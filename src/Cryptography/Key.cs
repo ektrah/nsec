@@ -5,7 +5,7 @@ using static Interop.Libsodium;
 namespace NSec.Cryptography
 {
     [DebuggerDisplay("Algorithm = {Algorithm}")]
-    public sealed class Key
+    public sealed class Key : IDisposable
     {
         private readonly Algorithm _algorithm;
         private readonly KeyFlags _flags;
