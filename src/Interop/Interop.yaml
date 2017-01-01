@@ -5,6 +5,13 @@ Interop.Core.cs:
   functions:
   - sodium_init
 
+Interop.Curve25519.cs:
+  include: include/sodium/crypto_scalarmult_curve25519.h
+  constants:
+  - crypto_scalarmult_curve25519_SCALARBYTES
+  functions:
+  - crypto_scalarmult_curve25519_base
+
 Interop.Random.cs:
   include: include/sodium/randombytes.h
   functions:
