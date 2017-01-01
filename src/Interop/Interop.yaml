@@ -1,0 +1,6 @@
+# libsodium
+
+Interop.Core.cs:
+  include: include/sodium/core.h
+  functions:
+  - sodium_init
