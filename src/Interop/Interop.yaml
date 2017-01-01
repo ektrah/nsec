@@ -8,8 +8,10 @@ Interop.Core.cs:
 Interop.X25519.cs:
   include: include/sodium/crypto_scalarmult_curve25519.h
   constants:
+  - crypto_scalarmult_curve25519_BYTES
   - crypto_scalarmult_curve25519_SCALARBYTES
   functions:
+  - crypto_scalarmult_curve25519 (ref byte p)
   - crypto_scalarmult_curve25519_base
 
 Interop.Ed25519.cs:
@@ -27,6 +29,7 @@ Interop.Random.cs:
   functions:
   - randombytes_buf
   - randombytes_buf (ref byte buf)
+  - randombytes_buf (SecureMemoryHandle buf)
 
 Interop.Utils.cs:
   include: include/sodium/utils.h
