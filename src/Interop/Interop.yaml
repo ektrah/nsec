@@ -73,8 +73,11 @@ Interop.HmacSha512.cs:
   functions:
   - crypto_auth_hmacsha512_final
   - crypto_auth_hmacsha512_final (ref byte out)
+  - crypto_auth_hmacsha512_init (ref byte key)
   - crypto_auth_hmacsha512_init (SecureMemoryHandle key)
+  - crypto_auth_hmacsha512_update
   - crypto_auth_hmacsha512_update (ref byte in)
+  - crypto_auth_hmacsha512_update (SecureMemoryHandle in)
   structs:
   - crypto_auth_hmacsha512_state
 
