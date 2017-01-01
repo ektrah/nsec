@@ -36,11 +36,11 @@ namespace NSec.Cryptography
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
             if (otherPartyPublicKey == null)
                 throw new ArgumentNullException(nameof(otherPartyPublicKey));
             if (otherPartyPublicKey.Algorithm != this)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(otherPartyPublicKey));
 
             if (!TryAgreeCore(key, otherPartyPublicKey, out SharedSecret result))
             {
@@ -58,11 +58,11 @@ namespace NSec.Cryptography
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
             if (otherPartyPublicKey == null)
                 throw new ArgumentNullException(nameof(otherPartyPublicKey));
             if (otherPartyPublicKey.Algorithm != this)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(otherPartyPublicKey));
 
             return TryAgreeCore(key, otherPartyPublicKey, out result);
         }

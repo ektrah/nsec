@@ -56,9 +56,9 @@ namespace NSec.Cryptography
             Span<byte> hash)
         {
             if (hash.Length < _minHashSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(hash));
             if (hash.Length > _maxHashSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(hash));
 
             HashCore(data, hash);
         }

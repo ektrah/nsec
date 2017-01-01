@@ -26,7 +26,7 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> sharedSecret)
         {
             if (sharedSecret.Length > 128)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(sharedSecret));
             if (!Sodium.TryInitialize())
                 throw new InvalidOperationException();
 

@@ -32,7 +32,7 @@ namespace NSec.Cryptography
             if (algorithm == null)
                 throw new ArgumentNullException(nameof(algorithm));
             if (format == KeyBlobFormat.None)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(format));
 
             if (!algorithm.TryImportPublicKey(blob, format, out PublicKey result))
             {
@@ -51,7 +51,7 @@ namespace NSec.Cryptography
             if (algorithm == null)
                 throw new ArgumentNullException(nameof(algorithm));
             if (format == KeyBlobFormat.None)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(format));
 
             return algorithm.TryImportPublicKey(blob, format, out result);
         }
@@ -72,7 +72,7 @@ namespace NSec.Cryptography
         public byte[] Export(KeyBlobFormat format)
         {
             if (format == KeyBlobFormat.None)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(format));
 
             if (!_algorithm.TryExportPublicKey(this, format, out byte[] result))
             {

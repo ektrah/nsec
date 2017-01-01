@@ -24,7 +24,7 @@ namespace NSec.Cryptography
             if (sharedSecret == null)
                 throw new ArgumentNullException(nameof(sharedSecret));
             if (!_usesSalt && !salt.IsEmpty)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(salt));
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
             if (count == 0)
@@ -44,7 +44,7 @@ namespace NSec.Cryptography
             if (sharedSecret == null)
                 throw new ArgumentNullException(nameof(sharedSecret));
             if (!_usesSalt && !salt.IsEmpty)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(salt));
             if (bytes.IsEmpty)
                 return;
 
@@ -61,7 +61,7 @@ namespace NSec.Cryptography
             if (sharedSecret == null)
                 throw new ArgumentNullException(nameof(sharedSecret));
             if (!_usesSalt && !salt.IsEmpty)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(salt));
             if (algorithm == null)
                 throw new ArgumentNullException(nameof(algorithm));
 

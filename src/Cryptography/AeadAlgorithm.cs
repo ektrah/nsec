@@ -38,11 +38,11 @@ namespace NSec.Cryptography
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
             if (nonce.Length != _nonceSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
             if (ciphertext.Length < _tagSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(ciphertext));
 
             byte[] plaintext = new byte[ciphertext.Length - _tagSize];
 
@@ -64,13 +64,13 @@ namespace NSec.Cryptography
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
             if (nonce.Length != _nonceSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
             if (ciphertext.Length < _tagSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(ciphertext));
             if (plaintext.Length != ciphertext.Length - _tagSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(plaintext));
 
             if (!TryDecryptCore(key, nonce, associatedData, ciphertext, plaintext))
             {
@@ -87,11 +87,11 @@ namespace NSec.Cryptography
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
             if (nonce.Length != _nonceSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
             if (int.MaxValue - plaintext.Length < _tagSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(plaintext));
 
             byte[] ciphertext = new byte[plaintext.Length + _tagSize];
             EncryptCore(key, nonce, associatedData, plaintext, ciphertext);
@@ -108,13 +108,13 @@ namespace NSec.Cryptography
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
             if (nonce.Length != _nonceSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
             if (int.MaxValue - plaintext.Length < _tagSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(plaintext));
             if (ciphertext.Length != plaintext.Length + _tagSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(ciphertext));
 
             EncryptCore(key, nonce, associatedData, plaintext, ciphertext);
         }
@@ -129,9 +129,9 @@ namespace NSec.Cryptography
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
             if (nonce.Length != _nonceSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
 
             if (ciphertext.Length < _tagSize)
             {
@@ -161,9 +161,9 @@ namespace NSec.Cryptography
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
             if (nonce.Length != _nonceSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
             if (ciphertext.Length < _tagSize)
                 return false;
             if (plaintext.Length != ciphertext.Length - _tagSize)

@@ -46,7 +46,7 @@ namespace NSec.Cryptography
             int count)
         {
             if (pseudorandomKey.Length < crypto_auth_hmacsha512_BYTES)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(pseudorandomKey));
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
             if (count > MaxOutputSize)
@@ -65,9 +65,9 @@ namespace NSec.Cryptography
             Span<byte> bytes)
         {
             if (pseudorandomKey.Length < crypto_auth_hmacsha512_BYTES)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(pseudorandomKey));
             if (bytes.Length > MaxOutputSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(bytes));
             if (bytes.IsEmpty)
                 return;
 
@@ -94,7 +94,7 @@ namespace NSec.Cryptography
             if (sharedSecret == null)
                 throw new ArgumentNullException(nameof(sharedSecret));
             if (pseudorandomKey.Length != crypto_auth_hmacsha512_BYTES)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(pseudorandomKey));
 
             ExtractCore(sharedSecret, salt, pseudorandomKey);
         }
@@ -106,7 +106,7 @@ namespace NSec.Cryptography
             Span<byte> bytes)
         {
             if (bytes.Length > MaxOutputSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(bytes));
 
             Debug.Assert(sharedSecret != null);
 

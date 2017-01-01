@@ -36,7 +36,7 @@ namespace NSec.Cryptography
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
 
             byte[] signature = new byte[_signatureSize];
             SignCore(key, data, signature);
@@ -51,9 +51,9 @@ namespace NSec.Cryptography
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
             if (signature.Length != _signatureSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(signature));
 
             SignCore(key, data, signature);
         }
@@ -66,7 +66,7 @@ namespace NSec.Cryptography
             if (publicKey == null)
                 throw new ArgumentNullException(nameof(publicKey));
             if (publicKey.Algorithm != this)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(publicKey));
             if (signature.Length != _signatureSize)
                 return false;
 
@@ -81,9 +81,9 @@ namespace NSec.Cryptography
             if (publicKey == null)
                 throw new ArgumentNullException(nameof(publicKey));
             if (publicKey.Algorithm != this)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(publicKey));
             if (signature.Length != _signatureSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(signature));
 
             if (!TryVerifyCore(publicKey, data, signature))
             {

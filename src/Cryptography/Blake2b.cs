@@ -27,7 +27,7 @@ namespace NSec.Cryptography
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
 
             byte[] hash = new byte[crypto_generichash_blake2b_BYTES];
             HashCore(key, data, hash);
@@ -42,7 +42,7 @@ namespace NSec.Cryptography
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
             if (hashSize < crypto_generichash_blake2b_BYTES_MIN)
                 throw new ArgumentOutOfRangeException(nameof(hashSize));
             if (hashSize > crypto_generichash_blake2b_BYTES_MAX)
@@ -61,11 +61,11 @@ namespace NSec.Cryptography
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
             if (hash.Length < crypto_generichash_blake2b_BYTES_MIN)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(hash));
             if (hash.Length > crypto_generichash_blake2b_BYTES_MAX)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(hash));
 
             HashCore(key, data, hash);
         }

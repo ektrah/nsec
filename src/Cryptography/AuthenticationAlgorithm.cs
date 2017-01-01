@@ -68,11 +68,11 @@ namespace NSec.Cryptography
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
             if (nonce.Length < _minNonceSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
             if (nonce.Length > _maxNonceSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
 
             byte[] mac = new byte[_defaultMacSize];
             SignCore(key, nonce, data, mac);
@@ -88,11 +88,11 @@ namespace NSec.Cryptography
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
             if (nonce.Length < _minNonceSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
             if (nonce.Length > _maxNonceSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
             if (macSize < _minMacSize)
                 throw new ArgumentOutOfRangeException(nameof(macSize));
             if (macSize > _maxMacSize)
@@ -112,15 +112,15 @@ namespace NSec.Cryptography
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
             if (nonce.Length < _minNonceSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
             if (nonce.Length > _maxNonceSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
             if (mac.Length < _minMacSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(mac));
             if (mac.Length > _maxMacSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(mac));
 
             SignCore(key, nonce, data, mac);
         }
@@ -134,11 +134,11 @@ namespace NSec.Cryptography
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
             if (nonce.Length < _minNonceSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
             if (nonce.Length > _maxNonceSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
             if (mac.Length < _minMacSize)
                 return false;
             if (mac.Length > _maxMacSize)
@@ -168,15 +168,15 @@ namespace NSec.Cryptography
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
             if (nonce.Length < _minNonceSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
             if (nonce.Length > _maxNonceSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
             if (mac.Length < _minMacSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(mac));
             if (mac.Length > _maxMacSize)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(mac));
 
             // crypto_auth_hmacsha{256,512}_verify does not support truncated
             // HMACs, so we calculate the MAC ourselves and call sodium_memcmp

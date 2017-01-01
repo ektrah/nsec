@@ -60,7 +60,7 @@ namespace NSec.Cryptography
             if (algorithm == null)
                 throw new ArgumentNullException(nameof(algorithm));
             if (format == KeyBlobFormat.None)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(format));
 
             if (!algorithm.TryImportKey(blob, format, flags, out Key key))
             {
@@ -80,7 +80,7 @@ namespace NSec.Cryptography
             if (algorithm == null)
                 throw new ArgumentNullException(nameof(algorithm));
             if (format == KeyBlobFormat.None)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(format));
 
             return algorithm.TryImportKey(blob, format, flags, out result);
         }
@@ -94,7 +94,7 @@ namespace NSec.Cryptography
             KeyBlobFormat format)
         {
             if (format == KeyBlobFormat.None)
-                throw new ArgumentException();
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(format));
             if (_handle.IsClosed)
                 throw new ObjectDisposedException(GetType().FullName);
 
