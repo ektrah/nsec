@@ -49,6 +49,19 @@ Interop.Ed25519.cs:
   - crypto_sign_ed25519_sk_to_seed (ref byte seed)
   - crypto_sign_ed25519_verify_detached (ref byte sig, ref byte m, ref byte pk)
 
+Interop.HmacSha256.cs:
+  include: include/sodium/crypto_auth_hmacsha256.h
+  constants:
+  - crypto_auth_hmacsha256_BYTES
+  - crypto_auth_hmacsha256_KEYBYTES
+  functions:
+  - crypto_auth_hmacsha256_final
+  - crypto_auth_hmacsha256_final (ref byte out)
+  - crypto_auth_hmacsha256_init (SecureMemoryHandle key)
+  - crypto_auth_hmacsha256_update (ref byte in)
+  structs:
+  - crypto_auth_hmacsha256_state
+
 Interop.Random.cs:
   include: include/sodium/randombytes.h
   functions:
@@ -63,6 +76,7 @@ Interop.Sha256.cs:
   functions:
   - crypto_hash_sha256_final
   - crypto_hash_sha256_final (ref byte out)
+  - crypto_hash_sha256_final (SecureMemoryHandle out)
   - crypto_hash_sha256_init
   - crypto_hash_sha256_update (ref byte in)
   structs:
