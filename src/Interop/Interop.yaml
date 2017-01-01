@@ -62,6 +62,19 @@ Interop.HmacSha256.cs:
   structs:
   - crypto_auth_hmacsha256_state
 
+Interop.HmacSha512.cs:
+  include: include/sodium/crypto_auth_hmacsha512.h
+  constants:
+  - crypto_auth_hmacsha512_BYTES
+  - crypto_auth_hmacsha512_KEYBYTES
+  functions:
+  - crypto_auth_hmacsha512_final
+  - crypto_auth_hmacsha512_final (ref byte out)
+  - crypto_auth_hmacsha512_init (SecureMemoryHandle key)
+  - crypto_auth_hmacsha512_update (ref byte in)
+  structs:
+  - crypto_auth_hmacsha512_state
+
 Interop.Random.cs:
   include: include/sodium/randombytes.h
   functions:
@@ -89,6 +102,7 @@ Interop.Sha512.cs:
   functions:
   - crypto_hash_sha512_final
   - crypto_hash_sha512_final (ref byte out)
+  - crypto_hash_sha512_final (SecureMemoryHandle out)
   - crypto_hash_sha512_init
   - crypto_hash_sha512_update (ref byte in)
   structs:
