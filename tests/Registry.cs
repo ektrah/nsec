@@ -22,6 +22,7 @@ namespace NSec.Tests
 
         public static readonly TheoryData<Type> KeyAgreementAlgorithms = new TheoryData<Type>
         {
+            typeof(X25519),
         };
 
         public static readonly TheoryData<Type> KeyDerivationAlgorithms = new TheoryData<Type>
@@ -34,6 +35,7 @@ namespace NSec.Tests
 
         public static readonly TheoryData<Type> SignatureAlgorithms = new TheoryData<Type>
         {
+            typeof(Ed25519),
         };
 
         #endregion
@@ -42,6 +44,8 @@ namespace NSec.Tests
 
         public static readonly TheoryData<Type> AsymmetricAlgorithms = new TheoryData<Type>
         {
+            typeof(X25519),
+            typeof(Ed25519),
         };
 
         public static readonly TheoryData<Type> SymmetricAlgorithms = new TheoryData<Type>
@@ -58,10 +62,14 @@ namespace NSec.Tests
 
         public static readonly TheoryData<Type, KeyBlobFormat> PublicKeyBlobFormats = new TheoryData<Type, KeyBlobFormat>
         {
+            { typeof(X25519), KeyBlobFormat.RawPublicKey },
+            { typeof(Ed25519), KeyBlobFormat.RawPublicKey },
         };
 
         public static readonly TheoryData<Type, KeyBlobFormat> PrivateKeyBlobFormats = new TheoryData<Type, KeyBlobFormat>
         {
+            { typeof(X25519), KeyBlobFormat.RawPrivateKey },
+            { typeof(Ed25519), KeyBlobFormat.RawPrivateKey },
         };
 
         public static readonly TheoryData<Type, KeyBlobFormat> SymmetricKeyBlobFormats = new TheoryData<Type, KeyBlobFormat>
