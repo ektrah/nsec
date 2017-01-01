@@ -12,10 +12,16 @@ namespace NSec.Cryptography
         NSecSymmetricKey = -101,
         NSecPrivateKey = -102,
 
+        PkixPrivateKey = -202,
+        PkixPrivateKeyText = -203,
+
         // --- Public Key Formats ---
 
         RawPublicKey = 1,
 
         NSecPublicKey = 101,
+
+        PkixPublicKey = 201,
+        PkixPublicKeyText = 202,
     }
 }
