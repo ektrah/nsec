@@ -138,3 +138,9 @@ Interop.Utils.cs:
   - sodium_malloc
   - sodium_memcmp (ref byte b2_)
   - sodium_mprotect_readonly (IntPtr ptr)
+
+Interop.Version.cs:
+  include: include/sodium/version.h
+  functions:
+  - sodium_library_version_major
+  - sodium_library_version_minor
