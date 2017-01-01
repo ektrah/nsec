@@ -5,6 +5,12 @@ Interop.Core.cs:
   functions:
   - sodium_init
 
+Interop.Random.cs:
+  include: include/sodium/randombytes.h
+  functions:
+  - randombytes_buf
+  - randombytes_buf (ref byte buf)
+
 Interop.Utils.cs:
   include: include/sodium/utils.h
   functions:
