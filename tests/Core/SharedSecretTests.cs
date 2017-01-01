@@ -1,6 +1,5 @@
 using System;
 using NSec.Cryptography;
-
 using Xunit;
 
 namespace NSec.Tests.Core
