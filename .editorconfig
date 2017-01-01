@@ -7,6 +7,10 @@ indent_style = space
 indent_size = 2
 charset = latin1
 
+[*.yaml]
+indent_size = 2
+charset = latin1
+
 [*.md]
 indent_size = 4
 charset = latin1
