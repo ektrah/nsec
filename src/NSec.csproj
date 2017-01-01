@@ -4,15 +4,23 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
+  <PropertyGroup>
+    <Version>0.0.1-prerelease-1</Version>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="**\*.cs" />
     <EmbeddedResource Include="**\*.resx" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\lib\libsodium-1.0.11-msvc\x64\Release\v140\dynamic\libsodium.dll">
+    <Content Include="..\lib\libsodium-1.0.11-msvc\x64\Release\v140\dynamic\libsodium.dll">
+      <PackagePath>runtimes\win7-x64\native\</PackagePath>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <Link>libsodium.dll</Link>
-    </None>
+    </Content>
+    <Content Include="..\lib\libsodium-1.0.11-msvc\Win32\Release\v140\dynamic\libsodium.dll">
+      <PackagePath>runtimes\win7-x86\native\</PackagePath>
+      <Link>libsodium.x86.dll</Link>
+    </Content>
     <None Include=".editorconfig" />
     <None Include="Interop\Interop.yaml" />
   </ItemGroup>
