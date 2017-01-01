@@ -8,6 +8,10 @@
     <EmbeddedResource Include="**\*.resx" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\lib\libsodium-1.0.11-msvc\x64\Release\v140\dynamic\libsodium.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Link>libsodium.dll</Link>
+    </None>
     <None Include=".editorconfig" />
     <None Include="Interop\Interop.yaml" />
   </ItemGroup>
