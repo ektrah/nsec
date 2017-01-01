@@ -56,6 +56,18 @@ Interop.Random.cs:
   - randombytes_buf (ref byte buf)
   - randombytes_buf (SecureMemoryHandle buf)
 
+Interop.Sha256.cs:
+  include: include/sodium/crypto_hash_sha256.h
+  constants:
+  - crypto_hash_sha256_BYTES
+  functions:
+  - crypto_hash_sha256_final
+  - crypto_hash_sha256_final (ref byte out)
+  - crypto_hash_sha256_init
+  - crypto_hash_sha256_update (ref byte in)
+  structs:
+  - crypto_hash_sha256_state
+
 Interop.Utils.cs:
   include: include/sodium/utils.h
   functions:
