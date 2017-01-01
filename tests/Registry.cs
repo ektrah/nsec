@@ -38,6 +38,8 @@ namespace NSec.Tests
 
         public static readonly TheoryData<Type> KeyDerivationAlgorithms = new TheoryData<Type>
         {
+            typeof(HkdfSha256),
+            typeof(HkdfSha512),
         };
 
         public static readonly TheoryData<Type> SignatureAlgorithms = new TheoryData<Type>
@@ -72,6 +74,8 @@ namespace NSec.Tests
 
         public static readonly TheoryData<Type> KeylessAlgorithms = new TheoryData<Type>
         {
+            typeof(HkdfSha256),
+            typeof(HkdfSha512),
             typeof(Sha256),
             typeof(Sha512),
         };
