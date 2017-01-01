@@ -8,7 +8,13 @@ namespace NSec.Tests
     {
         #region Algorithms By Base Class
 
-        public static readonly TheoryData<Type> AeadAlgorithms = new TheoryData<Type>
+        public static readonly TheoryData<Type> AeadAlgorithms = Aes256Gcm.IsAvailable
+            ? new TheoryData<Type>
+        {
+            typeof(Aes256Gcm),
+            typeof(ChaCha20Poly1305),
+        }
+            : new TheoryData<Type>
         {
             typeof(ChaCha20Poly1305),
         };
@@ -19,6 +25,8 @@ namespace NSec.Tests
 
         public static readonly TheoryData<Type> HashAlgorithms = new TheoryData<Type>
         {
+            typeof(Sha256),
+            typeof(Sha512),
         };
 
         public static readonly TheoryData<Type> KeyAgreementAlgorithms = new TheoryData<Type>
@@ -27,10 +35,6 @@ namespace NSec.Tests
         };
 
         public static readonly TheoryData<Type> KeyDerivationAlgorithms = new TheoryData<Type>
-        {
-        };
-
-        public static readonly TheoryData<Type> PasswordHashAlgorithms = new TheoryData<Type>
         {
         };
 
@@ -49,13 +53,21 @@ namespace NSec.Tests
             typeof(Ed25519),
         };
 
-        public static readonly TheoryData<Type> SymmetricAlgorithms = new TheoryData<Type>
+        public static readonly TheoryData<Type> SymmetricAlgorithms = Aes256Gcm.IsAvailable
+            ? new TheoryData<Type>
+        {
+            typeof(Aes256Gcm),
+            typeof(ChaCha20Poly1305),
+        }
+            : new TheoryData<Type>
         {
             typeof(ChaCha20Poly1305),
         };
 
         public static readonly TheoryData<Type> KeylessAlgorithms = new TheoryData<Type>
         {
+            typeof(Sha256),
+            typeof(Sha512),
         };
 
         #endregion
@@ -86,7 +98,15 @@ namespace NSec.Tests
             { typeof(Ed25519), KeyBlobFormat.PkixPrivateKeyText },
         };
 
-        public static readonly TheoryData<Type, KeyBlobFormat> SymmetricKeyBlobFormats = new TheoryData<Type, KeyBlobFormat>
+        public static readonly TheoryData<Type, KeyBlobFormat> SymmetricKeyBlobFormats = Aes256Gcm.IsAvailable
+            ? new TheoryData<Type, KeyBlobFormat>
+        {
+            { typeof(Aes256Gcm), KeyBlobFormat.RawSymmetricKey },
+            { typeof(Aes256Gcm), KeyBlobFormat.NSecSymmetricKey },
+            { typeof(ChaCha20Poly1305), KeyBlobFormat.RawSymmetricKey },
+            { typeof(ChaCha20Poly1305), KeyBlobFormat.NSecSymmetricKey },
+        }
+            : new TheoryData<Type, KeyBlobFormat>
         {
             { typeof(ChaCha20Poly1305), KeyBlobFormat.RawSymmetricKey },
             { typeof(ChaCha20Poly1305), KeyBlobFormat.NSecSymmetricKey },
