@@ -68,6 +68,18 @@ Interop.Sha256.cs:
   structs:
   - crypto_hash_sha256_state
 
+Interop.Sha512.cs:
+  include: include/sodium/crypto_hash_sha512.h
+  constants:
+  - crypto_hash_sha512_BYTES
+  functions:
+  - crypto_hash_sha512_final
+  - crypto_hash_sha512_final (ref byte out)
+  - crypto_hash_sha512_init
+  - crypto_hash_sha512_update (ref byte in)
+  structs:
+  - crypto_hash_sha512_state
+
 Interop.Utils.cs:
   include: include/sodium/utils.h
   functions:
