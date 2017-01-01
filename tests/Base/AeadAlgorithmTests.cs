@@ -413,7 +413,7 @@ namespace NSec.Tests.Base
             using (var k = new Key(a))
             {
                 var pt = new byte[16];
-                for (int i = 0; i < pt.Length; i++)
+                for (var i = 0; i < pt.Length; i++)
                 {
                     pt[i] = 0xD6;
                 }
