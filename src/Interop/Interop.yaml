@@ -5,7 +5,7 @@ Interop.Core.cs:
   functions:
   - sodium_init
 
-Interop.Curve25519.cs:
+Interop.X25519.cs:
   include: include/sodium/crypto_scalarmult_curve25519.h
   constants:
   - crypto_scalarmult_curve25519_SCALARBYTES
