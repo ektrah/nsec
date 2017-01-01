@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Linq;
 
 namespace NSec.Cryptography
 {
@@ -62,7 +61,7 @@ namespace NSec.Cryptography
             return (this == other)
                 || (other != null)
                 && (_algorithm == other._algorithm)
-                && _bytes.SequenceEqual(other._bytes); // TODO: use BlockEquals
+                && Extensions.BlockEquals(_bytes, other._bytes);
         }
 
         public override bool Equals(object obj)

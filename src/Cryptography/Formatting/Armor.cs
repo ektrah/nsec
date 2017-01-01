@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace NSec.Cryptography.Formatting
@@ -87,13 +86,6 @@ namespace NSec.Cryptography.Formatting
             }
 
             return true;
-        }
-
-        private static bool BlockEquals(
-            this ReadOnlySpan<byte> first,
-            ReadOnlySpan<byte> second)
-        {
-            return first.ToArray().SequenceEqual(second.ToArray()); // TODO: use ReadOnlySpan<T>.BlockEquals
         }
 
         private static void EncodeBase64(
