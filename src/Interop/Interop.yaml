@@ -4,3 +4,10 @@ Interop.Core.cs:
   include: include/sodium/core.h
   functions:
   - sodium_init
+
+Interop.Utils.cs:
+  include: include/sodium/utils.h
+  functions:
+  - sodium_free (IntPtr ptr)
+  - sodium_malloc
+  - sodium_mprotect_readonly (IntPtr ptr)

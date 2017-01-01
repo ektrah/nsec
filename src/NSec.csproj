@@ -13,5 +13,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NETStandard.Library" Version="1.6.1" />
+    <PackageReference Include="System.Memory" Version="4.4.0-beta-24814-02" />
   </ItemGroup>
 </Project>
