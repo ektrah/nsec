@@ -1,5 +1,15 @@
 # libsodium
 
+Interop.ChaCha20Poly1305.cs:
+  include: include/sodium/crypto_aead_chacha20poly1305.h
+  constants:
+  - crypto_aead_chacha20poly1305_ietf_ABYTES
+  - crypto_aead_chacha20poly1305_ietf_KEYBYTES
+  - crypto_aead_chacha20poly1305_ietf_NPUBBYTES
+  functions:
+  - crypto_aead_chacha20poly1305_ietf_decrypt (ref byte m, ref byte c, ref byte ad, ref byte npub)
+  - crypto_aead_chacha20poly1305_ietf_encrypt (ref byte c, ref byte m, ref byte ad, ref byte npub)
+
 Interop.Core.cs:
   include: include/sodium/core.h
   functions:
