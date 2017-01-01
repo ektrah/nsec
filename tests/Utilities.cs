@@ -12,6 +12,13 @@ namespace NSec.Tests
             return result;
         }
 
+        public static byte[] Substring(this byte[] array, int offset, int length)
+        {
+            var result = new byte[length];
+            Buffer.BlockCopy(array, offset, result, 0, length);
+            return result;
+        }
+
         private static int ConvertHexDigit(char val)
         {
             if (val >= '0' && val <= '9')

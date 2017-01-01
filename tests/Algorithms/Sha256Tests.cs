@@ -30,7 +30,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = new Sha256();
 
-            var expected = HashOfEmpty.DecodeHex().Slice(0, hashSize);
+            var expected = HashOfEmpty.DecodeHex().Substring(0, hashSize);
             var actual = a.Hash(ReadOnlySpan<byte>.Empty, hashSize);
 
             Assert.Equal(hashSize, actual.Length);
@@ -47,7 +47,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = new Sha256();
 
-            var expected = HashOfEmpty.DecodeHex().Slice(0, hashSize);
+            var expected = HashOfEmpty.DecodeHex().Substring(0, hashSize);
             var actual = new byte[hashSize];
 
             a.Hash(ReadOnlySpan<byte>.Empty, actual);
