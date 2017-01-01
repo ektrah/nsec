@@ -11,6 +11,23 @@ Interop.Aes256Gcm.cs:
   - crypto_aead_aes256gcm_encrypt (ref byte c, ref byte m, ref byte ad, ref byte npub)
   - crypto_aead_aes256gcm_is_available
 
+Interop.Blake2b.cs:
+  include: include/sodium/crypto_generichash_blake2b.h
+  constants:
+  - crypto_generichash_blake2b_BYTES
+  - crypto_generichash_blake2b_BYTES_MAX
+  - crypto_generichash_blake2b_BYTES_MIN
+  - crypto_generichash_blake2b_KEYBYTES
+  - crypto_generichash_blake2b_KEYBYTES_MAX
+  - crypto_generichash_blake2b_KEYBYTES_MIN
+  functions:
+  - crypto_generichash_blake2b_final (ref byte out)
+  - crypto_generichash_blake2b_init (SecureMemoryHandle key)
+  - crypto_generichash_blake2b_init (IntPtr key)
+  - crypto_generichash_blake2b_update (ref byte in)
+  structs:
+  - crypto_generichash_blake2b_state
+
 Interop.ChaCha20Poly1305.cs:
   include: include/sodium/crypto_aead_chacha20poly1305.h
   constants:
