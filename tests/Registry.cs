@@ -21,6 +21,8 @@ namespace NSec.Tests
 
         public static readonly TheoryData<Type> AuthenticationAlgorithms = new TheoryData<Type>
         {
+            typeof(HmacSha256),
+            typeof(HmacSha512),
         };
 
         public static readonly TheoryData<Type> HashAlgorithms = new TheoryData<Type>
@@ -58,10 +60,14 @@ namespace NSec.Tests
         {
             typeof(Aes256Gcm),
             typeof(ChaCha20Poly1305),
+            typeof(HmacSha256),
+            typeof(HmacSha512),
         }
             : new TheoryData<Type>
         {
             typeof(ChaCha20Poly1305),
+            typeof(HmacSha256),
+            typeof(HmacSha512),
         };
 
         public static readonly TheoryData<Type> KeylessAlgorithms = new TheoryData<Type>
@@ -105,11 +111,15 @@ namespace NSec.Tests
             { typeof(Aes256Gcm), KeyBlobFormat.NSecSymmetricKey },
             { typeof(ChaCha20Poly1305), KeyBlobFormat.RawSymmetricKey },
             { typeof(ChaCha20Poly1305), KeyBlobFormat.NSecSymmetricKey },
+            { typeof(HmacSha256), KeyBlobFormat.RawSymmetricKey },
+            { typeof(HmacSha512), KeyBlobFormat.RawSymmetricKey },
         }
             : new TheoryData<Type, KeyBlobFormat>
         {
             { typeof(ChaCha20Poly1305), KeyBlobFormat.RawSymmetricKey },
             { typeof(ChaCha20Poly1305), KeyBlobFormat.NSecSymmetricKey },
+            { typeof(HmacSha256), KeyBlobFormat.RawSymmetricKey },
+            { typeof(HmacSha512), KeyBlobFormat.RawSymmetricKey },
         };
 
         #endregion
