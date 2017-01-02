@@ -24,11 +24,11 @@ namespace NSec.Cryptography
     //      Input Size - Between 0 and 2^128-1. Since a Span<byte> can hold
     //          between 0 to 2^31-1 bytes, we do not check the length of inputs.
     //
-    public sealed class Blake2b : HashAlgorithm
+    public sealed class Blake2 : HashAlgorithm
     {
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
-        public Blake2b() : base(
+        public Blake2() : base(
             minHashSize: crypto_generichash_blake2b_BYTES_MIN,
             defaultHashSize: crypto_generichash_blake2b_BYTES,
             maxHashSize: crypto_generichash_blake2b_BYTES_MAX)

@@ -27,7 +27,7 @@ namespace NSec.Tests
 
         public static readonly TheoryData<Type> HashAlgorithms = new TheoryData<Type>
         {
-            typeof(Blake2b),
+            typeof(Blake2),
             typeof(Sha256),
             typeof(Sha512),
         };
@@ -62,14 +62,14 @@ namespace NSec.Tests
             ? new TheoryData<Type>
         {
             typeof(Aes256Gcm),
-            typeof(Blake2b),
+            typeof(Blake2),
             typeof(ChaCha20Poly1305),
             typeof(HmacSha256),
             typeof(HmacSha512),
         }
             : new TheoryData<Type>
         {
-            typeof(Blake2b),
+            typeof(Blake2),
             typeof(ChaCha20Poly1305),
             typeof(HmacSha256),
             typeof(HmacSha512),
@@ -116,7 +116,7 @@ namespace NSec.Tests
         {
             { typeof(Aes256Gcm), KeyBlobFormat.RawSymmetricKey },
             { typeof(Aes256Gcm), KeyBlobFormat.NSecSymmetricKey },
-            { typeof(Blake2b), KeyBlobFormat.RawSymmetricKey },
+            { typeof(Blake2), KeyBlobFormat.RawSymmetricKey },
             { typeof(ChaCha20Poly1305), KeyBlobFormat.RawSymmetricKey },
             { typeof(ChaCha20Poly1305), KeyBlobFormat.NSecSymmetricKey },
             { typeof(HmacSha256), KeyBlobFormat.RawSymmetricKey },
@@ -124,7 +124,7 @@ namespace NSec.Tests
         }
             : new TheoryData<Type, KeyBlobFormat>
         {
-            { typeof(Blake2b), KeyBlobFormat.RawSymmetricKey },
+            { typeof(Blake2), KeyBlobFormat.RawSymmetricKey },
             { typeof(ChaCha20Poly1305), KeyBlobFormat.RawSymmetricKey },
             { typeof(ChaCha20Poly1305), KeyBlobFormat.NSecSymmetricKey },
             { typeof(HmacSha256), KeyBlobFormat.RawSymmetricKey },
