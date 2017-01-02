@@ -27,10 +27,8 @@ namespace NSec.Cryptography
     //
     //      Nonce - HMAC-SHA-256 does not use nonces.
     //
-    //      MAC Size - The output of HMAC-SHA-256 consists of L bytes. The
-    //          output can be truncated. The output length should not be less
-    //          than half the length of the hash output and not less than 80
-    //          bits.
+    //      MAC Size - 32 bytes. The output can be truncated down to 16 bytes
+    //          (128 bits of security).
     //
     public sealed class HmacSha256 : AuthenticationAlgorithm
     {
@@ -45,7 +43,7 @@ namespace NSec.Cryptography
             maxKeySize: SHA256MessageBlockSize,
             minNonceSize: 0,
             maxNonceSize: 0,
-            minMacSize: crypto_auth_hmacsha256_BYTES / 2,
+            minMacSize: 16,
             defaultMacSize: crypto_auth_hmacsha256_BYTES,
             maxMacSize: crypto_auth_hmacsha256_BYTES)
         {

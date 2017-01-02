@@ -21,19 +21,18 @@ namespace NSec.Cryptography
     //
     //      Key Size - The key for HMAC-SHA-512 can be of any length. A length
     //          less than L=64 bytes (the output length of SHA-512) is strongly
-    //          discouraged. Keys longer than L do not significantly increase
-    //          the function strength. Keys longer than B=128 bytes (the block
-    //          size of SHA-512) are first hashed using SHA-512.
-    //
-    //          libsodium uses crypto_auth_hmacsha512_KEYBYTES=32 by default,
-    //          which is less than L.
+    //          discouraged. (libsodium recommends a default size of
+    //          crypto_auth_hmacsha512_KEYBYTES=32 bytes.) Keys longer than L do
+    //          not significantly increase the function strength. Keys longer
+    //          than B=128 bytes (the block size of SHA-512) are first hashed
+    //          using SHA-512.
     //
     //      Nonce - HMAC-SHA-512 does not use nonces.
     //
-    //      MAC Size - The output of HMAC-SHA-512 consists of L bytes. The
-    //          output can be truncated. The output length should not be less
-    //          than half the length of the hash output and not less than 80
-    //          bits.
+    //      MAC Size - 64 bytes. The output can be truncated down to 16 bytes
+    //          (128 bits of security). To match the security of SHA-512, the
+    //          output length should not be less than half of L (i.e., not less
+    //          than 32 bytes).
     //
     public sealed class HmacSha512 : AuthenticationAlgorithm
     {
@@ -48,7 +47,7 @@ namespace NSec.Cryptography
             maxKeySize: SHA512MessageBlockSize,
             minNonceSize: 0,
             maxNonceSize: 0,
-            minMacSize: crypto_auth_hmacsha512_BYTES / 2,
+            minMacSize: 16,
             defaultMacSize: crypto_auth_hmacsha512_BYTES,
             maxMacSize: crypto_auth_hmacsha512_BYTES)
         {
