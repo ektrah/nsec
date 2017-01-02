@@ -18,5 +18,11 @@ internal static partial class Interop
         internal static extern int crypto_scalarmult_curve25519_base(
             byte[] q,
             SecureMemoryHandle n);
+
+        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern IntPtr crypto_scalarmult_curve25519_bytes();
+
+        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern IntPtr crypto_scalarmult_curve25519_scalarbytes();
     }
 }

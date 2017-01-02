@@ -28,6 +28,8 @@ namespace NSec.Cryptography
     //
     public sealed class X25519 : KeyAgreementAlgorithm
     {
+        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
+
         private static readonly KeyFormatter s_nsecPrivateKeyFormatter =
             new X25519KeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[]
         {
@@ -75,6 +77,8 @@ namespace NSec.Cryptography
             publicKeySize: crypto_scalarmult_curve25519_SCALARBYTES,
             sharedSecretSize: crypto_scalarmult_curve25519_BYTES)
         {
+            if (!s_selfTest.Value)
+                throw new InvalidOperationException();
         }
 
         internal override SecureMemoryHandle CreateKey(
@@ -208,6 +212,12 @@ namespace NSec.Cryptography
                 result = null;
                 return false;
             }
+        }
+
+        private static bool SelfTest()
+        {
+            return (crypto_scalarmult_curve25519_bytes() == (IntPtr)crypto_scalarmult_curve25519_BYTES)
+                && (crypto_scalarmult_curve25519_scalarbytes() == (IntPtr)crypto_scalarmult_curve25519_SCALARBYTES);
         }
     }
 }

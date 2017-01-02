@@ -68,6 +68,8 @@ Interop.X25519.cs:
   functions:
   - crypto_scalarmult_curve25519 (ref byte p)
   - crypto_scalarmult_curve25519_base
+  - crypto_scalarmult_curve25519_bytes
+  - crypto_scalarmult_curve25519_scalarbytes
 
 Interop.Ed25519.cs:
   include: include/sodium/crypto_sign_ed25519.h
