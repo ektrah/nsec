@@ -11,8 +11,8 @@ namespace NSec.Cryptography
 
         public static bool TryInitialize()
         {
-            // require libsodium 1.0.4 or later
-            if ((s_versionMajor.Value < 7) || (s_versionMajor.Value == 7 && s_versionMinor.Value < 6))
+            // Require libsodium 1.0.9 or later
+            if ((s_versionMajor.Value < 9) || (s_versionMajor.Value == 9 && s_versionMinor.Value < 2))
             {
                 return false;
             }
