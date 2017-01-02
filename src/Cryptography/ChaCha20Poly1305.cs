@@ -39,6 +39,8 @@ namespace NSec.Cryptography
     //
     public sealed class ChaCha20Poly1305 : AeadAlgorithm
     {
+        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
+
         private static readonly KeyFormatter s_nsecKeyFormatter =
             new KeyFormatter(crypto_aead_chacha20poly1305_ietf_KEYBYTES, new byte[]
         {
@@ -53,6 +55,8 @@ namespace NSec.Cryptography
             nonceSize: crypto_aead_chacha20poly1305_ietf_NPUBBYTES,
             tagSize: crypto_aead_chacha20poly1305_ietf_ABYTES)
         {
+            if (!s_selfTest.Value)
+                throw new InvalidOperationException();
         }
 
         internal override SecureMemoryHandle CreateDerivedKey()
@@ -160,6 +164,14 @@ namespace NSec.Cryptography
                 result = null;
                 return false;
             }
+        }
+
+        private static bool SelfTest()
+        {
+            return (crypto_aead_chacha20poly1305_ietf_abytes() == (IntPtr)crypto_aead_chacha20poly1305_ietf_ABYTES)
+                && (crypto_aead_chacha20poly1305_ietf_keybytes() == (IntPtr)crypto_aead_chacha20poly1305_ietf_KEYBYTES)
+                && (crypto_aead_chacha20poly1305_ietf_npubbytes() == (IntPtr)crypto_aead_chacha20poly1305_ietf_NPUBBYTES)
+                && (crypto_aead_chacha20poly1305_ietf_nsecbytes() == (IntPtr)crypto_aead_chacha20poly1305_ietf_NSECBYTES);
         }
     }
 }

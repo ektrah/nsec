@@ -46,9 +46,14 @@ Interop.ChaCha20Poly1305.cs:
   - crypto_aead_chacha20poly1305_ietf_ABYTES
   - crypto_aead_chacha20poly1305_ietf_KEYBYTES
   - crypto_aead_chacha20poly1305_ietf_NPUBBYTES
+  - crypto_aead_chacha20poly1305_ietf_NSECBYTES
   functions:
+  - crypto_aead_chacha20poly1305_ietf_abytes
   - crypto_aead_chacha20poly1305_ietf_decrypt (ref byte m, ref byte c, ref byte ad, ref byte npub)
   - crypto_aead_chacha20poly1305_ietf_encrypt (ref byte c, ref byte m, ref byte ad, ref byte npub)
+  - crypto_aead_chacha20poly1305_ietf_keybytes
+  - crypto_aead_chacha20poly1305_ietf_npubbytes
+  - crypto_aead_chacha20poly1305_ietf_nsecbytes
 
 Interop.Core.cs:
   include: include/sodium/core.h
