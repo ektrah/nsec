@@ -36,8 +36,7 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> data,
             Span<byte> hash)
         {
-            Debug.Assert(hash.Length >= crypto_hash_sha256_BYTES / 2);
-            Debug.Assert(hash.Length <= crypto_hash_sha256_BYTES);
+            Debug.Assert(hash.Length == crypto_hash_sha256_BYTES);
 
             crypto_hash_sha256_init(out crypto_hash_sha256_state state);
 
