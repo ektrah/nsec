@@ -13,7 +13,7 @@ namespace NSec.Tests.Rfc
 
         [Theory]
         [MemberData(nameof(Rfc7693TestVectors))]
-        public static void TestRfc7693(string msg, string hash)
+        public static void Test(string msg, string hash)
         {
             var a = new Blake2();
 

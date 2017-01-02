@@ -15,7 +15,7 @@ namespace NSec.Tests.Algorithms
 
         [Theory]
         [MemberData(nameof(Rfc5869TestVectors))]
-        public static void TestRfc5869OneStep(string ikm, string salt, string info, string expectedPrk, string expectedOkm)
+        public static void TestOneStep(string ikm, string salt, string info, string expectedPrk, string expectedOkm)
         {
             var a = new HkdfSha256();
 
@@ -28,7 +28,7 @@ namespace NSec.Tests.Algorithms
 
         [Theory]
         [MemberData(nameof(Rfc5869TestVectors))]
-        public static void TestRfc5869TwoStep(string ikm, string salt, string info, string expectedPrk, string expectedOkm)
+        public static void TestTwoStep(string ikm, string salt, string info, string expectedPrk, string expectedOkm)
         {
             var a = new HkdfSha256();
 

@@ -13,7 +13,7 @@ namespace NSec.Tests.Algorithms
 
         [Theory]
         [MemberData(nameof(Rfc7539TestVectors))]
-        public static void TestRfc7539(string[] testVector)
+        public static void Test(string[] testVector)
         {
             var plaintext = testVector[0];
             var aad = testVector[1];

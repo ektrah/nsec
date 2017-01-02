@@ -14,7 +14,7 @@ namespace NSec.Tests.Rfc
 
         [Theory]
         [MemberData(nameof(Rfc7748TestVectors))]
-        public static void TestRfc7748(string privateKey, string publicKey, string sharedSecret)
+        public static void Test(string privateKey, string publicKey, string sharedSecret)
         {
             var a = new X25519();
             var kdf = new HkdfSha256();
