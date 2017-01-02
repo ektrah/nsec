@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
@@ -26,11 +27,15 @@ namespace NSec.Cryptography
     //
     public sealed class Sha512 : HashAlgorithm
     {
+        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
+
         public Sha512() : base(
             minHashSize: crypto_hash_sha512_BYTES / 2,
             defaultHashSize: crypto_hash_sha512_BYTES,
             maxHashSize: crypto_hash_sha512_BYTES)
         {
+            if (!s_selfTest.Value)
+                throw new InvalidOperationException();
         }
 
         internal override void HashCore(
@@ -61,6 +66,12 @@ namespace NSec.Cryptography
                 crypto_hash_sha512_final(ref state, result);
                 new ReadOnlySpan<byte>(result, 0, hash.Length).CopyTo(hash);
             }
+        }
+
+        private static bool SelfTest()
+        {
+            return (crypto_hash_sha512_bytes() == (IntPtr)crypto_hash_sha512_BYTES)
+                && (crypto_hash_sha512_statebytes() == (IntPtr)Unsafe.SizeOf<crypto_hash_sha512_state>());
         }
     }
 }

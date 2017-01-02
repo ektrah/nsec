@@ -154,10 +154,12 @@ Interop.Sha512.cs:
   constants:
   - crypto_hash_sha512_BYTES
   functions:
+  - crypto_hash_sha512_bytes
   - crypto_hash_sha512_final
   - crypto_hash_sha512_final (ref byte out)
   - crypto_hash_sha512_final (SecureMemoryHandle out)
   - crypto_hash_sha512_init
+  - crypto_hash_sha512_statebytes
   - crypto_hash_sha512_update (ref byte in)
   structs:
   - crypto_hash_sha512_state

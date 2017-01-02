@@ -167,7 +167,9 @@ namespace NSec.Cryptography
         {
             return (crypto_auth_hmacsha512_bytes() == (IntPtr)crypto_auth_hmacsha512_BYTES)
                 && (crypto_auth_hmacsha512_keybytes() == (IntPtr)crypto_auth_hmacsha512_KEYBYTES)
-                && (crypto_auth_hmacsha512_statebytes() == (IntPtr)Unsafe.SizeOf<crypto_auth_hmacsha512_state>());
+                && (crypto_auth_hmacsha512_statebytes() == (IntPtr)Unsafe.SizeOf<crypto_auth_hmacsha512_state>())
+                && (crypto_hash_sha512_bytes() == (IntPtr)crypto_hash_sha512_BYTES)
+                && (crypto_hash_sha512_statebytes() == (IntPtr)Unsafe.SizeOf<crypto_hash_sha512_state>());
         }
     }
 }
