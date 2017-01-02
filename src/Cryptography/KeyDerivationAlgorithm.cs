@@ -76,10 +76,26 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> info,
             Span<byte> bytes);
 
-        internal abstract void DeriveKeyCore(
+        internal virtual void DeriveKeyCore(
             SharedSecret sharedSecret,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> info,
-            SecureMemoryHandle key);
+            SecureMemoryHandle key)
+        {
+            bool addedRef = false;
+            try
+            {
+                key.DangerousAddRef(ref addedRef);
+
+                DeriveBytesCore(sharedSecret, salt, info, key.DangerousGetSpan());
+            }
+            finally
+            {
+                if (addedRef)
+                {
+                    key.DangerousRelease();
+                }
+            }
+        }
     }
 }

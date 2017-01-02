@@ -120,34 +120,6 @@ namespace NSec.Cryptography
             ExpandCore(pseudorandomKey, info, bytes);
         }
 
-        internal override void DeriveKeyCore(
-            SharedSecret sharedSecret,
-            ReadOnlySpan<byte> salt,
-            ReadOnlySpan<byte> info,
-            SecureMemoryHandle key)
-        {
-            Debug.Assert(sharedSecret != null);
-            Debug.Assert(key != null);
-            Debug.Assert(key.Length <= MaxOutputSize);
-
-            bool addedRef = false;
-            try
-            {
-                key.DangerousAddRef(ref addedRef);
-
-                byte[] pseudorandomKey = new byte[crypto_auth_hmacsha256_BYTES]; // TODO: avoid placing sensitive data in managed memory
-                ExtractCore(sharedSecret, salt, pseudorandomKey);
-                ExpandCore(pseudorandomKey, info, key.DangerousGetSpan());
-            }
-            finally
-            {
-                if (addedRef)
-                {
-                    key.DangerousRelease();
-                }
-            }
-        }
-
         private static void ExpandCore(
             ReadOnlySpan<byte> pseudorandomKey,
             ReadOnlySpan<byte> info,
