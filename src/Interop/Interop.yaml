@@ -139,10 +139,12 @@ Interop.Sha256.cs:
   constants:
   - crypto_hash_sha256_BYTES
   functions:
+  - crypto_hash_sha256_bytes
   - crypto_hash_sha256_final
   - crypto_hash_sha256_final (ref byte out)
   - crypto_hash_sha256_final (SecureMemoryHandle out)
   - crypto_hash_sha256_init
+  - crypto_hash_sha256_statebytes
   - crypto_hash_sha256_update (ref byte in)
   structs:
   - crypto_hash_sha256_state
