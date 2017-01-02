@@ -17,20 +17,14 @@ namespace NSec.Cryptography
     //
     //  Parameters:
     //
-    //      Hash Size - The output of SHA-256 consists of 32 bytes and can be
-    //          truncated. RFC 6920 notes that truncated hashes with a length of
-    //          less than 100 bit do not have useful security properties. RFC
-    //          2104 recommends for HMAC that the length of the HMAC output
-    //          should not be less than half the length of the hash size and
-    //          not less than 80 bits. We choose 16 bytes (128 bits) as the
-    //          minimum size.
+    //      Hash Size - 32 bytes (128 bits of security).
     //
     public sealed class Sha256 : HashAlgorithm
     {
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
         public Sha256() : base(
-            minHashSize: crypto_hash_sha256_BYTES / 2,
+            minHashSize: crypto_hash_sha256_BYTES,
             defaultHashSize: crypto_hash_sha256_BYTES,
             maxHashSize: crypto_hash_sha256_BYTES)
         {

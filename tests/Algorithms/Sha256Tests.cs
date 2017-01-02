@@ -20,35 +20,13 @@ namespace NSec.Tests.Algorithms
             Assert.Equal(expected, actual);
         }
 
-        [Theory]
-        [InlineData(16)]
-        [InlineData(17)]
-        [InlineData(23)]
-        [InlineData(31)]
-        [InlineData(32)]
-        public static void HashEmptyWithSize(int hashSize)
+        [Fact]
+        public static void HashEmptyWithSpan()
         {
             var a = new Sha256();
 
-            var expected = HashOfEmpty.DecodeHex().Substring(0, hashSize);
-            var actual = a.Hash(ReadOnlySpan<byte>.Empty, hashSize);
-
-            Assert.Equal(hashSize, actual.Length);
-            Assert.Equal(expected, actual);
-        }
-
-        [Theory]
-        [InlineData(16)]
-        [InlineData(17)]
-        [InlineData(23)]
-        [InlineData(31)]
-        [InlineData(32)]
-        public static void HashEmptyWithSpan(int hashSize)
-        {
-            var a = new Sha256();
-
-            var expected = HashOfEmpty.DecodeHex().Substring(0, hashSize);
-            var actual = new byte[hashSize];
+            var expected = HashOfEmpty.DecodeHex();
+            var actual = new byte[expected.Length];
 
             a.Hash(ReadOnlySpan<byte>.Empty, actual);
             Assert.Equal(expected, actual);

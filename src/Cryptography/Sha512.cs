@@ -17,13 +17,8 @@ namespace NSec.Cryptography
     //
     //  Parameters:
     //
-    //      Hash Size - The output of SHA-512 consists of 64 bytes and can be
-    //          truncated. RFC 6920 notes that truncated hashes with a length of
-    //          less than 100 bit do not have useful security properties. RFC
-    //          2104 recommends for HMAC that the length of the HMAC output
-    //          should not be less than half the length of the hash size and
-    //          not less than 80 bits. We choose 32 bytes (256 bits) as the
-    //          minimum size.
+    //      Hash Size - 64 bytes (256 bits of security). The output can be
+    //          truncated down to 32 bytes (SHA-512/256) (128 bits of security).
     //
     public sealed class Sha512 : HashAlgorithm
     {
