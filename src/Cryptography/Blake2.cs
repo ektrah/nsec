@@ -18,8 +18,8 @@ namespace NSec.Cryptography
     //      Key Size - Between 0 and 64 bytes. libsodium recommends a default
     //          size of 32 bytes and a minimum size of 16 bytes.
     //
-    //      Hash Size - Between 1 and 64 bytes. libsodium recommends a default
-    //          size of 32 bytes and a minimum size of 16 bytes.
+    //      Hash Size - Between 1 and 64 bytes. For 128 bits of security, the
+    //          output length should not be less than 32 bytes (blake2b256).
     //
     //      Input Size - Between 0 and 2^128-1 bytes. Since a Span<byte> can
     //          hold between 0 to 2^31-1 bytes, we do not check the length of
@@ -27,12 +27,15 @@ namespace NSec.Cryptography
     //
     public sealed class Blake2 : HashAlgorithm
     {
+        private const int BLAKE2B_KEYBYTES = 64;
+        private const int BLAKE2B_OUTBYTES = 64;
+
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
         public Blake2() : base(
-            minHashSize: crypto_generichash_blake2b_BYTES_MIN,
-            defaultHashSize: crypto_generichash_blake2b_BYTES,
-            maxHashSize: crypto_generichash_blake2b_BYTES_MAX)
+            minHashSize: 32,
+            defaultHashSize: 32,
+            maxHashSize: BLAKE2B_OUTBYTES)
         {
             if (!s_selfTest.Value)
                 throw new InvalidOperationException();
@@ -53,7 +56,7 @@ namespace NSec.Cryptography
             if (key.Algorithm != this)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
 
-            byte[] hash = new byte[crypto_generichash_blake2b_BYTES];
+            byte[] hash = new byte[DefaultHashSize];
             HashCore(key, data, hash);
             return hash;
         }
@@ -67,9 +70,9 @@ namespace NSec.Cryptography
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
-            if (hashSize < crypto_generichash_blake2b_BYTES_MIN)
+            if (hashSize < MinHashSize)
                 throw new ArgumentOutOfRangeException(nameof(hashSize));
-            if (hashSize > crypto_generichash_blake2b_BYTES_MAX)
+            if (hashSize > MaxHashSize)
                 throw new ArgumentOutOfRangeException(nameof(hashSize));
 
             byte[] hash = new byte[hashSize];
@@ -86,9 +89,9 @@ namespace NSec.Cryptography
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
-            if (hash.Length < crypto_generichash_blake2b_BYTES_MIN)
+            if (hash.Length < MinHashSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(hash));
-            if (hash.Length > crypto_generichash_blake2b_BYTES_MAX)
+            if (hash.Length > MaxHashSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(hash));
 
             HashCore(key, data, hash);
@@ -112,8 +115,8 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> data,
             Span<byte> hash)
         {
-            Debug.Assert(hash.Length >= crypto_generichash_blake2b_BYTES_MIN);
-            Debug.Assert(hash.Length <= crypto_generichash_blake2b_BYTES_MAX);
+            Debug.Assert(hash.Length > 0);
+            Debug.Assert(hash.Length <= BLAKE2B_OUTBYTES);
 
             crypto_generichash_blake2b_init(out crypto_generichash_blake2b_state state, IntPtr.Zero, IntPtr.Zero, (IntPtr)hash.Length);
             crypto_generichash_blake2b_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
@@ -163,10 +166,10 @@ namespace NSec.Cryptography
             Span<byte> hash)
         {
             Debug.Assert(key != null);
-            Debug.Assert(key.Handle.Length >= crypto_generichash_blake2b_KEYBYTES_MIN);
-            Debug.Assert(key.Handle.Length <= crypto_generichash_blake2b_KEYBYTES_MAX);
-            Debug.Assert(hash.Length >= crypto_generichash_blake2b_BYTES_MIN);
-            Debug.Assert(hash.Length <= crypto_generichash_blake2b_BYTES_MAX);
+            Debug.Assert(key.Handle.Length >= 0);
+            Debug.Assert(key.Handle.Length <= BLAKE2B_KEYBYTES);
+            Debug.Assert(hash.Length > 0);
+            Debug.Assert(hash.Length <= BLAKE2B_OUTBYTES);
 
             crypto_generichash_blake2b_init(out crypto_generichash_blake2b_state state, key.Handle, (IntPtr)key.Handle.Length, (IntPtr)hash.Length);
             crypto_generichash_blake2b_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
