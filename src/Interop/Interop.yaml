@@ -114,10 +114,13 @@ Interop.HmacSha512.cs:
   - crypto_auth_hmacsha512_BYTES
   - crypto_auth_hmacsha512_KEYBYTES
   functions:
+  - crypto_auth_hmacsha512_bytes
   - crypto_auth_hmacsha512_final
   - crypto_auth_hmacsha512_final (ref byte out)
   - crypto_auth_hmacsha512_init (ref byte key)
   - crypto_auth_hmacsha512_init (SecureMemoryHandle key)
+  - crypto_auth_hmacsha512_keybytes
+  - crypto_auth_hmacsha512_statebytes
   - crypto_auth_hmacsha512_update
   - crypto_auth_hmacsha512_update (ref byte in)
   - crypto_auth_hmacsha512_update (SecureMemoryHandle in)

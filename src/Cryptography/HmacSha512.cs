@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
@@ -39,6 +40,8 @@ namespace NSec.Cryptography
         private const int SHA512HashSize = 64; // "L" in RFC 2104
         private const int SHA512MessageBlockSize = 128; // "B" in RFC 2104
 
+        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
+
         public HmacSha512() : base(
             minKeySize: SHA512HashSize,
             defaultKeySize: SHA512HashSize,
@@ -49,6 +52,8 @@ namespace NSec.Cryptography
             defaultMacSize: crypto_auth_hmacsha512_BYTES,
             maxMacSize: crypto_auth_hmacsha512_BYTES)
         {
+            if (!s_selfTest.Value)
+                throw new InvalidOperationException();
         }
 
         internal override SecureMemoryHandle CreateDerivedKey()
@@ -156,6 +161,13 @@ namespace NSec.Cryptography
 
             result = new Key(this, flags, handle, null);
             return true;
+        }
+
+        private static bool SelfTest()
+        {
+            return (crypto_auth_hmacsha512_bytes() == (IntPtr)crypto_auth_hmacsha512_BYTES)
+                && (crypto_auth_hmacsha512_keybytes() == (IntPtr)crypto_auth_hmacsha512_KEYBYTES)
+                && (crypto_auth_hmacsha512_statebytes() == (IntPtr)Unsafe.SizeOf<crypto_auth_hmacsha512_state>());
         }
     }
 }
