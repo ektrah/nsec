@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
@@ -31,9 +32,13 @@ namespace NSec.Cryptography
     //
     public sealed class HkdfSha256 : KeyDerivationAlgorithm
     {
+        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
+
         public HkdfSha256() : base(
             usesSalt: true)
         {
+            if (!s_selfTest.Value)
+                throw new InvalidOperationException();
         }
 
         public int MaxOutputSize => 255 * crypto_auth_hmacsha256_BYTES;
@@ -187,6 +192,12 @@ namespace NSec.Cryptography
             crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, ref salt.DangerousGetPinnableReference(), (IntPtr)salt.Length);
             crypto_auth_hmacsha256_update(ref state, sharedSecret.Handle, (ulong)sharedSecret.Handle.Length);
             crypto_auth_hmacsha256_final(ref state, ref pseudorandomKey.DangerousGetPinnableReference());
+        }
+
+        private static bool SelfTest()
+        {
+            return (crypto_auth_hmacsha256_bytes() == (IntPtr)crypto_auth_hmacsha256_BYTES)
+                && (crypto_auth_hmacsha256_statebytes() == (IntPtr)Unsafe.SizeOf<crypto_auth_hmacsha256_state>());
         }
     }
 }
