@@ -8,6 +8,10 @@ internal static partial class Interop
         internal const int crypto_aead_aes256gcm_ABYTES = 16;
         internal const int crypto_aead_aes256gcm_KEYBYTES = 32;
         internal const int crypto_aead_aes256gcm_NPUBBYTES = 12;
+        internal const int crypto_aead_aes256gcm_NSECBYTES = 0;
+
+        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern IntPtr crypto_aead_aes256gcm_abytes();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int crypto_aead_aes256gcm_decrypt(
@@ -35,5 +39,14 @@ internal static partial class Interop
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int crypto_aead_aes256gcm_is_available();
+
+        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern IntPtr crypto_aead_aes256gcm_keybytes();
+
+        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern IntPtr crypto_aead_aes256gcm_npubbytes();
+
+        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern IntPtr crypto_aead_aes256gcm_nsecbytes();
     }
 }

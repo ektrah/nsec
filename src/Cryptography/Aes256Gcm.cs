@@ -38,6 +38,7 @@ namespace NSec.Cryptography
     public sealed class Aes256Gcm : AeadAlgorithm
     {
         private static readonly Lazy<int> s_isAvailable = new Lazy<int>(new Func<int>(crypto_aead_aes256gcm_is_available));
+        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
         private static readonly KeyFormatter s_nsecKeyFormatter =
             new KeyFormatter(crypto_aead_aes256gcm_KEYBYTES, new byte[]
@@ -55,6 +56,8 @@ namespace NSec.Cryptography
         {
             if (s_isAvailable.Value == 0)
                 throw new PlatformNotSupportedException();
+            if (!s_selfTest.Value)
+                throw new InvalidOperationException();
         }
 
         public static bool IsAvailable => Sodium.TryInitialize() && (s_isAvailable.Value != 0);
@@ -164,6 +167,14 @@ namespace NSec.Cryptography
                 result = null;
                 return false;
             }
+        }
+
+        private static bool SelfTest()
+        {
+            return (crypto_aead_aes256gcm_abytes() == (IntPtr)crypto_aead_aes256gcm_ABYTES)
+                && (crypto_aead_aes256gcm_keybytes() == (IntPtr)crypto_aead_aes256gcm_KEYBYTES)
+                && (crypto_aead_aes256gcm_npubbytes() == (IntPtr)crypto_aead_aes256gcm_NPUBBYTES)
+                && (crypto_aead_aes256gcm_nsecbytes() == (IntPtr)crypto_aead_aes256gcm_NSECBYTES);
         }
     }
 }
