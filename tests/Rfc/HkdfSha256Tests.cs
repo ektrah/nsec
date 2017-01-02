@@ -13,15 +13,6 @@ namespace NSec.Tests.Algorithms
             { "0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b", "", "", "19ef24a32c717b167f33a91d6f648bdf96596776afdb6377ac434c1c293ccb04", "8da4e775a563c18f715f802a063c5a31b8a11f5c5ee1879ec3454e5f3c738d2d9d201395faa4b61a96c8" },
         };
 
-        [Fact]
-        public static void Properties()
-        {
-            var a = new HkdfSha256();
-
-            Assert.True(a.MaxOutputSize > 0);
-            Assert.True(a.PseudorandomKeySize > 0);
-        }
-
         [Theory]
         [MemberData(nameof(Rfc5869TestVectors))]
         public static void TestRfc5869OneStep(string ikm, string salt, string info, string expectedPrk, string expectedOkm)
