@@ -79,9 +79,13 @@ Interop.Ed25519.cs:
   - crypto_sign_ed25519_SECRETKEYBYTES
   - crypto_sign_ed25519_SEEDBYTES
   functions:
+  - crypto_sign_ed25519_bytes
   - crypto_sign_ed25519_detached (ref byte sig, ref byte m)
   - crypto_sign_ed25519_keypair
+  - crypto_sign_ed25519_publickeybytes
+  - crypto_sign_ed25519_secretkeybytes
   - crypto_sign_ed25519_seed_keypair (ref byte seed)
+  - crypto_sign_ed25519_seedbytes
   - crypto_sign_ed25519_sk_to_seed (ref byte seed)
   - crypto_sign_ed25519_verify_detached (ref byte sig, ref byte m, ref byte pk)
 

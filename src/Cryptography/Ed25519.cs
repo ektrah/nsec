@@ -32,6 +32,8 @@ namespace NSec.Cryptography
     //
     public sealed class Ed25519 : SignatureAlgorithm
     {
+        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
+
         private static readonly KeyFormatter s_nsecPrivateKeyFormatter =
             new Ed25519KeyFormatter(crypto_sign_ed25519_SEEDBYTES, new byte[]
         {
@@ -79,6 +81,8 @@ namespace NSec.Cryptography
             publicKeySize: crypto_sign_ed25519_PUBLICKEYBYTES,
             signatureSize: crypto_sign_ed25519_BYTES)
         {
+            if (!s_selfTest.Value)
+                throw new InvalidOperationException();
         }
 
         internal override SecureMemoryHandle CreateKey(
@@ -220,6 +224,14 @@ namespace NSec.Cryptography
                 ref publicKey.Bytes.DangerousGetPinnableReference());
 
             return error == 0;
+        }
+
+        private static bool SelfTest()
+        {
+            return (crypto_sign_ed25519_bytes() == (IntPtr)crypto_sign_ed25519_BYTES)
+                && (crypto_sign_ed25519_publickeybytes() == (IntPtr)crypto_sign_ed25519_PUBLICKEYBYTES)
+                && (crypto_sign_ed25519_secretkeybytes() == (IntPtr)crypto_sign_ed25519_SECRETKEYBYTES)
+                && (crypto_sign_ed25519_seedbytes() == (IntPtr)crypto_sign_ed25519_SEEDBYTES);
         }
     }
 }
