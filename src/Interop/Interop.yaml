@@ -95,10 +95,13 @@ Interop.HmacSha256.cs:
   - crypto_auth_hmacsha256_BYTES
   - crypto_auth_hmacsha256_KEYBYTES
   functions:
+  - crypto_auth_hmacsha256_bytes
   - crypto_auth_hmacsha256_final
   - crypto_auth_hmacsha256_final (ref byte out)
   - crypto_auth_hmacsha256_init (ref byte key)
   - crypto_auth_hmacsha256_init (SecureMemoryHandle key)
+  - crypto_auth_hmacsha256_keybytes
+  - crypto_auth_hmacsha256_statebytes
   - crypto_auth_hmacsha256_update
   - crypto_auth_hmacsha256_update (ref byte in)
   - crypto_auth_hmacsha256_update (SecureMemoryHandle in)
