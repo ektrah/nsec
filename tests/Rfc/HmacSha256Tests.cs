@@ -17,8 +17,17 @@ namespace NSec.Tests.Rfc
             { "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "5468697320697320612074657374207573696e672061206c6172676572207468616e20626c6f636b2d73697a65206b657920616e642061206c6172676572207468616e20626c6f636b2d73697a6520646174612e20546865206b6579206e6565647320746f20626520686173686564206265666f7265206265696e6720757365642062792074686520484d414320616c676f726974686d2e", "9b09ffa71b942fcb27635fbcd5b0e944bfdc63644f0713938a7f51535c3a35e2" },
         };
 
+        public static readonly TheoryData<string, string, string> Rfc4868TestVectors = new TheoryData<string, string, string>
+        {
+            { "0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b", "4869205468657265", "198a607eb44bfbc69903a0f1cf2bbdc5" },
+            { "4a6566654a6566654a6566654a6566654a6566654a6566654a6566654a656665", "7768617420646f2079612077616e7420666f72206e6f7468696e673f", "167f928588c5cc2eef8e3093caa0e87c" },
+            { "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "cdcb1220d1ecccea91e53aba3092f962" },
+            { "0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20", "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd", "372efcf9b40b35c2115b1346903d2ef4" },
+        };
+
         [Theory]
         [MemberData(nameof(Rfc4231TestVectors))]
+        [MemberData(nameof(Rfc4868TestVectors))]
         public static void Test(string key, string msg, string mac)
         {
             var a = new HmacSha256();
