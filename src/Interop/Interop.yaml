@@ -26,9 +26,16 @@ Interop.Blake2b.cs:
   - crypto_generichash_blake2b_KEYBYTES_MAX
   - crypto_generichash_blake2b_KEYBYTES_MIN
   functions:
+  - crypto_generichash_blake2b_bytes
+  - crypto_generichash_blake2b_bytes_max
+  - crypto_generichash_blake2b_bytes_min
   - crypto_generichash_blake2b_final (ref byte out)
-  - crypto_generichash_blake2b_init (SecureMemoryHandle key)
   - crypto_generichash_blake2b_init (IntPtr key)
+  - crypto_generichash_blake2b_init (SecureMemoryHandle key)
+  - crypto_generichash_blake2b_keybytes
+  - crypto_generichash_blake2b_keybytes_max
+  - crypto_generichash_blake2b_keybytes_min
+  - crypto_generichash_blake2b_statebytes
   - crypto_generichash_blake2b_update (ref byte in)
   structs:
   - crypto_generichash_blake2b_state

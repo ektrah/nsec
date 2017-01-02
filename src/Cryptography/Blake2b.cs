@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
@@ -7,11 +8,15 @@ namespace NSec.Cryptography
     // RFC 7693
     public sealed class Blake2b : HashAlgorithm
     {
+        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
+
         public Blake2b() : base(
             minHashSize: crypto_generichash_blake2b_BYTES_MIN,
             defaultHashSize: crypto_generichash_blake2b_BYTES,
             maxHashSize: crypto_generichash_blake2b_BYTES_MAX)
         {
+            if (!s_selfTest.Value)
+                throw new InvalidOperationException();
         }
 
         public int DefaultKeySize => crypto_generichash_blake2b_KEYBYTES;
@@ -147,6 +152,17 @@ namespace NSec.Cryptography
             crypto_generichash_blake2b_init(out crypto_generichash_blake2b_state state, key.Handle, (IntPtr)key.Handle.Length, (IntPtr)hash.Length);
             crypto_generichash_blake2b_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
             crypto_generichash_blake2b_final(ref state, ref hash.DangerousGetPinnableReference(), (IntPtr)hash.Length);
+        }
+
+        private static bool SelfTest()
+        {
+            return (crypto_generichash_blake2b_bytes() == (IntPtr)crypto_generichash_blake2b_BYTES)
+                && (crypto_generichash_blake2b_bytes_max() == (IntPtr)crypto_generichash_blake2b_BYTES_MAX)
+                && (crypto_generichash_blake2b_bytes_min() == (IntPtr)crypto_generichash_blake2b_BYTES_MIN)
+                && (crypto_generichash_blake2b_keybytes() == (IntPtr)crypto_generichash_blake2b_BYTES)
+                && (crypto_generichash_blake2b_keybytes_max() == (IntPtr)crypto_generichash_blake2b_BYTES_MAX)
+                && (crypto_generichash_blake2b_keybytes_min() == (IntPtr)crypto_generichash_blake2b_BYTES_MIN)
+                && (crypto_generichash_blake2b_statebytes() == (IntPtr)Unsafe.SizeOf<crypto_generichash_blake2b_state>());
         }
     }
 }
