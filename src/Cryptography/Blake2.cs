@@ -181,9 +181,9 @@ namespace NSec.Cryptography
             return (crypto_generichash_blake2b_bytes() == (IntPtr)crypto_generichash_blake2b_BYTES)
                 && (crypto_generichash_blake2b_bytes_max() == (IntPtr)crypto_generichash_blake2b_BYTES_MAX)
                 && (crypto_generichash_blake2b_bytes_min() == (IntPtr)crypto_generichash_blake2b_BYTES_MIN)
-                && (crypto_generichash_blake2b_keybytes() == (IntPtr)crypto_generichash_blake2b_BYTES)
-                && (crypto_generichash_blake2b_keybytes_max() == (IntPtr)crypto_generichash_blake2b_BYTES_MAX)
-                && (crypto_generichash_blake2b_keybytes_min() == (IntPtr)crypto_generichash_blake2b_BYTES_MIN)
+                && (crypto_generichash_blake2b_keybytes() == (IntPtr)crypto_generichash_blake2b_KEYBYTES)
+                && (crypto_generichash_blake2b_keybytes_max() == (IntPtr)crypto_generichash_blake2b_KEYBYTES_MAX)
+                && (crypto_generichash_blake2b_keybytes_min() == (IntPtr)crypto_generichash_blake2b_KEYBYTES_MIN)
                 && (crypto_generichash_blake2b_statebytes() == (IntPtr)Unsafe.SizeOf<crypto_generichash_blake2b_state>());
         }
     }
