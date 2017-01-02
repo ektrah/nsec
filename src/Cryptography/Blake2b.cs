@@ -5,7 +5,25 @@ using static Interop.Libsodium;
 
 namespace NSec.Cryptography
 {
-    // RFC 7693
+    //
+    //  BLAKE2b
+    //
+    //  References:
+    //
+    //      RFC 7693 - The BLAKE2 Cryptographic Hash and Message Authentication
+    //          Code (MAC)
+    //
+    //  Parameters:
+    //
+    //      Hash Size - Between 1 and 64 bytes. libsodium recommends a default
+    //          size of 32 bytes and a minimum size of 16 bytes.
+    //
+    //      Key Size - Between 0 and 64 bytes. libsodium recommends a default
+    //          size of 32 bytes and a minimum size of 16 bytes.
+    //
+    //      Input Size - Between 0 and 2^128-1. Since a Span<byte> can hold
+    //          between 0 to 2^31-1 bytes, we do not check the length of inputs.
+    //
     public sealed class Blake2b : HashAlgorithm
     {
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
