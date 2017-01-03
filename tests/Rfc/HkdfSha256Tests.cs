@@ -2,7 +2,7 @@ using System;
 using NSec.Cryptography;
 using Xunit;
 
-namespace NSec.Tests.Algorithms
+namespace NSec.Tests.Rfc
 {
     public static class HkdfSha256Tests
     {

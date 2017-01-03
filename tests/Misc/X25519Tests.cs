@@ -2,7 +2,7 @@ using System;
 using NSec.Cryptography;
 using Xunit;
 
-namespace NSec.Tests.More
+namespace NSec.Tests.Misc
 {
     public static class X25519Tests
     {

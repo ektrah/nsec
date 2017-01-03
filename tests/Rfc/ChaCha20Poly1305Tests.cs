@@ -2,7 +2,7 @@ using System;
 using NSec.Cryptography;
 using Xunit;
 
-namespace NSec.Tests.Algorithms
+namespace NSec.Tests.Rfc
 {
     public static class ChaCha20Poly1305Tests
     {
