@@ -9,6 +9,17 @@ namespace NSec.Tests.Algorithms
         public static readonly string HashOfEmpty = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
 
         [Fact]
+        public static void Properties()
+        {
+            var a = new Sha256();
+
+            Assert.Equal(32, a.MinHashSize);
+            Assert.True(a.DefaultHashSize >= a.MinHashSize);
+            Assert.True(a.MaxHashSize >= a.DefaultHashSize);
+            Assert.Equal(32, a.MaxHashSize);
+        }
+
+        [Fact]
         public static void HashEmpty()
         {
             var a = new Sha256();
@@ -17,6 +28,18 @@ namespace NSec.Tests.Algorithms
             var actual = a.Hash(ReadOnlySpan<byte>.Empty);
 
             Assert.Equal(a.DefaultHashSize, actual.Length);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public static void HashEmptyWithSize()
+        {
+            var a = new Sha256();
+
+            var expected = HashOfEmpty.DecodeHex();
+            var actual = a.Hash(ReadOnlySpan<byte>.Empty, a.MaxHashSize);
+
+            Assert.Equal(a.MaxHashSize, actual.Length);
             Assert.Equal(expected, actual);
         }
 
