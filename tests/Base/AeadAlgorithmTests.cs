@@ -445,7 +445,7 @@ namespace NSec.Tests.Base
 
         #endregion
 
-        #region Decrypt #2
+        #region TryDecrypt #2
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
