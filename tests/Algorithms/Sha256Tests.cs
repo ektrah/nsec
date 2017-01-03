@@ -6,7 +6,7 @@ namespace NSec.Tests.Algorithms
 {
     public static class Sha256Tests
     {
-        public static readonly string HashOfEmpty = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
+        private static readonly string s_hashOfEmpty = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
 
         [Fact]
         public static void Properties()
@@ -24,7 +24,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = new Sha256();
 
-            var expected = HashOfEmpty.DecodeHex();
+            var expected = s_hashOfEmpty.DecodeHex();
             var actual = a.Hash(ReadOnlySpan<byte>.Empty);
 
             Assert.Equal(a.DefaultHashSize, actual.Length);
@@ -36,7 +36,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = new Sha256();
 
-            var expected = HashOfEmpty.DecodeHex();
+            var expected = s_hashOfEmpty.DecodeHex();
             var actual = a.Hash(ReadOnlySpan<byte>.Empty, a.MaxHashSize);
 
             Assert.Equal(a.MaxHashSize, actual.Length);
@@ -48,7 +48,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = new Sha256();
 
-            var expected = HashOfEmpty.DecodeHex();
+            var expected = s_hashOfEmpty.DecodeHex();
             var actual = new byte[expected.Length];
 
             a.Hash(ReadOnlySpan<byte>.Empty, actual);

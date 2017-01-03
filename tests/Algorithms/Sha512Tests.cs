@@ -6,7 +6,7 @@ namespace NSec.Tests.Algorithms
 {
     public static class Sha512Tests
     {
-        public static readonly string HashOfEmpty = "cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e";
+        private static readonly string s_hashOfEmpty = "cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e";
 
         [Fact]
         public static void Properties()
@@ -24,7 +24,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = new Sha512();
 
-            var expected = HashOfEmpty.DecodeHex();
+            var expected = s_hashOfEmpty.DecodeHex();
             var actual = a.Hash(ReadOnlySpan<byte>.Empty);
 
             Assert.Equal(a.DefaultHashSize, actual.Length);
@@ -41,7 +41,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = new Sha512();
 
-            var expected = HashOfEmpty.DecodeHex().Substring(0, hashSize);
+            var expected = s_hashOfEmpty.DecodeHex().Substring(0, hashSize);
             var actual = a.Hash(ReadOnlySpan<byte>.Empty, hashSize);
 
             Assert.Equal(hashSize, actual.Length);
@@ -58,7 +58,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = new Sha512();
 
-            var expected = HashOfEmpty.DecodeHex().Substring(0, hashSize);
+            var expected = s_hashOfEmpty.DecodeHex().Substring(0, hashSize);
             var actual = new byte[hashSize];
 
             a.Hash(ReadOnlySpan<byte>.Empty, actual);
