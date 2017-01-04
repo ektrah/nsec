@@ -3,6 +3,24 @@ using static Interop.Libsodium;
 
 namespace NSec.Cryptography
 {
+    //
+    //  Libsodium Versions
+    //
+    //      Version | Major | Minor
+    //      ------- | ----- | -----
+    //      1.0.0   |   7   |   2
+    //      1.0.1   |   7   |   3
+    //      1.0.2   |   7   |   4
+    //      1.0.3   |   7   |   5
+    //      1.0.4   |   7   |   6
+    //      1.0.5   |   7   |   6
+    //      1.0.6   |   8   |   0
+    //      1.0.7   |   9   |   0
+    //      1.0.8   |   9   |   1
+    //      1.0.9   |   9   |   2
+    //      1.0.10  |   9   |   2
+    //      1.0.11  |   9   |   3
+    //
     internal static class Sodium
     {
         private static readonly Lazy<int> s_initialized = new Lazy<int>(new Func<int>(sodium_init));
