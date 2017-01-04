@@ -27,8 +27,8 @@ namespace NSec.Cryptography
         {
             if (sharedSecret.Length > 128)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(sharedSecret));
-            if (!Sodium.TryInitialize())
-                throw new InvalidOperationException();
+
+            Sodium.Initialize();
 
             SecureMemoryHandle handle = SecureMemoryHandle.Alloc(sharedSecret.Length);
             handle.Import(sharedSecret);

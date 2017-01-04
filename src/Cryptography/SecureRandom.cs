@@ -8,12 +8,12 @@ namespace NSec.Cryptography
         public static byte[] GenerateBytes(
             int count)
         {
-            if (!Sodium.TryInitialize())
-                throw new InvalidOperationException();
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
             if (count == 0)
                 return new byte[0];
+
+            Sodium.Initialize();
 
             byte[] bytes = new byte[count];
             randombytes_buf(bytes, (IntPtr)bytes.Length);
@@ -23,10 +23,10 @@ namespace NSec.Cryptography
         public static void GenerateBytes(
             Span<byte> bytes)
         {
-            if (!Sodium.TryInitialize())
-                throw new InvalidOperationException();
             if (bytes.Length == 0)
                 return;
+
+            Sodium.Initialize();
 
             randombytes_buf(ref bytes.DangerousGetPinnableReference(), (IntPtr)bytes.Length);
         }

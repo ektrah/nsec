@@ -7,8 +7,7 @@ namespace NSec.Cryptography
     {
         internal Algorithm()
         {
-            if (!Sodium.TryInitialize())
-                throw new InvalidOperationException();
+            Sodium.Initialize();
         }
 
         // Allocates a new uninitialized libsodium secret key for key derivation
