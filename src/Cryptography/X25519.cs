@@ -33,13 +33,13 @@ namespace NSec.Cryptography
         private static readonly KeyFormatter s_nsecPrivateKeyFormatter =
             new X25519KeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[]
         {
-            0x7F, 0x06, 0x4E, 0x41, 0x00, 0x00, 0x00, 0x20,
+            0x7F, 0x36, 0x41, crypto_scalarmult_curve25519_SCALARBYTES,
         });
 
         private static readonly PublicKeyFormatter s_nsecPublicKeyFormatter =
             new PublicKeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[]
         {
-            0x7F, 0x07, 0x4E, 0x41, 0x00, 0x00, 0x00, 0x20,
+            0x7F, 0x37, 0x41, crypto_scalarmult_curve25519_SCALARBYTES,
         });
 
         private static readonly KeyFormatter s_pkixPrivateKeyFormatter =

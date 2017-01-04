@@ -43,7 +43,7 @@ namespace NSec.Cryptography
         private static readonly KeyFormatter s_nsecKeyFormatter =
             new KeyFormatter(crypto_aead_aes256gcm_KEYBYTES, new byte[]
         {
-            0x7F, 0x01, 0x71, 0xE6, 0x00, 0x00, 0x00, 0x20,
+            0x7F, 0x31, 0x44, crypto_aead_aes256gcm_KEYBYTES,
         });
 
         private static readonly KeyFormatter s_rawKeyFormatter =

@@ -44,7 +44,7 @@ namespace NSec.Cryptography
         private static readonly KeyFormatter s_nsecKeyFormatter =
             new KeyFormatter(crypto_aead_chacha20poly1305_ietf_KEYBYTES, new byte[]
         {
-            0x7F, 0x01, 0x5A, 0x08, 0x00, 0x00, 0x00, 0x20,
+            0x7F, 0x31, 0x43, crypto_aead_chacha20poly1305_ietf_KEYBYTES,
         });
 
         private static readonly KeyFormatter s_rawKeyFormatter =

@@ -37,13 +37,13 @@ namespace NSec.Cryptography
         private static readonly KeyFormatter s_nsecPrivateKeyFormatter =
             new Ed25519KeyFormatter(crypto_sign_ed25519_SEEDBYTES, new byte[]
         {
-            0x7F, 0x04, 0xC3, 0x96, 0x00, 0x00, 0x00, 0x20,
+            0x7F, 0x34, 0x42, crypto_sign_ed25519_SEEDBYTES,
         });
 
         private static readonly PublicKeyFormatter s_nsecPublicKeyFormatter =
             new PublicKeyFormatter(crypto_sign_ed25519_PUBLICKEYBYTES, new byte[]
         {
-            0x7F, 0x05, 0xC3, 0x96, 0x00, 0x00, 0x00, 0x20,
+            0x7F, 0x35, 0x42, crypto_sign_ed25519_PUBLICKEYBYTES,
         });
 
         private static readonly KeyFormatter s_pkixPrivateKeyFormatter =
