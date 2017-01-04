@@ -27,6 +27,14 @@ namespace NSec.Cryptography
         private static readonly Lazy<int> s_versionMajor = new Lazy<int>(new Func<int>(sodium_library_version_major));
         private static readonly Lazy<int> s_versionMinor = new Lazy<int>(new Func<int>(sodium_library_version_minor));
 
+        public static void Initialize()
+        {
+            if (!TryInitialize())
+            {
+                throw new InvalidOperationException();
+            }
+        }
+
         public static bool IsVersionOrLater(int major, int minor)
         {
             return (s_versionMajor.Value > major)
