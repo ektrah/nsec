@@ -9,10 +9,16 @@ namespace NSec.Cryptography
         private static readonly Lazy<int> s_versionMajor = new Lazy<int>(new Func<int>(sodium_library_version_major));
         private static readonly Lazy<int> s_versionMinor = new Lazy<int>(new Func<int>(sodium_library_version_minor));
 
+        public static bool IsVersionOrLater(int major, int minor)
+        {
+            return (s_versionMajor.Value > major)
+                || (s_versionMajor.Value == major && s_versionMinor.Value >= minor);
+        }
+
         public static bool TryInitialize()
         {
             // Require libsodium 1.0.9 or later
-            if ((s_versionMajor.Value < 9) || (s_versionMajor.Value == 9 && s_versionMinor.Value < 2))
+            if (!IsVersionOrLater(9, 2))
             {
                 return false;
             }
