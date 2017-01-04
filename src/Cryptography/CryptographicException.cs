@@ -6,8 +6,13 @@ namespace NSec.Cryptography
     {
         public CryptographicException() { }
 
-        public CryptographicException(string message) : base(message) { }
+        public CryptographicException(
+            string message)
+            : base(message) { }
 
-        public CryptographicException(string message, Exception innerException) : base(message, innerException) { }
+        public CryptographicException(
+            string message,
+            Exception innerException)
+            : base(message, innerException) { }
     }
 }

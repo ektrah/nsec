@@ -56,7 +56,8 @@ namespace NSec.Cryptography
             return algorithm.TryImportPublicKey(blob, format, out result);
         }
 
-        public bool Equals(PublicKey other)
+        public bool Equals(
+            PublicKey other)
         {
             return (this == other)
                 || (other != null)
@@ -64,12 +65,14 @@ namespace NSec.Cryptography
                 && Extensions.BlockEquals(_bytes, other._bytes);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(
+            object obj)
         {
             return Equals(obj as PublicKey);
         }
 
-        public byte[] Export(KeyBlobFormat format)
+        public byte[] Export(
+            KeyBlobFormat format)
         {
             if (format == KeyBlobFormat.None)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(format));
