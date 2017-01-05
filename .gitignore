@@ -1,0 +1,5 @@
+*.log
+*~
+.firebaserc
+.vs
+public/
