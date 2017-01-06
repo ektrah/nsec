@@ -1,0 +1,137 @@
+footer, header, main, nav {
+    display: block;
+}
+
+body {
+    font: 13px/1.618 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+}
+
+dd, dl, dt, li, ol, ul {
+    margin: .3em 0 0;
+}
+
+    dt + dd {
+        margin: 0;
+    }
+
+main > * {
+    margin: 1em 0 1em 1.5em;
+}
+
+h1, h2, h3, h4, h5, h6, main nav {
+    margin: 1.5em 0 1em;
+}
+
+code, pre {
+    font: 1em Consolas,"Liberation Mono",Menlo,Courier,monospace;
+    background: #F8F8F8;
+}
+
+pre {
+    padding: 1em;
+    border-top: 1px solid #EEE;
+    border-bottom: 1px solid #EEE;
+}
+
+blockquote, dd, ol, ul {
+    padding: 0 0 0 2em;
+}
+
+cite, dt {
+    font-style: italic;
+}
+
+header, footer {
+    font-size: smaller;
+}
+
+    header li {
+        display: inline;
+    }
+
+nav ol, nav ul {
+    list-style: none;
+}
+
+nav > ol, nav > ul {
+    padding: 0;
+}
+
+nav > ul {
+    margin: 1em 0 1em 1.5em;
+}
+
+@media print {
+    h1, h2, h3, h4, h5, h6 {
+        page-break-after: avoid;
+    }
+
+    a, a:visited {
+        color: #000;
+        text-decoration: underline;
+    }
+}
+
+@media screen {
+
+    html {
+        width: 100%;
+        height: 100%;
+    }
+
+    body {
+        color: #333;
+        background: #FFF;
+        max-width: 50em;
+        min-height: 100%;
+        margin: 0 auto;
+        padding: 0 1em;
+        overflow-wrap: break-word;
+        border-left: 1px solid #EEE;
+        border-right: 1px solid #EEE;
+        overflow-y: scroll;
+    }
+
+        body:after, body:before, header:before {
+            content: '';
+            display: block;
+        }
+
+        body:before {
+            height: 1em;
+        }
+
+        body:after {
+            height: 4em;
+        }
+
+    header:before {
+        background: url(nsec.svg) center no-repeat;
+        height: 148px;
+        padding: 3em 0;
+        border-bottom: 1px solid #EEE;
+    }
+
+    a, .k {
+        color: #0071BC;
+        text-decoration: none;
+    }
+
+        a:active, a:hover {
+            text-decoration: underline;
+        }
+}
+
+@media screen and (min-width:30em) {
+    body {
+        font-size: 14px;
+        padding: 0 2em;
+    }
+}
+
+@media screen and (min-width:40em) {
+    body {
+        font-size: 15px;
+        padding: 0 3em;
+    }
+}
