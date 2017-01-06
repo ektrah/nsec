@@ -5,7 +5,7 @@
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup>
-    <Version>0.0.1-prerelease-1</Version>
+    <Version>0.0.2-prerelease</Version>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="**\*.cs" />
