@@ -52,11 +52,11 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-License notice for CoreFX
--------------------------
+License notice for .NET Core Libraries
+--------------------------------------
 
-This software contains code derived from the .NET Core Libraries (CoreFX),
-which are available under the MIT license.
+This software contains code derived from the .NET Core Libraries, which are
+available under the MIT license.
 
 Copyright (c) .NET Foundation and Contributors
 
