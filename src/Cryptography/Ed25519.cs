@@ -96,12 +96,12 @@ namespace NSec.Cryptography
         }
 
         internal override void SignCore(
-            Key key,
+            SecureMemoryHandle key,
             ReadOnlySpan<byte> data,
             Span<byte> signature)
         {
             Debug.Assert(key != null);
-            Debug.Assert(key.Handle.Length == crypto_sign_ed25519_SECRETKEYBYTES);
+            Debug.Assert(key.Length == crypto_sign_ed25519_SECRETKEYBYTES);
             Debug.Assert(signature.Length == crypto_sign_ed25519_BYTES);
 
             crypto_sign_ed25519_detached(
@@ -109,7 +109,7 @@ namespace NSec.Cryptography
                 out ulong signatureLength,
                 ref data.DangerousGetPinnableReference(),
                 (ulong)data.Length,
-                key.Handle);
+                key);
 
             Debug.Assert((ulong)signature.Length == signatureLength);
         }

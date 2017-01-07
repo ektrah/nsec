@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using static Interop.Libsodium;
 
 namespace NSec.Cryptography
 {
@@ -53,7 +54,7 @@ namespace NSec.Cryptography
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
 
             byte[] signature = new byte[_signatureSize];
-            SignCore(key, data, signature);
+            SignCore(key.Handle, data, signature);
             return signature;
         }
 
@@ -69,7 +70,7 @@ namespace NSec.Cryptography
             if (signature.Length != _signatureSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(signature));
 
-            SignCore(key, data, signature);
+            SignCore(key.Handle, data, signature);
         }
 
         public bool TryVerify(
@@ -106,7 +107,7 @@ namespace NSec.Cryptography
         }
 
         internal abstract void SignCore(
-            Key key,
+            SecureMemoryHandle key,
             ReadOnlySpan<byte> data,
             Span<byte> signature);
 
