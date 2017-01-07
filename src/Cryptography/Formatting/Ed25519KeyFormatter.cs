@@ -28,14 +28,14 @@ namespace NSec.Cryptography.Formatting
         }
 
         protected override void Serialize(
-            Key key,
+            SecureMemoryHandle key,
             Span<byte> span)
         {
             Debug.Assert(key != null);
-            Debug.Assert(key.Handle.Length == crypto_sign_ed25519_SECRETKEYBYTES);
+            Debug.Assert(key.Length == crypto_sign_ed25519_SECRETKEYBYTES);
             Debug.Assert(span.Length == crypto_sign_ed25519_SEEDBYTES);
 
-            crypto_sign_ed25519_sk_to_seed(ref span.DangerousGetPinnableReference(), key.Handle);
+            crypto_sign_ed25519_sk_to_seed(ref span.DangerousGetPinnableReference(), key);
         }
     }
 }

@@ -39,7 +39,7 @@ namespace NSec.Cryptography.Formatting
         }
 
         public bool TryExport(
-            Key key,
+            SecureMemoryHandle key,
             out byte[] result)
         {
             Debug.Assert(key != null);
@@ -52,7 +52,7 @@ namespace NSec.Cryptography.Formatting
         }
 
         public bool TryExportText(
-            Key key,
+            SecureMemoryHandle key,
             out byte[] result)
         {
             Debug.Assert(key != null);
@@ -115,14 +115,14 @@ namespace NSec.Cryptography.Formatting
         }
 
         protected virtual void Serialize(
-            Key key,
+            SecureMemoryHandle key,
             Span<byte> span)
         {
             Debug.Assert(key != null);
-            Debug.Assert(key.Handle.Length == _blobSize - _blobHeader.Length);
+            Debug.Assert(key.Length == _blobSize - _blobHeader.Length);
             Debug.Assert(span.Length == _blobSize - _blobHeader.Length);
 
-            key.Handle.Export(span);
+            key.Export(span);
         }
     }
 }

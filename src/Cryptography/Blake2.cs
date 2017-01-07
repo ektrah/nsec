@@ -124,7 +124,7 @@ namespace NSec.Cryptography
         }
 
         internal override bool TryExportKey(
-            Key key,
+            SecureMemoryHandle key,
             KeyBlobFormat format,
             out byte[] result)
         {
@@ -136,8 +136,8 @@ namespace NSec.Cryptography
                 return false;
             }
 
-            byte[] bytes = new byte[key.Handle.Length];
-            key.Handle.Export(bytes);
+            byte[] bytes = new byte[key.Length];
+            key.Export(bytes);
             result = bytes;
             return true;
         }

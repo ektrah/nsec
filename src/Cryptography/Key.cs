@@ -122,7 +122,7 @@ namespace NSec.Cryptography
 
                 _exported = true;
 
-                if (!_algorithm.TryExportKey(this, format, out result))
+                if (!_algorithm.TryExportKey(_handle, format, out result))
                 {
                     throw new FormatException();
                 }

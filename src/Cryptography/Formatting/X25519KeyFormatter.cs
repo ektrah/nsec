@@ -29,14 +29,14 @@ namespace NSec.Cryptography.Formatting
         }
 
         protected override void Serialize(
-            Key key,
+            SecureMemoryHandle key,
             Span<byte> span)
         {
             Debug.Assert(key != null);
-            Debug.Assert(key.Handle.Length == crypto_scalarmult_curve25519_SCALARBYTES);
+            Debug.Assert(key.Length == crypto_scalarmult_curve25519_SCALARBYTES);
             Debug.Assert(span.Length == crypto_scalarmult_curve25519_SCALARBYTES);
 
-            key.Handle.Export(span);
+            key.Export(span);
         }
     }
 }

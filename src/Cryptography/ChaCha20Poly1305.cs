@@ -131,7 +131,7 @@ namespace NSec.Cryptography
         }
 
         internal override bool TryExportKey(
-            Key key,
+            SecureMemoryHandle key,
             KeyBlobFormat format,
             out byte[] result)
         {
