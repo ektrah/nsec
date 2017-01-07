@@ -6,6 +6,15 @@ namespace NSec.Cryptography
     //
     //  A key agreement algorithm
     //
+    //  Examples
+    //
+    //      | Algorithm  | Reference  | Key Size | Shared Secret Size |
+    //      | ---------- | ---------- | -------- | ------------------ |
+    //      | ECDH P-256 | FIPS 186-3 | 32       | 32                 |
+    //      | ECDH P-521 | FIPS 186-3 | 66       | 66                 |
+    //      | X25519     | RFC 7748   | 32       | 32                 |
+    //      | X448       | RFC 7748   | 56       | 56                 |
+    //
     public abstract class KeyAgreementAlgorithm : Algorithm
     {
         private readonly int _privateKeySize;
