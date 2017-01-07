@@ -59,7 +59,7 @@ namespace NSec.Cryptography
                 return new byte[0];
 
             byte[] bytes = new byte[count];
-            DeriveBytesCore(sharedSecret, salt, info, bytes);
+            DeriveBytesCore(sharedSecret.Handle, salt, info, bytes);
             return bytes;
         }
 
@@ -78,7 +78,7 @@ namespace NSec.Cryptography
             if (bytes.IsEmpty)
                 return;
 
-            DeriveBytesCore(sharedSecret, salt, info, bytes);
+            DeriveBytesCore(sharedSecret.Handle, salt, info, bytes);
         }
 
         public Key DeriveKey(
@@ -100,18 +100,40 @@ namespace NSec.Cryptography
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(algorithm));
 
             SecureMemoryHandle handle = SecureMemoryHandle.Alloc(keySize);
-            DeriveKeyCore(sharedSecret, salt, info, handle);
+            DeriveKeyCore(sharedSecret.Handle, salt, info, handle);
             return new Key(algorithm, flags, handle, null);
         }
 
         internal abstract void DeriveBytesCore(
-            SharedSecret sharedSecret,
+            ReadOnlySpan<byte> inputKeyingMaterial,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> info,
             Span<byte> bytes);
 
+        internal virtual void DeriveBytesCore(
+            SecureMemoryHandle inputKeyingMaterial,
+            ReadOnlySpan<byte> salt,
+            ReadOnlySpan<byte> info,
+            Span<byte> bytes)
+        {
+            bool addedRef = false;
+            try
+            {
+                inputKeyingMaterial.DangerousAddRef(ref addedRef);
+
+                DeriveBytesCore(inputKeyingMaterial.DangerousGetSpan(), salt, info, bytes);
+            }
+            finally
+            {
+                if (addedRef)
+                {
+                    inputKeyingMaterial.DangerousRelease();
+                }
+            }
+        }
+
         internal virtual void DeriveKeyCore(
-            SharedSecret sharedSecret,
+            ReadOnlySpan<byte> inputKeyingMaterial,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> info,
             SecureMemoryHandle key)
@@ -121,7 +143,29 @@ namespace NSec.Cryptography
             {
                 key.DangerousAddRef(ref addedRef);
 
-                DeriveBytesCore(sharedSecret, salt, info, key.DangerousGetSpan());
+                DeriveBytesCore(inputKeyingMaterial, salt, info, key.DangerousGetSpan());
+            }
+            finally
+            {
+                if (addedRef)
+                {
+                    key.DangerousRelease();
+                }
+            }
+        }
+
+        internal virtual void DeriveKeyCore(
+            SecureMemoryHandle inputKeyingMaterial,
+            ReadOnlySpan<byte> salt,
+            ReadOnlySpan<byte> info,
+            SecureMemoryHandle key)
+        {
+            bool addedRef = false;
+            try
+            {
+                key.DangerousAddRef(ref addedRef);
+
+                DeriveBytesCore(inputKeyingMaterial, salt, info, key.DangerousGetSpan());
             }
             finally
             {

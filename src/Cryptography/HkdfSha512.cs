@@ -90,7 +90,7 @@ namespace NSec.Cryptography
                 throw new ArgumentNullException(nameof(sharedSecret));
 
             byte[] pseudorandomKey = new byte[crypto_auth_hmacsha512_BYTES];
-            ExtractCore(sharedSecret, salt, pseudorandomKey);
+            ExtractCore(sharedSecret.Handle, salt, pseudorandomKey);
             return pseudorandomKey;
         }
 
@@ -104,20 +104,19 @@ namespace NSec.Cryptography
             if (pseudorandomKey.Length != crypto_auth_hmacsha512_BYTES)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(pseudorandomKey));
 
-            ExtractCore(sharedSecret, salt, pseudorandomKey);
+            ExtractCore(sharedSecret.Handle, salt, pseudorandomKey);
         }
 
         internal override void DeriveBytesCore(
-            SharedSecret sharedSecret,
+            ReadOnlySpan<byte> inputKeyingMaterial,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> info,
             Span<byte> bytes)
         {
-            Debug.Assert(sharedSecret != null);
             Debug.Assert(bytes.Length <= 255 * crypto_auth_hmacsha512_BYTES);
 
             byte[] pseudorandomKey = new byte[crypto_auth_hmacsha512_BYTES]; // TODO: avoid placing sensitive data in managed memory
-            ExtractCore(sharedSecret, salt, pseudorandomKey);
+            ExtractCore(inputKeyingMaterial, salt, pseudorandomKey);
             ExpandCore(pseudorandomKey, info, bytes);
         }
 
@@ -155,11 +154,10 @@ namespace NSec.Cryptography
         }
 
         private static void ExtractCore(
-            SharedSecret sharedSecret,
+            ReadOnlySpan<byte> inputKeyingMaterial,
             ReadOnlySpan<byte> salt,
             Span<byte> pseudorandomKey)
         {
-            Debug.Assert(sharedSecret != null);
             Debug.Assert(pseudorandomKey.Length == crypto_auth_hmacsha512_BYTES);
 
             // According to the spec, the salt is set to a string of HashLen
@@ -168,8 +166,29 @@ namespace NSec.Cryptography
             // HashLen zeros, so we're ignoring this corner case here.
 
             crypto_auth_hmacsha512_init(out crypto_auth_hmacsha512_state state, ref salt.DangerousGetPinnableReference(), (IntPtr)salt.Length);
-            crypto_auth_hmacsha512_update(ref state, sharedSecret.Handle, (ulong)sharedSecret.Handle.Length);
+            crypto_auth_hmacsha512_update(ref state, ref inputKeyingMaterial.DangerousGetPinnableReference(), (ulong)inputKeyingMaterial.Length);
             crypto_auth_hmacsha512_final(ref state, ref pseudorandomKey.DangerousGetPinnableReference());
+        }
+
+        private static void ExtractCore(
+            SecureMemoryHandle inputKeyingMaterial,
+            ReadOnlySpan<byte> salt,
+            Span<byte> pseudorandomKey)
+        {
+            bool addedRef = false;
+            try
+            {
+                inputKeyingMaterial.DangerousAddRef(ref addedRef);
+
+                ExtractCore(inputKeyingMaterial.DangerousGetSpan(), salt, pseudorandomKey);
+            }
+            finally
+            {
+                if (addedRef)
+                {
+                    inputKeyingMaterial.DangerousRelease();
+                }
+            }
         }
 
         private static bool SelfTest()
