@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using static Interop.Libsodium;
 
 namespace NSec.Cryptography
 {
@@ -54,7 +55,7 @@ namespace NSec.Cryptography
             if (otherPartyPublicKey.Algorithm != this)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(otherPartyPublicKey));
 
-            if (!TryAgreeCore(key, otherPartyPublicKey.Bytes, out SharedSecret result))
+            if (!TryAgreeCore(key.Handle, otherPartyPublicKey.Bytes, out SharedSecret result))
             {
                 throw new CryptographicException();
             }
@@ -76,11 +77,11 @@ namespace NSec.Cryptography
             if (otherPartyPublicKey.Algorithm != this)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(otherPartyPublicKey));
 
-            return TryAgreeCore(key, otherPartyPublicKey.Bytes, out result);
+            return TryAgreeCore(key.Handle, otherPartyPublicKey.Bytes, out result);
         }
 
         internal abstract bool TryAgreeCore(
-            Key key,
+            SecureMemoryHandle key,
             ReadOnlySpan<byte> otherPartyPublicKey,
             out SharedSecret result);
     }
