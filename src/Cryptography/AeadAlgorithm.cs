@@ -22,26 +22,32 @@ namespace NSec.Cryptography
     public abstract class AeadAlgorithm : Algorithm
     {
         private readonly int _keySize;
-        private readonly int _nonceSize;
+        private readonly int _maxNonceSize;
+        private readonly int _minNonceSize;
         private readonly int _tagSize;
 
         internal AeadAlgorithm(
             int keySize,
-            int nonceSize,
+            int minNonceSize,
+            int maxNonceSize,
             int tagSize)
         {
             Debug.Assert(keySize > 0);
-            Debug.Assert(nonceSize > 0);
+            Debug.Assert(minNonceSize > 0);
+            Debug.Assert(maxNonceSize >= minNonceSize);
             Debug.Assert(tagSize > 0);
 
             _keySize = keySize;
-            _nonceSize = nonceSize;
+            _minNonceSize = minNonceSize;
+            _maxNonceSize = maxNonceSize;
             _tagSize = tagSize;
         }
 
         public int KeySize => _keySize;
 
-        public int NonceSize => _nonceSize;
+        public int MaxNonceSize => _maxNonceSize;
+
+        public int MinNonceSize => _minNonceSize;
 
         public int TagSize => _tagSize;
 
@@ -55,7 +61,9 @@ namespace NSec.Cryptography
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
-            if (nonce.Length != _nonceSize)
+            if (nonce.Length < _minNonceSize)
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
+            if (nonce.Length > _maxNonceSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
             if (ciphertext.Length < _tagSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(ciphertext));
@@ -81,7 +89,9 @@ namespace NSec.Cryptography
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
-            if (nonce.Length != _nonceSize)
+            if (nonce.Length < _minNonceSize)
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
+            if (nonce.Length > _maxNonceSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
             if (ciphertext.Length < _tagSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(ciphertext));
@@ -104,7 +114,9 @@ namespace NSec.Cryptography
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
-            if (nonce.Length != _nonceSize)
+            if (nonce.Length < _minNonceSize)
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
+            if (nonce.Length > _maxNonceSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
             if (int.MaxValue - plaintext.Length < _tagSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(plaintext));
@@ -125,7 +137,9 @@ namespace NSec.Cryptography
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
-            if (nonce.Length != _nonceSize)
+            if (nonce.Length < _minNonceSize)
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
+            if (nonce.Length > _maxNonceSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
             if (int.MaxValue - plaintext.Length < _tagSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(plaintext));
@@ -146,7 +160,9 @@ namespace NSec.Cryptography
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
-            if (nonce.Length != _nonceSize)
+            if (nonce.Length < _minNonceSize)
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
+            if (nonce.Length > _maxNonceSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
 
             if (ciphertext.Length < _tagSize)
@@ -178,7 +194,9 @@ namespace NSec.Cryptography
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
-            if (nonce.Length != _nonceSize)
+            if (nonce.Length < _minNonceSize)
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
+            if (nonce.Length > _maxNonceSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
             if (ciphertext.Length < _tagSize)
                 return false;
