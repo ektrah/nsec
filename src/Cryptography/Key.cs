@@ -105,12 +105,13 @@ namespace NSec.Cryptography
             if (_handle.IsClosed)
                 throw new ObjectDisposedException(GetType().FullName);
 
-            bool exportSecretKey = format < KeyBlobFormat.None;
-            bool allowExport = (_flags & KeyFlags.AllowExport) != 0;
-            bool allowArchiving = (_flags & KeyFlags.AllowArchiving) != 0;
+            byte[] result;
 
-            if (exportSecretKey)
+            if (format < KeyBlobFormat.None)
             {
+                bool allowExport = (_flags & KeyFlags.AllowExport) != 0;
+                bool allowArchiving = (_flags & KeyFlags.AllowArchiving) != 0;
+
                 if (!allowExport)
                 {
                     if (!allowArchiving || _exported)
@@ -120,11 +121,18 @@ namespace NSec.Cryptography
                 }
 
                 _exported = true;
-            }
 
-            if (!_algorithm.TryExportKey(this, format, out byte[] result))
+                if (!_algorithm.TryExportKey(this, format, out result))
+                {
+                    throw new FormatException();
+                }
+            }
+            else
             {
-                throw new FormatException();
+                if (!_algorithm.TryExportPublicKey(_publicKey, format, out result))
+                {
+                    throw new FormatException();
+                }
             }
 
             return result;
