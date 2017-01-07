@@ -49,6 +49,14 @@ header, footer {
         display: inline;
     }
 
+footer {
+    padding: 1em 0 4em;
+}
+
+    footer, footer a, footer a:visited {
+        color: #EEE;
+    }
+
 nav ol, nav ul {
     list-style: none;
 }
@@ -92,23 +100,12 @@ nav > ul {
         overflow-y: scroll;
     }
 
-        body:after, body:before, header:before {
-            content: '';
-            display: block;
-        }
-
-        body:before {
-            height: 1em;
-        }
-
-        body:after {
-            height: 4em;
-        }
-
     header:before {
+        content: '';
+        display: block;
         background: url(nsec.svg) center no-repeat;
         height: 148px;
-        padding: 3em 0;
+        padding: 4em 0;
         border-bottom: 1px solid #EEE;
     }
 
