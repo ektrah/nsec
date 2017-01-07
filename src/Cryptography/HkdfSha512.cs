@@ -162,6 +162,11 @@ namespace NSec.Cryptography
             Debug.Assert(sharedSecret != null);
             Debug.Assert(pseudorandomKey.Length == crypto_auth_hmacsha512_BYTES);
 
+            // According to the spec, the salt is set to a string of HashLen
+            // zeros if not provided. A ReadOnlySpan<byte> cannot be null, and
+            // an empty span seems to yield the same result as a string of
+            // HashLen zeros, so we're ignoring this corner case here.
+
             crypto_auth_hmacsha512_init(out crypto_auth_hmacsha512_state state, ref salt.DangerousGetPinnableReference(), (IntPtr)salt.Length);
             crypto_auth_hmacsha512_update(ref state, sharedSecret.Handle, (ulong)sharedSecret.Handle.Length);
             crypto_auth_hmacsha512_final(ref state, ref pseudorandomKey.DangerousGetPinnableReference());

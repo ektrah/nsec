@@ -291,6 +291,22 @@ namespace NSec.Tests.Algorithms
         }
 
         [Fact]
+        public static void ExtractWithEmptySalt()
+        {
+            const int HashLen = 256 / 8;
+
+            var a = new HkdfSha256();
+
+            using (var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty))
+            {
+                var expected = a.Extract(s, new byte[HashLen]);
+                var actual = a.Extract(s, ReadOnlySpan<byte>.Empty);
+
+                Assert.Equal(expected, actual);
+            }
+        }
+
+        [Fact]
         public static void ExtractSuccess()
         {
             var a = new HkdfSha256();
@@ -336,6 +352,25 @@ namespace NSec.Tests.Algorithms
             using (var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty))
             {
                 Assert.Throws<ArgumentException>("pseudorandomKey", () => a.Extract(s, ReadOnlySpan<byte>.Empty, new byte[a.PseudorandomKeySize + 1]));
+            }
+        }
+
+        [Fact]
+        public static void ExtractWithSpanWithEmptySalt()
+        {
+            const int HashLen = 256 / 8;
+
+            var a = new HkdfSha256();
+
+            using (var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty))
+            {
+                var expected = new byte[a.PseudorandomKeySize];
+                var actual = new byte[expected.Length];
+
+                a.Extract(s, new byte[HashLen], expected);
+                a.Extract(s, ReadOnlySpan<byte>.Empty, actual);
+
+                Assert.Equal(expected, actual);
             }
         }
 
