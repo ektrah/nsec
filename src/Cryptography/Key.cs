@@ -51,6 +51,13 @@ namespace NSec.Cryptography
 
         internal SecureMemoryHandle Handle => _handle;
 
+        public static Key Create(
+            Algorithm algorithm,
+            KeyFlags flags = KeyFlags.None)
+        {
+            return new Key(algorithm, flags);
+        }
+
         public static Key Import(
            Algorithm algorithm,
            ReadOnlySpan<byte> blob,
