@@ -8,7 +8,7 @@ namespace NSec.Cryptography
     //
     //  HKDF-SHA-256
     //
-    //      HMAC-based Key Derivation Function (HKDF) based on HMAC-SHA-256
+    //      HMAC-based Key Derivation Function (HKDF) using HMAC-SHA-256
     //
     //  References:
     //
