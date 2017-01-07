@@ -6,6 +6,16 @@ namespace NSec.Cryptography
     //
     //  A cryptographic hash algorithm
     //
+    //  Examples
+    //
+    //      | Algorithm | Reference | Hash Size |
+    //      | --------- | --------- | --------- |
+    //      | BLAKE2b   | RFC 7693  | 1..64     |
+    //      | SHA-256   | RFC 6234  | 32        |
+    //      | SHA-512   | RFC 6234  | 64        |
+    //      | SHA3-256  | FIPS 202  | 32        |
+    //      | SHA3-512  | FIPS 202  | 64        |
+    //
     public abstract class HashAlgorithm : Algorithm
     {
         private readonly int _defaultHashSize;
