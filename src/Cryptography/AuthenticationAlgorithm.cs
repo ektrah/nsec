@@ -7,6 +7,19 @@ namespace NSec.Cryptography
     //
     //  A message authentication code (MAC) algorithm
     //
+    //  Examples
+    //
+    //      | Algorithm    | Reference | Key Size | Nonce Size | MAC Size  |
+    //      | ------------ | --------- | -------- | ---------- | --------  |
+    //      | AES-CMAC     | RFC 4493  | 16       | 0          | 16        |
+    //      | BLAKE2b      | RFC 7693  | 0..64    | 0          | 1..64     |
+    //      | HMAC-SHA-256 | RFC 2104  | 32..64   | 0          | 32        |
+    //      | HMAC-SHA-512 | RFC 2104  | 64..128  | 0          | 64        |
+    //      | Poly1305-AES | [*]       | 32       | 16         | 16        |
+    //      | UMAC-AES     | RFC 4418  | 16,24,32 | 1..16      | 4,8,12,16 |
+    //
+    //      [*] http://cr.yp.to/mac.html
+    //
     public abstract class AuthenticationAlgorithm : Algorithm
     {
         private readonly int _defaultKeySize;
