@@ -25,10 +25,14 @@ namespace NSec.Cryptography
     //          of HashLen=64 bytes. The second stage expands a pseudorandom
     //          key of _at least_ HashLen bytes to the desired length.
     //
+    //      Salt Size - HKDF is defined to operate with and without random salt.
+    //          Ideally, the salt value is a random string of the length
+    //          HashLen.
+    //
+    //      Shared Info Size - Any.
+    //
     //      Output Size - The length of the output key material must be less
     //          than or equal to 255*HashLen=16320 bytes.
-    //
-    //      Uses Salt - HKDF-SHA-512 supports salt.
     //
     public sealed class HkdfSha512 : KeyDerivationAlgorithm
     {
