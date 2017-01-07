@@ -91,7 +91,7 @@ namespace NSec.Cryptography
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
 
             byte[] mac = new byte[_defaultMacSize];
-            SignCore(key, nonce, data, mac);
+            SignCore(key.Handle, nonce, data, mac);
             return mac;
         }
 
@@ -115,7 +115,7 @@ namespace NSec.Cryptography
                 throw new ArgumentOutOfRangeException(nameof(macSize));
 
             byte[] mac = new byte[macSize];
-            SignCore(key, nonce, data, mac);
+            SignCore(key.Handle, nonce, data, mac);
             return mac;
         }
 
@@ -138,7 +138,7 @@ namespace NSec.Cryptography
             if (mac.Length > _maxMacSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(mac));
 
-            SignCore(key, nonce, data, mac);
+            SignCore(key.Handle, nonce, data, mac);
         }
 
         public bool TryVerify(
@@ -169,7 +169,7 @@ namespace NSec.Cryptography
             // compare only the initial 'mac.Length' bytes.
 
             byte[] result = new byte[_defaultMacSize]; // TODO: avoid placing sensitive data in managed memory
-            SignCore(key, nonce, data, result);
+            SignCore(key.Handle, nonce, data, result);
 
             int error = sodium_memcmp(result, ref mac.DangerousGetPinnableReference(), (IntPtr)mac.Length);
             return error == 0;
@@ -203,7 +203,7 @@ namespace NSec.Cryptography
             // compare only the initial 'mac.Length' bytes.
 
             byte[] result = new byte[_defaultMacSize]; // TODO: avoid placing sensitive data in managed memory
-            SignCore(key, nonce, data, result);
+            SignCore(key.Handle, nonce, data, result);
 
             int error = sodium_memcmp(result, ref mac.DangerousGetPinnableReference(), (IntPtr)mac.Length);
             if (error != 0)
@@ -213,7 +213,7 @@ namespace NSec.Cryptography
         }
 
         internal abstract void SignCore(
-            Key key,
+            SecureMemoryHandle key,
             ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> data,
             Span<byte> mac);

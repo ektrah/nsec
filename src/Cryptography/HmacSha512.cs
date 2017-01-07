@@ -70,7 +70,7 @@ namespace NSec.Cryptography
         }
 
         internal override void SignCore(
-            Key key,
+            SecureMemoryHandle key,
             ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> data,
             Span<byte> mac)
@@ -89,7 +89,7 @@ namespace NSec.Cryptography
             // TryImportKey method to keep the KeyHandle small, so we never
             // pass a key larger than the block size to _init.
 
-            crypto_auth_hmacsha512_init(out crypto_auth_hmacsha512_state state, key.Handle, (IntPtr)key.Handle.Length);
+            crypto_auth_hmacsha512_init(out crypto_auth_hmacsha512_state state, key, (IntPtr)key.Length);
 
             if (!data.IsEmpty)
             {
