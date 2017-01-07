@@ -14,7 +14,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void Properties(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             Assert.True(a.MinKeySize > 0);
             Assert.True(a.DefaultKeySize >= a.MinKeySize);
@@ -36,7 +36,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void SignWithNullKey(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             Assert.Throws<ArgumentNullException>("key", () => a.Sign(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
         }
@@ -45,7 +45,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void SignWithWrongKey(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(new Ed25519()))
             {
@@ -57,7 +57,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void SignWithNonceTooShort(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             if (a.MinNonceSize > 0)
             {
@@ -72,7 +72,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void SignWithNonceTooLong(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
@@ -84,7 +84,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void SignEmptySuccess(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
@@ -103,7 +103,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void SignWithCountWithNullKey(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             Assert.Throws<ArgumentNullException>("key", () => a.Sign(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, 0));
         }
@@ -112,7 +112,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void SignWithCountWithWrongKey(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(new Ed25519()))
             {
@@ -124,7 +124,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void SignWithCountWithNonceTooShort(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             if (a.MinNonceSize > 0)
             {
@@ -139,7 +139,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void SignWithCountWithNonceTooLong(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
@@ -151,7 +151,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void SignWithCountTooSmall(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             if (a.MinMacSize > 0)
             {
@@ -166,7 +166,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void SignWithCountTooLarge(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
@@ -178,7 +178,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void SignWithCountMinSuccess(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
@@ -193,7 +193,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void SignWithCountMaxSuccess(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
@@ -212,7 +212,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void SignWithSpanWithNullKey(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             Assert.Throws<ArgumentNullException>("key", () => a.Sign(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
@@ -221,7 +221,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void SignWithSpanWithWrongKey(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(new Ed25519()))
             {
@@ -233,7 +233,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void SignWithSpanWithNonceTooShort(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             if (a.MinNonceSize > 0)
             {
@@ -248,7 +248,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void SignWithSpanWithNonceTooLong(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
@@ -260,7 +260,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void SignWithSpanTooSmall(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             if (a.MinMacSize > 0)
             {
@@ -275,7 +275,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void SignWithSpanTooLarge(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
@@ -287,7 +287,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void SignWithSpanMinSuccess(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
@@ -299,7 +299,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void SignWithSpanMaxSuccess(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
@@ -315,7 +315,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void TryVerifyWithNullKey(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             Assert.Throws<ArgumentNullException>("key", () => a.TryVerify(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
         }
@@ -324,7 +324,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void TryVerifyWithWrongKey(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(new Ed25519()))
             {
@@ -336,7 +336,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void TryVerifyWithNonceTooShort(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             if (a.MinNonceSize > 0)
             {
@@ -351,7 +351,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void TryVerifyWithNonceTooLong(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
@@ -363,7 +363,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void TryVerifyWithSpanTooSmall(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             if (a.MinMacSize > 0)
             {
@@ -378,7 +378,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void TryVerifyWithSpanTooLarge(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
@@ -390,7 +390,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void TryVerifyWithSpanMinSuccess(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
@@ -407,7 +407,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void TryVerifyWithSpanMaxSuccess(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
@@ -428,7 +428,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void VerifyWithNullKey(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             Assert.Throws<ArgumentNullException>("key", () => a.Verify(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
         }
@@ -437,7 +437,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void VerifyWithWrongKey(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(new Ed25519()))
             {
@@ -449,7 +449,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void VerifyWithNonceTooShort(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             if (a.MinNonceSize > 0)
             {
@@ -464,7 +464,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void VerifyWithNonceTooLong(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
@@ -476,7 +476,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void VerifyWithSpanTooSmall(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             if (a.MinMacSize > 0)
             {
@@ -491,7 +491,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void VerifyWithSpanTooLarge(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
@@ -503,7 +503,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void VerifyWithSpanMinSuccess(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
@@ -520,7 +520,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AuthenticationAlgorithms))]
         public static void VerifyWithSpanMaxSuccess(Type algorithmType)
         {
-            var a = (AuthenticationAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {

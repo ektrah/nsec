@@ -20,7 +20,7 @@ namespace NSec.Cryptography
     //
     //      [1] http://cr.yp.to/mac.html
     //
-    public abstract class AuthenticationAlgorithm : Algorithm
+    public abstract class MacAlgorithm : Algorithm
     {
         private readonly int _defaultKeySize;
         private readonly int _defaultMacSize;
@@ -31,7 +31,7 @@ namespace NSec.Cryptography
         private readonly int _minNonceSize;
         private readonly int _minMacSize;
 
-        internal AuthenticationAlgorithm(
+        internal MacAlgorithm(
             int minKeySize,
             int defaultKeySize,
             int maxKeySize,

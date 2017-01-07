@@ -34,7 +34,7 @@ namespace NSec.Cryptography
     //          output length should not be less than half of L (i.e., not less
     //          than 32 bytes).
     //
-    public sealed class HmacSha512 : AuthenticationAlgorithm
+    public sealed class HmacSha512 : MacAlgorithm
     {
         private const int SHA512HashSize = 64; // "L" in RFC 2104
         private const int SHA512MessageBlockSize = 128; // "B" in RFC 2104

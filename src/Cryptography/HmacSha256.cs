@@ -30,7 +30,7 @@ namespace NSec.Cryptography
     //      MAC Size - 32 bytes. The output can be truncated down to 16 bytes
     //          (128 bits of security).
     //
-    public sealed class HmacSha256 : AuthenticationAlgorithm
+    public sealed class HmacSha256 : MacAlgorithm
     {
         private const int SHA256HashSize = 32; // "L" in RFC 2104
         private const int SHA256MessageBlockSize = 64; // "B" in RFC 2104
