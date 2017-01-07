@@ -4,6 +4,9 @@ using static Interop.Libsodium;
 
 namespace NSec.Cryptography
 {
+    //
+    //  A key derivation algorithm
+    //
     public abstract class KeyDerivationAlgorithm : Algorithm
     {
         private readonly int _maxOutputSize;

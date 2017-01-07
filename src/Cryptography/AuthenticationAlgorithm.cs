@@ -4,6 +4,9 @@ using static Interop.Libsodium;
 
 namespace NSec.Cryptography
 {
+    //
+    //  A message authentication code (MAC) algorithm
+    //
     public abstract class AuthenticationAlgorithm : Algorithm
     {
         private readonly int _defaultKeySize;

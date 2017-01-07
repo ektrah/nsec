@@ -3,6 +3,9 @@ using System.Diagnostics;
 
 namespace NSec.Cryptography
 {
+    //
+    //  A key agreement algorithm
+    //
     public abstract class KeyAgreementAlgorithm : Algorithm
     {
         private readonly int _privateKeySize;

@@ -3,6 +3,9 @@ using System.Diagnostics;
 
 namespace NSec.Cryptography
 {
+    //
+    //  A digital signature algorithm
+    //
     public abstract class SignatureAlgorithm : Algorithm
     {
         private readonly int _privateKeySize;

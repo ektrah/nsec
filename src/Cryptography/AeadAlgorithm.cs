@@ -3,6 +3,9 @@ using System.Diagnostics;
 
 namespace NSec.Cryptography
 {
+    //
+    //  An authenticated encryption with associated data (AEAD) algorithm
+    //
     public abstract class AeadAlgorithm : Algorithm
     {
         private readonly int _keySize;

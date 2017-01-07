@@ -3,6 +3,9 @@ using System.Diagnostics;
 
 namespace NSec.Cryptography
 {
+    //
+    //  A cryptographic hash algorithm
+    //
     public abstract class HashAlgorithm : Algorithm
     {
         private readonly int _defaultHashSize;
