@@ -129,14 +129,6 @@ namespace NSec.Cryptography
                 return s_pkixPrivateKeyFormatter.TryExport(key, out result);
             case KeyBlobFormat.PkixPrivateKeyText:
                 return s_pkixPrivateKeyFormatter.TryExportText(key, out result);
-            case KeyBlobFormat.RawPublicKey:
-                return s_rawPublicKeyFormatter.TryExport(key.PublicKey, out result);
-            case KeyBlobFormat.NSecPublicKey:
-                return s_nsecPublicKeyFormatter.TryExport(key.PublicKey, out result);
-            case KeyBlobFormat.PkixPublicKey:
-                return s_pkixPublicKeyFormatter.TryExport(key.PublicKey, out result);
-            case KeyBlobFormat.PkixPublicKeyText:
-                return s_pkixPublicKeyFormatter.TryExportText(key.PublicKey, out result);
             default:
                 result = null;
                 return false;
