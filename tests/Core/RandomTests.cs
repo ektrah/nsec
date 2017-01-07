@@ -24,8 +24,8 @@ namespace NSec.Tests.Core
         }
 
         [Theory]
-        [InlineData(1)]
         [InlineData(15)]
+        [InlineData(31)]
         [InlineData(63)]
         public static void GenerateBytesWithCount(int count)
         {
