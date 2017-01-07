@@ -6,6 +6,19 @@ namespace NSec.Cryptography
     //
     //  An authenticated encryption with associated data (AEAD) algorithm
     //
+    //  Examples
+    //
+    //      | Algorithm         | Reference | Key Size | Nonce Size | Tag Size |
+    //      | ----------------- | --------- | -------- | ---------- | -------- |
+    //      | AES_128_CCM       | RFC 5116  | 16       | 12         | 16       |
+    //      | AES_256_CCM       | RFC 5116  | 32       | 12         | 16       |
+    //      | AES_128_GCM       | RFC 5116  | 16       | 12         | 16       |
+    //      | AES_256_GCM       | RFC 5116  | 32       | 12         | 16       |
+    //      | AES_128_OCB       | RFC 7253  | 16       | 1..15      | 8,12,16  |
+    //      | AES_192_OCB       | RFC 7253  | 24       | 1..15      | 8,12,16  |
+    //      | AES_256_OCB       | RFC 7253  | 32       | 1..15      | 8,12,16  |
+    //      | CHACHA20_POLY1305 | RFC 7539  | 32       | 12         | 16       |
+    //
     public abstract class AeadAlgorithm : Algorithm
     {
         private readonly int _keySize;
