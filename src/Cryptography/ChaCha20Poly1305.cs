@@ -59,11 +59,6 @@ namespace NSec.Cryptography
                 throw new InvalidOperationException();
         }
 
-        internal override SecureMemoryHandle CreateDerivedKey()
-        {
-            return SecureMemoryHandle.Alloc(crypto_aead_chacha20poly1305_ietf_KEYBYTES);
-        }
-
         internal override SecureMemoryHandle CreateKey(
             out PublicKey publicKey)
         {
@@ -97,6 +92,11 @@ namespace NSec.Cryptography
                 key.Handle);
 
             Debug.Assert((ulong)ciphertext.Length == ciphertextLength);
+        }
+
+        internal override int GetDerivedKeySize()
+        {
+            return crypto_aead_chacha20poly1305_ietf_KEYBYTES;
         }
 
         internal override bool TryDecryptCore(

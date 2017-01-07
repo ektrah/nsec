@@ -97,11 +97,6 @@ namespace NSec.Cryptography
             HashCore(key, data, hash);
         }
 
-        internal override SecureMemoryHandle CreateDerivedKey()
-        {
-            return SecureMemoryHandle.Alloc(DefaultKeySize);
-        }
-
         internal override SecureMemoryHandle CreateKey(
             out PublicKey publicKey)
         {
@@ -109,6 +104,11 @@ namespace NSec.Cryptography
             randombytes_buf(handle, (IntPtr)handle.Length);
             publicKey = null;
             return handle;
+        }
+
+        internal override int GetDerivedKeySize()
+        {
+            return DefaultKeySize;
         }
 
         internal override void HashCore(

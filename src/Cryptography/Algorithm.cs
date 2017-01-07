@@ -10,16 +10,15 @@ namespace NSec.Cryptography
             Sodium.Initialize();
         }
 
-        // Allocates a new uninitialized libsodium secret key for key derivation
-        // algorithms.
-        internal virtual SecureMemoryHandle CreateDerivedKey()
+        // Allocates a new, initialized libsodium secret key.
+        internal virtual SecureMemoryHandle CreateKey(
+            out PublicKey publicKey)
         {
             throw new NotSupportedException();
         }
 
-        // Allocates a new, initialized libsodium secret key.
-        internal virtual SecureMemoryHandle CreateKey(
-            out PublicKey publicKey)
+        // Gets the size for a derived key, if supported.
+        internal virtual int GetDerivedKeySize()
         {
             throw new NotSupportedException();
         }

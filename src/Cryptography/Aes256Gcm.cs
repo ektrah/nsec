@@ -62,11 +62,6 @@ namespace NSec.Cryptography
 
         public static bool IsAvailable => Sodium.TryInitialize() && (s_isAvailable.Value != 0);
 
-        internal override SecureMemoryHandle CreateDerivedKey()
-        {
-            return SecureMemoryHandle.Alloc(crypto_aead_aes256gcm_KEYBYTES);
-        }
-
         internal override SecureMemoryHandle CreateKey(
             out PublicKey publicKey)
         {
@@ -100,6 +95,11 @@ namespace NSec.Cryptography
                 key.Handle);
 
             Debug.Assert((ulong)ciphertext.Length == ciphertextLength);
+        }
+
+        internal override int GetDerivedKeySize()
+        {
+            return crypto_aead_aes256gcm_KEYBYTES;
         }
 
         internal override bool TryDecryptCore(
