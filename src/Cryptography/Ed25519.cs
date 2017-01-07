@@ -208,20 +208,18 @@ namespace NSec.Cryptography
         }
 
         internal override bool TryVerifyCore(
-            PublicKey publicKey,
+            ReadOnlySpan<byte> publicKey,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> signature)
         {
-            Debug.Assert(publicKey != null);
-            Debug.Assert(publicKey.Algorithm == this);
-            Debug.Assert(publicKey.Bytes.Length == crypto_sign_ed25519_PUBLICKEYBYTES);
+            Debug.Assert(publicKey.Length == crypto_sign_ed25519_PUBLICKEYBYTES);
             Debug.Assert(signature.Length == crypto_sign_ed25519_BYTES);
 
             int error = crypto_sign_ed25519_verify_detached(
                 ref signature.DangerousGetPinnableReference(),
                 ref data.DangerousGetPinnableReference(),
                 (ulong)data.Length,
-                ref publicKey.Bytes.DangerousGetPinnableReference());
+                ref publicKey.DangerousGetPinnableReference());
 
             return error == 0;
         }

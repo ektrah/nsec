@@ -84,7 +84,7 @@ namespace NSec.Cryptography
             if (signature.Length != _signatureSize)
                 return false;
 
-            return TryVerifyCore(publicKey, data, signature);
+            return TryVerifyCore(publicKey.Bytes, data, signature);
         }
 
         public void Verify(
@@ -99,7 +99,7 @@ namespace NSec.Cryptography
             if (signature.Length != _signatureSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(signature));
 
-            if (!TryVerifyCore(publicKey, data, signature))
+            if (!TryVerifyCore(publicKey.Bytes, data, signature))
             {
                 throw new CryptographicException();
             }
@@ -111,7 +111,7 @@ namespace NSec.Cryptography
             Span<byte> signature);
 
         internal abstract bool TryVerifyCore(
-            PublicKey publicKey,
+            ReadOnlySpan<byte> publicKey,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> signature);
     }
