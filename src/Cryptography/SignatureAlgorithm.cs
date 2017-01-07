@@ -6,6 +6,17 @@ namespace NSec.Cryptography
     //
     //  A digital signature algorithm
     //
+    //  Examples
+    //
+    //      | Algorithm   | Reference  | Key Size | Signature Size |
+    //      | ----------- | ---------- | -------- | -------------- |
+    //      | ECDSA P-256 | FIPS 186-3 | 32       | 64             |
+    //      | ECDSA P-521 | FIPS 186-3 | 66       | 132            |
+    //      | Ed25519     | [1]        | 32       | 64             |
+    //      | Ed448       | [1]        | 57       | 114            |
+    //
+    //      [1] draft-irtf-cfrg-eddsa-08
+    //
     public abstract class SignatureAlgorithm : Algorithm
     {
         private readonly int _privateKeySize;
