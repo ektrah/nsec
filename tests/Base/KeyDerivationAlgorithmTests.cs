@@ -16,7 +16,8 @@ namespace NSec.Tests.Base
         {
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.True(a.UsesSalt || !a.UsesSalt);
+            Assert.True(a.MaxSaltSize >= 0);
+            Assert.True(a.MaxOutputSize > 0);
         }
 
         #endregion
@@ -34,18 +35,18 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveBytesWithUnusedSalt(Type algorithmType)
+        public static void DeriveBytesWithSaltTooLarge(Type algorithmType)
         {
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
 
-            if (!a.UsesSalt)
+            if (a.MaxSaltSize < int.MaxValue)
             {
                 var x = new X25519();
 
                 using (var k = new Key(x))
                 using (var s = x.Agree(k, k.PublicKey))
                 {
-                    Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s, new byte[1], ReadOnlySpan<byte>.Empty, 0));
+                    Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s, new byte[a.MaxSaltSize + 1], ReadOnlySpan<byte>.Empty, 0));
                 }
             }
         }
@@ -66,6 +67,23 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
+        public static void DeriveBytesWithCountTooLarge(Type algorithmType)
+        {
+            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
+            var x = new X25519();
+
+            if (a.MaxOutputSize < int.MaxValue)
+            {
+                using (var k = new Key(x))
+                using (var s = x.Agree(k, k.PublicKey))
+                {
+                    Assert.Throws<ArgumentOutOfRangeException>("count", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, a.MaxOutputSize + 1));
+                }
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveBytesWithZeroCount(Type algorithmType)
         {
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
@@ -78,6 +96,23 @@ namespace NSec.Tests.Base
 
                 Assert.NotNull(b);
                 Assert.Equal(0, b.Length);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(KeyDerivationAlgorithms))]
+        public static void DeriveBytesWithMaxCount(Type algorithmType)
+        {
+            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
+            var x = new X25519();
+
+            using (var k = new Key(x))
+            using (var s = x.Agree(k, k.PublicKey))
+            {
+                var b = a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, a.MaxOutputSize);
+
+                Assert.NotNull(b);
+                Assert.Equal(a.MaxOutputSize, b.Length);
             }
         }
 
@@ -96,18 +131,35 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveBytesWithUnusedSaltAndSpan(Type algorithmType)
+        public static void DeriveBytesWithSpanWithSaltTooLarge(Type algorithmType)
         {
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
 
-            if (!a.UsesSalt)
+            if (a.MaxSaltSize < int.MaxValue)
             {
                 var x = new X25519();
 
                 using (var k = new Key(x))
                 using (var s = x.Agree(k, k.PublicKey))
                 {
-                    Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s, new byte[1], ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+                    Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s, new byte[a.MaxSaltSize + 1], ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+                }
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(KeyDerivationAlgorithms))]
+        public static void DeriveBytesWithSpanTooLarge(Type algorithmType)
+        {
+            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
+            var x = new X25519();
+
+            if (a.MaxOutputSize < int.MaxValue)
+            {
+                using (var k = new Key(x))
+                using (var s = x.Agree(k, k.PublicKey))
+                {
+                    Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[a.MaxOutputSize + 1]));
                 }
             }
         }
@@ -126,6 +178,20 @@ namespace NSec.Tests.Base
             }
         }
 
+        [Theory]
+        [MemberData(nameof(KeyDerivationAlgorithms))]
+        public static void DeriveBytesWithMaxSpan(Type algorithmType)
+        {
+            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
+            var x = new X25519();
+
+            using (var k = new Key(x))
+            using (var s = x.Agree(k, k.PublicKey))
+            {
+                a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[a.MaxOutputSize]);
+            }
+        }
+
         #endregion
 
         #region DeriveKey
@@ -141,18 +207,18 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveKeyWithUnusedSalt(Type algorithmType)
+        public static void DeriveKeyWithSaltTooLarge(Type algorithmType)
         {
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
 
-            if (!a.UsesSalt)
+            if (a.MaxSaltSize < int.MaxValue)
             {
                 var x = new X25519();
 
                 using (var k = new Key(x))
                 using (var s = x.Agree(k, k.PublicKey))
                 {
-                    Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(s, new byte[1], ReadOnlySpan<byte>.Empty, null));
+                    Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(s, new byte[a.MaxSaltSize + 1], ReadOnlySpan<byte>.Empty, null));
                 }
             }
         }

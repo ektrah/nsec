@@ -1,19 +1,28 @@
 using System;
+using System.Diagnostics;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
 {
     public abstract class KeyDerivationAlgorithm : Algorithm
     {
-        private readonly bool _usesSalt;
+        private readonly int _maxOutputSize;
+        private readonly int _maxSaltSize;
 
         internal KeyDerivationAlgorithm(
-            bool usesSalt)
+            int maxSaltSize,
+            int maxOutputSize)
         {
-            _usesSalt = usesSalt;
+            Debug.Assert(maxSaltSize >= 0);
+            Debug.Assert(maxOutputSize > 0);
+
+            _maxSaltSize = maxSaltSize;
+            _maxOutputSize = maxOutputSize;
         }
 
-        public bool UsesSalt => _usesSalt;
+        public int MaxOutputSize => _maxOutputSize;
+
+        public int MaxSaltSize => _maxSaltSize;
 
         public byte[] DeriveBytes(
             SharedSecret sharedSecret,
@@ -23,9 +32,11 @@ namespace NSec.Cryptography
         {
             if (sharedSecret == null)
                 throw new ArgumentNullException(nameof(sharedSecret));
-            if (!_usesSalt && !salt.IsEmpty)
+            if (salt.Length > MaxSaltSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(salt));
             if (count < 0)
+                throw new ArgumentOutOfRangeException(nameof(count));
+            if (count > MaxOutputSize)
                 throw new ArgumentOutOfRangeException(nameof(count));
             if (count == 0)
                 return new byte[0];
@@ -43,8 +54,10 @@ namespace NSec.Cryptography
         {
             if (sharedSecret == null)
                 throw new ArgumentNullException(nameof(sharedSecret));
-            if (!_usesSalt && !salt.IsEmpty)
+            if (salt.Length > MaxSaltSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(salt));
+            if (bytes.Length > MaxOutputSize)
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(bytes));
             if (bytes.IsEmpty)
                 return;
 
@@ -60,10 +73,12 @@ namespace NSec.Cryptography
         {
             if (sharedSecret == null)
                 throw new ArgumentNullException(nameof(sharedSecret));
-            if (!_usesSalt && !salt.IsEmpty)
+            if (salt.Length > MaxSaltSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(salt));
             if (algorithm == null)
                 throw new ArgumentNullException(nameof(algorithm));
+
+            // TODO: check derived key size <= MaxOutputSize
 
             SecureMemoryHandle handle = algorithm.CreateDerivedKey();
             DeriveKeyCore(sharedSecret, salt, info, handle);

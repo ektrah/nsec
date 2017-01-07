@@ -39,13 +39,12 @@ namespace NSec.Cryptography
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
         public HkdfSha256() : base(
-            usesSalt: true)
+            maxSaltSize: int.MaxValue,
+            maxOutputSize: 255 * crypto_auth_hmacsha256_BYTES)
         {
             if (!s_selfTest.Value)
                 throw new InvalidOperationException();
         }
-
-        public int MaxOutputSize => 255 * crypto_auth_hmacsha256_BYTES;
 
         public int PseudorandomKeySize => crypto_auth_hmacsha256_BYTES;
 
@@ -114,10 +113,8 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> info,
             Span<byte> bytes)
         {
-            if (bytes.Length > MaxOutputSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(bytes));
-
             Debug.Assert(sharedSecret != null);
+            Debug.Assert(bytes.Length <= 255 * crypto_auth_hmacsha256_BYTES);
 
             byte[] pseudorandomKey = new byte[crypto_auth_hmacsha256_BYTES]; // TODO: avoid placing sensitive data in managed memory
             ExtractCore(sharedSecret, salt, pseudorandomKey);
