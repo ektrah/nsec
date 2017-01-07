@@ -54,7 +54,7 @@ namespace NSec.Cryptography
             if (otherPartyPublicKey.Algorithm != this)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(otherPartyPublicKey));
 
-            if (!TryAgreeCore(key, otherPartyPublicKey, out SharedSecret result))
+            if (!TryAgreeCore(key, otherPartyPublicKey.Bytes, out SharedSecret result))
             {
                 throw new CryptographicException();
             }
@@ -76,12 +76,12 @@ namespace NSec.Cryptography
             if (otherPartyPublicKey.Algorithm != this)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(otherPartyPublicKey));
 
-            return TryAgreeCore(key, otherPartyPublicKey, out result);
+            return TryAgreeCore(key, otherPartyPublicKey.Bytes, out result);
         }
 
         internal abstract bool TryAgreeCore(
             Key key,
-            PublicKey otherPartyPublicKey,
+            ReadOnlySpan<byte> otherPartyPublicKey,
             out SharedSecret result);
     }
 }

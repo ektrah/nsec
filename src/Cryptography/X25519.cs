@@ -94,21 +94,19 @@ namespace NSec.Cryptography
 
         internal override bool TryAgreeCore(
             Key key,
-            PublicKey otherPartyPublicKey,
+            ReadOnlySpan<byte> otherPartyPublicKey,
             out SharedSecret result)
         {
             Debug.Assert(key != null);
             Debug.Assert(key.Handle.Length == crypto_scalarmult_curve25519_SCALARBYTES);
-            Debug.Assert(otherPartyPublicKey != null);
-            Debug.Assert(otherPartyPublicKey.Algorithm == this);
-            Debug.Assert(otherPartyPublicKey.Bytes.Length == crypto_scalarmult_curve25519_SCALARBYTES);
+            Debug.Assert(otherPartyPublicKey.Length == crypto_scalarmult_curve25519_SCALARBYTES);
 
             SecureMemoryHandle sharedSecretHandle = SecureMemoryHandle.Alloc(crypto_scalarmult_curve25519_BYTES);
 
             int error = crypto_scalarmult_curve25519(
                 sharedSecretHandle,
                 key.Handle,
-                ref otherPartyPublicKey.Bytes.DangerousGetPinnableReference());
+                ref otherPartyPublicKey.DangerousGetPinnableReference());
 
             if (error != 0)
             {
