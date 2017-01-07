@@ -19,7 +19,7 @@ namespace NSec.Tests
             typeof(ChaCha20Poly1305),
         };
 
-        public static readonly TheoryData<Type> AuthenticationAlgorithms = new TheoryData<Type>
+        public static readonly TheoryData<Type> MacAlgorithms = new TheoryData<Type>
         {
             typeof(HmacSha256),
             typeof(HmacSha512),

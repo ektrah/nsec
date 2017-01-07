@@ -4,14 +4,14 @@ using Xunit;
 
 namespace NSec.Tests.Base
 {
-    public static class AuthenticationAlgorithmTests
+    public static class MacAlgorithmTests
     {
-        public static readonly TheoryData<Type> AuthenticationAlgorithms = Registry.AuthenticationAlgorithms;
+        public static readonly TheoryData<Type> MacAlgorithms = Registry.MacAlgorithms;
 
         #region Properties
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void Properties(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -33,7 +33,7 @@ namespace NSec.Tests.Base
         #region Sign #1
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void SignWithNullKey(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -42,7 +42,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void SignWithWrongKey(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -54,7 +54,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void SignWithNonceTooShort(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -69,7 +69,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void SignWithNonceTooLong(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -81,7 +81,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void SignEmptySuccess(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -100,7 +100,7 @@ namespace NSec.Tests.Base
         #region Sign #2
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void SignWithCountWithNullKey(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -109,7 +109,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void SignWithCountWithWrongKey(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -121,7 +121,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void SignWithCountWithNonceTooShort(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -136,7 +136,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void SignWithCountWithNonceTooLong(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -148,7 +148,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void SignWithCountTooSmall(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -163,7 +163,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void SignWithCountTooLarge(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -175,7 +175,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void SignWithCountMinSuccess(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -190,7 +190,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void SignWithCountMaxSuccess(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -209,7 +209,7 @@ namespace NSec.Tests.Base
         #region Sign #3
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void SignWithSpanWithNullKey(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -218,7 +218,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void SignWithSpanWithWrongKey(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -230,7 +230,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void SignWithSpanWithNonceTooShort(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -245,7 +245,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void SignWithSpanWithNonceTooLong(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -257,7 +257,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void SignWithSpanTooSmall(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -272,7 +272,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void SignWithSpanTooLarge(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -284,7 +284,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void SignWithSpanMinSuccess(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -296,7 +296,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void SignWithSpanMaxSuccess(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -312,7 +312,7 @@ namespace NSec.Tests.Base
         #region TryVerify
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void TryVerifyWithNullKey(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -321,7 +321,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void TryVerifyWithWrongKey(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -333,7 +333,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void TryVerifyWithNonceTooShort(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -348,7 +348,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void TryVerifyWithNonceTooLong(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -360,7 +360,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void TryVerifyWithSpanTooSmall(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -375,7 +375,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void TryVerifyWithSpanTooLarge(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -387,7 +387,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void TryVerifyWithSpanMinSuccess(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -404,7 +404,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void TryVerifyWithSpanMaxSuccess(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -425,7 +425,7 @@ namespace NSec.Tests.Base
         #region Verify
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void VerifyWithNullKey(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -434,7 +434,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void VerifyWithWrongKey(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -446,7 +446,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void VerifyWithNonceTooShort(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -461,7 +461,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void VerifyWithNonceTooLong(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -473,7 +473,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void VerifyWithSpanTooSmall(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -488,7 +488,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void VerifyWithSpanTooLarge(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -500,7 +500,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void VerifyWithSpanMinSuccess(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -517,7 +517,7 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(AuthenticationAlgorithms))]
+        [MemberData(nameof(MacAlgorithms))]
         public static void VerifyWithSpanMaxSuccess(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
