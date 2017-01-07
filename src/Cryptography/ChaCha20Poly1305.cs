@@ -70,14 +70,14 @@ namespace NSec.Cryptography
         }
 
         internal override void EncryptCore(
-            Key key,
+            SecureMemoryHandle key,
             ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext)
         {
             Debug.Assert(key != null);
-            Debug.Assert(key.Handle.Length == crypto_aead_chacha20poly1305_ietf_KEYBYTES);
+            Debug.Assert(key.Length == crypto_aead_chacha20poly1305_ietf_KEYBYTES);
             Debug.Assert(nonce.Length == crypto_aead_chacha20poly1305_ietf_NPUBBYTES);
             Debug.Assert(ciphertext.Length == plaintext.Length + crypto_aead_chacha20poly1305_ietf_ABYTES);
 
@@ -90,7 +90,7 @@ namespace NSec.Cryptography
                 (ulong)associatedData.Length,
                 IntPtr.Zero,
                 ref nonce.DangerousGetPinnableReference(),
-                key.Handle);
+                key);
 
             Debug.Assert((ulong)ciphertext.Length == ciphertextLength);
         }
@@ -101,14 +101,14 @@ namespace NSec.Cryptography
         }
 
         internal override bool TryDecryptCore(
-            Key key,
+            SecureMemoryHandle key,
             ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> ciphertext,
             Span<byte> plaintext)
         {
             Debug.Assert(key != null);
-            Debug.Assert(key.Handle.Length == crypto_aead_chacha20poly1305_ietf_KEYBYTES);
+            Debug.Assert(key.Length == crypto_aead_chacha20poly1305_ietf_KEYBYTES);
             Debug.Assert(nonce.Length == crypto_aead_chacha20poly1305_ietf_NPUBBYTES);
             Debug.Assert(plaintext.Length == ciphertext.Length - crypto_aead_chacha20poly1305_ietf_ABYTES);
 
@@ -121,7 +121,7 @@ namespace NSec.Cryptography
                 ref associatedData.DangerousGetPinnableReference(),
                 (ulong)associatedData.Length,
                 ref nonce.DangerousGetPinnableReference(),
-                key.Handle);
+                key);
 
             // libsodium clears the plaintext if decryption fails, so we do
             // not need to clear the plaintext.

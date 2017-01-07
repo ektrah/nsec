@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using static Interop.Libsodium;
 
 namespace NSec.Cryptography
 {
@@ -70,7 +71,7 @@ namespace NSec.Cryptography
 
             byte[] plaintext = new byte[ciphertext.Length - _tagSize];
 
-            if (!TryDecryptCore(key, nonce, associatedData, ciphertext, plaintext))
+            if (!TryDecryptCore(key.Handle, nonce, associatedData, ciphertext, plaintext))
             {
                 throw new CryptographicException();
             }
@@ -98,7 +99,7 @@ namespace NSec.Cryptography
             if (plaintext.Length != ciphertext.Length - _tagSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(plaintext));
 
-            if (!TryDecryptCore(key, nonce, associatedData, ciphertext, plaintext))
+            if (!TryDecryptCore(key.Handle, nonce, associatedData, ciphertext, plaintext))
             {
                 throw new CryptographicException();
             }
@@ -122,7 +123,7 @@ namespace NSec.Cryptography
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(plaintext));
 
             byte[] ciphertext = new byte[plaintext.Length + _tagSize];
-            EncryptCore(key, nonce, associatedData, plaintext, ciphertext);
+            EncryptCore(key.Handle, nonce, associatedData, plaintext, ciphertext);
             return ciphertext;
         }
 
@@ -146,7 +147,7 @@ namespace NSec.Cryptography
             if (ciphertext.Length != plaintext.Length + _tagSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(ciphertext));
 
-            EncryptCore(key, nonce, associatedData, plaintext, ciphertext);
+            EncryptCore(key.Handle, nonce, associatedData, plaintext, ciphertext);
         }
 
         public bool TryDecrypt(
@@ -173,7 +174,7 @@ namespace NSec.Cryptography
 
             byte[] result = new byte[ciphertext.Length - _tagSize];
 
-            if (!TryDecryptCore(key, nonce, associatedData, ciphertext, result))
+            if (!TryDecryptCore(key.Handle, nonce, associatedData, ciphertext, result))
             {
                 plaintext = null;
                 return false;
@@ -203,18 +204,18 @@ namespace NSec.Cryptography
             if (plaintext.Length != ciphertext.Length - _tagSize)
                 return false;
 
-            return TryDecryptCore(key, nonce, associatedData, ciphertext, plaintext);
+            return TryDecryptCore(key.Handle, nonce, associatedData, ciphertext, plaintext);
         }
 
         internal abstract void EncryptCore(
-            Key key,
+            SecureMemoryHandle key,
             ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext);
 
         internal abstract bool TryDecryptCore(
-            Key key,
+            SecureMemoryHandle key,
             ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> ciphertext,
