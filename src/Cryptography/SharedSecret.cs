@@ -14,8 +14,9 @@ namespace NSec.Cryptography
         {
             Debug.Assert(handle != null);
 
+            handle.MakeReadOnly();
+
             _handle = handle;
-            _handle.MakeReadOnly();
         }
 
         public int Size => _handle.Length;
@@ -30,8 +31,23 @@ namespace NSec.Cryptography
 
             Sodium.Initialize();
 
-            SecureMemoryHandle handle = SecureMemoryHandle.Alloc(sharedSecret.Length);
-            handle.Import(sharedSecret);
+            SecureMemoryHandle handle = null;
+            bool success = false;
+
+            try
+            {
+                handle = SecureMemoryHandle.Alloc(sharedSecret.Length);
+                handle.Import(sharedSecret);
+                success = true;
+            }
+            finally
+            {
+                if (!success && handle != null)
+                {
+                    handle.Dispose();
+                }
+            }
+
             return new SharedSecret(handle);
         }
 
