@@ -208,14 +208,14 @@ namespace NSec.Cryptography
         }
 
         internal abstract void EncryptCore(
-            SecureMemoryHandle key,
+            SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext);
 
         internal abstract bool TryDecryptCore(
-            SecureMemoryHandle key,
+            SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> ciphertext,

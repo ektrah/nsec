@@ -136,20 +136,20 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> inputKeyingMaterial,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> info,
-            SecureMemoryHandle key)
+            SecureMemoryHandle keyHandle)
         {
             bool addedRef = false;
             try
             {
-                key.DangerousAddRef(ref addedRef);
+                keyHandle.DangerousAddRef(ref addedRef);
 
-                DeriveBytesCore(inputKeyingMaterial, salt, info, key.DangerousGetSpan());
+                DeriveBytesCore(inputKeyingMaterial, salt, info, keyHandle.DangerousGetSpan());
             }
             finally
             {
                 if (addedRef)
                 {
-                    key.DangerousRelease();
+                    keyHandle.DangerousRelease();
                 }
             }
         }
@@ -158,20 +158,20 @@ namespace NSec.Cryptography
             SecureMemoryHandle inputKeyingMaterial,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> info,
-            SecureMemoryHandle key)
+            SecureMemoryHandle keyHandle)
         {
             bool addedRef = false;
             try
             {
-                key.DangerousAddRef(ref addedRef);
+                keyHandle.DangerousAddRef(ref addedRef);
 
-                DeriveBytesCore(inputKeyingMaterial, salt, info, key.DangerousGetSpan());
+                DeriveBytesCore(inputKeyingMaterial, salt, info, keyHandle.DangerousGetSpan());
             }
             finally
             {
                 if (addedRef)
                 {
-                    key.DangerousRelease();
+                    keyHandle.DangerousRelease();
                 }
             }
         }

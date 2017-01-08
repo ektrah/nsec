@@ -39,90 +39,84 @@ namespace NSec.Cryptography.Formatting
         }
 
         public bool TryExport(
-            SecureMemoryHandle key,
+            SecureMemoryHandle keyHandle,
             out byte[] result)
         {
-            Debug.Assert(key != null);
+            Debug.Assert(keyHandle != null);
 
-            byte[] blob = new byte[_blobSize];
-            Buffer.BlockCopy(_blobHeader, 0, blob, 0, _blobHeader.Length);
-            Serialize(key, new Span<byte>(blob, _blobHeader.Length));
-            result = blob;
+            result = new byte[_blobSize];
+            Buffer.BlockCopy(_blobHeader, 0, result, 0, _blobHeader.Length);
+            Serialize(keyHandle, new Span<byte>(result, _blobHeader.Length));
             return true;
         }
 
         public bool TryExportText(
-            SecureMemoryHandle key,
+            SecureMemoryHandle keyHandle,
             out byte[] result)
         {
-            Debug.Assert(key != null);
+            Debug.Assert(keyHandle != null);
 
             byte[] temp = new byte[_blobSize]; // TODO: avoid placing sensitive data in managed memory
             new ReadOnlySpan<byte>(_blobHeader).CopyTo(temp);
-            Serialize(key, new Span<byte>(temp, _blobHeader.Length));
+            Serialize(keyHandle, new Span<byte>(temp, _blobHeader.Length));
             result = Armor.Encode(temp, s_beginLabel, s_endLabel);
             return true;
         }
 
         public bool TryImport(
-            Algorithm algorithm,
-            KeyFlags flags,
             ReadOnlySpan<byte> blob,
-            out Key result)
+            out SecureMemoryHandle keyHandle,
+            out byte[] publicKeyBytes)
         {
-            Debug.Assert(algorithm != null);
-
             if (blob.Length != _blobSize || !blob.Slice(0, _blobHeader.Length).BlockEquals(_blobHeader))
             {
-                result = null;
+                keyHandle = null;
+                publicKeyBytes = null;
                 return false;
             }
 
-            result = Deserialize(algorithm, flags, blob.Slice(_blobHeader.Length));
+            Deserialize(blob.Slice(_blobHeader.Length), out keyHandle, out publicKeyBytes);
             return true;
         }
 
         public bool TryImportText(
-            Algorithm algorithm,
-            KeyFlags flags,
             ReadOnlySpan<byte> blob,
-            out Key result)
+            out SecureMemoryHandle keyHandle,
+            out byte[] publicKeyBytes)
         {
-            Debug.Assert(algorithm != null);
-
             byte[] temp = new byte[_blobSize]; // TODO: avoid placing sensitive data in managed memory
 
             if (!Armor.TryDecode(blob, s_beginLabel, s_endLabel, temp))
             {
-                result = null;
+                keyHandle = null;
+                publicKeyBytes = null;
                 return false;
             }
 
-            return TryImport(algorithm, flags, temp, out result);
+            return TryImport(temp, out keyHandle, out publicKeyBytes);
         }
 
-        protected virtual Key Deserialize(
-            Algorithm algorithm,
-            KeyFlags flags,
-            ReadOnlySpan<byte> span)
+        protected virtual void Deserialize(
+            ReadOnlySpan<byte> span,
+            out SecureMemoryHandle keyHandle,
+            out byte[] publicKeyBytes)
         {
-            Debug.Assert(algorithm != null);
             Debug.Assert(span.Length == _blobSize - _blobHeader.Length);
 
-            SecureMemoryHandle handle = SecureMemoryHandle.Alloc(span.Length);
-            handle.Import(span);
-            return new Key(algorithm, flags, handle, null);
+            publicKeyBytes = null;
+            keyHandle = SecureMemoryHandle.Alloc(span.Length);
+            keyHandle.Import(span);
         }
 
         protected virtual void Serialize(
-            SecureMemoryHandle key,
+            SecureMemoryHandle keyHandle,
             Span<byte> span)
         {
-            Debug.Assert(key != null);
-            Debug.Assert(key.Length == _blobSize - _blobHeader.Length);
+            Debug.Assert(keyHandle != null);
+            Debug.Assert(keyHandle.Length == _blobSize - _blobHeader.Length);
             Debug.Assert(span.Length == _blobSize - _blobHeader.Length);
 
-            key.Export(span);
+            keyHandle.Export(span);
         }
     }
 }

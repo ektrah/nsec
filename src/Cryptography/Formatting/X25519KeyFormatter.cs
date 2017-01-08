@@ -13,30 +13,28 @@ namespace NSec.Cryptography.Formatting
         {
         }
 
-        protected override Key Deserialize(
-            Algorithm algorithm,
-            KeyFlags flags,
-            ReadOnlySpan<byte> span)
+        protected override void Deserialize(
+            ReadOnlySpan<byte> span,
+            out SecureMemoryHandle keyHandle,
+            out byte[] publicKeyBytes)
         {
-            Debug.Assert(algorithm != null);
             Debug.Assert(span.Length == crypto_scalarmult_curve25519_SCALARBYTES);
 
-            byte[] publicKeyBytes = new byte[crypto_scalarmult_curve25519_SCALARBYTES];
-            SecureMemoryHandle handle = SecureMemoryHandle.Alloc(span.Length);
-            handle.Import(span);
-            crypto_scalarmult_curve25519_base(publicKeyBytes, handle);
-            return new Key(algorithm, flags, handle, new PublicKey(algorithm, publicKeyBytes));
+            publicKeyBytes = new byte[crypto_scalarmult_curve25519_SCALARBYTES];
+            keyHandle = SecureMemoryHandle.Alloc(span.Length);
+            keyHandle.Import(span);
+            crypto_scalarmult_curve25519_base(publicKeyBytes, keyHandle);
         }
 
         protected override void Serialize(
-            SecureMemoryHandle key,
+            SecureMemoryHandle keyHandle,
             Span<byte> span)
         {
-            Debug.Assert(key != null);
-            Debug.Assert(key.Length == crypto_scalarmult_curve25519_SCALARBYTES);
+            Debug.Assert(keyHandle != null);
+            Debug.Assert(keyHandle.Length == crypto_scalarmult_curve25519_SCALARBYTES);
             Debug.Assert(span.Length == crypto_scalarmult_curve25519_SCALARBYTES);
 
-            key.Export(span);
+            keyHandle.Export(span);
         }
     }
 }

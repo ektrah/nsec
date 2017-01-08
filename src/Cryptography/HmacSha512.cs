@@ -55,13 +55,13 @@ namespace NSec.Cryptography
                 throw new InvalidOperationException();
         }
 
-        internal override SecureMemoryHandle CreateKey(
-            out PublicKey publicKey)
+        internal override void CreateKey(
+            out SecureMemoryHandle keyHandle,
+            out byte[] publicKeyBytes)
         {
-            SecureMemoryHandle handle = SecureMemoryHandle.Alloc(DefaultKeySize);
-            randombytes_buf(handle, (IntPtr)handle.Length);
-            publicKey = null;
-            return handle;
+            publicKeyBytes = null;
+            keyHandle = SecureMemoryHandle.Alloc(DefaultKeySize);
+            randombytes_buf(keyHandle, (IntPtr)keyHandle.Length);
         }
 
         internal override int GetDerivedKeySize()
@@ -70,12 +70,12 @@ namespace NSec.Cryptography
         }
 
         internal override void SignCore(
-            SecureMemoryHandle key,
+            SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> data,
             Span<byte> mac)
         {
-            Debug.Assert(key != null);
+            Debug.Assert(keyHandle != null);
             Debug.Assert(nonce.IsEmpty);
             Debug.Assert(mac.Length >= MinMacSize);
             Debug.Assert(mac.Length <= MaxMacSize);
@@ -89,7 +89,7 @@ namespace NSec.Cryptography
             // TryImportKey method to keep the KeyHandle small, so we never
             // pass a key larger than the block size to _init.
 
-            crypto_auth_hmacsha512_init(out crypto_auth_hmacsha512_state state, key, (IntPtr)key.Length);
+            crypto_auth_hmacsha512_init(out crypto_auth_hmacsha512_state state, keyHandle, (IntPtr)keyHandle.Length);
 
             if (!data.IsEmpty)
             {
@@ -113,11 +113,11 @@ namespace NSec.Cryptography
         }
 
         internal override bool TryExportKey(
-            SecureMemoryHandle key,
+            SecureMemoryHandle keyHandle,
             KeyBlobFormat format,
             out byte[] result)
         {
-            Debug.Assert(key != null);
+            Debug.Assert(keyHandle != null);
 
             if (format != KeyBlobFormat.RawSymmetricKey)
             {
@@ -125,40 +125,39 @@ namespace NSec.Cryptography
                 return false;
             }
 
-            byte[] bytes = new byte[key.Length];
-            key.Export(bytes);
-            result = bytes;
+            result = new byte[keyHandle.Length];
+            keyHandle.Export(result);
             return true;
         }
 
         internal override bool TryImportKey(
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
-            KeyFlags flags,
-            out Key result)
+            out SecureMemoryHandle keyHandle,
+            out byte[] publicKeyBytes)
         {
-            SecureMemoryHandle handle;
-
             if (format != KeyBlobFormat.RawSymmetricKey || blob.Length < MinKeySize)
             {
-                result = null;
+                keyHandle = null;
+                publicKeyBytes = null;
                 return false;
             }
 
             if (blob.Length > SHA512MessageBlockSize)
             {
-                handle = SecureMemoryHandle.Alloc(crypto_hash_sha512_BYTES);
+                publicKeyBytes = null;
+                keyHandle = SecureMemoryHandle.Alloc(crypto_hash_sha512_BYTES);
                 crypto_hash_sha512_init(out crypto_hash_sha512_state state);
                 crypto_hash_sha512_update(ref state, ref blob.DangerousGetPinnableReference(), (ulong)blob.Length);
-                crypto_hash_sha512_final(ref state, handle);
+                crypto_hash_sha512_final(ref state, keyHandle);
             }
             else
             {
-                handle = SecureMemoryHandle.Alloc(blob.Length);
-                handle.Import(blob);
+                publicKeyBytes = null;
+                keyHandle = SecureMemoryHandle.Alloc(blob.Length);
+                keyHandle.Import(blob);
             }
 
-            result = new Key(this, flags, handle, null);
             return true;
         }
 

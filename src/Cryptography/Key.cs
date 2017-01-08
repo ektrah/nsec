@@ -23,7 +23,8 @@ namespace NSec.Cryptography
 
             _algorithm = algorithm;
             _flags = flags;
-            _handle = algorithm.CreateKey(out _publicKey);
+            algorithm.CreateKey(out _handle, out byte[] publicKeyBytes);
+            _publicKey = (publicKeyBytes != null) ? new PublicKey(_algorithm, publicKeyBytes) : null;
             _handle.MakeReadOnly();
         }
 
@@ -69,12 +70,12 @@ namespace NSec.Cryptography
             if (format == KeyBlobFormat.None)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(format));
 
-            if (!algorithm.TryImportKey(blob, format, flags, out Key key))
+            if (!algorithm.TryImportKey(blob, format, out SecureMemoryHandle keyHandle, out byte[] publicKeyBytes))
             {
                 throw new FormatException();
             }
 
-            return key;
+            return new Key(algorithm, flags, keyHandle, (publicKeyBytes != null) ? new PublicKey(algorithm, publicKeyBytes) : null);
         }
 
         public static bool TryImport(
@@ -89,7 +90,14 @@ namespace NSec.Cryptography
             if (format == KeyBlobFormat.None)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(format));
 
-            return algorithm.TryImportKey(blob, format, flags, out result);
+            if (!algorithm.TryImportKey(blob, format, out SecureMemoryHandle keyHandle, out byte[] publicKeyBytes))
+            {
+                result = null;
+                return false;
+            }
+
+            result = new Key(algorithm, flags, keyHandle, (publicKeyBytes != null) ? new PublicKey(algorithm, publicKeyBytes) : null);
+            return true;
         }
 
         public void Dispose()

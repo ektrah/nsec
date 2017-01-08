@@ -97,13 +97,13 @@ namespace NSec.Cryptography
             HashCore(key, data, hash);
         }
 
-        internal override SecureMemoryHandle CreateKey(
-            out PublicKey publicKey)
+        internal override void CreateKey(
+            out SecureMemoryHandle keyHandle,
+            out byte[] publicKeyBytes)
         {
-            SecureMemoryHandle handle = SecureMemoryHandle.Alloc(DefaultKeySize);
-            randombytes_buf(handle, (IntPtr)handle.Length);
-            publicKey = null;
-            return handle;
+            publicKeyBytes = null;
+            keyHandle = SecureMemoryHandle.Alloc(DefaultKeySize);
+            randombytes_buf(keyHandle, (IntPtr)keyHandle.Length);
         }
 
         internal override int GetDerivedKeySize()
@@ -124,11 +124,11 @@ namespace NSec.Cryptography
         }
 
         internal override bool TryExportKey(
-            SecureMemoryHandle key,
+            SecureMemoryHandle keyHandle,
             KeyBlobFormat format,
             out byte[] result)
         {
-            Debug.Assert(key != null);
+            Debug.Assert(keyHandle != null);
 
             if (format != KeyBlobFormat.RawSymmetricKey)
             {
@@ -136,27 +136,27 @@ namespace NSec.Cryptography
                 return false;
             }
 
-            byte[] bytes = new byte[key.Length];
-            key.Export(bytes);
-            result = bytes;
+            result = new byte[keyHandle.Length];
+            keyHandle.Export(result);
             return true;
         }
 
         internal override bool TryImportKey(
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
-            KeyFlags flags,
-            out Key result)
+            out SecureMemoryHandle keyHandle,
+            out byte[] publicKeyBytes)
         {
             if (format != KeyBlobFormat.RawSymmetricKey || blob.Length < MinKeySize || blob.Length > MaxKeySize)
             {
-                result = null;
+                keyHandle = null;
+                publicKeyBytes = null;
                 return false;
             }
 
-            SecureMemoryHandle handle = SecureMemoryHandle.Alloc(blob.Length);
-            handle.Import(blob);
-            result = new Key(this, flags, handle, null);
+            publicKeyBytes = null;
+            keyHandle = SecureMemoryHandle.Alloc(blob.Length);
+            keyHandle.Import(blob);
             return true;
         }
 

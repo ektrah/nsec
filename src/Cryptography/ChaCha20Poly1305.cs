@@ -60,24 +60,24 @@ namespace NSec.Cryptography
                 throw new InvalidOperationException();
         }
 
-        internal override SecureMemoryHandle CreateKey(
-            out PublicKey publicKey)
+        internal override void CreateKey(
+            out SecureMemoryHandle keyHandle,
+            out byte[] publicKeyBytes)
         {
-            SecureMemoryHandle handle = SecureMemoryHandle.Alloc(crypto_aead_chacha20poly1305_ietf_KEYBYTES);
-            randombytes_buf(handle, (IntPtr)handle.Length);
-            publicKey = null;
-            return handle;
+            publicKeyBytes = null;
+            keyHandle = SecureMemoryHandle.Alloc(crypto_aead_chacha20poly1305_ietf_KEYBYTES);
+            randombytes_buf(keyHandle, (IntPtr)keyHandle.Length);
         }
 
         internal override void EncryptCore(
-            SecureMemoryHandle key,
+            SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext)
         {
-            Debug.Assert(key != null);
-            Debug.Assert(key.Length == crypto_aead_chacha20poly1305_ietf_KEYBYTES);
+            Debug.Assert(keyHandle != null);
+            Debug.Assert(keyHandle.Length == crypto_aead_chacha20poly1305_ietf_KEYBYTES);
             Debug.Assert(nonce.Length == crypto_aead_chacha20poly1305_ietf_NPUBBYTES);
             Debug.Assert(ciphertext.Length == plaintext.Length + crypto_aead_chacha20poly1305_ietf_ABYTES);
 
@@ -90,7 +90,7 @@ namespace NSec.Cryptography
                 (ulong)associatedData.Length,
                 IntPtr.Zero,
                 ref nonce.DangerousGetPinnableReference(),
-                key);
+                keyHandle);
 
             Debug.Assert((ulong)ciphertext.Length == ciphertextLength);
         }
@@ -101,14 +101,14 @@ namespace NSec.Cryptography
         }
 
         internal override bool TryDecryptCore(
-            SecureMemoryHandle key,
+            SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> ciphertext,
             Span<byte> plaintext)
         {
-            Debug.Assert(key != null);
-            Debug.Assert(key.Length == crypto_aead_chacha20poly1305_ietf_KEYBYTES);
+            Debug.Assert(keyHandle != null);
+            Debug.Assert(keyHandle.Length == crypto_aead_chacha20poly1305_ietf_KEYBYTES);
             Debug.Assert(nonce.Length == crypto_aead_chacha20poly1305_ietf_NPUBBYTES);
             Debug.Assert(plaintext.Length == ciphertext.Length - crypto_aead_chacha20poly1305_ietf_ABYTES);
 
@@ -121,7 +121,7 @@ namespace NSec.Cryptography
                 ref associatedData.DangerousGetPinnableReference(),
                 (ulong)associatedData.Length,
                 ref nonce.DangerousGetPinnableReference(),
-                key);
+                keyHandle);
 
             // libsodium clears the plaintext if decryption fails, so we do
             // not need to clear the plaintext.
@@ -131,18 +131,18 @@ namespace NSec.Cryptography
         }
 
         internal override bool TryExportKey(
-            SecureMemoryHandle key,
+            SecureMemoryHandle keyHandle,
             KeyBlobFormat format,
             out byte[] result)
         {
-            Debug.Assert(key != null);
+            Debug.Assert(keyHandle != null);
 
             switch (format)
             {
             case KeyBlobFormat.RawSymmetricKey:
-                return s_rawKeyFormatter.TryExport(key, out result);
+                return s_rawKeyFormatter.TryExport(keyHandle, out result);
             case KeyBlobFormat.NSecSymmetricKey:
-                return s_nsecKeyFormatter.TryExport(key, out result);
+                return s_nsecKeyFormatter.TryExport(keyHandle, out result);
             default:
                 result = null;
                 return false;
@@ -152,17 +152,18 @@ namespace NSec.Cryptography
         internal override bool TryImportKey(
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
-            KeyFlags flags,
-            out Key result)
+            out SecureMemoryHandle keyHandle,
+            out byte[] publicKeyBytes)
         {
             switch (format)
             {
             case KeyBlobFormat.RawSymmetricKey:
-                return s_rawKeyFormatter.TryImport(this, flags, blob, out result);
+                return s_rawKeyFormatter.TryImport(blob, out keyHandle, out publicKeyBytes);
             case KeyBlobFormat.NSecSymmetricKey:
-                return s_nsecKeyFormatter.TryImport(this, flags, blob, out result);
+                return s_nsecKeyFormatter.TryImport(blob, out keyHandle, out publicKeyBytes);
             default:
-                result = null;
+                keyHandle = null;
+                publicKeyBytes = null;
                 return false;
             }
         }

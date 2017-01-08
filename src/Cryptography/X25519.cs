@@ -81,31 +81,30 @@ namespace NSec.Cryptography
                 throw new InvalidOperationException();
         }
 
-        internal override SecureMemoryHandle CreateKey(
-            out PublicKey publicKey)
+        internal override void CreateKey(
+            out SecureMemoryHandle keyHandle,
+            out byte[] publicKeyBytes)
         {
-            byte[] publicKeyBytes = new byte[crypto_scalarmult_curve25519_SCALARBYTES];
-            SecureMemoryHandle handle = SecureMemoryHandle.Alloc(crypto_scalarmult_curve25519_SCALARBYTES);
-            randombytes_buf(handle, (IntPtr)handle.Length);
-            crypto_scalarmult_curve25519_base(publicKeyBytes, handle);
-            publicKey = new PublicKey(this, publicKeyBytes);
-            return handle;
+            publicKeyBytes = new byte[crypto_scalarmult_curve25519_SCALARBYTES];
+            keyHandle = SecureMemoryHandle.Alloc(crypto_scalarmult_curve25519_SCALARBYTES);
+            randombytes_buf(keyHandle, (IntPtr)keyHandle.Length);
+            crypto_scalarmult_curve25519_base(publicKeyBytes, keyHandle);
         }
 
         internal override bool TryAgreeCore(
-            SecureMemoryHandle key,
+            SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> otherPartyPublicKey,
             out SharedSecret result)
         {
-            Debug.Assert(key != null);
-            Debug.Assert(key.Length == crypto_scalarmult_curve25519_SCALARBYTES);
+            Debug.Assert(keyHandle != null);
+            Debug.Assert(keyHandle.Length == crypto_scalarmult_curve25519_SCALARBYTES);
             Debug.Assert(otherPartyPublicKey.Length == crypto_scalarmult_curve25519_SCALARBYTES);
 
             SecureMemoryHandle sharedSecretHandle = SecureMemoryHandle.Alloc(crypto_scalarmult_curve25519_BYTES);
 
             int error = crypto_scalarmult_curve25519(
                 sharedSecretHandle,
-                key,
+                keyHandle,
                 ref otherPartyPublicKey.DangerousGetPinnableReference());
 
             if (error != 0)
@@ -120,20 +119,20 @@ namespace NSec.Cryptography
         }
 
         internal override bool TryExportKey(
-            SecureMemoryHandle key,
+            SecureMemoryHandle keyHandle,
             KeyBlobFormat format,
             out byte[] result)
         {
             switch (format)
             {
             case KeyBlobFormat.RawPrivateKey:
-                return s_rawPrivateKeyFormatter.TryExport(key, out result);
+                return s_rawPrivateKeyFormatter.TryExport(keyHandle, out result);
             case KeyBlobFormat.NSecPrivateKey:
-                return s_nsecPrivateKeyFormatter.TryExport(key, out result);
+                return s_nsecPrivateKeyFormatter.TryExport(keyHandle, out result);
             case KeyBlobFormat.PkixPrivateKey:
-                return s_pkixPrivateKeyFormatter.TryExport(key, out result);
+                return s_pkixPrivateKeyFormatter.TryExport(keyHandle, out result);
             case KeyBlobFormat.PkixPrivateKeyText:
-                return s_pkixPrivateKeyFormatter.TryExportText(key, out result);
+                return s_pkixPrivateKeyFormatter.TryExportText(keyHandle, out result);
             default:
                 result = null;
                 return false;
@@ -164,21 +163,22 @@ namespace NSec.Cryptography
         internal override bool TryImportKey(
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
-            KeyFlags flags,
-            out Key result)
+            out SecureMemoryHandle keyHandle,
+            out byte[] publicKeyBytes)
         {
             switch (format)
             {
             case KeyBlobFormat.RawPrivateKey:
-                return s_rawPrivateKeyFormatter.TryImport(this, flags, blob, out result);
+                return s_rawPrivateKeyFormatter.TryImport(blob, out keyHandle, out publicKeyBytes);
             case KeyBlobFormat.NSecPrivateKey:
-                return s_nsecPrivateKeyFormatter.TryImport(this, flags, blob, out result);
+                return s_nsecPrivateKeyFormatter.TryImport(blob, out keyHandle, out publicKeyBytes);
             case KeyBlobFormat.PkixPrivateKey:
-                return s_pkixPrivateKeyFormatter.TryImport(this, flags, blob, out result);
+                return s_pkixPrivateKeyFormatter.TryImport(blob, out keyHandle, out publicKeyBytes);
             case KeyBlobFormat.PkixPrivateKeyText:
-                return s_pkixPrivateKeyFormatter.TryImportText(this, flags, blob, out result);
+                return s_pkixPrivateKeyFormatter.TryImportText(blob, out keyHandle, out publicKeyBytes);
             default:
-                result = null;
+                keyHandle = null;
+                publicKeyBytes = null;
                 return false;
             }
         }

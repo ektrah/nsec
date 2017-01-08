@@ -11,8 +11,9 @@ namespace NSec.Cryptography
         }
 
         // Allocates a new, initialized libsodium secret key.
-        internal virtual SecureMemoryHandle CreateKey(
-            out PublicKey publicKey)
+        internal virtual void CreateKey(
+            out SecureMemoryHandle keyHandle,
+            out byte[] publicKeyBytes)
         {
             throw new NotSupportedException();
         }
@@ -25,7 +26,7 @@ namespace NSec.Cryptography
 
         // Converts a libsodium secret key into a key blob.
         internal virtual bool TryExportKey(
-            SecureMemoryHandle key,
+            SecureMemoryHandle keyHandle,
             KeyBlobFormat format,
             out byte[] result)
         {
@@ -45,8 +46,8 @@ namespace NSec.Cryptography
         internal virtual bool TryImportKey(
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
-            KeyFlags flags,
-            out Key result)
+            out SecureMemoryHandle keyHandle,
+            out byte[] publicKeyBytes)
         {
             throw new NotSupportedException();
         }

@@ -213,7 +213,7 @@ namespace NSec.Cryptography
         }
 
         internal abstract void SignCore(
-            SecureMemoryHandle key,
+            SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> data,
             Span<byte> mac);

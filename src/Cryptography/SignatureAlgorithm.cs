@@ -107,7 +107,7 @@ namespace NSec.Cryptography
         }
 
         internal abstract void SignCore(
-            SecureMemoryHandle key,
+            SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             Span<byte> signature);
 
