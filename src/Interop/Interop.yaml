@@ -167,7 +167,7 @@ Interop.Utils.cs:
   functions:
   - sodium_free (IntPtr ptr)
   - sodium_malloc
-  - sodium_memcmp (ref byte b2_)
+  - sodium_memcmp (ref byte b1_, ref byte b2_)
   - sodium_mprotect_readonly (IntPtr ptr)
 
 Interop.Version.cs:

@@ -168,10 +168,11 @@ namespace NSec.Cryptography
             // a copy. So we provide an array with the default length and
             // compare only the initial 'mac.Length' bytes.
 
-            byte[] result = new byte[_defaultMacSize]; // TODO: avoid placing sensitive data in managed memory
+            Span<byte> result = new byte[_defaultMacSize]; // TODO: avoid placing sensitive data in managed memory
             SignCore(key.Handle, nonce, data, result);
 
-            int error = sodium_memcmp(result, ref mac.DangerousGetPinnableReference(), (IntPtr)mac.Length);
+            // TODO: check mac.Length <= _defaultMacSize
+            int error = sodium_memcmp(ref result.DangerousGetPinnableReference(), ref mac.DangerousGetPinnableReference(), (IntPtr)mac.Length);
             return error == 0;
         }
 
@@ -202,10 +203,11 @@ namespace NSec.Cryptography
             // a copy. So we provide an array with the default length and
             // compare only the initial 'mac.Length' bytes.
 
-            byte[] result = new byte[_defaultMacSize]; // TODO: avoid placing sensitive data in managed memory
+            Span<byte> result = new byte[_defaultMacSize]; // TODO: avoid placing sensitive data in managed memory
             SignCore(key.Handle, nonce, data, result);
 
-            int error = sodium_memcmp(result, ref mac.DangerousGetPinnableReference(), (IntPtr)mac.Length);
+            // TODO: check mac.Length <= _defaultMacSize
+            int error = sodium_memcmp(ref result.DangerousGetPinnableReference(), ref mac.DangerousGetPinnableReference(), (IntPtr)mac.Length);
             if (error != 0)
             {
                 throw new CryptographicException();

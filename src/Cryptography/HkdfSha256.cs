@@ -115,7 +115,7 @@ namespace NSec.Cryptography
         {
             Debug.Assert(bytes.Length <= 255 * crypto_auth_hmacsha256_BYTES);
 
-            byte[] pseudorandomKey = new byte[crypto_auth_hmacsha256_BYTES]; // TODO: avoid placing sensitive data in managed memory
+            Span<byte> pseudorandomKey = new byte[crypto_auth_hmacsha256_BYTES]; // TODO: avoid placing sensitive data in managed memory
             ExtractCore(inputKeyingMaterial, salt, pseudorandomKey);
             ExpandCore(pseudorandomKey, info, bytes);
         }
@@ -128,7 +128,7 @@ namespace NSec.Cryptography
             Debug.Assert(pseudorandomKey.Length >= crypto_auth_hmacsha256_BYTES);
             Debug.Assert(bytes.Length <= 255 * crypto_auth_hmacsha256_BYTES);
 
-            byte[] t = new byte[crypto_auth_hmacsha256_BYTES]; // TODO: avoid placing sensitive data in managed memory
+            Span<byte> t = new byte[crypto_auth_hmacsha256_BYTES]; // TODO: avoid placing sensitive data in managed memory
             int tLen = 0;
             int offset = 0;
             byte counter = 0;
@@ -139,16 +139,16 @@ namespace NSec.Cryptography
                 counter++;
 
                 crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, ref pseudorandomKey.DangerousGetPinnableReference(), (IntPtr)pseudorandomKey.Length);
-                crypto_auth_hmacsha256_update(ref state, t, (ulong)tLen);
+                crypto_auth_hmacsha256_update(ref state, ref t.DangerousGetPinnableReference(), (ulong)tLen);
                 crypto_auth_hmacsha256_update(ref state, ref info.DangerousGetPinnableReference(), (ulong)info.Length);
                 crypto_auth_hmacsha256_update(ref state, ref counter, sizeof(byte));
-                crypto_auth_hmacsha256_final(ref state, t);
+                crypto_auth_hmacsha256_final(ref state, ref t.DangerousGetPinnableReference());
 
                 tLen = crypto_auth_hmacsha256_BYTES;
 
                 if (chunkSize > crypto_auth_hmacsha256_BYTES)
                     chunkSize = crypto_auth_hmacsha256_BYTES;
-                new ReadOnlySpan<byte>(t, 0, chunkSize).CopyTo(bytes.Slice(offset));
+                t.Slice(0, chunkSize).CopyTo(bytes.Slice(offset));
                 offset += chunkSize;
             }
         }

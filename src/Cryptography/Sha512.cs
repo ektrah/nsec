@@ -61,9 +61,9 @@ namespace NSec.Cryptography
             }
             else
             {
-                byte[] result = new byte[crypto_hash_sha512_BYTES]; // TODO: avoid placing sensitive data in managed memory
-                crypto_hash_sha512_final(ref state, result);
-                new ReadOnlySpan<byte>(result, 0, hash.Length).CopyTo(hash);
+                Span<byte> temp = new byte[crypto_hash_sha512_BYTES]; // TODO: avoid placing sensitive data in managed memory
+                crypto_hash_sha512_final(ref state, ref temp.DangerousGetPinnableReference());
+                temp.Slice(0, hash.Length).CopyTo(hash);
             }
         }
 

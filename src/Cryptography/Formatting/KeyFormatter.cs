@@ -56,9 +56,9 @@ namespace NSec.Cryptography.Formatting
         {
             Debug.Assert(keyHandle != null);
 
-            byte[] temp = new byte[_blobSize]; // TODO: avoid placing sensitive data in managed memory
+            Span<byte> temp = new byte[_blobSize]; // TODO: avoid placing sensitive data in managed memory
             new ReadOnlySpan<byte>(_blobHeader).CopyTo(temp);
-            Serialize(keyHandle, new Span<byte>(temp, _blobHeader.Length));
+            Serialize(keyHandle, temp.Slice(_blobHeader.Length));
             result = Armor.Encode(temp, s_beginLabel, s_endLabel);
             return true;
         }
@@ -84,7 +84,7 @@ namespace NSec.Cryptography.Formatting
             out SecureMemoryHandle keyHandle,
             out byte[] publicKeyBytes)
         {
-            byte[] temp = new byte[_blobSize]; // TODO: avoid placing sensitive data in managed memory
+            Span<byte> temp = new byte[_blobSize]; // TODO: avoid placing sensitive data in managed memory
 
             if (!Armor.TryDecode(blob, s_beginLabel, s_endLabel, temp))
             {

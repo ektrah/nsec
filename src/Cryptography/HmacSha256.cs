@@ -102,9 +102,9 @@ namespace NSec.Cryptography
             }
             else
             {
-                byte[] result = new byte[crypto_auth_hmacsha256_BYTES]; // TODO: avoid placing sensitive data in managed memory
-                crypto_auth_hmacsha256_final(ref state, result);
-                new ReadOnlySpan<byte>(result, 0, mac.Length).CopyTo(mac);
+                Span<byte> temp = new byte[crypto_auth_hmacsha256_BYTES]; // TODO: avoid placing sensitive data in managed memory
+                crypto_auth_hmacsha256_final(ref state, ref temp.DangerousGetPinnableReference());
+                temp.Slice(0, mac.Length).CopyTo(mac);
             }
         }
 
