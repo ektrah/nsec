@@ -37,27 +37,23 @@ namespace NSec.Cryptography.Formatting
         }
 
         public bool TryExport(
-            PublicKey publicKey,
+            ReadOnlySpan<byte> publicKeyBytes,
             out byte[] result)
         {
-            Debug.Assert(publicKey != null);
-
             byte[] blob = new byte[_blobSize];
             Buffer.BlockCopy(_blobHeader, 0, blob, 0, _blobHeader.Length);
-            Serialize(publicKey, new Span<byte>(blob, _blobHeader.Length));
+            Serialize(publicKeyBytes, new Span<byte>(blob, _blobHeader.Length));
             result = blob;
             return true;
         }
 
         public bool TryExportText(
-            PublicKey publicKey,
+            ReadOnlySpan<byte> publicKeyBytes,
             out byte[] result)
         {
-            Debug.Assert(publicKey != null);
-
             byte[] blob = new byte[_blobSize];
             new ReadOnlySpan<byte>(_blobHeader).CopyTo(blob);
-            Serialize(publicKey, new Span<byte>(blob, _blobHeader.Length));
+            Serialize(publicKeyBytes, new Span<byte>(blob, _blobHeader.Length));
             result = Armor.Encode(blob, s_beginLabel, s_endLabel);
             return true;
         }
@@ -108,14 +104,13 @@ namespace NSec.Cryptography.Formatting
         }
 
         protected virtual void Serialize(
-            PublicKey publicKey,
+            ReadOnlySpan<byte> publicKeyBytes,
             Span<byte> span)
         {
-            Debug.Assert(publicKey != null);
-            Debug.Assert(publicKey.Bytes.Length == _blobSize - _blobHeader.Length);
+            Debug.Assert(publicKeyBytes.Length == _blobSize - _blobHeader.Length);
             Debug.Assert(span.Length == _blobSize - _blobHeader.Length);
 
-            publicKey.Bytes.CopyTo(span);
+            publicKeyBytes.CopyTo(span);
         }
     }
 }

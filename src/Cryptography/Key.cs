@@ -137,7 +137,7 @@ namespace NSec.Cryptography
             }
             else
             {
-                if (!_algorithm.TryExportPublicKey(_publicKey, format, out result))
+                if (!_algorithm.TryExportPublicKey(_publicKey.Bytes, format, out result))
                 {
                     throw new FormatException();
                 }

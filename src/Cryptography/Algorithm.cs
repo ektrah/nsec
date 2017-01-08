@@ -35,7 +35,7 @@ namespace NSec.Cryptography
 
         // Converts a libsodium public key into a key blob.
         internal virtual bool TryExportPublicKey(
-            PublicKey publicKey,
+            ReadOnlySpan<byte> publicKeyBytes,
             KeyBlobFormat format,
             out byte[] result)
         {

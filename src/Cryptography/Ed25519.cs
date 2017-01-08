@@ -135,20 +135,20 @@ namespace NSec.Cryptography
         }
 
         internal override bool TryExportPublicKey(
-            PublicKey publicKey,
+            ReadOnlySpan<byte> publicKeyBytes,
             KeyBlobFormat format,
             out byte[] result)
         {
             switch (format)
             {
             case KeyBlobFormat.RawPublicKey:
-                return s_rawPublicKeyFormatter.TryExport(publicKey, out result);
+                return s_rawPublicKeyFormatter.TryExport(publicKeyBytes, out result);
             case KeyBlobFormat.NSecPublicKey:
-                return s_nsecPublicKeyFormatter.TryExport(publicKey, out result);
+                return s_nsecPublicKeyFormatter.TryExport(publicKeyBytes, out result);
             case KeyBlobFormat.PkixPublicKey:
-                return s_pkixPublicKeyFormatter.TryExport(publicKey, out result);
+                return s_pkixPublicKeyFormatter.TryExport(publicKeyBytes, out result);
             case KeyBlobFormat.PkixPublicKeyText:
-                return s_pkixPublicKeyFormatter.TryExportText(publicKey, out result);
+                return s_pkixPublicKeyFormatter.TryExportText(publicKeyBytes, out result);
             default:
                 result = null;
                 return false;

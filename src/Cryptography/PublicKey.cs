@@ -77,7 +77,7 @@ namespace NSec.Cryptography
             if (format == KeyBlobFormat.None)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(format));
 
-            if (!_algorithm.TryExportPublicKey(this, format, out byte[] result))
+            if (!_algorithm.TryExportPublicKey(_bytes, format, out byte[] result))
             {
                 throw new FormatException();
             }
