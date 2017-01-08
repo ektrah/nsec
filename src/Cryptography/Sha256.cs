@@ -43,26 +43,8 @@ namespace NSec.Cryptography
             Debug.Assert(hash.Length == crypto_hash_sha256_BYTES);
 
             crypto_hash_sha256_init(out crypto_hash_sha256_state state);
-
-            if (!data.IsEmpty)
-            {
-                crypto_hash_sha256_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
-            }
-
-            // crypto_hash_sha256_final expects an output buffer with a
-            // size of exactly crypto_hash_sha256_BYTES, so we need to
-            // copy when truncating the output.
-
-            if (hash.Length == crypto_hash_sha256_BYTES)
-            {
-                crypto_hash_sha256_final(ref state, ref hash.DangerousGetPinnableReference());
-            }
-            else
-            {
-                byte[] result = new byte[crypto_hash_sha256_BYTES]; // TODO: avoid placing sensitive data in managed memory
-                crypto_hash_sha256_final(ref state, result);
-                new ReadOnlySpan<byte>(result, 0, hash.Length).CopyTo(hash);
-            }
+            crypto_hash_sha256_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
+            crypto_hash_sha256_final(ref state, ref hash.DangerousGetPinnableReference());
         }
 
         private static bool SelfTest()
