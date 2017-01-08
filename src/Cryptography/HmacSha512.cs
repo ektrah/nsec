@@ -27,7 +27,7 @@ namespace NSec.Cryptography
     //          than B=128 bytes (the block size of SHA-512) are first hashed
     //          using SHA-512.
     //
-    //      Nonce - HMAC-SHA-512 does not use nonces.
+    //      Nonce Size - HMAC-SHA-512 does not use nonces.
     //
     //      MAC Size - 64 bytes. The output can be truncated down to 16 bytes
     //          (128 bits of security). To match the security of SHA-512, the

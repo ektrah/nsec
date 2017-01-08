@@ -25,7 +25,7 @@ namespace NSec.Cryptography
     //          the function strength. Keys longer than B=64 bytes (the block
     //          size of SHA-256) are first hashed using SHA-256.
     //
-    //      Nonce - HMAC-SHA-256 does not use nonces.
+    //      Nonce Size - HMAC-SHA-256 does not use nonces.
     //
     //      MAC Size - 32 bytes. The output can be truncated down to 16 bytes
     //          (128 bits of security).
