@@ -18,12 +18,12 @@ namespace NSec.Cryptography
     //      Key Size - Between 0 and 64 bytes. libsodium recommends a default
     //          size of 32 bytes and a minimum size of 16 bytes.
     //
-    //      Hash Size - Between 1 and 64 bytes. For 128 bits of security, the
-    //          output length should not be less than 32 bytes (blake2b256).
-    //
     //      Input Size - Between 0 and 2^128-1 bytes. Since a Span<byte> can
     //          hold between 0 to 2^31-1 bytes, we do not check the length of
     //          inputs.
+    //
+    //      Hash Size - Between 1 and 64 bytes. For 128 bits of security, the
+    //          output length should not be less than 32 bytes (BLAKE2b-256).
     //
     public sealed class Blake2 : HashAlgorithm
     {
