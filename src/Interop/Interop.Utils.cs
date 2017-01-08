@@ -21,6 +21,6 @@ internal static partial class Interop
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int sodium_mprotect_readonly(
-            IntPtr ptr);
+            SecureMemoryHandle ptr);
     }
 }

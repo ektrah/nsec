@@ -68,7 +68,7 @@ internal static partial class Interop
 
             public void MakeReadOnly()
             {
-                sodium_mprotect_readonly(handle);
+                sodium_mprotect_readonly(this);
             }
 
             protected override bool ReleaseHandle()
