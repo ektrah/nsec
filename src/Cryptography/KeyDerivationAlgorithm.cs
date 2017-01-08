@@ -9,14 +9,14 @@ namespace NSec.Cryptography
     //
     //  Examples
     //
-    //      | Algorithm      | Reference | Salt Size | Output Size   |
-    //      | -------------- | --------- | --------- | ------------- |
-    //      | ANSI X9.63 KDF | [1]       | 0         | 0..L*(2^32-1) |
-    //      | ConcatKDF Hash | [2]       | 0         | 0..L*(2^32-1) |
-    //      | ConcatKDF HMAC | [2]       | any       | 0..L*(2^32-1) |
-    //      | HKDF           | RFC 5869  | any       | 0..L*255      |
+    //      | Algorithm      | Reference | Salt Size | Info Size | Output Size   |
+    //      | -------------- | --------- | --------- | --------- | ------------- |
+    //      | ANSI X9.63 KDF | [1]       | 0         | any       | 0..L*(2^32-1) |
+    //      | ConcatKDF Hash | [2]       | 0         | any       | 0..L*(2^32-1) |
+    //      | ConcatKDF HMAC | [2]       | any       | any       | 0..L*(2^32-1) |
+    //      | HKDF           | RFC 5869  | any       | any       | 0..L*255      |
     //
-    //      L is the hash length of the underlying hash function.
+    //      L is the hash length of the hash function used.
     //
     //      [1] SEC 1: Elliptic Curve Cryptography, Section 3.6.1
     //      [2] NIST Special Publication 800-56A, Revision 2, Section 5.8
