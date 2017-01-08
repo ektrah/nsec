@@ -181,18 +181,18 @@ namespace NSec.Cryptography
         internal override bool TryImportPublicKey(
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
-            out PublicKey result)
+            out byte[] result)
         {
             switch (format)
             {
             case KeyBlobFormat.RawPublicKey:
-                return s_rawPublicKeyFormatter.TryImport(this, blob, out result);
+                return s_rawPublicKeyFormatter.TryImport(blob, out result);
             case KeyBlobFormat.NSecPublicKey:
-                return s_nsecPublicKeyFormatter.TryImport(this, blob, out result);
+                return s_nsecPublicKeyFormatter.TryImport(blob, out result);
             case KeyBlobFormat.PkixPublicKey:
-                return s_pkixPublicKeyFormatter.TryImport(this, blob, out result);
+                return s_pkixPublicKeyFormatter.TryImport(blob, out result);
             case KeyBlobFormat.PkixPublicKeyText:
-                return s_pkixPublicKeyFormatter.TryImportText(this, blob, out result);
+                return s_pkixPublicKeyFormatter.TryImportText(blob, out result);
             default:
                 result = null;
                 return false;

@@ -59,29 +59,23 @@ namespace NSec.Cryptography.Formatting
         }
 
         public bool TryImport(
-            Algorithm algorithm,
             ReadOnlySpan<byte> blob,
-            out PublicKey result)
+            out byte[] result)
         {
-            Debug.Assert(algorithm != null);
-
             if (blob.Length != _blobSize || !blob.Slice(0, _blobHeader.Length).BlockEquals(_blobHeader))
             {
                 result = null;
                 return false;
             }
 
-            result = Deserialize(algorithm, blob.Slice(_blobHeader.Length));
+            result = Deserialize(blob.Slice(_blobHeader.Length));
             return true;
         }
 
         public bool TryImportText(
-            Algorithm algorithm,
             ReadOnlySpan<byte> blob,
-            out PublicKey result)
+            out byte[] result)
         {
-            Debug.Assert(algorithm != null);
-
             byte[] temp = new byte[_blobSize];
 
             if (!Armor.TryDecode(blob, s_beginLabel, s_endLabel, temp))
@@ -90,17 +84,15 @@ namespace NSec.Cryptography.Formatting
                 return false;
             }
 
-            return TryImport(algorithm, temp, out result);
+            return TryImport(temp, out result);
         }
 
-        protected virtual PublicKey Deserialize(
-            Algorithm algorithm,
+        protected virtual byte[] Deserialize(
             ReadOnlySpan<byte> span)
         {
-            Debug.Assert(algorithm != null);
             Debug.Assert(span.Length == _blobSize - _blobHeader.Length);
 
-            return new PublicKey(algorithm, span.ToArray());
+            return span.ToArray();
         }
 
         protected virtual void Serialize(

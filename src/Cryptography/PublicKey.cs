@@ -34,12 +34,12 @@ namespace NSec.Cryptography
             if (format == KeyBlobFormat.None)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(format));
 
-            if (!algorithm.TryImportPublicKey(blob, format, out PublicKey result))
+            if (!algorithm.TryImportPublicKey(blob, format, out byte[] publicKeyBytes))
             {
                 throw new FormatException();
             }
 
-            return result;
+            return new PublicKey(algorithm, publicKeyBytes);
         }
 
         public static bool TryImport(
@@ -53,7 +53,14 @@ namespace NSec.Cryptography
             if (format == KeyBlobFormat.None)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(format));
 
-            return algorithm.TryImportPublicKey(blob, format, out result);
+            if (!algorithm.TryImportPublicKey(blob, format, out byte[] publicKeyBytes))
+            {
+                result = null;
+                return false;
+            }
+
+            result = new PublicKey(algorithm, publicKeyBytes);
+            return true;
         }
 
         public bool Equals(

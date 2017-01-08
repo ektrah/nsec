@@ -56,7 +56,7 @@ namespace NSec.Cryptography
         internal virtual bool TryImportPublicKey(
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
-            out PublicKey result)
+            out byte[] result)
         {
             throw new NotSupportedException();
         }
