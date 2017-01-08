@@ -6,9 +6,9 @@ using static Interop.Libsodium;
 namespace NSec.Cryptography
 {
     //
-    //  Curve25519
+    //  X25519
     //
-    //      Elliptic Curve Diffie-Hellman (ECDH) based on the X25519 function
+    //      Elliptic Curve Diffie-Hellman (ECDH) based on the curve25519 curve
     //
     //  References:
     //
