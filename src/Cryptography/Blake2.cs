@@ -57,7 +57,7 @@ namespace NSec.Cryptography
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
 
             byte[] hash = new byte[DefaultHashSize];
-            HashCore(key, data, hash);
+            HashCore(key.Handle, data, hash);
             return hash;
         }
 
@@ -76,7 +76,7 @@ namespace NSec.Cryptography
                 throw new ArgumentOutOfRangeException(nameof(hashSize));
 
             byte[] hash = new byte[hashSize];
-            HashCore(key, data, hash);
+            HashCore(key.Handle, data, hash);
             return hash;
         }
 
@@ -94,7 +94,7 @@ namespace NSec.Cryptography
             if (hash.Length > MaxHashSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(hash));
 
-            HashCore(key, data, hash);
+            HashCore(key.Handle, data, hash);
         }
 
         internal override void CreateKey(
@@ -161,17 +161,17 @@ namespace NSec.Cryptography
         }
 
         private static void HashCore(
-            Key key,
+            SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             Span<byte> hash)
         {
-            Debug.Assert(key != null);
-            Debug.Assert(key.Handle.Length >= 0);
-            Debug.Assert(key.Handle.Length <= BLAKE2B_KEYBYTES);
+            Debug.Assert(keyHandle != null);
+            Debug.Assert(keyHandle.Length >= 0);
+            Debug.Assert(keyHandle.Length <= BLAKE2B_KEYBYTES);
             Debug.Assert(hash.Length > 0);
             Debug.Assert(hash.Length <= BLAKE2B_OUTBYTES);
 
-            crypto_generichash_blake2b_init(out crypto_generichash_blake2b_state state, key.Handle, (UIntPtr)key.Handle.Length, (UIntPtr)hash.Length);
+            crypto_generichash_blake2b_init(out crypto_generichash_blake2b_state state, keyHandle, (UIntPtr)keyHandle.Length, (UIntPtr)hash.Length);
             crypto_generichash_blake2b_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
             crypto_generichash_blake2b_final(ref state, ref hash.DangerousGetPinnableReference(), (UIntPtr)hash.Length);
         }
