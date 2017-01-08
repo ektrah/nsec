@@ -74,12 +74,31 @@ namespace NSec.Tests.Core
 
         #endregion
 
+        #region Ctor
+
+        [Fact]
+        public static void CtorWithNullAlgorithm()
+        {
+            Assert.Throws<ArgumentNullException>("algorithm", () => new Key(null));
+        }
+
+        [Theory]
+        [MemberData(nameof(KeylessAlgorithms))]
+        public static void CtorWithAlgorithmThatDoesNotUseKeys(Type algorithmType)
+        {
+            var a = (Algorithm)Activator.CreateInstance(algorithmType);
+
+            Assert.Throws<NotSupportedException>(() => new Key(a));
+        }
+
+        #endregion
+
         #region Create
 
         [Fact]
         public static void CreateWithNullAlgorithm()
         {
-            Assert.Throws<ArgumentNullException>("algorithm", () => new Key(null));
+            Assert.Throws<ArgumentNullException>("algorithm", () => Key.Create(null));
         }
 
         [Theory]
@@ -88,7 +107,7 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.Throws<NotSupportedException>(() => new Key(a));
+            Assert.Throws<NotSupportedException>(() => Key.Create(a));
         }
 
         #endregion
