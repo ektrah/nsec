@@ -17,6 +17,10 @@ namespace NSec.Cryptography
     //
     //  Parameters:
     //
+    //      Input Size - Between 0 and 2^61-1 bytes. Since a Span<byte> can
+    //          hold between 0 to 2^31-1 bytes, we do not check the length of
+    //          inputs.
+    //
     //      Hash Size - 32 bytes (128 bits of security).
     //
     public sealed class Sha256 : HashAlgorithm
