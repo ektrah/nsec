@@ -55,12 +55,27 @@ namespace NSec.Cryptography
             if (otherPartyPublicKey.Algorithm != this)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(otherPartyPublicKey));
 
-            if (!TryAgreeCore(key.Handle, otherPartyPublicKey.Bytes, out SharedSecret result))
+            SecureMemoryHandle sharedSecretHandle = null;
+            bool success = false;
+
+            try
+            {
+                success = TryAgreeCore(key.Handle, otherPartyPublicKey.Bytes, out sharedSecretHandle);
+            }
+            finally
+            {
+                if (!success && sharedSecretHandle != null)
+                {
+                    sharedSecretHandle.Dispose();
+                }
+            }
+
+            if (!success)
             {
                 throw new CryptographicException();
             }
 
-            return result;
+            return new SharedSecret(sharedSecretHandle);
         }
 
         public bool TryAgree(
@@ -77,12 +92,28 @@ namespace NSec.Cryptography
             if (otherPartyPublicKey.Algorithm != this)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(otherPartyPublicKey));
 
-            return TryAgreeCore(key.Handle, otherPartyPublicKey.Bytes, out result);
+            SecureMemoryHandle sharedSecretHandle = null;
+            bool success = false;
+
+            try
+            {
+                success = TryAgreeCore(key.Handle, otherPartyPublicKey.Bytes, out sharedSecretHandle);
+            }
+            finally
+            {
+                if (!success && sharedSecretHandle != null)
+                {
+                    sharedSecretHandle.Dispose();
+                }
+            }
+
+            result = success ? new SharedSecret(sharedSecretHandle) : null;
+            return success;
         }
 
         internal abstract bool TryAgreeCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> otherPartyPublicKey,
-            out SharedSecret result);
+            out SecureMemoryHandle sharedSecretHandle);
     }
 }
