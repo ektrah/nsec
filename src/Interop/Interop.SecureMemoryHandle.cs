@@ -18,13 +18,12 @@ internal static partial class Interop
 
             public int Length => _length;
 
-            public static SecureMemoryHandle Alloc(int length)
+            public static void Alloc(int length, out SecureMemoryHandle handle)
             {
                 Debug.Assert(length >= 0);
 
-                SecureMemoryHandle handle = sodium_malloc((UIntPtr)length);
+                handle = sodium_malloc((UIntPtr)length);
                 handle._length = length;
-                return handle;
             }
 
             public unsafe Span<byte> DangerousGetSpan()

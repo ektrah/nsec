@@ -65,7 +65,7 @@ namespace NSec.Cryptography
             out byte[] publicKeyBytes)
         {
             publicKeyBytes = null;
-            keyHandle = SecureMemoryHandle.Alloc(crypto_aead_chacha20poly1305_ietf_KEYBYTES);
+            SecureMemoryHandle.Alloc(crypto_aead_chacha20poly1305_ietf_KEYBYTES, out keyHandle);
             randombytes_buf(keyHandle, (UIntPtr)keyHandle.Length);
         }
 

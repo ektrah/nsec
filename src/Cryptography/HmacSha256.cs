@@ -56,7 +56,7 @@ namespace NSec.Cryptography
             out byte[] publicKeyBytes)
         {
             publicKeyBytes = null;
-            keyHandle = SecureMemoryHandle.Alloc(DefaultKeySize);
+            SecureMemoryHandle.Alloc(DefaultKeySize, out keyHandle);
             randombytes_buf(keyHandle, (UIntPtr)keyHandle.Length);
         }
 
@@ -142,7 +142,7 @@ namespace NSec.Cryptography
             if (blob.Length > SHA256MessageBlockSize)
             {
                 publicKeyBytes = null;
-                keyHandle = SecureMemoryHandle.Alloc(crypto_hash_sha256_BYTES);
+                SecureMemoryHandle.Alloc(crypto_hash_sha256_BYTES, out keyHandle);
                 crypto_hash_sha256_init(out crypto_hash_sha256_state state);
                 crypto_hash_sha256_update(ref state, ref blob.DangerousGetPinnableReference(), (ulong)blob.Length);
                 crypto_hash_sha256_final(ref state, keyHandle);
@@ -150,7 +150,7 @@ namespace NSec.Cryptography
             else
             {
                 publicKeyBytes = null;
-                keyHandle = SecureMemoryHandle.Alloc(blob.Length);
+                SecureMemoryHandle.Alloc(blob.Length, out keyHandle);
                 keyHandle.Import(blob);
             }
 

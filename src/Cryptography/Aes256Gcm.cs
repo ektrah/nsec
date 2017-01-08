@@ -68,7 +68,7 @@ namespace NSec.Cryptography
             out byte[] publicKeyBytes)
         {
             publicKeyBytes = null;
-            keyHandle = SecureMemoryHandle.Alloc(crypto_aead_aes256gcm_KEYBYTES);
+            SecureMemoryHandle.Alloc(crypto_aead_aes256gcm_KEYBYTES, out keyHandle);
             randombytes_buf(keyHandle, (UIntPtr)keyHandle.Length);
         }
 

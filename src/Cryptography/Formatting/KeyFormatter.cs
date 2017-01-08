@@ -104,7 +104,7 @@ namespace NSec.Cryptography.Formatting
             Debug.Assert(span.Length == _blobSize - _blobHeader.Length);
 
             publicKeyBytes = null;
-            keyHandle = SecureMemoryHandle.Alloc(span.Length);
+            SecureMemoryHandle.Alloc(span.Length, out keyHandle);
             keyHandle.Import(span);
         }
 

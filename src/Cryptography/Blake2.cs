@@ -102,7 +102,7 @@ namespace NSec.Cryptography
             out byte[] publicKeyBytes)
         {
             publicKeyBytes = null;
-            keyHandle = SecureMemoryHandle.Alloc(DefaultKeySize);
+            SecureMemoryHandle.Alloc(DefaultKeySize, out keyHandle);
             randombytes_buf(keyHandle, (UIntPtr)keyHandle.Length);
         }
 
@@ -155,7 +155,7 @@ namespace NSec.Cryptography
             }
 
             publicKeyBytes = null;
-            keyHandle = SecureMemoryHandle.Alloc(blob.Length);
+            SecureMemoryHandle.Alloc(blob.Length, out keyHandle);
             keyHandle.Import(blob);
             return true;
         }

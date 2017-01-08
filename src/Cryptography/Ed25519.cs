@@ -90,7 +90,7 @@ namespace NSec.Cryptography
             out byte[] publicKeyBytes)
         {
             publicKeyBytes = new byte[crypto_sign_ed25519_PUBLICKEYBYTES];
-            keyHandle = SecureMemoryHandle.Alloc(crypto_sign_ed25519_SECRETKEYBYTES);
+            SecureMemoryHandle.Alloc(crypto_sign_ed25519_SECRETKEYBYTES, out keyHandle);
             crypto_sign_ed25519_keypair(publicKeyBytes, keyHandle);
         }
 

@@ -31,24 +31,24 @@ namespace NSec.Cryptography
 
             Sodium.Initialize();
 
-            SecureMemoryHandle handle = null;
+            SecureMemoryHandle sharedSecretHandle = null;
             bool success = false;
 
             try
             {
-                handle = SecureMemoryHandle.Alloc(sharedSecret.Length);
-                handle.Import(sharedSecret);
+                SecureMemoryHandle.Alloc(sharedSecret.Length, out sharedSecretHandle);
+                sharedSecretHandle.Import(sharedSecret);
                 success = true;
             }
             finally
             {
-                if (!success && handle != null)
+                if (!success && sharedSecretHandle != null)
                 {
-                    handle.Dispose();
+                    sharedSecretHandle.Dispose();
                 }
             }
 
-            return new SharedSecret(handle);
+            return new SharedSecret(sharedSecretHandle);
         }
 
         public void Dispose()
