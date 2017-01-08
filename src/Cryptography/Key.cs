@@ -21,27 +21,46 @@ namespace NSec.Cryptography
             if (algorithm == null)
                 throw new ArgumentNullException(nameof(algorithm));
 
+            SecureMemoryHandle keyHandle = null;
+            byte[] publicKeyBytes = null;
+            bool success = false;
+
+            try
+            {
+                algorithm.CreateKey(out keyHandle, out publicKeyBytes);
+                success = true;
+            }
+            finally
+            {
+                if (!success && keyHandle != null)
+                {
+                    keyHandle.Dispose();
+                }
+            }
+
+            keyHandle.MakeReadOnly();
+
             _algorithm = algorithm;
             _flags = flags;
-            algorithm.CreateKey(out _handle, out byte[] publicKeyBytes);
-            _publicKey = (publicKeyBytes != null) ? new PublicKey(_algorithm, publicKeyBytes) : null;
-            _handle.MakeReadOnly();
+            _handle = keyHandle;
+            _publicKey = (publicKeyBytes) != null ? new PublicKey(algorithm, publicKeyBytes) : null;
         }
 
         internal Key(
             Algorithm algorithm,
             KeyFlags flags,
-            SecureMemoryHandle handle,
-            PublicKey publicKey)
+            SecureMemoryHandle keyHandle,
+            byte[] publicKeyBytes)
         {
             Debug.Assert(algorithm != null);
-            Debug.Assert(handle != null);
+            Debug.Assert(keyHandle != null);
+
+            keyHandle.MakeReadOnly();
 
             _algorithm = algorithm;
             _flags = flags;
-            _handle = handle;
-            _publicKey = publicKey;
-            _handle.MakeReadOnly();
+            _handle = keyHandle;
+            _publicKey = (publicKeyBytes) != null ? new PublicKey(algorithm, publicKeyBytes) : null;
         }
 
         public Algorithm Algorithm => _algorithm;
@@ -70,12 +89,28 @@ namespace NSec.Cryptography
             if (format == KeyBlobFormat.None)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(format));
 
-            if (!algorithm.TryImportKey(blob, format, out SecureMemoryHandle keyHandle, out byte[] publicKeyBytes))
+            SecureMemoryHandle keyHandle = null;
+            byte[] publicKeyBytes = null;
+            bool success = false;
+
+            try
+            {
+                success = algorithm.TryImportKey(blob, format, out keyHandle, out publicKeyBytes);
+            }
+            finally
+            {
+                if (!success && keyHandle != null)
+                {
+                    keyHandle.Dispose();
+                }
+            }
+
+            if (!success)
             {
                 throw new FormatException();
             }
 
-            return new Key(algorithm, flags, keyHandle, (publicKeyBytes != null) ? new PublicKey(algorithm, publicKeyBytes) : null);
+            return new Key(algorithm, flags, keyHandle, publicKeyBytes);
         }
 
         public static bool TryImport(
@@ -90,14 +125,24 @@ namespace NSec.Cryptography
             if (format == KeyBlobFormat.None)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(format));
 
-            if (!algorithm.TryImportKey(blob, format, out SecureMemoryHandle keyHandle, out byte[] publicKeyBytes))
+            SecureMemoryHandle keyHandle = null;
+            byte[] publicKeyBytes = null;
+            bool success = false;
+
+            try
             {
-                result = null;
-                return false;
+                success = algorithm.TryImportKey(blob, format, out keyHandle, out publicKeyBytes);
+            }
+            finally
+            {
+                if (!success && keyHandle != null)
+                {
+                    keyHandle.Dispose();
+                }
             }
 
-            result = new Key(algorithm, flags, keyHandle, (publicKeyBytes != null) ? new PublicKey(algorithm, publicKeyBytes) : null);
-            return true;
+            result = success ? new Key(algorithm, flags, keyHandle, publicKeyBytes) : null;
+            return success;
         }
 
         public void Dispose()
