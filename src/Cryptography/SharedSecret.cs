@@ -10,13 +10,13 @@ namespace NSec.Cryptography
         private readonly SecureMemoryHandle _handle;
 
         internal SharedSecret(
-            SecureMemoryHandle handle)
+            SecureMemoryHandle sharedSecretHandle)
         {
-            Debug.Assert(handle != null);
+            Debug.Assert(sharedSecretHandle != null);
 
-            handle.MakeReadOnly();
+            sharedSecretHandle.MakeReadOnly();
 
-            _handle = handle;
+            _handle = sharedSecretHandle;
         }
 
         public int Size => _handle.Length;
