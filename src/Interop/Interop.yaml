@@ -96,13 +96,11 @@ Interop.HmacSha256.cs:
   - crypto_auth_hmacsha256_KEYBYTES
   functions:
   - crypto_auth_hmacsha256_bytes
-  - crypto_auth_hmacsha256_final
   - crypto_auth_hmacsha256_final (ref byte out)
   - crypto_auth_hmacsha256_init (ref byte key)
   - crypto_auth_hmacsha256_init (SecureMemoryHandle key)
   - crypto_auth_hmacsha256_keybytes
   - crypto_auth_hmacsha256_statebytes
-  - crypto_auth_hmacsha256_update
   - crypto_auth_hmacsha256_update (ref byte in)
   structs:
   - crypto_auth_hmacsha256_state
@@ -114,13 +112,11 @@ Interop.HmacSha512.cs:
   - crypto_auth_hmacsha512_KEYBYTES
   functions:
   - crypto_auth_hmacsha512_bytes
-  - crypto_auth_hmacsha512_final
   - crypto_auth_hmacsha512_final (ref byte out)
   - crypto_auth_hmacsha512_init (ref byte key)
   - crypto_auth_hmacsha512_init (SecureMemoryHandle key)
   - crypto_auth_hmacsha512_keybytes
   - crypto_auth_hmacsha512_statebytes
-  - crypto_auth_hmacsha512_update
   - crypto_auth_hmacsha512_update (ref byte in)
   structs:
   - crypto_auth_hmacsha512_state
@@ -138,7 +134,6 @@ Interop.Sha256.cs:
   - crypto_hash_sha256_BYTES
   functions:
   - crypto_hash_sha256_bytes
-  - crypto_hash_sha256_final
   - crypto_hash_sha256_final (ref byte out)
   - crypto_hash_sha256_final (SecureMemoryHandle out)
   - crypto_hash_sha256_init
@@ -153,7 +148,6 @@ Interop.Sha512.cs:
   - crypto_hash_sha512_BYTES
   functions:
   - crypto_hash_sha512_bytes
-  - crypto_hash_sha512_final
   - crypto_hash_sha512_final (ref byte out)
   - crypto_hash_sha512_final (SecureMemoryHandle out)
   - crypto_hash_sha512_init

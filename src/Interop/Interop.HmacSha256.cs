@@ -14,11 +14,6 @@ internal static partial class Interop
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int crypto_auth_hmacsha256_final(
             ref crypto_auth_hmacsha256_state state,
-            byte[] @out);
-
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int crypto_auth_hmacsha256_final(
-            ref crypto_auth_hmacsha256_state state,
             ref byte @out);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
@@ -38,12 +33,6 @@ internal static partial class Interop
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern IntPtr crypto_auth_hmacsha256_statebytes();
-
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int crypto_auth_hmacsha256_update(
-            ref crypto_auth_hmacsha256_state state,
-            byte[] @in,
-            ulong inlen);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int crypto_auth_hmacsha256_update(
