@@ -138,7 +138,7 @@ namespace NSec.Cryptography
             {
                 counter++;
 
-                crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, ref pseudorandomKey.DangerousGetPinnableReference(), (IntPtr)pseudorandomKey.Length);
+                crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, ref pseudorandomKey.DangerousGetPinnableReference(), (UIntPtr)pseudorandomKey.Length);
                 crypto_auth_hmacsha256_update(ref state, ref t.DangerousGetPinnableReference(), (ulong)tLen);
                 crypto_auth_hmacsha256_update(ref state, ref info.DangerousGetPinnableReference(), (ulong)info.Length);
                 crypto_auth_hmacsha256_update(ref state, ref counter, sizeof(byte));
@@ -165,7 +165,7 @@ namespace NSec.Cryptography
             // an empty span seems to yield the same result as a string of
             // HashLen zeros, so we're ignoring this corner case here.
 
-            crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, ref salt.DangerousGetPinnableReference(), (IntPtr)salt.Length);
+            crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, ref salt.DangerousGetPinnableReference(), (UIntPtr)salt.Length);
             crypto_auth_hmacsha256_update(ref state, ref inputKeyingMaterial.DangerousGetPinnableReference(), (ulong)inputKeyingMaterial.Length);
             crypto_auth_hmacsha256_final(ref state, ref pseudorandomKey.DangerousGetPinnableReference());
         }
@@ -193,8 +193,8 @@ namespace NSec.Cryptography
 
         private static bool SelfTest()
         {
-            return (crypto_auth_hmacsha256_bytes() == (IntPtr)crypto_auth_hmacsha256_BYTES)
-                && (crypto_auth_hmacsha256_statebytes() == (IntPtr)Unsafe.SizeOf<crypto_auth_hmacsha256_state>());
+            return (crypto_auth_hmacsha256_bytes() == (UIntPtr)crypto_auth_hmacsha256_BYTES)
+                && (crypto_auth_hmacsha256_statebytes() == (UIntPtr)Unsafe.SizeOf<crypto_auth_hmacsha256_state>());
         }
     }
 }

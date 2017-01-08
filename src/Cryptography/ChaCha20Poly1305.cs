@@ -66,7 +66,7 @@ namespace NSec.Cryptography
         {
             publicKeyBytes = null;
             keyHandle = SecureMemoryHandle.Alloc(crypto_aead_chacha20poly1305_ietf_KEYBYTES);
-            randombytes_buf(keyHandle, (IntPtr)keyHandle.Length);
+            randombytes_buf(keyHandle, (UIntPtr)keyHandle.Length);
         }
 
         internal override void EncryptCore(
@@ -170,10 +170,10 @@ namespace NSec.Cryptography
 
         private static bool SelfTest()
         {
-            return (crypto_aead_chacha20poly1305_ietf_abytes() == (IntPtr)crypto_aead_chacha20poly1305_ietf_ABYTES)
-                && (crypto_aead_chacha20poly1305_ietf_keybytes() == (IntPtr)crypto_aead_chacha20poly1305_ietf_KEYBYTES)
-                && (crypto_aead_chacha20poly1305_ietf_npubbytes() == (IntPtr)crypto_aead_chacha20poly1305_ietf_NPUBBYTES)
-                && (crypto_aead_chacha20poly1305_ietf_nsecbytes() == (IntPtr)crypto_aead_chacha20poly1305_ietf_NSECBYTES);
+            return (crypto_aead_chacha20poly1305_ietf_abytes() == (UIntPtr)crypto_aead_chacha20poly1305_ietf_ABYTES)
+                && (crypto_aead_chacha20poly1305_ietf_keybytes() == (UIntPtr)crypto_aead_chacha20poly1305_ietf_KEYBYTES)
+                && (crypto_aead_chacha20poly1305_ietf_npubbytes() == (UIntPtr)crypto_aead_chacha20poly1305_ietf_NPUBBYTES)
+                && (crypto_aead_chacha20poly1305_ietf_nsecbytes() == (UIntPtr)crypto_aead_chacha20poly1305_ietf_NSECBYTES);
         }
     }
 }

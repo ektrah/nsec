@@ -87,7 +87,7 @@ namespace NSec.Cryptography
         {
             publicKeyBytes = new byte[crypto_scalarmult_curve25519_SCALARBYTES];
             keyHandle = SecureMemoryHandle.Alloc(crypto_scalarmult_curve25519_SCALARBYTES);
-            randombytes_buf(keyHandle, (IntPtr)keyHandle.Length);
+            randombytes_buf(keyHandle, (UIntPtr)keyHandle.Length);
             crypto_scalarmult_curve25519_base(publicKeyBytes, keyHandle);
         }
 
@@ -206,8 +206,8 @@ namespace NSec.Cryptography
 
         private static bool SelfTest()
         {
-            return (crypto_scalarmult_curve25519_bytes() == (IntPtr)crypto_scalarmult_curve25519_BYTES)
-                && (crypto_scalarmult_curve25519_scalarbytes() == (IntPtr)crypto_scalarmult_curve25519_SCALARBYTES);
+            return (crypto_scalarmult_curve25519_bytes() == (UIntPtr)crypto_scalarmult_curve25519_BYTES)
+                && (crypto_scalarmult_curve25519_scalarbytes() == (UIntPtr)crypto_scalarmult_curve25519_SCALARBYTES);
         }
     }
 }

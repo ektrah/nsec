@@ -218,10 +218,10 @@ namespace NSec.Cryptography
 
         private static bool SelfTest()
         {
-            return (crypto_sign_ed25519_bytes() == (IntPtr)crypto_sign_ed25519_BYTES)
-                && (crypto_sign_ed25519_publickeybytes() == (IntPtr)crypto_sign_ed25519_PUBLICKEYBYTES)
-                && (crypto_sign_ed25519_secretkeybytes() == (IntPtr)crypto_sign_ed25519_SECRETKEYBYTES)
-                && (crypto_sign_ed25519_seedbytes() == (IntPtr)crypto_sign_ed25519_SEEDBYTES);
+            return (crypto_sign_ed25519_bytes() == (UIntPtr)crypto_sign_ed25519_BYTES)
+                && (crypto_sign_ed25519_publickeybytes() == (UIntPtr)crypto_sign_ed25519_PUBLICKEYBYTES)
+                && (crypto_sign_ed25519_secretkeybytes() == (UIntPtr)crypto_sign_ed25519_SECRETKEYBYTES)
+                && (crypto_sign_ed25519_seedbytes() == (UIntPtr)crypto_sign_ed25519_SEEDBYTES);
         }
     }
 }

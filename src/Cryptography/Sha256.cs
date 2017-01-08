@@ -49,8 +49,8 @@ namespace NSec.Cryptography
 
         private static bool SelfTest()
         {
-            return (crypto_hash_sha256_bytes() == (IntPtr)crypto_hash_sha256_BYTES)
-                && (crypto_hash_sha256_statebytes() == (IntPtr)Unsafe.SizeOf<crypto_hash_sha256_state>());
+            return (crypto_hash_sha256_bytes() == (UIntPtr)crypto_hash_sha256_BYTES)
+                && (crypto_hash_sha256_statebytes() == (UIntPtr)Unsafe.SizeOf<crypto_hash_sha256_state>());
         }
     }
 }

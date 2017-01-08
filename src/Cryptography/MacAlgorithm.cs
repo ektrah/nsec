@@ -172,7 +172,7 @@ namespace NSec.Cryptography
             SignCore(key.Handle, nonce, data, temp);
 
             Debug.Assert(mac.Length <= temp.Length);
-            int error = sodium_memcmp(ref temp.DangerousGetPinnableReference(), ref mac.DangerousGetPinnableReference(), (IntPtr)mac.Length);
+            int error = sodium_memcmp(ref temp.DangerousGetPinnableReference(), ref mac.DangerousGetPinnableReference(), (UIntPtr)mac.Length);
             return error == 0;
         }
 
@@ -207,7 +207,7 @@ namespace NSec.Cryptography
             SignCore(key.Handle, nonce, data, temp);
 
             Debug.Assert(mac.Length <= temp.Length);
-            int error = sodium_memcmp(ref temp.DangerousGetPinnableReference(), ref mac.DangerousGetPinnableReference(), (IntPtr)mac.Length);
+            int error = sodium_memcmp(ref temp.DangerousGetPinnableReference(), ref mac.DangerousGetPinnableReference(), (UIntPtr)mac.Length);
             if (error != 0)
             {
                 throw new CryptographicException();

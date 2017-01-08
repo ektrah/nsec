@@ -69,7 +69,7 @@ namespace NSec.Cryptography
         {
             publicKeyBytes = null;
             keyHandle = SecureMemoryHandle.Alloc(crypto_aead_aes256gcm_KEYBYTES);
-            randombytes_buf(keyHandle, (IntPtr)keyHandle.Length);
+            randombytes_buf(keyHandle, (UIntPtr)keyHandle.Length);
         }
 
         internal override void EncryptCore(
@@ -173,10 +173,10 @@ namespace NSec.Cryptography
 
         private static bool SelfTest()
         {
-            return (crypto_aead_aes256gcm_abytes() == (IntPtr)crypto_aead_aes256gcm_ABYTES)
-                && (crypto_aead_aes256gcm_keybytes() == (IntPtr)crypto_aead_aes256gcm_KEYBYTES)
-                && (crypto_aead_aes256gcm_npubbytes() == (IntPtr)crypto_aead_aes256gcm_NPUBBYTES)
-                && (crypto_aead_aes256gcm_nsecbytes() == (IntPtr)crypto_aead_aes256gcm_NSECBYTES);
+            return (crypto_aead_aes256gcm_abytes() == (UIntPtr)crypto_aead_aes256gcm_ABYTES)
+                && (crypto_aead_aes256gcm_keybytes() == (UIntPtr)crypto_aead_aes256gcm_KEYBYTES)
+                && (crypto_aead_aes256gcm_npubbytes() == (UIntPtr)crypto_aead_aes256gcm_NPUBBYTES)
+                && (crypto_aead_aes256gcm_nsecbytes() == (UIntPtr)crypto_aead_aes256gcm_NSECBYTES);
         }
     }
 }

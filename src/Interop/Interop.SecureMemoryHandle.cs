@@ -22,7 +22,7 @@ internal static partial class Interop
             {
                 Debug.Assert(length >= 0);
 
-                SecureMemoryHandle handle = sodium_malloc((IntPtr)length);
+                SecureMemoryHandle handle = sodium_malloc((UIntPtr)length);
                 handle._length = length;
                 return handle;
             }

@@ -8,16 +8,16 @@ internal static partial class Interop
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern void randombytes_buf(
             byte[] buf,
-            IntPtr size);
+            UIntPtr size);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern void randombytes_buf(
             SecureMemoryHandle buf,
-            IntPtr size);
+            UIntPtr size);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern void randombytes_buf(
             ref byte buf,
-            IntPtr size);
+            UIntPtr size);
     }
 }

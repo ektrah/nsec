@@ -103,7 +103,7 @@ namespace NSec.Cryptography
         {
             publicKeyBytes = null;
             keyHandle = SecureMemoryHandle.Alloc(DefaultKeySize);
-            randombytes_buf(keyHandle, (IntPtr)keyHandle.Length);
+            randombytes_buf(keyHandle, (UIntPtr)keyHandle.Length);
         }
 
         internal override int GetDerivedKeySize()
@@ -118,9 +118,9 @@ namespace NSec.Cryptography
             Debug.Assert(hash.Length > 0);
             Debug.Assert(hash.Length <= BLAKE2B_OUTBYTES);
 
-            crypto_generichash_blake2b_init(out crypto_generichash_blake2b_state state, IntPtr.Zero, IntPtr.Zero, (IntPtr)hash.Length);
+            crypto_generichash_blake2b_init(out crypto_generichash_blake2b_state state, IntPtr.Zero, UIntPtr.Zero, (UIntPtr)hash.Length);
             crypto_generichash_blake2b_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
-            crypto_generichash_blake2b_final(ref state, ref hash.DangerousGetPinnableReference(), (IntPtr)hash.Length);
+            crypto_generichash_blake2b_final(ref state, ref hash.DangerousGetPinnableReference(), (UIntPtr)hash.Length);
         }
 
         internal override bool TryExportKey(
@@ -171,20 +171,20 @@ namespace NSec.Cryptography
             Debug.Assert(hash.Length > 0);
             Debug.Assert(hash.Length <= BLAKE2B_OUTBYTES);
 
-            crypto_generichash_blake2b_init(out crypto_generichash_blake2b_state state, key.Handle, (IntPtr)key.Handle.Length, (IntPtr)hash.Length);
+            crypto_generichash_blake2b_init(out crypto_generichash_blake2b_state state, key.Handle, (UIntPtr)key.Handle.Length, (UIntPtr)hash.Length);
             crypto_generichash_blake2b_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
-            crypto_generichash_blake2b_final(ref state, ref hash.DangerousGetPinnableReference(), (IntPtr)hash.Length);
+            crypto_generichash_blake2b_final(ref state, ref hash.DangerousGetPinnableReference(), (UIntPtr)hash.Length);
         }
 
         private static bool SelfTest()
         {
-            return (crypto_generichash_blake2b_bytes() == (IntPtr)crypto_generichash_blake2b_BYTES)
-                && (crypto_generichash_blake2b_bytes_max() == (IntPtr)crypto_generichash_blake2b_BYTES_MAX)
-                && (crypto_generichash_blake2b_bytes_min() == (IntPtr)crypto_generichash_blake2b_BYTES_MIN)
-                && (crypto_generichash_blake2b_keybytes() == (IntPtr)crypto_generichash_blake2b_KEYBYTES)
-                && (crypto_generichash_blake2b_keybytes_max() == (IntPtr)crypto_generichash_blake2b_KEYBYTES_MAX)
-                && (crypto_generichash_blake2b_keybytes_min() == (IntPtr)crypto_generichash_blake2b_KEYBYTES_MIN)
-                && (crypto_generichash_blake2b_statebytes() == (IntPtr)Unsafe.SizeOf<crypto_generichash_blake2b_state>());
+            return (crypto_generichash_blake2b_bytes() == (UIntPtr)crypto_generichash_blake2b_BYTES)
+                && (crypto_generichash_blake2b_bytes_max() == (UIntPtr)crypto_generichash_blake2b_BYTES_MAX)
+                && (crypto_generichash_blake2b_bytes_min() == (UIntPtr)crypto_generichash_blake2b_BYTES_MIN)
+                && (crypto_generichash_blake2b_keybytes() == (UIntPtr)crypto_generichash_blake2b_KEYBYTES)
+                && (crypto_generichash_blake2b_keybytes_max() == (UIntPtr)crypto_generichash_blake2b_KEYBYTES_MAX)
+                && (crypto_generichash_blake2b_keybytes_min() == (UIntPtr)crypto_generichash_blake2b_KEYBYTES_MIN)
+                && (crypto_generichash_blake2b_statebytes() == (UIntPtr)Unsafe.SizeOf<crypto_generichash_blake2b_state>());
         }
     }
 }

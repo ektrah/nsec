@@ -11,13 +11,13 @@ internal static partial class Interop
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern SecureMemoryHandle sodium_malloc(
-            IntPtr size);
+            UIntPtr size);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int sodium_memcmp(
             ref byte b1_,
             ref byte b2_,
-            IntPtr len);
+            UIntPtr len);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int sodium_mprotect_readonly(

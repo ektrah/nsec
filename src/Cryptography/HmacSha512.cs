@@ -61,7 +61,7 @@ namespace NSec.Cryptography
         {
             publicKeyBytes = null;
             keyHandle = SecureMemoryHandle.Alloc(DefaultKeySize);
-            randombytes_buf(keyHandle, (IntPtr)keyHandle.Length);
+            randombytes_buf(keyHandle, (UIntPtr)keyHandle.Length);
         }
 
         internal override int GetDerivedKeySize()
@@ -89,7 +89,7 @@ namespace NSec.Cryptography
             // TryImportKey method to keep the KeyHandle small, so we never
             // pass a key larger than the block size to _init.
 
-            crypto_auth_hmacsha512_init(out crypto_auth_hmacsha512_state state, keyHandle, (IntPtr)keyHandle.Length);
+            crypto_auth_hmacsha512_init(out crypto_auth_hmacsha512_state state, keyHandle, (UIntPtr)keyHandle.Length);
 
             if (!data.IsEmpty)
             {
@@ -163,11 +163,11 @@ namespace NSec.Cryptography
 
         private static bool SelfTest()
         {
-            return (crypto_auth_hmacsha512_bytes() == (IntPtr)crypto_auth_hmacsha512_BYTES)
-                && (crypto_auth_hmacsha512_keybytes() == (IntPtr)crypto_auth_hmacsha512_KEYBYTES)
-                && (crypto_auth_hmacsha512_statebytes() == (IntPtr)Unsafe.SizeOf<crypto_auth_hmacsha512_state>())
-                && (crypto_hash_sha512_bytes() == (IntPtr)crypto_hash_sha512_BYTES)
-                && (crypto_hash_sha512_statebytes() == (IntPtr)Unsafe.SizeOf<crypto_hash_sha512_state>());
+            return (crypto_auth_hmacsha512_bytes() == (UIntPtr)crypto_auth_hmacsha512_BYTES)
+                && (crypto_auth_hmacsha512_keybytes() == (UIntPtr)crypto_auth_hmacsha512_KEYBYTES)
+                && (crypto_auth_hmacsha512_statebytes() == (UIntPtr)Unsafe.SizeOf<crypto_auth_hmacsha512_state>())
+                && (crypto_hash_sha512_bytes() == (UIntPtr)crypto_hash_sha512_BYTES)
+                && (crypto_hash_sha512_statebytes() == (UIntPtr)Unsafe.SizeOf<crypto_hash_sha512_state>());
         }
     }
 }

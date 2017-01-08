@@ -16,7 +16,7 @@ namespace NSec.Cryptography
             Sodium.Initialize();
 
             byte[] bytes = new byte[count];
-            randombytes_buf(bytes, (IntPtr)bytes.Length);
+            randombytes_buf(bytes, (UIntPtr)bytes.Length);
             return bytes;
         }
 
@@ -28,7 +28,7 @@ namespace NSec.Cryptography
 
             Sodium.Initialize();
 
-            randombytes_buf(ref bytes.DangerousGetPinnableReference(), (IntPtr)bytes.Length);
+            randombytes_buf(ref bytes.DangerousGetPinnableReference(), (UIntPtr)bytes.Length);
         }
     }
 }

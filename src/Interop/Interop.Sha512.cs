@@ -8,7 +8,7 @@ internal static partial class Interop
         internal const int crypto_hash_sha512_BYTES = 64;
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern IntPtr crypto_hash_sha512_bytes();
+        internal static extern UIntPtr crypto_hash_sha512_bytes();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int crypto_hash_sha512_final(
@@ -25,7 +25,7 @@ internal static partial class Interop
             out crypto_hash_sha512_state state);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern IntPtr crypto_hash_sha512_statebytes();
+        internal static extern UIntPtr crypto_hash_sha512_statebytes();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int crypto_hash_sha512_update(
