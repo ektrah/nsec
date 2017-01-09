@@ -12,20 +12,12 @@
     <EmbeddedResource Include="**\*.resx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\lib\libsodium-1.0.11-msvc\x64\Release\v140\dynamic\libsodium.dll">
-      <PackagePath>runtimes\win7-x64\native\</PackagePath>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <Link>libsodium.dll</Link>
-    </Content>
-    <Content Include="..\lib\libsodium-1.0.11-msvc\Win32\Release\v140\dynamic\libsodium.dll">
-      <PackagePath>runtimes\win7-x86\native\</PackagePath>
-      <Link>libsodium.x86.dll</Link>
-    </Content>
     <None Include=".editorconfig" />
     <None Include="Interop\Interop.yaml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NETStandard.Library" Version="1.6.0" />
+    <PackageReference Include="runtime.native.NSec" Version="1.0.11-prerelease" />
     <PackageReference Include="System.Memory" Version="4.4.0-beta-24906-03" />
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.4.0-beta-24906-03" />
   </ItemGroup>
