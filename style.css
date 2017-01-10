@@ -33,6 +33,12 @@ pre {
     border-bottom: 1px solid #EEE;
 }
 
+code {
+    display: inline-block;
+    padding: .1em .3em;
+    border: 1px solid #EEE;
+}
+
 blockquote, dd, ol, ul {
     padding: 0 0 0 2em;
 }
