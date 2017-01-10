@@ -115,6 +115,10 @@ nav > ul {
         border-bottom: 1px solid #EEE;
     }
 
+    .c {
+        color: #AAA;
+    }
+
     a, .k {
         color: #0071BC;
         text-decoration: none;
