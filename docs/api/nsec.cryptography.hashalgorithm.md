@@ -116,7 +116,7 @@ data
 : The input data to compute the hash for.
 
 hash
-: The span to fill with the hash to compute.
+: The span to fill with the computed hash.
 
 #### Exceptions
 
