@@ -141,7 +141,7 @@ ArgumentNullException
 : `algorithm` is null.
 
 FormatException
-: The key BLOB is not in the correct format.
+: The key BLOB is not in the correct format or the format is not supported.
 
 NotSupportedException
 : The specified algorithm does not support importing keys.
