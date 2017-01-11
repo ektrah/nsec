@@ -67,7 +67,7 @@ namespace NSec.Cryptography
             if (nonce.Length > _maxNonceSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
             if (ciphertext.Length < _tagSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(ciphertext));
+                throw new CryptographicException();
 
             byte[] plaintext = new byte[ciphertext.Length - _tagSize];
 
@@ -95,7 +95,7 @@ namespace NSec.Cryptography
             if (nonce.Length > _maxNonceSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
             if (ciphertext.Length < _tagSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(ciphertext));
+                throw new CryptographicException();
             if (plaintext.Length != ciphertext.Length - _tagSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(plaintext));
 
@@ -202,7 +202,7 @@ namespace NSec.Cryptography
             if (ciphertext.Length < _tagSize)
                 return false;
             if (plaintext.Length != ciphertext.Length - _tagSize)
-                return false;
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(plaintext));
 
             return TryDecryptCore(key.Handle, nonce, associatedData, ciphertext, plaintext);
         }

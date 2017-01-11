@@ -228,7 +228,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                Assert.Throws<ArgumentException>("ciphertext", () => a.Decrypt(k, new byte[a.MaxNonceSize], ReadOnlySpan<byte>.Empty, new byte[a.TagSize - 1]));
+                Assert.Throws<CryptographicException>(() => a.Decrypt(k, new byte[a.MaxNonceSize], ReadOnlySpan<byte>.Empty, new byte[a.TagSize - 1]));
             }
         }
 
@@ -307,7 +307,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                Assert.Throws<ArgumentException>("ciphertext", () => a.Decrypt(k, new byte[a.MaxNonceSize], ReadOnlySpan<byte>.Empty, new byte[a.TagSize - 1], Span<byte>.Empty));
+                Assert.Throws<CryptographicException>(() => a.Decrypt(k, new byte[a.MaxNonceSize], ReadOnlySpan<byte>.Empty, new byte[a.TagSize - 1], Span<byte>.Empty));
             }
         }
 
@@ -517,7 +517,7 @@ namespace NSec.Tests.Base
                 Assert.NotNull(ct);
                 Assert.Equal(a.TagSize, ct.Length);
 
-                Assert.False(a.TryDecrypt(k, new byte[a.MaxNonceSize], ReadOnlySpan<byte>.Empty, ct, new byte[1]));
+                Assert.Throws<ArgumentException>("plaintext", () => a.TryDecrypt(k, new byte[a.MaxNonceSize], ReadOnlySpan<byte>.Empty, ct, new byte[1]));
             }
         }
 
