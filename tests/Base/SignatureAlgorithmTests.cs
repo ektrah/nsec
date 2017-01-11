@@ -71,7 +71,7 @@ namespace NSec.Tests.Base
         {
             var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.Throws<ArgumentNullException>(() => a.Sign(null, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Sign(null, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
@@ -82,7 +82,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(new X25519()))
             {
-                Assert.Throws<ArgumentException>(() => a.Sign(k, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+                Assert.Throws<ArgumentException>("key", () => a.Sign(k, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
             }
         }
 
@@ -94,7 +94,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                Assert.Throws<ArgumentException>(() => a.Sign(k, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+                Assert.Throws<ArgumentException>("signature", () => a.Sign(k, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
             }
         }
 
@@ -173,7 +173,7 @@ namespace NSec.Tests.Base
         {
             var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.Throws<ArgumentNullException>(() => a.Verify(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("publicKey", () => a.Verify(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
@@ -184,7 +184,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(new X25519()))
             {
-                Assert.Throws<ArgumentException>(() => a.Verify(k.PublicKey, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+                Assert.Throws<ArgumentException>("publicKey", () => a.Verify(k.PublicKey, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
             }
         }
 
