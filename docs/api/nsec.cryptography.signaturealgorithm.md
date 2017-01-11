@@ -66,7 +66,7 @@ as an array of bytes.
 #### Parameters
 
 key
-: The key used for signing.
+: The [[Key|Key Class]] object to use for signing.
 
 data
 : The data to be signed.
@@ -81,7 +81,7 @@ ArgumentNullException
 : `key` is `null`.
 
 ArgumentException
-: The algorithm for the key is not the same object as the current
+: `key.Algorithm` is not the same object as the current
     [[SignatureAlgorithm|SignatureAlgorithm Class]] object.
 
 ObjectDisposedException
@@ -101,7 +101,7 @@ span of bytes with the signature.
 #### Parameters
 
 key
-: The key used for signing.
+: The [[Key|Key Class]] object to use for signing.
 
 data
 : The data to be signed.
@@ -115,7 +115,7 @@ ArgumentNullException
 : `key` is `null`.
 
 ArgumentException
-: The algorithm for the key is not the same object as the current
+: `key.Algorithm` is not the same object as the current
     [[SignatureAlgorithm|SignatureAlgorithm Class]] object.
 
 ArgumentException
@@ -139,8 +139,8 @@ public key.
 #### Parameters
 
 publicKey
-: The public key used for verification. This must be the public key of the key
-    previously used to sign the input data.
+: The [[PublicKey|PublicKey Class]] object to use for verification. This must
+    be the public key for the key previously used to sign the input data.
 
 data
 : The data to be verified.
@@ -158,7 +158,7 @@ ArgumentNullException
 : `publicKey` is `null`.
 
 ArgumentException
-: The algorithm for the public key is not the same object as the current
+: `publicKey.Algorithm` is not the same object as the current
     [[SignatureAlgorithm|SignatureAlgorithm Class]] object.
 
 
@@ -175,8 +175,8 @@ key.
 #### Parameters
 
 publicKey
-: The public key used for verification. This must be the public key of the key
-    previously used to sign the input data.
+: The [[PublicKey|PublicKey Class]] object to use for verification. This must
+    be the public key for the key previously used to sign the input data.
 
 data
 : The data to be verified.
@@ -190,7 +190,7 @@ ArgumentNullException
 : `publicKey` is `null`.
 
 ArgumentException
-: The algorithm for the public key is not the same object as the current
+: `publicKey.Algorithm` is not the same object as the current
     [[SignatureAlgorithm|SignatureAlgorithm Class]] object.
 
 CryptographicException
