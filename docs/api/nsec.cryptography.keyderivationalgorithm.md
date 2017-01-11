@@ -85,7 +85,7 @@ ArgumentException
     [[MaxSaltSize|KeyDerivationAlgorithm Class#MaxSaltSize]].
 
 ArgumentOutOfRangeException
-: `count` is less than zero or larger than
+: `count` is less than 0 or larger than
     [[MaxOutputSize|KeyDerivationAlgorithm Class#MaxOutputSize]].
 
 ObjectDisposedException
