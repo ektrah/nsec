@@ -75,7 +75,6 @@ otherPartyPublicKey
 A new instance of the [[SharedSecret|SharedSecret Class]] class that represents
 the shared secret created from `key` and `otherPartyPublicKey`.
 
-
 #### Exceptions
 
 ArgumentNullException
@@ -87,6 +86,9 @@ ArgumentException
 
 CryptographicException
 : Key agreement failed.
+
+ObjectDisposedException
+: `key` has been disposed.
 
 
 ### TryAgree(Key, PublicKey, out SharedSecret)
@@ -123,6 +125,9 @@ ArgumentNullException
 ArgumentException
 : `key.Algorithm` or `otherPartyPublicKey.Algorithm` is not the same object as
     the current [[KeyAgreementAlgorithm|KeyAgreementAlgorithm Class]] object.
+
+ObjectDisposedException
+: `key` has been disposed.
 
 
 ## See also
