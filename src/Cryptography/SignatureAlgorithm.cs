@@ -97,10 +97,9 @@ namespace NSec.Cryptography
                 throw new ArgumentNullException(nameof(publicKey));
             if (publicKey.Algorithm != this)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(publicKey));
-            if (signature.Length != _signatureSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(signature));
 
-            if (!TryVerifyCore(publicKey.Bytes, data, signature))
+            if ((signature.Length != _signatureSize) ||
+                !TryVerifyCore(publicKey.Bytes, data, signature))
             {
                 throw new CryptographicException();
             }
