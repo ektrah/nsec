@@ -106,7 +106,21 @@ namespace NSec.Tests.Algorithms
         }
 
         [Fact]
-        public static void HashWithSizeSuccess()
+        public static void HashWithMinSizeSuccess()
+        {
+            var a = new Blake2();
+
+            using (var k = new Key(a))
+            {
+                var b = a.Hash(k, ReadOnlySpan<byte>.Empty, a.MinHashSize);
+
+                Assert.NotNull(b);
+                Assert.Equal(a.MinHashSize, b.Length);
+            }
+        }
+
+        [Fact]
+        public static void HashWithMaxSizeSuccess()
         {
             var a = new Blake2();
 
@@ -165,7 +179,18 @@ namespace NSec.Tests.Algorithms
         }
 
         [Fact]
-        public static void HashWithSpanSuccess()
+        public static void HashWithMinSpanSuccess()
+        {
+            var a = new Blake2();
+
+            using (var k = new Key(a))
+            {
+                a.Hash(k, ReadOnlySpan<byte>.Empty, new byte[a.MinHashSize]);
+            }
+        }
+
+        [Fact]
+        public static void HashWithMaxSpanSuccess()
         {
             var a = new Blake2();
 
