@@ -44,9 +44,3 @@ RawSymmetricKey
 * API Reference
     * [[Key Class]]
     * [[PublicKey Class]]
-* Specifications
-    * [I-D.ietf-curdle-pkix](https://tools.ietf.org/html/draft-ietf-curdle-pkix-03)
-        -- Algorithm Identifiers for Ed25519, Ed25519ph, Ed448, Ed448ph, X25519
-        and X448 for use in the Internet X.509 Public Key Infrastructure
-    * [RFC 7468](https://tools.ietf.org/html/rfc7468) -- Textual Encodings of
-        PKIX, PKCS, and CMS Structures
