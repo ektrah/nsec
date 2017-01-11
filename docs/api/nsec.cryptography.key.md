@@ -180,7 +180,7 @@ result
 
 #### Return value
 
-`true` if the key BLOB was imported; otherwise, `false`.
+`true` if the import succeeds; otherwise, `false`.
 
 #### Exceptions
 

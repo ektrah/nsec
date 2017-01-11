@@ -150,7 +150,7 @@ signature
 
 #### Return value
 
-`true` if verification succeeded; otherwise, `false`.
+`true` if verification succeeds; otherwise, `false`.
 
 #### Exceptions
 

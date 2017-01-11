@@ -113,7 +113,7 @@ result
 
 #### Return value
 
-`true` if key agreement succeeded; otherwise, `false`.
+`true` if key agreement succeeds; otherwise, `false`.
 
 #### Exceptions
 
