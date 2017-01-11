@@ -176,7 +176,7 @@ ArgumentException
     [[MaxSaltSize|KeyDerivationAlgorithm Class#MaxSaltSize]].
 
 NotSupportedException
-: The specified algorithm does not supported derived keys.
+: The specified algorithm does not support key derivation.
 
 ObjectDisposedException
 : `sharedSecret` has been disposed.
