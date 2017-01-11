@@ -57,7 +57,7 @@ instance of the [[SharedSecret|SharedSecret Class]] class.
     public void Dispose()
 
 
-## See Also
+## See also
 
 * API Reference
     * [[KeyAgreementAlgorithm Class]]

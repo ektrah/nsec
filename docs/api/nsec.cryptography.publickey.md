@@ -186,7 +186,7 @@ be used as keys of a Dictionary<TKey, TValue> or elements of a HashSet<T>. The
 hash code is not a fingerprint that can be used to identify the public key.
 
 
-## See Also
+## See also
 
 * API Reference
     * [[Algorithm Class]]
