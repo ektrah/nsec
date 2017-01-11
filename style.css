@@ -18,7 +18,7 @@ main > * {
     margin: 1em 0 1em 1.5em;
 }
 
-h1, h2, h3, h4, h5, h6, main nav {
+h1, h2, h3, main nav {
     margin: 1.5em 0 1em;
 }
 
