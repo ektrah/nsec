@@ -10,7 +10,7 @@ If you're adventurous, you can use use NSec in a .NET Core project as follows:
 
 2. Add the [.NET Core "dev" builds feed](https://dotnet.myget.org/gallery/dotnet-core) as a NuGet package source
 
-3. Add the following package reference to your `.csproj` file:
+3. Create a new .NET Core project and add the following package reference to the `.csproj` file:
 
         <PackageReference Include="NSec.Cryptography" Version="1.0.0-preview-24912-01" />
 
