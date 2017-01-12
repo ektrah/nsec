@@ -33,8 +33,8 @@ NSec.Cryptography.X25519]]></Description>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NETStandard.Library" Version="1.6.0" />
-    <PackageReference Include="runtime.native.NSec" Version="9.2.0-preview-24910-01" />
-    <PackageReference Include="System.Memory" Version="4.4.0-beta-24906-03" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.4.0-beta-24906-03" />
+    <PackageReference Include="runtime.native.NSec.Cryptography" Version="9.2.0-preview-24912-01" />
+    <PackageReference Include="System.Memory" Version="4.4.0-beta-24912-01	" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.4.0-beta-24912-01	" />
   </ItemGroup>
 </Project>
