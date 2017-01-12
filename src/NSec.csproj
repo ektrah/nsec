@@ -5,7 +5,23 @@
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup>
-    <Version>0.0.2-prerelease</Version>
+    <PackageId>NSec.Cryptography</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Klaus Hartke</Authors>
+    <Description><![CDATA[Provides modern cryptographic algorithm implementations based on libsodium.
+    
+Commonly Used Types:
+NSec.Cryptography.Chacha20Poly1309
+NSec.Cryptography.Ed25519
+NSec.Cryptography.Key
+NSec.Cryptography.X25519]]></Description>
+    <Copyright>© 2017 Klaus Hartke</Copyright>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/ektrah/nsec/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/ektrah/nsec</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/ektrah/nsec/master/icon-64x64.png</PackageIconUrl>
+    <PackageReleaseNotes>https://github.com/ektrah/nsec/releases</PackageReleaseNotes>
+    <Tags>libsodium</Tags>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="**\*.cs" />
