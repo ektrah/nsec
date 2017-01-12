@@ -2,4 +2,6 @@
 *~
 .firebaserc
 .vs
+bin
+obj
 public/
