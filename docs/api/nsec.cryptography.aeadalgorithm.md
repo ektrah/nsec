@@ -21,46 +21,46 @@ Represents an authenticated encryption with associated data (AEAD) algorithm.
 
 ### KeySize
 
-Get the size, in bytes, of a key.
+Gets the key size, in bytes.
 
     public int KeySize { get; }
 
 #### Property value
 
-The size, in bytes, of a key.
+The key size, in bytes.
 
 
 ### MaxNonceSize
 
-Gets the maximum size, in bytes, of a nonce.
+Gets the maximum nonce size, in bytes.
 
     public int MaxNonceSize { get; }
 
 #### Property value
 
-The maximum size, in bytes, of a nonce.
+The maximum nonce size, in bytes.
 
 
 ### MinNonceSize
 
-Gets the minimum size, in bytes, of a nonce.
+Gets the minimum nonce size, in bytes.
 
     public int MinNonceSize { get; }
 
 #### Property value
 
-The minimum size, in bytes, of a nonce.
+The minimum nonce size, in bytes.
 
 
 ### TagSize
 
-Gets the size, in bytes, of an authentication tag.
+Gets the authentication tag size, in bytes.
 
     public int TagSize { get; }
 
 #### Property value
 
-The size, in bytes, of an authentication tag.
+The authentication tag size, in bytes.
 
 
 ## Methods

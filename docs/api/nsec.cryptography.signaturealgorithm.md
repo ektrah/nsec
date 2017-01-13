@@ -20,35 +20,35 @@ Represents a digital signature algorithm.
 
 ### PrivateKeySize
 
-Get the size, in bytes, of a private key.
+Gets the private size, in bytes.
 
     public int PrivateKeySize { get; }
 
 #### Property value
 
-The size, in bytes, of a private key.
+The private key size, in bytes.
 
 
 ### PublicKeySize
 
-Get the size, in bytes, of a public key.
+Gets the public key size, in bytes.
 
     public int PublicKeySize { get; }
 
 #### Property value
 
-The size, in bytes, of a public key.
+The public key size, in bytes.
 
 
 ### SignatureSize
 
-Get the size, in bytes, of a signature.
+Gets the signature size, in bytes.
 
     public int SignatureSize { get; }
 
 #### Property value
 
-The size, in bytes, of a signature.
+The signature size, in bytes.
 
 
 ## Methods

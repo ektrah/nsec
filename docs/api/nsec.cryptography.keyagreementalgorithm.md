@@ -20,35 +20,35 @@ Represents a key agreement algorithm.
 
 ### PrivateKeySize
 
-Get the size, in bytes, of a private key.
+Gets the private key size, in bytes.
 
     public int PrivateKeySize { get; }
 
 #### Property value
 
-The size, in bytes, of a private key.
+The private key size, in bytes.
 
 
 ### PublicKeySize
 
-Get the size, in bytes, of a public key.
+Gets the public key size, in bytes.
 
     public int PublicKeySize { get; }
 
 #### Property value
 
-The size, in bytes, of a public key.
+The public key size, in bytes.
 
 
 ### SharedSecretSize
 
-Get the size, in bytes, of the shared secret resulting from key agreement.
+Gets the size, in bytes, of the shared secret resulting from key agreement.
 
     public int SharedSecretSize { get; }
 
 #### Property value
 
-The size, in bytes, of the shared secret.
+The shared secret size, in bytes.
 
 
 ## Methods

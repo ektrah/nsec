@@ -22,36 +22,36 @@ Represents a cryptographic hash algorithm.
 
 ### DefaultHashSize
 
-Gets the default size, in bytes, of the computed hash.
+Gets the default hash size, in bytes.
 
     public int DefaultHashSize { get; }
 
 #### Property value
 
-The default size, in bytes, of the computed hash.
+The default hash size, in bytes.
 
 
 
 ### MaxHashSize
 
-Gets the maximum size, in bytes, of the computed hash.
+Gets the maximum hash size, in bytes.
 
     public int MaxHashSize { get; }
 
 #### Property value
 
-The maximum size, in bytes, of the computed hash.
+The maximum hash size, in bytes.
 
 
 ### MinHashSize
 
-Gets the minimum size, in bytes, of the computed hash.
+Gets the minimum hash size, in bytes.
 
     public int MinHashSize { get; }
 
 #### Property value
 
-The minimum size, in bytes, of the computed hash.
+The minimum hash size, in bytes.
 
 
 ## Methods

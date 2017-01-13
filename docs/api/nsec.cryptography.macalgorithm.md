@@ -21,90 +21,90 @@ Represents a message authentication code (MAC) algorithm.
 
 ### DefaultKeySize
 
-Gets the default size, in bytes, of a key.
+Gets the default key size, in bytes.
 
     public int DefaultKeySize { get; }
 
 #### Property value
 
-The default size, in bytes, of a key.
+The default key size, in bytes.
 
 
 ### DefaultMacSize
 
-Gets the default size, in bytes, of a message authentication code.
+Gets the default MAC size, in bytes.
 
     public int DefaultMacSize { get; }
 
 #### Property value
 
-The default size, in bytes, of a message authentication code.
+The default MAC size, in bytes.
 
 
 ### MaxKeySize
 
-Gets the maximum size, in bytes, of a key.
+Gets the maximum key size, in bytes.
 
     public int MaxKeySize { get; }
 
 #### Property value
 
-The maximum size, in bytes, of a key.
+The maximum key size, in bytes.
 
 
 ### MaxNonceSize
 
-Gets the maximum size, in bytes, of a nonce.
+Gets the maximum nonce size, in bytes.
 
     public int MaxNonceSize { get; }
 
 #### Property value
 
-The maximum size, in bytes, of a nonce.
+The maximum nonce size, in bytes.
 
 
 ### MaxMacSize
 
-Gets the maximum size, in bytes, of a message authentication code.
+Gets the maximum MAC size, in bytes.
 
     public int MaxMacSize { get; }
 
 #### Property value
 
-The maximum size, in bytes, of a message authentication code.
+The maximum MAC size, in bytes.
 
 
 ### MinKeySize
 
-Gets the minimum size, in bytes, of a key.
+Gets the minimum key size, in bytes.
 
     public int MinKeySize { get; }
 
 #### Property value
 
-The minimum size, in bytes, of a key.
+The minimum key size, in bytes.
 
 
 ### MinNonceSize
 
-Gets the minimum size, in bytes, of a nonce.
+Gets the minimum nonce size, in bytes.
 
     public int MinNonceSize { get; }
 
 #### Property value
 
-The minimum size, in bytes, of a nonce.
+The minimum nonce size, in bytes.
 
 
 ### MinMacSize
 
-Gets the minimum size, in bytes, of a message authentication code.
+Gets the minimum MAC size, in bytes.
 
     public int MinMacSize { get; }
 
 #### Property value
 
-The minimum size, in bytes, of a message authentication code.
+The minimum MAC size, in bytes.
 
 
 ## Methods
