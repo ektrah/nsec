@@ -46,15 +46,8 @@ See the [[documentation|NSec Documentation]] for more examples.
 **Note:** NSec depends on .NET Core pre-release features and is therefore not
 yet ready for production.
 
-A pre-release version of NSec is available as a package from
-[nuget.org](https://www.nuget.org/packages/nsec.cryptography).
-
-To use NSec in a .NET Core project, add the following package reference to your
-`.csproj` file:
-
-    <PackageReference Include="NSec.Cryptography" Version="1.0.0-preview-24912-01" />
-
-See [[Installation]] for more information.
+If you're adventurous, you can use a pre-release version of NSec.
+See [[Installation]] for details.
 
 
 ## Documentation
