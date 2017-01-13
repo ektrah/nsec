@@ -120,6 +120,7 @@ nav > ul {
         color: #AAA;
         float: right;
         display: inline-block;
+        margin: -.5em;
         padding: .1em .3em;
         background: white;
         border: 1px solid #EEE;
