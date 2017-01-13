@@ -33,15 +33,15 @@ Gets the maximum size, in bytes, of the key derivation output.
 The maximum size, in bytes, of the key derivation output.
 
 
-### MaxSaltSize
+### SupportsSalt
 
-Gets the maximum size, in bytes, of the salt to use in key derivation.
+Gets a value that indicates whether the algorithm supports the use of salt.
 
     public int MaxSaltSize { get; }
 
 #### Propery value
 
-The maximum size, in bytes, of the salt.
+`true` if the algorithm supports the use of salt; otherwise, `false`.
 
 
 ## Methods
@@ -81,8 +81,8 @@ ArgumentNullException
 : `sharedSecret` is `null`
 
 ArgumentException
-: The length of `salt` is larger than
-    [[MaxSaltSize|KeyDerivationAlgorithm Class#MaxSaltSize]].
+: [[SupportsSalt|KeyDerivationAlgorithm Class#SupportsSalt]] is `false` but
+    `salt` is not empty.
 
 ArgumentOutOfRangeException
 : `count` is less than 0 or larger than
@@ -122,8 +122,8 @@ ArgumentNullException
 : `sharedSecret` is `null`
 
 ArgumentException
-: The length of `salt` is larger than
-    [[MaxSaltSize|KeyDerivationAlgorithm Class#MaxSaltSize]].
+: [[SupportsSalt|KeyDerivationAlgorithm Class#SupportsSalt]] is `false` but
+    `salt` is not empty.
 
 ArgumentException
 : The length of `bytes` is larger than
@@ -172,8 +172,8 @@ ArgumentNullException
 : `sharedSecret` or `algorithm` is `null`.
 
 ArgumentException
-: The length of `salt` is larger than
-    [[MaxSaltSize|KeyDerivationAlgorithm Class#MaxSaltSize]].
+: [[SupportsSalt|KeyDerivationAlgorithm Class#SupportsSalt]] is `false` but
+    `salt` is not empty.
 
 NotSupportedException
 : The specified algorithm does not support key derivation.
