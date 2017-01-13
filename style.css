@@ -115,6 +115,16 @@ nav > ul {
         border-bottom: 1px solid #EEE;
     }
 
+    pre[data-lang]:before {
+        content: attr(data-lang);
+        color: #AAA;
+        float: right;
+        display: inline-block;
+        padding: .1em .3em;
+        background: white;
+        border: 1px solid #EEE;
+    }
+
     .c {
         color: #AAA;
     }
