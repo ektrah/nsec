@@ -115,9 +115,23 @@ namespace NSec.Cryptography
         {
             Debug.Assert(bytes.Length <= 255 * crypto_auth_hmacsha512_BYTES);
 
-            Span<byte> pseudorandomKey = new byte[crypto_auth_hmacsha512_BYTES]; // TODO: avoid placing sensitive data in managed memory
-            ExtractCore(inputKeyingMaterial, salt, pseudorandomKey);
-            ExpandCore(pseudorandomKey, info, bytes);
+            Span<byte> pseudorandomKey;
+            try
+            {
+                unsafe
+                {
+                    byte* pointer = stackalloc byte[crypto_auth_hmacsha512_BYTES];
+                    pseudorandomKey = new Span<byte>(pointer, crypto_auth_hmacsha512_BYTES);
+                }
+
+                ExtractCore(inputKeyingMaterial, salt, pseudorandomKey);
+
+                ExpandCore(pseudorandomKey, info, bytes);
+            }
+            finally
+            {
+                sodium_memzero(ref pseudorandomKey.DangerousGetPinnableReference(), (UIntPtr)pseudorandomKey.Length);
+            }
         }
 
         private static void ExpandCore(
@@ -128,28 +142,41 @@ namespace NSec.Cryptography
             Debug.Assert(pseudorandomKey.Length >= crypto_auth_hmacsha512_BYTES);
             Debug.Assert(bytes.Length <= 255 * crypto_auth_hmacsha512_BYTES);
 
-            Span<byte> t = new byte[crypto_auth_hmacsha512_BYTES]; // TODO: avoid placing sensitive data in managed memory
-            int tLen = 0;
-            int offset = 0;
-            byte counter = 0;
-            int chunkSize;
-
-            while ((chunkSize = bytes.Length - offset) > 0)
+            Span<byte> temp;
+            try
             {
-                counter++;
+                unsafe
+                {
+                    byte* pointer = stackalloc byte[crypto_auth_hmacsha512_BYTES];
+                    temp = new Span<byte>(pointer, crypto_auth_hmacsha512_BYTES);
+                }
 
-                crypto_auth_hmacsha512_init(out crypto_auth_hmacsha512_state state, ref pseudorandomKey.DangerousGetPinnableReference(), (UIntPtr)pseudorandomKey.Length);
-                crypto_auth_hmacsha512_update(ref state, ref t.DangerousGetPinnableReference(), (ulong)tLen);
-                crypto_auth_hmacsha512_update(ref state, ref info.DangerousGetPinnableReference(), (ulong)info.Length);
-                crypto_auth_hmacsha512_update(ref state, ref counter, sizeof(byte));
-                crypto_auth_hmacsha512_final(ref state, ref t.DangerousGetPinnableReference());
+                int tempLength = 0;
+                int offset = 0;
+                byte counter = 0;
+                int chunkSize;
 
-                tLen = crypto_auth_hmacsha512_BYTES;
+                while ((chunkSize = bytes.Length - offset) > 0)
+                {
+                    counter++;
 
-                if (chunkSize > crypto_auth_hmacsha512_BYTES)
-                    chunkSize = crypto_auth_hmacsha512_BYTES;
-                t.Slice(0, chunkSize).CopyTo(bytes.Slice(offset));
-                offset += chunkSize;
+                    crypto_auth_hmacsha512_init(out crypto_auth_hmacsha512_state state, ref pseudorandomKey.DangerousGetPinnableReference(), (UIntPtr)pseudorandomKey.Length);
+                    crypto_auth_hmacsha512_update(ref state, ref temp.DangerousGetPinnableReference(), (ulong)tempLength);
+                    crypto_auth_hmacsha512_update(ref state, ref info.DangerousGetPinnableReference(), (ulong)info.Length);
+                    crypto_auth_hmacsha512_update(ref state, ref counter, sizeof(byte));
+                    crypto_auth_hmacsha512_final(ref state, ref temp.DangerousGetPinnableReference());
+
+                    tempLength = crypto_auth_hmacsha512_BYTES;
+
+                    if (chunkSize > crypto_auth_hmacsha512_BYTES)
+                        chunkSize = crypto_auth_hmacsha512_BYTES;
+                    temp.Slice(0, chunkSize).CopyTo(bytes.Slice(offset));
+                    offset += chunkSize;
+                }
+            }
+            finally
+            {
+                sodium_memzero(ref temp.DangerousGetPinnableReference(), (UIntPtr)temp.Length);
             }
         }
 

@@ -56,11 +56,24 @@ namespace NSec.Cryptography.Formatting
         {
             Debug.Assert(keyHandle != null);
 
-            Span<byte> temp = new byte[_blobSize]; // TODO: avoid placing sensitive data in managed memory
-            new ReadOnlySpan<byte>(_blobHeader).CopyTo(temp);
-            Serialize(keyHandle, temp.Slice(_blobHeader.Length));
-            result = Armor.Encode(temp, s_beginLabel, s_endLabel);
-            return true;
+            Span<byte> temp;
+            try
+            {
+                unsafe
+                {
+                    byte* pointer = stackalloc byte[_blobSize];
+                    temp = new Span<byte>(pointer, _blobSize);
+                }
+
+                new ReadOnlySpan<byte>(_blobHeader).CopyTo(temp);
+                Serialize(keyHandle, temp.Slice(_blobHeader.Length));
+                result = Armor.Encode(temp, s_beginLabel, s_endLabel);
+                return true;
+            }
+            finally
+            {
+                sodium_memzero(ref temp.DangerousGetPinnableReference(), (UIntPtr)temp.Length);
+            }
         }
 
         public bool TryImport(
@@ -84,16 +97,28 @@ namespace NSec.Cryptography.Formatting
             out SecureMemoryHandle keyHandle,
             out byte[] publicKeyBytes)
         {
-            Span<byte> temp = new byte[_blobSize]; // TODO: avoid placing sensitive data in managed memory
-
-            if (!Armor.TryDecode(blob, s_beginLabel, s_endLabel, temp))
+            Span<byte> temp;
+            try
             {
-                keyHandle = null;
-                publicKeyBytes = null;
-                return false;
-            }
+                unsafe
+                {
+                    byte* pointer = stackalloc byte[_blobSize];
+                    temp = new Span<byte>(pointer, _blobSize);
+                }
 
-            return TryImport(temp, out keyHandle, out publicKeyBytes);
+                if (!Armor.TryDecode(blob, s_beginLabel, s_endLabel, temp))
+                {
+                    keyHandle = null;
+                    publicKeyBytes = null;
+                    return false;
+                }
+
+                return TryImport(temp, out keyHandle, out publicKeyBytes);
+            }
+            finally
+            {
+                sodium_memzero(ref temp.DangerousGetPinnableReference(), (UIntPtr)temp.Length);
+            }
         }
 
         protected virtual void Deserialize(

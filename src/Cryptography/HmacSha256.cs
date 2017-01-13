@@ -102,9 +102,22 @@ namespace NSec.Cryptography
             }
             else
             {
-                Span<byte> temp = new byte[crypto_auth_hmacsha256_BYTES]; // TODO: avoid placing sensitive data in managed memory
-                crypto_auth_hmacsha256_final(ref state, ref temp.DangerousGetPinnableReference());
-                temp.Slice(0, mac.Length).CopyTo(mac);
+                Span<byte> temp;
+                try
+                {
+                    unsafe
+                    {
+                        byte* pointer = stackalloc byte[crypto_auth_hmacsha256_BYTES];
+                        temp = new Span<byte>(pointer, crypto_auth_hmacsha256_BYTES);
+                    }
+
+                    crypto_auth_hmacsha256_final(ref state, ref temp.DangerousGetPinnableReference());
+                    temp.Slice(0, mac.Length).CopyTo(mac);
+                }
+                finally
+                {
+                    sodium_memzero(ref temp.DangerousGetPinnableReference(), (UIntPtr)temp.Length);
+                }
             }
         }
 
