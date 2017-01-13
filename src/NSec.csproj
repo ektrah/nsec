@@ -20,8 +20,7 @@ NSec.Cryptography.X25519]]></Description>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageLicenseUrl>https://raw.githubusercontent.com/ektrah/nsec/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/ektrah/nsec</PackageProjectUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/ektrah/nsec-docs/master/icon-64x64.png</PackageIconUrl>
-    <PackageReleaseNotes>https://github.com/ektrah/nsec/releases</PackageReleaseNotes>
+    <PackageIconUrl>https://git.io/vM2Mz</PackageIconUrl>
     <PackageTags>aead aes blake2b chacha20 cryptography curve25519 ed25519 eddsa encryption gcm hash hkdf hmac libsodium poly1305 security sha256 sha512 x25519</PackageTags>
   </PropertyGroup>
   <ItemGroup>
