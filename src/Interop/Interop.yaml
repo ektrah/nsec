@@ -162,6 +162,7 @@ Interop.Utils.cs:
   - sodium_free (IntPtr ptr)
   - sodium_malloc
   - sodium_memcmp (ref byte b1_, ref byte b2_)
+  - sodium_memzero (ref byte pnt)
   - sodium_mprotect_readonly (SecureMemoryHandle ptr)
 
 Interop.Version.cs:
