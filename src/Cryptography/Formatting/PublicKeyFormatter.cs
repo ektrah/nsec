@@ -62,7 +62,7 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> blob,
             out byte[] result)
         {
-            if (blob.Length != _blobSize || !blob.Slice(0, _blobHeader.Length).BlockEquals(_blobHeader))
+            if (blob.Length != _blobSize || !blob.Slice(0, _blobHeader.Length).SequenceEqual(_blobHeader))
             {
                 result = null;
                 return false;

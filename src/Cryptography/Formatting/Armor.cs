@@ -72,7 +72,7 @@ namespace NSec.Cryptography.Formatting
             Span<byte> output)
         {
             int i = FindHyphens(input);
-            if ((i < 0) || (input.Length - i < beginLabel.Length) || !input.Slice(i, beginLabel.Length).BlockEquals(beginLabel))
+            if ((i < 0) || (input.Length - i < beginLabel.Length) || !input.Slice(i, beginLabel.Length).SequenceEqual(beginLabel))
             {
                 return false;
             }
@@ -80,7 +80,7 @@ namespace NSec.Cryptography.Formatting
             input = input.Slice(i + beginLabel.Length);
 
             i = DecodeBase64(input, output);
-            if ((i < 0) || (input.Length - i < endLabel.Length) || !input.Slice(i, endLabel.Length).BlockEquals(endLabel))
+            if ((i < 0) || (input.Length - i < endLabel.Length) || !input.Slice(i, endLabel.Length).SequenceEqual(endLabel))
             {
                 return false;
             }

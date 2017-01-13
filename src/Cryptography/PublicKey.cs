@@ -69,7 +69,7 @@ namespace NSec.Cryptography
             return (this == other)
                 || (other != null)
                 && (_algorithm == other._algorithm)
-                && Extensions.BlockEquals(_bytes, other._bytes);
+                && ReadOnlySpanExtensions.SequenceEqual(_bytes, other._bytes);
         }
 
         public override bool Equals(

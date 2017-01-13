@@ -68,7 +68,7 @@ namespace NSec.Cryptography.Formatting
             out SecureMemoryHandle keyHandle,
             out byte[] publicKeyBytes)
         {
-            if (blob.Length != _blobSize || !blob.Slice(0, _blobHeader.Length).BlockEquals(_blobHeader))
+            if (blob.Length != _blobSize || !blob.Slice(0, _blobHeader.Length).SequenceEqual(_blobHeader))
             {
                 keyHandle = null;
                 publicKeyBytes = null;
