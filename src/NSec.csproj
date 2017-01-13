@@ -16,7 +16,7 @@ NSec.Cryptography.Chacha20Poly1305
 NSec.Cryptography.Ed25519
 NSec.Cryptography.Key
 NSec.Cryptography.X25519]]></Description>
-    <Copyright>&#169; 2017 Klaus Hartke</Copyright>
+    <Copyright>© 2017 Klaus Hartke</Copyright>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageLicenseUrl>https://raw.githubusercontent.com/ektrah/nsec/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/ektrah/nsec</PackageProjectUrl>
