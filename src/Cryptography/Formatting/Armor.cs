@@ -39,6 +39,11 @@ namespace NSec.Cryptography.Formatting
             0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x2B, 0x2F,
         };
 
+        private static readonly byte[] s_fiveHyphens =
+        {
+            0x2D, 0x2D, 0x2D, 0x2D, 0x2D,
+        };
+
         public static byte[] Encode(
             ReadOnlySpan<byte> input,
             ReadOnlySpan<byte> beginLabel,
@@ -71,7 +76,7 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> endLabel,
             Span<byte> output)
         {
-            int i = FindHyphens(input);
+            int i = input.IndexOf(s_fiveHyphens);
             if ((i < 0) || (input.Length - i < beginLabel.Length) || !input.Slice(i, beginLabel.Length).SequenceEqual(beginLabel))
             {
                 return false;
@@ -222,33 +227,6 @@ namespace NSec.Cryptography.Formatting
             }
 
             return i;
-        }
-
-        private static int FindHyphens(
-            ReadOnlySpan<byte> input)
-        {
-            int hyphens = 0;
-            int i = 0;
-
-            while (i < input.Length)
-            {
-                int ch = input[i];
-                i++;
-                if (ch == '-')
-                {
-                    hyphens++;
-                    if (hyphens == 5)
-                    {
-                        return i - 5;
-                    }
-                }
-                else
-                {
-                    hyphens = 0;
-                }
-            }
-
-            return -1;
         }
     }
 }
