@@ -16,7 +16,7 @@ namespace NSec.Tests.Base
         {
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.True(a.UsesSalt || !a.UsesSalt);
+            Assert.True(a.SupportsSalt || !a.SupportsSalt);
             Assert.True(a.MaxOutputSize > 0);
         }
 
@@ -39,7 +39,7 @@ namespace NSec.Tests.Base
         {
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
 
-            if (!a.UsesSalt)
+            if (!a.SupportsSalt)
             {
                 var x = new X25519();
 
@@ -135,7 +135,7 @@ namespace NSec.Tests.Base
         {
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
 
-            if (!a.UsesSalt)
+            if (!a.SupportsSalt)
             {
                 var x = new X25519();
 
@@ -211,7 +211,7 @@ namespace NSec.Tests.Base
         {
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
 
-            if (!a.UsesSalt)
+            if (!a.SupportsSalt)
             {
                 var x = new X25519();
 

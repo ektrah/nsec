@@ -24,21 +24,21 @@ namespace NSec.Cryptography
     public abstract class KeyDerivationAlgorithm : Algorithm
     {
         private readonly int _maxOutputSize;
-        private readonly bool _usesSalt;
+        private readonly bool _supportsSalt;
 
         internal KeyDerivationAlgorithm(
-            bool usesSalt,
+            bool supportsSalt,
             int maxOutputSize)
         {
             Debug.Assert(maxOutputSize > 0);
 
-            _usesSalt = usesSalt;
+            _supportsSalt = supportsSalt;
             _maxOutputSize = maxOutputSize;
         }
 
         public int MaxOutputSize => _maxOutputSize;
 
-        public bool UsesSalt => _usesSalt;
+        public bool SupportsSalt => _supportsSalt;
 
         public byte[] DeriveBytes(
             SharedSecret sharedSecret,
@@ -48,7 +48,7 @@ namespace NSec.Cryptography
         {
             if (sharedSecret == null)
                 throw new ArgumentNullException(nameof(sharedSecret));
-            if (!_usesSalt && !salt.IsEmpty)
+            if (!_supportsSalt && !salt.IsEmpty)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(salt));
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
@@ -70,7 +70,7 @@ namespace NSec.Cryptography
         {
             if (sharedSecret == null)
                 throw new ArgumentNullException(nameof(sharedSecret));
-            if (!_usesSalt && !salt.IsEmpty)
+            if (!_supportsSalt && !salt.IsEmpty)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(salt));
             if (bytes.Length > MaxOutputSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(bytes));
@@ -89,7 +89,7 @@ namespace NSec.Cryptography
         {
             if (sharedSecret == null)
                 throw new ArgumentNullException(nameof(sharedSecret));
-            if (!_usesSalt && !salt.IsEmpty)
+            if (!_supportsSalt && !salt.IsEmpty)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(salt));
             if (algorithm == null)
                 throw new ArgumentNullException(nameof(algorithm));

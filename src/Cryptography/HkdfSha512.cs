@@ -39,7 +39,7 @@ namespace NSec.Cryptography
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
         public HkdfSha512() : base(
-            usesSalt: true,
+            supportsSalt: true,
             maxOutputSize: 255 * crypto_auth_hmacsha512_BYTES)
         {
             if (!s_selfTest.Value)
