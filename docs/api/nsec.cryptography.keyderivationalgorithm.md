@@ -37,7 +37,7 @@ The maximum size, in bytes, of the key derivation output.
 
 Gets a value that indicates whether the algorithm supports the use of salt.
 
-    public int MaxSaltSize { get; }
+    public bool SupportsSalt { get; }
 
 #### Propery value
 
