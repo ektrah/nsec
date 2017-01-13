@@ -16,7 +16,7 @@ accidentally using a key with the wrong algorithm.
 * **Secure** -- In addition to the security provided by the cryptographic
 primitives, NSec tries to make working with these primitives as secure as
 possible. All sensitive data such as keys is stored in libsodium's secure memory
-rather than on the managed heap and securely erased when it's no longer needed.
+rather than on the managed heap and is securely erased when no longer needed.
 
 * **Fast** -- libsodium is fast, and cryptographic operations in libsodium never
 allocate memory on the heap. NSec follows libsodium's example and avoids
