@@ -90,7 +90,7 @@ new features -- are a fantastic help. Please ask first before embarking on any
 significant pull request (e.g., implementing new features).
 
 
-## Caution
+## Note
 
 *Cryptography is not magic pixie dust that you can sprinkle on a system to make
 it secure.*
@@ -98,7 +98,7 @@ it secure.*
 NSec aims to provide careful abstractions to make the work with modern
 cryptographic primitives relatively easy and pain-free. However, the primitives
 are not very useful by themselves and need to be combined into higher-level
-security schemes, such as TLS or JSON Web Token. Don't roll your own security.
+security protocols, such as TLS or JSON Web Token. Don't roll your own security.
 
 
 ## License
