@@ -144,7 +144,8 @@ obj
 
 ### Export(KeyBlobFormat)
 
-Exports the public key into a BLOB, in the specified format.
+Exports the public key as a BLOB in the specified format and returns it as an
+array of bytes.
 
     public byte[] Export(
         KeyBlobFormat format)
@@ -160,6 +161,44 @@ format
 A BLOB that contains the public key in the specified format.
 
 #### Exceptions
+
+FormatException
+: The algorithm for the public key does not support the specified format.
+
+NotSupportedException
+: The algorithm for the public key does not support exporting public keys.
+
+
+### Export(KeyBlobFormat, Span<byte>)
+
+Exports the public key as a BLOB in the specified format and writes it to the start
+of the specified span of bytes.
+
+    public int Export(
+        KeyBlobFormat format,
+        Span<byte> blob)
+
+#### Parameters
+
+format
+: One of the [[KeyBlobFormat|KeyBlobFormat Enum]] values that specifies the
+    format of the public key BLOB.
+
+blob
+: The span to fill with the public key BLOB. The size of the span must be
+    greater than or equal to `Key.GetKeyBlobSize(publicKey.Algorithm, format)`
+    where `publicKey` is the public key to export.
+
+#### Returns
+
+The actual number of bytes written to `blob`.
+
+#### Exceptions
+
+ArgumentException
+: The length of `blob` is less than the value returned by
+    [[GetKeyBlobSize|Key Class#GetKeyBlobSize(Algorithm, KeyBlobFormat)]]
+    for the specified format.
 
 FormatException
 : The algorithm for the public key does not support the specified format.
