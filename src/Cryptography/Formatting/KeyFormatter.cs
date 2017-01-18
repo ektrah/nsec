@@ -42,14 +42,7 @@ namespace NSec.Cryptography.Formatting
 
         public int BlobTextSize => Armor.GetEncodedSize(_blobSize, s_beginLabel, s_endLabel);
 
-        public bool IsValid(
-            ReadOnlySpan<byte> blob)
-        {
-            return blob.Length == _blobSize
-                && blob.Slice(0, _blobHeader.Length).SequenceEqual(_blobHeader);
-        }
-
-        public bool TryExport(
+        public int Export(
             SecureMemoryHandle keyHandle,
             Span<byte> blob)
         {
@@ -60,10 +53,10 @@ namespace NSec.Cryptography.Formatting
 
             new ReadOnlySpan<byte>(_blobHeader).CopyTo(blob);
             Serialize(keyHandle, blob.Slice(_blobHeader.Length));
-            return true;
+            return blob.Length;
         }
 
-        public bool TryExportText(
+        public int ExportText(
             SecureMemoryHandle keyHandle,
             Span<byte> blob)
         {
@@ -84,12 +77,19 @@ namespace NSec.Cryptography.Formatting
                 new ReadOnlySpan<byte>(_blobHeader).CopyTo(temp);
                 Serialize(keyHandle, temp.Slice(_blobHeader.Length));
                 Armor.Encode(temp, s_beginLabel, s_endLabel, blob);
-                return true;
+                return blob.Length;
             }
             finally
             {
                 sodium_memzero(ref temp.DangerousGetPinnableReference(), (UIntPtr)temp.Length);
             }
+        }
+
+        public bool IsValid(
+            ReadOnlySpan<byte> blob)
+        {
+            return blob.Length == _blobSize
+                && blob.Slice(0, _blobHeader.Length).SequenceEqual(_blobHeader);
         }
 
         public bool TryImport(

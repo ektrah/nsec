@@ -7,6 +7,7 @@ namespace NSec.Tests.Base
     public static class MacAlgorithmTests
     {
         public static readonly TheoryData<Type> MacAlgorithms = Registry.MacAlgorithms;
+        public static readonly TheoryData<Type, int> MacAlgorithmsAndKeySizes = GetMacAlgorithmsAndKeySizes(Registry.MacAlgorithms);
 
         #region Properties
 
@@ -26,6 +27,39 @@ namespace NSec.Tests.Base
             Assert.True(a.MinMacSize > 0);
             Assert.True(a.DefaultMacSize >= a.MinMacSize);
             Assert.True(a.MaxMacSize >= a.DefaultMacSize);
+        }
+
+        #endregion
+
+        #region Export #1
+
+        [Theory]
+        [MemberData(nameof(MacAlgorithmsAndKeySizes))]
+        public static void ExportImportSymmetric(Type algorithmType, int keySize)
+        {
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
+
+            using (var k = Key.Import(a, Utilities.RandomBytes.Slice(0, keySize), KeyBlobFormat.RawSymmetricKey, KeyFlags.AllowExport))
+            {
+                Assert.Equal(KeyFlags.AllowExport, k.Flags);
+
+                var b = k.Export(KeyBlobFormat.RawSymmetricKey);
+                Assert.NotNull(b);
+                Assert.Equal(b.Length, keySize);
+            }
+        }
+
+        private static TheoryData<Type, int> GetMacAlgorithmsAndKeySizes(TheoryData<Type> algorithmTypes)
+        {
+            var data = new TheoryData<Type, int>();
+            foreach (var algorithmType in algorithmTypes)
+            {
+                var a = (MacAlgorithm)Activator.CreateInstance((Type)algorithmType[0]);
+                data.Add((Type)algorithmType[0], a.DefaultKeySize);
+                data.Add((Type)algorithmType[0], a.MinKeySize);
+                data.Add((Type)algorithmType[0], a.MaxKeySize);
+            }
+            return data;
         }
 
         #endregion

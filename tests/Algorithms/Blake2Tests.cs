@@ -6,6 +6,8 @@ namespace NSec.Tests.Algorithms
 {
     public static class Blake2Tests
     {
+        public static readonly TheoryData<int> KeySizes = GetKeySizes();
+
         #region Properties
 
         [Fact]
@@ -22,6 +24,36 @@ namespace NSec.Tests.Algorithms
             Assert.True(a.DefaultHashSize >= a.MinHashSize);
             Assert.True(a.MaxHashSize >= a.DefaultHashSize);
             Assert.True(a.MaxHashSize <= 64);
+        }
+
+        #endregion
+
+        #region Export #1
+
+        [Theory]
+        [MemberData(nameof(KeySizes))]
+        public static void ExportImportSymmetric(int keySize)
+        {
+            var a = new Blake2();
+
+            using (var k = Key.Import(a, Utilities.RandomBytes.Slice(0, keySize), KeyBlobFormat.RawSymmetricKey, KeyFlags.AllowExport))
+            {
+                Assert.Equal(KeyFlags.AllowExport, k.Flags);
+
+                var b = k.Export(KeyBlobFormat.RawSymmetricKey);
+                Assert.NotNull(b);
+                Assert.Equal(b.Length, keySize);
+            }
+        }
+
+        private static TheoryData<int> GetKeySizes()
+        {
+            var data = new TheoryData<int>();
+            var a = new Blake2();
+            data.Add(a.DefaultKeySize);
+            data.Add(a.MinKeySize);
+            data.Add(a.MaxKeySize);
+            return data;
         }
 
         #endregion

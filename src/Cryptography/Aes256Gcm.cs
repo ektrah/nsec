@@ -104,6 +104,24 @@ namespace NSec.Cryptography
             Debug.Assert((ulong)ciphertext.Length == ciphertextLength);
         }
 
+        internal override int ExportKey(
+            SecureMemoryHandle keyHandle,
+            KeyBlobFormat format,
+            Span<byte> blob)
+        {
+            Debug.Assert(keyHandle != null);
+
+            switch (format)
+            {
+            case KeyBlobFormat.RawSymmetricKey:
+                return s_rawKeyFormatter.Export(keyHandle, blob);
+            case KeyBlobFormat.NSecSymmetricKey:
+                return s_nsecKeyFormatter.Export(keyHandle, blob);
+            default:
+                throw new FormatException();
+            }
+        }
+
         internal override int GetDerivedKeySize()
         {
             return crypto_aead_aes256gcm_KEYBYTES;
@@ -156,24 +174,6 @@ namespace NSec.Cryptography
 
             Debug.Assert(error != 0 || (ulong)plaintext.Length == plaintextLength);
             return error == 0;
-        }
-
-        internal override bool TryExportKey(
-            SecureMemoryHandle keyHandle,
-            KeyBlobFormat format,
-            Span<byte> blob)
-        {
-            Debug.Assert(keyHandle != null);
-
-            switch (format)
-            {
-            case KeyBlobFormat.RawSymmetricKey:
-                return s_rawKeyFormatter.TryExport(keyHandle, blob);
-            case KeyBlobFormat.NSecSymmetricKey:
-                return s_nsecKeyFormatter.TryExport(keyHandle, blob);
-            default:
-                return false;
-            }
         }
 
         internal override bool TryImportKey(

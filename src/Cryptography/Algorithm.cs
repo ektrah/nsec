@@ -18,6 +18,24 @@ namespace NSec.Cryptography
             throw new NotSupportedException();
         }
 
+        // Converts a libsodium secret key into a key blob.
+        internal virtual int ExportKey(
+            SecureMemoryHandle keyHandle,
+            KeyBlobFormat format,
+            Span<byte> blob)
+        {
+            throw new NotSupportedException();
+        }
+
+        // Converts a libsodium public key into a key blob.
+        internal virtual int ExportPublicKey(
+            ReadOnlySpan<byte> publicKeyBytes,
+            KeyBlobFormat format,
+            Span<byte> blob)
+        {
+            throw new NotSupportedException();
+        }
+
         // Gets the size for a derived key, if supported.
         internal virtual int GetDerivedKeySize()
         {
@@ -35,24 +53,6 @@ namespace NSec.Cryptography
         internal virtual ReadOnlySpan<KeyBlobFormat> GetSupportedKeyBlobFormats()
         {
             return ReadOnlySpan<KeyBlobFormat>.Empty;
-        }
-
-        // Converts a libsodium secret key into a key blob.
-        internal virtual bool TryExportKey(
-            SecureMemoryHandle keyHandle,
-            KeyBlobFormat format,
-            Span<byte> result)
-        {
-            throw new NotSupportedException();
-        }
-
-        // Converts a libsodium public key into a key blob.
-        internal virtual bool TryExportPublicKey(
-            ReadOnlySpan<byte> publicKeyBytes,
-            KeyBlobFormat format,
-            Span<byte> result)
-        {
-            throw new NotSupportedException();
         }
 
         // Converts a key blob into a libsodium secret key.

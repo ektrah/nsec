@@ -131,6 +131,20 @@ namespace NSec.Cryptography
             return s_supportedKeyBlobFormats;
         }
 
+        internal override int ExportKey(
+            SecureMemoryHandle keyHandle,
+            KeyBlobFormat format,
+            Span<byte> blob)
+        {
+            if (format != KeyBlobFormat.RawSymmetricKey)
+                throw new FormatException();
+            if (blob.Length < keyHandle.Length)
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(blob));
+
+            Debug.Assert(keyHandle != null);
+            return keyHandle.Export(blob);
+        }
+
         internal override void HashCore(
             ReadOnlySpan<byte> data,
             Span<byte> hash)
@@ -141,25 +155,6 @@ namespace NSec.Cryptography
             crypto_generichash_blake2b_init(out crypto_generichash_blake2b_state state, IntPtr.Zero, UIntPtr.Zero, (UIntPtr)hash.Length);
             crypto_generichash_blake2b_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
             crypto_generichash_blake2b_final(ref state, ref hash.DangerousGetPinnableReference(), (UIntPtr)hash.Length);
-        }
-
-        internal override bool TryExportKey(
-            SecureMemoryHandle keyHandle,
-            KeyBlobFormat format,
-            Span<byte> blob)
-        {
-            if (blob.Length < keyHandle.Length)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(blob));
-
-            Debug.Assert(keyHandle != null);
-
-            if (format != KeyBlobFormat.RawSymmetricKey)
-            {
-                return false;
-            }
-
-            keyHandle.Export(blob);
-            return true;
         }
 
         internal override bool TryImportKey(

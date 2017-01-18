@@ -31,13 +31,14 @@ internal static partial class Interop
                 return new Span<byte>(handle.ToPointer(), _length);
             }
 
-            public void Export(Span<byte> span)
+            public int Export(Span<byte> span)
             {
                 bool addedRef = false;
                 try
                 {
                     DangerousAddRef(ref addedRef);
                     DangerousGetSpan().CopyTo(span);
+                    return _length;
                 }
                 finally
                 {

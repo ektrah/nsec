@@ -65,6 +65,20 @@ namespace NSec.Cryptography
             randombytes_buf(keyHandle, (UIntPtr)keyHandle.Length);
         }
 
+        internal override int ExportKey(
+            SecureMemoryHandle keyHandle,
+            KeyBlobFormat format,
+            Span<byte> blob)
+        {
+            if (format != KeyBlobFormat.RawSymmetricKey)
+                throw new FormatException();
+            if (blob.Length < keyHandle.Length)
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(blob));
+
+            Debug.Assert(keyHandle != null);
+            return keyHandle.Export(blob);
+        }
+
         internal override int GetDerivedKeySize()
         {
             return DefaultKeySize;
@@ -139,25 +153,6 @@ namespace NSec.Cryptography
                     sodium_memzero(ref temp.DangerousGetPinnableReference(), (UIntPtr)temp.Length);
                 }
             }
-        }
-
-        internal override bool TryExportKey(
-            SecureMemoryHandle keyHandle,
-            KeyBlobFormat format,
-            Span<byte> blob)
-        {
-            if (blob.Length < keyHandle.Length)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(blob));
-
-            Debug.Assert(keyHandle != null);
-
-            if (format != KeyBlobFormat.RawSymmetricKey)
-            {
-                return false;
-            }
-
-            keyHandle.Export(blob);
-            return true;
         }
 
         internal override bool TryImportKey(

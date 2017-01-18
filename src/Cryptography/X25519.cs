@@ -104,6 +104,46 @@ namespace NSec.Cryptography
             crypto_scalarmult_curve25519_base(publicKeyBytes, keyHandle);
         }
 
+        internal override int ExportKey(
+            SecureMemoryHandle keyHandle,
+            KeyBlobFormat format,
+            Span<byte> blob)
+        {
+            switch (format)
+            {
+            case KeyBlobFormat.RawPrivateKey:
+                return s_rawPrivateKeyFormatter.Export(keyHandle, blob);
+            case KeyBlobFormat.NSecPrivateKey:
+                return s_nsecPrivateKeyFormatter.Export(keyHandle, blob);
+            case KeyBlobFormat.PkixPrivateKey:
+                return s_pkixPrivateKeyFormatter.Export(keyHandle, blob);
+            case KeyBlobFormat.PkixPrivateKeyText:
+                return s_pkixPrivateKeyFormatter.ExportText(keyHandle, blob);
+            default:
+                throw new FormatException();
+            }
+        }
+
+        internal override int ExportPublicKey(
+            ReadOnlySpan<byte> publicKeyBytes,
+            KeyBlobFormat format,
+            Span<byte> blob)
+        {
+            switch (format)
+            {
+            case KeyBlobFormat.RawPublicKey:
+                return s_rawPublicKeyFormatter.Export(publicKeyBytes, blob);
+            case KeyBlobFormat.NSecPublicKey:
+                return s_nsecPublicKeyFormatter.Export(publicKeyBytes, blob);
+            case KeyBlobFormat.PkixPublicKey:
+                return s_pkixPublicKeyFormatter.Export(publicKeyBytes, blob);
+            case KeyBlobFormat.PkixPublicKeyText:
+                return s_pkixPublicKeyFormatter.ExportText(publicKeyBytes, blob);
+            default:
+                throw new FormatException();
+            }
+        }
+
         internal override int? GetKeyBlobSize(
             KeyBlobFormat format)
         {
@@ -154,46 +194,6 @@ namespace NSec.Cryptography
                 ref otherPartyPublicKey.DangerousGetPinnableReference());
 
             return error == 0;
-        }
-
-        internal override bool TryExportKey(
-            SecureMemoryHandle keyHandle,
-            KeyBlobFormat format,
-            Span<byte> blob)
-        {
-            switch (format)
-            {
-            case KeyBlobFormat.RawPrivateKey:
-                return s_rawPrivateKeyFormatter.TryExport(keyHandle, blob);
-            case KeyBlobFormat.NSecPrivateKey:
-                return s_nsecPrivateKeyFormatter.TryExport(keyHandle, blob);
-            case KeyBlobFormat.PkixPrivateKey:
-                return s_pkixPrivateKeyFormatter.TryExport(keyHandle, blob);
-            case KeyBlobFormat.PkixPrivateKeyText:
-                return s_pkixPrivateKeyFormatter.TryExportText(keyHandle, blob);
-            default:
-                return false;
-            }
-        }
-
-        internal override bool TryExportPublicKey(
-            ReadOnlySpan<byte> publicKeyBytes,
-            KeyBlobFormat format,
-            Span<byte> blob)
-        {
-            switch (format)
-            {
-            case KeyBlobFormat.RawPublicKey:
-                return s_rawPublicKeyFormatter.TryExport(publicKeyBytes, blob);
-            case KeyBlobFormat.NSecPublicKey:
-                return s_nsecPublicKeyFormatter.TryExport(publicKeyBytes, blob);
-            case KeyBlobFormat.PkixPublicKey:
-                return s_pkixPublicKeyFormatter.TryExport(publicKeyBytes, blob);
-            case KeyBlobFormat.PkixPublicKeyText:
-                return s_pkixPublicKeyFormatter.TryExportText(publicKeyBytes, blob);
-            default:
-                return false;
-            }
         }
 
         internal override bool TryImportKey(
