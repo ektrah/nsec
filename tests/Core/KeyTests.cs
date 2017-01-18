@@ -450,6 +450,26 @@ namespace NSec.Tests.Core
             }
         }
 
+        [Theory]
+        [MemberData(nameof(PublicKeyBlobFormats))]
+        [MemberData(nameof(PrivateKeyBlobFormats))]
+        [MemberData(nameof(SymmetricKeyBlobFormats))]
+        public static void ExportWithLargeSpan(Type algorithmType, KeyBlobFormat format)
+        {
+            var a = (Algorithm)Activator.CreateInstance(algorithmType);
+
+            using (var k = new Key(a, KeyFlags.AllowExport))
+            {
+                Assert.Equal(KeyFlags.AllowExport, k.Flags);
+
+                var blob = new byte[1024];
+                var blobSize = k.Export(format, blob);
+
+                Assert.True(blobSize > 0);
+                Assert.True(blobSize <= blob.Length);
+            }
+        }
+
         #endregion
 
         #region Dispose
