@@ -112,6 +112,80 @@ namespace NSec.Tests.Core
 
         #endregion
 
+        #region GetKeyBlobSize
+
+        [Fact]
+        public static void GetBlobSizeWithNullAlgorithm()
+        {
+            Assert.Throws<ArgumentNullException>("algorithm", () => Key.GetKeyBlobSize(null, KeyBlobFormat.None));
+        }
+
+        [Theory]
+        [MemberData(nameof(AsymmetricKeyAlgorithms))]
+        [MemberData(nameof(SymmetricKeyAlgorithms))]
+        public static void GetBlobSizeWithFormatNone(Type algorithmType)
+        {
+            var a = (Algorithm)Activator.CreateInstance(algorithmType);
+
+            Assert.Throws<ArgumentException>("format", () => Key.GetKeyBlobSize(a, KeyBlobFormat.None));
+        }
+
+        [Theory]
+        [MemberData(nameof(PublicKeyBlobFormats))]
+        [MemberData(nameof(PrivateKeyBlobFormats))]
+        [MemberData(nameof(SymmetricKeyBlobFormats))]
+        public static void GetBlobSizeSuccess(Type algorithmType, KeyBlobFormat format)
+        {
+            var a = (Algorithm)Activator.CreateInstance(algorithmType);
+
+            var size = Key.GetKeyBlobSize(a, format);
+
+            if (algorithmType == typeof(Blake2) ||
+                algorithmType == typeof(HmacSha256) ||
+                algorithmType == typeof(HmacSha512))
+            {
+                Assert.True(size == null);
+            }
+            else
+            {
+                Assert.True(size != null);
+                Assert.True(size > 0);
+            }
+        }
+
+        #endregion
+
+        #region Import
+
+        [Fact]
+        public static void GetBlobFormatsWithNullAlgorithm()
+        {
+            Assert.Throws<ArgumentNullException>("algorithm", () => Key.GetSupportedKeyBlobFormats(null));
+        }
+
+        [Theory]
+        [MemberData(nameof(AsymmetricKeyAlgorithms))]
+        [MemberData(nameof(SymmetricKeyAlgorithms))]
+        public static void GetBlobFormatsSuccess(Type algorithmType)
+        {
+            var a = (Algorithm)Activator.CreateInstance(algorithmType);
+
+            var formats = Key.GetSupportedKeyBlobFormats(a);
+
+            if (algorithmType == typeof(Blake2) ||
+                algorithmType == typeof(HmacSha256) ||
+                algorithmType == typeof(HmacSha512))
+            {
+                Assert.True(formats.IsEmpty);
+            }
+            else
+            {
+                Assert.True(formats.Length > 0);
+            }
+        }
+
+        #endregion
+
         #region Import
 
         [Fact]

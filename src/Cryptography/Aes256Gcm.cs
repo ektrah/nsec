@@ -40,6 +40,12 @@ namespace NSec.Cryptography
         private static readonly Lazy<int> s_isAvailable = new Lazy<int>(new Func<int>(crypto_aead_aes256gcm_is_available));
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
+        private static readonly KeyBlobFormat[] s_supportedKeyBlobFormats =
+        {
+            KeyBlobFormat.NSecSymmetricKey,
+            KeyBlobFormat.RawSymmetricKey,
+        };
+
         private static readonly KeyFormatter s_nsecKeyFormatter =
             new KeyFormatter(crypto_aead_aes256gcm_KEYBYTES, new byte[]
         {
@@ -101,6 +107,25 @@ namespace NSec.Cryptography
         internal override int GetDerivedKeySize()
         {
             return crypto_aead_aes256gcm_KEYBYTES;
+        }
+
+        internal override int? GetKeyBlobSize(
+            KeyBlobFormat format)
+        {
+            switch (format)
+            {
+            case KeyBlobFormat.RawSymmetricKey:
+                return s_rawKeyFormatter.BlobSize;
+            case KeyBlobFormat.NSecSymmetricKey:
+                return s_nsecKeyFormatter.BlobSize;
+            default:
+                return null;
+            }
+        }
+
+        internal override ReadOnlySpan<KeyBlobFormat> GetSupportedKeyBlobFormats()
+        {
+            return s_supportedKeyBlobFormats;
         }
 
         internal override bool TryDecryptCore(

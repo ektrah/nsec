@@ -30,6 +30,19 @@ namespace NSec.Cryptography
     {
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
+        private static readonly KeyBlobFormat[] s_supportedKeyBlobFormats =
+        {
+            KeyBlobFormat.PkixPrivateKeyText,
+            KeyBlobFormat.PkixPrivateKey,
+            KeyBlobFormat.NSecPrivateKey,
+            KeyBlobFormat.RawPrivateKey,
+
+            KeyBlobFormat.PkixPublicKeyText,
+            KeyBlobFormat.PkixPublicKey,
+            KeyBlobFormat.NSecPublicKey,
+            KeyBlobFormat.RawPublicKey,
+        };
+
         private static readonly KeyFormatter s_nsecPrivateKeyFormatter =
             new X25519KeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[]
         {
@@ -89,6 +102,39 @@ namespace NSec.Cryptography
             SecureMemoryHandle.Alloc(crypto_scalarmult_curve25519_SCALARBYTES, out keyHandle);
             randombytes_buf(keyHandle, (UIntPtr)keyHandle.Length);
             crypto_scalarmult_curve25519_base(publicKeyBytes, keyHandle);
+        }
+
+        internal override int? GetKeyBlobSize(
+            KeyBlobFormat format)
+        {
+            switch (format)
+            {
+            case KeyBlobFormat.RawPrivateKey:
+                return s_rawPrivateKeyFormatter.BlobSize;
+            case KeyBlobFormat.NSecPrivateKey:
+                return s_nsecPrivateKeyFormatter.BlobSize;
+            case KeyBlobFormat.PkixPrivateKey:
+                return s_pkixPrivateKeyFormatter.BlobSize;
+            case KeyBlobFormat.PkixPrivateKeyText:
+                return s_pkixPrivateKeyFormatter.BlobSize;
+
+            case KeyBlobFormat.RawPublicKey:
+                return s_rawPublicKeyFormatter.BlobSize;
+            case KeyBlobFormat.NSecPublicKey:
+                return s_nsecPublicKeyFormatter.BlobSize;
+            case KeyBlobFormat.PkixPublicKey:
+                return s_pkixPublicKeyFormatter.BlobSize;
+            case KeyBlobFormat.PkixPublicKeyText:
+                return s_pkixPublicKeyFormatter.BlobSize;
+
+            default:
+                return null;
+            }
+        }
+
+        internal override ReadOnlySpan<KeyBlobFormat> GetSupportedKeyBlobFormats()
+        {
+            return s_supportedKeyBlobFormats;
         }
 
         internal override bool TryAgreeCore(

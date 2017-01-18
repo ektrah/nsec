@@ -36,6 +36,15 @@ namespace NSec.Cryptography.Formatting
             _blobHeader = blobHeader;
         }
 
+        public int BlobSize => _blobSize;
+
+        public bool IsValid(
+            ReadOnlySpan<byte> blob)
+        {
+            return blob.Length == _blobSize
+                && blob.Slice(0, _blobHeader.Length).SequenceEqual(_blobHeader);
+        }
+
         public bool TryExport(
             ReadOnlySpan<byte> publicKeyBytes,
             out byte[] result)
@@ -62,7 +71,7 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> blob,
             out byte[] result)
         {
-            if (blob.Length != _blobSize || !blob.Slice(0, _blobHeader.Length).SequenceEqual(_blobHeader))
+            if (!IsValid(blob))
             {
                 result = null;
                 return false;

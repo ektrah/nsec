@@ -78,6 +78,27 @@ namespace NSec.Cryptography
             return new Key(algorithm, flags);
         }
 
+        public static int? GetKeyBlobSize(
+            Algorithm algorithm,
+            KeyBlobFormat format)
+        {
+            if (algorithm == null)
+                throw new ArgumentNullException(nameof(algorithm));
+            if (format == KeyBlobFormat.None)
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(format));
+
+            return algorithm.GetKeyBlobSize(format);
+        }
+
+        public static ReadOnlySpan<KeyBlobFormat> GetSupportedKeyBlobFormats(
+            Algorithm algorithm)
+        {
+            if (algorithm == null)
+                throw new ArgumentNullException(nameof(algorithm));
+
+            return algorithm.GetSupportedKeyBlobFormats();
+        }
+
         public static Key Import(
            Algorithm algorithm,
            ReadOnlySpan<byte> blob,
