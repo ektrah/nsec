@@ -1,6 +1,7 @@
 *.suo
 *.user
 *~
+.cookie
 .vs
 bin
 obj
