@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace NSec.Cryptography.Formatting
@@ -44,30 +45,37 @@ namespace NSec.Cryptography.Formatting
             0x2D, 0x2D, 0x2D, 0x2D, 0x2D,
         };
 
-        public static byte[] Encode(
+        public static void Encode(
             ReadOnlySpan<byte> input,
             ReadOnlySpan<byte> beginLabel,
-            ReadOnlySpan<byte> endLabel)
+            ReadOnlySpan<byte> endLabel,
+            Span<byte> output)
         {
-            int base64Length = ((input.Length + 3 - 1) / 3) * 4;
-            base64Length += ((base64Length + 64 - 1) / 64) * 2;
+            Debug.Assert(output.Length == GetEncodedSize(input.Length, beginLabel, endLabel));
 
-            byte[] output = new byte[
-                beginLabel.Length + 2 +
-                base64Length +
-                endLabel.Length + 2];
-
-            beginLabel.CopyTo(new Span<byte>(output, 0, beginLabel.Length));
+            beginLabel.CopyTo(output);
             output[beginLabel.Length + 0] = (byte)'\r';
             output[beginLabel.Length + 1] = (byte)'\n';
 
-            EncodeBase64(input, new Span<byte>(output, beginLabel.Length + 2, base64Length));
+            EncodeBase64(input, output.Slice(beginLabel.Length + 2));
 
-            endLabel.CopyTo(new Span<byte>(output, output.Length - (endLabel.Length + 2), endLabel.Length));
+            endLabel.CopyTo(output.Slice(output.Length - 2 - endLabel.Length));
             output[output.Length - 2] = (byte)'\r';
             output[output.Length - 1] = (byte)'\n';
+        }
 
-            return output;
+        public static int GetEncodedSize(
+            int inputLength,
+            ReadOnlySpan<byte> beginLabel,
+            ReadOnlySpan<byte> endLabel)
+        {
+            int base64Length = ((inputLength + 3 - 1) / 3) * 4;
+            base64Length += ((base64Length + 64 - 1) / 64) * 2;
+
+            return
+                beginLabel.Length + 2 +
+                base64Length +
+                endLabel.Length + 2;
         }
 
         public static bool TryDecode(

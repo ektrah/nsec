@@ -176,10 +176,27 @@ namespace NSec.Cryptography
         {
             if (format == KeyBlobFormat.None)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(format));
+
+            int? keyBlobSize = GetKeyBlobSize(_algorithm, format);
+
+            if (!keyBlobSize.HasValue)
+            {
+                throw new FormatException();
+            }
+
+            byte[] blob = new byte[keyBlobSize.GetValueOrDefault()];
+            Export(format, blob);
+            return blob;
+        }
+
+        public void Export(
+            KeyBlobFormat format,
+            Span<byte> blob)
+        {
+            if (format == KeyBlobFormat.None)
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(format));
             if (_handle.IsClosed)
                 throw new ObjectDisposedException(GetType().FullName);
-
-            byte[] result;
 
             if (format < KeyBlobFormat.None)
             {
@@ -196,20 +213,18 @@ namespace NSec.Cryptography
 
                 _exported = true;
 
-                if (!_algorithm.TryExportKey(_handle, format, out result))
+                if (!_algorithm.TryExportKey(_handle, format, blob))
                 {
                     throw new FormatException();
                 }
             }
             else
             {
-                if (!_algorithm.TryExportPublicKey(_publicKey.Bytes, format, out result))
+                if (!_algorithm.TryExportPublicKey(_publicKey.Bytes, format, blob))
                 {
                     throw new FormatException();
                 }
             }
-
-            return result;
         }
     }
 }

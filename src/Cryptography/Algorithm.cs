@@ -41,7 +41,7 @@ namespace NSec.Cryptography
         internal virtual bool TryExportKey(
             SecureMemoryHandle keyHandle,
             KeyBlobFormat format,
-            out byte[] result)
+            Span<byte> result)
         {
             throw new NotSupportedException();
         }
@@ -50,7 +50,7 @@ namespace NSec.Cryptography
         internal virtual bool TryExportPublicKey(
             ReadOnlySpan<byte> publicKeyBytes,
             KeyBlobFormat format,
-            out byte[] result)
+            Span<byte> result)
         {
             throw new NotSupportedException();
         }

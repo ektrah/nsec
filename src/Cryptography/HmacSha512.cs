@@ -41,6 +41,11 @@ namespace NSec.Cryptography
 
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
+        private static readonly KeyBlobFormat[] s_supportedKeyBlobFormats =
+        {
+            KeyBlobFormat.RawSymmetricKey,
+        };
+
         public HmacSha512() : base(
             minKeySize: SHA512HashSize,
             defaultKeySize: SHA512HashSize,
@@ -67,6 +72,21 @@ namespace NSec.Cryptography
         internal override int GetDerivedKeySize()
         {
             return DefaultKeySize;
+        }
+
+        internal override int? GetKeyBlobSize(KeyBlobFormat format)
+        {
+            if (format != KeyBlobFormat.RawSymmetricKey)
+            {
+                return null;
+            }
+
+            return MaxKeySize;
+        }
+
+        internal override ReadOnlySpan<KeyBlobFormat> GetSupportedKeyBlobFormats()
+        {
+            return s_supportedKeyBlobFormats;
         }
 
         internal override void SignCore(
@@ -128,18 +148,19 @@ namespace NSec.Cryptography
         internal override bool TryExportKey(
             SecureMemoryHandle keyHandle,
             KeyBlobFormat format,
-            out byte[] result)
+            Span<byte> blob)
         {
+            if (blob.Length < keyHandle.Length)
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(blob));
+
             Debug.Assert(keyHandle != null);
 
             if (format != KeyBlobFormat.RawSymmetricKey)
             {
-                result = null;
                 return false;
             }
 
-            result = new byte[keyHandle.Length];
-            keyHandle.Export(result);
+            keyHandle.Export(blob);
             return true;
         }
 

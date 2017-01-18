@@ -158,18 +158,17 @@ namespace NSec.Cryptography
         internal override bool TryExportKey(
             SecureMemoryHandle keyHandle,
             KeyBlobFormat format,
-            out byte[] result)
+            Span<byte> blob)
         {
             Debug.Assert(keyHandle != null);
 
             switch (format)
             {
             case KeyBlobFormat.RawSymmetricKey:
-                return s_rawKeyFormatter.TryExport(keyHandle, out result);
+                return s_rawKeyFormatter.TryExport(keyHandle, blob);
             case KeyBlobFormat.NSecSymmetricKey:
-                return s_nsecKeyFormatter.TryExport(keyHandle, out result);
+                return s_nsecKeyFormatter.TryExport(keyHandle, blob);
             default:
-                result = null;
                 return false;
             }
         }

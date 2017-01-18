@@ -105,7 +105,7 @@ namespace NSec.Tests.Core
 
         #endregion
 
-        #region Export
+        #region Export #1
 
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
@@ -134,6 +134,34 @@ namespace NSec.Tests.Core
                 Assert.NotNull(pk);
                 Assert.Equal(k.PublicKey, pk);
                 Assert.Same(a, pk.Algorithm);
+            }
+        }
+
+        #endregion
+
+        #region Export #2
+
+        [Theory]
+        [MemberData(nameof(AsymmetricKeyAlgorithms))]
+        public static void ExportWithSpanWithFormatNone(Type algorithmType)
+        {
+            var a = (Algorithm)Activator.CreateInstance(algorithmType);
+
+            using (var k = new Key(a))
+            {
+                Assert.Throws<ArgumentException>("format", () => k.PublicKey.Export(KeyBlobFormat.None, Span<byte>.Empty));
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(PublicKeyBlobFormats))]
+        public static void ExportWithSpanTooSmall(Type algorithmType, KeyBlobFormat format)
+        {
+            var a = (Algorithm)Activator.CreateInstance(algorithmType);
+
+            using (var k = new Key(a))
+            {
+                Assert.Throws<ArgumentException>("blob", () => k.PublicKey.Export(format, Span<byte>.Empty));
             }
         }
 

@@ -140,22 +140,13 @@ namespace NSec.Tests.Core
 
             var size = Key.GetKeyBlobSize(a, format);
 
-            if (algorithmType == typeof(Blake2) ||
-                algorithmType == typeof(HmacSha256) ||
-                algorithmType == typeof(HmacSha512))
-            {
-                Assert.True(size == null);
-            }
-            else
-            {
-                Assert.True(size != null);
-                Assert.True(size > 0);
-            }
+            Assert.True(size != null);
+            Assert.True(size > 0);
         }
 
         #endregion
 
-        #region Import
+        #region GetSupportedKeyBlobFormats
 
         [Fact]
         public static void GetBlobFormatsWithNullAlgorithm()
@@ -172,16 +163,7 @@ namespace NSec.Tests.Core
 
             var formats = Key.GetSupportedKeyBlobFormats(a);
 
-            if (algorithmType == typeof(Blake2) ||
-                algorithmType == typeof(HmacSha256) ||
-                algorithmType == typeof(HmacSha512))
-            {
-                Assert.True(formats.IsEmpty);
-            }
-            else
-            {
-                Assert.True(formats.Length > 0);
-            }
+            Assert.True(formats.Length > 0);
         }
 
         #endregion
@@ -262,7 +244,7 @@ namespace NSec.Tests.Core
 
         #endregion
 
-        #region Export
+        #region Export #1
 
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
@@ -431,6 +413,41 @@ namespace NSec.Tests.Core
             Assert.Throws<ObjectDisposedException>(() => k.Export(KeyBlobFormat.RawSymmetricKey));
             Assert.Throws<ObjectDisposedException>(() => k.Export(KeyBlobFormat.RawSymmetricKey));
             Assert.Throws<ObjectDisposedException>(() => k.Export(KeyBlobFormat.RawSymmetricKey));
+        }
+
+        #endregion
+
+        #region Export #2
+
+        [Theory]
+        [MemberData(nameof(AsymmetricKeyAlgorithms))]
+        [MemberData(nameof(SymmetricKeyAlgorithms))]
+        public static void ExportWithSpanWithFormatNone(Type algorithmType)
+        {
+            var a = (Algorithm)Activator.CreateInstance(algorithmType);
+
+            using (var k = new Key(a, KeyFlags.None))
+            {
+                Assert.Equal(KeyFlags.None, k.Flags);
+
+                Assert.Throws<ArgumentException>("format", () => k.Export(KeyBlobFormat.None, Span<byte>.Empty));
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(PublicKeyBlobFormats))]
+        [MemberData(nameof(PrivateKeyBlobFormats))]
+        [MemberData(nameof(SymmetricKeyBlobFormats))]
+        public static void ExportWithSpanTooSmall(Type algorithmType, KeyBlobFormat format)
+        {
+            var a = (Algorithm)Activator.CreateInstance(algorithmType);
+
+            using (var k = new Key(a, KeyFlags.AllowExport))
+            {
+                Assert.Equal(KeyFlags.AllowExport, k.Flags);
+
+                Assert.Throws<ArgumentException>("blob", () => k.Export(format, Span<byte>.Empty));
+            }
         }
 
         #endregion

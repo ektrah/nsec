@@ -84,12 +84,29 @@ namespace NSec.Cryptography
             if (format == KeyBlobFormat.None)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(format));
 
-            if (!_algorithm.TryExportPublicKey(_bytes, format, out byte[] result))
+            int? keyBlobSize = Key.GetKeyBlobSize(_algorithm, format);
+
+            if (!keyBlobSize.HasValue)
             {
                 throw new FormatException();
             }
 
-            return result;
+            byte[] blob = new byte[keyBlobSize.GetValueOrDefault()];
+            Export(format, blob);
+            return blob;
+        }
+
+        public void Export(
+            KeyBlobFormat format,
+            Span<byte> blob)
+        {
+            if (format == KeyBlobFormat.None)
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(format));
+
+            if (!_algorithm.TryExportPublicKey(_bytes, format, blob))
+            {
+                throw new FormatException();
+            }
         }
 
         public override int GetHashCode()
