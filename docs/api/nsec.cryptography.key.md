@@ -290,9 +290,7 @@ format
     format of the key BLOB.
 
 blob
-: The span to fill with the key BLOB. The size of the span must be greater than
-    or equal to `Key.GetKeyBlobSize(key.Algorithm, format)` where `key` is the
-    key to export.
+: The span to fill with the key BLOB.
     
 #### Returns
 
@@ -301,9 +299,10 @@ The actual number of bytes written to `blob`.
 #### Exceptions
 
 ArgumentException
-: The length of `blob` is less than the value returned by
+: The length of `blob` is less than the size of the key BLOB. The maximum BLOB
+    size can be determined using the
     [[GetKeyBlobSize|Key Class#GetKeyBlobSize(Algorithm, KeyBlobFormat)]]
-    for the specified format.
+    method.
 
 FormatException
 : The algorithm for the key does not support the specified format.
