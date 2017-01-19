@@ -1,9 +1,9 @@
 # Installation
 
-**Note:** NSec depends on .NET Core pre-release features and is therefore not
-yet ready for production.
+NSec depends on a few .NET Core pre-release features and is therefore not
+quite ready yet.
 
-You can use a pre-release version of NSec in a .NET Core project as follows:
+If you're adventurous, you can try out a pre-release version of NSec as follows:
 
 1. Download and install the [.NET Core SDK 1.0 Preview 4](https://github.com/dotnet/core/blob/master/release-notes/preview4-download.md)
     or the latest [Visual Studio 2017 Release Candidate](https://www.visualstudio.com/vs/visual-studio-2017-rc/).
@@ -12,7 +12,7 @@ You can use a pre-release version of NSec in a .NET Core project as follows:
 
 3. Create a new .NET Core project and add the following package reference to the `.csproj` file:
 
-        <PackageReference Include="NSec.Cryptography" Version="1.0.0-preview-24913-01" />
+        <PackageReference Include="NSec.Cryptography" Version="1.0.0-preview-24919-01" />
 
 
 ## Supported Platforms

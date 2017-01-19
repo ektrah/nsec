@@ -38,16 +38,10 @@ verify the signature.
 
     {{README Example}}
 
-More examples are in the [[documentation|NSec Documentation]].
-
 
 ## Installation
 
-**Note:** NSec depends on .NET Core pre-release features and is therefore not
-yet ready for prime time.
-
-If you're adventurous, you can try out a pre-release version of NSec.
-See [[Installation]] for details.
+Soon&trade; (waiting for VS2017)
 
 
 ## Documentation

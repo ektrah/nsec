@@ -19,7 +19,7 @@ namespace Snippets
             using (var key = new Key(algorithm))
             {
                 // generate some data to be signed
-                var data = Encoding.UTF8.GetBytes("Hello World");
+                var data = Encoding.UTF8.GetBytes("Use the Force, Luke!");
 
                 // sign the data with the private key
                 var signature = algorithm.Sign(key, data);
