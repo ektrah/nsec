@@ -18,8 +18,8 @@ NSec.Cryptography.Key
 NSec.Cryptography.X25519</Description>
     <Copyright>© 2017 Klaus Hartke</Copyright>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/ektrah/nsec/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/ektrah/nsec</PackageProjectUrl>
+    <PackageLicenseUrl>https://nsec.rocks/license</PackageLicenseUrl>
+    <PackageProjectUrl>https://nsec.rocks/</PackageProjectUrl>
     <PackageIconUrl>https://git.io/vMM0H</PackageIconUrl>
     <PackageTags>aead aes blake2b chacha20 cryptography curve25519 ed25519 eddsa encryption gcm hash hkdf hmac libsodium poly1305 security sha256 sha512 x25519</PackageTags>
   </PropertyGroup>
