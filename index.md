@@ -22,8 +22,8 @@ rather than on the managed heap and is securely erased when no longer needed.
 * **Fast** -- libsodium is fast, and cryptographic operations in libsodium never
 allocate memory on the heap. NSec follows libsodium's example and avoids
 allocations and expensive copies in almost all cases. Only methods that return
-byte arrays or create keys and shared secrets do allocate memory and should
-therefore be kept outside hot paths.
+byte arrays, keys, or shared secrets do allocate memory and should be kept
+outside hot paths.
 
 * **Agile** -- NSec features a simple object model with cryptographic agility in
 mind. All algorithms derive from a small set of base classes. This helps writing
@@ -91,4 +91,4 @@ security protocols, such as TLS or JSON Web Token. Don't roll your own security.
 ## License
 
 NSec is licensed under the [[MIT license|License]].
-This documentation is licensed under [[a Creative Commons license|License]].
+The NSec documentation is licensed under [[a Creative Commons license|License]].
