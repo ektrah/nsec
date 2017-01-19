@@ -31,10 +31,10 @@ flags
 #### Exceptions
 
 ArgumentNullException
-: `algorithm` is null.
+: `algorithm` is `null`.
 
 NotSupportedException
-: The specified algorithm does not support keys.
+: The specified algorithm does not use keys.
 
 
 ## Properties
@@ -99,10 +99,10 @@ flags
 #### Exceptions
 
 ArgumentNullException
-: `algorithm` is null.
+: `algorithm` is `null`.
 
 NotSupportedException
-: The specified algorithm does not support keys.
+: The specified algorithm does not use keys.
 
 
 ### GetKeyBlobSize(Algorithm, KeyBlobFormat)
@@ -179,10 +179,11 @@ A new instance of the [[Key|Key Class]] class that represents the imported key.
 #### Exceptions
 
 ArgumentNullException
-: `algorithm` is null.
+: `algorithm` is `null`.
 
 FormatException
-: The key BLOB is not in the correct format or the format is not supported.
+: The key BLOB is not in the correct format or the format is not supported by
+    the algorithm.
 
 NotSupportedException
 : The specified algorithm does not support importing keys.
@@ -226,7 +227,7 @@ result
 #### Exceptions
 
 ArgumentNullException
-: `algorithm` is null.
+: `algorithm` is `null`.
 
 NotSupportedException
 : The specified algorithm does not support importing keys.
@@ -276,8 +277,8 @@ ObjectDisposedException
 
 ### Export(KeyBlobFormat, Span<byte>)
 
-Exports the key as a BLOB in the specified format and writes it to the start
-of the specified span of bytes.
+Exports the key as a BLOB in the specified format and writes it to the specified
+span of bytes.
 
     public int Export(
         KeyBlobFormat format,
@@ -290,7 +291,10 @@ format
     format of the key BLOB.
 
 blob
-: The span to fill with the key BLOB.
+: The span to write the key BLOB to. The span must be large enough to hold the
+    the key BLOB. The maximum BLOB size can be determined using the
+    [[GetKeyBlobSize|Key Class#GetKeyBlobSize(Algorithm, KeyBlobFormat)]]
+    method.
     
 #### Returns
 
@@ -299,10 +303,7 @@ The actual number of bytes written to `blob`.
 #### Exceptions
 
 ArgumentException
-: The length of `blob` is less than the size of the key BLOB. The maximum BLOB
-    size can be determined using the
-    [[GetKeyBlobSize|Key Class#GetKeyBlobSize(Algorithm, KeyBlobFormat)]]
-    method.
+: The length of `blob` is less than the size of the key BLOB.
 
 FormatException
 : The algorithm for the key does not support the specified format.

@@ -54,7 +54,7 @@ imported key.
 #### Exceptions
 
 ArgumentNullException
-: `algorithm` is null.
+: `algorithm` is `null`.
 
 FormatException
 : The public key BLOB is not in the correct format or the format is not
