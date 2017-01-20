@@ -68,7 +68,7 @@ namespace NSec.Cryptography
         {
             return (this == other)
                 || (other != null)
-                && (_algorithm == other._algorithm)
+                && (_algorithm.GetType() == other._algorithm.GetType())
                 && ReadOnlySpanExtensions.SequenceEqual(_bytes, other._bytes);
         }
 
