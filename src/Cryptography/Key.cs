@@ -78,7 +78,7 @@ namespace NSec.Cryptography
             return new Key(algorithm, flags);
         }
 
-        public static int? GetKeyBlobSize(
+        public static int GetKeyBlobSize(
             Algorithm algorithm,
             KeyBlobFormat format)
         {

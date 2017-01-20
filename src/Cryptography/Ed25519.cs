@@ -147,7 +147,7 @@ namespace NSec.Cryptography
             }
         }
 
-        internal override int? GetKeyBlobSize(
+        internal override int GetKeyBlobSize(
             KeyBlobFormat format)
         {
             switch (format)
@@ -171,7 +171,7 @@ namespace NSec.Cryptography
                 return s_pkixPublicKeyFormatter.BlobTextSize;
 
             default:
-                return null;
+                throw new FormatException();
             }
         }
 

@@ -131,6 +131,16 @@ namespace NSec.Tests.Core
         }
 
         [Theory]
+        [MemberData(nameof(AsymmetricKeyAlgorithms))]
+        [MemberData(nameof(SymmetricKeyAlgorithms))]
+        public static void GetBlobSizeWithInvalidFormat(Type algorithmType)
+        {
+            var a = (Algorithm)Activator.CreateInstance(algorithmType);
+
+            Assert.Throws<FormatException>(() => Key.GetKeyBlobSize(a, (KeyBlobFormat)int.MaxValue));
+        }
+
+        [Theory]
         [MemberData(nameof(PublicKeyBlobFormats))]
         [MemberData(nameof(PrivateKeyBlobFormats))]
         [MemberData(nameof(SymmetricKeyBlobFormats))]
@@ -140,7 +150,6 @@ namespace NSec.Tests.Core
 
             var size = Key.GetKeyBlobSize(a, format);
 
-            Assert.True(size != null);
             Assert.True(size > 0);
         }
 

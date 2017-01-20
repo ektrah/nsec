@@ -88,12 +88,10 @@ namespace NSec.Cryptography
             return DefaultKeySize;
         }
 
-        internal override int? GetKeyBlobSize(KeyBlobFormat format)
+        internal override int GetKeyBlobSize(KeyBlobFormat format)
         {
             if (format != KeyBlobFormat.RawSymmetricKey)
-            {
-                return null;
-            }
+                throw new FormatException();
 
             return MaxKeySize;
         }

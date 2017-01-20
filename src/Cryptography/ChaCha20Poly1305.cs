@@ -124,7 +124,7 @@ namespace NSec.Cryptography
             return crypto_aead_chacha20poly1305_ietf_KEYBYTES;
         }
 
-        internal override int? GetKeyBlobSize(
+        internal override int GetKeyBlobSize(
             KeyBlobFormat format)
         {
             switch (format)
@@ -134,7 +134,7 @@ namespace NSec.Cryptography
             case KeyBlobFormat.NSecSymmetricKey:
                 return s_nsecKeyFormatter.BlobSize;
             default:
-                return null;
+                throw new FormatException();
             }
         }
 

@@ -43,10 +43,10 @@ namespace NSec.Cryptography
         }
 
         // Gets the size of a key blob in the specified format.
-        internal virtual int? GetKeyBlobSize(
+        internal virtual int GetKeyBlobSize(
             KeyBlobFormat format)
         {
-            return null;
+            throw new NotSupportedException();
         }
 
         // Gets the supported key blob formats.
