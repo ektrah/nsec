@@ -109,7 +109,7 @@ NotSupportedException
 
 Gets the maximum size of a key BLOB for the specified algorithm and format.
 
-    public static int? GetKeyBlobSize(
+    public static int GetKeyBlobSize(
         Algorithm algorithm,
         KeyBlobFormat format)
 
@@ -124,8 +124,13 @@ format
 
 #### Return value
 
-The maximum key BLOB size if the specified format is supported by the algorithm;
-otherwise, `null`.
+The maximum key BLOB size for the specified algorithm and format.
+
+FormatException
+: The algorithm for the key does not support the specified format.
+
+NotSupportedException
+: The algorithm for the key does not use keys.
 
 
 ### GetSupportedKeyBlobFormats(Algorithm)
