@@ -19,13 +19,13 @@ internal static partial class Interop
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int crypto_auth_hmacsha512_init(
             out crypto_auth_hmacsha512_state state,
-            SecureMemoryHandle key,
+            ref byte key,
             UIntPtr keylen);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int crypto_auth_hmacsha512_init(
             out crypto_auth_hmacsha512_state state,
-            ref byte key,
+            SecureMemoryHandle key,
             UIntPtr keylen);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
