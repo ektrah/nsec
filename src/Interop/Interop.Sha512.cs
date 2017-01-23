@@ -33,6 +33,12 @@ internal static partial class Interop
             ref byte @in,
             ulong inlen);
 
+        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int crypto_hash_sha512_update(
+            ref crypto_hash_sha512_state state,
+            ref uint @in,
+            ulong inlen);
+
         [StructLayout(LayoutKind.Explicit, Size = 208, Pack = 8)]
         internal struct crypto_hash_sha512_state { }
     }

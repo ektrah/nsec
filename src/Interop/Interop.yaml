@@ -139,6 +139,7 @@ Interop.Sha256.cs:
   - crypto_hash_sha256_init
   - crypto_hash_sha256_statebytes
   - crypto_hash_sha256_update (ref byte in)
+  - crypto_hash_sha256_update (ref uint in)
   structs:
   - crypto_hash_sha256_state
 
@@ -153,6 +154,7 @@ Interop.Sha512.cs:
   - crypto_hash_sha512_init
   - crypto_hash_sha512_statebytes
   - crypto_hash_sha512_update (ref byte in)
+  - crypto_hash_sha512_update (ref uint in)
   structs:
   - crypto_hash_sha512_state
 
