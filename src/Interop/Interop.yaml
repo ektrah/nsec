@@ -102,6 +102,7 @@ Interop.HmacSha256.cs:
   - crypto_auth_hmacsha256_keybytes
   - crypto_auth_hmacsha256_statebytes
   - crypto_auth_hmacsha256_update (ref byte in)
+  - crypto_auth_hmacsha256_update (ref uint in)
   structs:
   - crypto_auth_hmacsha256_state
 
@@ -118,6 +119,7 @@ Interop.HmacSha512.cs:
   - crypto_auth_hmacsha512_keybytes
   - crypto_auth_hmacsha512_statebytes
   - crypto_auth_hmacsha512_update (ref byte in)
+  - crypto_auth_hmacsha512_update (ref uint in)
   structs:
   - crypto_auth_hmacsha512_state
 
