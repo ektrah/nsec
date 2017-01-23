@@ -41,6 +41,8 @@ namespace NSec.Cryptography
     {
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
+        private static readonly Oid s_oid = new Oid(1, 2, 840, 113549, 1, 9, 16, 3, 99999);
+
         private static readonly KeyBlobFormat[] s_supportedKeyBlobFormats =
         {
             KeyBlobFormat.NSecSymmetricKey,

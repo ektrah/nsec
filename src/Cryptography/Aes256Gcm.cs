@@ -40,6 +40,8 @@ namespace NSec.Cryptography
         private static readonly Lazy<int> s_isAvailable = new Lazy<int>(new Func<int>(crypto_aead_aes256gcm_is_available));
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
+        private static readonly Oid s_oid = new Oid(2, 16, 840, 1, 101, 3, 4, 1, 46);
+
         private static readonly KeyBlobFormat[] s_supportedKeyBlobFormats =
         {
             KeyBlobFormat.NSecSymmetricKey,

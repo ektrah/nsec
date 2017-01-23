@@ -30,6 +30,8 @@ namespace NSec.Cryptography
     {
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
+        private static readonly Oid s_oid = new Oid(1, 3, 101, 110);
+
         private static readonly KeyBlobFormat[] s_supportedKeyBlobFormats =
         {
             KeyBlobFormat.PkixPrivateKeyText,
