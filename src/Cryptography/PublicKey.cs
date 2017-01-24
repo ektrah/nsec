@@ -84,13 +84,8 @@ namespace NSec.Cryptography
             if (format == KeyBlobFormat.None)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(format));
 
-            int? maxBlobSize = Key.GetKeyBlobSize(_algorithm, format);
-            if (!maxBlobSize.HasValue)
-            {
-                throw new FormatException();
-            }
-
-            byte[] blob = new byte[maxBlobSize.GetValueOrDefault()];
+            int maxBlobSize = Key.GetKeyBlobSize(_algorithm, format);
+            byte[] blob = new byte[maxBlobSize];
             int blobSize = Export(format, blob);
             Array.Resize(ref blob, blobSize);
             return blob;
