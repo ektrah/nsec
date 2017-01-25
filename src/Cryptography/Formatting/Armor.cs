@@ -84,17 +84,29 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> endLabel,
             Span<byte> output)
         {
+            return TryDecode(input, beginLabel, endLabel, output, out int bytesWritten) && (bytesWritten == output.Length);
+        }
+
+        public static bool TryDecode(
+            ReadOnlySpan<byte> input,
+            ReadOnlySpan<byte> beginLabel,
+            ReadOnlySpan<byte> endLabel,
+            Span<byte> output,
+            out int bytesWritten)
+        {
             int i = input.IndexOf(s_fiveHyphens);
             if ((i < 0) || (input.Length - i < beginLabel.Length) || !input.Slice(i, beginLabel.Length).SequenceEqual(beginLabel))
             {
+                bytesWritten = 0;
                 return false;
             }
 
             input = input.Slice(i + beginLabel.Length);
 
-            i = DecodeBase64(input, output);
+            i = DecodeBase64(input, output, out bytesWritten);
             if ((i < 0) || (input.Length - i < endLabel.Length) || !input.Slice(i, endLabel.Length).SequenceEqual(endLabel))
             {
+                bytesWritten = 0;
                 return false;
             }
 
@@ -176,7 +188,8 @@ namespace NSec.Cryptography.Formatting
 
         private static int DecodeBase64(
             ReadOnlySpan<byte> input,
-            Span<byte> output)
+            Span<byte> output,
+            out int bytesWritten)
         {
             int buffer = 0;
             int filled = 0;
@@ -198,6 +211,7 @@ namespace NSec.Cryptography.Formatting
                 int digit;
                 if (ch >= 128 || (digit = s_decodingMap[ch]) == 0xFF)
                 {
+                    bytesWritten = 0;
                     return -1;
                 }
                 buffer = (buffer << 6) | digit;
@@ -206,6 +220,7 @@ namespace NSec.Cryptography.Formatting
                 {
                     if (j == output.Length)
                     {
+                        bytesWritten = 0;
                         return -1;
                     }
                     output[j] = (byte)((buffer >> (filled - 8)) & 0xFF);
@@ -226,14 +241,11 @@ namespace NSec.Cryptography.Formatting
                 {
                     continue;
                 }
+                bytesWritten = 0;
                 return -1;
             }
 
-            if (j != output.Length)
-            {
-                return -1;
-            }
-
+            bytesWritten = j;
             return i;
         }
     }
