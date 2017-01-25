@@ -54,28 +54,29 @@ namespace NSec.Cryptography.Formatting
 
         public void End()
         {
-            Debug.Assert(_depth != 0);
             if (_failed || !Top.IsEmpty)
             {
                 Fail();
             }
             else
             {
+                Debug.Assert(_depth != 0);
                 _depth--;
             }
         }
 
-        public uint Integer32()
+        public int Integer32()
         {
             ReadOnlySpan<byte> bytes = Read(0x02).ApplyTo(_bytes);
-            uint value = 0U;
+            int value = 0;
 
-            if (_failed || bytes.Length > sizeof(uint))
+            if (_failed || bytes.Length > sizeof(int))
             {
                 Fail();
             }
-            else
+            else if (bytes.Length != 0)
             {
+                value = -(bytes[0] >> 7);
                 for (int i = 0; i < bytes.Length; i++)
                 {
                     value = (value << 8) | bytes[i];
@@ -85,17 +86,18 @@ namespace NSec.Cryptography.Formatting
             return value;
         }
 
-        public ulong Integer64()
+        public long Integer64()
         {
             ReadOnlySpan<byte> bytes = Read(0x02).ApplyTo(_bytes);
-            ulong value = 0UL;
+            long value = 0;
 
-            if (_failed || bytes.Length > sizeof(ulong))
+            if (_failed || bytes.Length > sizeof(long))
             {
                 Fail();
             }
-            else
+            else if (bytes.Length != 0)
             {
+                value = -(bytes[0] >> 7);
                 for (int i = 0; i < bytes.Length; i++)
                 {
                     value = (value << 8) | bytes[i];

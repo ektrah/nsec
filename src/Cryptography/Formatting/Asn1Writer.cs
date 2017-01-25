@@ -57,43 +57,45 @@ namespace NSec.Cryptography.Formatting
             _depth++;
         }
 
-        public void Integer(uint value)
+        public void Integer(int value)
         {
             int end = _pos;
             unchecked
             {
-                WriteByte((byte)value);
-                if ((value & 0xFFFFFF80U) != 0)
-                    WriteByte((byte)(value >> 8));
-                if ((value & 0xFFFF8000U) != 0)
-                    WriteByte((byte)(value >> 16));
-                if ((value & 0xFF800000U) != 0)
-                    WriteByte((byte)(value >> 24));
+                uint v = (uint)value;
+                WriteByte((byte)v);
+                if ((v & 0xFFFFFF80) != 0 && (v & 0xFFFFFF80) != 0xFFFFFF80)
+                    WriteByte((byte)(v >> 8));
+                if ((v & 0xFFFF8000) != 0 && (v & 0xFFFF8000) != 0xFFFF8000)
+                    WriteByte((byte)(v >> 16));
+                if ((v & 0xFF800000) != 0 && (v & 0xFF800000) != 0xFF800000)
+                    WriteByte((byte)(v >> 24));
             }
             WriteLength(end - _pos);
             WriteByte(0x02);
         }
 
-        public void Integer(ulong value)
+        public void Integer(long value)
         {
             int end = _pos;
             unchecked
             {
-                WriteByte((byte)value);
-                if ((value & 0xFFFFFFFFFFFFFF80U) != 0)
-                    WriteByte((byte)(value >> 8));
-                if ((value & 0xFFFFFFFFFFFF8000U) != 0)
-                    WriteByte((byte)(value >> 16));
-                if ((value & 0xFFFFFFFFFF800000U) != 0)
-                    WriteByte((byte)(value >> 24));
-                if ((value & 0xFFFFFFFF80000000U) != 0)
-                    WriteByte((byte)(value >> 32));
-                if ((value & 0xFFFFFF8000000000U) != 0)
-                    WriteByte((byte)(value >> 40));
-                if ((value & 0xFFFF800000000000U) != 0)
-                    WriteByte((byte)(value >> 48));
-                if ((value & 0xFF80000000000000U) != 0)
-                    WriteByte((byte)(value >> 56));
+                ulong v = (ulong)value;
+                WriteByte((byte)v);
+                if ((v & 0xFFFFFFFFFFFFFF80) != 0 && (v & 0xFFFFFFFFFFFFFF80) != 0xFFFFFFFFFFFFFF80)
+                    WriteByte((byte)(v >> 8));
+                if ((v & 0xFFFFFFFFFFFF8000) != 0 && (v & 0xFFFFFFFFFFFF8000) != 0xFFFFFFFFFFFF8000)
+                    WriteByte((byte)(v >> 16));
+                if ((v & 0xFFFFFFFFFF800000) != 0 && (v & 0xFFFFFFFFFF800000) != 0xFFFFFFFFFF800000)
+                    WriteByte((byte)(v >> 24));
+                if ((v & 0xFFFFFFFF80000000) != 0 && (v & 0xFFFFFFFF80000000) != 0xFFFFFFFF80000000)
+                    WriteByte((byte)(v >> 32));
+                if ((v & 0xFFFFFF8000000000) != 0 && (v & 0xFFFFFF8000000000) != 0xFFFFFF8000000000)
+                    WriteByte((byte)(v >> 40));
+                if ((v & 0xFFFF800000000000) != 0 && (v & 0xFFFF800000000000) != 0xFFFF800000000000)
+                    WriteByte((byte)(v >> 48));
+                if ((v & 0xFF80000000000000) != 0 && (v & 0xFF80000000000000) != 0xFF80000000000000)
+                    WriteByte((byte)(v >> 56));
             }
             WriteLength(end - _pos);
             WriteByte(0x02);
@@ -158,7 +160,7 @@ namespace NSec.Cryptography.Formatting
                     if ((length & 0xFF000000U) != 0)
                         WriteByte((byte)(length >> 24));
                 }
-                WriteByte((byte)(0x80 | (end - _pos)));
+                WriteByte((byte)(0x80 + (end - _pos)));
             }
         }
     }
