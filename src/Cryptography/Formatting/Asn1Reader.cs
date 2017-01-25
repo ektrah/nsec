@@ -142,13 +142,13 @@ namespace NSec.Cryptography.Formatting
             else
             {
                 int c = span[1] & 0x7F;
-                if (c > sizeof(int) || span.Length - 2 < c)
+                if (c > sizeof(int) || c > span.Length - 2)
                     goto fail;
                 while (c-- > 0)
                     length = (length << 8) | span[pos++];
             }
 
-            if (length < 0 || span.Length - pos < length)
+            if (length < 0 || length > span.Length - pos)
                 goto fail;
 
             result = top.Slice(pos, length);

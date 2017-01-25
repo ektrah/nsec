@@ -106,7 +106,7 @@ namespace NSec.Cryptography.Formatting
         private void WriteByte(byte value)
         {
             if (_pos == 0)
-                throw new ArgumentException();
+                throw new ArgumentException(); // not enough space
 
             _pos--;
 #if UNSAFE
@@ -119,7 +119,7 @@ namespace NSec.Cryptography.Formatting
         private void WriteBytes(ReadOnlySpan<byte> bytes)
         {
             if (bytes.Length > _pos)
-                throw new ArgumentException();
+                throw new ArgumentException(); // not enough space
 
             _pos -= bytes.Length;
 #if UNSAFE
