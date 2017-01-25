@@ -16,30 +16,30 @@ namespace NSec.Cryptography.Formatting
         private const int StackSize = 8;
 
 #if UNSAFE
-        private void* _bytes;
+        private void* _buffer;
 #else
-        private Span<byte> _bytes;
+        private Span<byte> _buffer;
 #endif
         private int _depth;
         private int _pos;
         private int[] _stack;
 
-        public Asn1Writer(ref Span<byte> bytes)
+        public Asn1Writer(ref Span<byte> buffer)
         {
 #if UNSAFE
-            _bytes = Unsafe.AsPointer(ref bytes);
+            _buffer = Unsafe.AsPointer(ref buffer);
 #else
-            _bytes = bytes;
+            _buffer = buffer;
 #endif
             _depth = 0;
-            _pos = bytes.Length;
+            _pos = buffer.Length;
             _stack = new int[StackSize];
         }
 
 #if UNSAFE
-        public ReadOnlySpan<byte> Bytes => Unsafe.AsRef<Span<byte>>(_bytes).Slice(_pos);
+        public ReadOnlySpan<byte> Bytes => Unsafe.AsRef<Span<byte>>(_buffer).Slice(_pos);
 #else
-        public ReadOnlySpan<byte> Bytes => _bytes.Slice(_pos);
+        public ReadOnlySpan<byte> Bytes => _buffer.Slice(_pos);
 #endif
 
         public void BeginSequence()
@@ -110,9 +110,9 @@ namespace NSec.Cryptography.Formatting
 
             _pos--;
 #if UNSAFE
-            Unsafe.AsRef<Span<byte>>(_bytes)[_pos] = value;
+            Unsafe.AsRef<Span<byte>>(_buffer)[_pos] = value;
 #else
-            _bytes[_pos] = value;
+            _buffer[_pos] = value;
 #endif
         }
 
@@ -123,9 +123,9 @@ namespace NSec.Cryptography.Formatting
 
             _pos -= bytes.Length;
 #if UNSAFE
-            bytes.CopyTo(Unsafe.AsRef<Span<byte>>(_bytes).Slice(_pos));
+            bytes.CopyTo(Unsafe.AsRef<Span<byte>>(_buffer).Slice(_pos));
 #else
-            bytes.CopyTo(_bytes.Slice(_pos));
+            bytes.CopyTo(_buffer.Slice(_pos));
 #endif
         }
 
