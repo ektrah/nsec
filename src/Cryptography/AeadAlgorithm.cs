@@ -214,57 +214,11 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext);
 
-        internal virtual void EncryptCore(
-            SecureMemoryHandle keyHandle,
-            ReadOnlySpan<byte> nonce,
-            ReadOnlySpan<byte> associatedData,
-            SecureMemoryHandle plaintext,
-            Span<byte> ciphertext)
-        {
-            bool addedRef = false;
-            try
-            {
-                plaintext.DangerousAddRef(ref addedRef);
-
-                EncryptCore(keyHandle, nonce, associatedData, plaintext.DangerousGetSpan(), ciphertext);
-            }
-            finally
-            {
-                if (addedRef)
-                {
-                    plaintext.DangerousRelease();
-                }
-            }
-        }
-
         internal abstract bool TryDecryptCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> ciphertext,
             Span<byte> plaintext);
-
-        internal virtual bool TryDecryptCore(
-            SecureMemoryHandle keyHandle,
-            ReadOnlySpan<byte> nonce,
-            ReadOnlySpan<byte> associatedData,
-            ReadOnlySpan<byte> ciphertext,
-            SecureMemoryHandle plaintext)
-        {
-            bool addedRef = false;
-            try
-            {
-                plaintext.DangerousAddRef(ref addedRef);
-
-                return TryDecryptCore(keyHandle, nonce, associatedData, ciphertext, plaintext.DangerousGetSpan());
-            }
-            finally
-            {
-                if (addedRef)
-                {
-                    plaintext.DangerousRelease();
-                }
-            }
-        }
     }
 }
