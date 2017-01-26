@@ -1,7 +1,8 @@
 License notice for libsodium
 ----------------------------
 
-This software bundles libsodium, which is available under the ISC license.
+This software is based on and contains code derived from libsodium, which is
+available under the ISC license.
 
 Copyright (c) 2013-2017 Frank Denis
 
