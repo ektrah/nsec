@@ -38,7 +38,8 @@ SOFTWARE.
 
 ## License notice for libsodium
 
-NSec bundles [libsodium](https://github.com/jedisct1/libsodium),
+NSec is based on and contains code derived from
+[libsodium](https://github.com/jedisct1/libsodium),
 which is available under the ISC license.
 
 Copyright &copy; 2013-2017 Frank Denis
