@@ -6,7 +6,7 @@ using static Interop.Libsodium;
 namespace NSec.Cryptography
 {
     //
-    //  AES-256-GCM
+    //  AES256-GCM
     //
     //      Authenticated Encryption with Associated Data (AEAD) algorithm
     //      based on the Advanced Encryption Standard (AES) in Galois/Counter
@@ -15,6 +15,9 @@ namespace NSec.Cryptography
     //  References:
     //
     //      RFC 5116 - An Interface and Algorithms for Authenticated Encryption
+    //
+    //      RFC 5084 - Using AES-CCM and AES-GCM Authenticated Encryption in the
+    //          Cryptographic Message Syntax (CMS)
     //
     //  Parameters:
     //
