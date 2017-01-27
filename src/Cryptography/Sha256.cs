@@ -15,6 +15,8 @@ namespace NSec.Cryptography
     //      RFC 6234 - US Secure Hash Algorithms (SHA and SHA-based HMAC and
     //          HKDF)
     //
+    //      RFC 5754 - Using SHA2 Algorithms with Cryptographic Message Syntax
+    //
     //  Parameters:
     //
     //      Input Size - Between 0 and 2^61-1 bytes. Since a Span<byte> can
