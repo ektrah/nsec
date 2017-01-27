@@ -14,6 +14,11 @@ namespace NSec.Cryptography
     //
     //  References:
     //
+    //      FIPS 197 - Advanced Encryption Standard (AES)
+    //
+    //      NIST SP 800-38D - Recommendation for Block Cipher Modes of
+    //          Operation: Galois/Counter Mode (GCM) and GMAC
+    //
     //      RFC 5116 - An Interface and Algorithms for Authenticated Encryption
     //
     //      RFC 5084 - Using AES-CCM and AES-GCM Authenticated Encryption in the
