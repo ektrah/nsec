@@ -17,6 +17,9 @@ namespace NSec.Cryptography
     //      RFC 6234 - US Secure Hash Algorithms (SHA and SHA-based HMAC and
     //          HKDF)
     //
+    //      RFC 4231 - Identifiers and Test Vectors for HMAC-SHA-224,
+    //          HMAC-SHA-256, HMAC-SHA-384, and HMAC-SHA-512
+    //
     //  Parameters:
     //
     //      Key Size - The key for HMAC-SHA-256 can be of any length. A length
@@ -36,6 +39,8 @@ namespace NSec.Cryptography
         private const int SHA256MessageBlockSize = 64; // "B" in RFC 2104
 
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
+
+        private static readonly Oid s_oid = new Oid(1, 2, 840, 113549, 2, 9);
 
         private static readonly KeyBlobFormat[] s_supportedKeyBlobFormats =
         {
