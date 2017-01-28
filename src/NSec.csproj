@@ -26,6 +26,10 @@ NSec.Cryptography.X25519</Description>
     <PackageTags>aead aes blake2b chacha20 cryptography curve25519 ed25519 eddsa encryption gcm hash hkdf hmac libsodium poly1305 security sha256 sha512 x25519</PackageTags>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="..\LICENSE" Link="LICENSE" PackagePath="" Visible="False" />
+    <Content Include="..\NOTICE" Link="NOTICE" PackagePath="" Visible="False" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="libsodium" Version="1.0.11-preview-24928-01" />
     <PackageReference Include="System.Memory" Version="4.4.0-beta-24913-02" />
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.4.0-beta-24913-02" />
