@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard1.1</TargetFramework>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
@@ -9,7 +9,7 @@
     <Version>1.0.0</Version>
     <Authors>Klaus Hartke</Authors>
     <Description>Provides modern cryptographic algorithm implementations based on libsodium.
-    
+
 Commonly Used Types:
 NSec.Cryptography.Blake2
 NSec.Cryptography.Chacha20Poly1305
@@ -20,20 +20,13 @@ NSec.Cryptography.X25519</Description>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageLicenseUrl>https://nsec.rocks/license</PackageLicenseUrl>
     <PackageProjectUrl>https://nsec.rocks/</PackageProjectUrl>
-    <PackageIconUrl>https://git.io/vMM0H</PackageIconUrl>
+    <PackageIconUrl>https://goo.gl/iN8fpR</PackageIconUrl>
+    <RepositoryUrl>https://github.com/ektrah/nsec</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     <PackageTags>aead aes blake2b chacha20 cryptography curve25519 ed25519 eddsa encryption gcm hash hkdf hmac libsodium poly1305 security sha256 sha512 x25519</PackageTags>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="**\*.cs" />
-    <EmbeddedResource Include="**\*.resx" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include=".editorconfig" />
-    <None Include="Interop\Interop.yaml" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="NETStandard.Library" Version="1.6.0" />
-    <PackageReference Include="runtime.native.NSec.Cryptography" Version="9.2.0-preview-24913-01" />
+    <PackageReference Include="libsodium" Version="1.0.11-preview-24928-01" />
     <PackageReference Include="System.Memory" Version="4.4.0-beta-24913-02" />
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.4.0-beta-24913-02" />
   </ItemGroup>
