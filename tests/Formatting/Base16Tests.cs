@@ -25,6 +25,20 @@ namespace NSec.Tests.Formatting
 
         [Theory]
         [InlineData("", "")]
+        [InlineData("f", "66")]
+        [InlineData("fo", "666F")]
+        [InlineData("foo", "666F6F")]
+        [InlineData("foob", "666F6F62")]
+        [InlineData("fooba", "666F6F6261")]
+        [InlineData("foobar", "666F6F626172")]
+        public static void EncodeString(string input, string expected)
+        {
+            var bytes = Encoding.UTF8.GetBytes(input);
+            Assert.Equal(expected, Base16.Encode(bytes));
+        }
+
+        [Theory]
+        [InlineData("", "")]
         [InlineData("66", "f")]
         [InlineData("666F", "fo")]
         [InlineData("666F6F", "foo")]
@@ -44,6 +58,20 @@ namespace NSec.Tests.Formatting
             var actual = new byte[length];
             Assert.True(Base16.TryDecode(base16, actual));
             Assert.Equal(bytes, actual);
+        }
+
+        [Theory]
+        [InlineData("", "")]
+        [InlineData("66", "f")]
+        [InlineData("666F", "fo")]
+        [InlineData("666F6F", "foo")]
+        [InlineData("666F6F62", "foob")]
+        [InlineData("666F6F6261", "fooba")]
+        [InlineData("666F6F626172", "foobar")]
+        public static void DecodeString(string input, string expected)
+        {
+            var bytes = Encoding.UTF8.GetBytes(expected);
+            Assert.Equal(bytes, Base16.Decode(input));
         }
 
         [Theory]

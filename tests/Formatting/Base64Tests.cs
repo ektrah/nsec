@@ -26,6 +26,21 @@ namespace NSec.Tests.Formatting
 
         [Theory]
         [InlineData("", "")]
+        [InlineData("f", "Zg==")]
+        [InlineData("fo", "Zm8=")]
+        [InlineData("foo", "Zm9v")]
+        [InlineData("foob", "Zm9vYg==")]
+        [InlineData("fooba", "Zm9vYmE=")]
+        [InlineData("foobar", "Zm9vYmFy")]
+        [InlineData("a", "YQ==")]
+        public static void EncodeString(string input, string expected)
+        {
+            var bytes = Encoding.UTF8.GetBytes(input);
+            Assert.Equal(expected, Base64.Encode(bytes));
+        }
+
+        [Theory]
+        [InlineData("", "")]
         [InlineData("Zg==", "f")]
         [InlineData("Zm8=", "fo")]
         [InlineData("Zm9v", "foo")]
@@ -42,6 +57,20 @@ namespace NSec.Tests.Formatting
             var actual = new byte[length];
             Assert.True(Base64.TryDecode(base64, actual));
             Assert.Equal(bytes, actual);
+        }
+
+        [Theory]
+        [InlineData("", "")]
+        [InlineData("Zg==", "f")]
+        [InlineData("Zm8=", "fo")]
+        [InlineData("Zm9v", "foo")]
+        [InlineData("Zm9vYg==", "foob")]
+        [InlineData("Zm9vYmE=", "fooba")]
+        [InlineData("Zm9vYmFy", "foobar")]
+        public static void DecodeString(string input, string expected)
+        {
+            var bytes = Encoding.UTF8.GetBytes(expected);
+            Assert.Equal(bytes, Base64.Decode(input));
         }
 
         [Theory]

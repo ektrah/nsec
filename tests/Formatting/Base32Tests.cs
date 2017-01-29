@@ -25,6 +25,20 @@ namespace NSec.Tests.Formatting
 
         [Theory]
         [InlineData("", "")]
+        [InlineData("f", "MY======")]
+        [InlineData("fo", "MZXQ====")]
+        [InlineData("foo", "MZXW6===")]
+        [InlineData("foob", "MZXW6YQ=")]
+        [InlineData("fooba", "MZXW6YTB")]
+        [InlineData("foobar", "MZXW6YTBOI======")]
+        public static void EncodeString(string input, string expected)
+        {
+            var bytes = Encoding.UTF8.GetBytes(input);
+            Assert.Equal(expected, Base32.Encode(bytes));
+        }
+
+        [Theory]
+        [InlineData("", "")]
         [InlineData("MY======", "f")]
         [InlineData("MZXQ====", "fo")]
         [InlineData("MZXW6===", "foo")]
@@ -46,7 +60,21 @@ namespace NSec.Tests.Formatting
             Assert.True(Base32.TryDecode(base32, actual));
             Assert.Equal(bytes, actual);
         }
-        
+
+        [Theory]
+        [InlineData("", "")]
+        [InlineData("MY======", "f")]
+        [InlineData("MZXQ====", "fo")]
+        [InlineData("MZXW6===", "foo")]
+        [InlineData("MZXW6YQ=", "foob")]
+        [InlineData("MZXW6YTB", "fooba")]
+        [InlineData("MZXW6YTBOI======", "foobar")]
+        public static void DecodeString(string input, string expected)
+        {
+            var bytes = Encoding.UTF8.GetBytes(expected);
+            Assert.Equal(bytes, Base32.Decode(input));
+        }
+
         [Theory]
         [InlineData("M")]
         [InlineData("MZ")]
