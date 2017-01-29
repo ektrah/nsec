@@ -7,6 +7,47 @@ namespace NSec.Cryptography.Formatting
     // RFC 4648
     public static class Base32
     {
+        public static byte[] Decode(
+            string base32)
+        {
+            if (!TryGetDecodedLength(base32, out int length))
+                throw new FormatException();
+            byte[] result = new byte[length];
+            if (!TryDecode(base32, result))
+                throw new FormatException();
+            return result;
+        }
+
+        public static byte[] Decode(
+            ReadOnlySpan<char> base32)
+        {
+            if (!TryGetDecodedLength(base32, out int length))
+                throw new FormatException();
+            byte[] result = new byte[length];
+            if (!TryDecode(base32, result))
+                throw new FormatException();
+            return result;
+        }
+
+        public static byte[] Decode(
+            ReadOnlySpan<byte> base32)
+        {
+            if (!TryGetDecodedLength(base32, out int length))
+                throw new FormatException();
+            byte[] result = new byte[length];
+            if (!TryDecode(base32, result))
+                throw new FormatException();
+            return result;
+        }
+
+        public static string Encode(
+            ReadOnlySpan<byte> bytes)
+        {
+            char[] chars = new char[GetEncodedLength(bytes.Length)];
+            Encode(bytes, chars);
+            return new string(chars);
+        }
+
         public static void Encode(
             ReadOnlySpan<byte> bytes,
             Span<char> base32)
@@ -182,6 +223,22 @@ namespace NSec.Cryptography.Formatting
         }
 
         public static bool TryDecode(
+            string base32,
+            Span<byte> bytes)
+        {
+            if (base32 == null)
+                throw new ArgumentNullException(nameof(base32));
+
+            unsafe
+            {
+                fixed (char* pointer = base32)
+                {
+                    return TryDecode(new ReadOnlySpan<char>(pointer, base32.Length), bytes);
+                }
+            }
+        }
+
+        public static bool TryDecode(
             ReadOnlySpan<char> base32,
             Span<byte> bytes)
         {
@@ -330,6 +387,22 @@ namespace NSec.Cryptography.Formatting
                 Debug.Assert(di == bytes.Length);
 
                 return err == 0;
+            }
+        }
+
+        public static bool TryGetDecodedLength(
+            string base32,
+            out int decodedLength)
+        {
+            if (base32 == null)
+                throw new ArgumentNullException(nameof(base32));
+
+            unsafe
+            {
+                fixed (char* pointer = base32)
+                {
+                    return TryGetDecodedLength(new ReadOnlySpan<char>(pointer, base32.Length), out decodedLength);
+                }
             }
         }
 
