@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 
 namespace NSec.Cryptography.Formatting
 {
@@ -90,19 +89,18 @@ namespace NSec.Cryptography.Formatting
             while (input.Length - i >= 48)
             {
                 Base64.Encode(input.Slice(i, 48), output.Slice(j, 64));
-                j += 64;
-                output[j + 0] = (byte)'\r';
-                output[j + 1] = (byte)'\n';
-                j += 2;
+                output[j + 64 + 0] = (byte)'\r';
+                output[j + 64 + 1] = (byte)'\n';
                 i += 48;
+                j += 64 + 2;
             }
 
             if (input.Length - i > 0)
             {
-                Base64.Encode(input.Slice(i), output.Slice(j));
-                j += Base64.GetEncodedLength(input.Length - i);
-                output[j + 0] = (byte)'\r';
-                output[j + 1] = (byte)'\n';
+                int length = Base64.GetEncodedLength(input.Length - i);
+                Base64.Encode(input.Slice(i), output.Slice(j, length));
+                output[j + length + 0] = (byte)'\r';
+                output[j + length + 1] = (byte)'\n';
             }
         }
 
