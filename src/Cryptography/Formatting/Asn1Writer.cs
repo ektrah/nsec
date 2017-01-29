@@ -1,20 +1,18 @@
 //#define UNSAFE
 
 using System;
-using System.Diagnostics;
 #if UNSAFE
 using System.Runtime.CompilerServices;
 #endif
 
 namespace NSec.Cryptography.Formatting
 {
+    // ITU-T X.690 5.0 DER
 #if UNSAFE
     unsafe 
 #endif
     internal struct Asn1Writer
     {
-        private const int StackSize = 8;
-
 #if UNSAFE
         private void* _buffer;
 #else
@@ -24,7 +22,7 @@ namespace NSec.Cryptography.Formatting
         private int _pos;
         private int[] _stack;
 
-        public Asn1Writer(ref Span<byte> buffer)
+        public Asn1Writer(ref Span<byte> buffer, int maxDepth = 8)
         {
 #if UNSAFE
             _buffer = Unsafe.AsPointer(ref buffer);
@@ -33,7 +31,7 @@ namespace NSec.Cryptography.Formatting
 #endif
             _depth = 0;
             _pos = buffer.Length;
-            _stack = new int[StackSize];
+            _stack = new int[maxDepth];
         }
 
 #if UNSAFE
@@ -44,15 +42,31 @@ namespace NSec.Cryptography.Formatting
 
         public void BeginSequence()
         {
-            Debug.Assert(_depth != 0);
             _depth--;
             WriteLength(_stack[_depth] - _pos);
             WriteByte(0x30);
         }
 
+        public void BitString(ReadOnlySpan<byte> bits)
+        {
+            WriteBytes(bits);
+            WriteByte(0);
+            WriteLength(1 + bits.Length);
+            WriteByte(0x03);
+        }
+
+        public void Bool(bool value)
+        {
+            unchecked
+            {
+                WriteByte((byte)(value ? -1 : 0));
+            }
+            WriteLength(1);
+            WriteByte(0x01);
+        }
+
         public void End()
         {
-            Debug.Assert(_depth != StackSize);
             _stack[_depth] = _pos;
             _depth++;
         }
@@ -87,6 +101,12 @@ namespace NSec.Cryptography.Formatting
             }
             WriteLength(end - _pos);
             WriteByte(0x02);
+        }
+
+        public void Null()
+        {
+            WriteLength(0);
+            WriteByte(0x05);
         }
 
         public void ObjectIdentifier(ReadOnlySpan<byte> oid)
