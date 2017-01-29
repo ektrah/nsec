@@ -4,6 +4,7 @@
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\src\Cryptography\Formatting\Asn1Reader.cs" Link="Formatting\Asn1Reader.cs" />
     <Compile Include="..\src\Cryptography\Formatting\Asn1Writer.cs" Link="Formatting\Asn1Writer.cs" />
   </ItemGroup>
   <ItemGroup>
