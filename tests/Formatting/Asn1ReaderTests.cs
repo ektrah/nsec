@@ -268,6 +268,25 @@ namespace NSec.Tests.Formatting
         }
 
         [Theory]
+        [InlineData(new byte[] { 0x30, 0x00 }, new int[] { })]
+        [InlineData(new byte[] { 0x30, 0x03, 0x02, 0x01, 0x01 }, new int[] { 1 })]
+        [InlineData(new byte[] { 0x30, 0x06, 0x02, 0x01, 0x01, 0x02, 0x01, 0x02 }, new int[] { 1, 2 })]
+        [InlineData(new byte[] { 0x30, 0x09, 0x02, 0x01, 0x01, 0x02, 0x01, 0x02, 0x02, 0x01, 0x03 }, new int[] { 1, 2, 3 })]
+        public static void IntegerSequence(byte[] value, int[] expected)
+        {
+            var span = new ReadOnlySpan<byte>(value);
+            var reader = new Asn1Reader(ref span, 2);
+            reader.BeginSequence();
+            for (var i = 0; i < expected.Length; i++)
+            {
+                Assert.Equal(expected[i], reader.Integer32());
+            }
+            reader.End();
+            Assert.True(reader.Success);
+            Assert.True(reader.SuccessComplete);
+        }
+
+        [Theory]
         [InlineData(new byte[] { 0x30 })]
         [InlineData(new byte[] { 0x30, 0x01 })]
         [InlineData(new byte[] { 0x30, 0x80 })]

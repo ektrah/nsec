@@ -137,5 +137,21 @@ namespace NSec.Tests.Formatting
                 writer.BeginSequence();
             Assert.Equal(expected, writer.Bytes.ToArray());
         }
+
+        [Theory]
+        [InlineData(new int[] { }, new byte[] { 0x30, 0x00 })]
+        [InlineData(new int[] { 1 }, new byte[] { 0x30, 0x03, 0x02, 0x01, 0x01 })]
+        [InlineData(new int[] { 1, 2 }, new byte[] { 0x30, 0x06, 0x02, 0x01, 0x01, 0x02, 0x01, 0x02 })]
+        [InlineData(new int[] { 1, 2, 3 }, new byte[] { 0x30, 0x09, 0x02, 0x01, 0x01, 0x02, 0x01, 0x02, 0x02, 0x01, 0x03 })]
+        public static void IntegerSequence(int[] values, byte[] expected)
+        {
+            var span = new Span<byte>(new byte[expected.Length]);
+            var writer = new Asn1Writer(ref span, 1);
+            writer.End();
+            for (var i = 0; i < values.Length; i++)
+                writer.Integer(values[values.Length - i - 1]);
+            writer.BeginSequence();
+            Assert.Equal(expected, writer.Bytes.ToArray());
+        }
     }
 }
