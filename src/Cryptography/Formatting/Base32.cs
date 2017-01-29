@@ -451,7 +451,7 @@ namespace NSec.Cryptography.Formatting
                 r3 = (byte)(c4 << 7 | c5 << 2 | c6 >> 3);
                 r4 = (byte)(c6 << 5 | c7);
 
-                return (c0 | c1 | c2 | c3) >> 31;
+                return (c0 | c1 | c2 | c3 | c4 | c5 | c6 | c7) >> 31;
             }
         }
 
