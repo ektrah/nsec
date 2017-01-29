@@ -52,7 +52,7 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> bytes,
             Span<char> base32)
         {
-            if (base32.Length != ((bytes.Length + 5 - 1) / 5) * 8)
+            if (base32.Length != GetEncodedLength(bytes.Length))
                 throw new ArgumentException();
             if (bytes.IsEmpty)
                 return;
@@ -136,7 +136,7 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> bytes,
             Span<byte> base32)
         {
-            if (base32.Length != ((bytes.Length + 5 - 1) / 5) * 8)
+            if (base32.Length != GetEncodedLength(bytes.Length))
                 throw new ArgumentException();
             if (bytes.IsEmpty)
                 return;
@@ -242,7 +242,7 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<char> base32,
             Span<byte> bytes)
         {
-            if (base32.Length != ((bytes.Length + 5 - 1) / 5) * 8)
+            if (base32.Length != GetEncodedLength(bytes.Length))
                 throw new ArgumentException();
             if (base32.IsEmpty)
                 return true;
@@ -318,7 +318,7 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> base32,
             Span<byte> bytes)
         {
-            if (base32.Length != ((bytes.Length + 5 - 1) / 5) * 8)
+            if (base32.Length != GetEncodedLength(bytes.Length))
                 throw new ArgumentException();
             if (base32.IsEmpty)
                 return true;
@@ -474,7 +474,10 @@ namespace NSec.Cryptography.Formatting
         private static int CheckPadding(
             int src)
         {
-            return ((0x3d - src) | (src - 0x3d)) >> 31;
+            unchecked
+            {
+                return ((0x3d - src) | (src - 0x3d)) >> 31;
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

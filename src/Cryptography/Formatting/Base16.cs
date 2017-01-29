@@ -52,7 +52,7 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> bytes,
             Span<char> base16)
         {
-            if (base16.Length != 2 * bytes.Length)
+            if (base16.Length != GetEncodedLength(bytes.Length))
                 throw new ArgumentException();
             if (bytes.IsEmpty)
                 return;
@@ -79,7 +79,7 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> bytes,
             Span<byte> base16)
         {
-            if (base16.Length != 2 * bytes.Length)
+            if (base16.Length != GetEncodedLength(bytes.Length))
                 throw new ArgumentException();
             if (bytes.IsEmpty)
                 return;
@@ -128,7 +128,7 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<char> base16,
             Span<byte> bytes)
         {
-            if (base16.Length != 2 * bytes.Length)
+            if (base16.Length != GetEncodedLength(bytes.Length))
                 throw new ArgumentException();
             if (base16.IsEmpty)
                 return true;
@@ -157,7 +157,7 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> base16,
             Span<byte> bytes)
         {
-            if (base16.Length != 2 * bytes.Length)
+            if (base16.Length != GetEncodedLength(bytes.Length))
                 throw new ArgumentException();
             if (base16.IsEmpty)
                 return true;
