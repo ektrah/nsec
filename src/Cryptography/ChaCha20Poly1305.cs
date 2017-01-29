@@ -198,6 +198,30 @@ namespace NSec.Cryptography
             }
         }
 
+        internal override bool TryReadAlgorithmIdentifier(
+            ref Asn1Reader reader,
+            out ReadOnlySpan<byte> nonce)
+        {
+            bool success = true;
+            reader.BeginSequence();
+            success &= reader.ObjectIdentifier().SequenceEqual(s_oid.Bytes);
+            nonce = reader.OctetString();
+            success &= (nonce.Length == crypto_aead_chacha20poly1305_ietf_NPUBBYTES);
+            reader.End();
+            success &= reader.Success;
+            return success;
+        }
+
+        internal override void WriteAlgorithmIdentifier(
+            ref Asn1Writer writer,
+            ReadOnlySpan<byte> nonce)
+        {
+            writer.End();
+            writer.OctetString(nonce);
+            writer.ObjectIdentifier(s_oid.Bytes);
+            writer.BeginSequence();
+        }
+
         private static bool SelfTest()
         {
             return (crypto_aead_chacha20poly1305_ietf_abytes() == (UIntPtr)crypto_aead_chacha20poly1305_ietf_ABYTES)
