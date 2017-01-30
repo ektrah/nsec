@@ -29,18 +29,14 @@ namespace NSec.Cryptography
         private readonly int _defaultKeySize;
         private readonly int _defaultMacSize;
         private readonly int _maxKeySize;
-        private readonly int _maxNonceSize;
         private readonly int _maxMacSize;
         private readonly int _minKeySize;
-        private readonly int _minNonceSize;
         private readonly int _minMacSize;
 
         internal MacAlgorithm(
             int minKeySize,
             int defaultKeySize,
             int maxKeySize,
-            int minNonceSize,
-            int maxNonceSize,
             int minMacSize,
             int defaultMacSize,
             int maxMacSize)
@@ -48,8 +44,6 @@ namespace NSec.Cryptography
             Debug.Assert(minKeySize > 0);
             Debug.Assert(defaultKeySize >= minKeySize);
             Debug.Assert(maxKeySize >= defaultKeySize);
-            Debug.Assert(minNonceSize >= 0);
-            Debug.Assert(maxNonceSize >= minNonceSize);
             Debug.Assert(minMacSize > 0);
             Debug.Assert(defaultMacSize >= minMacSize);
             Debug.Assert(maxMacSize >= defaultMacSize);
@@ -57,8 +51,6 @@ namespace NSec.Cryptography
             _minKeySize = minKeySize;
             _defaultKeySize = defaultKeySize;
             _maxKeySize = maxKeySize;
-            _minNonceSize = minNonceSize;
-            _maxNonceSize = maxNonceSize;
             _minMacSize = minMacSize;
             _defaultMacSize = defaultMacSize;
             _maxMacSize = maxMacSize;
@@ -70,38 +62,28 @@ namespace NSec.Cryptography
 
         public int MaxKeySize => _maxKeySize;
 
-        public int MaxNonceSize => _maxNonceSize;
-
         public int MaxMacSize => _maxMacSize;
 
         public int MinKeySize => _minKeySize;
-
-        public int MinNonceSize => _minNonceSize;
 
         public int MinMacSize => _minMacSize;
 
         public byte[] Sign(
             Key key,
-            ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> data)
         {
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
-            if (nonce.Length < _minNonceSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
-            if (nonce.Length > _maxNonceSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
 
             byte[] mac = new byte[_defaultMacSize];
-            SignCore(key.Handle, nonce, data, mac);
+            SignCore(key.Handle, data, mac);
             return mac;
         }
 
         public byte[] Sign(
             Key key,
-            ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> data,
             int macSize)
         {
@@ -109,23 +91,18 @@ namespace NSec.Cryptography
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
-            if (nonce.Length < _minNonceSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
-            if (nonce.Length > _maxNonceSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
             if (macSize < _minMacSize)
                 throw new ArgumentOutOfRangeException(nameof(macSize));
             if (macSize > _maxMacSize)
                 throw new ArgumentOutOfRangeException(nameof(macSize));
 
             byte[] mac = new byte[macSize];
-            SignCore(key.Handle, nonce, data, mac);
+            SignCore(key.Handle, data, mac);
             return mac;
         }
 
         public void Sign(
             Key key,
-            ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> data,
             Span<byte> mac)
         {
@@ -133,21 +110,16 @@ namespace NSec.Cryptography
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
-            if (nonce.Length < _minNonceSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
-            if (nonce.Length > _maxNonceSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
             if (mac.Length < _minMacSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(mac));
             if (mac.Length > _maxMacSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(mac));
 
-            SignCore(key.Handle, nonce, data, mac);
+            SignCore(key.Handle, data, mac);
         }
 
         public bool TryVerify(
             Key key,
-            ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> mac)
         {
@@ -155,10 +127,6 @@ namespace NSec.Cryptography
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
-            if (nonce.Length < _minNonceSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
-            if (nonce.Length > _maxNonceSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
             if (mac.Length < _minMacSize)
                 return false;
             if (mac.Length > _maxMacSize)
@@ -182,7 +150,7 @@ namespace NSec.Cryptography
                     temp = new Span<byte>(pointer, length);
                 }
 
-                SignCore(key.Handle, nonce, data, temp);
+                SignCore(key.Handle, data, temp);
 
                 Debug.Assert(mac.Length <= temp.Length);
                 int error = sodium_memcmp(ref temp.DangerousGetPinnableReference(), ref mac.DangerousGetPinnableReference(), (UIntPtr)mac.Length);
@@ -196,7 +164,6 @@ namespace NSec.Cryptography
 
         public void Verify(
             Key key,
-            ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> mac)
         {
@@ -204,10 +171,6 @@ namespace NSec.Cryptography
                 throw new ArgumentNullException(nameof(key));
             if (key.Algorithm != this)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
-            if (nonce.Length < _minNonceSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
-            if (nonce.Length > _maxNonceSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
             if (mac.Length < _minMacSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(mac));
             if (mac.Length > _maxMacSize)
@@ -231,7 +194,7 @@ namespace NSec.Cryptography
                     temp = new Span<byte>(pointer, length);
                 }
 
-                SignCore(key.Handle, nonce, data, temp);
+                SignCore(key.Handle, data, temp);
 
                 Debug.Assert(mac.Length <= temp.Length);
                 int error = sodium_memcmp(ref temp.DangerousGetPinnableReference(), ref mac.DangerousGetPinnableReference(), (UIntPtr)mac.Length);
@@ -248,7 +211,6 @@ namespace NSec.Cryptography
 
         internal abstract void SignCore(
             SecureMemoryHandle keyHandle,
-            ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> data,
             Span<byte> mac);
     }

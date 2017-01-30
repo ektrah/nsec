@@ -28,8 +28,6 @@ namespace NSec.Cryptography
     //          the function strength. Keys longer than B=64 bytes (the block
     //          size of SHA-256) are first hashed using SHA-256.
     //
-    //      Nonce Size - HMAC-SHA-256 does not use nonces.
-    //
     //      MAC Size - 32 bytes. The output can be truncated down to 16 bytes
     //          (128 bits of security).
     //
@@ -51,8 +49,6 @@ namespace NSec.Cryptography
             minKeySize: SHA256HashSize,
             defaultKeySize: SHA256HashSize,
             maxKeySize: SHA256MessageBlockSize,
-            minNonceSize: 0,
-            maxNonceSize: 0,
             minMacSize: 16,
             defaultMacSize: crypto_auth_hmacsha256_BYTES,
             maxMacSize: crypto_auth_hmacsha256_BYTES)
@@ -104,12 +100,10 @@ namespace NSec.Cryptography
 
         internal override void SignCore(
             SecureMemoryHandle keyHandle,
-            ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> data,
             Span<byte> mac)
         {
             Debug.Assert(keyHandle != null);
-            Debug.Assert(nonce.IsEmpty);
             Debug.Assert(mac.Length >= MinMacSize);
             Debug.Assert(mac.Length <= MaxMacSize);
 
