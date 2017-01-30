@@ -52,17 +52,6 @@ Gets the maximum key size, in bytes.
 The maximum key size, in bytes.
 
 
-### MaxNonceSize
-
-Gets the maximum nonce size, in bytes.
-
-    public int MaxNonceSize { get; }
-
-#### Property value
-
-The maximum nonce size, in bytes.
-
-
 ### MaxMacSize
 
 Gets the maximum MAC size, in bytes.
@@ -85,17 +74,6 @@ Gets the minimum key size, in bytes.
 The minimum key size, in bytes.
 
 
-### MinNonceSize
-
-Gets the minimum nonce size, in bytes.
-
-    public int MinNonceSize { get; }
-
-#### Property value
-
-The minimum nonce size, in bytes.
-
-
 ### MinMacSize
 
 Gets the minimum MAC size, in bytes.
@@ -110,26 +88,19 @@ The minimum MAC size, in bytes.
 ## Methods
 
 
-### Sign(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
+### Sign(Key, ReadOnlySpan<byte>)
 
 Computes a message authentication code for the specified input data using the
 specified key and returns it as an array of bytes.
 
     public byte[] Sign(
         Key key,
-        ReadOnlySpan<byte> nonce,
         ReadOnlySpan<byte> data)
 
 #### Parameters
 
 key
 : The key to use for signing.
-
-nonce
-: The nonce to use for signing.
-    The nonce must not be used more than once with the specified key,
-    unless both [[MinNonceSize|MacAlgorithm Class#MinNonceSize]] and
-    `nonce.Length` are 0.
 
 data
 : The data to be signed.
@@ -147,23 +118,17 @@ ArgumentException
 : `key.Algorithm` is not the same object as the current
     [[MacAlgorithm|MacAlgorithm Class]] object.
 
-ArgumentException
-: `nonce.Length` is less than
-    [[MinNonceSize|MacAlgorithm Class#MinNonceSize]] or greater than
-    [[MaxNonceSize|MacAlgorithm Class#MaxNonceSize]].
-
 ObjectDisposedException
 : `key` has been disposed.
 
 
-### Sign(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>, int)
+### Sign(Key, ReadOnlySpan<byte>, int)
 
 Computes a message authentication code for the specified input data using the
 specified key and returns it as an array of bytes of the specified size.
 
     public byte[] Sign(
         Key key,
-        ReadOnlySpan<byte> nonce,
         ReadOnlySpan<byte> data,
         int macSize)
 
@@ -171,12 +136,6 @@ specified key and returns it as an array of bytes of the specified size.
 
 key
 : The key to use for signing.
-
-nonce
-: The nonce to use for signing.
-    The nonce must not be used more than once with the specified key,
-    unless both [[MinNonceSize|MacAlgorithm Class#MinNonceSize]] and
-    `nonce.Length` are 0.
 
 data
 : The data to be signed.
@@ -197,11 +156,6 @@ ArgumentException
 : `key.Algorithm` is not the same object as the current
     [[MacAlgorithm|MacAlgorithm Class]] object.
 
-ArgumentException
-: `nonce.Length` is less than
-    [[MinNonceSize|MacAlgorithm Class#MinNonceSize]] or greater than
-    [[MaxNonceSize|MacAlgorithm Class#MaxNonceSize]].
-
 ArgumentOutOfRangeException
 : `macSize` is less than
     [[MinMacSize|MacAlgorithm Class#MinMacSize]] or greater than
@@ -211,14 +165,13 @@ ObjectDisposedException
 : `key` has been disposed.
 
 
-### Sign(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
+### Sign(Key, ReadOnlySpan<byte>, Span<byte>)
 
 Fills the specified span of bytes with a message authentication code for the
 specified input data using the specified key.
 
     public void Sign(
         Key key,
-        ReadOnlySpan<byte> nonce,
         ReadOnlySpan<byte> data,
         Span<byte> mac)
 
@@ -226,12 +179,6 @@ specified input data using the specified key.
 
 key
 : The key to use for signing.
-
-nonce
-: The nonce to use for signing.
-    The nonce must not be used more than once with the specified key,
-    unless both [[MinNonceSize|MacAlgorithm Class#MinNonceSize]] and
-    `nonce.Length` are 0.
 
 data
 : The data to be signed.
@@ -249,11 +196,6 @@ ArgumentException
     [[MacAlgorithm|MacAlgorithm Class]] object.
 
 ArgumentException
-: `nonce.Length` is less than
-    [[MinNonceSize|MacAlgorithm Class#MinNonceSize]] or greater than
-    [[MaxNonceSize|MacAlgorithm Class#MaxNonceSize]].
-
-ArgumentException
 : `mac.Length` is less than
     [[MinMacSize|MacAlgorithm Class#MinMacSize]] or greater than
     [[MaxMacSize|MacAlgorithm Class#MaxMacSize]].
@@ -262,14 +204,13 @@ ObjectDisposedException
 : `key` has been disposed.
 
 
-### TryVerify(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
+### TryVerify(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
 
 Attempts to verify the message authentication for the specified input data using
 the specified key.
 
     public bool TryVerify(
         Key key,
-        ReadOnlySpan<byte> nonce,
         ReadOnlySpan<byte> data,
         ReadOnlySpan<byte> mac)
 
@@ -277,10 +218,6 @@ the specified key.
 
 key
 : The key to use for verification.
-
-nonce
-: The nonce to use for verification.
-    This must be the same nonce used for signing.
 
 data
 : The data to be verified.
@@ -301,23 +238,17 @@ ArgumentException
 : `key.Algorithm` is not the same object as the current
     [[MacAlgorithm|MacAlgorithm Class]] object.
 
-ArgumentException
-: `nonce.Length` is less than
-    [[MinNonceSize|MacAlgorithm Class#MinNonceSize]] or greater than
-    [[MaxNonceSize|MacAlgorithm Class#MaxNonceSize]].
-
 ObjectDisposedException
 : `key` has been disposed.
 
 
-### Verify(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
+### Verify(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
 
 Verifies the message authentication code for the specified input data using the
 specified key.
 
     public void Verify(
         Key key,
-        ReadOnlySpan<byte> nonce,
         ReadOnlySpan<byte> data,
         ReadOnlySpan<byte> mac)
 
@@ -325,10 +256,6 @@ specified key.
 
 key
 : The key to use for verification.
-
-nonce
-: The nonce to use for verification.
-    This must be the same nonce used for signing.
 
 data
 : The data to be verified.
@@ -344,11 +271,6 @@ ArgumentNullException
 ArgumentException
 : `key.Algorithm` is not the same object as the current
     [[MacAlgorithm|MacAlgorithm Class]] object.
-
-ArgumentException
-: `nonce.Length` is less than
-    [[MinNonceSize|MacAlgorithm Class#MinNonceSize]] or greater than
-    [[MaxNonceSize|MacAlgorithm Class#MaxNonceSize]].
 
 ArgumentException
 : `mac.Length` is less than
