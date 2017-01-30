@@ -21,9 +21,6 @@ namespace NSec.Tests.Base
             Assert.True(a.DefaultKeySize >= a.MinKeySize);
             Assert.True(a.MaxKeySize >= a.DefaultKeySize);
 
-            Assert.True(a.MinNonceSize >= 0);
-            Assert.True(a.MaxNonceSize >= a.MinNonceSize);
-
             Assert.True(a.MinMacSize > 0);
             Assert.True(a.DefaultMacSize >= a.MinMacSize);
             Assert.True(a.MaxMacSize >= a.DefaultMacSize);
@@ -72,7 +69,7 @@ namespace NSec.Tests.Base
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.Throws<ArgumentNullException>("key", () => a.Sign(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Sign(null, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
@@ -83,34 +80,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(new Ed25519()))
             {
-                Assert.Throws<ArgumentException>("key", () => a.Sign(k, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void SignWithNonceTooShort(Type algorithmType)
-        {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
-            if (a.MinNonceSize > 0)
-            {
-                using (var k = new Key(a))
-                {
-                    Assert.Throws<ArgumentException>("nonce", () => a.Sign(k, new byte[a.MinNonceSize - 1], ReadOnlySpan<byte>.Empty));
-                }
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void SignWithNonceTooLong(Type algorithmType)
-        {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
-            using (var k = new Key(a))
-            {
-                Assert.Throws<ArgumentException>("nonce", () => a.Sign(k, new byte[a.MaxNonceSize + 1], ReadOnlySpan<byte>.Empty));
+                Assert.Throws<ArgumentException>("key", () => a.Sign(k, ReadOnlySpan<byte>.Empty));
             }
         }
 
@@ -122,7 +92,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                var b = a.Sign(k, new byte[a.MinNonceSize], ReadOnlySpan<byte>.Empty);
+                var b = a.Sign(k, ReadOnlySpan<byte>.Empty);
 
                 Assert.NotNull(b);
                 Assert.Equal(a.DefaultMacSize, b.Length);
@@ -139,7 +109,7 @@ namespace NSec.Tests.Base
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.Throws<ArgumentNullException>("key", () => a.Sign(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, 0));
+            Assert.Throws<ArgumentNullException>("key", () => a.Sign(null, ReadOnlySpan<byte>.Empty, 0));
         }
 
         [Theory]
@@ -150,34 +120,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(new Ed25519()))
             {
-                Assert.Throws<ArgumentException>("key", () => a.Sign(k, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, 0));
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void SignWithCountWithNonceTooShort(Type algorithmType)
-        {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
-            if (a.MinNonceSize > 0)
-            {
-                using (var k = new Key(a))
-                {
-                    Assert.Throws<ArgumentException>("nonce", () => a.Sign(k, new byte[a.MinNonceSize - 1], ReadOnlySpan<byte>.Empty, 0));
-                }
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void SignWithCountWithNonceTooLong(Type algorithmType)
-        {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
-            using (var k = new Key(a))
-            {
-                Assert.Throws<ArgumentException>("nonce", () => a.Sign(k, new byte[a.MaxNonceSize + 1], ReadOnlySpan<byte>.Empty, 0));
+                Assert.Throws<ArgumentException>("key", () => a.Sign(k, ReadOnlySpan<byte>.Empty, 0));
             }
         }
 
@@ -191,7 +134,7 @@ namespace NSec.Tests.Base
             {
                 using (var k = new Key(a))
                 {
-                    Assert.Throws<ArgumentOutOfRangeException>("macSize", () => a.Sign(k, new byte[a.MinNonceSize], ReadOnlySpan<byte>.Empty, a.MinMacSize - 1));
+                    Assert.Throws<ArgumentOutOfRangeException>("macSize", () => a.Sign(k, ReadOnlySpan<byte>.Empty, a.MinMacSize - 1));
                 }
             }
         }
@@ -204,7 +147,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                Assert.Throws<ArgumentOutOfRangeException>("macSize", () => a.Sign(k, new byte[a.MinNonceSize], ReadOnlySpan<byte>.Empty, a.MaxMacSize + 1));
+                Assert.Throws<ArgumentOutOfRangeException>("macSize", () => a.Sign(k, ReadOnlySpan<byte>.Empty, a.MaxMacSize + 1));
             }
         }
 
@@ -216,7 +159,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                var b = a.Sign(k, new byte[a.MinNonceSize], ReadOnlySpan<byte>.Empty, a.MinMacSize);
+                var b = a.Sign(k, ReadOnlySpan<byte>.Empty, a.MinMacSize);
 
                 Assert.NotNull(b);
                 Assert.Equal(a.MinMacSize, b.Length);
@@ -231,7 +174,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                var b = a.Sign(k, new byte[a.MaxNonceSize], ReadOnlySpan<byte>.Empty, a.MaxMacSize);
+                var b = a.Sign(k, ReadOnlySpan<byte>.Empty, a.MaxMacSize);
 
                 Assert.NotNull(b);
                 Assert.Equal(a.MaxMacSize, b.Length);
@@ -248,7 +191,7 @@ namespace NSec.Tests.Base
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.Throws<ArgumentNullException>("key", () => a.Sign(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Sign(null, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
@@ -259,34 +202,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(new Ed25519()))
             {
-                Assert.Throws<ArgumentException>("key", () => a.Sign(k, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void SignWithSpanWithNonceTooShort(Type algorithmType)
-        {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
-            if (a.MinNonceSize > 0)
-            {
-                using (var k = new Key(a))
-                {
-                    Assert.Throws<ArgumentException>("nonce", () => a.Sign(k, new byte[a.MinNonceSize - 1], ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
-                }
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void SignWithSpanWithNonceTooLong(Type algorithmType)
-        {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
-            using (var k = new Key(a))
-            {
-                Assert.Throws<ArgumentException>("nonce", () => a.Sign(k, new byte[a.MaxNonceSize + 1], ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+                Assert.Throws<ArgumentException>("key", () => a.Sign(k, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
             }
         }
 
@@ -300,7 +216,7 @@ namespace NSec.Tests.Base
             {
                 using (var k = new Key(a))
                 {
-                    Assert.Throws<ArgumentException>("mac", () => a.Sign(k, new byte[a.MinNonceSize], ReadOnlySpan<byte>.Empty, new byte[a.MinMacSize - 1]));
+                    Assert.Throws<ArgumentException>("mac", () => a.Sign(k, ReadOnlySpan<byte>.Empty, new byte[a.MinMacSize - 1]));
                 }
             }
         }
@@ -313,7 +229,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                Assert.Throws<ArgumentException>("mac", () => a.Sign(k, new byte[a.MaxNonceSize], ReadOnlySpan<byte>.Empty, new byte[a.MaxMacSize + 1]));
+                Assert.Throws<ArgumentException>("mac", () => a.Sign(k, ReadOnlySpan<byte>.Empty, new byte[a.MaxMacSize + 1]));
             }
         }
 
@@ -325,7 +241,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                a.Sign(k, new byte[a.MinNonceSize], ReadOnlySpan<byte>.Empty, new byte[a.MinMacSize]);
+                a.Sign(k, ReadOnlySpan<byte>.Empty, new byte[a.MinMacSize]);
             }
         }
 
@@ -337,7 +253,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                a.Sign(k, new byte[a.MaxNonceSize], ReadOnlySpan<byte>.Empty, new byte[a.MaxMacSize]);
+                a.Sign(k, ReadOnlySpan<byte>.Empty, new byte[a.MaxMacSize]);
             }
         }
 
@@ -351,7 +267,7 @@ namespace NSec.Tests.Base
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.Throws<ArgumentNullException>("key", () => a.TryVerify(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.TryVerify(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
@@ -362,34 +278,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(new Ed25519()))
             {
-                Assert.Throws<ArgumentException>("key", () => a.TryVerify(k, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void TryVerifyWithNonceTooShort(Type algorithmType)
-        {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
-            if (a.MinNonceSize > 0)
-            {
-                using (var k = new Key(a))
-                {
-                    Assert.Throws<ArgumentException>("nonce", () => a.TryVerify(k, new byte[a.MinNonceSize - 1], ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
-                }
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void TryVerifyWithNonceTooLong(Type algorithmType)
-        {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
-            using (var k = new Key(a))
-            {
-                Assert.Throws<ArgumentException>("nonce", () => a.TryVerify(k, new byte[a.MaxNonceSize + 1], ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+                Assert.Throws<ArgumentException>("key", () => a.TryVerify(k, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
             }
         }
 
@@ -403,7 +292,7 @@ namespace NSec.Tests.Base
             {
                 using (var k = new Key(a))
                 {
-                    Assert.False(a.TryVerify(k, new byte[a.MinNonceSize], ReadOnlySpan<byte>.Empty, new byte[a.MinMacSize - 1]));
+                    Assert.False(a.TryVerify(k, ReadOnlySpan<byte>.Empty, new byte[a.MinMacSize - 1]));
                 }
             }
         }
@@ -416,7 +305,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                Assert.False(a.TryVerify(k, new byte[a.MaxNonceSize], ReadOnlySpan<byte>.Empty, new byte[a.MaxMacSize + 1]));
+                Assert.False(a.TryVerify(k, ReadOnlySpan<byte>.Empty, new byte[a.MaxMacSize + 1]));
             }
         }
 
@@ -429,11 +318,10 @@ namespace NSec.Tests.Base
             using (var k = new Key(a))
             {
                 var d = ReadOnlySpan<byte>.Empty;
-                var n = new byte[a.MinNonceSize];
 
-                var mac = a.Sign(k, n, d, a.MinMacSize);
+                var mac = a.Sign(k, d, a.MinMacSize);
 
-                Assert.True(a.TryVerify(k, n, d, mac));
+                Assert.True(a.TryVerify(k, d, mac));
             }
         }
 
@@ -446,11 +334,10 @@ namespace NSec.Tests.Base
             using (var k = new Key(a))
             {
                 var d = ReadOnlySpan<byte>.Empty;
-                var n = new byte[a.MaxNonceSize];
 
-                var mac = a.Sign(k, n, d, a.MaxMacSize);
+                var mac = a.Sign(k, d, a.MaxMacSize);
 
-                Assert.True(a.TryVerify(k, n, d, mac));
+                Assert.True(a.TryVerify(k, d, mac));
             }
         }
 
@@ -464,7 +351,7 @@ namespace NSec.Tests.Base
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.Throws<ArgumentNullException>("key", () => a.Verify(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Verify(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
@@ -475,34 +362,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(new Ed25519()))
             {
-                Assert.Throws<ArgumentException>("key", () => a.Verify(k, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void VerifyWithNonceTooShort(Type algorithmType)
-        {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
-            if (a.MinNonceSize > 0)
-            {
-                using (var k = new Key(a))
-                {
-                    Assert.Throws<ArgumentException>("nonce", () => a.Verify(k, new byte[a.MinNonceSize - 1], ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
-                }
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void VerifyWithNonceTooLong(Type algorithmType)
-        {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
-            using (var k = new Key(a))
-            {
-                Assert.Throws<ArgumentException>("nonce", () => a.Verify(k, new byte[a.MaxNonceSize + 1], ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+                Assert.Throws<ArgumentException>("key", () => a.Verify(k, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
             }
         }
 
@@ -516,7 +376,7 @@ namespace NSec.Tests.Base
             {
                 using (var k = new Key(a))
                 {
-                    Assert.Throws<ArgumentException>("mac", () => a.Verify(k, new byte[a.MinNonceSize], ReadOnlySpan<byte>.Empty, new byte[a.MinMacSize - 1]));
+                    Assert.Throws<ArgumentException>("mac", () => a.Verify(k, ReadOnlySpan<byte>.Empty, new byte[a.MinMacSize - 1]));
                 }
             }
         }
@@ -529,7 +389,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                Assert.Throws<ArgumentException>("mac", () => a.Verify(k, new byte[a.MaxNonceSize], ReadOnlySpan<byte>.Empty, new byte[a.MaxMacSize + 1]));
+                Assert.Throws<ArgumentException>("mac", () => a.Verify(k, ReadOnlySpan<byte>.Empty, new byte[a.MaxMacSize + 1]));
             }
         }
 
@@ -542,11 +402,10 @@ namespace NSec.Tests.Base
             using (var k = new Key(a))
             {
                 var d = ReadOnlySpan<byte>.Empty;
-                var n = new byte[a.MinNonceSize];
 
-                var mac = a.Sign(k, n, d, a.MinMacSize);
+                var mac = a.Sign(k, d, a.MinMacSize);
 
-                a.Verify(k, n, d, mac);
+                a.Verify(k, d, mac);
             }
         }
 
@@ -559,11 +418,10 @@ namespace NSec.Tests.Base
             using (var k = new Key(a))
             {
                 var d = ReadOnlySpan<byte>.Empty;
-                var n = new byte[a.MaxNonceSize];
 
-                var mac = a.Sign(k, n, d, a.MaxMacSize);
+                var mac = a.Sign(k, d, a.MaxMacSize);
 
-                a.Verify(k, n, d, mac);
+                a.Verify(k, d, mac);
             }
         }
 

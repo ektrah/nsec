@@ -35,13 +35,12 @@ namespace NSec.Tests.Rfc
             using (var k = Key.Import(a, key.DecodeHex(), KeyBlobFormat.RawSymmetricKey))
             {
                 var m = msg.DecodeHex();
-                var n = ReadOnlySpan<byte>.Empty;
 
                 var expected = mac.DecodeHex();
-                var actual = a.Sign(k, n, m, expected.Length);
+                var actual = a.Sign(k, m, expected.Length);
                 Assert.Equal(expected, actual);
 
-                Assert.True(a.TryVerify(k, n, m, expected));
+                Assert.True(a.TryVerify(k, m, expected));
             }
         }
     }
