@@ -8,13 +8,17 @@ namespace NSec.Cryptography
     //
     //  Examples
     //
-    //      | Algorithm | Reference | Hash Size |
-    //      | --------- | --------- | --------- |
-    //      | BLAKE2b   | RFC 7693  | 1..64     |
-    //      | SHA-256   | RFC 6234  | 32        |
-    //      | SHA-512   | RFC 6234  | 64        |
-    //      | SHA3-256  | FIPS 202  | 32        |
-    //      | SHA3-512  | FIPS 202  | 64        |
+    //      | Algorithm | Reference       | Customization | Hash Size |
+    //      | --------- | --------------- | ------------- | --------- |
+    //      | BLAKE2b   | RFC 7693        | no            | 1..64     |
+    //      | SHA-256   | RFC 6234        | no            | 32        |
+    //      | SHA-512   | RFC 6234        | no            | 64        |
+    //      | SHA3-256  | NIST FIPS 202   | no            | 32        |
+    //      | SHA3-512  | NIST FIPS 202   | no            | 64        |
+    //      | SHAKE128  | NIST FIPS 202   | no            | any       |
+    //      | SHAKE256  | NIST FIPS 202   | no            | any       |
+    //      | cSHAKE128 | NIST SP 800-185 | yes           | any       |
+    //      | cSHAKE256 | NIST SP 800-185 | yes           | any       |
     //
     public abstract class HashAlgorithm : Algorithm
     {
