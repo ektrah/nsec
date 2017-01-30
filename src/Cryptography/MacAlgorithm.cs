@@ -9,14 +9,18 @@ namespace NSec.Cryptography
     //
     //  Examples
     //
-    //      | Algorithm    | Reference | Key Size | Nonce Size | MAC Size  |
-    //      | ------------ | --------- | -------- | ---------- | --------  |
-    //      | AES-CMAC     | RFC 4493  | 16       | 0          | 16        |
-    //      | BLAKE2b      | RFC 7693  | 0..64    | 0          | 1..64     |
-    //      | HMAC-SHA-256 | RFC 2104  | any      | 0          | 32        |
-    //      | HMAC-SHA-512 | RFC 2104  | any      | 0          | 64        |
-    //      | Poly1305-AES | [1]       | 32       | 16         | 16        |
-    //      | UMAC-AES     | RFC 4418  | 16,24,32 | 1..16      | 4,8,12,16 |
+    //      | Algorithm    | Reference       | Key Size | Nonce Size | Customization | MAC Size  |
+    //      | ------------ | --------------- | -------- | ---------- | ------------- | --------  |
+    //      | AES-CMAC     | RFC 4493        | 16       | 0          | no            | 16        |
+    //      | BLAKE2b      | RFC 7693        | 0..64    | 0          | no            | 1..64     |
+    //      | HMAC-SHA-256 | RFC 2104        | any      | 0          | no            | 32        |
+    //      | HMAC-SHA-512 | RFC 2104        | any      | 0          | no            | 64        |
+    //      | KMAC128      | NIST SP 800-185 | any      | 0          | yes           | any       |
+    //      | KMAC256      | NIST SP 800-185 | any      | 0          | yes           | any       |
+    //      | KMACXOF128   | NIST SP 800-185 | any      | 0          | yes           | any       |
+    //      | KMACXOF256   | NIST SP 800-185 | any      | 0          | yes           | any       |
+    //      | Poly1305-AES | [1]             | 32       | 16         | no            | 16        |
+    //      | UMAC-AES     | RFC 4418        | 16,24,32 | 1..16      | no            | 4,8,12,16 |
     //
     //      [1] http://cr.yp.to/mac.html
     //
