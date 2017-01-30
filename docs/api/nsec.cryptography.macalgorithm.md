@@ -277,6 +277,9 @@ ArgumentException
     [[MinMacSize|MacAlgorithm Class#MinMacSize]] or greater than
     [[MaxMacSize|MacAlgorithm Class#MaxMacSize]].
 
+CryptographicException
+: Verification failed.
+
 ObjectDisposedException
 : `key` has been disposed.
 
