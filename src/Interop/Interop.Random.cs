@@ -14,10 +14,5 @@ internal static partial class Interop
         internal static extern void randombytes_buf(
             SecureMemoryHandle buf,
             UIntPtr size);
-
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void randombytes_buf(
-            byte[] buf,
-            UIntPtr size);
     }
 }

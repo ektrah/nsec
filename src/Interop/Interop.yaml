@@ -81,7 +81,6 @@ Interop.Ed25519.cs:
   functions:
   - crypto_sign_ed25519_bytes
   - crypto_sign_ed25519_detached
-  - crypto_sign_ed25519_keypair (byte[] pk)
   - crypto_sign_ed25519_publickeybytes
   - crypto_sign_ed25519_secretkeybytes
   - crypto_sign_ed25519_seed_keypair (byte[] pk)
@@ -127,7 +126,6 @@ Interop.Random.cs:
   include: include/sodium/randombytes.h
   functions:
   - randombytes_buf
-  - randombytes_buf (byte[] buf)
   - randombytes_buf (SecureMemoryHandle buf)
 
 Interop.Sha256.cs:

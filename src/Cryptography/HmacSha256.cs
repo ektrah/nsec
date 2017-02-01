@@ -63,7 +63,7 @@ namespace NSec.Cryptography
         {
             publicKeyBytes = null;
             SecureMemoryHandle.Alloc(DefaultKeySize, out keyHandle);
-            randombytes_buf(keyHandle, (UIntPtr)keyHandle.Length);
+            SecureRandom.GenerateKeyCore(keyHandle);
         }
 
         internal override int ExportKey(

@@ -85,7 +85,7 @@ namespace NSec.Cryptography
         {
             publicKeyBytes = null;
             SecureMemoryHandle.Alloc(crypto_aead_aes256gcm_KEYBYTES, out keyHandle);
-            randombytes_buf(keyHandle, (UIntPtr)keyHandle.Length);
+            SecureRandom.GenerateKeyCore(keyHandle);
         }
 
         internal override void EncryptCore(

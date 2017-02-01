@@ -102,7 +102,7 @@ namespace NSec.Cryptography
         {
             publicKeyBytes = new byte[crypto_scalarmult_curve25519_SCALARBYTES];
             SecureMemoryHandle.Alloc(crypto_scalarmult_curve25519_SCALARBYTES, out keyHandle);
-            randombytes_buf(keyHandle, (UIntPtr)keyHandle.Length);
+            SecureRandom.GenerateKeyCore(keyHandle);
             crypto_scalarmult_curve25519_base(publicKeyBytes, keyHandle);
         }
 

@@ -103,9 +103,25 @@ namespace NSec.Cryptography
             out SecureMemoryHandle keyHandle,
             out byte[] publicKeyBytes)
         {
-            publicKeyBytes = new byte[crypto_sign_ed25519_PUBLICKEYBYTES];
-            SecureMemoryHandle.Alloc(crypto_sign_ed25519_SECRETKEYBYTES, out keyHandle);
-            crypto_sign_ed25519_keypair(publicKeyBytes, keyHandle);
+            Span<byte> seed;
+            try
+            {
+                unsafe
+                {
+                    byte* pointer = stackalloc byte[crypto_sign_ed25519_SEEDBYTES];
+                    seed = new Span<byte>(pointer, crypto_sign_ed25519_SEEDBYTES);
+                }
+
+                SecureRandom.GenerateBytesCore(seed);
+
+                publicKeyBytes = new byte[crypto_sign_ed25519_PUBLICKEYBYTES];
+                SecureMemoryHandle.Alloc(crypto_sign_ed25519_SECRETKEYBYTES, out keyHandle);
+                crypto_sign_ed25519_seed_keypair(publicKeyBytes, keyHandle, ref seed.DangerousGetPinnableReference());
+            }
+            finally
+            {
+                sodium_memzero(ref seed.DangerousGetPinnableReference(), (UIntPtr)seed.Length);
+            }
         }
 
         internal override int ExportKey(

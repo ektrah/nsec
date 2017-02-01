@@ -16,7 +16,7 @@ namespace NSec.Cryptography
             Sodium.Initialize();
 
             byte[] bytes = new byte[count];
-            randombytes_buf(bytes, (UIntPtr)bytes.Length);
+            GenerateBytesCore(bytes);
             return bytes;
         }
 
@@ -28,7 +28,19 @@ namespace NSec.Cryptography
 
             Sodium.Initialize();
 
+            GenerateBytesCore(bytes);
+        }
+
+        internal static void GenerateBytesCore(
+            Span<byte> bytes)
+        {
             randombytes_buf(ref bytes.DangerousGetPinnableReference(), (UIntPtr)bytes.Length);
+        }
+
+        internal static void GenerateKeyCore(
+            SecureMemoryHandle keyHandle)
+        {
+            randombytes_buf(keyHandle, (UIntPtr)keyHandle.Length);
         }
     }
 }

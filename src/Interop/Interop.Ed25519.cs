@@ -22,11 +22,6 @@ internal static partial class Interop
             SecureMemoryHandle sk);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int crypto_sign_ed25519_keypair(
-            byte[] pk,
-            SecureMemoryHandle sk);
-
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern UIntPtr crypto_sign_ed25519_publickeybytes();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
