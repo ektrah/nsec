@@ -538,5 +538,26 @@ namespace NSec.Tests.Base
         }
 
         #endregion
+
+        #region CreateKey
+
+        [Theory]
+        [MemberData(nameof(AeadAlgorithms))]
+        public static void CreateKey(Type algorithmType)
+        {
+            var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
+
+            using (var k = new Key(a, KeyFlags.AllowArchiving))
+            {
+                var actual = k.Export(KeyBlobFormat.RawSymmetricKey);
+
+                var expected = new byte[actual.Length];
+                Utilities.Fill(expected, 0xD0);
+
+                Assert.NotEqual(expected, actual);
+            }
+        }
+
+        #endregion
     }
 }

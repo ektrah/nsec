@@ -14,6 +14,12 @@ namespace NSec.Tests
             return result;
         }
 
+        public static void Fill(byte[] array, byte value)
+        {
+            for (var i = 0; i < array.Length; i++)
+                array[i] = value;
+        }
+
         public static byte[] Substring(this byte[] array, int offset, int length)
         {
             var result = new byte[length];

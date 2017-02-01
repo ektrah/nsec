@@ -233,5 +233,25 @@ namespace NSec.Tests.Algorithms
         }
 
         #endregion
+
+        #region CreateKey
+
+        [Fact]
+        public static void CreateKey()
+        {
+            var a = new Blake2();
+
+            using (var k = new Key(a, KeyFlags.AllowArchiving))
+            {
+                var actual = k.Export(KeyBlobFormat.RawSymmetricKey);
+
+                var expected = new byte[actual.Length];
+                Utilities.Fill(expected, 0xD0);
+
+                Assert.NotEqual(expected, actual);
+            }
+        }
+
+        #endregion
     }
 }
