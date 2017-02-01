@@ -103,15 +103,13 @@ namespace NSec.Cryptography
         }
 
         internal override void CreateKey(
-            out SecureMemoryHandle keyHandle,
+            SecureMemoryHandle keyHandle,
             out byte[] publicKeyBytes)
         {
             publicKeyBytes = null;
-            SecureMemoryHandle.Alloc(DefaultKeySize, out keyHandle);
-            SecureRandom.GenerateKeyCore(keyHandle);
         }
 
-        internal override int GetDerivedKeySize()
+        internal override int GetDefaultKeySize()
         {
             return DefaultKeySize;
         }

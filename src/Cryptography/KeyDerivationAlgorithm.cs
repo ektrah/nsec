@@ -94,17 +94,19 @@ namespace NSec.Cryptography
             if (algorithm == null)
                 throw new ArgumentNullException(nameof(algorithm));
 
-            int keySize = algorithm.GetDerivedKeySize();
+            int keySize = algorithm.GetDefaultKeySize();
             if (keySize > MaxOutputSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(algorithm));
 
             SecureMemoryHandle keyHandle = null;
+            byte[] publicKeyBytes = null;
             bool success = false;
 
             try
             {
                 SecureMemoryHandle.Alloc(keySize, out keyHandle);
                 DeriveKeyCore(sharedSecret.Handle, salt, info, keyHandle);
+                algorithm.CreateKey(keyHandle, out publicKeyBytes);
                 success = true;
             }
             finally
@@ -115,7 +117,7 @@ namespace NSec.Cryptography
                 }
             }
 
-            return new Key(algorithm, flags, keyHandle, null);
+            return new Key(algorithm, flags, keyHandle, publicKeyBytes);
         }
 
         internal abstract void DeriveBytesCore(

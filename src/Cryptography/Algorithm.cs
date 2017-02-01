@@ -12,7 +12,7 @@ namespace NSec.Cryptography
 
         // Allocates a new, initialized libsodium secret key.
         internal virtual void CreateKey(
-            out SecureMemoryHandle keyHandle,
+            SecureMemoryHandle keyHandle,
             out byte[] publicKeyBytes)
         {
             throw new NotSupportedException();
@@ -36,8 +36,8 @@ namespace NSec.Cryptography
             throw new NotSupportedException();
         }
 
-        // Gets the size for a derived key, if supported.
-        internal virtual int GetDerivedKeySize()
+        // Gets the default size for a libsodium secret key, if supported.
+        internal virtual int GetDefaultKeySize()
         {
             throw new NotSupportedException();
         }

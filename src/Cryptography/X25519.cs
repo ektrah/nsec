@@ -97,12 +97,10 @@ namespace NSec.Cryptography
         }
 
         internal override void CreateKey(
-            out SecureMemoryHandle keyHandle,
+            SecureMemoryHandle keyHandle, 
             out byte[] publicKeyBytes)
         {
             publicKeyBytes = new byte[crypto_scalarmult_curve25519_SCALARBYTES];
-            SecureMemoryHandle.Alloc(crypto_scalarmult_curve25519_SCALARBYTES, out keyHandle);
-            SecureRandom.GenerateKeyCore(keyHandle);
             crypto_scalarmult_curve25519_base(publicKeyBytes, keyHandle);
         }
 
@@ -144,6 +142,11 @@ namespace NSec.Cryptography
             default:
                 throw new FormatException();
             }
+        }
+
+        internal override int GetDefaultKeySize()
+        {
+            return crypto_scalarmult_curve25519_SCALARBYTES;
         }
 
         internal override int GetKeyBlobSize(

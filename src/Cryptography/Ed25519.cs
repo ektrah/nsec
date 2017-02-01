@@ -100,7 +100,7 @@ namespace NSec.Cryptography
         }
 
         internal override void CreateKey(
-            out SecureMemoryHandle keyHandle,
+            SecureMemoryHandle keyHandle,
             out byte[] publicKeyBytes)
         {
             Span<byte> seed;
@@ -112,10 +112,21 @@ namespace NSec.Cryptography
                     seed = new Span<byte>(pointer, crypto_sign_ed25519_SEEDBYTES);
                 }
 
-                SecureRandom.GenerateBytesCore(seed);
+                bool addedRef = false;
+                try
+                {
+                    keyHandle.DangerousAddRef(ref addedRef);
+                    keyHandle.DangerousGetSpan().Slice(0, crypto_sign_ed25519_SEEDBYTES).CopyTo(seed);
+                }
+                finally
+                {
+                    if (addedRef)
+                    {
+                        keyHandle.DangerousRelease();
+                    }
+                }
 
                 publicKeyBytes = new byte[crypto_sign_ed25519_PUBLICKEYBYTES];
-                SecureMemoryHandle.Alloc(crypto_sign_ed25519_SECRETKEYBYTES, out keyHandle);
                 crypto_sign_ed25519_seed_keypair(publicKeyBytes, keyHandle, ref seed.DangerousGetPinnableReference());
             }
             finally
@@ -162,6 +173,11 @@ namespace NSec.Cryptography
             default:
                 throw new FormatException();
             }
+        }
+
+        internal override int GetDefaultKeySize()
+        {
+            return crypto_sign_ed25519_SECRETKEYBYTES;
         }
 
         internal override int GetKeyBlobSize(

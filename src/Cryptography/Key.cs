@@ -21,13 +21,17 @@ namespace NSec.Cryptography
             if (algorithm == null)
                 throw new ArgumentNullException(nameof(algorithm));
 
+            int keySize = algorithm.GetDefaultKeySize();
+
             SecureMemoryHandle keyHandle = null;
             byte[] publicKeyBytes = null;
             bool success = false;
 
             try
             {
-                algorithm.CreateKey(out keyHandle, out publicKeyBytes);
+                SecureMemoryHandle.Alloc(keySize, out keyHandle);
+                SecureRandom.GenerateKeyCore(keyHandle);
+                algorithm.CreateKey(keyHandle, out publicKeyBytes);
                 success = true;
             }
             finally

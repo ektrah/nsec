@@ -80,12 +80,10 @@ namespace NSec.Cryptography
         public static bool IsAvailable => Sodium.TryInitialize() && (s_isAvailable.Value != 0);
 
         internal override void CreateKey(
-            out SecureMemoryHandle keyHandle,
+            SecureMemoryHandle keyHandle,
             out byte[] publicKeyBytes)
         {
             publicKeyBytes = null;
-            SecureMemoryHandle.Alloc(crypto_aead_aes256gcm_KEYBYTES, out keyHandle);
-            SecureRandom.GenerateKeyCore(keyHandle);
         }
 
         internal override void EncryptCore(
@@ -132,7 +130,7 @@ namespace NSec.Cryptography
             }
         }
 
-        internal override int GetDerivedKeySize()
+        internal override int GetDefaultKeySize()
         {
             return crypto_aead_aes256gcm_KEYBYTES;
         }
