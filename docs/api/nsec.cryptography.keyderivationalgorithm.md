@@ -85,7 +85,7 @@ ArgumentException
     `salt` is not empty.
 
 ArgumentOutOfRangeException
-: `count` is less than 0 or larger than
+: `count` is less than 0 or greater than
     [[MaxOutputSize|KeyDerivationAlgorithm Class#MaxOutputSize]].
 
 ObjectDisposedException
@@ -126,7 +126,7 @@ ArgumentException
     `salt` is not empty.
 
 ArgumentException
-: The length of `bytes` is larger than
+: The length of `bytes` is greater than
     [[MaxOutputSize|KeyDerivationAlgorithm Class#MaxOutputSize]].
 
 ObjectDisposedException
