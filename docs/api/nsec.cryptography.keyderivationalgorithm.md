@@ -128,7 +128,7 @@ ArgumentException
     `salt` is not empty.
 
 ArgumentException
-: The length of `bytes` is greater than
+: `bytes.Length` is greater than
     [[MaxOutputSize|KeyDerivationAlgorithm Class#MaxOutputSize]].
 
 ObjectDisposedException

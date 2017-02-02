@@ -121,7 +121,7 @@ hash
 #### Exceptions
 
 ArgumentException
-: The length of `hash` is less than
+: `hash.Length` is less than
     [[MinHashSize|HashAlgorithm Class#MinHashSize]] or greater than
     [[MaxHashSize|HashAlgorithm Class#MaxHashSize]].
 

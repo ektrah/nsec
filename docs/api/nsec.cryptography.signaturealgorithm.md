@@ -121,7 +121,7 @@ ArgumentException
     [[SignatureAlgorithm|SignatureAlgorithm Class]] object.
 
 ArgumentException
-: The length of `signature` is not equal to the value of
+: `signature.Length` is not equal to
     [[SignatureSize|SignatureAlgorithm Class#SignatureSize]].
 
 ObjectDisposedException
