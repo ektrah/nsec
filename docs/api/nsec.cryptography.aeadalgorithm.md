@@ -30,26 +30,15 @@ Gets the key size, in bytes.
 The key size, in bytes.
 
 
-### MaxNonceSize
+### NonceSize
 
-Gets the maximum nonce size, in bytes.
+Gets the nonce size, in bytes.
 
-    public int MaxNonceSize { get; }
-
-#### Property value
-
-The maximum nonce size, in bytes.
-
-
-### MinNonceSize
-
-Gets the minimum nonce size, in bytes.
-
-    public int MinNonceSize { get; }
+    public int NonceSize { get; }
 
 #### Property value
 
-The minimum nonce size, in bytes.
+The nonce size, in bytes.
 
 
 ### TagSize
@@ -107,9 +96,7 @@ ArgumentException
     [[AeadAlgorithm|AeadAlgorithm Class]] object.
 
 ArgumentException
-: `nonce.Length` is less than
-    [[MinNonceSize|AeadAlgorithm Class#MinNonceSize]] or greater than
-    [[MaxNonceSize|AeadAlgorithm Class#MaxNonceSize]].
+: `nonce.Length` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
 
 CryptographicException
 : Authentication failed.
@@ -161,9 +148,7 @@ ArgumentException
     [[AeadAlgorithm|AeadAlgorithm Class]] object.
 
 ArgumentException
-: `nonce.Length` is less than
-    [[MinNonceSize|AeadAlgorithm Class#MinNonceSize]] or greater than
-    [[MaxNonceSize|AeadAlgorithm Class#MaxNonceSize]].
+: `nonce.Length` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
 
 ArgumentException
 : `plaintext.Length` is not equal to `ciphertext.Length` minus
@@ -220,9 +205,7 @@ ArgumentException
     [[AeadAlgorithm|AeadAlgorithm Class]] object.
 
 ArgumentException
-: `nonce.Length` is less than
-    [[MinNonceSize|AeadAlgorithm Class#MinNonceSize]] or greater than
-    [[MaxNonceSize|AeadAlgorithm Class#MaxNonceSize]].
+: `nonce.Length` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
 
 ArgumentException
 : `plaintext.Length` plus [[TagSize|AeadAlgorithm Class#TagSize]]
@@ -274,9 +257,7 @@ ArgumentException
     [[AeadAlgorithm|AeadAlgorithm Class]] object.
 
 ArgumentException
-: `nonce.Length` is less than
-    [[MinNonceSize|AeadAlgorithm Class#MinNonceSize]] or greater than
-    [[MaxNonceSize|AeadAlgorithm Class#MaxNonceSize]].
+: `nonce.Length` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
 
 ArgumentException
 : `plaintext.Length` plus [[TagSize|AeadAlgorithm Class#TagSize]]
@@ -336,9 +317,7 @@ ArgumentException
     [[AeadAlgorithm|AeadAlgorithm Class]] object.
 
 ArgumentException
-: `nonce.Length` is less than
-    [[MinNonceSize|AeadAlgorithm Class#MinNonceSize]] or greater than
-    [[MaxNonceSize|AeadAlgorithm Class#MaxNonceSize]].
+: `nonce.Length` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
 
 ObjectDisposedException
 : `key` has been disposed.
@@ -391,9 +370,7 @@ ArgumentException
     [[AeadAlgorithm|AeadAlgorithm Class]] object.
 
 ArgumentException
-: `nonce.Length` is less than
-    [[MinNonceSize|AeadAlgorithm Class#MinNonceSize]] or greater than
-    [[MaxNonceSize|AeadAlgorithm Class#MaxNonceSize]].
+: `nonce.Length` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
 
 ArgumentException
 : `plaintext.Length` is not equal to `ciphertext.Length` minus
