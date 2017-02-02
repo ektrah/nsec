@@ -64,8 +64,7 @@ namespace NSec.Cryptography
 
         public ChaCha20Poly1305() : base(
             keySize: crypto_aead_chacha20poly1305_ietf_KEYBYTES,
-            minNonceSize: crypto_aead_chacha20poly1305_ietf_NPUBBYTES,
-            maxNonceSize: crypto_aead_chacha20poly1305_ietf_NPUBBYTES,
+            nonceSize: crypto_aead_chacha20poly1305_ietf_NPUBBYTES,
             tagSize: crypto_aead_chacha20poly1305_ietf_ABYTES)
         {
             if (!s_selfTest.Value)
