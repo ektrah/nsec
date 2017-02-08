@@ -25,6 +25,10 @@ namespace NSec.Tests
             typeof(Blake2b),
             typeof(Sha256),
             typeof(Sha512),
+            typeof(Sha3_256),
+            typeof(Sha3_512),
+            typeof(Shake128),
+            typeof(Shake256),
         };
 
         public static readonly TheoryData<Type> KeyAgreementAlgorithms = new TheoryData<Type>
