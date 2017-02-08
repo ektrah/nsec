@@ -31,7 +31,8 @@ namespace NSec.Cryptography
             int defaultHashSize,
             int maxHashSize)
         {
-            Debug.Assert(minHashSize > 0);
+            Debug.Assert(minHashSize >= 0);
+            Debug.Assert(defaultHashSize > 0);
             Debug.Assert(defaultHashSize >= minHashSize);
             Debug.Assert(maxHashSize >= defaultHashSize);
 
@@ -62,6 +63,8 @@ namespace NSec.Cryptography
                 throw new ArgumentOutOfRangeException(nameof(hashSize));
             if (hashSize > _maxHashSize)
                 throw new ArgumentOutOfRangeException(nameof(hashSize));
+            if (hashSize == 0)
+                return new byte[0];
 
             byte[] hash = new byte[hashSize];
             HashCore(data, hash);
@@ -76,6 +79,8 @@ namespace NSec.Cryptography
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(hash));
             if (hash.Length > _maxHashSize)
                 throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(hash));
+            if (hash.IsEmpty)
+                return;
 
             HashCore(data, hash);
         }

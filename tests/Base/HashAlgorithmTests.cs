@@ -16,7 +16,8 @@ namespace NSec.Tests.Base
         {
             var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.True(a.MinHashSize > 0);
+            Assert.True(a.MinHashSize >= 0);
+            Assert.True(a.DefaultHashSize > 0);
             Assert.True(a.DefaultHashSize >= a.MinHashSize);
             Assert.True(a.MaxHashSize >= a.DefaultHashSize);
         }
@@ -47,7 +48,10 @@ namespace NSec.Tests.Base
         {
             var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.Throws<ArgumentOutOfRangeException>("hashSize", () => a.Hash(ReadOnlySpan<byte>.Empty, a.MinHashSize - 1));
+            if (a.MinHashSize > 0)
+            {
+                Assert.Throws<ArgumentOutOfRangeException>("hashSize", () => a.Hash(ReadOnlySpan<byte>.Empty, a.MinHashSize - 1));
+            }
         }
 
         [Theory]
@@ -56,7 +60,10 @@ namespace NSec.Tests.Base
         {
             var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.Throws<ArgumentOutOfRangeException>("hashSize", () => a.Hash(ReadOnlySpan<byte>.Empty, a.MaxHashSize + 1));
+            if (a.MaxHashSize < int.MaxValue)
+            {
+                Assert.Throws<ArgumentOutOfRangeException>("hashSize", () => a.Hash(ReadOnlySpan<byte>.Empty, a.MaxHashSize + 1));
+            }
         }
 
         [Theory]
@@ -65,10 +72,10 @@ namespace NSec.Tests.Base
         {
             var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
 
-            var b = a.Hash(ReadOnlySpan<byte>.Empty, a.MaxHashSize);
+            var b = a.Hash(ReadOnlySpan<byte>.Empty, 32);
 
             Assert.NotNull(b);
-            Assert.Equal(a.MaxHashSize, b.Length);
+            Assert.Equal(32, b.Length);
         }
 
         #endregion
@@ -81,7 +88,10 @@ namespace NSec.Tests.Base
         {
             var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.Throws<ArgumentException>("hash", () => a.Hash(ReadOnlySpan<byte>.Empty, new byte[a.MinHashSize - 1]));
+            if (a.MinHashSize > 0)
+            {
+                Assert.Throws<ArgumentException>("hash", () => a.Hash(ReadOnlySpan<byte>.Empty, new byte[a.MinHashSize - 1]));
+            }
         }
 
         [Theory]
@@ -90,7 +100,10 @@ namespace NSec.Tests.Base
         {
             var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.Throws<ArgumentException>("hash", () => a.Hash(ReadOnlySpan<byte>.Empty, new byte[a.MaxHashSize + 1]));
+            if (a.MaxHashSize < int.MaxValue)
+            {
+                Assert.Throws<ArgumentException>("hash", () => a.Hash(ReadOnlySpan<byte>.Empty, new byte[a.MaxHashSize + 1]));
+            }
         }
 
         [Theory]
@@ -99,7 +112,7 @@ namespace NSec.Tests.Base
         {
             var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
 
-            a.Hash(ReadOnlySpan<byte>.Empty, new byte[a.MaxHashSize]);
+            a.Hash(ReadOnlySpan<byte>.Empty, new byte[32]);
         }
 
         #endregion
