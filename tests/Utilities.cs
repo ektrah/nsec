@@ -36,6 +36,21 @@ namespace NSec.Tests
             }
         }
 
+        public static TheoryData<string, string, string, string> LoadTheoryData4(Type type)
+        {
+            var assembly = type.GetTypeInfo().Assembly;
+
+            using (var stream = assembly.GetManifestResourceStream(type.FullName + ".txt"))
+            using (var reader = new StreamReader(stream))
+            {
+                var data = new TheoryData<string, string, string, string>();
+                var line = (string[])null;
+                while ((line = reader.ReadLine()?.Split(':')) != null)
+                    data.Add(line[0], line[1], line[2], line[3]);
+                return data;
+            }
+        }
+
         public static byte[] Substring(this byte[] array, int offset, int length)
         {
             var result = new byte[length];
