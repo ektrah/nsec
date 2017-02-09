@@ -157,13 +157,7 @@ namespace NSec.Cryptography.Formatting
             if (base64 == null)
                 throw new ArgumentNullException(nameof(base64));
 
-            unsafe
-            {
-                fixed (char* pointer = base64)
-                {
-                    return TryDecode(new ReadOnlySpan<char>(pointer, base64.Length), bytes);
-                }
-            }
+            return TryDecode(base64.Slice(), bytes);
         }
 
         public static bool TryDecode(
@@ -269,13 +263,7 @@ namespace NSec.Cryptography.Formatting
             if (base64 == null)
                 throw new ArgumentNullException(nameof(base64));
 
-            unsafe
-            {
-                fixed (char* pointer = base64)
-                {
-                    return TryGetDecodedLength(new ReadOnlySpan<char>(pointer, base64.Length), out decodedLength);
-                }
-            }
+            return TryGetDecodedLength(base64.Slice(), out decodedLength);
         }
 
         public static bool TryGetDecodedLength(
