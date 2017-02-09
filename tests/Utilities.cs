@@ -21,6 +21,21 @@ namespace NSec.Tests
                 array[i] = value;
         }
 
+        public static TheoryData<string[]> LoadTheoryData(Type type)
+        {
+            var assembly = type.GetTypeInfo().Assembly;
+
+            using (var stream = assembly.GetManifestResourceStream(type.FullName + ".txt"))
+            using (var reader = new StreamReader(stream))
+            {
+                var data = new TheoryData<string[]>();
+                var line = (string[])null;
+                while ((line = reader.ReadLine()?.Split(':')) != null)
+                    data.Add(line);
+                return data;
+            }
+        }
+
         public static TheoryData<string, string, string> LoadTheoryData3(Type type)
         {
             var assembly = type.GetTypeInfo().Assembly;
