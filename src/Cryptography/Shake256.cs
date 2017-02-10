@@ -3,6 +3,23 @@ using static Interop.KeccakTiny;
 
 namespace NSec.Cryptography
 {
+    //
+    //  SHAKE256
+    //
+    //      SHA-3 Extendable-Output Function with 256-bit security strength
+    //
+    //  References:
+    //
+    //      FIPS 202 - SHA-3 Standard: Permutation-Based Hash and
+    //          Extendable-Output Functions
+    //
+    //  Parameters:
+    //
+    //      Input Size - The SHA-3 functions are defined on messages of any bit
+    //          length, including the empty string.
+    //
+    //      Hash Size - Any.
+    //
     public sealed class Shake256 : HashAlgorithm
     {
         public Shake256() : base(
