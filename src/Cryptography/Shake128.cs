@@ -22,6 +22,8 @@ namespace NSec.Cryptography
     //
     public sealed class Shake128 : HashAlgorithm
     {
+        private static readonly Oid s_oid = new Oid(2, 16, 840, 1, 101, 3, 4, 2, 11);
+
         public Shake128() : base(
             minHashSize: 0,
             defaultHashSize: 32,

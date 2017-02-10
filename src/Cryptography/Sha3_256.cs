@@ -22,6 +22,8 @@ namespace NSec.Cryptography
     //
     public sealed class Sha3_256 : HashAlgorithm
     {
+        private static readonly Oid s_oid = new Oid(2, 16, 840, 1, 101, 3, 4, 2, 8);
+
         public Sha3_256() : base(
             minHashSize: 32,
             defaultHashSize: 32,
