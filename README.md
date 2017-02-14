@@ -10,24 +10,27 @@
 
 * **Modern** &ndash; libsodium provides a small set of high-quality, modern
 cryptographic primitives, including X25519, Ed25519 and ChaCha20-Poly1305. NSec
-wraps libsodium in a modern .NET API based on the new `Span<T>` and
+wraps these primitives in a modern .NET API based on the new `Span<T>` and
 `ReadOnlySpan<T>` types.
 
-* **Easy-to-use** &ndash; NSec throws you into the "pit of success" by providing a
-strongly typed data model. Keys and shared secrets are represented with specific
-classes rather than naked byte arrays. This avoids, for example, accidentally
-using a key with the wrong algorithm.
+* **Easy-to-use** &ndash; NSec wants you to fall into the "pit of success." It
+provides a strongly typed data model that represents keys and shared secrets
+with specific classes rather than naked byte arrays. This avoids, for example,
+accidentally using a key with a wrong algorithm. Still, there are some hard
+problems that need to be solved outside of NSec, such as nonce generation and
+key management.
 
 * **Secure** &ndash; In addition to the security provided by the cryptographic
-primitives, NSec tries to make working with these primitives as secure as
-possible. All sensitive data such as keys is stored in libsodium's secure memory
-rather than on the managed heap and is securely erased when no longer needed.
+primitives, NSec tries to make the use of these primitives secure by default.
+For example, all sensitive data such as keys is stored in libsodium's secure
+memory rather than on the managed heap and is securely erased when no longer
+needed.
 
 * **Fast** &ndash; libsodium is fast, and cryptographic operations in libsodium never
-allocate memory on the heap. NSec follows libsodium's example and avoids
+allocate memory on the heap. NSec follows libsodium's lead and avoids
 allocations and expensive copies in almost all cases. Only methods that return
-byte arrays, keys, or shared secrets do allocate memory and should be kept
-outside hot paths.
+byte arrays, keys or shared secrets do allocate memory and should therefore be
+kept outside of hot paths.
 
 * **Agile** &ndash; NSec features a simple object model with cryptographic agility in
 mind. All algorithms derive from a small set of base classes. This helps writing
@@ -84,13 +87,14 @@ Soon&trade; (waiting for VS2017)
 
 ## Contributing
 
+NSec is an open source project.
+Contributions to the code or documentation are highly welcome.
+
+The easiest way to contribute is by
+[submitting a pull request](https://github.com/ektrah/nsec/pulls).
 If you've found an problem with NSec, please
 [open a new issue](https://github.com/ektrah/nsec/issues).
 Feature requests are welcome, too.
-
-[Pull requests](https://github.com/ektrah/nsec/pulls) &ndash; patches, improvements,
-new features &ndash; are a fantastic help. Please ask first before embarking on any
-significant pull request (e.g., implementing new features).
 
 
 ## Note
@@ -101,7 +105,8 @@ it secure.*
 NSec aims to provide careful abstractions to make the work with modern
 cryptographic primitives relatively easy and pain-free. However, the primitives
 are not very useful by themselves and need to be combined into higher-level
-security protocols, such as TLS or JSON Web Token. Don't roll your own security.
+security protocols, such as TLS or JSON Web Token. Don't roll your own security
+protocols.
 
 
 ## License
