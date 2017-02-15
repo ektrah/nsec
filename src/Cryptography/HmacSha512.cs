@@ -40,9 +40,9 @@ namespace NSec.Cryptography
         private const int SHA512HashSize = 64; // "L" in RFC 2104
         private const int SHA512MessageBlockSize = 128; // "B" in RFC 2104
 
-        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
-
         private static readonly Oid s_oid = new Oid(1, 2, 840, 113549, 2, 11);
+
+        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
         private static readonly KeyBlobFormat[] s_supportedKeyBlobFormats =
         {

@@ -28,23 +28,6 @@ namespace NSec.Cryptography
     //
     public sealed class X25519 : KeyAgreementAlgorithm
     {
-        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
-
-        private static readonly Oid s_oid = new Oid(1, 3, 101, 110);
-
-        private static readonly KeyBlobFormat[] s_supportedKeyBlobFormats =
-        {
-            KeyBlobFormat.PkixPrivateKeyText,
-            KeyBlobFormat.PkixPrivateKey,
-            KeyBlobFormat.NSecPrivateKey,
-            KeyBlobFormat.RawPrivateKey,
-
-            KeyBlobFormat.PkixPublicKeyText,
-            KeyBlobFormat.PkixPublicKey,
-            KeyBlobFormat.NSecPublicKey,
-            KeyBlobFormat.RawPublicKey,
-        };
-
         private static readonly KeyFormatter s_nsecPrivateKeyFormatter =
             new X25519KeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[]
         {
@@ -56,6 +39,8 @@ namespace NSec.Cryptography
         {
             0x7F, 0x37, 0x41, crypto_scalarmult_curve25519_SCALARBYTES,
         });
+
+        private static readonly Oid s_oid = new Oid(1, 3, 101, 110);
 
         private static readonly KeyFormatter s_pkixPrivateKeyFormatter =
             new X25519KeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[]
@@ -86,6 +71,21 @@ namespace NSec.Cryptography
 
         private static readonly PublicKeyFormatter s_rawPublicKeyFormatter =
             new PublicKeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[] { });
+
+        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
+
+        private static readonly KeyBlobFormat[] s_supportedKeyBlobFormats =
+        {
+            KeyBlobFormat.PkixPrivateKeyText,
+            KeyBlobFormat.PkixPrivateKey,
+            KeyBlobFormat.NSecPrivateKey,
+            KeyBlobFormat.RawPrivateKey,
+
+            KeyBlobFormat.PkixPublicKeyText,
+            KeyBlobFormat.PkixPublicKey,
+            KeyBlobFormat.NSecPublicKey,
+            KeyBlobFormat.RawPublicKey,
+        };
 
         public X25519() : base(
             privateKeySize: crypto_scalarmult_curve25519_SCALARBYTES,

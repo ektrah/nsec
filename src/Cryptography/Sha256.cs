@@ -27,9 +27,9 @@ namespace NSec.Cryptography
     //
     public sealed class Sha256 : HashAlgorithm
     {
-        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
-
         private static readonly Oid s_oid = new Oid(2, 16, 840, 1, 101, 3, 4, 2, 1);
+
+        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
         public Sha256() : base(
             minHashSize: crypto_hash_sha256_BYTES,

@@ -43,24 +43,24 @@ namespace NSec.Cryptography
     //
     public sealed class ChaCha20Poly1305 : AeadAlgorithm
     {
-        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
-
-        private static readonly Oid s_oid = new Oid(1, 2, 840, 113549, 1, 9, 16, 3, 18);
-
-        private static readonly KeyBlobFormat[] s_supportedKeyBlobFormats =
-        {
-            KeyBlobFormat.NSecSymmetricKey,
-            KeyBlobFormat.RawSymmetricKey,
-        };
-
         private static readonly KeyFormatter s_nsecKeyFormatter =
             new KeyFormatter(crypto_aead_chacha20poly1305_ietf_KEYBYTES, new byte[]
         {
             0x7F, 0x31, 0x43, crypto_aead_chacha20poly1305_ietf_KEYBYTES,
         });
 
+        private static readonly Oid s_oid = new Oid(1, 2, 840, 113549, 1, 9, 16, 3, 18);
+
         private static readonly KeyFormatter s_rawKeyFormatter =
             new KeyFormatter(crypto_aead_chacha20poly1305_ietf_KEYBYTES, new byte[] { });
+
+        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
+
+        private static readonly KeyBlobFormat[] s_supportedKeyBlobFormats =
+        {
+            KeyBlobFormat.NSecSymmetricKey,
+            KeyBlobFormat.RawSymmetricKey,
+        };
 
         public ChaCha20Poly1305() : base(
             keySize: crypto_aead_chacha20poly1305_ietf_KEYBYTES,

@@ -46,15 +46,6 @@ namespace NSec.Cryptography
     public sealed class Aes256Gcm : AeadAlgorithm
     {
         private static readonly Lazy<int> s_isAvailable = new Lazy<int>(new Func<int>(crypto_aead_aes256gcm_is_available));
-        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
-
-        private static readonly Oid s_oid = new Oid(2, 16, 840, 1, 101, 3, 4, 1, 46);
-
-        private static readonly KeyBlobFormat[] s_supportedKeyBlobFormats =
-        {
-            KeyBlobFormat.NSecSymmetricKey,
-            KeyBlobFormat.RawSymmetricKey,
-        };
 
         private static readonly KeyFormatter s_nsecKeyFormatter =
             new KeyFormatter(crypto_aead_aes256gcm_KEYBYTES, new byte[]
@@ -62,8 +53,18 @@ namespace NSec.Cryptography
             0x7F, 0x31, 0x44, crypto_aead_aes256gcm_KEYBYTES,
         });
 
+        private static readonly Oid s_oid = new Oid(2, 16, 840, 1, 101, 3, 4, 1, 46);
+
         private static readonly KeyFormatter s_rawKeyFormatter =
             new KeyFormatter(crypto_aead_aes256gcm_KEYBYTES, new byte[] { });
+
+        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
+
+        private static readonly KeyBlobFormat[] s_supportedKeyBlobFormats =
+        {
+            KeyBlobFormat.NSecSymmetricKey,
+            KeyBlobFormat.RawSymmetricKey,
+        };
 
         public Aes256Gcm() : base(
             keySize: crypto_aead_aes256gcm_KEYBYTES,
