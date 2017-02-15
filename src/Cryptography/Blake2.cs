@@ -109,6 +109,20 @@ namespace NSec.Cryptography
             publicKeyBytes = null;
         }
 
+        internal override int ExportKey(
+            SecureMemoryHandle keyHandle,
+            KeyBlobFormat format,
+            Span<byte> blob)
+        {
+            if (format != KeyBlobFormat.RawSymmetricKey)
+                throw new FormatException();
+            if (blob.Length < keyHandle.Length)
+                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(blob));
+
+            Debug.Assert(keyHandle != null);
+            return keyHandle.Export(blob);
+        }
+
         internal override int GetDefaultKeySize()
         {
             return DefaultKeySize;
@@ -125,20 +139,6 @@ namespace NSec.Cryptography
         internal override ReadOnlySpan<KeyBlobFormat> GetSupportedKeyBlobFormats()
         {
             return s_supportedKeyBlobFormats;
-        }
-
-        internal override int ExportKey(
-            SecureMemoryHandle keyHandle,
-            KeyBlobFormat format,
-            Span<byte> blob)
-        {
-            if (format != KeyBlobFormat.RawSymmetricKey)
-                throw new FormatException();
-            if (blob.Length < keyHandle.Length)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(blob));
-
-            Debug.Assert(keyHandle != null);
-            return keyHandle.Export(blob);
         }
 
         internal override void HashCore(
