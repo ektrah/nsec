@@ -19,12 +19,13 @@ namespace NSec.Cryptography
     //
     //  Parameters:
     //
-    //      Input Size - Between 0 and 2^125-1 bytes. Since a Span<byte> can
-    //          hold between 0 to 2^31-1 bytes, we do not check the length of
-    //          inputs.
+    //      Input Size - Between 0 and 2^125-1 bytes. (A Span<byte> can hold
+    //          only up to 2^31-1 bytes.)
     //
     //      Hash Size - 64 bytes (256 bits of security). The output can be
-    //          truncated down to 32 bytes (SHA-512/256) (128 bits of security).
+    //          truncated to 32 bytes (128 bits of security). Note that SHA-512
+    //          truncated to 32 bytes/256 bits is not the same as SHA-512/256,
+    //          which uses a different initial hash value.
     //
     public sealed class Sha512 : HashAlgorithm
     {
@@ -57,7 +58,7 @@ namespace NSec.Cryptography
 
             // crypto_hash_sha512_final expects an output buffer with a
             // size of exactly crypto_hash_sha512_BYTES, so we need to
-            // copy when truncating the output.
+            // copy when a truncated output is requested.
 
             if (hash.Length == crypto_hash_sha512_BYTES)
             {

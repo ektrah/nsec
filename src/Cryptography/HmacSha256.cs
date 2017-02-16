@@ -28,7 +28,7 @@ namespace NSec.Cryptography
     //          the function strength. Keys longer than B=64 bytes (the block
     //          size of SHA-256) are first hashed using SHA-256.
     //
-    //      MAC Size - 32 bytes. The output can be truncated down to 16 bytes
+    //      MAC Size - 32 bytes. The output can be truncated to 16 bytes
     //          (128 bits of security).
     //
     public sealed class HmacSha256 : MacAlgorithm
@@ -58,7 +58,7 @@ namespace NSec.Cryptography
         }
 
         internal override void CreateKey(
-            SecureMemoryHandle keyHandle, 
+            SecureMemoryHandle keyHandle,
             out byte[] publicKeyBytes)
         {
             publicKeyBytes = null;
@@ -121,9 +121,9 @@ namespace NSec.Cryptography
                 crypto_auth_hmacsha256_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
             }
 
-            // crypto_auth_hmacsha256_final expects an output buffer with a
-            // size of exactly crypto_auth_hmacsha256_BYTES, so we need to
-            // copy when truncating the output.
+            // crypto_auth_hmacsha256_final expects an output buffer with a size
+            // of exactly crypto_auth_hmacsha256_BYTES, so we need to copy when
+            // a truncated output is requested.
 
             if (mac.Length == crypto_auth_hmacsha256_BYTES)
             {

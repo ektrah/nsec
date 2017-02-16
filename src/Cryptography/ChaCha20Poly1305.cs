@@ -30,13 +30,10 @@ namespace NSec.Cryptography
     //
     //      Tag Size - 16 bytes.
     //
-    //      Plaintext Size - Between 0 and 2^38-64 bytes. Since a Span<byte> can
-    //          hold between 0 to 2^31-1 bytes, we do not check the length of
-    //          plaintext inputs.
+    //      Plaintext Size - Between 0 and 2^38-64 bytes. (A Span<byte> can hold
+    //          only up to 2^31-1 bytes.)
     //
-    //      Associated Data Size - Between 0 and 2^64-1 bytes. Since a
-    //          Span<byte> can hold between 0 to 2^31-1 bytes, we do not check
-    //          the length of associated data inputs.
+    //      Associated Data Size - Between 0 and 2^64-1 bytes.
     //
     //      Ciphertext Size - The ciphertext always has the size of the
     //          plaintext plus the tag size.
@@ -169,8 +166,7 @@ namespace NSec.Cryptography
                 ref nonce.DangerousGetPinnableReference(),
                 keyHandle);
 
-            // libsodium clears the plaintext if decryption fails, so we do
-            // not need to clear the plaintext.
+            // libsodium clears the plaintext if decryption fails.
 
             Debug.Assert(error != 0 || (ulong)plaintext.Length == plaintextLength);
             return error == 0;

@@ -30,7 +30,7 @@ namespace NSec.Cryptography
     //          than B=128 bytes (the block size of SHA-512) are first hashed
     //          using SHA-512.
     //
-    //      MAC Size - 64 bytes. The output can be truncated down to 16 bytes
+    //      MAC Size - 64 bytes. The output can be truncated to 16 bytes
     //          (128 bits of security). To match the security of SHA-512, the
     //          output length should not be less than half of L (i.e., not less
     //          than 32 bytes).
@@ -62,7 +62,7 @@ namespace NSec.Cryptography
         }
 
         internal override void CreateKey(
-            SecureMemoryHandle keyHandle, 
+            SecureMemoryHandle keyHandle,
             out byte[] publicKeyBytes)
         {
             publicKeyBytes = null;
@@ -125,9 +125,9 @@ namespace NSec.Cryptography
                 crypto_auth_hmacsha512_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
             }
 
-            // crypto_auth_hmacsha512_final expects an output buffer with a
-            // size of exactly crypto_auth_hmacsha512_BYTES, so we need to
-            // copy when truncating the output.
+            // crypto_auth_hmacsha512_final expects an output buffer with a size
+            // of exactly crypto_auth_hmacsha512_BYTES, so we need to copy when
+            // a truncated output is requested.
 
             if (mac.Length == crypto_auth_hmacsha512_BYTES)
             {
