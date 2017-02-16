@@ -6,6 +6,28 @@ using static Interop.Norx3241;
 
 namespace NSec.Cryptography
 {
+    //
+    //  NORX32-4-1
+    //
+    //  References:
+    //
+    //      NORX v3.0 <https://norx.io/data/norx.pdf>
+    //
+    //  Parameters:
+    //
+    //      Key Size - 16 bytes.
+    //
+    //      Nonce Size - 16 bytes.
+    //
+    //      Tag Size - 16 bytes.
+    //
+    //      Plaintext Size - TBD.
+    //
+    //      Associated Data Size - TBD.
+    //
+    //      Ciphertext Size - The ciphertext always has the size of the
+    //          plaintext plus the tag size.
+    //
     public sealed class Norx3241 : AeadAlgorithm
     {
         private static readonly KeyFormatter s_rawKeyFormatter =
