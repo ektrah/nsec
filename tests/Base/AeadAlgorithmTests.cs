@@ -418,7 +418,7 @@ namespace NSec.Tests.Base
                     pt[i] = 0xD6;
                 }
 
-                var ct = new byte[32];
+                var ct = new byte[pt.Length + a.TagSize];
 
                 Assert.False(a.TryDecrypt(k, new byte[a.NonceSize], ReadOnlySpan<byte>.Empty, ct, pt));
                 Assert.Equal(new byte[pt.Length], pt);
