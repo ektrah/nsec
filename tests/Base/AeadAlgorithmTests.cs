@@ -16,7 +16,7 @@ namespace NSec.Tests.Base
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.True(a.KeySize >= 32);
+            Assert.True(a.KeySize > 0);
             Assert.True(a.NonceSize > 0);
             Assert.True(a.TagSize > 0);
         }
