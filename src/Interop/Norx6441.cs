@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using static Interop.Libsodium;
 /*
  * NORX reference source code package - reference C implementations
@@ -34,44 +35,34 @@ internal static partial class Norx6441
 
 static unsafe void memset(byte* dst, byte v, ulong length)
 {
-    ulong i;
-
-    for (i = 0; i < length; i++)
-    {
-        dst[i] = v;
-    }
+    Unsafe.InitBlockUnaligned(dst, v, (uint)length);
 }
 
 static unsafe void memcpy(byte* dst, byte* src, ulong length)
 {
-    ulong i;
-
-    for (i = 0; i < length; i++)
-    {
-        dst[i] = src[i];
-    }
+    Unsafe.CopyBlockUnaligned(dst, src, (uint)length);
 }
 static unsafe uint load32( void * @in)
 {
-    return *(uint *)@in;
+    return Unsafe.Read<uint>(@in);
 }
 
 
 static unsafe ulong load64( void * @in)
 {
-    return *(ulong *)@in;
+    return Unsafe.Read<ulong>(@in);
 }
 
 
 static unsafe void store32(void * @out, uint v)
 {
-    *(uint *)@out = v;
+    Unsafe.Write(@out, v);
 }
 
 
 static unsafe void store64(void * @out, ulong v)
 {
-    *(ulong *)@out = v;
+    Unsafe.Write(@out, v);
 }
 
 
