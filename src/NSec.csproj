@@ -30,8 +30,8 @@ NSec.Cryptography.X25519</Description>
     <Content Include="..\NOTICE" Link="NOTICE" PackagePath="" Visible="False" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="libsodium" Version="1.0.11-preview-24928-01" />
-    <PackageReference Include="System.Memory" Version="4.4.0-beta-24913-02" />
+    <PackageReference Include="libsodium" Version="1.0.11-preview-24931-01" />
+    <PackageReference Include="System.Memory" Version="4.4.0-beta-25006-0" />
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.4.0-beta-24913-02" />
   </ItemGroup>
 </Project>
