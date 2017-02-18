@@ -8,9 +8,9 @@
     <Compile Include="..\src\Cryptography\Formatting\Asn1Writer.cs" Link="Formatting\Asn1Writer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170210-02" />
-    <PackageReference Include="xunit" Version="2.2.0-rc2-build3523" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0-rc2-build1249" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170217-05" />
+    <PackageReference Include="xunit" Version="2.2.0-rc4-build3536" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0-rc4-build1270" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\NSec.csproj" />
