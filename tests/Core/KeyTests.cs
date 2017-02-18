@@ -117,27 +117,27 @@ namespace NSec.Tests.Core
         [Fact]
         public static void GetBlobSizeWithNullAlgorithm()
         {
-            Assert.Throws<ArgumentNullException>("algorithm", () => Key.GetKeyBlobSize(null, KeyBlobFormat.None));
+            Assert.Throws<ArgumentNullException>("algorithm", () => Key.GetKeyBlobSize(null, 0));
         }
 
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
         [MemberData(nameof(SymmetricKeyAlgorithms))]
-        public static void GetBlobSizeWithFormatNone(Type algorithmType)
+        public static void GetBlobSizeWithFormatMin(Type algorithmType)
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.Throws<ArgumentException>("format", () => Key.GetKeyBlobSize(a, KeyBlobFormat.None));
+            Assert.Throws<ArgumentException>("format", () => Key.GetKeyBlobSize(a, (KeyBlobFormat)int.MinValue));
         }
 
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
         [MemberData(nameof(SymmetricKeyAlgorithms))]
-        public static void GetBlobSizeWithInvalidFormat(Type algorithmType)
+        public static void GetBlobSizeWithFormatMax(Type algorithmType)
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.Throws<FormatException>(() => Key.GetKeyBlobSize(a, (KeyBlobFormat)int.MaxValue));
+            Assert.Throws<ArgumentException>("format", () => Key.GetKeyBlobSize(a, (KeyBlobFormat)int.MaxValue));
         }
 
         [Theory]
@@ -182,17 +182,27 @@ namespace NSec.Tests.Core
         [Fact]
         public static void ImportWithNullAlgorithm()
         {
-            Assert.Throws<ArgumentNullException>("algorithm", () => Key.Import(null, ReadOnlySpan<byte>.Empty, KeyBlobFormat.None));
+            Assert.Throws<ArgumentNullException>("algorithm", () => Key.Import(null, ReadOnlySpan<byte>.Empty, 0));
         }
 
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
         [MemberData(nameof(SymmetricKeyAlgorithms))]
-        public static void ImportWithFormatNone(Type algorithmType)
+        public static void ImportWithFormatMin(Type algorithmType)
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.Throws<ArgumentException>("format", () => Key.Import(a, ReadOnlySpan<byte>.Empty, KeyBlobFormat.None));
+            Assert.Throws<ArgumentException>("format", () => Key.Import(a, ReadOnlySpan<byte>.Empty, (KeyBlobFormat)int.MinValue));
+        }
+
+        [Theory]
+        [MemberData(nameof(AsymmetricKeyAlgorithms))]
+        [MemberData(nameof(SymmetricKeyAlgorithms))]
+        public static void ImportWithFormatMax(Type algorithmType)
+        {
+            var a = (Algorithm)Activator.CreateInstance(algorithmType);
+
+            Assert.Throws<ArgumentException>("format", () => Key.Import(a, ReadOnlySpan<byte>.Empty, (KeyBlobFormat)int.MaxValue));
         }
 
         [Theory]
@@ -220,17 +230,27 @@ namespace NSec.Tests.Core
         [Fact]
         public static void TryImportWithNullAlgorithm()
         {
-            Assert.Throws<ArgumentNullException>("algorithm", () => Key.TryImport(null, ReadOnlySpan<byte>.Empty, KeyBlobFormat.None, KeyFlags.None, out Key k));
+            Assert.Throws<ArgumentNullException>("algorithm", () => Key.TryImport(null, ReadOnlySpan<byte>.Empty, 0, KeyFlags.None, out Key k));
         }
 
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
         [MemberData(nameof(SymmetricKeyAlgorithms))]
-        public static void TryImportWithFormatNone(Type algorithmType)
+        public static void TryImportWithFormatMin(Type algorithmType)
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.Throws<ArgumentException>("format", () => Key.TryImport(a, ReadOnlySpan<byte>.Empty, KeyBlobFormat.None, KeyFlags.None, out Key k));
+            Assert.Throws<ArgumentException>("format", () => Key.TryImport(a, ReadOnlySpan<byte>.Empty, (KeyBlobFormat)int.MinValue, KeyFlags.None, out Key k));
+        }
+
+        [Theory]
+        [MemberData(nameof(AsymmetricKeyAlgorithms))]
+        [MemberData(nameof(SymmetricKeyAlgorithms))]
+        public static void TryImportWithFormatMax(Type algorithmType)
+        {
+            var a = (Algorithm)Activator.CreateInstance(algorithmType);
+
+            Assert.Throws<ArgumentException>("format", () => Key.TryImport(a, ReadOnlySpan<byte>.Empty, (KeyBlobFormat)int.MaxValue, KeyFlags.None, out Key k));
         }
 
         [Theory]
@@ -258,7 +278,7 @@ namespace NSec.Tests.Core
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
         [MemberData(nameof(SymmetricKeyAlgorithms))]
-        public static void ExportWithFormatNone(Type algorithmType)
+        public static void ExportWithFormatMin(Type algorithmType)
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
@@ -266,7 +286,22 @@ namespace NSec.Tests.Core
             {
                 Assert.Equal(KeyFlags.None, k.Flags);
 
-                Assert.Throws<ArgumentException>("format", () => k.Export(KeyBlobFormat.None));
+                Assert.Throws<ArgumentException>("format", () => k.Export((KeyBlobFormat)int.MinValue));
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(AsymmetricKeyAlgorithms))]
+        [MemberData(nameof(SymmetricKeyAlgorithms))]
+        public static void ExportWithFormatMax(Type algorithmType)
+        {
+            var a = (Algorithm)Activator.CreateInstance(algorithmType);
+
+            using (var k = new Key(a, KeyFlags.None))
+            {
+                Assert.Equal(KeyFlags.None, k.Flags);
+
+                Assert.Throws<ArgumentException>("format", () => k.Export((KeyBlobFormat)int.MaxValue));
             }
         }
 
@@ -391,9 +426,9 @@ namespace NSec.Tests.Core
             var k = new Key(a, KeyFlags.None);
             k.Dispose();
 
-            Assert.Throws<ObjectDisposedException>(() => k.Export(KeyBlobFormat.RawPublicKey));
-            Assert.Throws<ObjectDisposedException>(() => k.Export(KeyBlobFormat.RawPublicKey));
-            Assert.Throws<ObjectDisposedException>(() => k.Export(KeyBlobFormat.RawPublicKey));
+            k.Export(KeyBlobFormat.RawPublicKey);
+            k.Export(KeyBlobFormat.RawPublicKey);
+            k.Export(KeyBlobFormat.RawPublicKey);
         }
 
         [Theory]
@@ -431,15 +466,30 @@ namespace NSec.Tests.Core
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
         [MemberData(nameof(SymmetricKeyAlgorithms))]
-        public static void ExportWithSpanWithFormatNone(Type algorithmType)
+        public static void ExportWithSpanWithFormatMin(Type algorithmType)
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(a, KeyFlags.None))
+            using (var k = new Key(a, KeyFlags.AllowExport))
             {
-                Assert.Equal(KeyFlags.None, k.Flags);
+                Assert.Equal(KeyFlags.AllowExport, k.Flags);
 
-                Assert.Throws<ArgumentException>("format", () => k.Export(KeyBlobFormat.None, Span<byte>.Empty));
+                Assert.Throws<ArgumentException>("format", () => k.Export((KeyBlobFormat)int.MinValue, Span<byte>.Empty));
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(AsymmetricKeyAlgorithms))]
+        [MemberData(nameof(SymmetricKeyAlgorithms))]
+        public static void ExportWithSpanWithFormatMax(Type algorithmType)
+        {
+            var a = (Algorithm)Activator.CreateInstance(algorithmType);
+
+            using (var k = new Key(a, KeyFlags.AllowExport))
+            {
+                Assert.Equal(KeyFlags.AllowExport, k.Flags);
+
+                Assert.Throws<ArgumentException>("format", () => k.Export((KeyBlobFormat)int.MaxValue, Span<byte>.Empty));
             }
         }
 
