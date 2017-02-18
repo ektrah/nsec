@@ -2,8 +2,6 @@ namespace NSec.Cryptography
 {
     public enum KeyBlobFormat
     {
-        None = 0,
-
         // --- Secret Key Formats ---
 
         RawSymmetricKey = -1,

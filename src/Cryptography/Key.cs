@@ -88,8 +88,6 @@ namespace NSec.Cryptography
         {
             if (algorithm == null)
                 throw new ArgumentNullException(nameof(algorithm));
-            if (format == KeyBlobFormat.None)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(format));
 
             return algorithm.GetKeyBlobSize(format);
         }
@@ -111,8 +109,6 @@ namespace NSec.Cryptography
         {
             if (algorithm == null)
                 throw new ArgumentNullException(nameof(algorithm));
-            if (format == KeyBlobFormat.None)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(format));
 
             SecureMemoryHandle keyHandle = null;
             byte[] publicKeyBytes = null;
@@ -147,8 +143,6 @@ namespace NSec.Cryptography
         {
             if (algorithm == null)
                 throw new ArgumentNullException(nameof(algorithm));
-            if (format == KeyBlobFormat.None)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(format));
 
             SecureMemoryHandle keyHandle = null;
             byte[] publicKeyBytes = null;
@@ -178,9 +172,6 @@ namespace NSec.Cryptography
         public byte[] Export(
             KeyBlobFormat format)
         {
-            if (format == KeyBlobFormat.None)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(format));
-
             int maxBlobSize = GetKeyBlobSize(_algorithm, format);
             byte[] blob = new byte[maxBlobSize];
             int blobSize = Export(format, blob);
@@ -192,12 +183,10 @@ namespace NSec.Cryptography
             KeyBlobFormat format,
             Span<byte> blob)
         {
-            if (format == KeyBlobFormat.None)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(format));
             if (_handle.IsClosed)
                 throw new ObjectDisposedException(GetType().FullName);
 
-            if (format < KeyBlobFormat.None)
+            if (format < 0)
             {
                 bool allowExport = (_flags & KeyFlags.AllowExport) != 0;
                 bool allowArchiving = (_flags & KeyFlags.AllowArchiving) != 0;
