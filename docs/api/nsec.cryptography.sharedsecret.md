@@ -51,8 +51,8 @@ ArgumentException
 
 ### Dispose()
 
-Securely erases the shared secret and releases all resources used by the current
-instance of the [[SharedSecret|SharedSecret Class]] class.
+Securely erases the shared secret from memory and releases all resources used by
+the current instance of the [[SharedSecret|SharedSecret Class]] class.
 
     public void Dispose()
 

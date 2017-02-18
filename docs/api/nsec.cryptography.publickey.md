@@ -58,7 +58,7 @@ ArgumentNullException
 
 FormatException
 : The public key BLOB is not in the correct format or the format is not
-    supported.
+    supported by the specified algorithm.
 
 NotSupportedException
 : The specified algorithm does not support importing public keys.
@@ -218,9 +218,9 @@ A 32-bit signed integer hash code.
 
 #### Remarks
 
-The [[PublicKey|PublicKey Class]] class overrides the [[GetHashCode()|PublicKey
+The [[PublicKey|PublicKey Class]] class overrides the [[GetHashCode|PublicKey
 Class#GetHashCode()]] method so that [[PublicKey|PublicKey Class]] objects can
-be used as keys of a Dictionary<TKey, TValue> or elements of a HashSet<T>. The
+be used as elements of a HashSet<T> or keys of a Dictionary<TKey, TValue>. The
 hash code is not a fingerprint that can be used to identify the public key.
 
 

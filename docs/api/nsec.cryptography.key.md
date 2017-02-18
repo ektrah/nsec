@@ -127,10 +127,10 @@ format
 The maximum key BLOB size for the specified algorithm and format.
 
 FormatException
-: The algorithm for the key does not support the specified format.
+: The specified algorithm does not support the specified format.
 
 NotSupportedException
-: The algorithm for the key does not use keys.
+: The specified algorithm does not use keys.
 
 
 ### GetSupportedKeyBlobFormats(Algorithm)
@@ -188,7 +188,7 @@ ArgumentNullException
 
 FormatException
 : The key BLOB is not in the correct format or the format is not supported by
-    the algorithm.
+    the specified algorithm.
 
 NotSupportedException
 : The specified algorithm does not support importing keys.
@@ -240,8 +240,8 @@ NotSupportedException
 
 ### Dispose()
 
-Securely erases the key and releases all resources used by the current instance
-of the [[Key|Key Class]] class.
+Securely erases the key from memory and releases all resources used by the
+current instance of the [[Key|Key Class]] class.
 
     public void Dispose();
 
