@@ -47,9 +47,9 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> data)
         {
             if (key == null)
-                throw new ArgumentNullException(nameof(key));
+                throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
+                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
 
             byte[] signature = new byte[_signatureSize];
             SignCore(key.Handle, data, signature);
@@ -62,11 +62,11 @@ namespace NSec.Cryptography
             Span<byte> signature)
         {
             if (key == null)
-                throw new ArgumentNullException(nameof(key));
+                throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
+                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (signature.Length != _signatureSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(signature));
+                throw Error.Argument_SignatureLength(nameof(signature), _signatureSize.ToString());
 
             SignCore(key.Handle, data, signature);
         }
@@ -77,9 +77,9 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> signature)
         {
             if (publicKey == null)
-                throw new ArgumentNullException(nameof(publicKey));
+                throw Error.ArgumentNull_Key(nameof(publicKey));
             if (publicKey.Algorithm != this)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(publicKey));
+                throw Error.Argument_KeyWrongAlgorithm(nameof(publicKey), publicKey.Algorithm.GetType().FullName, GetType().FullName);
             if (signature.Length != _signatureSize)
                 return false;
 
@@ -92,14 +92,13 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> signature)
         {
             if (publicKey == null)
-                throw new ArgumentNullException(nameof(publicKey));
+                throw Error.ArgumentNull_Key(nameof(publicKey));
             if (publicKey.Algorithm != this)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(publicKey));
+                throw Error.Argument_KeyWrongAlgorithm(nameof(publicKey), publicKey.Algorithm.GetType().FullName, GetType().FullName);
 
-            if ((signature.Length != _signatureSize) ||
-                !TryVerifyCore(publicKey.Bytes, data, signature))
+            if ((signature.Length != _signatureSize) || !TryVerifyCore(publicKey.Bytes, data, signature))
             {
-                throw new CryptographicException();
+                throw Error.Cryptographic_VerificationFailed();
             }
         }
 
