@@ -1,0 +1,231 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ArgumentNull_Algorithm" xml:space="preserve">
+    <value>Algorithm cannot be null.</value>
+  </data>
+  <data name="ArgumentNull_Key" xml:space="preserve">
+    <value>Key cannot be null.</value>
+  </data>
+  <data name="ArgumentNull_SharedSecret" xml:space="preserve">
+    <value>Shared secret cannot be null.</value>
+  </data>
+  <data name="ArgumentOutOfRange_DeriveInvalidCount" xml:space="preserve">
+    <value>The number of bytes to derive must be less than or equal to the maximum output size '{0}'.</value>
+  </data>
+  <data name="ArgumentOutOfRange_DeriveNegativeCount" xml:space="preserve">
+    <value>The number of bytes to derive cannot be negative.</value>
+  </data>
+  <data name="ArgumentOutOfRange_GenerateNegativeCount" xml:space="preserve">
+    <value>The number of bytes to generate cannot be negative.</value>
+  </data>
+  <data name="ArgumentOutOfRange_HashSize" xml:space="preserve">
+    <value>Hash size '{0}' is out of range. Must be between {1} and {2}.</value>
+  </data>
+  <data name="ArgumentOutOfRange_MacSize" xml:space="preserve">
+    <value>MAC size '{0}' is out of range. Must be between {1} and {2}.</value>
+  </data>
+  <data name="Argument_CiphertextLength" xml:space="preserve">
+    <value>The ciphertext length must be equal to the plaintet length plus the tag size.</value>
+  </data>
+  <data name="Argument_DeriveInvalidCount" xml:space="preserve">
+    <value>The number of bytes to derive must be less than or equal to the maximum output size '{0}'.</value>
+  </data>
+  <data name="Argument_FormatNotSupported" xml:space="preserve">
+    <value>The key BLOB format '{0}' is not supported by the algorithm.</value>
+  </data>
+  <data name="Argument_HashSize" xml:space="preserve">
+    <value>Hash size '{0}' is out of range. Must be between {1} and {2}.</value>
+  </data>
+  <data name="Argument_InvalidPrkLength" xml:space="preserve">
+    <value>The length of the pseudorandom key must be greater than or equal to {0}.</value>
+  </data>
+  <data name="Argument_InvalidPrkLengthExact" xml:space="preserve">
+    <value>The length of the pseudorandom key must be equal to {0}.</value>
+  </data>
+  <data name="Argument_KeyWrongAlgorithm" xml:space="preserve">
+    <value>This key is for algorithm '{0}'. Expected '{1}'.</value>
+  </data>
+  <data name="Argument_MacSize" xml:space="preserve">
+    <value>MAC size '{0}' is out of range. Must be between {1} and {2}.</value>
+  </data>
+  <data name="Argument_NonceLength" xml:space="preserve">
+    <value>The nonce must have a length of '{0}' bytes.</value>
+  </data>
+  <data name="Argument_PlaintextLength" xml:space="preserve">
+    <value>The plaintext length must be equal to the ciphertext length minus the tag size.</value>
+  </data>
+  <data name="Argument_PlaintextTooLong" xml:space="preserve">
+    <value>The plaintext is too long.</value>
+  </data>
+  <data name="Argument_SaltNotSupported" xml:space="preserve">
+    <value>Salt is not supported and must be an empty span.</value>
+  </data>
+  <data name="Argument_SharedSecretLength" xml:space="preserve">
+    <value>The length of the shared secret must be less than or equal to {0}.</value>
+  </data>
+  <data name="Argument_SignatureLength" xml:space="preserve">
+    <value>The signature must have a length of '{0}' bytes.</value>
+  </data>
+  <data name="Argument_SpanBlob" xml:space="preserve">
+    <value>The span is not large enough to fit the key BLOB.</value>
+  </data>
+  <data name="Cryptographic_DecryptionFailed" xml:space="preserve">
+    <value>Decryption failed.</value>
+  </data>
+  <data name="Cryptographic_InitializationFailed" xml:space="preserve">
+    <value>Initialization failed.</value>
+  </data>
+  <data name="Cryptographic_KeyAgreementFailed" xml:space="preserve">
+    <value>Key agreement failed.</value>
+  </data>
+  <data name="Cryptographic_LibsodiumOutdated" xml:space="preserve">
+    <value>Unsupported libsodium version '{0}'.  NSec can only be used with libsodium version {1} and later.</value>
+  </data>
+  <data name="Cryptographic_VerificationFailed" xml:space="preserve">
+    <value>Verification failed.</value>
+  </data>
+  <data name="Format_InvalidBlob" xml:space="preserve">
+    <value>The key BLOB is not in the correct format.</value>
+  </data>
+  <data name="InvalidOperation_AlreadyArchived" xml:space="preserve">
+    <value>The key can be exported only once.</value>
+  </data>
+  <data name="InvalidOperation_ExportNotAllowed" xml:space="preserve">
+    <value>The key cannot be exported.</value>
+  </data>
+  <data name="NotSupported_CreateKey" xml:space="preserve">
+    <value>The specified algorithm does not use keys.</value>
+  </data>
+  <data name="NotSupported_ExportKey" xml:space="preserve">
+    <value>The algorithm for the key does not support exporting keys.</value>
+  </data>
+  <data name="NotSupported_ImportKey" xml:space="preserve">
+    <value>The specified algorithm does not support importing keys.</value>
+  </data>
+  <data name="NotSupported_Operation" xml:space="preserve">
+    <value>This operation is not supported.</value>
+  </data>
+  <data name="ObjectDisposed_Key" xml:space="preserve">
+    <value>The key has been disposed.</value>
+  </data>
+  <data name="PlatformNotSupported_Algorithm" xml:space="preserve">
+    <value>The cryptographic algorithm is not supported on this platform.</value>
+  </data>
+</root>
