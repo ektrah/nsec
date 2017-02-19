@@ -54,19 +54,19 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> ciphertext)
         {
             if (key == null)
-                throw new ArgumentNullException(nameof(key));
+                throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
+                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (nonce.Length != _nonceSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
+                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
             if (ciphertext.Length < _tagSize)
-                throw new CryptographicException();
+                throw Error.Cryptographic_DecryptionFailed();
 
             byte[] plaintext = new byte[ciphertext.Length - _tagSize];
 
             if (!TryDecryptCore(key.Handle, nonce, associatedData, ciphertext, plaintext))
             {
-                throw new CryptographicException();
+                throw Error.Cryptographic_DecryptionFailed();
             }
 
             return plaintext;
@@ -80,19 +80,19 @@ namespace NSec.Cryptography
             Span<byte> plaintext)
         {
             if (key == null)
-                throw new ArgumentNullException(nameof(key));
+                throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
+                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (nonce.Length != _nonceSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
+                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
             if (ciphertext.Length < _tagSize)
-                throw new CryptographicException();
+                throw Error.Cryptographic_DecryptionFailed();
             if (plaintext.Length != ciphertext.Length - _tagSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(plaintext));
+                throw Error.Argument_PlaintextLength(nameof(plaintext));
 
             if (!TryDecryptCore(key.Handle, nonce, associatedData, ciphertext, plaintext))
             {
-                throw new CryptographicException();
+                throw Error.Cryptographic_DecryptionFailed();
             }
         }
 
@@ -103,13 +103,13 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> plaintext)
         {
             if (key == null)
-                throw new ArgumentNullException(nameof(key));
+                throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
+                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (nonce.Length != _nonceSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
+                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
             if (int.MaxValue - plaintext.Length < _tagSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(plaintext));
+                throw Error.Argument_PlaintextTooLong(nameof(plaintext));
 
             byte[] ciphertext = new byte[plaintext.Length + _tagSize];
             EncryptCore(key.Handle, nonce, associatedData, plaintext, ciphertext);
@@ -124,15 +124,15 @@ namespace NSec.Cryptography
             Span<byte> ciphertext)
         {
             if (key == null)
-                throw new ArgumentNullException(nameof(key));
+                throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
+                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (nonce.Length != _nonceSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
+                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
             if (int.MaxValue - plaintext.Length < _tagSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(plaintext));
+                throw Error.Argument_PlaintextTooLong(nameof(plaintext));
             if (ciphertext.Length != plaintext.Length + _tagSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(ciphertext));
+                throw Error.Argument_CiphertextLength(nameof(ciphertext));
 
             EncryptCore(key.Handle, nonce, associatedData, plaintext, ciphertext);
         }
@@ -145,11 +145,11 @@ namespace NSec.Cryptography
             out byte[] plaintext)
         {
             if (key == null)
-                throw new ArgumentNullException(nameof(key));
+                throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
+                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (nonce.Length != _nonceSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
+                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
 
             if (ciphertext.Length < _tagSize)
             {
@@ -177,15 +177,15 @@ namespace NSec.Cryptography
             Span<byte> plaintext)
         {
             if (key == null)
-                throw new ArgumentNullException(nameof(key));
+                throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
+                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (nonce.Length != _nonceSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(nonce));
+                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
             if (ciphertext.Length < _tagSize)
                 return false;
             if (plaintext.Length != ciphertext.Length - _tagSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(plaintext));
+                throw Error.Argument_PlaintextLength(nameof(plaintext));
 
             return TryDecryptCore(key.Handle, nonce, associatedData, ciphertext, plaintext);
         }
@@ -208,14 +208,14 @@ namespace NSec.Cryptography
             ref Asn1Reader reader,
             out ReadOnlySpan<byte> nonce)
         {
-            throw new NotSupportedException();
+            throw Error.NotSupported_Operation();
         }
 
         internal virtual void WriteAlgorithmIdentifier(
             ref Asn1Writer writer,
             ReadOnlySpan<byte> nonce)
         {
-            throw new NotSupportedException();
+            throw Error.NotSupported_Operation();
         }
     }
 }

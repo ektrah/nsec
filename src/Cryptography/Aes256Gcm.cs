@@ -69,9 +69,9 @@ namespace NSec.Cryptography
             tagSize: crypto_aead_aes256gcm_ABYTES)
         {
             if (s_isAvailable.Value == 0)
-                throw new PlatformNotSupportedException();
+                throw Error.PlatformNotSupported_Algorithm();
             if (!s_selfTest.Value)
-                throw new InvalidOperationException();
+                throw Error.Cryptographic_InitializationFailed();
         }
 
         public static bool IsAvailable => Sodium.TryInitialize() && (s_isAvailable.Value != 0);
@@ -123,7 +123,7 @@ namespace NSec.Cryptography
             case KeyBlobFormat.NSecSymmetricKey:
                 return s_nsecKeyFormatter.Export(keyHandle, blob);
             default:
-                throw new FormatException();
+                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
         }
 
@@ -142,7 +142,7 @@ namespace NSec.Cryptography
             case KeyBlobFormat.NSecSymmetricKey:
                 return s_nsecKeyFormatter.BlobSize;
             default:
-                throw new FormatException();
+                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
         }
 
@@ -193,9 +193,7 @@ namespace NSec.Cryptography
             case KeyBlobFormat.NSecSymmetricKey:
                 return s_nsecKeyFormatter.TryImport(blob, out keyHandle, out publicKeyBytes);
             default:
-                keyHandle = null;
-                publicKeyBytes = null;
-                return false;
+                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
         }
 
