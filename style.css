@@ -24,11 +24,17 @@ h1, h2, h3, main nav {
 
 code, pre {
     font: 1em Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+
+code, pre, th {
     background: #F8F8F8;
 }
 
 pre {
     padding: 1em;
+}
+
+pre, th {
     border-top: 1px solid #EEE;
     border-bottom: 1px solid #EEE;
 }
@@ -45,6 +51,30 @@ blockquote, dd, ol, ul {
 
 cite, dt {
     font-style: italic;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 1em auto;
+}
+
+th, td {
+    padding: .3em 1em;
+}
+
+.admonition {
+    border: 1px solid #EEE;
+    border-left: .5em solid #0071BC;
+    padding: 0 1em;
+}
+
+    .admonition > * {
+        margin: 0.5em 0;
+    }
+
+.admonition-title {
+    font-weight: bold;
 }
 
 header, footer {
