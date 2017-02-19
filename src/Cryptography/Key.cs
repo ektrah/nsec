@@ -19,7 +19,7 @@ namespace NSec.Cryptography
             KeyFlags flags = KeyFlags.None)
         {
             if (algorithm == null)
-                throw new ArgumentNullException(nameof(algorithm));
+                throw Error.ArgumentNull_Algorithm(nameof(algorithm));
 
             int keySize = algorithm.GetDefaultKeySize();
 
@@ -87,7 +87,7 @@ namespace NSec.Cryptography
             KeyBlobFormat format)
         {
             if (algorithm == null)
-                throw new ArgumentNullException(nameof(algorithm));
+                throw Error.ArgumentNull_Algorithm(nameof(algorithm));
 
             return algorithm.GetKeyBlobSize(format);
         }
@@ -96,7 +96,7 @@ namespace NSec.Cryptography
             Algorithm algorithm)
         {
             if (algorithm == null)
-                throw new ArgumentNullException(nameof(algorithm));
+                throw Error.ArgumentNull_Algorithm(nameof(algorithm));
 
             return algorithm.GetSupportedKeyBlobFormats();
         }
@@ -108,7 +108,7 @@ namespace NSec.Cryptography
            KeyFlags flags = KeyFlags.None)
         {
             if (algorithm == null)
-                throw new ArgumentNullException(nameof(algorithm));
+                throw Error.ArgumentNull_Algorithm(nameof(algorithm));
 
             SecureMemoryHandle keyHandle = null;
             byte[] publicKeyBytes = null;
@@ -128,7 +128,7 @@ namespace NSec.Cryptography
 
             if (!success)
             {
-                throw new FormatException();
+                throw Error.Format_InvalidBlob();
             }
 
             return new Key(algorithm, flags, keyHandle, publicKeyBytes);
@@ -142,7 +142,7 @@ namespace NSec.Cryptography
             out Key result)
         {
             if (algorithm == null)
-                throw new ArgumentNullException(nameof(algorithm));
+                throw Error.ArgumentNull_Algorithm(nameof(algorithm));
 
             SecureMemoryHandle keyHandle = null;
             byte[] publicKeyBytes = null;
@@ -183,19 +183,25 @@ namespace NSec.Cryptography
             KeyBlobFormat format,
             Span<byte> blob)
         {
-            if (_handle.IsClosed)
-                throw new ObjectDisposedException(GetType().FullName);
-
             if (format < 0)
             {
+                if (_handle.IsClosed)
+                {
+                    throw Error.ObjectDisposed_Key();
+                }
+
                 bool allowExport = (_flags & KeyFlags.AllowExport) != 0;
                 bool allowArchiving = (_flags & KeyFlags.AllowArchiving) != 0;
 
                 if (!allowExport)
                 {
-                    if (!allowArchiving || _exported)
+                    if (!allowArchiving)
                     {
-                        throw new InvalidOperationException();
+                        throw Error.InvalidOperation_ExportNotAllowed();
+                    }
+                    if (_exported)
+                    {
+                        throw Error.InvalidOperation_AlreadyArchived();
                     }
                 }
 
@@ -205,6 +211,11 @@ namespace NSec.Cryptography
             }
             else
             {
+                if (_publicKey == null)
+                {
+                    throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
+                }
+
                 return _algorithm.ExportPublicKey(_publicKey.Bytes, format, blob);
             }
         }
