@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
@@ -23,15 +24,26 @@ namespace NSec.Cryptography
     //
     internal static class Sodium
     {
+        private const int RequiredLibraryVersionMajor = 9;
+        private const int RequiredLibraryVersionMinor = 2;
+        private const string RequiredVersionString = "1.0.9";
+
         private static readonly Lazy<int> s_initialized = new Lazy<int>(new Func<int>(sodium_init));
         private static readonly Lazy<int> s_versionMajor = new Lazy<int>(new Func<int>(sodium_library_version_major));
         private static readonly Lazy<int> s_versionMinor = new Lazy<int>(new Func<int>(sodium_library_version_minor));
 
         public static void Initialize()
         {
+            if (!IsVersionOrLater(RequiredLibraryVersionMajor, RequiredLibraryVersionMinor))
+            {
+                throw Error.Cryptographic_LibsodiumOutdated(
+                    Marshal.PtrToStringAnsi(sodium_version_string()),
+                    RequiredVersionString);
+            }
+
             if (!TryInitialize())
             {
-                throw new InvalidOperationException();
+                throw Error.Cryptographic_InitializationFailed();
             }
         }
 
@@ -43,8 +55,7 @@ namespace NSec.Cryptography
 
         public static bool TryInitialize()
         {
-            // Require libsodium 1.0.9 or later
-            if (!IsVersionOrLater(9, 2))
+            if (!IsVersionOrLater(RequiredLibraryVersionMajor, RequiredLibraryVersionMinor))
             {
                 return false;
             }

@@ -172,3 +172,4 @@ Interop.Version.cs:
   functions:
   - sodium_library_version_major
   - sodium_library_version_minor
+  - sodium_version_string
