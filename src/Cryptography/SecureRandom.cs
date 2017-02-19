@@ -9,7 +9,7 @@ namespace NSec.Cryptography
             int count)
         {
             if (count < 0)
-                throw new ArgumentOutOfRangeException(nameof(count));
+                throw Error.ArgumentOutOfRange_GenerateNegativeCount(nameof(count));
             if (count == 0)
                 return new byte[0];
 
