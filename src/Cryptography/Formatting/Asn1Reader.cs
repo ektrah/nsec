@@ -22,7 +22,9 @@ namespace NSec.Cryptography.Formatting
         private bool _failed;
         private StartAndLength[] _stack;
 
-        public Asn1Reader(ref ReadOnlySpan<byte> buffer, int maxDepth = 8)
+        public Asn1Reader(
+            ref ReadOnlySpan<byte> buffer, 
+            int maxDepth = 8)
         {
 #if UNSAFE
             _buffer = Unsafe.AsPointer(ref buffer);
@@ -170,7 +172,9 @@ namespace NSec.Cryptography.Formatting
             Top = default(StartAndLength);
         }
 
-        private bool IsInvalidInteger(ReadOnlySpan<byte> bytes, int maxSize)
+        private bool IsInvalidInteger(
+            ReadOnlySpan<byte> bytes,
+            int maxSize)
         {
             return bytes.Length == 0
                 || bytes.Length > maxSize
@@ -178,7 +182,8 @@ namespace NSec.Cryptography.Formatting
                 || bytes.Length > 1 && bytes[0] == 0xFF && (bytes[1] & 0x80) == 0x80;
         }
 
-        private StartAndLength Read(int tag)
+        private StartAndLength Read(
+            int tag)
         {
             StartAndLength top = Top;
             StartAndLength result = default(StartAndLength);

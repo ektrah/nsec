@@ -47,7 +47,9 @@ namespace NSec.Cryptography
             }
         }
 
-        public static bool IsVersionOrLater(int major, int minor)
+        public static bool IsVersionOrLater(
+            int major, 
+            int minor)
         {
             return (s_versionMajor.Value > major)
                 || (s_versionMajor.Value == major && s_versionMinor.Value >= minor);

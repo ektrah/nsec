@@ -6,7 +6,8 @@ namespace NSec.Cryptography
     internal static class Utilities
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint ToBigEndian(uint value)
+        public static uint ToBigEndian(
+            uint value)
         {
             if (BitConverter.IsLittleEndian)
             {

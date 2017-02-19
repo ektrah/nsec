@@ -22,7 +22,9 @@ namespace NSec.Cryptography.Formatting
         private int _pos;
         private int[] _stack;
 
-        public Asn1Writer(ref Span<byte> buffer, int maxDepth = 8)
+        public Asn1Writer(
+            ref Span<byte> buffer, 
+            int maxDepth = 8)
         {
 #if UNSAFE
             _buffer = Unsafe.AsPointer(ref buffer);
@@ -47,7 +49,8 @@ namespace NSec.Cryptography.Formatting
             WriteByte(0x30);
         }
 
-        public void BitString(ReadOnlySpan<byte> bits)
+        public void BitString(
+            ReadOnlySpan<byte> bits)
         {
             WriteBytes(bits);
             WriteByte(0);
@@ -55,7 +58,8 @@ namespace NSec.Cryptography.Formatting
             WriteByte(0x03);
         }
 
-        public void Bool(bool value)
+        public void Bool(
+            bool value)
         {
             unchecked
             {
@@ -71,7 +75,8 @@ namespace NSec.Cryptography.Formatting
             _depth++;
         }
 
-        public void Integer(int value)
+        public void Integer(
+            int value)
         {
             int end = _pos;
             unchecked
@@ -87,7 +92,8 @@ namespace NSec.Cryptography.Formatting
             WriteByte(0x02);
         }
 
-        public void Integer(long value)
+        public void Integer(
+            long value)
         {
             int end = _pos;
             unchecked
@@ -109,21 +115,24 @@ namespace NSec.Cryptography.Formatting
             WriteByte(0x05);
         }
 
-        public void ObjectIdentifier(ReadOnlySpan<byte> oid)
+        public void ObjectIdentifier(
+            ReadOnlySpan<byte> oid)
         {
             WriteBytes(oid);
             WriteLength(oid.Length);
             WriteByte(0x06);
         }
 
-        public void OctetString(ReadOnlySpan<byte> octets)
+        public void OctetString(
+            ReadOnlySpan<byte> octets)
         {
             WriteBytes(octets);
             WriteLength(octets.Length);
             WriteByte(0x04);
         }
 
-        private void WriteByte(byte value)
+        private void WriteByte(
+            byte value)
         {
             if (_pos == 0)
                 throw new ArgumentException(); // not enough space
@@ -136,7 +145,8 @@ namespace NSec.Cryptography.Formatting
 #endif
         }
 
-        private void WriteBytes(ReadOnlySpan<byte> bytes)
+        private void WriteBytes(
+            ReadOnlySpan<byte> bytes)
         {
             if (bytes.Length > _pos)
                 throw new ArgumentException(); // not enough space
@@ -149,7 +159,8 @@ namespace NSec.Cryptography.Formatting
 #endif
         }
 
-        private void WriteLength(int length)
+        private void WriteLength(
+            int length)
         {
             if (length < 0x80)
             {
