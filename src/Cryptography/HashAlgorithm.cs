@@ -59,10 +59,8 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> data,
             int hashSize)
         {
-            if (hashSize < _minHashSize)
-                throw new ArgumentOutOfRangeException(nameof(hashSize));
-            if (hashSize > _maxHashSize)
-                throw new ArgumentOutOfRangeException(nameof(hashSize));
+            if (hashSize < _minHashSize || hashSize > _maxHashSize)
+                throw Error.ArgumentOutOfRange_HashSize(nameof(hashSize), hashSize.ToString(), _minHashSize.ToString(), _maxHashSize.ToString());
             if (hashSize == 0)
                 return new byte[0];
 
@@ -75,10 +73,8 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> data,
             Span<byte> hash)
         {
-            if (hash.Length < _minHashSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(hash));
-            if (hash.Length > _maxHashSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(hash));
+            if (hash.Length < _minHashSize || hash.Length > _maxHashSize)
+                throw Error.Argument_HashSize(nameof(hash), hash.Length.ToString(), _minHashSize.ToString(), _maxHashSize.ToString());
             if (hash.IsEmpty)
                 return;
 

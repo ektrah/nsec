@@ -44,7 +44,7 @@ namespace NSec.Cryptography
             maxHashSize: BLAKE2B_OUTBYTES)
         {
             if (!s_selfTest.Value)
-                throw new InvalidOperationException();
+                throw Error.Cryptographic_InitializationFailed();
         }
 
         public int DefaultKeySize => crypto_generichash_blake2b_KEYBYTES;
@@ -58,9 +58,9 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> data)
         {
             if (key == null)
-                throw new ArgumentNullException(nameof(key));
+                throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
+                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
 
             byte[] hash = new byte[DefaultHashSize];
             HashCore(key.Handle, data, hash);
@@ -73,13 +73,11 @@ namespace NSec.Cryptography
             int hashSize)
         {
             if (key == null)
-                throw new ArgumentNullException(nameof(key));
+                throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
-            if (hashSize < MinHashSize)
-                throw new ArgumentOutOfRangeException(nameof(hashSize));
-            if (hashSize > MaxHashSize)
-                throw new ArgumentOutOfRangeException(nameof(hashSize));
+                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
+            if (hashSize < MinHashSize || hashSize > MaxHashSize)
+                throw Error.ArgumentOutOfRange_HashSize(nameof(hashSize), hashSize.ToString(), MinHashSize.ToString(), MaxHashSize.ToString());
 
             byte[] hash = new byte[hashSize];
             HashCore(key.Handle, data, hash);
@@ -92,13 +90,11 @@ namespace NSec.Cryptography
             Span<byte> hash)
         {
             if (key == null)
-                throw new ArgumentNullException(nameof(key));
+                throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
-            if (hash.Length < MinHashSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(hash));
-            if (hash.Length > MaxHashSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(hash));
+                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
+            if (hash.Length < MinHashSize || hash.Length > MaxHashSize)
+                throw Error.Argument_HashSize(nameof(hash), hash.Length.ToString(), MinHashSize.ToString(), MaxHashSize.ToString());
 
             HashCore(key.Handle, data, hash);
         }
@@ -116,9 +112,9 @@ namespace NSec.Cryptography
             Span<byte> blob)
         {
             if (format != KeyBlobFormat.RawSymmetricKey)
-                throw new FormatException();
+                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             if (blob.Length < keyHandle.Length)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(blob));
+                throw Error.Argument_SpanBlob(nameof(blob));
 
             Debug.Assert(keyHandle != null);
             return keyHandle.Export(blob);
@@ -129,10 +125,11 @@ namespace NSec.Cryptography
             return DefaultKeySize;
         }
 
-        internal override int GetKeyBlobSize(KeyBlobFormat format)
+        internal override int GetKeyBlobSize(
+            KeyBlobFormat format)
         {
             if (format != KeyBlobFormat.RawSymmetricKey)
-                throw new FormatException();
+                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
 
             return MaxKeySize;
         }
@@ -160,7 +157,10 @@ namespace NSec.Cryptography
             out SecureMemoryHandle keyHandle,
             out byte[] publicKeyBytes)
         {
-            if (format != KeyBlobFormat.RawSymmetricKey || blob.Length < MinKeySize || blob.Length > MaxKeySize)
+            if (format != KeyBlobFormat.RawSymmetricKey)
+                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
+
+            if (blob.Length < MinKeySize || blob.Length > MaxKeySize)
             {
                 keyHandle = null;
                 publicKeyBytes = null;

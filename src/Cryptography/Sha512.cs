@@ -39,7 +39,7 @@ namespace NSec.Cryptography
             maxHashSize: crypto_hash_sha512_BYTES)
         {
             if (!s_selfTest.Value)
-                throw new InvalidOperationException();
+                throw Error.Cryptographic_InitializationFailed();
         }
 
         internal override void HashCore(
