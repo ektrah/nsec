@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 namespace NSec.Cryptography
 {
@@ -27,8 +28,7 @@ namespace NSec.Cryptography
             uint value)
         {
             int length = 0;
-            if ((value & 0xF0000000) != 0)
-                throw new NotImplementedException();
+            Debug.Assert((value & 0xF0000000) == 0);
             if ((value & 0xFFE00000) != 0)
                 length++;
             if ((value & 0xFFFFC000) != 0)
@@ -45,8 +45,7 @@ namespace NSec.Cryptography
             int pos)
         {
             int start = pos;
-            if ((value & 0xF0000000) != 0)
-                throw new NotImplementedException();
+            Debug.Assert((value & 0xF0000000) == 0);
             if ((value & 0xFFE00000) != 0)
                 buffer[pos++] = (byte)((value >> 21) & 0x7F | 0x80);
             if ((value & 0xFFFFC000) != 0)
