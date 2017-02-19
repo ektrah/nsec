@@ -54,7 +54,7 @@ namespace NSec.Cryptography
             maxMacSize: crypto_auth_hmacsha256_BYTES)
         {
             if (!s_selfTest.Value)
-                throw new InvalidOperationException();
+                throw Error.Cryptographic_InitializationFailed();
         }
 
         internal override void CreateKey(
@@ -70,9 +70,9 @@ namespace NSec.Cryptography
             Span<byte> blob)
         {
             if (format != KeyBlobFormat.RawSymmetricKey)
-                throw new FormatException();
+                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             if (blob.Length < keyHandle.Length)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(blob));
+                throw Error.Argument_SpanBlob(nameof(blob));
 
             Debug.Assert(keyHandle != null);
             return keyHandle.Export(blob);
@@ -83,10 +83,11 @@ namespace NSec.Cryptography
             return DefaultKeySize;
         }
 
-        internal override int GetKeyBlobSize(KeyBlobFormat format)
+        internal override int GetKeyBlobSize(
+            KeyBlobFormat format)
         {
             if (format != KeyBlobFormat.RawSymmetricKey)
-                throw new FormatException();
+                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
 
             return MaxKeySize;
         }
@@ -156,7 +157,10 @@ namespace NSec.Cryptography
             out SecureMemoryHandle keyHandle,
             out byte[] publicKeyBytes)
         {
-            if (format != KeyBlobFormat.RawSymmetricKey || blob.Length < MinKeySize)
+            if (format != KeyBlobFormat.RawSymmetricKey)
+                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
+
+            if (blob.Length < MinKeySize)
             {
                 keyHandle = null;
                 publicKeyBytes = null;

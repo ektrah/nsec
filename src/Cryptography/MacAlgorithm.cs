@@ -73,9 +73,9 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> data)
         {
             if (key == null)
-                throw new ArgumentNullException(nameof(key));
+                throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
+                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
 
             byte[] mac = new byte[_defaultMacSize];
             SignCore(key.Handle, data, mac);
@@ -88,13 +88,11 @@ namespace NSec.Cryptography
             int macSize)
         {
             if (key == null)
-                throw new ArgumentNullException(nameof(key));
+                throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
-            if (macSize < _minMacSize)
-                throw new ArgumentOutOfRangeException(nameof(macSize));
-            if (macSize > _maxMacSize)
-                throw new ArgumentOutOfRangeException(nameof(macSize));
+                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
+            if (macSize < _minMacSize || macSize > _maxMacSize)
+                throw Error.ArgumentOutOfRange_MacSize(nameof(macSize), macSize.ToString(), _minMacSize.ToString(), _maxMacSize.ToString());
 
             byte[] mac = new byte[macSize];
             SignCore(key.Handle, data, mac);
@@ -107,13 +105,11 @@ namespace NSec.Cryptography
             Span<byte> mac)
         {
             if (key == null)
-                throw new ArgumentNullException(nameof(key));
+                throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
-            if (mac.Length < _minMacSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(mac));
-            if (mac.Length > _maxMacSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(mac));
+                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
+            if (mac.Length < _minMacSize || mac.Length > _maxMacSize)
+                throw Error.Argument_MacSize(nameof(mac), mac.Length.ToString(), _minMacSize.ToString(), _maxMacSize.ToString());
 
             SignCore(key.Handle, data, mac);
         }
@@ -124,9 +120,9 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> mac)
         {
             if (key == null)
-                throw new ArgumentNullException(nameof(key));
+                throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
+                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (mac.Length < _minMacSize)
                 return false;
             if (mac.Length > _maxMacSize)
@@ -168,13 +164,11 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> mac)
         {
             if (key == null)
-                throw new ArgumentNullException(nameof(key));
+                throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
-            if (mac.Length < _minMacSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(mac));
-            if (mac.Length > _maxMacSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(mac));
+                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
+            if (mac.Length < _minMacSize || mac.Length > _maxMacSize)
+                throw Error.Argument_MacSize(nameof(mac), mac.Length.ToString(), _minMacSize.ToString(), _maxMacSize.ToString());
 
             // crypto_auth_hmacsha{256,512}_verify does not support truncated
             // HMACs, so we calculate the MAC ourselves and call sodium_memcmp
@@ -200,7 +194,7 @@ namespace NSec.Cryptography
                 int error = sodium_memcmp(ref temp.DangerousGetPinnableReference(), ref mac.DangerousGetPinnableReference(), (UIntPtr)mac.Length);
                 if (error != 0)
                 {
-                    throw new CryptographicException();
+                    throw Error.Cryptographic_VerificationFailed();
                 }
             }
             finally
