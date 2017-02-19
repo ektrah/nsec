@@ -43,7 +43,7 @@ namespace NSec.Cryptography
             maxOutputSize: 255 * crypto_auth_hmacsha512_BYTES)
         {
             if (!s_selfTest.Value)
-                throw new InvalidOperationException();
+                throw Error.Cryptographic_InitializationFailed();
         }
 
         public int PseudorandomKeySize => crypto_auth_hmacsha512_BYTES;
@@ -54,11 +54,11 @@ namespace NSec.Cryptography
             int count)
         {
             if (pseudorandomKey.Length < crypto_auth_hmacsha512_BYTES)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(pseudorandomKey));
+                throw Error.Argument_InvalidPrkLength(nameof(pseudorandomKey), crypto_auth_hmacsha512_BYTES.ToString());
             if (count < 0)
-                throw new ArgumentOutOfRangeException(nameof(count));
+                throw Error.ArgumentOutOfRange_DeriveNegativeCount(nameof(count));
             if (count > MaxOutputSize)
-                throw new ArgumentOutOfRangeException(nameof(count));
+                throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), MaxOutputSize.ToString());
             if (count == 0)
                 return new byte[0];
 
@@ -73,9 +73,9 @@ namespace NSec.Cryptography
             Span<byte> bytes)
         {
             if (pseudorandomKey.Length < crypto_auth_hmacsha512_BYTES)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(pseudorandomKey));
+                throw Error.Argument_InvalidPrkLength(nameof(pseudorandomKey), crypto_auth_hmacsha512_BYTES.ToString());
             if (bytes.Length > MaxOutputSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(bytes));
+                throw Error.Argument_DeriveInvalidCount(nameof(bytes), MaxOutputSize.ToString());
             if (bytes.IsEmpty)
                 return;
 
@@ -87,7 +87,7 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> salt)
         {
             if (sharedSecret == null)
-                throw new ArgumentNullException(nameof(sharedSecret));
+                throw Error.ArgumentNull_SharedSecret(nameof(sharedSecret));
 
             byte[] pseudorandomKey = new byte[crypto_auth_hmacsha512_BYTES];
             ExtractCore(sharedSecret.Handle, salt, pseudorandomKey);
@@ -100,9 +100,9 @@ namespace NSec.Cryptography
             Span<byte> pseudorandomKey)
         {
             if (sharedSecret == null)
-                throw new ArgumentNullException(nameof(sharedSecret));
+                throw Error.ArgumentNull_SharedSecret(nameof(sharedSecret));
             if (pseudorandomKey.Length != crypto_auth_hmacsha512_BYTES)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(pseudorandomKey));
+                throw Error.Argument_InvalidPrkLengthExact(nameof(pseudorandomKey), crypto_auth_hmacsha512_BYTES.ToString());
 
             ExtractCore(sharedSecret.Handle, salt, pseudorandomKey);
         }

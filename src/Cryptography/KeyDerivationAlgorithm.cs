@@ -47,13 +47,13 @@ namespace NSec.Cryptography
             int count)
         {
             if (sharedSecret == null)
-                throw new ArgumentNullException(nameof(sharedSecret));
+                throw Error.ArgumentNull_SharedSecret(nameof(sharedSecret));
             if (!_supportsSalt && !salt.IsEmpty)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(salt));
+                throw Error.Argument_SaltNotSupported(nameof(salt));
             if (count < 0)
-                throw new ArgumentOutOfRangeException(nameof(count));
+                throw Error.ArgumentOutOfRange_DeriveNegativeCount(nameof(count));
             if (count > MaxOutputSize)
-                throw new ArgumentOutOfRangeException(nameof(count));
+                throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), MaxOutputSize.ToString());
             if (count == 0)
                 return new byte[0];
 
@@ -69,11 +69,11 @@ namespace NSec.Cryptography
             Span<byte> bytes)
         {
             if (sharedSecret == null)
-                throw new ArgumentNullException(nameof(sharedSecret));
+                throw Error.ArgumentNull_SharedSecret(nameof(sharedSecret));
             if (!_supportsSalt && !salt.IsEmpty)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(salt));
+                throw Error.Argument_SaltNotSupported(nameof(salt));
             if (bytes.Length > MaxOutputSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(bytes));
+                throw Error.Argument_DeriveInvalidCount(nameof(bytes), MaxOutputSize.ToString());
             if (bytes.IsEmpty)
                 return;
 
@@ -88,15 +88,15 @@ namespace NSec.Cryptography
             KeyFlags flags = KeyFlags.None)
         {
             if (sharedSecret == null)
-                throw new ArgumentNullException(nameof(sharedSecret));
+                throw Error.ArgumentNull_SharedSecret(nameof(sharedSecret));
             if (!_supportsSalt && !salt.IsEmpty)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(salt));
+                throw Error.Argument_SaltNotSupported(nameof(salt));
             if (algorithm == null)
-                throw new ArgumentNullException(nameof(algorithm));
+                throw Error.ArgumentNull_Algorithm(nameof(algorithm));
 
             int keySize = algorithm.GetDefaultKeySize();
             if (keySize > MaxOutputSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(algorithm));
+                throw Error.NotSupported_CreateKey();
 
             SecureMemoryHandle keyHandle = null;
             byte[] publicKeyBytes = null;
