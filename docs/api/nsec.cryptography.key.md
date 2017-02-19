@@ -126,7 +126,7 @@ format
 
 The maximum key BLOB size for the specified algorithm and format.
 
-FormatException
+ArgumentException
 : The specified algorithm does not support the specified format.
 
 NotSupportedException
@@ -186,9 +186,11 @@ A new instance of the [[Key|Key Class]] class that represents the imported key.
 ArgumentNullException
 : `algorithm` is `null`.
 
+ArgumentException
+: The specified format is not supported by the specified algorithm.
+
 FormatException
-: The key BLOB is not in the correct format or the format is not supported by
-    the specified algorithm.
+: The key BLOB is not in the correct format.
 
 NotSupportedException
 : The specified algorithm does not support importing keys.
@@ -234,6 +236,9 @@ result
 ArgumentNullException
 : `algorithm` is `null`.
 
+ArgumentException
+: The specified format is not supported by the specified algorithm.
+
 NotSupportedException
 : The specified algorithm does not support importing keys.
 
@@ -267,7 +272,7 @@ A BLOB that contains the key in the specified format.
 
 #### Exceptions
 
-FormatException
+ArgumentException
 : The algorithm for the key does not support the specified format.
 
 InvalidOperationException
@@ -310,7 +315,7 @@ The actual number of bytes written to `blob`.
 ArgumentException
 : The length of `blob` is less than the size of the key BLOB.
 
-FormatException
+ArgumentException
 : The algorithm for the key does not support the specified format.
 
 InvalidOperationException

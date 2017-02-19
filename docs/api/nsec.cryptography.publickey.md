@@ -56,9 +56,11 @@ imported key.
 ArgumentNullException
 : `algorithm` is `null`.
 
+ArgumentException
+: The specified format is not supported by the specified algorithm.
+
 FormatException
-: The public key BLOB is not in the correct format or the format is not
-    supported by the specified algorithm.
+: The public key BLOB is not in the correct format.
 
 NotSupportedException
 : The specified algorithm does not support importing public keys.
@@ -162,7 +164,7 @@ A BLOB that contains the public key in the specified format.
 
 #### Exceptions
 
-FormatException
+ArgumentException
 : The algorithm for the public key does not support the specified format.
 
 NotSupportedException
@@ -199,7 +201,7 @@ ArgumentException
     [[GetKeyBlobSize|Key Class#GetKeyBlobSize(Algorithm, KeyBlobFormat)]]
     method.
 
-FormatException
+ArgumentException
 : The algorithm for the public key does not support the specified format.
 
 NotSupportedException
