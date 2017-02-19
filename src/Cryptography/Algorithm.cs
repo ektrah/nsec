@@ -15,7 +15,7 @@ namespace NSec.Cryptography
             SecureMemoryHandle keyHandle,
             out byte[] publicKeyBytes)
         {
-            throw new NotSupportedException();
+            throw Error.NotSupported_CreateKey();
         }
 
         // Converts a libsodium secret key into a key blob.
@@ -24,7 +24,7 @@ namespace NSec.Cryptography
             KeyBlobFormat format,
             Span<byte> blob)
         {
-            throw new NotSupportedException();
+            throw Error.NotSupported_ExportKey();
         }
 
         // Converts a libsodium public key into a key blob.
@@ -33,20 +33,20 @@ namespace NSec.Cryptography
             KeyBlobFormat format,
             Span<byte> blob)
         {
-            throw new NotSupportedException();
+            throw Error.NotSupported_ExportKey();
         }
 
         // Gets the default size for a libsodium secret key, if supported.
         internal virtual int GetDefaultKeySize()
         {
-            throw new NotSupportedException();
+            throw Error.NotSupported_CreateKey();
         }
 
         // Gets the size of a key blob in the specified format.
         internal virtual int GetKeyBlobSize(
             KeyBlobFormat format)
         {
-            throw new NotSupportedException();
+            throw Error.NotSupported_ExportKey();
         }
 
         // Gets the supported key blob formats.
@@ -62,7 +62,7 @@ namespace NSec.Cryptography
             out SecureMemoryHandle keyHandle,
             out byte[] publicKeyBytes)
         {
-            throw new NotSupportedException();
+            throw Error.NotSupported_ImportKey();
         }
 
         // Converts a key blob into a libsodium public key.
@@ -71,7 +71,7 @@ namespace NSec.Cryptography
             KeyBlobFormat format,
             out byte[] result)
         {
-            throw new NotSupportedException();
+            throw Error.NotSupported_ImportKey();
         }
     }
 }
