@@ -47,13 +47,13 @@ namespace NSec.Cryptography
             PublicKey otherPartyPublicKey)
         {
             if (key == null)
-                throw new ArgumentNullException(nameof(key));
+                throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
+                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (otherPartyPublicKey == null)
-                throw new ArgumentNullException(nameof(otherPartyPublicKey));
+                throw Error.ArgumentNull_Key(nameof(otherPartyPublicKey));
             if (otherPartyPublicKey.Algorithm != this)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(otherPartyPublicKey));
+                throw Error.Argument_KeyWrongAlgorithm(nameof(otherPartyPublicKey), key.Algorithm.GetType().FullName, GetType().FullName);
 
             SecureMemoryHandle sharedSecretHandle = null;
             bool success = false;
@@ -72,7 +72,7 @@ namespace NSec.Cryptography
 
             if (!success)
             {
-                throw new CryptographicException();
+                throw Error.Cryptographic_KeyAgreementFailed();
             }
 
             return new SharedSecret(sharedSecretHandle);
@@ -84,13 +84,13 @@ namespace NSec.Cryptography
             out SharedSecret result)
         {
             if (key == null)
-                throw new ArgumentNullException(nameof(key));
+                throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(key));
+                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (otherPartyPublicKey == null)
-                throw new ArgumentNullException(nameof(otherPartyPublicKey));
+                throw Error.ArgumentNull_Key(nameof(otherPartyPublicKey));
             if (otherPartyPublicKey.Algorithm != this)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(otherPartyPublicKey));
+                throw Error.Argument_KeyWrongAlgorithm(nameof(otherPartyPublicKey), key.Algorithm.GetType().FullName, GetType().FullName);
 
             SecureMemoryHandle sharedSecretHandle = null;
             bool success = false;

@@ -93,7 +93,7 @@ namespace NSec.Cryptography
             sharedSecretSize: crypto_scalarmult_curve25519_BYTES)
         {
             if (!s_selfTest.Value)
-                throw new InvalidOperationException();
+                throw Error.Cryptographic_InitializationFailed();
         }
 
         internal override void CreateKey(
@@ -120,7 +120,7 @@ namespace NSec.Cryptography
             case KeyBlobFormat.PkixPrivateKeyText:
                 return s_pkixPrivateKeyFormatter.ExportText(keyHandle, blob);
             default:
-                throw new FormatException();
+                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
         }
 
@@ -140,7 +140,7 @@ namespace NSec.Cryptography
             case KeyBlobFormat.PkixPublicKeyText:
                 return s_pkixPublicKeyFormatter.ExportText(publicKeyBytes, blob);
             default:
-                throw new FormatException();
+                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
         }
 
@@ -173,7 +173,7 @@ namespace NSec.Cryptography
                 return s_pkixPublicKeyFormatter.BlobTextSize;
 
             default:
-                throw new FormatException();
+                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
         }
 
@@ -218,9 +218,7 @@ namespace NSec.Cryptography
             case KeyBlobFormat.PkixPrivateKeyText:
                 return s_pkixPrivateKeyFormatter.TryImportText(blob, out keyHandle, out publicKeyBytes);
             default:
-                keyHandle = null;
-                publicKeyBytes = null;
-                return false;
+                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
         }
 
@@ -240,8 +238,7 @@ namespace NSec.Cryptography
             case KeyBlobFormat.PkixPublicKeyText:
                 return s_pkixPublicKeyFormatter.TryImportText(blob, out result);
             default:
-                result = null;
-                return false;
+                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
         }
 
