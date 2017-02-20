@@ -2,8 +2,8 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.1</TargetFramework>
     <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
-    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup>
     <PackageId>NSec.Cryptography</PackageId>
@@ -18,17 +18,17 @@ NSec.Cryptography.Ed25519
 NSec.Cryptography.Key
 NSec.Cryptography.X25519</Description>
     <Copyright>© 2017 Klaus Hartke</Copyright>
-    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseUrl>https://nsec.rocks/license</PackageLicenseUrl>
     <PackageProjectUrl>https://nsec.rocks/</PackageProjectUrl>
     <PackageIconUrl>https://goo.gl/iN8fpR</PackageIconUrl>
     <RepositoryUrl>https://github.com/ektrah/nsec</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>aead aes blake2b chacha20 cryptography curve25519 ed25519 eddsa encryption gcm hash hkdf hmac libsodium poly1305 security sha256 sha512 x25519</PackageTags>
+    <PackageTags>aead aes-gcm blake2b chacha20-poly1305 crypto cryptography curve25519 dotnet-core ed25519 encryption hash hkdf hmac libsodium security sha256 sha512 x25519</PackageTags>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="..\LICENSE" Link="LICENSE" PackagePath="" Visible="False" />
-    <Content Include="..\NOTICE" Link="NOTICE" PackagePath="" Visible="False" />
+    <Content Include="..\LICENSE" Link="LICENSE" PackagePath="" Visible="false" />
+    <Content Include="..\NOTICE" Link="NOTICE" PackagePath="" Visible="false" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="libsodium" Version="1.0.11-preview-24931-01" />
