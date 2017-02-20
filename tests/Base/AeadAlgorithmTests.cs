@@ -8,6 +8,8 @@ namespace NSec.Tests.Base
     {
         public static readonly TheoryData<Type> AeadAlgorithms = Registry.AeadAlgorithms;
 
+        private const int L = 547;
+
         #region Properties
 
         [Theory]
@@ -160,13 +162,45 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void EncryptEmptyWithSpanSuccess(Type algorithmType)
+        public static void EncryptWithSpanOutOfPlace(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
-                a.Encrypt(k, new byte[a.NonceSize], ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[a.TagSize]);
+                var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
+                var ad = Utilities.RandomBytes.Slice(0, 100);
+
+                var expected = new byte[L + a.TagSize];
+                var actual = new byte[L + a.TagSize];
+
+                var plaintext = Utilities.RandomBytes.Slice(0, L);
+
+                a.Encrypt(k, n, ad, plaintext, expected);
+                a.Encrypt(k, n, ad, plaintext, actual);
+                Assert.Equal(expected, actual);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(AeadAlgorithms))]
+        public static void EncryptWithSpanInPlace(Type algorithmType)
+        {
+
+            var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
+
+            using (var k = new Key(a))
+            {
+                var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
+                var ad = Utilities.RandomBytes.Slice(0, 100);
+
+                var actual = new byte[L + a.TagSize];
+                var expected = new byte[L + a.TagSize];
+                Utilities.RandomBytes.Slice(0, L).CopyTo(actual);
+
+                a.Encrypt(k, n, ad, new ReadOnlySpan<byte>(actual, 0, L), expected);
+                a.Encrypt(k, n, ad, new ReadOnlySpan<byte>(actual, 0, L), actual);
+                Assert.Equal(expected, actual);
             }
         }
 
@@ -328,17 +362,45 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void DecryptWithSpanEmptySuccess(Type algorithmType)
+        public static void DecryptWithSpanOutOfPlace(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
-                var ct = a.Encrypt(k, new byte[a.NonceSize], ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty);
-                Assert.NotNull(ct);
-                Assert.Equal(a.TagSize, ct.Length);
+                var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
+                var ad = Utilities.RandomBytes.Slice(0, 100);
 
-                a.Decrypt(k, new byte[a.NonceSize], ReadOnlySpan<byte>.Empty, ct, Span<byte>.Empty);
+                var expected = Utilities.RandomBytes.Slice(0, L).ToArray();
+                var actual = new byte[L];
+
+                var ciphertext = a.Encrypt(k, n, ad, expected);
+
+                a.Decrypt(k, n, ad, ciphertext, actual);
+                Assert.Equal(expected, actual);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(AeadAlgorithms))]
+        public static void DecryptWithSpanInPlace(Type algorithmType)
+        {
+            var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
+
+            using (var k = new Key(a))
+            {
+                var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
+                var ad = Utilities.RandomBytes.Slice(0, 100);
+
+                var actual = new byte[L + a.TagSize];
+                var expected = new byte[L + a.TagSize];
+
+                a.Encrypt(k, n, ad, Utilities.RandomBytes.Slice(0, L), actual);
+                a.Encrypt(k, n, ad, Utilities.RandomBytes.Slice(0, L), expected);
+
+                a.Decrypt(k, n, ad, actual, new Span<byte>(expected, 0, L));
+                a.Decrypt(k, n, ad, actual, new Span<byte>(actual, 0, L));
+                Assert.Equal(expected, actual);
             }
         }
 
@@ -522,17 +584,45 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void TryDecryptWithSpanEmptySuccess(Type algorithmType)
+        public static void TryDecryptWithSpanOutOfPlace(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
-                var ct = a.Encrypt(k, new byte[a.NonceSize], ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty);
-                Assert.NotNull(ct);
-                Assert.Equal(a.TagSize, ct.Length);
+                var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
+                var ad = Utilities.RandomBytes.Slice(0, 100);
 
-                Assert.True(a.TryDecrypt(k, new byte[a.NonceSize], ReadOnlySpan<byte>.Empty, ct, Span<byte>.Empty));
+                var expected = Utilities.RandomBytes.Slice(0, L).ToArray();
+                var actual = new byte[L];
+
+                var ciphertext = a.Encrypt(k, n, ad, expected);
+
+                Assert.True(a.TryDecrypt(k, n, ad, ciphertext, actual));
+                Assert.Equal(expected, actual);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(AeadAlgorithms))]
+        public static void TryDecryptWithSpanInPlace(Type algorithmType)
+        {
+            var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
+
+            using (var k = new Key(a))
+            {
+                var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
+                var ad = Utilities.RandomBytes.Slice(0, 100);
+
+                var actual = new byte[L + a.TagSize];
+                var expected = new byte[L + a.TagSize];
+
+                a.Encrypt(k, n, ad, Utilities.RandomBytes.Slice(0, L), actual);
+                a.Encrypt(k, n, ad, Utilities.RandomBytes.Slice(0, L), expected);
+
+                Assert.True(a.TryDecrypt(k, n, ad, actual, new Span<byte>(expected, 0, L)));
+                Assert.True(a.TryDecrypt(k, n, ad, actual, new Span<byte>(actual, 0, L)));
+                Assert.Equal(expected, actual);
             }
         }
 

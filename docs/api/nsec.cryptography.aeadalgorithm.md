@@ -138,6 +138,10 @@ plaintext
     The length of the span must be `ciphertext.Length` minus
     [[TagSize|AeadAlgorithm Class#TagSize]].
 
+With the exception of `plaintext` and `ciphertext` pointing at the same memory
+(in-place decryption), `plaintext` must not overlap with any of the other
+arguments.
+
 #### Exceptions
 
 ArgumentNullException
@@ -247,6 +251,10 @@ ciphertext
     The length of the span must be `plaintext.Length` plus
     [[TagSize|AeadAlgorithm Class#TagSize]].
 
+With the exception of `ciphertext` and `plaintext` pointing at the same memory
+(in-place encryption), `ciphertext` must not overlap with any of the other
+arguments.
+
 #### Exceptions
 
 ArgumentNullException
@@ -355,6 +363,10 @@ plaintext
 : The span to fill with the decrypted and authenticated data.
     The length of the span must be `ciphertext.Length` minus
     [[TagSize|AeadAlgorithm Class#TagSize]].
+
+With the exception of `plaintext` and `ciphertext` pointing at the same memory
+(in-place decryption), `plaintext` must not overlap with any of the other
+arguments.
 
 #### Return value
 
