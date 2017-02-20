@@ -32,10 +32,14 @@ namespace NSec.Tests.Base
         {
             var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
 
-            var b = a.Hash(ReadOnlySpan<byte>.Empty);
+            var data = Utilities.RandomBytes.Slice(0, 100);
 
-            Assert.NotNull(b);
-            Assert.Equal(a.DefaultHashSize, b.Length);
+            var expected = a.Hash(data);
+            var actual = a.Hash(data);
+
+            Assert.NotNull(actual);
+            Assert.Equal(a.DefaultHashSize, actual.Length);
+            Assert.Equal(expected, actual);
         }
 
         #endregion
@@ -72,10 +76,14 @@ namespace NSec.Tests.Base
         {
             var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
 
-            var b = a.Hash(ReadOnlySpan<byte>.Empty, 32);
+            var data = Utilities.RandomBytes.Slice(0, 100);
 
-            Assert.NotNull(b);
-            Assert.Equal(32, b.Length);
+            var expected = a.Hash(data, 32);
+            var actual = a.Hash(data, 32);
+
+            Assert.NotNull(actual);
+            Assert.Equal(32, actual.Length);
+            Assert.Equal(expected, actual);
         }
 
         #endregion
@@ -112,7 +120,30 @@ namespace NSec.Tests.Base
         {
             var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
 
-            a.Hash(ReadOnlySpan<byte>.Empty, new byte[32]);
+            var data = Utilities.RandomBytes.Slice(0, 100);
+
+            var expected = new byte[a.DefaultHashSize];
+            var actual = new byte[a.DefaultHashSize];
+
+            a.Hash(data, expected);
+            a.Hash(data, actual);
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [MemberData(nameof(HashAlgorithms))]
+        public static void HashWithSpanOverlapping(Type algorithmType)
+        {
+            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
+
+            var data = Utilities.RandomBytes.Slice(0, 100).ToArray();
+
+            var expected = new byte[a.DefaultHashSize];
+            var actual = new Span<byte>(data, 0, a.DefaultHashSize);
+
+            a.Hash(data, expected);
+            a.Hash(data, actual);
+            Assert.Equal(expected, actual.ToArray());
         }
 
         #endregion

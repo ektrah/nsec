@@ -86,16 +86,20 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void SignEmptySuccess(Type algorithmType)
+        public static void SignSuccess(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
-                var b = a.Sign(k, ReadOnlySpan<byte>.Empty);
+                var data = Utilities.RandomBytes.Slice(0, 100);
 
-                Assert.NotNull(b);
-                Assert.Equal(a.DefaultMacSize, b.Length);
+                var expected = a.Sign(k, data);
+                var actual = a.Sign(k, data);
+
+                Assert.NotNull(actual);
+                Assert.Equal(a.DefaultMacSize, actual.Length);
+                Assert.Equal(expected, actual);
             }
         }
 
@@ -159,10 +163,14 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                var b = a.Sign(k, ReadOnlySpan<byte>.Empty, a.MinMacSize);
+                var data = Utilities.RandomBytes.Slice(0, 100);
 
-                Assert.NotNull(b);
-                Assert.Equal(a.MinMacSize, b.Length);
+                var expected = a.Sign(k, data, a.MinMacSize);
+                var actual = a.Sign(k, data, a.MinMacSize);
+
+                Assert.NotNull(actual);
+                Assert.Equal(a.MinMacSize, actual.Length);
+                Assert.Equal(expected, actual);
             }
         }
 
@@ -174,10 +182,14 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                var b = a.Sign(k, ReadOnlySpan<byte>.Empty, a.MaxMacSize);
+                var data = Utilities.RandomBytes.Slice(0, 100);
 
-                Assert.NotNull(b);
-                Assert.Equal(a.MaxMacSize, b.Length);
+                var expected = a.Sign(k, data, a.MaxMacSize);
+                var actual = a.Sign(k, data, a.MaxMacSize);
+
+                Assert.NotNull(actual);
+                Assert.Equal(a.MaxMacSize, actual.Length);
+                Assert.Equal(expected, actual);
             }
         }
 
@@ -241,7 +253,14 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                a.Sign(k, ReadOnlySpan<byte>.Empty, new byte[a.MinMacSize]);
+                var data = Utilities.RandomBytes.Slice(0, 100);
+
+                var expected = new byte[a.MinMacSize];
+                var actual = new byte[a.MinMacSize];
+
+                a.Sign(k, data, expected);
+                a.Sign(k, data, actual);
+                Assert.Equal(expected, actual);
             }
         }
 
@@ -253,7 +272,33 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                a.Sign(k, ReadOnlySpan<byte>.Empty, new byte[a.MaxMacSize]);
+                var data = Utilities.RandomBytes.Slice(0, 100);
+
+                var expected = new byte[a.MaxMacSize];
+                var actual = new byte[a.MaxMacSize];
+
+                a.Sign(k, data, expected);
+                a.Sign(k, data, actual);
+                Assert.Equal(expected, actual);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(MacAlgorithms))]
+        public static void SignWithSpanOverlapping(Type algorithmType)
+        {
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
+
+            using (var k = new Key(a))
+            {
+                var data = Utilities.RandomBytes.Slice(0, 100).ToArray();
+
+                var expected = new byte[a.DefaultMacSize];
+                var actual = new Span<byte>(data, 0, a.DefaultMacSize);
+
+                a.Sign(k, data, expected);
+                a.Sign(k, data, actual);
+                Assert.Equal(expected, actual.ToArray());
             }
         }
 
