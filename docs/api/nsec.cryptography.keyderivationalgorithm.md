@@ -115,8 +115,7 @@ info
 
 bytes
 : The span to fill with bytes derived from the shared secret.
-
-`bytes` must not overlap with `salt` or `info`.
+: `bytes` must not overlap with `salt` or `info`.
 
 #### Exceptions
 

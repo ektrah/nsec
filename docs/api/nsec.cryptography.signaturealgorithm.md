@@ -108,8 +108,7 @@ data
 
 signature
 : The span to fill with the signature.
-
-`signature` must not overlap with `data`.
+: `signature` must not overlap with `data`.
 
 #### Exceptions
 
