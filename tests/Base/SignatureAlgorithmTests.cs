@@ -48,7 +48,7 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(SignatureAlgorithms))]
-        public static void SignSucces(Type algorithmType)
+        public static void SignSuccess(Type algorithmType)
         {
             var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
 
