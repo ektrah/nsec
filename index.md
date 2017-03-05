@@ -44,7 +44,7 @@ verify the signature.
 
 ## Installation
 
-Soon&trade; (waiting for VS2017)
+Soon&trade; (waiting for .NET Core 2.0)
 
 
 ## Documentation
