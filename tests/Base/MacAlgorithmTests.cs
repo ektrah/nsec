@@ -484,10 +484,10 @@ namespace NSec.Tests.Base
             {
                 var actual = k.Export(KeyBlobFormat.RawSymmetricKey);
 
-                var expected = new byte[actual.Length];
-                Utilities.Fill(expected, 0xD0);
+                var unexpected = new byte[actual.Length];
+                Utilities.Fill(unexpected, 0xDB);
 
-                Assert.NotEqual(expected, actual);
+                Assert.NotEqual(unexpected, actual);
             }
         }
 
