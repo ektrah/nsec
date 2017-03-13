@@ -1,11 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <TargetFramework>netstandard1.1</TargetFramework>
-    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-  </PropertyGroup>
-  <PropertyGroup>
+    <TargetFramework>netcoreapp1.0</TargetFramework>
     <PackageId>NSec.Cryptography</PackageId>
     <VersionPrefix>1.0.0</VersionPrefix>
     <Authors>Klaus Hartke</Authors>
@@ -18,21 +14,35 @@ NSec.Cryptography.Ed25519
 NSec.Cryptography.Key
 NSec.Cryptography.X25519</Description>
     <Copyright>© 2017 Klaus Hartke</Copyright>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageLicenseUrl>https://nsec.rocks/license</PackageLicenseUrl>
     <PackageProjectUrl>https://nsec.rocks/</PackageProjectUrl>
     <PackageIconUrl>https://goo.gl/iN8fpR</PackageIconUrl>
-    <RepositoryUrl>https://github.com/ektrah/nsec</RepositoryUrl>
+    <RepositoryUrl>https://github.com/ektrah/nsec.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>aead aes-gcm blake2b chacha20-poly1305 crypto cryptography curve25519 dotnet-core ed25519 encryption hash hkdf hmac libsodium security sha256 sha512 x25519</PackageTags>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
   <ItemGroup>
-    <Content Include="..\LICENSE" Link="LICENSE" PackagePath="" Visible="false" />
-    <Content Include="..\NOTICE" Link="NOTICE" PackagePath="" Visible="false" />
+    <Content Include="..\LICENSE" Link="LICENSE" PackagePath="" />
+    <Content Include="..\NOTICE" Link="NOTICE" PackagePath="" />
   </ItemGroup>
+
   <ItemGroup>
-    <PackageReference Include="libsodium" Version="1.0.11-preview-1" />
-    <PackageReference Include="System.Memory" Version="4.4.0-beta-25104-02" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.4.0-beta-25104-02" />
+    <PackageReference Include="libsodium" Version="1.0.12-preview-01" />
+    <PackageReference Include="System.Memory" Version="4.4.0-beta-25110-02" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.4.0-beta-25110-02" />
   </ItemGroup>
+
 </Project>
