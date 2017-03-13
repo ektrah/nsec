@@ -9,6 +9,7 @@ namespace NSec.Cryptography
     //
     //      | Version | Major | Minor |
     //      | ------- | ----- | ----- |
+    //      | 1.0.12  |   9   |   4   |
     //      | 1.0.11  |   9   |   3   |
     //      | 1.0.10  |   9   |   2   |
     //      | 1.0.9   |   9   |   2   |
@@ -65,7 +66,7 @@ namespace NSec.Cryptography
             // sodium_init() returns 0 on success, -1 on failure, and 1 if the
             // library had already been initialized. We call sodium_init() only
             // once, but if another library p/invokes into libsodium it might
-            // already have been called.
+            // already have been initialized.
             return (s_initialized.Value == 0) || (s_initialized.Value == 1);
         }
     }
