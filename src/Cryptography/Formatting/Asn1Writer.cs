@@ -1,23 +1,11 @@
-//#define UNSAFE
-
 using System;
-#if UNSAFE
-using System.Runtime.CompilerServices;
-#endif
 
 namespace NSec.Cryptography.Formatting
 {
     // ITU-T X.690 5.0 DER
-#if UNSAFE
-    unsafe 
-#endif
     internal struct Asn1Writer
     {
-#if UNSAFE
-        private void* _buffer;
-#else
         private Span<byte> _buffer;
-#endif
         private int _depth;
         private int _pos;
         private int[] _stack;
@@ -26,21 +14,13 @@ namespace NSec.Cryptography.Formatting
             ref Span<byte> buffer, 
             int maxDepth = 8)
         {
-#if UNSAFE
-            _buffer = Unsafe.AsPointer(ref buffer);
-#else
             _buffer = buffer;
-#endif
             _depth = 0;
             _pos = buffer.Length;
             _stack = new int[maxDepth];
         }
 
-#if UNSAFE
-        public ReadOnlySpan<byte> Bytes => Unsafe.AsRef<Span<byte>>(_buffer).Slice(_pos);
-#else
         public ReadOnlySpan<byte> Bytes => _buffer.Slice(_pos);
-#endif
 
         public void BeginSequence()
         {
@@ -138,11 +118,7 @@ namespace NSec.Cryptography.Formatting
                 throw new ArgumentException(); // not enough space
 
             _pos--;
-#if UNSAFE
-            Unsafe.AsRef<Span<byte>>(_buffer)[_pos] = value;
-#else
             _buffer[_pos] = value;
-#endif
         }
 
         private void WriteBytes(
@@ -152,11 +128,7 @@ namespace NSec.Cryptography.Formatting
                 throw new ArgumentException(); // not enough space
 
             _pos -= bytes.Length;
-#if UNSAFE
-            bytes.CopyTo(Unsafe.AsRef<Span<byte>>(_buffer).Slice(_pos));
-#else
             bytes.CopyTo(_buffer.Slice(_pos));
-#endif
         }
 
         private void WriteLength(

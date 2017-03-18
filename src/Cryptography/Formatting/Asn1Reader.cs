@@ -1,23 +1,11 @@
-//#define UNSAFE
-
 using System;
-#if UNSAFE
-using System.Runtime.CompilerServices;
-#endif
 
 namespace NSec.Cryptography.Formatting
 {
     // ITU-T X.690 5.0 DER
-#if UNSAFE
-    unsafe 
-#endif
     internal struct Asn1Reader
     {
-#if UNSAFE
-        private void* _buffer;
-#else
         private ReadOnlySpan<byte> _buffer;
-#endif
         private int _depth;
         private bool _failed;
         private StartAndLength[] _stack;
@@ -26,11 +14,7 @@ namespace NSec.Cryptography.Formatting
             ref ReadOnlySpan<byte> buffer, 
             int maxDepth = 8)
         {
-#if UNSAFE
-            _buffer = Unsafe.AsPointer(ref buffer);
-#else
             _buffer = buffer;
-#endif
             _depth = 0;
             _failed = false;
             _stack = new StartAndLength[maxDepth];
@@ -229,11 +213,7 @@ namespace NSec.Cryptography.Formatting
             public bool IsEmpty => _length == 0;
             public int Length => _length;
             public int Start => _start;
-#if UNSAFE
-            public ReadOnlySpan<byte> ApplyTo(void* buffer) => Unsafe.AsRef<ReadOnlySpan<byte>>(buffer).Slice(_start, _length);
-#else
             public ReadOnlySpan<byte> ApplyTo(ReadOnlySpan<byte> buffer) { return buffer.Slice(_start, _length); }
-#endif
             public StartAndLength Slice(int start) { return new StartAndLength(_start + start, _length - start); }
             public StartAndLength Slice(int start, int length) { return new StartAndLength(_start + start, length); }
         }
