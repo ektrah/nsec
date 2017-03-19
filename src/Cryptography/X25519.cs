@@ -35,7 +35,7 @@ namespace NSec.Cryptography
         });
 
         private static readonly PublicKeyFormatter s_nsecPublicKeyFormatter =
-            new PublicKeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[]
+            new X25519PublicKeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[]
         {
             0x7F, 0x37, 0x41, crypto_scalarmult_curve25519_SCALARBYTES,
         });
@@ -56,7 +56,7 @@ namespace NSec.Cryptography
         });
 
         private static readonly PublicKeyFormatter s_pkixPublicKeyFormatter =
-            new PublicKeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[]
+            new X25519PublicKeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[]
         {
             // +-- SEQUENCE (2 elements)
             //     +-- SEQUENCE (1 element)
@@ -70,7 +70,7 @@ namespace NSec.Cryptography
             new X25519KeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[] { });
 
         private static readonly PublicKeyFormatter s_rawPublicKeyFormatter =
-            new PublicKeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[] { });
+            new X25519PublicKeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[] { });
 
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
@@ -97,11 +97,12 @@ namespace NSec.Cryptography
         }
 
         internal override void CreateKey(
-            SecureMemoryHandle keyHandle, 
+            SecureMemoryHandle keyHandle,
             out byte[] publicKeyBytes)
         {
             publicKeyBytes = new byte[crypto_scalarmult_curve25519_SCALARBYTES];
             crypto_scalarmult_curve25519_base(publicKeyBytes, keyHandle);
+            Debug.Assert((publicKeyBytes[crypto_scalarmult_curve25519_SCALARBYTES - 1] & 0x80) == 0);
         }
 
         internal override int ExportKey(
