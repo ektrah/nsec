@@ -20,61 +20,61 @@ namespace NSec.Cryptography
         }
 
         internal static ArgumentException Argument_DeriveInvalidCount(
-            string paramName, 
+            string paramName,
             string arg0)
         {
             return new ArgumentException(string.Format(ResourceManager.GetString("Argument_DeriveInvalidCount"), arg0), paramName);
         }
 
         internal static ArgumentException Argument_FormatNotSupported(
-            string paramName, 
+            string paramName,
             string arg0)
         {
             return new ArgumentException(string.Format(ResourceManager.GetString("Argument_FormatNotSupported"), arg0), paramName);
         }
 
         internal static ArgumentException Argument_HashSize(
-            string paramName, 
-            string arg0, 
-            string arg1, 
+            string paramName,
+            string arg0,
+            string arg1,
             string arg2)
         {
             return new ArgumentException(string.Format(ResourceManager.GetString("Argument_HashSize"), arg0, arg1, arg2), paramName);
         }
 
         internal static ArgumentException Argument_InvalidPrkLength(
-            string paramName, 
+            string paramName,
             string arg0)
         {
             return new ArgumentException(string.Format(ResourceManager.GetString("Argument_InvalidPrkLength"), arg0), paramName);
         }
 
         internal static ArgumentException Argument_InvalidPrkLengthExact(
-            string paramName, 
+            string paramName,
             string arg0)
         {
             return new ArgumentException(string.Format(ResourceManager.GetString("Argument_InvalidPrkLengthExact"), arg0), paramName);
         }
 
         internal static ArgumentException Argument_KeyWrongAlgorithm(
-            string paramName, 
-            string arg0, 
+            string paramName,
+            string arg0,
             string arg1)
         {
             return new ArgumentException(string.Format(ResourceManager.GetString("Argument_KeyWrongAlgorithm"), arg0, arg1), paramName);
         }
 
         internal static ArgumentException Argument_MacSize(
-            string paramName, 
-            string arg0, 
-            string arg1, 
+            string paramName,
+            string arg0,
+            string arg1,
             string arg2)
         {
             return new ArgumentException(string.Format(ResourceManager.GetString("Argument_MacSize"), arg0, arg1, arg2), paramName);
         }
 
         internal static ArgumentException Argument_NonceLength(
-            string paramName, 
+            string paramName,
             string arg0)
         {
             return new ArgumentException(string.Format(ResourceManager.GetString("Argument_NonceLength"), arg0), paramName);
@@ -99,14 +99,14 @@ namespace NSec.Cryptography
         }
 
         internal static ArgumentException Argument_SharedSecretLength(
-            string paramName, 
+            string paramName,
             string arg0)
         {
             return new ArgumentException(string.Format(ResourceManager.GetString("Argument_SharedSecretLength"), arg0), paramName);
         }
 
         internal static ArgumentException Argument_SignatureLength(
-            string paramName, 
+            string paramName,
             string arg0)
         {
             return new ArgumentException(string.Format(ResourceManager.GetString("Argument_SignatureLength"), arg0), paramName);
@@ -137,7 +137,7 @@ namespace NSec.Cryptography
         }
 
         internal static ArgumentOutOfRangeException ArgumentOutOfRange_DeriveInvalidCount(
-            string paramName, 
+            string paramName,
             string arg0)
         {
             return new ArgumentOutOfRangeException(paramName, string.Format(ResourceManager.GetString("ArgumentOutOfRange_DeriveInvalidCount"), arg0));
@@ -156,18 +156,18 @@ namespace NSec.Cryptography
         }
 
         internal static ArgumentOutOfRangeException ArgumentOutOfRange_HashSize(
-            string paramName, 
-            string arg0, 
-            string arg1, 
+            string paramName,
+            string arg0,
+            string arg1,
             string arg2)
         {
             return new ArgumentOutOfRangeException(paramName, string.Format(ResourceManager.GetString("ArgumentOutOfRange_HashSize"), arg0, arg1, arg2));
         }
 
         internal static ArgumentOutOfRangeException ArgumentOutOfRange_MacSize(
-            string paramName, 
-            string arg0, 
-            string arg1, 
+            string paramName,
+            string arg0,
+            string arg1,
             string arg2)
         {
             return new ArgumentOutOfRangeException(paramName, string.Format(ResourceManager.GetString("ArgumentOutOfRange_MacSize"), arg0, arg1, arg2));
@@ -189,7 +189,7 @@ namespace NSec.Cryptography
         }
 
         internal static CryptographicException Cryptographic_LibsodiumOutdated(
-            string arg0, 
+            string arg0,
             string arg1)
         {
             return new CryptographicException(string.Format(ResourceManager.GetString("Cryptographic_LibsodiumOutdated"), arg0, arg1));
