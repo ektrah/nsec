@@ -8,7 +8,7 @@ namespace NSec.Cryptography
     //
     //  An authenticated encryption with associated data (AEAD) algorithm
     //
-    //  Examples
+    //  Possible Instances
     //
     //      | Algorithm         | Reference | Key Size | Nonce Size | Tag Size |
     //      | ----------------- | --------- | -------- | ---------- | -------- |

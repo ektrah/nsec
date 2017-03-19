@@ -7,7 +7,7 @@ namespace NSec.Cryptography
     //
     //  A key derivation algorithm
     //
-    //  Examples
+    //  Possible Instances
     //
     //      | Algorithm      | Reference | Salt Size | Info Size | Output Size   |
     //      | -------------- | --------- | --------- | --------- | ------------- |

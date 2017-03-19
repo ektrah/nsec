@@ -7,7 +7,7 @@ namespace NSec.Cryptography
     //
     //  A digital signature algorithm
     //
-    //  Examples
+    //  Possible Instances
     //
     //      | Algorithm   | Reference  | Key Size | Signature Size |
     //      | ----------- | ---------- | -------- | -------------- |
