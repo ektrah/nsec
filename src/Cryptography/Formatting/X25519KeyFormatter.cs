@@ -11,6 +11,7 @@ namespace NSec.Cryptography.Formatting
             byte[] blobHeader)
             : base(keySize, blobHeader)
         {
+            Debug.Assert(keySize == crypto_scalarmult_curve25519_SCALARBYTES);
         }
 
         protected override void Deserialize(

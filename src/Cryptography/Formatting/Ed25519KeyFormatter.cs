@@ -11,6 +11,7 @@ namespace NSec.Cryptography.Formatting
             byte[] blobHeader)
             : base(keySize, blobHeader)
         {
+            Debug.Assert(keySize == crypto_sign_ed25519_SEEDBYTES);
         }
 
         protected override void Deserialize(
