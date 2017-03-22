@@ -62,7 +62,7 @@ namespace NSec.Tests.Formatting
         {
             var writer = new Asn1Writer(new byte[expected.Length]);
             writer.Integer(value);
-            Assert.Equal(BitConverter.ToString(expected), BitConverter.ToString(writer.Bytes.ToArray()));
+            Assert.Equal(expected, writer.Bytes.ToArray());
         }
 
         [Fact]
