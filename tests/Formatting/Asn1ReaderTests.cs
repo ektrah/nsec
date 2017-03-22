@@ -198,7 +198,7 @@ namespace NSec.Tests.Formatting
         public static void SequenceStackOverflow()
         {
             var value = new byte[] { 0x30, 0x06, 0x30, 0x04, 0x30, 0x02, 0x30, 0x00 };
-            var reader = new Asn1Reader(value, 3);
+            var reader = new Asn1Reader(value, 2);
             reader.BeginSequence();
             Assert.True(reader.Success);
             reader.BeginSequence();
@@ -239,7 +239,7 @@ namespace NSec.Tests.Formatting
         [InlineData(4, new byte[] { 0x30, 0x06, 0x30, 0x04, 0x30, 0x02, 0x30, 0x00 })]
         public static void Sequence(int depth, byte[] value)
         {
-            var reader = new Asn1Reader(value, depth + 1);
+            var reader = new Asn1Reader(value, depth);
             for (var i = 0; i < depth; i++)
             {
                 reader.BeginSequence();
@@ -260,7 +260,7 @@ namespace NSec.Tests.Formatting
         [InlineData(new byte[] { 0x30, 0x09, 0x02, 0x01, 0x01, 0x02, 0x01, 0x02, 0x02, 0x01, 0x03 }, new int[] { 1, 2, 3 })]
         public static void IntegerSequence(byte[] value, int[] expected)
         {
-            var reader = new Asn1Reader(value, 2);
+            var reader = new Asn1Reader(value, 1);
             reader.BeginSequence();
             for (var i = 0; i < expected.Length; i++)
             {

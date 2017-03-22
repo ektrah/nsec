@@ -17,7 +17,7 @@ namespace NSec.Cryptography.Formatting
             _buffer = buffer;
             _depth = 0;
             _failed = false;
-            _stack = new StartAndLength[maxDepth];
+            _stack = new StartAndLength[1 + maxDepth];
             _stack[_depth] = new StartAndLength(0, buffer.Length);
         }
 
