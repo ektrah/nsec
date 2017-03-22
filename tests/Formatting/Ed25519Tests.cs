@@ -18,9 +18,9 @@ namespace NSec.Tests.Formatting
 
             using (var k = Key.Import(a, b, KeyBlobFormat.RawPrivateKey, KeyFlags.AllowExport))
             {
-                var blob = new ReadOnlySpan<byte>(k.Export(KeyBlobFormat.PkixPrivateKey));
+                var blob = k.Export(KeyBlobFormat.PkixPrivateKey);
 
-                var reader = new Asn1Reader(ref blob);
+                var reader = new Asn1Reader(blob);
                 reader.BeginSequence();
                 Assert.Equal(0, reader.Integer32());
                 reader.BeginSequence();
@@ -30,7 +30,7 @@ namespace NSec.Tests.Formatting
                 reader.End();
                 Assert.True(reader.SuccessComplete);
 
-                var reader2 = new Asn1Reader(ref edPrivateKey);
+                var reader2 = new Asn1Reader(edPrivateKey);
                 Assert.Equal(b.ToArray(), reader2.OctetString().ToArray());
                 Assert.True(reader2.SuccessComplete);
             }
@@ -64,9 +64,9 @@ namespace NSec.Tests.Formatting
             using (var k = Key.Import(a, b, KeyBlobFormat.RawPrivateKey))
             {
                 var publicKeyBytes = k.Export(KeyBlobFormat.RawPublicKey);
-                var blob = new ReadOnlySpan<byte>(k.Export(KeyBlobFormat.PkixPublicKey));
+                var blob = k.Export(KeyBlobFormat.PkixPublicKey);
 
-                var reader = new Asn1Reader(ref blob);
+                var reader = new Asn1Reader(blob);
                 reader.BeginSequence();
                 reader.BeginSequence();
                 Assert.Equal(s_oid, reader.ObjectIdentifier().ToArray());

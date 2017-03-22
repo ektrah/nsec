@@ -11,7 +11,7 @@ namespace NSec.Cryptography.Formatting
         private StartAndLength[] _stack;
 
         public Asn1Reader(
-            ref ReadOnlySpan<byte> buffer,
+            ReadOnlySpan<byte> buffer,
             int maxDepth = 8)
         {
             _buffer = buffer;

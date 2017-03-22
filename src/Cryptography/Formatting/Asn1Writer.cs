@@ -11,7 +11,7 @@ namespace NSec.Cryptography.Formatting
         private int[] _stack;
 
         public Asn1Writer(
-            ref Span<byte> buffer,
+            Span<byte> buffer,
             int maxDepth = 8)
         {
             _buffer = buffer;
