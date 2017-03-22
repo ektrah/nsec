@@ -5,10 +5,11 @@ namespace NSec.Cryptography.Formatting
     // ITU-T X.690 5.0 DER
     internal struct Asn1Reader
     {
-        private ReadOnlySpan<byte> _buffer;
+        private readonly ReadOnlySpan<byte> _buffer;
+        private readonly StartAndLength[] _stack;
+
         private int _depth;
         private bool _failed;
-        private StartAndLength[] _stack;
 
         public Asn1Reader(
             ReadOnlySpan<byte> buffer,

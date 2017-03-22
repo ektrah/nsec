@@ -5,10 +5,11 @@ namespace NSec.Cryptography.Formatting
     // ITU-T X.690 5.0 DER
     internal struct Asn1Writer
     {
-        private Span<byte> _buffer;
+        private readonly Span<byte> _buffer;
+        private readonly int[] _stack;
+
         private int _depth;
         private int _pos;
-        private int[] _stack;
 
         public Asn1Writer(
             Span<byte> buffer,
