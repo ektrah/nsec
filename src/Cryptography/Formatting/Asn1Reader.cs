@@ -18,14 +18,12 @@ namespace NSec.Cryptography.Formatting
             _depth = 0;
             _failed = false;
             _stack = new StartAndLength[maxDepth];
-            Top = new StartAndLength(0, buffer.Length);
+            _stack[_depth] = new StartAndLength(0, buffer.Length);
         }
 
         public bool Success => !_failed;
 
-        public bool SuccessComplete => !_failed && _depth == 0 && Top.IsEmpty;
-
-        private ref StartAndLength Top => ref _stack[_depth];
+        public bool SuccessComplete => !_failed && _depth == 0 && _stack[_depth].IsEmpty;
 
         public void BeginSequence()
         {
@@ -33,7 +31,7 @@ namespace NSec.Cryptography.Formatting
             if (!_failed)
             {
                 _depth++;
-                Top = bytes;
+                _stack[_depth] = bytes;
             }
         }
 
@@ -73,7 +71,7 @@ namespace NSec.Cryptography.Formatting
 
         public void End()
         {
-            if (_failed || !Top.IsEmpty)
+            if (_failed || !_stack[_depth].IsEmpty)
             {
                 Fail();
             }
@@ -153,7 +151,7 @@ namespace NSec.Cryptography.Formatting
         {
             _failed = true;
             _depth = 0;
-            Top = default(StartAndLength);
+            _stack[_depth] = default(StartAndLength);
         }
 
         private bool IsInvalidInteger(
@@ -169,7 +167,7 @@ namespace NSec.Cryptography.Formatting
         private StartAndLength Read(
             int tag)
         {
-            StartAndLength top = Top;
+            StartAndLength top = _stack[_depth];
             StartAndLength result = default(StartAndLength);
             ReadOnlySpan<byte> span = top.ApplyTo(_buffer);
             int length = 0;
@@ -197,7 +195,7 @@ namespace NSec.Cryptography.Formatting
                 goto fail;
 
             result = top.Slice(pos, length);
-            Top = top.Slice(pos + length);
+            _stack[_depth] = top.Slice(pos + length);
             goto done;
         fail:
             Fail();
