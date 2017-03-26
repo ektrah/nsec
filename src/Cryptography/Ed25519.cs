@@ -100,39 +100,15 @@ namespace NSec.Cryptography
         }
 
         internal override void CreateKey(
-            SecureMemoryHandle keyHandle,
+            ReadOnlySpan<byte> seed,
+            out SecureMemoryHandle keyHandle,
             out byte[] publicKeyBytes)
         {
-            Span<byte> seed;
-            try
-            {
-                unsafe
-                {
-                    byte* pointer = stackalloc byte[crypto_sign_ed25519_SEEDBYTES];
-                    seed = new Span<byte>(pointer, crypto_sign_ed25519_SEEDBYTES);
-                }
+            Debug.Assert(seed.Length == crypto_sign_ed25519_SEEDBYTES);
 
-                bool addedRef = false;
-                try
-                {
-                    keyHandle.DangerousAddRef(ref addedRef);
-                    keyHandle.DangerousGetSpan().Slice(0, crypto_sign_ed25519_SEEDBYTES).CopyTo(seed);
-                }
-                finally
-                {
-                    if (addedRef)
-                    {
-                        keyHandle.DangerousRelease();
-                    }
-                }
-
-                publicKeyBytes = new byte[crypto_sign_ed25519_PUBLICKEYBYTES];
-                crypto_sign_ed25519_seed_keypair(publicKeyBytes, keyHandle, ref seed.DangerousGetPinnableReference());
-            }
-            finally
-            {
-                sodium_memzero(ref seed.DangerousGetPinnableReference(), (UIntPtr)seed.Length);
-            }
+            publicKeyBytes = new byte[crypto_sign_ed25519_PUBLICKEYBYTES];
+            SecureMemoryHandle.Alloc(crypto_sign_ed25519_SECRETKEYBYTES, out keyHandle);
+            crypto_sign_ed25519_seed_keypair(publicKeyBytes, keyHandle, ref seed.DangerousGetPinnableReference());
         }
 
         internal override int ExportKey(
@@ -175,9 +151,9 @@ namespace NSec.Cryptography
             }
         }
 
-        internal override int GetDefaultKeySize()
+        internal override int GetDefaultSeedSize()
         {
-            return crypto_sign_ed25519_SECRETKEYBYTES;
+            return crypto_sign_ed25519_SEEDBYTES;
         }
 
         internal override int GetKeyBlobSize(

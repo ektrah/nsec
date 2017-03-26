@@ -97,11 +97,17 @@ namespace NSec.Cryptography
         }
 
         internal override void CreateKey(
-            SecureMemoryHandle keyHandle,
+            ReadOnlySpan<byte> seed,
+            out SecureMemoryHandle keyHandle,
             out byte[] publicKeyBytes)
         {
+            Debug.Assert(seed.Length == crypto_scalarmult_curve25519_SCALARBYTES);
+
             publicKeyBytes = new byte[crypto_scalarmult_curve25519_SCALARBYTES];
+            SecureMemoryHandle.Alloc(crypto_scalarmult_curve25519_SCALARBYTES, out keyHandle);
+            keyHandle.Import(seed);
             crypto_scalarmult_curve25519_base(publicKeyBytes, keyHandle);
+
             Debug.Assert((publicKeyBytes[crypto_scalarmult_curve25519_SCALARBYTES - 1] & 0x80) == 0);
         }
 
@@ -145,7 +151,7 @@ namespace NSec.Cryptography
             }
         }
 
-        internal override int GetDefaultKeySize()
+        internal override int GetDefaultSeedSize()
         {
             return crypto_scalarmult_curve25519_SCALARBYTES;
         }

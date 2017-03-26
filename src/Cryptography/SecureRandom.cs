@@ -36,11 +36,5 @@ namespace NSec.Cryptography
         {
             randombytes_buf(ref bytes.DangerousGetPinnableReference(), (UIntPtr)bytes.Length);
         }
-
-        internal static void GenerateKeyCore(
-            SecureMemoryHandle keyHandle)
-        {
-            randombytes_buf(keyHandle, (UIntPtr)keyHandle.Length);
-        }
     }
 }

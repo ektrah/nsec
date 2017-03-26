@@ -21,21 +21,28 @@ namespace NSec.Cryptography
             if (algorithm == null)
                 throw Error.ArgumentNull_Algorithm(nameof(algorithm));
 
-            int keySize = algorithm.GetDefaultKeySize();
+            int seedSize = algorithm.GetDefaultSeedSize();
 
             SecureMemoryHandle keyHandle = null;
             byte[] publicKeyBytes = null;
             bool success = false;
+            Span<byte> seed;
 
             try
             {
-                SecureMemoryHandle.Alloc(keySize, out keyHandle);
-                SecureRandom.GenerateKeyCore(keyHandle);
-                algorithm.CreateKey(keyHandle, out publicKeyBytes);
+                unsafe
+                {
+                    byte* pointer = stackalloc byte[seedSize];
+                    seed = new Span<byte>(pointer, seedSize);
+                }
+
+                SecureRandom.GenerateBytesCore(seed);
+                algorithm.CreateKey(seed, out keyHandle, out publicKeyBytes);
                 success = true;
             }
             finally
             {
+                sodium_memzero(ref seed.DangerousGetPinnableReference(), (UIntPtr)seed.Length);
                 if (!success && keyHandle != null)
                 {
                     keyHandle.Dispose();

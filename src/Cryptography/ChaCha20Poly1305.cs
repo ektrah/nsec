@@ -68,10 +68,15 @@ namespace NSec.Cryptography
         }
 
         internal override void CreateKey(
-            SecureMemoryHandle keyHandle,
+            ReadOnlySpan<byte> seed,
+            out SecureMemoryHandle keyHandle,
             out byte[] publicKeyBytes)
         {
+            Debug.Assert(seed.Length == crypto_aead_chacha20poly1305_ietf_KEYBYTES);
+
             publicKeyBytes = null;
+            SecureMemoryHandle.Alloc(seed.Length, out keyHandle);
+            keyHandle.Import(seed);
         }
 
         internal override void EncryptCore(
@@ -118,7 +123,7 @@ namespace NSec.Cryptography
             }
         }
 
-        internal override int GetDefaultKeySize()
+        internal override int GetDefaultSeedSize()
         {
             return crypto_aead_chacha20poly1305_ietf_KEYBYTES;
         }

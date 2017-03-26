@@ -100,10 +100,13 @@ namespace NSec.Cryptography
         }
 
         internal override void CreateKey(
-            SecureMemoryHandle keyHandle,
+            ReadOnlySpan<byte> seed,
+            out SecureMemoryHandle keyHandle,
             out byte[] publicKeyBytes)
         {
             publicKeyBytes = null;
+            SecureMemoryHandle.Alloc(seed.Length, out keyHandle);
+            keyHandle.Import(seed);
         }
 
         internal override int ExportKey(
@@ -120,7 +123,7 @@ namespace NSec.Cryptography
             return keyHandle.Export(blob);
         }
 
-        internal override int GetDefaultKeySize()
+        internal override int GetDefaultSeedSize()
         {
             return DefaultKeySize;
         }

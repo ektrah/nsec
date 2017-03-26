@@ -94,23 +94,30 @@ namespace NSec.Cryptography
             if (algorithm == null)
                 throw Error.ArgumentNull_Algorithm(nameof(algorithm));
 
-            int keySize = algorithm.GetDefaultKeySize();
-            if (keySize > MaxOutputSize)
+            int seedSize = algorithm.GetDefaultSeedSize();
+            if (seedSize > MaxOutputSize)
                 throw Error.NotSupported_CreateKey();
 
             SecureMemoryHandle keyHandle = null;
             byte[] publicKeyBytes = null;
             bool success = false;
+            Span<byte> seed;
 
             try
             {
-                SecureMemoryHandle.Alloc(keySize, out keyHandle);
-                DeriveKeyCore(sharedSecret.Handle, salt, info, keyHandle);
-                algorithm.CreateKey(keyHandle, out publicKeyBytes);
+                unsafe
+                {
+                    byte* pointer = stackalloc byte[seedSize];
+                    seed = new Span<byte>(pointer, seedSize);
+                }
+
+                DeriveBytesCore(sharedSecret.Handle, salt, info, seed);
+                algorithm.CreateKey(seed, out keyHandle, out publicKeyBytes);
                 success = true;
             }
             finally
             {
+                sodium_memzero(ref seed.DangerousGetPinnableReference(), (UIntPtr)seed.Length);
                 if (!success && keyHandle != null)
                 {
                     keyHandle.Dispose();
