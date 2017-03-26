@@ -12,9 +12,9 @@ wraps these primitives in a modern .NET API based on the new `Span<T>` and
 * **Easy-to-use** -- NSec wants you to fall into the "pit of success." It
 provides a strongly typed data model that represents keys and shared secrets
 with specific classes rather than naked byte arrays. This avoids, for example,
-accidentally using a key with a wrong algorithm. Still, there are some hard
-problems that need to be solved outside of NSec, such as nonce generation and
-key management.
+accidentally using a key with a wrong algorithm. There are still some hard
+problems that NSec does not solve, though, such as nonce generation and key
+management.
 
 * **Secure** -- In addition to the security provided by the cryptographic
 primitives, NSec tries to make the use of these primitives secure by default.
@@ -44,7 +44,7 @@ verify the signature.
 
 ## Installation
 
-Soon&trade; (waiting for .NET Core 2.0)
+Soon&trade; (waiting for .NET Core 2.0 Preview)
 
 
 ## Documentation
@@ -82,8 +82,8 @@ Feature requests are welcome, too.
 
 ## Note
 
-*Cryptography is not magic pixie dust that you can sprinkle on a system to make
-it secure.*
+*"Cryptography is not magic pixie dust that you can sprinkle on a system to make
+it secure."*
 
 NSec aims to provide careful abstractions to make the work with modern
 cryptographic primitives relatively easy and pain-free. However, the primitives
