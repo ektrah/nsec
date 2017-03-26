@@ -8,10 +8,10 @@
 
 For more information about NSec, please refer to the following resources:
 
-|                       |                                               |
-|:--------------------- |:--------------------------------------------- |
-| Project homepage:     | https://nsec.rocks/                           |
-| Installation:         | Soon&trade; (waiting for .NET Core 2.0)       |
-| Online documentation: | https://nsec.rocks/docs/api/nsec.cryptography |
-| Open issues:          | https://github.com/ektrah/nsec/issues         |
-| Pull requests:        | https://github.com/ektrah/nsec/pulls          |
+|                           |                                                       |
+|:------------------------- |:----------------------------------------------------- |
+| Project homepage:         | https://nsec.rocks/                                   |
+| Installation:             | Soon&trade; (waiting for .NET Core 2.0 Preview)       |
+| Online documentation:     | https://nsec.rocks/docs/api/nsec.cryptography         |
+| Open issues:              | https://github.com/ektrah/nsec/issues                 |
+| Pull requests:            | https://github.com/ektrah/nsec/pulls                  |
