@@ -39,7 +39,7 @@ namespace NSec.Cryptography.Formatting
         public ReadOnlySpan<byte> BitString()
         {
             ReadOnlySpan<byte> bytes = Read(0x03).ApplyTo(_buffer);
-            ReadOnlySpan<byte> value = ReadOnlySpan<byte>.Empty;
+            ReadOnlySpan<byte> value = default(ReadOnlySpan<byte>);
 
             if (_failed || bytes.Length == 0 || bytes[0] != 0)
             {

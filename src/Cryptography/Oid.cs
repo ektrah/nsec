@@ -22,7 +22,7 @@ namespace NSec.Cryptography
             _bytes = bytes;
         }
 
-        public ReadOnlySpan<byte> Bytes => _bytes ?? ReadOnlySpan<byte>.Empty;
+        public ReadOnlySpan<byte> Bytes => _bytes ?? default(ReadOnlySpan<byte>);
 
         private static int CalcLength(
             uint value)

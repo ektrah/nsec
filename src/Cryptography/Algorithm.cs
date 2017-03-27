@@ -53,7 +53,7 @@ namespace NSec.Cryptography
         // Gets the supported key blob formats.
         internal virtual ReadOnlySpan<KeyBlobFormat> GetSupportedKeyBlobFormats()
         {
-            return ReadOnlySpan<KeyBlobFormat>.Empty;
+            return default(ReadOnlySpan<KeyBlobFormat>);
         }
 
         // Converts a key blob into a libsodium secret key.
