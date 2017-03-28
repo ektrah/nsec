@@ -239,47 +239,6 @@ ObjectDisposedException
 : The key has been disposed.
 
 
-### Export(KeyBlobFormat, Span<byte>)
-
-Exports the key as a BLOB in the specified format and writes it to the specified
-span of bytes.
-
-    public int Export(
-        KeyBlobFormat format,
-        Span<byte> blob)
-
-#### Parameters
-
-format
-: One of the [[KeyBlobFormat|KeyBlobFormat Enum]] values that specifies the
-    format of the key BLOB.
-
-blob
-: The span to write the key BLOB to. The span must be large enough to hold the
-    the key BLOB.
-    
-#### Returns
-
-The actual number of bytes written to `blob`.
-
-#### Exceptions
-
-ArgumentException
-: The length of `blob` is less than the size of the key BLOB.
-
-ArgumentException
-: The algorithm for the key does not support the specified format.
-
-InvalidOperationException
-: The flags for the key do not allow the key to be exported.
-
-NotSupportedException
-: The algorithm for the key does not support exporting keys.
-
-ObjectDisposedException
-: The key has been disposed.
-
-
 ## See also
 
 * API Reference

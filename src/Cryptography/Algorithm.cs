@@ -20,19 +20,17 @@ namespace NSec.Cryptography
         }
 
         // Converts a libsodium secret key into a key blob.
-        internal virtual int ExportKey(
+        internal virtual byte[] ExportKey(
             SecureMemoryHandle keyHandle,
-            KeyBlobFormat format,
-            Span<byte> blob)
+            KeyBlobFormat format)
         {
             throw Error.NotSupported_ExportKey();
         }
 
         // Converts a libsodium public key into a key blob.
-        internal virtual int ExportPublicKey(
+        internal virtual byte[] ExportPublicKey(
             ReadOnlySpan<byte> publicKeyBytes,
-            KeyBlobFormat format,
-            Span<byte> blob)
+            KeyBlobFormat format)
         {
             throw Error.NotSupported_ExportKey();
         }

@@ -82,41 +82,39 @@ namespace NSec.Cryptography
             Debug.Assert((publicKeyBytes[crypto_scalarmult_curve25519_SCALARBYTES - 1] & 0x80) == 0);
         }
 
-        internal override int ExportKey(
+        internal override byte[] ExportKey(
             SecureMemoryHandle keyHandle,
-            KeyBlobFormat format,
-            Span<byte> blob)
+            KeyBlobFormat format)
         {
             switch (format)
             {
             case KeyBlobFormat.RawPrivateKey:
-                return s_rawPrivateKeyFormatter.Export(keyHandle, blob);
+                return s_rawPrivateKeyFormatter.Export(keyHandle);
             case KeyBlobFormat.NSecPrivateKey:
-                return s_nsecPrivateKeyFormatter.Export(keyHandle, blob);
+                return s_nsecPrivateKeyFormatter.Export(keyHandle);
             case KeyBlobFormat.PkixPrivateKey:
-                return s_pkixPrivateKeyFormatter.Export(keyHandle, blob);
+                return s_pkixPrivateKeyFormatter.Export(keyHandle);
             case KeyBlobFormat.PkixPrivateKeyText:
-                return s_pkixPrivateKeyFormatter.ExportText(keyHandle, blob);
+                return s_pkixPrivateKeyFormatter.ExportText(keyHandle);
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
         }
 
-        internal override int ExportPublicKey(
+        internal override byte[] ExportPublicKey(
             ReadOnlySpan<byte> publicKeyBytes,
-            KeyBlobFormat format,
-            Span<byte> blob)
+            KeyBlobFormat format)
         {
             switch (format)
             {
             case KeyBlobFormat.RawPublicKey:
-                return s_rawPublicKeyFormatter.Export(publicKeyBytes, blob);
+                return s_rawPublicKeyFormatter.Export(publicKeyBytes);
             case KeyBlobFormat.NSecPublicKey:
-                return s_nsecPublicKeyFormatter.Export(publicKeyBytes, blob);
+                return s_nsecPublicKeyFormatter.Export(publicKeyBytes);
             case KeyBlobFormat.PkixPublicKey:
-                return s_pkixPublicKeyFormatter.Export(publicKeyBytes, blob);
+                return s_pkixPublicKeyFormatter.Export(publicKeyBytes);
             case KeyBlobFormat.PkixPublicKeyText:
-                return s_pkixPublicKeyFormatter.ExportText(publicKeyBytes, blob);
+                return s_pkixPublicKeyFormatter.ExportText(publicKeyBytes);
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }

@@ -77,18 +77,7 @@ namespace NSec.Cryptography
         public byte[] Export(
             KeyBlobFormat format)
         {
-            int maxBlobSize = _algorithm.GetKeyBlobSize(format);
-            byte[] blob = new byte[maxBlobSize];
-            int blobSize = Export(format, blob);
-            Array.Resize(ref blob, blobSize);
-            return blob;
-        }
-
-        public int Export(
-            KeyBlobFormat format,
-            Span<byte> blob)
-        {
-            return _algorithm.ExportPublicKey(_bytes, format, blob);
+            return _algorithm.ExportPublicKey(_bytes, format);
         }
 
         public override int GetHashCode()

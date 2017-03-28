@@ -44,30 +44,25 @@ namespace NSec.Cryptography.Formatting
 
         public int BlobTextSize => _blobTextSize;
 
-        public int Export(
-            ReadOnlySpan<byte> publicKeyBytes,
-            Span<byte> blob)
+        public byte[] Export(
+            ReadOnlySpan<byte> publicKeyBytes)
         {
-            if (blob.Length < _blobSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(blob));
-
+            byte[] blob = new byte[_blobSize];
             new ReadOnlySpan<byte>(_blobHeader).CopyTo(blob);
-            Serialize(publicKeyBytes, blob.Slice(_blobHeader.Length, _keySize));
-            return blob.Length;
+            Serialize(publicKeyBytes, new Span<byte>(blob, _blobHeader.Length, _keySize));
+            return blob;
         }
 
-        public int ExportText(
-            ReadOnlySpan<byte> publicKeyBytes,
-            Span<byte> blob)
+        public byte[] ExportText(
+            ReadOnlySpan<byte> publicKeyBytes)
         {
-            if (blob.Length < _blobTextSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(blob));
-
             byte[] temp = new byte[_blobSize];
             new ReadOnlySpan<byte>(_blobHeader).CopyTo(temp);
             Serialize(publicKeyBytes, new Span<byte>(temp, _blobHeader.Length));
-            Armor.Encode(temp, s_beginLabel, s_endLabel, blob.Slice(0, _blobTextSize));
-            return blob.Length;
+
+            byte[] blob = new byte[_blobTextSize];
+            Armor.Encode(temp, s_beginLabel, s_endLabel, new Span<byte>(blob, 0, _blobTextSize));
+            return blob;
         }
 
         public bool IsValid(

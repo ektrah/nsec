@@ -99,19 +99,18 @@ namespace NSec.Cryptography
             Debug.Assert((ulong)ciphertext.Length == ciphertextLength);
         }
 
-        internal override int ExportKey(
+        internal override byte[] ExportKey(
             SecureMemoryHandle keyHandle,
-            KeyBlobFormat format,
-            Span<byte> blob)
+            KeyBlobFormat format)
         {
             Debug.Assert(keyHandle != null);
 
             switch (format)
             {
             case KeyBlobFormat.RawSymmetricKey:
-                return s_rawKeyFormatter.Export(keyHandle, blob);
+                return s_rawKeyFormatter.Export(keyHandle);
             case KeyBlobFormat.NSecSymmetricKey:
-                return s_nsecKeyFormatter.Export(keyHandle, blob);
+                return s_nsecKeyFormatter.Export(keyHandle);
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }

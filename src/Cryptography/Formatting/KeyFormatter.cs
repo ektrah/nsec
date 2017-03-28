@@ -46,27 +46,20 @@ namespace NSec.Cryptography.Formatting
 
         public int BlobTextSize => _blobTextSize;
 
-        public int Export(
-            SecureMemoryHandle keyHandle,
-            Span<byte> blob)
+        public byte[] Export(
+            SecureMemoryHandle keyHandle)
         {
-            if (blob.Length < _blobSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(blob));
-
             Debug.Assert(keyHandle != null);
 
+            byte[] blob = new byte[_blobSize];
             new ReadOnlySpan<byte>(_blobHeader).CopyTo(blob);
-            Serialize(keyHandle, blob.Slice(_blobHeader.Length, _keySize));
-            return _blobSize;
+            Serialize(keyHandle, new Span<byte>(blob, _blobHeader.Length, _keySize));
+            return blob;
         }
 
-        public int ExportText(
-            SecureMemoryHandle keyHandle,
-            Span<byte> blob)
+        public byte[] ExportText(
+            SecureMemoryHandle keyHandle)
         {
-            if (blob.Length < _blobTextSize)
-                throw new ArgumentException(Error.ArgumentExceptionMessage, nameof(blob));
-
             Debug.Assert(keyHandle != null);
 
             Span<byte> temp;
@@ -80,8 +73,10 @@ namespace NSec.Cryptography.Formatting
 
                 new ReadOnlySpan<byte>(_blobHeader).CopyTo(temp);
                 Serialize(keyHandle, temp.Slice(_blobHeader.Length));
-                Armor.Encode(temp, s_beginLabel, s_endLabel, blob.Slice(0, _blobTextSize));
-                return _blobTextSize;
+
+                byte[] blob = new byte[_blobTextSize];
+                Armor.Encode(temp, s_beginLabel, s_endLabel, new Span<byte>(blob, 0, _blobTextSize));
+                return blob;
             }
             finally
             {

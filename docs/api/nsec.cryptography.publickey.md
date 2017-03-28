@@ -171,40 +171,6 @@ NotSupportedException
 : The algorithm for the public key does not support exporting public keys.
 
 
-### Export(KeyBlobFormat, Span<byte>)
-
-Exports the public key as a BLOB in the specified format and writes it to the start
-of the specified span of bytes.
-
-    public int Export(
-        KeyBlobFormat format,
-        Span<byte> blob)
-
-#### Parameters
-
-format
-: One of the [[KeyBlobFormat|KeyBlobFormat Enum]] values that specifies the
-    format of the public key BLOB.
-
-blob
-: The span to fill with the public key BLOB.
-
-#### Returns
-
-The actual number of bytes written to `blob`.
-
-#### Exceptions
-
-ArgumentException
-: The length of `blob` is less than the size of the key BLOB.
-
-ArgumentException
-: The algorithm for the public key does not support the specified format.
-
-NotSupportedException
-: The algorithm for the public key does not support exporting public keys.
-
-
 ### GetHashCode()
 
 Returns the hash code for the current [[PublicKey|PublicKey Class]] object.

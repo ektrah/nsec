@@ -123,7 +123,7 @@ namespace NSec.Tests.Core
 
         #endregion
 
-        #region Export #1
+        #region Export
 
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
@@ -164,62 +164,6 @@ namespace NSec.Tests.Core
                 Assert.NotNull(pk);
                 Assert.Equal(k.PublicKey, pk);
                 Assert.Same(a, pk.Algorithm);
-            }
-        }
-
-        #endregion
-
-        #region Export #2
-
-        [Theory]
-        [MemberData(nameof(AsymmetricKeyAlgorithms))]
-        public static void ExportWithSpanWithFormatMin(Type algorithmType)
-        {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
-            using (var k = new Key(a))
-            {
-                Assert.Throws<ArgumentException>("format", () => k.PublicKey.Export((KeyBlobFormat)int.MinValue, Span<byte>.Empty));
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(AsymmetricKeyAlgorithms))]
-        public static void ExportWithSpanWithFormatMax(Type algorithmType)
-        {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
-            using (var k = new Key(a))
-            {
-                Assert.Throws<ArgumentException>("format", () => k.PublicKey.Export((KeyBlobFormat)int.MaxValue, Span<byte>.Empty));
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(PublicKeyBlobFormats))]
-        public static void ExportWithSpanTooSmall(Type algorithmType, KeyBlobFormat format)
-        {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
-            using (var k = new Key(a))
-            {
-                Assert.Throws<ArgumentException>("blob", () => k.PublicKey.Export(format, Span<byte>.Empty));
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(PublicKeyBlobFormats))]
-        public static void ExportWithLargeSpan(Type algorithmType, KeyBlobFormat format)
-        {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
-            using (var k = new Key(a))
-            {
-                var blob = new byte[1024];
-                var blobSize = k.PublicKey.Export(format, blob);
-
-                Assert.True(blobSize > 0);
-                Assert.True(blobSize <= blob.Length);
             }
         }
 

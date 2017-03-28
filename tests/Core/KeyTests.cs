@@ -208,7 +208,7 @@ namespace NSec.Tests.Core
 
         #endregion
 
-        #region Export #1
+        #region Export
 
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
@@ -217,9 +217,9 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(a, KeyFlags.None))
+            using (var k = new Key(a, KeyFlags.AllowExport))
             {
-                Assert.Equal(KeyFlags.None, k.Flags);
+                Assert.Equal(KeyFlags.AllowExport, k.Flags);
 
                 Assert.Throws<ArgumentException>("format", () => k.Export((KeyBlobFormat)int.MinValue));
             }
@@ -392,76 +392,6 @@ namespace NSec.Tests.Core
             Assert.Throws<ObjectDisposedException>(() => k.Export(KeyBlobFormat.RawSymmetricKey));
             Assert.Throws<ObjectDisposedException>(() => k.Export(KeyBlobFormat.RawSymmetricKey));
             Assert.Throws<ObjectDisposedException>(() => k.Export(KeyBlobFormat.RawSymmetricKey));
-        }
-
-        #endregion
-
-        #region Export #2
-
-        [Theory]
-        [MemberData(nameof(AsymmetricKeyAlgorithms))]
-        [MemberData(nameof(SymmetricKeyAlgorithms))]
-        public static void ExportWithSpanWithFormatMin(Type algorithmType)
-        {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
-            using (var k = new Key(a, KeyFlags.AllowExport))
-            {
-                Assert.Equal(KeyFlags.AllowExport, k.Flags);
-
-                Assert.Throws<ArgumentException>("format", () => k.Export((KeyBlobFormat)int.MinValue, Span<byte>.Empty));
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(AsymmetricKeyAlgorithms))]
-        [MemberData(nameof(SymmetricKeyAlgorithms))]
-        public static void ExportWithSpanWithFormatMax(Type algorithmType)
-        {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
-            using (var k = new Key(a, KeyFlags.AllowExport))
-            {
-                Assert.Equal(KeyFlags.AllowExport, k.Flags);
-
-                Assert.Throws<ArgumentException>("format", () => k.Export((KeyBlobFormat)int.MaxValue, Span<byte>.Empty));
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(PublicKeyBlobFormats))]
-        [MemberData(nameof(PrivateKeyBlobFormats))]
-        [MemberData(nameof(SymmetricKeyBlobFormats))]
-        public static void ExportWithSpanTooSmall(Type algorithmType, KeyBlobFormat format)
-        {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
-            using (var k = new Key(a, KeyFlags.AllowExport))
-            {
-                Assert.Equal(KeyFlags.AllowExport, k.Flags);
-
-                Assert.Throws<ArgumentException>("blob", () => k.Export(format, Span<byte>.Empty));
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(PublicKeyBlobFormats))]
-        [MemberData(nameof(PrivateKeyBlobFormats))]
-        [MemberData(nameof(SymmetricKeyBlobFormats))]
-        public static void ExportWithLargeSpan(Type algorithmType, KeyBlobFormat format)
-        {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
-            using (var k = new Key(a, KeyFlags.AllowExport))
-            {
-                Assert.Equal(KeyFlags.AllowExport, k.Flags);
-
-                var blob = new byte[1024];
-                var blobSize = k.Export(format, blob);
-
-                Assert.True(blobSize > 0);
-                Assert.True(blobSize <= blob.Length);
-            }
         }
 
         #endregion

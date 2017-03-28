@@ -103,18 +103,18 @@ namespace NSec.Cryptography
             keyHandle.Import(seed);
         }
 
-        internal override int ExportKey(
+        internal override byte[] ExportKey(
             SecureMemoryHandle keyHandle,
-            KeyBlobFormat format,
-            Span<byte> blob)
+            KeyBlobFormat format)
         {
             if (format != KeyBlobFormat.RawSymmetricKey)
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
-            if (blob.Length < keyHandle.Length)
-                throw Error.Argument_SpanBlob(nameof(blob));
 
             Debug.Assert(keyHandle != null);
-            return keyHandle.Export(blob);
+
+            byte[] blob = new byte[keyHandle.Length];
+            keyHandle.Export(blob);
+            return blob;
         }
 
         internal override int GetDefaultSeedSize()

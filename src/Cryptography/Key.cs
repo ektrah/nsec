@@ -160,17 +160,6 @@ namespace NSec.Cryptography
         public byte[] Export(
             KeyBlobFormat format)
         {
-            int maxBlobSize = _algorithm.GetKeyBlobSize(format);
-            byte[] blob = new byte[maxBlobSize];
-            int blobSize = Export(format, blob);
-            Array.Resize(ref blob, blobSize);
-            return blob;
-        }
-
-        public int Export(
-            KeyBlobFormat format,
-            Span<byte> blob)
-        {
             if (format < 0)
             {
                 if (_handle.IsClosed)
@@ -195,7 +184,7 @@ namespace NSec.Cryptography
 
                 _exported = true;
 
-                return _algorithm.ExportKey(_handle, format, blob);
+                return _algorithm.ExportKey(_handle, format);
             }
             else
             {
@@ -204,7 +193,7 @@ namespace NSec.Cryptography
                     throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
                 }
 
-                return _algorithm.ExportPublicKey(_publicKey.Bytes, format, blob);
+                return _algorithm.ExportPublicKey(_publicKey.Bytes, format);
             }
         }
     }
