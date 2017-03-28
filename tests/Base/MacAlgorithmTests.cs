@@ -7,7 +7,21 @@ namespace NSec.Tests.Base
     public static class MacAlgorithmTests
     {
         public static readonly TheoryData<Type> MacAlgorithms = Registry.MacAlgorithms;
-        public static readonly TheoryData<Type, int> MacAlgorithmsAndKeySizes = GetMacAlgorithmsAndKeySizes(Registry.MacAlgorithms);
+
+        public static readonly TheoryData<Type, int> MacAlgorithmsAndKeySizes = new TheoryData<Type, int>
+        {
+            { typeof(HmacSha256),  32 }, // L
+            { typeof(HmacSha256),  48 },
+            { typeof(HmacSha256),  64 }, // B
+            { typeof(HmacSha256),  80 },
+            { typeof(HmacSha256),  96 },
+
+            { typeof(HmacSha512),  64 }, // L
+            { typeof(HmacSha512),  96 },
+            { typeof(HmacSha512), 128 }, // B
+            { typeof(HmacSha512), 160 },
+            { typeof(HmacSha512), 192 },
+        };
 
         #region Properties
 
@@ -35,28 +49,17 @@ namespace NSec.Tests.Base
         public static void ExportImportSymmetric(Type algorithmType, int keySize)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
+            var b = Utilities.RandomBytes.Slice(0, keySize);
 
-            using (var k = Key.Import(a, Utilities.RandomBytes.Slice(0, keySize), KeyBlobFormat.RawSymmetricKey, KeyFlags.AllowExport))
+            using (var k = Key.Import(a, b, KeyBlobFormat.RawSymmetricKey, KeyFlags.AllowExport))
             {
                 Assert.Equal(KeyFlags.AllowExport, k.Flags);
 
-                var b = k.Export(KeyBlobFormat.RawSymmetricKey);
-                Assert.NotNull(b);
-                Assert.Equal(b.Length, keySize);
-            }
-        }
+                var expected = b.ToArray();
+                var actual = k.Export(KeyBlobFormat.RawSymmetricKey);
 
-        private static TheoryData<Type, int> GetMacAlgorithmsAndKeySizes(TheoryData<Type> algorithmTypes)
-        {
-            var data = new TheoryData<Type, int>();
-            foreach (var algorithmType in algorithmTypes)
-            {
-                var a = (MacAlgorithm)Activator.CreateInstance((Type)algorithmType[0]);
-                data.Add((Type)algorithmType[0], a.DefaultKeySize);
-                data.Add((Type)algorithmType[0], a.MinKeySize);
-                data.Add((Type)algorithmType[0], a.MaxKeySize);
+                Assert.Equal(expected, actual);
             }
-            return data;
         }
 
         #endregion

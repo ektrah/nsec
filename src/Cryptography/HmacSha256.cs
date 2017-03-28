@@ -25,8 +25,7 @@ namespace NSec.Cryptography
     //      Key Size - The key for HMAC-SHA-256 can be of any length. A length
     //          less than L=32 bytes (the output length of SHA-256) is strongly
     //          discouraged. Keys longer than L do not significantly increase
-    //          the function strength. Keys longer than B=64 bytes (the block
-    //          size of SHA-256) are first hashed using SHA-256.
+    //          the function strength.
     //
     //      MAC Size - 32 bytes. The output can be truncated to 16 bytes
     //          (128 bits of security).
@@ -42,7 +41,7 @@ namespace NSec.Cryptography
         public HmacSha256() : base(
             minKeySize: SHA256HashSize,
             defaultKeySize: SHA256HashSize,
-            maxKeySize: SHA256MessageBlockSize,
+            maxKeySize: int.MaxValue,
             minMacSize: 16,
             defaultMacSize: crypto_auth_hmacsha256_BYTES,
             maxMacSize: crypto_auth_hmacsha256_BYTES)
@@ -94,9 +93,7 @@ namespace NSec.Cryptography
             // exactly crypto_auth_hmacsha256_KEYBYTES. So we use _init here.
 
             // crypto_auth_hmacsha256_init hashes the key if it is larger than
-            // the block size. However, we perform this step already in the
-            // TryImportKey method to keep the KeyHandle small, so we never
-            // pass a key larger than the block size to _init.
+            // the block size.
 
             crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, keyHandle, (UIntPtr)keyHandle.Length);
 
@@ -150,21 +147,9 @@ namespace NSec.Cryptography
                 return false;
             }
 
-            if (blob.Length > SHA256MessageBlockSize)
-            {
-                publicKeyBytes = null;
-                SecureMemoryHandle.Alloc(crypto_hash_sha256_BYTES, out keyHandle);
-                crypto_hash_sha256_init(out crypto_hash_sha256_state state);
-                crypto_hash_sha256_update(ref state, ref blob.DangerousGetPinnableReference(), (ulong)blob.Length);
-                crypto_hash_sha256_final(ref state, keyHandle);
-            }
-            else
-            {
-                publicKeyBytes = null;
-                SecureMemoryHandle.Alloc(blob.Length, out keyHandle);
-                keyHandle.Import(blob);
-            }
-
+            publicKeyBytes = null;
+            SecureMemoryHandle.Alloc(blob.Length, out keyHandle);
+            keyHandle.Import(blob);
             return true;
         }
 

@@ -26,9 +26,7 @@ namespace NSec.Cryptography
     //          less than L=64 bytes (the output length of SHA-512) is strongly
     //          discouraged. (libsodium recommends a default size of
     //          crypto_auth_hmacsha512_KEYBYTES=32 bytes.) Keys longer than L do
-    //          not significantly increase the function strength. Keys longer
-    //          than B=128 bytes (the block size of SHA-512) are first hashed
-    //          using SHA-512.
+    //          not significantly increase the function strength.
     //
     //      MAC Size - 64 bytes. The output can be truncated to 16 bytes
     //          (128 bits of security). To match the security of SHA-512, the
@@ -46,7 +44,7 @@ namespace NSec.Cryptography
         public HmacSha512() : base(
             minKeySize: SHA512HashSize,
             defaultKeySize: SHA512HashSize,
-            maxKeySize: SHA512MessageBlockSize,
+            maxKeySize: int.MaxValue,
             minMacSize: 16,
             defaultMacSize: crypto_auth_hmacsha512_BYTES,
             maxMacSize: crypto_auth_hmacsha512_BYTES)
@@ -98,9 +96,7 @@ namespace NSec.Cryptography
             // exactly crypto_auth_hmacsha512_KEYBYTES. So we use _init here.
 
             // crypto_auth_hmacsha512_init hashes the key if it is larger than
-            // the block size. However, we perform this step already in the
-            // TryImportKey method to keep the KeyHandle small, so we never
-            // pass a key larger than the block size to _init.
+            // the block size.
 
             crypto_auth_hmacsha512_init(out crypto_auth_hmacsha512_state state, keyHandle, (UIntPtr)keyHandle.Length);
 
@@ -154,21 +150,9 @@ namespace NSec.Cryptography
                 return false;
             }
 
-            if (blob.Length > SHA512MessageBlockSize)
-            {
-                publicKeyBytes = null;
-                SecureMemoryHandle.Alloc(crypto_hash_sha512_BYTES, out keyHandle);
-                crypto_hash_sha512_init(out crypto_hash_sha512_state state);
-                crypto_hash_sha512_update(ref state, ref blob.DangerousGetPinnableReference(), (ulong)blob.Length);
-                crypto_hash_sha512_final(ref state, keyHandle);
-            }
-            else
-            {
-                publicKeyBytes = null;
-                SecureMemoryHandle.Alloc(blob.Length, out keyHandle);
-                keyHandle.Import(blob);
-            }
-
+            publicKeyBytes = null;
+            SecureMemoryHandle.Alloc(blob.Length, out keyHandle);
+            keyHandle.Import(blob);
             return true;
         }
 

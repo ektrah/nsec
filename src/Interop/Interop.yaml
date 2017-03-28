@@ -135,7 +135,6 @@ Interop.Sha256.cs:
   functions:
   - crypto_hash_sha256_bytes
   - crypto_hash_sha256_final
-  - crypto_hash_sha256_final (SecureMemoryHandle out)
   - crypto_hash_sha256_init
   - crypto_hash_sha256_statebytes
   - crypto_hash_sha256_update
@@ -150,7 +149,6 @@ Interop.Sha512.cs:
   functions:
   - crypto_hash_sha512_bytes
   - crypto_hash_sha512_final
-  - crypto_hash_sha512_final (SecureMemoryHandle out)
   - crypto_hash_sha512_init
   - crypto_hash_sha512_statebytes
   - crypto_hash_sha512_update
