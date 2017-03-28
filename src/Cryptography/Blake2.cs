@@ -30,7 +30,6 @@ namespace NSec.Cryptography
         private const int BLAKE2B_OUTBYTES = 64;
 
         private static readonly Oid s_oid = new Oid(1, 3, 6, 1, 4, 1, 1722, 12, 2, 1, 8);
-
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
         public Blake2() : base(

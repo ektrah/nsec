@@ -37,7 +37,6 @@ namespace NSec.Cryptography
         private const int SHA256MessageBlockSize = 64; // "B" in RFC 2104
 
         private static readonly Oid s_oid = new Oid(1, 2, 840, 113549, 2, 9);
-
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
         public HmacSha256() : base(
