@@ -133,24 +133,6 @@ NotSupportedException
 : The specified algorithm does not use keys.
 
 
-### GetSupportedKeyBlobFormats(Algorithm)
-
-    public static ReadOnlySpan<KeyBlobFormat> GetSupportedKeyBlobFormats(
-        Algorithm algorithm)
-
-Gets the key BLOB formats supported by the specified algorithm.
-
-#### Parameters
-
-algorithm
-: The algorithm.
-
-#### Return value
-
-A span of [[KeyBlobFormat|KeyBlobFormat Enum]] values where each value specifies
-a key BLOB format supported by the algorithm.
-
-
 ### Import(Algorithm, ReadOnlySpan<byte>, KeyBlobFormat, KeyFlags)
 
 Imports the specified key BLOB in the specified format.

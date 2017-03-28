@@ -57,12 +57,6 @@ namespace NSec.Cryptography
 
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
-        private static readonly KeyBlobFormat[] s_supportedKeyBlobFormats =
-        {
-            KeyBlobFormat.NSecSymmetricKey,
-            KeyBlobFormat.RawSymmetricKey,
-        };
-
         public Aes256Gcm() : base(
             keySize: crypto_aead_aes256gcm_KEYBYTES,
             nonceSize: crypto_aead_aes256gcm_NPUBBYTES,
@@ -149,11 +143,6 @@ namespace NSec.Cryptography
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
-        }
-
-        internal override ReadOnlySpan<KeyBlobFormat> GetSupportedKeyBlobFormats()
-        {
-            return s_supportedKeyBlobFormats;
         }
 
         internal override bool TryDecryptCore(

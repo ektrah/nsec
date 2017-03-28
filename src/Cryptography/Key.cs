@@ -99,15 +99,6 @@ namespace NSec.Cryptography
             return algorithm.GetKeyBlobSize(format);
         }
 
-        public static ReadOnlySpan<KeyBlobFormat> GetSupportedKeyBlobFormats(
-            Algorithm algorithm)
-        {
-            if (algorithm == null)
-                throw Error.ArgumentNull_Algorithm(nameof(algorithm));
-
-            return algorithm.GetSupportedKeyBlobFormats();
-        }
-
         public static Key Import(
            Algorithm algorithm,
            ReadOnlySpan<byte> blob,

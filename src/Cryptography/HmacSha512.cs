@@ -44,11 +44,6 @@ namespace NSec.Cryptography
 
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
-        private static readonly KeyBlobFormat[] s_supportedKeyBlobFormats =
-        {
-            KeyBlobFormat.RawSymmetricKey,
-        };
-
         public HmacSha512() : base(
             minKeySize: SHA512HashSize,
             defaultKeySize: SHA512HashSize,
@@ -97,11 +92,6 @@ namespace NSec.Cryptography
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
 
             return MaxKeySize;
-        }
-
-        internal override ReadOnlySpan<KeyBlobFormat> GetSupportedKeyBlobFormats()
-        {
-            return s_supportedKeyBlobFormats;
         }
 
         internal override void SignCore(

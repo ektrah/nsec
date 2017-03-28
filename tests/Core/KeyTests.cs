@@ -155,28 +155,6 @@ namespace NSec.Tests.Core
 
         #endregion
 
-        #region GetSupportedKeyBlobFormats
-
-        [Fact]
-        public static void GetBlobFormatsWithNullAlgorithm()
-        {
-            Assert.Throws<ArgumentNullException>("algorithm", () => Key.GetSupportedKeyBlobFormats(null));
-        }
-
-        [Theory]
-        [MemberData(nameof(AsymmetricKeyAlgorithms))]
-        [MemberData(nameof(SymmetricKeyAlgorithms))]
-        public static void GetBlobFormatsSuccess(Type algorithmType)
-        {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
-            var formats = Key.GetSupportedKeyBlobFormats(a);
-
-            Assert.True(formats.Length > 0);
-        }
-
-        #endregion
-
         #region Import
 
         [Fact]

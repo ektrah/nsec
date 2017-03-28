@@ -74,19 +74,6 @@ namespace NSec.Cryptography
 
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
-        private static readonly KeyBlobFormat[] s_supportedKeyBlobFormats =
-        {
-            KeyBlobFormat.PkixPrivateKeyText,
-            KeyBlobFormat.PkixPrivateKey,
-            KeyBlobFormat.NSecPrivateKey,
-            KeyBlobFormat.RawPrivateKey,
-
-            KeyBlobFormat.PkixPublicKeyText,
-            KeyBlobFormat.PkixPublicKey,
-            KeyBlobFormat.NSecPublicKey,
-            KeyBlobFormat.RawPublicKey,
-        };
-
         public X25519() : base(
             privateKeySize: crypto_scalarmult_curve25519_SCALARBYTES,
             publicKeySize: crypto_scalarmult_curve25519_SCALARBYTES,
@@ -182,11 +169,6 @@ namespace NSec.Cryptography
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
-        }
-
-        internal override ReadOnlySpan<KeyBlobFormat> GetSupportedKeyBlobFormats()
-        {
-            return s_supportedKeyBlobFormats;
         }
 
         internal override bool TryAgreeCore(

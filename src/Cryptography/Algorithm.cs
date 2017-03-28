@@ -50,12 +50,6 @@ namespace NSec.Cryptography
             throw Error.NotSupported_ExportKey();
         }
 
-        // Gets the supported key blob formats.
-        internal virtual ReadOnlySpan<KeyBlobFormat> GetSupportedKeyBlobFormats()
-        {
-            return default(ReadOnlySpan<KeyBlobFormat>);
-        }
-
         // Converts a key blob into a libsodium secret key.
         internal virtual bool TryImportKey(
             ReadOnlySpan<byte> blob,
