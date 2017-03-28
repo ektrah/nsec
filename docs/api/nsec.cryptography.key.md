@@ -105,34 +105,6 @@ NotSupportedException
 : The specified algorithm does not use keys.
 
 
-### GetKeyBlobSize(Algorithm, KeyBlobFormat)
-
-Gets the maximum size of a key BLOB for the specified algorithm and format.
-
-    public static int GetKeyBlobSize(
-        Algorithm algorithm,
-        KeyBlobFormat format)
-
-#### Parameters
-
-algorithm
-: The algorithm for the key BLOB format.
-
-format
-: One of the [[KeyBlobFormat|KeyBlobFormat Enum]] values that specifies the
-    format of a key BLOB.
-
-#### Return value
-
-The maximum key BLOB size for the specified algorithm and format.
-
-ArgumentException
-: The specified algorithm does not support the specified format.
-
-NotSupportedException
-: The specified algorithm does not use keys.
-
-
 ### Import(Algorithm, ReadOnlySpan<byte>, KeyBlobFormat, KeyFlags)
 
 Imports the specified key BLOB in the specified format.
@@ -284,9 +256,7 @@ format
 
 blob
 : The span to write the key BLOB to. The span must be large enough to hold the
-    the key BLOB. The maximum BLOB size can be determined using the
-    [[GetKeyBlobSize|Key Class#GetKeyBlobSize(Algorithm, KeyBlobFormat)]]
-    method.
+    the key BLOB.
     
 #### Returns
 

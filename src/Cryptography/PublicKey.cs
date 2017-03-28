@@ -77,7 +77,7 @@ namespace NSec.Cryptography
         public byte[] Export(
             KeyBlobFormat format)
         {
-            int maxBlobSize = Key.GetKeyBlobSize(_algorithm, format);
+            int maxBlobSize = _algorithm.GetKeyBlobSize(format);
             byte[] blob = new byte[maxBlobSize];
             int blobSize = Export(format, blob);
             Array.Resize(ref blob, blobSize);

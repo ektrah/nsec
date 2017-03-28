@@ -112,49 +112,6 @@ namespace NSec.Tests.Core
 
         #endregion
 
-        #region GetKeyBlobSize
-
-        [Fact]
-        public static void GetBlobSizeWithNullAlgorithm()
-        {
-            Assert.Throws<ArgumentNullException>("algorithm", () => Key.GetKeyBlobSize(null, 0));
-        }
-
-        [Theory]
-        [MemberData(nameof(AsymmetricKeyAlgorithms))]
-        [MemberData(nameof(SymmetricKeyAlgorithms))]
-        public static void GetBlobSizeWithFormatMin(Type algorithmType)
-        {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
-            Assert.Throws<ArgumentException>("format", () => Key.GetKeyBlobSize(a, (KeyBlobFormat)int.MinValue));
-        }
-
-        [Theory]
-        [MemberData(nameof(AsymmetricKeyAlgorithms))]
-        [MemberData(nameof(SymmetricKeyAlgorithms))]
-        public static void GetBlobSizeWithFormatMax(Type algorithmType)
-        {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
-            Assert.Throws<ArgumentException>("format", () => Key.GetKeyBlobSize(a, (KeyBlobFormat)int.MaxValue));
-        }
-
-        [Theory]
-        [MemberData(nameof(PublicKeyBlobFormats))]
-        [MemberData(nameof(PrivateKeyBlobFormats))]
-        [MemberData(nameof(SymmetricKeyBlobFormats))]
-        public static void GetBlobSizeSuccess(Type algorithmType, KeyBlobFormat format)
-        {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
-            var size = Key.GetKeyBlobSize(a, format);
-
-            Assert.True(size > 0);
-        }
-
-        #endregion
-
         #region Import
 
         [Fact]

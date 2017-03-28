@@ -89,16 +89,6 @@ namespace NSec.Cryptography
             return new Key(algorithm, flags);
         }
 
-        public static int GetKeyBlobSize(
-            Algorithm algorithm,
-            KeyBlobFormat format)
-        {
-            if (algorithm == null)
-                throw Error.ArgumentNull_Algorithm(nameof(algorithm));
-
-            return algorithm.GetKeyBlobSize(format);
-        }
-
         public static Key Import(
            Algorithm algorithm,
            ReadOnlySpan<byte> blob,
@@ -170,7 +160,7 @@ namespace NSec.Cryptography
         public byte[] Export(
             KeyBlobFormat format)
         {
-            int maxBlobSize = GetKeyBlobSize(_algorithm, format);
+            int maxBlobSize = _algorithm.GetKeyBlobSize(format);
             byte[] blob = new byte[maxBlobSize];
             int blobSize = Export(format, blob);
             Array.Resize(ref blob, blobSize);

@@ -196,10 +196,7 @@ The actual number of bytes written to `blob`.
 #### Exceptions
 
 ArgumentException
-: The length of `blob` is less than the size of the key BLOB. The maximum BLOB
-    size can be determined using the
-    [[GetKeyBlobSize|Key Class#GetKeyBlobSize(Algorithm, KeyBlobFormat)]]
-    method.
+: The length of `blob` is less than the size of the key BLOB.
 
 ArgumentException
 : The algorithm for the public key does not support the specified format.
