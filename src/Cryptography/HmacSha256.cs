@@ -80,15 +80,6 @@ namespace NSec.Cryptography
             return DefaultKeySize;
         }
 
-        internal override int GetKeyBlobSize(
-            KeyBlobFormat format)
-        {
-            if (format != KeyBlobFormat.RawSymmetricKey)
-                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
-
-            return MaxKeySize;
-        }
-
         internal override void SignCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,

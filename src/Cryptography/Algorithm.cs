@@ -41,13 +41,6 @@ namespace NSec.Cryptography
             throw Error.NotSupported_CreateKey();
         }
 
-        // Gets the size of a key blob in the specified format.
-        internal virtual int GetKeyBlobSize(
-            KeyBlobFormat format)
-        {
-            throw Error.NotSupported_ExportKey();
-        }
-
         // Converts a key blob into a libsodium secret key.
         internal virtual bool TryImportKey(
             ReadOnlySpan<byte> blob,

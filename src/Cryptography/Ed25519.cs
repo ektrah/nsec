@@ -125,34 +125,6 @@ namespace NSec.Cryptography
             return crypto_sign_ed25519_SEEDBYTES;
         }
 
-        internal override int GetKeyBlobSize(
-            KeyBlobFormat format)
-        {
-            switch (format)
-            {
-            case KeyBlobFormat.RawPrivateKey:
-                return s_rawPrivateKeyFormatter.BlobSize;
-            case KeyBlobFormat.NSecPrivateKey:
-                return s_nsecPrivateKeyFormatter.BlobSize;
-            case KeyBlobFormat.PkixPrivateKey:
-                return s_pkixPrivateKeyFormatter.BlobSize;
-            case KeyBlobFormat.PkixPrivateKeyText:
-                return s_pkixPrivateKeyFormatter.BlobTextSize;
-
-            case KeyBlobFormat.RawPublicKey:
-                return s_rawPublicKeyFormatter.BlobSize;
-            case KeyBlobFormat.NSecPublicKey:
-                return s_nsecPublicKeyFormatter.BlobSize;
-            case KeyBlobFormat.PkixPublicKey:
-                return s_pkixPublicKeyFormatter.BlobSize;
-            case KeyBlobFormat.PkixPublicKeyText:
-                return s_pkixPublicKeyFormatter.BlobTextSize;
-
-            default:
-                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
-            }
-        }
-
         internal override void SignCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,

@@ -113,20 +113,6 @@ namespace NSec.Cryptography
             return crypto_aead_chacha20poly1305_ietf_KEYBYTES;
         }
 
-        internal override int GetKeyBlobSize(
-            KeyBlobFormat format)
-        {
-            switch (format)
-            {
-            case KeyBlobFormat.RawSymmetricKey:
-                return s_rawKeyFormatter.BlobSize;
-            case KeyBlobFormat.NSecSymmetricKey:
-                return s_nsecKeyFormatter.BlobSize;
-            default:
-                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
-            }
-        }
-
         internal override bool TryDecryptCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> nonce,
