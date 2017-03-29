@@ -26,16 +26,13 @@ namespace NSec.Cryptography
     //
     public sealed class Blake2 : HashAlgorithm
     {
-        private const int BLAKE2B_KEYBYTES = 64;
-        private const int BLAKE2B_OUTBYTES = 64;
-
         private static readonly Oid s_oid = new Oid(1, 3, 6, 1, 4, 1, 1722, 12, 2, 1, 8);
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
         public Blake2() : base(
             minHashSize: 32,
-            defaultHashSize: 32,
-            maxHashSize: BLAKE2B_OUTBYTES)
+            defaultHashSize: crypto_generichash_blake2b_BYTES,
+            maxHashSize: crypto_generichash_blake2b_BYTES_MAX)
         {
             if (!s_selfTest.Value)
                 throw Error.Cryptographic_InitializationFailed();
@@ -126,8 +123,8 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> data,
             Span<byte> hash)
         {
-            Debug.Assert(hash.Length > 0);
-            Debug.Assert(hash.Length <= BLAKE2B_OUTBYTES);
+            Debug.Assert(hash.Length >= crypto_generichash_blake2b_BYTES_MIN);
+            Debug.Assert(hash.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
             crypto_generichash_blake2b_init(out crypto_generichash_blake2b_state state, IntPtr.Zero, UIntPtr.Zero, (UIntPtr)hash.Length);
             crypto_generichash_blake2b_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
@@ -162,10 +159,10 @@ namespace NSec.Cryptography
             Span<byte> hash)
         {
             Debug.Assert(keyHandle != null);
-            Debug.Assert(keyHandle.Length >= 0);
-            Debug.Assert(keyHandle.Length <= BLAKE2B_KEYBYTES);
-            Debug.Assert(hash.Length > 0);
-            Debug.Assert(hash.Length <= BLAKE2B_OUTBYTES);
+            Debug.Assert(keyHandle.Length >= crypto_generichash_blake2b_KEYBYTES_MIN);
+            Debug.Assert(keyHandle.Length <= crypto_generichash_blake2b_KEYBYTES_MAX);
+            Debug.Assert(hash.Length >= crypto_generichash_blake2b_BYTES_MIN);
+            Debug.Assert(hash.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
             crypto_generichash_blake2b_init(out crypto_generichash_blake2b_state state, keyHandle, (UIntPtr)keyHandle.Length, (UIntPtr)hash.Length);
             crypto_generichash_blake2b_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
