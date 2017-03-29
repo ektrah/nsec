@@ -169,7 +169,10 @@ namespace NSec.Cryptography
                     tempLength = crypto_auth_hmacsha256_BYTES;
 
                     if (chunkSize > crypto_auth_hmacsha256_BYTES)
+                    {
                         chunkSize = crypto_auth_hmacsha256_BYTES;
+                    }
+
                     temp.Slice(0, chunkSize).CopyTo(bytes.Slice(offset));
                     offset += chunkSize;
                 }
