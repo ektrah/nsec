@@ -14,9 +14,9 @@ namespace NSec.Cryptography
     //
     //      RFC 8032 - Edwards-Curve Digital Signature Algorithm (EdDSA)
     //
-    //      draft-ietf-curdle-pkix-03 - Algorithm Identifiers for Ed25519,
-    //          Ed25519ph, Ed448, Ed448ph, X25519 and X448 for use in the
-    //          Internet X.509 Public Key Infrastructure
+    //      draft-ietf-curdle-pkix-04 - Algorithm Identifiers for Ed25519,
+    //          Ed448, X25519 and X448 for use in the Internet X.509 Public Key
+    //          Infrastructure
     //
     //  Parameters:
     //

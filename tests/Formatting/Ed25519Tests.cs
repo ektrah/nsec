@@ -26,11 +26,11 @@ namespace NSec.Tests.Formatting
                 reader.BeginSequence();
                 Assert.Equal(s_oid, reader.ObjectIdentifier().ToArray());
                 reader.End();
-                var edPrivateKey = reader.OctetString();
+                var curvePrivateKey = reader.OctetString();
                 reader.End();
                 Assert.True(reader.SuccessComplete);
 
-                var reader2 = new Asn1Reader(edPrivateKey);
+                var reader2 = new Asn1Reader(curvePrivateKey);
                 Assert.Equal(b.ToArray(), reader2.OctetString().ToArray());
                 Assert.True(reader2.SuccessComplete);
             }
