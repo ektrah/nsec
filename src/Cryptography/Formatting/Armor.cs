@@ -61,7 +61,7 @@ namespace NSec.Cryptography.Formatting
             out int bytesWritten)
         {
             int i = input.IndexOf(s_fiveHyphens);
-            if ((i < 0) || (input.Length - i < beginLabel.Length) || !input.Slice(i, beginLabel.Length).SequenceEqual(beginLabel))
+            if (i < 0 || !input.Slice(i).StartsWith(beginLabel))
             {
                 bytesWritten = 0;
                 return false;
@@ -70,7 +70,7 @@ namespace NSec.Cryptography.Formatting
             input = input.Slice(i + beginLabel.Length);
 
             i = DecodeBase64(input, output, out bytesWritten);
-            if ((i < 0) || (input.Length - i < endLabel.Length) || !input.Slice(i, endLabel.Length).SequenceEqual(endLabel))
+            if (i < 0 || !input.Slice(i).StartsWith(endLabel))
             {
                 bytesWritten = 0;
                 return false;

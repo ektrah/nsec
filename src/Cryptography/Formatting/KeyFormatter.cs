@@ -87,8 +87,7 @@ namespace NSec.Cryptography.Formatting
         public bool IsValid(
             ReadOnlySpan<byte> blob)
         {
-            return blob.Length == _blobSize
-                && blob.Slice(0, _blobHeader.Length).SequenceEqual(_blobHeader);
+            return blob.Length == _blobSize && blob.StartsWith(_blobHeader);
         }
 
         public bool TryImport(
