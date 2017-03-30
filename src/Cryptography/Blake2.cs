@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using NSec.Cryptography.Formatting;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
@@ -26,7 +27,9 @@ namespace NSec.Cryptography
     //
     public sealed class Blake2 : HashAlgorithm
     {
+        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(crypto_generichash_blake2b_KEYBYTES_MIN, crypto_generichash_blake2b_KEYBYTES_MAX, new byte[] { 0x7F, 0x32, 0x45, 0 });
         private static readonly Oid s_oid = new Oid(1, 3, 6, 1, 4, 1, 1722, 12, 2, 1, 8);
+        private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(crypto_generichash_blake2b_KEYBYTES_MIN, crypto_generichash_blake2b_KEYBYTES_MAX);
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
         public Blake2() : base(
@@ -104,14 +107,17 @@ namespace NSec.Cryptography
             SecureMemoryHandle keyHandle,
             KeyBlobFormat format)
         {
-            if (format != KeyBlobFormat.RawSymmetricKey)
-                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
-
             Debug.Assert(keyHandle != null);
 
-            byte[] blob = new byte[keyHandle.Length];
-            keyHandle.Export(blob);
-            return blob;
+            switch (format)
+            {
+            case KeyBlobFormat.RawSymmetricKey:
+                return s_rawKeyFormatter.Export(keyHandle);
+            case KeyBlobFormat.NSecSymmetricKey:
+                return s_nsecKeyFormatter.Export(keyHandle);
+            default:
+                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
+            }
         }
 
         internal override int GetDefaultSeedSize()
@@ -137,20 +143,15 @@ namespace NSec.Cryptography
             out SecureMemoryHandle keyHandle,
             out byte[] publicKeyBytes)
         {
-            if (format != KeyBlobFormat.RawSymmetricKey)
-                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
-
-            if (blob.Length < MinKeySize || blob.Length > MaxKeySize)
+            switch (format)
             {
-                keyHandle = null;
-                publicKeyBytes = null;
-                return false;
+            case KeyBlobFormat.RawSymmetricKey:
+                return s_rawKeyFormatter.TryImport(blob, out keyHandle, out publicKeyBytes);
+            case KeyBlobFormat.NSecSymmetricKey:
+                return s_nsecKeyFormatter.TryImport(blob, out keyHandle, out publicKeyBytes);
+            default:
+                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
-
-            publicKeyBytes = null;
-            SecureMemoryHandle.Alloc(blob.Length, out keyHandle);
-            keyHandle.Import(blob);
-            return true;
         }
 
         private static void HashCore(
