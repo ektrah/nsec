@@ -6,8 +6,6 @@ namespace NSec.Tests.Algorithms
 {
     public static class Blake2Tests
     {
-        public static readonly TheoryData<int> KeySizes = GetKeySizes();
-
         #region Properties
 
         [Fact]
@@ -31,29 +29,23 @@ namespace NSec.Tests.Algorithms
         #region Export #1
 
         [Theory]
-        [MemberData(nameof(KeySizes))]
-        public static void ExportImportSymmetric(int keySize)
+        [InlineData(16)]
+        [InlineData(32)]
+        [InlineData(64)]
+        public static void ExportImportRaw(int keySize)
         {
             var a = new Blake2();
+            var b = Utilities.RandomBytes.Slice(0, keySize);
 
-            using (var k = Key.Import(a, Utilities.RandomBytes.Slice(0, keySize), KeyBlobFormat.RawSymmetricKey, KeyFlags.AllowExport))
+            using (var k = Key.Import(a, b, KeyBlobFormat.RawSymmetricKey, KeyFlags.AllowArchiving))
             {
-                Assert.Equal(KeyFlags.AllowExport, k.Flags);
+                Assert.Equal(KeyFlags.AllowArchiving, k.Flags);
 
-                var b = k.Export(KeyBlobFormat.RawSymmetricKey);
-                Assert.NotNull(b);
-                Assert.Equal(b.Length, keySize);
+                var expected = b.ToArray();
+                var actual = k.Export(KeyBlobFormat.RawSymmetricKey);
+
+                Assert.Equal(expected, actual);
             }
-        }
-
-        private static TheoryData<int> GetKeySizes()
-        {
-            var data = new TheoryData<int>();
-            var a = new Blake2();
-            data.Add(a.DefaultKeySize);
-            data.Add(a.MinKeySize);
-            data.Add(a.MaxKeySize);
-            return data;
         }
 
         #endregion

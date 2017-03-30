@@ -46,14 +46,14 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithmsAndKeySizes))]
-        public static void ExportImportSymmetric(Type algorithmType, int keySize)
+        public static void ExportImportRaw(Type algorithmType, int keySize)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
             var b = Utilities.RandomBytes.Slice(0, keySize);
 
-            using (var k = Key.Import(a, b, KeyBlobFormat.RawSymmetricKey, KeyFlags.AllowExport))
+            using (var k = Key.Import(a, b, KeyBlobFormat.RawSymmetricKey, KeyFlags.AllowArchiving))
             {
-                Assert.Equal(KeyFlags.AllowExport, k.Flags);
+                Assert.Equal(KeyFlags.AllowArchiving, k.Flags);
 
                 var expected = b.ToArray();
                 var actual = k.Export(KeyBlobFormat.RawSymmetricKey);
