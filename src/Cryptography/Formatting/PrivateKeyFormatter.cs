@@ -4,7 +4,7 @@ using static Interop.Libsodium;
 
 namespace NSec.Cryptography.Formatting
 {
-    internal class KeyFormatter
+    internal class PrivateKeyFormatter
     {
         private static readonly byte[] s_beginLabel =
         {
@@ -29,7 +29,7 @@ namespace NSec.Cryptography.Formatting
         private readonly int _blobTextSize;
         private readonly int _keySize;
 
-        public KeyFormatter(
+        public PrivateKeyFormatter(
             int keySize,
             byte[] blobHeader)
         {
