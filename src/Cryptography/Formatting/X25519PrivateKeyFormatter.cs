@@ -4,9 +4,9 @@ using static Interop.Libsodium;
 
 namespace NSec.Cryptography.Formatting
 {
-    internal class X25519KeyFormatter : PrivateKeyFormatter
+    internal class X25519PrivateKeyFormatter : PrivateKeyFormatter
     {
-        public X25519KeyFormatter(
+        public X25519PrivateKeyFormatter(
             int keySize,
             byte[] blobHeader)
             : base(keySize, blobHeader)
