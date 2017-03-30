@@ -278,6 +278,16 @@ namespace NSec.Tests.Algorithms
             Assert.True(a.MaxOutputSize > 0);
         }
 
+        [Fact]
+        public static void Properties2()
+        {
+            var a = new HkdfSha256();
+
+            Assert.Equal(8160, a.MaxOutputSize);
+            Assert.Equal(32, a.PseudorandomKeySize);
+            Assert.Equal(true, a.SupportsSalt);
+        }
+
         #endregion
 
         #region Extract #1

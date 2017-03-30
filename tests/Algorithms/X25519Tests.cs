@@ -8,6 +8,16 @@ namespace NSec.Tests.Algorithms
     {
         public static readonly TheoryData<string, string, string> Rfc7748TestVectors = Rfc.X25519Tests.Rfc7748TestVectors;
 
+        [Fact]
+        public static void Properties2()
+        {
+            var a = new X25519();
+
+            Assert.Equal(32, a.PublicKeySize);
+            Assert.Equal(32, a.PrivateKeySize);
+            Assert.Equal(32, a.SharedSecretSize);
+        }
+
         [Theory]
         [MemberData(nameof(Rfc7748TestVectors))]
         public static void BitMaskedAgree(string privateKey, string publicKey, string sharedSecret)

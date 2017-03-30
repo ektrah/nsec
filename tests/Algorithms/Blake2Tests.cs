@@ -14,14 +14,23 @@ namespace NSec.Tests.Algorithms
             var a = new Blake2();
 
             Assert.True(a.MinKeySize >= 0);
+            Assert.True(a.DefaultKeySize > 0);
             Assert.True(a.DefaultKeySize >= a.MinKeySize);
             Assert.True(a.MaxKeySize >= a.DefaultKeySize);
-            Assert.True(a.MaxKeySize <= 64);
+        }
 
-            Assert.True(a.MinHashSize >= 1);
-            Assert.True(a.DefaultHashSize >= a.MinHashSize);
-            Assert.True(a.MaxHashSize >= a.DefaultHashSize);
-            Assert.True(a.MaxHashSize <= 64);
+        [Fact]
+        public static void Properties2()
+        {
+            var a = new Blake2();
+
+            Assert.Equal(16, a.MinKeySize);
+            Assert.Equal(32, a.DefaultKeySize);
+            Assert.Equal(64, a.MaxKeySize);
+
+            Assert.Equal(32, a.MinHashSize);
+            Assert.Equal(32, a.DefaultHashSize);
+            Assert.Equal(64, a.MaxHashSize);
         }
 
         #endregion

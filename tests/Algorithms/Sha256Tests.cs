@@ -9,13 +9,12 @@ namespace NSec.Tests.Algorithms
         private static readonly string s_hashOfEmpty = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
 
         [Fact]
-        public static void Properties()
+        public static void Properties2()
         {
             var a = new Sha256();
 
             Assert.Equal(32, a.MinHashSize);
-            Assert.True(a.DefaultHashSize >= a.MinHashSize);
-            Assert.True(a.MaxHashSize >= a.DefaultHashSize);
+            Assert.Equal(32, a.DefaultHashSize);
             Assert.Equal(32, a.MaxHashSize);
         }
 
