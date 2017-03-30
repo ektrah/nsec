@@ -103,8 +103,6 @@ namespace NSec.Cryptography
             SecureMemoryHandle keyHandle,
             KeyBlobFormat format)
         {
-            Debug.Assert(keyHandle != null);
-
             switch (format)
             {
             case KeyBlobFormat.RawSymmetricKey:
