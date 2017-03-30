@@ -7,7 +7,7 @@ namespace NSec.Tests.Algorithms
     public static class HmacSha512Tests
     {
         [Fact]
-        public static void Properties2()
+        public static void Properties()
         {
             var a = new HmacSha512();
 

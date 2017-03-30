@@ -7,7 +7,7 @@ namespace NSec.Tests.Algorithms
     public static class Aes256GcmTests
     {
         [Fact]
-        public static void Properties2()
+        public static void Properties()
         {
             var a = new Aes256Gcm();
 

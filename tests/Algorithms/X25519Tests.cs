@@ -29,7 +29,7 @@ namespace NSec.Tests.Algorithms
         };
 
         [Fact]
-        public static void Properties2()
+        public static void Properties()
         {
             var a = new X25519();
 

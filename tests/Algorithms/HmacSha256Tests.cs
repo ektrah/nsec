@@ -7,7 +7,7 @@ namespace NSec.Tests.Algorithms
     public static class HmacSha256Tests
     {
         [Fact]
-        public static void Properties2()
+        public static void Properties()
         {
             var a = new HmacSha256();
 

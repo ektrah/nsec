@@ -270,7 +270,7 @@ namespace NSec.Tests.Algorithms
         #region Properties
 
         [Fact]
-        public static void Properties()
+        public static void HkdfProperties()
         {
             var a = new HkdfSha256();
 
@@ -279,7 +279,7 @@ namespace NSec.Tests.Algorithms
         }
 
         [Fact]
-        public static void Properties2()
+        public static void Properties()
         {
             var a = new HkdfSha256();
 
