@@ -86,7 +86,7 @@ namespace NSec.Cryptography
         {
             Debug.Assert(keyHandle != null);
             Debug.Assert(mac.Length >= MinMacSize);
-            Debug.Assert(mac.Length <= MaxMacSize);
+            Debug.Assert(mac.Length <= crypto_auth_hmacsha256_BYTES);
 
             // crypto_auth_hmacsha256_init accepts a key of arbitrary length,
             // while crypto_auth_hmacsha256 requires a key whose length is
