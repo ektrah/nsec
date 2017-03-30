@@ -62,6 +62,30 @@ namespace NSec.Tests.Base
             }
         }
 
+        [Theory]
+        [MemberData(nameof(MacAlgorithmsAndKeySizes))]
+        public static void ExportImportNSec(Type algorithmType, int keySize)
+        {
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
+            var b = Utilities.RandomBytes.Slice(0, keySize);
+
+            using (var k1 = Key.Import(a, b, KeyBlobFormat.RawSymmetricKey, KeyFlags.AllowArchiving))
+            {
+                Assert.Equal(KeyFlags.AllowArchiving, k1.Flags);
+
+                var n = k1.Export(KeyBlobFormat.NSecSymmetricKey);
+                Assert.NotNull(n);
+
+                using (var k2 = Key.Import(a, n, KeyBlobFormat.NSecSymmetricKey, KeyFlags.AllowArchiving))
+                {
+                    var expected = b.ToArray();
+                    var actual = k2.Export(KeyBlobFormat.RawSymmetricKey);
+
+                    Assert.Equal(expected, actual);
+                }
+            }
+        }
+
         #endregion
 
         #region Sign #1
