@@ -36,7 +36,7 @@ namespace NSec.Cryptography
         private const int SHA256HashSize = 32; // "L" in RFC 2104
         private const int SHA256MessageBlockSize = 64; // "B" in RFC 2104
 
-        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(SHA256HashSize, int.MaxValue, new byte[] { 0x7F, 0x33, 0x46, 0 });
+        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(SHA256HashSize, int.MaxValue, new byte[] { 0x7F, 0x00, 0x33, 0x46 });
         private static readonly Oid s_oid = new Oid(1, 2, 840, 113549, 2, 9);
         private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(SHA256HashSize, int.MaxValue);
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));

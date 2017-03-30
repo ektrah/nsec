@@ -43,7 +43,7 @@ namespace NSec.Cryptography
     public sealed class Aes256Gcm : AeadAlgorithm
     {
         private static readonly Lazy<int> s_isAvailable = new Lazy<int>(new Func<int>(crypto_aead_aes256gcm_is_available));
-        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(crypto_aead_aes256gcm_KEYBYTES, crypto_aead_aes256gcm_KEYBYTES, new byte[] { 0x7F, 0x31, 0x44, 0 });
+        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(crypto_aead_aes256gcm_KEYBYTES, crypto_aead_aes256gcm_KEYBYTES, new byte[] { 0x7F, 0x00, 0x31, 0x44 });
         private static readonly Oid s_oid = new Oid(2, 16, 840, 1, 101, 3, 4, 1, 46);
         private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(crypto_aead_aes256gcm_KEYBYTES, crypto_aead_aes256gcm_KEYBYTES);
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
