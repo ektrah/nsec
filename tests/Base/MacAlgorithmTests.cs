@@ -31,11 +31,13 @@ namespace NSec.Tests.Base
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.True(a.MinKeySize > 0);
+            Assert.True(a.MinKeySize >= 0);
+            Assert.True(a.DefaultKeySize > 0);
             Assert.True(a.DefaultKeySize >= a.MinKeySize);
             Assert.True(a.MaxKeySize >= a.DefaultKeySize);
 
-            Assert.True(a.MinMacSize > 0);
+            Assert.True(a.MinMacSize >= 0);
+            Assert.True(a.DefaultMacSize > 0);
             Assert.True(a.DefaultMacSize >= a.MinMacSize);
             Assert.True(a.MaxMacSize >= a.DefaultMacSize);
         }
