@@ -117,18 +117,24 @@ namespace NSec.Tests
             { typeof(Aes256Gcm), KeyBlobFormat.RawSymmetricKey },
             { typeof(Aes256Gcm), KeyBlobFormat.NSecSymmetricKey },
             { typeof(Blake2), KeyBlobFormat.RawSymmetricKey },
+            { typeof(Blake2), KeyBlobFormat.NSecSymmetricKey },
             { typeof(ChaCha20Poly1305), KeyBlobFormat.RawSymmetricKey },
             { typeof(ChaCha20Poly1305), KeyBlobFormat.NSecSymmetricKey },
             { typeof(HmacSha256), KeyBlobFormat.RawSymmetricKey },
+            { typeof(HmacSha256), KeyBlobFormat.NSecSymmetricKey },
             { typeof(HmacSha512), KeyBlobFormat.RawSymmetricKey },
+            { typeof(HmacSha512), KeyBlobFormat.NSecSymmetricKey },
         }
             : new TheoryData<Type, KeyBlobFormat>
         {
             { typeof(Blake2), KeyBlobFormat.RawSymmetricKey },
+            { typeof(Blake2), KeyBlobFormat.NSecSymmetricKey },
             { typeof(ChaCha20Poly1305), KeyBlobFormat.RawSymmetricKey },
             { typeof(ChaCha20Poly1305), KeyBlobFormat.NSecSymmetricKey },
             { typeof(HmacSha256), KeyBlobFormat.RawSymmetricKey },
+            { typeof(HmacSha256), KeyBlobFormat.NSecSymmetricKey },
             { typeof(HmacSha512), KeyBlobFormat.RawSymmetricKey },
+            { typeof(HmacSha512), KeyBlobFormat.NSecSymmetricKey },
         };
 
         #endregion
