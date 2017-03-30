@@ -6,6 +6,8 @@ namespace NSec.Tests.Algorithms
 {
     public static class HmacSha256Tests
     {
+        #region Properties
+
         [Fact]
         public static void Properties()
         {
@@ -19,5 +21,7 @@ namespace NSec.Tests.Algorithms
             Assert.Equal(32, a.DefaultMacSize);
             Assert.Equal(32, a.MaxMacSize);
         }
+
+        #endregion
     }
 }

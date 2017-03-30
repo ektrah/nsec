@@ -28,6 +28,8 @@ namespace NSec.Tests.Algorithms
             { "a546e36bf0527c9d3b16154b82465edd62144c0ac1fc5a18506a2244ba449ac4", "dbffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "6989e2cb1cea159acf121b0af6bf77493189c9bd32c2dac71669b540f9488247" },
         };
 
+        #region Properties
+
         [Fact]
         public static void Properties()
         {
@@ -37,6 +39,10 @@ namespace NSec.Tests.Algorithms
             Assert.Equal(32, a.PrivateKeySize);
             Assert.Equal(32, a.SharedSecretSize);
         }
+
+        #endregion
+
+        #region Agree
 
         [Theory]
         [MemberData(nameof(Rfc7748TestVectors))]
@@ -65,6 +71,10 @@ namespace NSec.Tests.Algorithms
             }
         }
 
+        #endregion
+
+        #region Import
+
         [Theory]
         [MemberData(nameof(Rfc7748TestVectors))]
         public static void BitMaskedEquals(string privateKey, string publicKey, string sharedSecret)
@@ -82,6 +92,10 @@ namespace NSec.Tests.Algorithms
 
             Assert.True(p1.Equals(p2));
         }
+
+        #endregion
+
+        #region Agree/TryAgree
 
         [Theory]
         [MemberData(nameof(TestVectorsAllZeros))]
@@ -117,5 +131,7 @@ namespace NSec.Tests.Algorithms
                 Assert.Equal(expected, actual);
             }
         }
+
+        #endregion
     }
 }

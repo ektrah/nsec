@@ -6,6 +6,8 @@ namespace NSec.Tests.Algorithms
 {
     public static class Aes256GcmTests
     {
+        #region Properties
+
         [Fact]
         public static void Properties()
         {
@@ -15,5 +17,7 @@ namespace NSec.Tests.Algorithms
             Assert.Equal(12, a.NonceSize);
             Assert.Equal(16, a.TagSize);
         }
+
+        #endregion
     }
 }

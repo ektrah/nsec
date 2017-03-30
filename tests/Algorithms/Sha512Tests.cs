@@ -8,6 +8,8 @@ namespace NSec.Tests.Algorithms
     {
         private static readonly string s_hashOfEmpty = "cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e";
 
+        #region Properties
+
         [Fact]
         public static void Properties()
         {
@@ -17,6 +19,10 @@ namespace NSec.Tests.Algorithms
             Assert.Equal(64, a.DefaultHashSize);
             Assert.Equal(64, a.MaxHashSize);
         }
+
+        #endregion
+
+        #region Hash #1
 
         [Fact]
         public static void HashEmpty()
@@ -29,6 +35,10 @@ namespace NSec.Tests.Algorithms
             Assert.Equal(a.DefaultHashSize, actual.Length);
             Assert.Equal(expected, actual);
         }
+
+        #endregion
+
+        #region Hash #2
 
         [Theory]
         [InlineData(32)]
@@ -47,6 +57,10 @@ namespace NSec.Tests.Algorithms
             Assert.Equal(expected, actual);
         }
 
+        #endregion
+
+        #region Hash #3
+
         [Theory]
         [InlineData(32)]
         [InlineData(41)]
@@ -63,5 +77,7 @@ namespace NSec.Tests.Algorithms
             a.Hash(ReadOnlySpan<byte>.Empty, actual);
             Assert.Equal(expected, actual);
         }
+
+        #endregion
     }
 }

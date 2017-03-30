@@ -6,6 +6,8 @@ namespace NSec.Tests.Algorithms
 {
     public static class Ed25519Tests
     {
+        #region Properties
+
         [Fact]
         public static void Properties()
         {
@@ -15,5 +17,7 @@ namespace NSec.Tests.Algorithms
             Assert.Equal(32, a.PrivateKeySize);
             Assert.Equal(64, a.SignatureSize);
         }
+
+        #endregion
     }
 }
