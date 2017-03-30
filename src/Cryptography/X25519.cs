@@ -28,8 +28,16 @@ namespace NSec.Cryptography
     //
     public sealed class X25519 : KeyAgreementAlgorithm
     {
-        private static readonly PrivateKeyFormatter s_nsecPrivateKeyFormatter = new X25519PrivateKeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[] { 0x7F, 0x00, 0x36, 0x41, crypto_scalarmult_curve25519_SCALARBYTES, 0, 0, 0 });
-        private static readonly PublicKeyFormatter s_nsecPublicKeyFormatter = new X25519PublicKeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[] { 0x7F, 0x00, 0x37, 0x41, crypto_scalarmult_curve25519_SCALARBYTES, 0, 0, 0 });
+        private static readonly PrivateKeyFormatter s_nsecPrivateKeyFormatter = new X25519PrivateKeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[]
+        {
+            0x7F, 0x00, 0x36, 0x41, crypto_scalarmult_curve25519_SCALARBYTES, 0, 0, 0,
+        });
+
+        private static readonly PublicKeyFormatter s_nsecPublicKeyFormatter = new X25519PublicKeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[] 
+        {
+            0x7F, 0x00, 0x37, 0x41, crypto_scalarmult_curve25519_SCALARBYTES, 0, 0, 0,
+        });
+
         private static readonly Oid s_oid = new Oid(1, 3, 101, 110);
 
         private static readonly PrivateKeyFormatter s_pkixPrivateKeyFormatter = new X25519PrivateKeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[]
@@ -55,7 +63,9 @@ namespace NSec.Cryptography
         });
 
         private static readonly PrivateKeyFormatter s_rawPrivateKeyFormatter = new X25519PrivateKeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[] { });
+
         private static readonly PublicKeyFormatter s_rawPublicKeyFormatter = new X25519PublicKeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[] { });
+
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
         public X25519() : base(

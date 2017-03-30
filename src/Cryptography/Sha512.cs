@@ -30,6 +30,7 @@ namespace NSec.Cryptography
     public sealed class Sha512 : HashAlgorithm
     {
         private static readonly Oid s_oid = new Oid(2, 16, 840, 1, 101, 3, 4, 2, 3);
+
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
         public Sha512() : base(

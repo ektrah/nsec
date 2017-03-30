@@ -31,8 +31,16 @@ namespace NSec.Cryptography
     //
     public sealed class Ed25519 : SignatureAlgorithm
     {
-        private static readonly PrivateKeyFormatter s_nsecPrivateKeyFormatter = new Ed25519PrivateKeyFormatter(crypto_sign_ed25519_SEEDBYTES, new byte[] { 0x7F, 0x00, 0x34, 0x42, crypto_sign_ed25519_SEEDBYTES, 0, 0, 0 });
-        private static readonly PublicKeyFormatter s_nsecPublicKeyFormatter = new PublicKeyFormatter(crypto_sign_ed25519_PUBLICKEYBYTES, new byte[] { 0x7F, 0x00, 0x35, 0x42, crypto_sign_ed25519_PUBLICKEYBYTES, 0, 0, 0 });
+        private static readonly PrivateKeyFormatter s_nsecPrivateKeyFormatter = new Ed25519PrivateKeyFormatter(crypto_sign_ed25519_SEEDBYTES, new byte[]
+        {
+            0x7F, 0x00, 0x34, 0x42, crypto_sign_ed25519_SEEDBYTES, 0, 0, 0,
+        });
+
+        private static readonly PublicKeyFormatter s_nsecPublicKeyFormatter = new PublicKeyFormatter(crypto_sign_ed25519_PUBLICKEYBYTES, new byte[]
+        {
+            0x7F, 0x00, 0x35, 0x42, crypto_sign_ed25519_PUBLICKEYBYTES, 0, 0, 0,
+        });
+
         private static readonly Oid s_oid = new Oid(1, 3, 101, 112);
 
         private static readonly PrivateKeyFormatter s_pkixPrivateKeyFormatter = new Ed25519PrivateKeyFormatter(crypto_sign_ed25519_SEEDBYTES, new byte[]
@@ -58,7 +66,9 @@ namespace NSec.Cryptography
         });
 
         private static readonly PrivateKeyFormatter s_rawPrivateKeyFormatter = new Ed25519PrivateKeyFormatter(crypto_sign_ed25519_SEEDBYTES, new byte[] { });
+
         private static readonly PublicKeyFormatter s_rawPublicKeyFormatter = new PublicKeyFormatter(crypto_sign_ed25519_PUBLICKEYBYTES, new byte[] { });
+
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
         public Ed25519() : base(
