@@ -48,7 +48,7 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> publicKeyBytes)
         {
             byte[] blob = new byte[_blobSize];
-            new ReadOnlySpan<byte>(_blobHeader).CopyTo(blob);
+            _blobHeader.AsSpan().CopyTo(blob);
             Serialize(publicKeyBytes, blob.AsSpan().Slice(_blobHeader.Length, _keySize));
             return blob;
         }
@@ -57,7 +57,7 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> publicKeyBytes)
         {
             byte[] temp = new byte[_blobSize];
-            new ReadOnlySpan<byte>(_blobHeader).CopyTo(temp);
+            _blobHeader.AsSpan().CopyTo(temp);
             Serialize(publicKeyBytes, temp.AsSpan().Slice(_blobHeader.Length));
 
             byte[] blob = new byte[_blobTextSize];

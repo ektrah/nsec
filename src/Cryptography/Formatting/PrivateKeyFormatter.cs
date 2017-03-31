@@ -52,7 +52,7 @@ namespace NSec.Cryptography.Formatting
             Debug.Assert(keyHandle != null);
 
             byte[] blob = new byte[_blobSize];
-            new ReadOnlySpan<byte>(_blobHeader).CopyTo(blob);
+            _blobHeader.AsSpan().CopyTo(blob);
             Serialize(keyHandle, blob.AsSpan().Slice(_blobHeader.Length, _keySize));
             return blob;
         }
@@ -71,7 +71,7 @@ namespace NSec.Cryptography.Formatting
                     temp = new Span<byte>(pointer, _blobSize);
                 }
 
-                new ReadOnlySpan<byte>(_blobHeader).CopyTo(temp);
+                _blobHeader.AsSpan().CopyTo(temp);
                 Serialize(keyHandle, temp.Slice(_blobHeader.Length));
 
                 byte[] blob = new byte[_blobTextSize];
