@@ -33,8 +33,8 @@ namespace NSec.Cryptography.Formatting
 
             byte[] blob = new byte[_magic.Length + sizeof(uint) + keyHandle.Length];
             new ReadOnlySpan<byte>(_magic).CopyTo(blob);
-            new Span<byte>(blob, _magic.Length).WriteLittleEndian((uint)keyHandle.Length);
-            keyHandle.Export(new Span<byte>(blob, _magic.Length + sizeof(uint)));
+            blob.AsSpan().Slice(_magic.Length).WriteLittleEndian((uint)keyHandle.Length);
+            keyHandle.Export(blob.AsSpan().Slice(_magic.Length + sizeof(uint)));
             return blob;
         }
 

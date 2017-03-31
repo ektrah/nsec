@@ -49,7 +49,7 @@ namespace NSec.Cryptography.Formatting
         {
             byte[] blob = new byte[_blobSize];
             new ReadOnlySpan<byte>(_blobHeader).CopyTo(blob);
-            Serialize(publicKeyBytes, new Span<byte>(blob, _blobHeader.Length, _keySize));
+            Serialize(publicKeyBytes, blob.AsSpan().Slice(_blobHeader.Length, _keySize));
             return blob;
         }
 
@@ -58,10 +58,10 @@ namespace NSec.Cryptography.Formatting
         {
             byte[] temp = new byte[_blobSize];
             new ReadOnlySpan<byte>(_blobHeader).CopyTo(temp);
-            Serialize(publicKeyBytes, new Span<byte>(temp, _blobHeader.Length));
+            Serialize(publicKeyBytes, temp.AsSpan().Slice(_blobHeader.Length));
 
             byte[] blob = new byte[_blobTextSize];
-            Armor.Encode(temp, s_beginLabel, s_endLabel, new Span<byte>(blob, 0, _blobTextSize));
+            Armor.Encode(temp, s_beginLabel, s_endLabel, blob.AsSpan().Slice(0, _blobTextSize));
             return blob;
         }
 
