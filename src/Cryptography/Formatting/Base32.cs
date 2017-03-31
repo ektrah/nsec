@@ -229,7 +229,7 @@ namespace NSec.Cryptography.Formatting
             if (base32 == null)
                 throw new ArgumentNullException(nameof(base32));
 
-            return TryDecode(base32.Slice(), bytes);
+            return TryDecode(base32.AsSpan(), bytes);
         }
 
         public static bool TryDecode(
@@ -391,7 +391,7 @@ namespace NSec.Cryptography.Formatting
             if (base32 == null)
                 throw new ArgumentNullException(nameof(base32));
 
-            return TryGetDecodedLength(base32.Slice(), out decodedLength);
+            return TryGetDecodedLength(base32.AsSpan(), out decodedLength);
         }
 
         public static bool TryGetDecodedLength(
