@@ -11,7 +11,9 @@ namespace NSec.Cryptography
             where T : struct
         {
             if (span.Length < Unsafe.SizeOf<T>())
-                throw new ArgumentException();
+            {
+                ThrowArgumentException();
+            }
 
             return Unsafe.ReadUnaligned<T>(ref span.DangerousGetPinnableReference());
         }
@@ -44,7 +46,9 @@ namespace NSec.Cryptography
             where T : struct
         {
             if (span.Length < Unsafe.SizeOf<T>())
-                throw new ArgumentException();
+            {
+                ThrowArgumentException();
+            }
 
             Unsafe.WriteUnaligned(ref span.DangerousGetPinnableReference(), value);
         }
@@ -74,6 +78,11 @@ namespace NSec.Cryptography
                 ((value & 0xFF00) << 8) |
                 ((value & 0xFF0000) >> 8) |
                 (value >> 24));
+        }
+
+        private static void ThrowArgumentException()
+        {
+            throw new ArgumentException();
         }
     }
 }
