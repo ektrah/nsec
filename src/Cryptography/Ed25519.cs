@@ -33,12 +33,12 @@ namespace NSec.Cryptography
     {
         private static readonly PrivateKeyFormatter s_nsecPrivateKeyFormatter = new Ed25519PrivateKeyFormatter(crypto_sign_ed25519_SEEDBYTES, new byte[]
         {
-            0x7F, 0x00, 0x34, 0x42, crypto_sign_ed25519_SEEDBYTES, 0, 0, 0,
+            0xDE, 0x34, 0x42, 0xDE, crypto_sign_ed25519_SEEDBYTES, 0, 0, 0
         });
 
         private static readonly PublicKeyFormatter s_nsecPublicKeyFormatter = new PublicKeyFormatter(crypto_sign_ed25519_PUBLICKEYBYTES, new byte[]
         {
-            0x7F, 0x00, 0x35, 0x42, crypto_sign_ed25519_PUBLICKEYBYTES, 0, 0, 0,
+            0xDE, 0x35, 0x42, 0xDE, crypto_sign_ed25519_PUBLICKEYBYTES, 0, 0, 0
         });
 
         private static readonly Oid s_oid = new Oid(1, 3, 101, 112);

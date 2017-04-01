@@ -38,7 +38,7 @@ namespace NSec.Cryptography
 
         private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(SHA256HashSize, int.MaxValue, new byte[]
         {
-            0x7F, 0x00, 0x33, 0x46
+            0xDE, 0x33, 0x46, 0xDE
         });
 
         private static readonly Oid s_oid = new Oid(1, 2, 840, 113549, 2, 9);

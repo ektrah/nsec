@@ -46,7 +46,7 @@ namespace NSec.Cryptography
 
         private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(crypto_aead_aes256gcm_KEYBYTES, crypto_aead_aes256gcm_KEYBYTES, new byte[]
         {
-            0x7F, 0x00, 0x31, 0x44,
+            0xDE, 0x31, 0x44, 0xDE
         });
 
         private static readonly Oid s_oid = new Oid(2, 16, 840, 1, 101, 3, 4, 1, 46);
