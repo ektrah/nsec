@@ -10,7 +10,7 @@ namespace NSec.Tests.Formatting
         [Theory]
         [InlineData(typeof(Aes256Gcm), new byte[] { 0xDE, 0x31, 0x44, 0xDE })]
         [InlineData(typeof(ChaCha20Poly1305), new byte[] { 0xDE, 0x31, 0x43, 0xDE })]
-        public static void TestAead(Type algorithmType, byte[] magic)
+        public static void Aead(Type algorithmType, byte[] magic)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
@@ -18,7 +18,7 @@ namespace NSec.Tests.Formatting
         }
 
         [Fact]
-        public static void TestBlake2()
+        public static void Blake2()
         {
             var a = new Blake2();
 
@@ -28,7 +28,7 @@ namespace NSec.Tests.Formatting
         [Theory]
         [InlineData(typeof(HmacSha256), new byte[] { 0xDE, 0x33, 0x46, 0xDE })]
         [InlineData(typeof(HmacSha512), new byte[] { 0xDE, 0x33, 0x47, 0xDE })]
-        public static void TestMac(Type algorithmType, byte[] magic)
+        public static void Mac(Type algorithmType, byte[] magic)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
@@ -36,7 +36,7 @@ namespace NSec.Tests.Formatting
         }
 
         [Fact]
-        public static void TestEd25519Private()
+        public static void Ed25519Private()
         {
             var a = new Ed25519();
 
@@ -44,7 +44,7 @@ namespace NSec.Tests.Formatting
         }
 
         [Fact]
-        public static void TestEd25519Public()
+        public static void Ed25519Public()
         {
             var a = new Ed25519();
 
@@ -52,7 +52,7 @@ namespace NSec.Tests.Formatting
         }
 
         [Fact]
-        public static void TestX25519Private()
+        public static void X25519Private()
         {
             var a = new X25519();
 
@@ -60,7 +60,7 @@ namespace NSec.Tests.Formatting
         }
 
         [Fact]
-        public static void TestX25519Public()
+        public static void X25519Public()
         {
             var a = new X25519();
 
