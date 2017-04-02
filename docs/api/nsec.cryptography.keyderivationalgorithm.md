@@ -115,7 +115,7 @@ info
 
 bytes
 : The span to fill with bytes derived from the shared secret.
-: `bytes` must not overlap with `salt` or `info`.
+: `bytes` must not overlap with `info`.
 
 #### Exceptions
 
@@ -129,6 +129,9 @@ ArgumentException
 ArgumentException
 : `bytes.Length` is greater than
     [[MaxOutputSize|KeyDerivationAlgorithm Class#MaxOutputSize]].
+
+ArgumentException
+: `bytes` overlaps with `info`.
 
 ObjectDisposedException
 : `sharedSecret` has been disposed.

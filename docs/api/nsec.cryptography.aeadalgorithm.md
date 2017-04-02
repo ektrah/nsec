@@ -139,7 +139,7 @@ plaintext
     [[TagSize|AeadAlgorithm Class#TagSize]].
 : `plaintext` and `ciphertext` may point at the same memory location for
     in-place decryption. Otherwise, `plaintext` must not overlap with
-    `ciphertext`, `associatedData` or `nonce`.
+    `ciphertext`.
 
 #### Exceptions
 
@@ -156,6 +156,9 @@ ArgumentException
 ArgumentException
 : `plaintext.Length` is not equal to `ciphertext.Length` minus
     [[TagSize|AeadAlgorithm Class#TagSize]].
+
+ArgumentException
+: `plaintext` overlaps with `ciphertext`.
 
 CryptographicException
 : `ciphertext.length` is less than
@@ -251,7 +254,7 @@ ciphertext
     [[TagSize|AeadAlgorithm Class#TagSize]].
 : `ciphertext` and `plaintext` may point at the same memory location for
     in-place encryption . Otherwise, `ciphertext` must not overlap with
-    `plaintext`, `associatedData` or `nonce`.
+    `plaintext`.
 
 #### Exceptions
 
@@ -272,6 +275,9 @@ ArgumentException
 ArgumentException
 : `ciphertext.Length` is not equal to `plaintext.Length` plus
     [[TagSize|AeadAlgorithm Class#TagSize]].
+
+ArgumentException
+: `ciphertext` overlaps with `plaintext`.
 
 ObjectDisposedException
 : `key` has been disposed.
@@ -363,7 +369,7 @@ plaintext
     [[TagSize|AeadAlgorithm Class#TagSize]].
 : `plaintext` and `ciphertext` may point at the same memory location for
     in-place decryption. Otherwise, `plaintext` must not overlap with
-    `ciphertext`, `associatedData` or `nonce`.
+    `ciphertext`.
 
 #### Return value
 
@@ -384,6 +390,9 @@ ArgumentException
 ArgumentException
 : `plaintext.Length` is not equal to `ciphertext.Length` minus
     [[TagSize|AeadAlgorithm Class#TagSize]].
+
+ArgumentException
+: `plaintext` overlaps with `ciphertext`.
 
 ObjectDisposedException
 : `key` has been disposed.
