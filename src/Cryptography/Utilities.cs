@@ -6,6 +6,24 @@ namespace NSec.Cryptography
     internal static class Utilities
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static unsafe bool Overlap<T>(
+            ReadOnlySpan<T> left,
+            ReadOnlySpan<T> right)
+        {
+            ref T x1 = ref left.DangerousGetPinnableReference();
+            ref T y1 = ref right.DangerousGetPinnableReference();
+
+            ref T x2 = ref Unsafe.Add(ref x1, left.Length);
+            ref T y2 = ref Unsafe.Add(ref y1, right.Length);
+
+            IntPtr diff1 = Unsafe.ByteOffset(ref x1, ref y2);
+            IntPtr diff2 = Unsafe.ByteOffset(ref y1, ref x2);
+
+            return (sizeof(IntPtr) == sizeof(int) ? (int)diff1 > 0 : (long)diff1 > 0)
+                && (sizeof(IntPtr) == sizeof(int) ? (int)diff2 > 0 : (long)diff2 > 0);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T Read<T>(
             this ReadOnlySpan<byte> span)
             where T : struct
