@@ -80,6 +80,24 @@ namespace NSec.Cryptography
             return new ArgumentException(string.Format(ResourceManager.GetString("Argument_NonceLength"), arg0), paramName);
         }
 
+        internal static ArgumentException Argument_OverlapCiphertext(
+            string paramName)
+        {
+            return new ArgumentException(ResourceManager.GetString("Argument_OverlapCiphertext"), paramName);
+        }
+
+        internal static ArgumentException Argument_OverlapDeriveBytes(
+            string paramName)
+        {
+            return new ArgumentException(ResourceManager.GetString("Argument_OverlapDeriveBytes"), paramName);
+        }
+
+        internal static ArgumentException Argument_OverlapPlaintext(
+            string paramName)
+        {
+            return new ArgumentException(ResourceManager.GetString("Argument_OverlapPlaintext"), paramName);
+        }
+
         internal static ArgumentException Argument_PlaintextLength(
             string paramName)
         {
