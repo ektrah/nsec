@@ -6,6 +6,14 @@ namespace NSec.Cryptography
     internal static class Utilities
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool AreSameStart<T>(
+            ReadOnlySpan<T> left,
+            ReadOnlySpan<T> right)
+        {
+            return Unsafe.AreSame(ref left.DangerousGetPinnableReference(), ref right.DangerousGetPinnableReference());
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe bool Overlap<T>(
             ReadOnlySpan<T> left,
             ReadOnlySpan<T> right)
