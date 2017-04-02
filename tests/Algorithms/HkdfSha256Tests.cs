@@ -385,6 +385,23 @@ namespace NSec.Tests.Algorithms
         }
 
         [Fact]
+        public static void ExtractWithSpanWithSaltOverlapping()
+        {
+            var a = new HkdfSha256();
+
+            using (var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty))
+            {
+                var expected = new byte[a.PseudorandomKeySize];
+                var actual = Utilities.RandomBytes.Slice(0, a.PseudorandomKeySize).ToArray();
+
+                a.Extract(s, actual, expected);
+                a.Extract(s, actual, actual);
+
+                Assert.Equal(expected, actual);
+            }
+        }
+
+        [Fact]
         public static void ExtractWithSpanSuccess()
         {
             var a = new HkdfSha256();
@@ -492,6 +509,24 @@ namespace NSec.Tests.Algorithms
             var a = new HkdfSha256();
 
             Assert.Throws<ArgumentException>("bytes", () => a.Expand(s_prkForEmpty.DecodeHex(), ReadOnlySpan<byte>.Empty, new byte[a.MaxOutputSize + 1]));
+        }
+
+        [Fact]
+        public static void ExpandWithInfoOverlapping()
+        {
+            var a = new HkdfSha256();
+            var x = new X25519();
+
+            using (var k = new Key(x))
+            using (var s = x.Agree(k, k.PublicKey))
+            {
+                var b = new byte[200];
+
+                var prk = a.Extract(s, ReadOnlySpan<byte>.Empty);
+
+                Assert.Throws<ArgumentException>("bytes", () => a.Expand(prk, b.AsSpan().Slice(10, 100), b.AsSpan().Slice(60, 100)));
+                Assert.Throws<ArgumentException>("bytes", () => a.Expand(prk, b.AsSpan().Slice(60, 100), b.AsSpan().Slice(10, 100)));
+            }
         }
 
         [Theory]
