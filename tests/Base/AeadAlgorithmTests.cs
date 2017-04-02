@@ -162,6 +162,68 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
+        public static void EncryptWithNonceOverlapping(Type algorithmType)
+        {
+            var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
+
+            using (var k = new Key(a))
+            {
+                var ad = Utilities.RandomBytes.Slice(0, 100);
+                var b = Utilities.RandomBytes.Slice(0, L);
+
+                var expected = new byte[b.Length + a.TagSize];
+                var actual = new byte[b.Length + a.TagSize];
+                Utilities.RandomBytes.Slice(200, actual.Length).CopyTo(actual);
+
+                a.Encrypt(k, actual.AsSpan().Slice(10, a.NonceSize), ad, b, expected);
+                a.Encrypt(k, actual.AsSpan().Slice(10, a.NonceSize), ad, b, actual);
+
+                Assert.Equal(expected, actual);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(AeadAlgorithms))]
+        public static void EncryptWithAdOverlapping(Type algorithmType)
+        {
+            var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
+
+            using (var k = new Key(a))
+            {
+                var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
+                var b = Utilities.RandomBytes.Slice(0, L);
+
+                var expected = new byte[b.Length + a.TagSize];
+                var actual = new byte[b.Length + a.TagSize];
+                Utilities.RandomBytes.Slice(200, actual.Length).CopyTo(actual);
+
+                a.Encrypt(k, n, actual, b, expected);
+                a.Encrypt(k, n, actual, b, actual);
+
+                Assert.Equal(expected, actual);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(AeadAlgorithms))]
+        public static void EncryptWithPlaintextOverlapping(Type algorithmType)
+        {
+            var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
+
+            using (var k = new Key(a))
+            {
+                var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
+                var ad = Utilities.RandomBytes.Slice(0, 100);
+
+                var b = Utilities.RandomBytes.Slice(200, 200).ToArray();
+
+                Assert.Throws<ArgumentException>("ciphertext", () => a.Encrypt(k, n, ad, b.AsSpan().Slice(10, 100), b.AsSpan().Slice(60, 100 + a.TagSize)));
+                Assert.Throws<ArgumentException>("ciphertext", () => a.Encrypt(k, n, ad, b.AsSpan().Slice(60, 100), b.AsSpan().Slice(10, 100 + a.TagSize)));
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(AeadAlgorithms))]
         public static void EncryptWithSpanOutOfPlace(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
@@ -186,7 +248,6 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AeadAlgorithms))]
         public static void EncryptWithSpanInPlace(Type algorithmType)
         {
-
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
@@ -194,12 +255,13 @@ namespace NSec.Tests.Base
                 var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
                 var ad = Utilities.RandomBytes.Slice(0, 100);
 
-                var actual = new byte[L + a.TagSize];
                 var expected = new byte[L + a.TagSize];
+                var actual = new byte[L + a.TagSize];
                 Utilities.RandomBytes.Slice(0, L).CopyTo(actual);
 
                 a.Encrypt(k, n, ad, new ReadOnlySpan<byte>(actual, 0, L), expected);
                 a.Encrypt(k, n, ad, new ReadOnlySpan<byte>(actual, 0, L), actual);
+
                 Assert.Equal(expected, actual);
             }
         }
@@ -357,6 +419,66 @@ namespace NSec.Tests.Base
                 Assert.Equal(a.TagSize, ct.Length);
 
                 Assert.Throws<ArgumentException>("plaintext", () => a.Decrypt(k, new byte[a.NonceSize], ReadOnlySpan<byte>.Empty, ct, new byte[1]));
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(AeadAlgorithms))]
+        public static void DecryptWithNonceOverlapping(Type algorithmType)
+        {
+            var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
+
+            using (var k = new Key(a))
+            {
+                var ad = Utilities.RandomBytes.Slice(0, 100);
+                var b = Utilities.RandomBytes.Slice(0, L);
+
+                var expected = b.ToArray();
+                var actual = Utilities.RandomBytes.Slice(200, L).ToArray();
+
+                var ciphertext = a.Encrypt(k, actual.AsSpan().Slice(10, a.NonceSize), ad, expected);
+
+                a.Decrypt(k, actual.AsSpan().Slice(10, a.NonceSize), ad, ciphertext, actual);
+                Assert.Equal(expected, actual);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(AeadAlgorithms))]
+        public static void DecryptWithAdOverlapping(Type algorithmType)
+        {
+            var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
+
+            using (var k = new Key(a))
+            {
+                var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
+                var b = Utilities.RandomBytes.Slice(0, L);
+
+                var expected = b.ToArray();
+                var actual = Utilities.RandomBytes.Slice(200, L).ToArray();
+
+                var ciphertext = a.Encrypt(k, n, actual.AsSpan().Slice(10, 100), expected);
+
+                a.Decrypt(k, n, actual.AsSpan().Slice(10, 100), ciphertext, actual);
+                Assert.Equal(expected, actual);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(AeadAlgorithms))]
+        public static void DecryptWithCiphertextOverlapping(Type algorithmType)
+        {
+            var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
+
+            using (var k = new Key(a))
+            {
+                var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
+                var ad = Utilities.RandomBytes.Slice(0, 100);
+
+                var b = Utilities.RandomBytes.Slice(200, 200).ToArray();
+
+                Assert.Throws<ArgumentException>("plaintext", () => a.Decrypt(k, n, ad, b.AsSpan().Slice(10, 100 + a.TagSize), b.AsSpan().Slice(60, 100)));
+                Assert.Throws<ArgumentException>("plaintext", () => a.Decrypt(k, n, ad, b.AsSpan().Slice(60, 100 + a.TagSize), b.AsSpan().Slice(10, 100)));
             }
         }
 
@@ -579,6 +701,66 @@ namespace NSec.Tests.Base
                 Assert.Equal(a.TagSize, ct.Length);
 
                 Assert.Throws<ArgumentException>("plaintext", () => a.TryDecrypt(k, new byte[a.NonceSize], ReadOnlySpan<byte>.Empty, ct, new byte[1]));
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(AeadAlgorithms))]
+        public static void TryDecryptWithNonceOverlapping(Type algorithmType)
+        {
+            var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
+
+            using (var k = new Key(a))
+            {
+                var ad = Utilities.RandomBytes.Slice(0, 100);
+                var b = Utilities.RandomBytes.Slice(0, L);
+
+                var expected = b.ToArray();
+                var actual = Utilities.RandomBytes.Slice(200, L).ToArray();
+
+                var ciphertext = a.Encrypt(k, actual.AsSpan().Slice(10, a.NonceSize), ad, expected);
+
+                Assert.True(a.TryDecrypt(k, actual.AsSpan().Slice(10, a.NonceSize), ad, ciphertext, actual));
+                Assert.Equal(expected, actual);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(AeadAlgorithms))]
+        public static void TryDecryptWithAdOverlapping(Type algorithmType)
+        {
+            var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
+
+            using (var k = new Key(a))
+            {
+                var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
+                var b = Utilities.RandomBytes.Slice(0, L);
+
+                var expected = b.ToArray();
+                var actual = Utilities.RandomBytes.Slice(200, L).ToArray();
+
+                var ciphertext = a.Encrypt(k, n, actual.AsSpan().Slice(10, 100), expected);
+
+                Assert.True(a.TryDecrypt(k, n, actual.AsSpan().Slice(10, 100), ciphertext, actual));
+                Assert.Equal(expected, actual);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(AeadAlgorithms))]
+        public static void TryDecryptWithCiphertextOverlapping(Type algorithmType)
+        {
+            var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
+
+            using (var k = new Key(a))
+            {
+                var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
+                var ad = Utilities.RandomBytes.Slice(0, 100);
+
+                var b = Utilities.RandomBytes.Slice(200, 200).ToArray();
+
+                Assert.Throws<ArgumentException>("plaintext", () => a.TryDecrypt(k, n, ad, b.AsSpan().Slice(10, 100 + a.TagSize), b.AsSpan().Slice(60, 100)));
+                Assert.Throws<ArgumentException>("plaintext", () => a.TryDecrypt(k, n, ad, b.AsSpan().Slice(60, 100 + a.TagSize), b.AsSpan().Slice(10, 100)));
             }
         }
 
