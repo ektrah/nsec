@@ -76,6 +76,8 @@ namespace NSec.Cryptography
                 throw Error.Argument_InvalidPrkLength(nameof(pseudorandomKey), crypto_auth_hmacsha512_BYTES.ToString());
             if (bytes.Length > MaxOutputSize)
                 throw Error.Argument_DeriveInvalidCount(nameof(bytes), MaxOutputSize.ToString());
+            if (Utilities.Overlap(bytes, info))
+                throw Error.Argument_OverlapDeriveBytes(nameof(bytes));
             if (bytes.IsEmpty)
                 return;
 
