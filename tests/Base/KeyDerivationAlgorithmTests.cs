@@ -149,6 +149,44 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
+        public static void DeriveBytesWithSaltOverlapping(Type algorithmType)
+        {
+            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
+            var x = new X25519();
+
+            using (var k = new Key(x))
+            using (var s = x.Agree(k, k.PublicKey))
+            {
+                var actual = new byte[100];
+                var expected = new byte[100];
+                Utilities.RandomBytes.Slice(0, 100).CopyTo(actual);
+
+                a.DeriveBytes(s, actual, ReadOnlySpan<byte>.Empty, expected);
+                a.DeriveBytes(s, actual, ReadOnlySpan<byte>.Empty, actual);
+
+                Assert.Equal(expected, actual);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(KeyDerivationAlgorithms))]
+        public static void DeriveBytesWithInfoOverlapping(Type algorithmType)
+        {
+            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
+            var x = new X25519();
+
+            using (var k = new Key(x))
+            using (var s = x.Agree(k, k.PublicKey))
+            {
+                var b = new byte[200];
+
+                Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, b.AsSpan().Slice(10, 100), b.AsSpan().Slice(60, 100)));
+                Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, b.AsSpan().Slice(60, 100), b.AsSpan().Slice(10, 100)));
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveBytesWithSpanTooLarge(Type algorithmType)
         {
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
