@@ -41,16 +41,20 @@ namespace NSec.Cryptography
             int defaultMacSize,
             int maxMacSize)
         {
-            Debug.Assert(minKeySize > 0);
+            Debug.Assert(minKeySize >= 0);
+            Debug.Assert(defaultKeySize > 0);
             Debug.Assert(defaultKeySize >= minKeySize);
             Debug.Assert(maxKeySize >= defaultKeySize);
-            Debug.Assert(minMacSize > 0);
+
+            Debug.Assert(minMacSize >= 0);
+            Debug.Assert(defaultMacSize > 0);
             Debug.Assert(defaultMacSize >= minMacSize);
             Debug.Assert(maxMacSize >= defaultMacSize);
 
             _minKeySize = minKeySize;
             _defaultKeySize = defaultKeySize;
             _maxKeySize = maxKeySize;
+
             _minMacSize = minMacSize;
             _defaultMacSize = defaultMacSize;
             _maxMacSize = maxMacSize;
