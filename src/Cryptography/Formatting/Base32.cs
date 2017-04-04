@@ -11,10 +11,10 @@ namespace NSec.Cryptography.Formatting
             string base32)
         {
             if (!TryGetDecodedLength(base32, out int length))
-                throw new FormatException();
+                throw Error.Format_BadBase32();
             byte[] result = new byte[length];
             if (!TryDecode(base32, result))
-                throw new FormatException();
+                throw Error.Format_BadBase32();
             return result;
         }
 
@@ -22,10 +22,10 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<char> base32)
         {
             if (!TryGetDecodedLength(base32, out int length))
-                throw new FormatException();
+                throw Error.Format_BadBase32();
             byte[] result = new byte[length];
             if (!TryDecode(base32, result))
-                throw new FormatException();
+                throw Error.Format_BadBase32();
             return result;
         }
 
@@ -33,10 +33,10 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> base32)
         {
             if (!TryGetDecodedLength(base32, out int length))
-                throw new FormatException();
+                throw Error.Format_BadBase32();
             byte[] result = new byte[length];
             if (!TryDecode(base32, result))
-                throw new FormatException();
+                throw Error.Format_BadBase32();
             return result;
         }
 
@@ -53,7 +53,7 @@ namespace NSec.Cryptography.Formatting
             Span<char> base32)
         {
             if (base32.Length != GetEncodedLength(bytes.Length))
-                throw new ArgumentException();
+                throw Error.Argument_BadBase32Length(nameof(base32));
             if (bytes.IsEmpty)
                 return;
 
@@ -137,7 +137,7 @@ namespace NSec.Cryptography.Formatting
             Span<byte> base32)
         {
             if (base32.Length != GetEncodedLength(bytes.Length))
-                throw new ArgumentException();
+                throw Error.Argument_BadBase32Length(nameof(base32));
             if (bytes.IsEmpty)
                 return;
 
@@ -227,7 +227,7 @@ namespace NSec.Cryptography.Formatting
             Span<byte> bytes)
         {
             if (base32 == null)
-                throw new ArgumentNullException(nameof(base32));
+                throw Error.ArgumentNull_String(nameof(base32));
 
             return TryDecode(base32.AsSpan(), bytes);
         }
@@ -237,7 +237,7 @@ namespace NSec.Cryptography.Formatting
             Span<byte> bytes)
         {
             if (base32.Length != GetEncodedLength(bytes.Length))
-                throw new ArgumentException();
+                throw Error.Argument_BadBase32Length(nameof(base32));
             if (base32.IsEmpty)
                 return true;
 
@@ -313,7 +313,7 @@ namespace NSec.Cryptography.Formatting
             Span<byte> bytes)
         {
             if (base32.Length != GetEncodedLength(bytes.Length))
-                throw new ArgumentException();
+                throw Error.Argument_BadBase32Length(nameof(base32));
             if (base32.IsEmpty)
                 return true;
 
@@ -389,7 +389,7 @@ namespace NSec.Cryptography.Formatting
             out int decodedLength)
         {
             if (base32 == null)
-                throw new ArgumentNullException(nameof(base32));
+                throw Error.ArgumentNull_String(nameof(base32));
 
             return TryGetDecodedLength(base32.AsSpan(), out decodedLength);
         }
