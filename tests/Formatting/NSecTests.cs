@@ -91,12 +91,12 @@ namespace NSec.Tests.Formatting
 
             using (var k = Key.Import(a, b, importFormat, KeyFlags.AllowArchiving))
             {
-                var blob = new ReadOnlySpan<byte>(k.Export(format));
+                var blob = k.Export(format);
 
                 Assert.NotNull(blob);
                 Assert.Equal(magic.Length + sizeof(uint) + keySize, blob.Length);
-                Assert.Equal(magic, blob.Slice(0, magic.Length).ToArray());
-                Assert.Equal(BitConverter.GetBytes(keySize), blob.Slice(magic.Length, sizeof(int)).ToArray());
+                Assert.Equal(magic, blob.AsSpan().Slice(0, magic.Length).ToArray());
+                Assert.Equal(BitConverter.GetBytes(keySize), blob.AsSpan().Slice(magic.Length, sizeof(int)).ToArray());
             }
         }
     }
