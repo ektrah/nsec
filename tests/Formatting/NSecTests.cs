@@ -10,11 +10,11 @@ namespace NSec.Tests.Formatting
         [Theory]
         [InlineData(typeof(Aes256Gcm), new byte[] { 0xDE, 0x31, 0x44, 0xDE })]
         [InlineData(typeof(ChaCha20Poly1305), new byte[] { 0xDE, 0x31, 0x43, 0xDE })]
-        public static void Aead(Type algorithmType, byte[] magic)
+        public static void Aead(Type algorithmType, byte[] blobHeader)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Test(a, a.KeySize, KeyBlobFormat.RawSymmetricKey, a.KeySize, KeyBlobFormat.NSecSymmetricKey, magic);
+            Test(a, a.KeySize, KeyBlobFormat.RawSymmetricKey, a.KeySize, KeyBlobFormat.NSecSymmetricKey, blobHeader);
         }
 
         [Fact]
@@ -28,11 +28,11 @@ namespace NSec.Tests.Formatting
         [Theory]
         [InlineData(typeof(HmacSha256), new byte[] { 0xDE, 0x33, 0x46, 0xDE })]
         [InlineData(typeof(HmacSha512), new byte[] { 0xDE, 0x33, 0x47, 0xDE })]
-        public static void Mac(Type algorithmType, byte[] magic)
+        public static void Mac(Type algorithmType, byte[] blobHeader)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Test(a, a.DefaultKeySize, KeyBlobFormat.RawSymmetricKey, a.DefaultKeySize, KeyBlobFormat.NSecSymmetricKey, magic);
+            Test(a, a.DefaultKeySize, KeyBlobFormat.RawSymmetricKey, a.DefaultKeySize, KeyBlobFormat.NSecSymmetricKey, blobHeader);
         }
 
         [Fact]
@@ -85,7 +85,7 @@ namespace NSec.Tests.Formatting
             }
         }
 
-        private static void Test(Algorithm a, int seedSize, KeyBlobFormat importFormat, int keySize, KeyBlobFormat format, byte[] magic)
+        private static void Test(Algorithm a, int seedSize, KeyBlobFormat importFormat, int keySize, KeyBlobFormat format, byte[] blobHeader)
         {
             var b = Utilities.RandomBytes.Slice(0, seedSize);
 
@@ -94,9 +94,9 @@ namespace NSec.Tests.Formatting
                 var blob = k.Export(format);
 
                 Assert.NotNull(blob);
-                Assert.Equal(magic.Length + sizeof(uint) + keySize, blob.Length);
-                Assert.Equal(magic, blob.AsSpan().Slice(0, magic.Length).ToArray());
-                Assert.Equal(BitConverter.GetBytes(keySize), blob.AsSpan().Slice(magic.Length, sizeof(int)).ToArray());
+                Assert.Equal(blobHeader.Length + sizeof(uint) + keySize, blob.Length);
+                Assert.Equal(blobHeader, blob.AsSpan().Slice(0, blobHeader.Length).ToArray());
+                Assert.Equal(BitConverter.GetBytes(keySize), blob.AsSpan().Slice(blobHeader.Length, sizeof(int)).ToArray());
             }
         }
     }
