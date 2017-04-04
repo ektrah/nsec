@@ -95,7 +95,6 @@ namespace NSec.Cryptography
             Span<byte> mac)
         {
             Debug.Assert(keyHandle != null);
-            Debug.Assert(mac.Length >= MinMacSize);
             Debug.Assert(mac.Length <= crypto_auth_hmacsha256_BYTES);
 
             // crypto_auth_hmacsha256_init accepts a key of arbitrary length,
@@ -164,7 +163,6 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> mac)
         {
             Debug.Assert(keyHandle != null);
-            Debug.Assert(mac.Length >= MinMacSize);
             Debug.Assert(mac.Length <= crypto_auth_hmacsha256_BYTES);
 
             // crypto_auth_hmacsha256_verify does not support truncated HMACs,
