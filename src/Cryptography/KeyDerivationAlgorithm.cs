@@ -109,6 +109,7 @@ namespace NSec.Cryptography
             {
                 unsafe
                 {
+                    Debug.Assert(seedSize <= 64);
                     byte* pointer = stackalloc byte[seedSize];
                     seed = new Span<byte>(pointer, seedSize);
                 }
