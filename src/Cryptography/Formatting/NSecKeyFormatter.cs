@@ -32,7 +32,7 @@ namespace NSec.Cryptography.Formatting
             Debug.Assert(keyHandle.Length <= _maxKeySize);
 
             byte[] blob = new byte[_blobHeader.Length + sizeof(uint) + keyHandle.Length];
-            _blobHeader.AsSpan().CopyTo(blob);
+            _blobHeader.CopyTo(blob);
             blob.AsSpan().Slice(_blobHeader.Length).WriteLittleEndian((uint)keyHandle.Length);
             keyHandle.Export(blob.AsSpan().Slice(_blobHeader.Length + sizeof(uint)));
             return blob;
