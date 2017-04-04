@@ -50,15 +50,11 @@ namespace NSec.Cryptography
             Debug.Assert(hash.Length <= crypto_hash_sha512_BYTES);
 
             crypto_hash_sha512_init(out crypto_hash_sha512_state state);
+            crypto_hash_sha512_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
 
-            if (!data.IsEmpty)
-            {
-                crypto_hash_sha512_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
-            }
-
-            // crypto_hash_sha512_final expects an output buffer with a
-            // size of exactly crypto_hash_sha512_BYTES, so we need to
-            // copy when a truncated output is requested.
+            // crypto_hash_sha512_final expects an output buffer with a size of
+            // exactly crypto_hash_sha512_BYTES, so we need to copy when a
+            // truncated output is requested.
 
             if (hash.Length == crypto_hash_sha512_BYTES)
             {

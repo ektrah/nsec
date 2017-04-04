@@ -104,6 +104,9 @@ namespace NSec.Cryptography
             out SecureMemoryHandle keyHandle,
             out byte[] publicKeyBytes)
         {
+            Debug.Assert(seed.Length >= crypto_generichash_blake2b_KEYBYTES_MIN);
+            Debug.Assert(seed.Length <= crypto_generichash_blake2b_KEYBYTES_MAX);
+
             publicKeyBytes = null;
             SecureMemoryHandle.Alloc(seed.Length, out keyHandle);
             keyHandle.Import(seed);
@@ -126,7 +129,7 @@ namespace NSec.Cryptography
 
         internal override int GetDefaultSeedSize()
         {
-            return DefaultKeySize;
+            return crypto_generichash_blake2b_KEYBYTES;
         }
 
         internal override void HashCore(

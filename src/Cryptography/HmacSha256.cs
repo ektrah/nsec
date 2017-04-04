@@ -86,7 +86,7 @@ namespace NSec.Cryptography
 
         internal override int GetDefaultSeedSize()
         {
-            return DefaultKeySize;
+            return SHA256HashSize;
         }
 
         internal override void SignCore(
@@ -105,11 +105,7 @@ namespace NSec.Cryptography
             // the block size.
 
             crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, keyHandle, (UIntPtr)keyHandle.Length);
-
-            if (!data.IsEmpty)
-            {
-                crypto_auth_hmacsha256_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
-            }
+            crypto_auth_hmacsha256_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
 
             // crypto_auth_hmacsha256_final expects an output buffer with a size
             // of exactly crypto_auth_hmacsha256_BYTES, so we need to copy when
