@@ -105,7 +105,7 @@ namespace NSec.Cryptography
 
         private static void ThrowArgumentException()
         {
-            throw new ArgumentException();
+            throw Error.Cryptographic_InternalError();
         }
     }
 }

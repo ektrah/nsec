@@ -201,6 +201,9 @@
   <data name="Cryptographic_InitializationFailed" xml:space="preserve">
     <value>Initialization failed.</value>
   </data>
+  <data name="Cryptographic_InternalError" xml:space="preserve">
+    <value>An internal error occurred.</value>
+  </data>
   <data name="Cryptographic_KeyAgreementFailed" xml:space="preserve">
     <value>Key agreement failed.</value>
   </data>

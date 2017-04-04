@@ -201,6 +201,11 @@ namespace NSec.Cryptography
             return new CryptographicException(ResourceManager.GetString("Cryptographic_InitializationFailed"));
         }
 
+        internal static CryptographicException Cryptographic_InternalError()
+        {
+            return new CryptographicException(ResourceManager.GetString("Cryptographic_InternalError"));
+        }
+
         internal static CryptographicException Cryptographic_KeyAgreementFailed()
         {
             return new CryptographicException(ResourceManager.GetString("Cryptographic_KeyAgreementFailed"));
