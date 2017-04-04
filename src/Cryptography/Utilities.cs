@@ -35,7 +35,7 @@ namespace NSec.Cryptography
         {
             if (span.Length < Unsafe.SizeOf<T>())
             {
-                ThrowArgumentException();
+                ThrowInternalError();
             }
 
             return Unsafe.ReadUnaligned<T>(ref span.DangerousGetPinnableReference());
@@ -70,7 +70,7 @@ namespace NSec.Cryptography
         {
             if (span.Length < Unsafe.SizeOf<T>())
             {
-                ThrowArgumentException();
+                ThrowInternalError();
             }
 
             Unsafe.WriteUnaligned(ref span.DangerousGetPinnableReference(), value);
@@ -103,7 +103,7 @@ namespace NSec.Cryptography
                 (value >> 24));
         }
 
-        private static void ThrowArgumentException()
+        private static void ThrowInternalError()
         {
             throw Error.Cryptographic_InternalError();
         }
