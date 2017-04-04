@@ -259,8 +259,8 @@ namespace NSec.Tests.Base
                 var actual = new byte[L + a.TagSize];
                 Utilities.RandomBytes.Slice(0, L).CopyTo(actual);
 
-                a.Encrypt(k, n, ad, new ReadOnlySpan<byte>(actual, 0, L), expected);
-                a.Encrypt(k, n, ad, new ReadOnlySpan<byte>(actual, 0, L), actual);
+                a.Encrypt(k, n, ad, actual.AsSpan().Slice(0, L), expected);
+                a.Encrypt(k, n, ad, actual.AsSpan().Slice(0, L), actual);
 
                 Assert.Equal(expected, actual);
             }
@@ -520,8 +520,8 @@ namespace NSec.Tests.Base
                 a.Encrypt(k, n, ad, Utilities.RandomBytes.Slice(0, L), actual);
                 a.Encrypt(k, n, ad, Utilities.RandomBytes.Slice(0, L), expected);
 
-                a.Decrypt(k, n, ad, actual, new Span<byte>(expected, 0, L));
-                a.Decrypt(k, n, ad, actual, new Span<byte>(actual, 0, L));
+                a.Decrypt(k, n, ad, actual, expected.AsSpan().Slice(0, L));
+                a.Decrypt(k, n, ad, actual, actual.AsSpan().Slice(0, L));
                 Assert.Equal(expected, actual);
             }
         }
@@ -802,8 +802,8 @@ namespace NSec.Tests.Base
                 a.Encrypt(k, n, ad, Utilities.RandomBytes.Slice(0, L), actual);
                 a.Encrypt(k, n, ad, Utilities.RandomBytes.Slice(0, L), expected);
 
-                Assert.True(a.TryDecrypt(k, n, ad, actual, new Span<byte>(expected, 0, L)));
-                Assert.True(a.TryDecrypt(k, n, ad, actual, new Span<byte>(actual, 0, L)));
+                Assert.True(a.TryDecrypt(k, n, ad, actual, expected.AsSpan().Slice(0, L)));
+                Assert.True(a.TryDecrypt(k, n, ad, actual, actual.AsSpan().Slice(0, L)));
                 Assert.Equal(expected, actual);
             }
         }
