@@ -158,6 +158,42 @@ namespace NSec.Cryptography
             }
         }
 
+        internal override bool TryVerifyCore(
+            SecureMemoryHandle keyHandle,
+            ReadOnlySpan<byte> data,
+            ReadOnlySpan<byte> mac)
+        {
+            Debug.Assert(keyHandle != null);
+            Debug.Assert(mac.Length >= MinMacSize);
+            Debug.Assert(mac.Length <= crypto_auth_hmacsha256_BYTES);
+
+            // crypto_auth_hmacsha256_verify does not support truncated HMACs,
+            // so we calculate the MAC ourselves and call sodium_memcmp to
+            // compare the expected MAC with the actual MAC.
+
+            Span<byte> temp;
+            try
+            {
+                unsafe
+                {
+                    byte* pointer = stackalloc byte[crypto_auth_hmacsha256_BYTES];
+                    temp = new Span<byte>(pointer, crypto_auth_hmacsha256_BYTES);
+                }
+
+                crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, keyHandle, (UIntPtr)keyHandle.Length);
+                crypto_auth_hmacsha256_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
+                crypto_auth_hmacsha256_final(ref state, ref temp.DangerousGetPinnableReference());
+
+                int error = sodium_memcmp(ref temp.DangerousGetPinnableReference(), ref mac.DangerousGetPinnableReference(), (UIntPtr)mac.Length);
+
+                return error == 0;
+            }
+            finally
+            {
+                sodium_memzero(ref temp.DangerousGetPinnableReference(), (UIntPtr)temp.Length);
+            }
+        }
+
         private static bool SelfTest()
         {
             return (crypto_auth_hmacsha256_bytes() == (UIntPtr)crypto_auth_hmacsha256_BYTES)

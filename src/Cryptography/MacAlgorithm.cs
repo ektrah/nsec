@@ -127,39 +127,10 @@ namespace NSec.Cryptography
                 throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (mac.Length < _minMacSize)
-                return false;
-            if (mac.Length > _maxMacSize)
+            if (mac.Length < _minMacSize || mac.Length > _maxMacSize)
                 return false;
 
-            // crypto_auth_hmacsha{256,512}_verify does not support truncated
-            // HMACs, so we calculate the MAC ourselves and call sodium_memcmp
-            // to compare the expected MAC with the actual MAC.
-
-            // SignCore can output a truncated MAC. However, truncation requires
-            // a copy. So we provide an array with the default length and
-            // compare only the initial 'mac.Length' bytes.
-
-            Span<byte> temp;
-            try
-            {
-                unsafe
-                {
-                    int length = Math.Max(mac.Length, _defaultMacSize);
-                    byte* pointer = stackalloc byte[length];
-                    temp = new Span<byte>(pointer, length);
-                }
-
-                SignCore(key.Handle, data, temp);
-
-                Debug.Assert(mac.Length <= temp.Length);
-                int error = sodium_memcmp(ref temp.DangerousGetPinnableReference(), ref mac.DangerousGetPinnableReference(), (UIntPtr)mac.Length);
-                return error == 0;
-            }
-            finally
-            {
-                sodium_memzero(ref temp.DangerousGetPinnableReference(), (UIntPtr)temp.Length);
-            }
+            return TryVerifyCore(key.Handle, data, mac);
         }
 
         public void Verify(
@@ -174,36 +145,9 @@ namespace NSec.Cryptography
             if (mac.Length < _minMacSize || mac.Length > _maxMacSize)
                 throw Error.Argument_MacSize(nameof(mac), mac.Length.ToString(), _minMacSize.ToString(), _maxMacSize.ToString());
 
-            // crypto_auth_hmacsha{256,512}_verify does not support truncated
-            // HMACs, so we calculate the MAC ourselves and call sodium_memcmp
-            // to compare the expected MAC with the actual MAC.
-
-            // SignCore can output a truncated MAC. However, truncation requires
-            // a copy. So we provide an array with the default length and
-            // compare only the initial 'mac.Length' bytes.
-
-            Span<byte> temp;
-            try
+            if (!TryVerifyCore(key.Handle, data, mac))
             {
-                unsafe
-                {
-                    int length = Math.Max(mac.Length, _defaultMacSize);
-                    byte* pointer = stackalloc byte[length];
-                    temp = new Span<byte>(pointer, length);
-                }
-
-                SignCore(key.Handle, data, temp);
-
-                Debug.Assert(mac.Length <= temp.Length);
-                int error = sodium_memcmp(ref temp.DangerousGetPinnableReference(), ref mac.DangerousGetPinnableReference(), (UIntPtr)mac.Length);
-                if (error != 0)
-                {
-                    throw Error.Cryptographic_VerificationFailed();
-                }
-            }
-            finally
-            {
-                sodium_memzero(ref temp.DangerousGetPinnableReference(), (UIntPtr)temp.Length);
+                throw Error.Cryptographic_VerificationFailed();
             }
         }
 
@@ -211,5 +155,10 @@ namespace NSec.Cryptography
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             Span<byte> mac);
+
+        internal abstract bool TryVerifyCore(
+            SecureMemoryHandle keyHandle,
+            ReadOnlySpan<byte> data,
+            ReadOnlySpan<byte> mac);
     }
 }
