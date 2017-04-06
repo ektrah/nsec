@@ -156,6 +156,7 @@ namespace NSec.Tests.Base
             using (var k = new Key(a))
             {
                 var s = a.Sign(k, ReadOnlySpan<byte>.Empty);
+
                 Assert.NotNull(s);
                 Assert.Equal(a.SignatureSize, s.Length);
 
@@ -209,6 +210,7 @@ namespace NSec.Tests.Base
             using (var k = new Key(a))
             {
                 var s = a.Sign(k, ReadOnlySpan<byte>.Empty);
+
                 Assert.NotNull(s);
                 Assert.Equal(a.SignatureSize, s.Length);
 

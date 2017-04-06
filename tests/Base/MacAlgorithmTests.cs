@@ -308,6 +308,7 @@ namespace NSec.Tests.Base
 
                 a.Sign(k, data, expected);
                 a.Sign(k, data, actual);
+
                 Assert.Equal(expected, actual);
             }
         }
@@ -327,6 +328,7 @@ namespace NSec.Tests.Base
 
                 a.Sign(k, data, expected);
                 a.Sign(k, data, actual);
+
                 Assert.Equal(expected, actual.ToArray());
             }
         }
