@@ -12,9 +12,9 @@ namespace NSec.Cryptography
             uint second,
             params uint[] rest)
         {
-            int length = CalcLength(first * 40 + second);
+            int length = GetLength(first * 40 + second);
             for (int i = 0; i < rest.Length; i++)
-                length += CalcLength(rest[i]);
+                length += GetLength(rest[i]);
             byte[] bytes = new byte[length];
             int pos = Encode(first * 40 + second, bytes, 0);
             for (int i = 0; i < rest.Length; i++)
@@ -23,21 +23,6 @@ namespace NSec.Cryptography
         }
 
         public ReadOnlySpan<byte> Bytes => _bytes ?? default(ReadOnlySpan<byte>);
-
-        private static int CalcLength(
-            uint value)
-        {
-            int length = 0;
-            Debug.Assert((value & 0xF0000000) == 0);
-            if ((value & 0xFFE00000) != 0)
-                length++;
-            if ((value & 0xFFFFC000) != 0)
-                length++;
-            if ((value & 0xFFFFFF80) != 0)
-                length++;
-            length++;
-            return length;
-        }
 
         private static int Encode(
             uint value,
@@ -54,6 +39,21 @@ namespace NSec.Cryptography
                 buffer[pos++] = (byte)((value >> 7) & 0x7F | 0x80);
             buffer[pos++] = (byte)(value & 0x7F);
             return pos - start;
+        }
+
+        private static int GetLength(
+            uint value)
+        {
+            int length = 0;
+            Debug.Assert((value & 0xF0000000) == 0);
+            if ((value & 0xFFE00000) != 0)
+                length++;
+            if ((value & 0xFFFFC000) != 0)
+                length++;
+            if ((value & 0xFFFFFF80) != 0)
+                length++;
+            length++;
+            return length;
         }
     }
 }
