@@ -11,10 +11,8 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> bytes,
             Span<byte> base64)
         {
-            if (base64.Length != GetEncodedLength(bytes.Length))
-                throw Error.Argument_BadBase64Length(nameof(base64));
-            if (bytes.IsEmpty)
-                return;
+            Debug.Assert(base64.Length == GetEncodedLength(bytes.Length));
+            Debug.Assert(!bytes.IsEmpty);
 
             unchecked
             {

@@ -8,26 +8,7 @@ namespace NSec.Cryptography
     {
         private static ResourceManager s_resourceManager;
 
-        private static ResourceManager ResourceManager
-            => s_resourceManager ?? (s_resourceManager = new ResourceManager("NSec.Resources.Strings", typeof(Error).GetTypeInfo().Assembly));
-
-        internal static ArgumentException Argument_BadBase16Length(
-            string paramName)
-        {
-            return new ArgumentException(ResourceManager.GetString("Argument_BadBase16Length"), paramName);
-        }
-
-        internal static ArgumentException Argument_BadBase32Length(
-            string paramName)
-        {
-            return new ArgumentException(ResourceManager.GetString("Argument_BadBase32Length"), paramName);
-        }
-
-        internal static ArgumentException Argument_BadBase64Length(
-            string paramName)
-        {
-            return new ArgumentException(ResourceManager.GetString("Argument_BadBase64Length"), paramName);
-        }
+        private static ResourceManager ResourceManager => s_resourceManager ?? (s_resourceManager = new ResourceManager("NSec.Resources.Strings", typeof(Error).GetTypeInfo().Assembly));
 
         internal static ArgumentException Argument_CiphertextLength(
             string paramName)
@@ -170,12 +151,6 @@ namespace NSec.Cryptography
             return new ArgumentNullException(paramName, ResourceManager.GetString("ArgumentNull_SharedSecret"));
         }
 
-        internal static ArgumentNullException ArgumentNull_String(
-            string paramName)
-        {
-            return new ArgumentNullException(paramName, ResourceManager.GetString("ArgumentNull_String"));
-        }
-
         internal static ArgumentOutOfRangeException ArgumentOutOfRange_DeriveInvalidCount(
             string paramName,
             string arg0)
@@ -243,21 +218,6 @@ namespace NSec.Cryptography
         internal static CryptographicException Cryptographic_VerificationFailed()
         {
             return new CryptographicException(ResourceManager.GetString("Cryptographic_VerificationFailed"));
-        }
-
-        internal static FormatException Format_BadBase16()
-        {
-            return new FormatException(ResourceManager.GetString("Format_BadBase16"));
-        }
-
-        internal static FormatException Format_BadBase32()
-        {
-            return new FormatException(ResourceManager.GetString("Format_BadBase32"));
-        }
-
-        internal static FormatException Format_BadBase64()
-        {
-            return new FormatException(ResourceManager.GetString("Format_BadBase64"));
         }
 
         internal static FormatException Format_InvalidBlob()
