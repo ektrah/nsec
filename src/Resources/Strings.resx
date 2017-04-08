@@ -126,6 +126,9 @@
   <data name="ArgumentNull_SharedSecret" xml:space="preserve">
     <value>Shared secret cannot be null.</value>
   </data>
+  <data name="ArgumentNull_String" xml:space="preserve">
+    <value>String cannot be null.</value>
+  </data>
   <data name="ArgumentOutOfRange_DeriveInvalidCount" xml:space="preserve">
     <value>The number of bytes to derive must be less than or equal to the maximum output size '{0}'.</value>
   </data>
@@ -140,6 +143,15 @@
   </data>
   <data name="ArgumentOutOfRange_MacSize" xml:space="preserve">
     <value>MAC size '{0}' is out of range. Must be between {1} and {2}.</value>
+  </data>
+  <data name="Argument_BadBase16Length" xml:space="preserve">
+    <value>Invalid length for a Base16 span.</value>
+  </data>
+  <data name="Argument_BadBase32Length" xml:space="preserve">
+    <value>Invalid length for a Base32 span.</value>
+  </data>
+  <data name="Argument_BadBase64Length" xml:space="preserve">
+    <value>Invalid length for a Base64 span.</value>
   </data>
   <data name="Argument_CiphertextLength" xml:space="preserve">
     <value>The ciphertext length must be equal to the plaintet length plus the tag size.</value>
@@ -212,6 +224,15 @@
   </data>
   <data name="Cryptographic_VerificationFailed" xml:space="preserve">
     <value>Verification failed.</value>
+  </data>
+  <data name="Format_BadBase16" xml:space="preserve">
+    <value>The input is not a valid Base16 string as it contains a non-Base16 character.</value>
+  </data>
+  <data name="Format_BadBase32" xml:space="preserve">
+    <value>The input is not a valid Base32 string as it contains a non-Base32 character, an incorrect number of padding characters, or an illegal character among the padding characters.</value>
+  </data>
+  <data name="Format_BadBase64" xml:space="preserve">
+    <value>The input is not a valid Base64 string as it contains a non-Base64 character, more than two padding characters, or an illegal character among the padding characters.</value>
   </data>
   <data name="Format_InvalidBlob" xml:space="preserve">
     <value>The key BLOB is not in the correct format.</value>
