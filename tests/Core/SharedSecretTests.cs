@@ -21,7 +21,7 @@ namespace NSec.Tests.Core
         [Fact]
         public static void ImportNonEmpty()
         {
-            var b = "00010203040506070809".DecodeHex();
+            var b = Utilities.RandomBytes.Slice(0, 57);
 
             using (var s = SharedSecret.Import(b))
             {
