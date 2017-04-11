@@ -18,9 +18,9 @@ namespace NSec.Tests.Formatting
         }
 
         [Fact]
-        public static void Blake2()
+        public static void Blake2b()
         {
-            var a = new Blake2();
+            var a = new Blake2b();
 
             Test(a, a.DefaultKeySize, KeyBlobFormat.RawSymmetricKey, a.DefaultKeySize, KeyBlobFormat.NSecSymmetricKey, new byte[] { 0xDE, 0x32, 0x45, 0xDE });
         }

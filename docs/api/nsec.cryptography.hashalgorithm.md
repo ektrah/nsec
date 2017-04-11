@@ -9,7 +9,7 @@ Represents a cryptographic hash algorithm.
 
 * [[Algorithm|Algorithm Class]]
     * **HashAlgorithm**
-        * Blake2
+        * Blake2b
         * Sha256
         * Sha512
 

@@ -16,7 +16,7 @@ Interop.Aes256Gcm.cs:
   - crypto_aead_aes256gcm_npubbytes
   - crypto_aead_aes256gcm_nsecbytes
 
-Interop.Blake2.cs:
+Interop.Blake2b.cs:
   include: include/sodium/crypto_generichash_blake2b.h
   constants:
   - crypto_generichash_blake2b_BYTES

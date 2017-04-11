@@ -5,7 +5,7 @@
         * Aes256Gcm Class
         * ChaCha20Poly1305 Class
     * [[HashAlgorithm Class]]
-        * Blake2 Class
+        * Blake2b Class
         * Sha256 Class
         * Sha512 Class
     * [[KeyAgreementAlgorithm Class]]

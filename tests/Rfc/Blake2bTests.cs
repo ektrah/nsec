@@ -15,7 +15,7 @@ namespace NSec.Tests.Rfc
         [MemberData(nameof(Rfc7693TestVectors))]
         public static void Test(string msg, string hash)
         {
-            var a = new Blake2();
+            var a = new Blake2b();
 
             var expected = hash.DecodeHex();
             var actual = a.Hash(msg.DecodeHex(), expected.Length);

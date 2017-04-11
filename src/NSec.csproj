@@ -8,7 +8,7 @@
     <Description>Provides modern cryptographic algorithm implementations based on libsodium.
 
 Commonly Used Types:
-NSec.Cryptography.Blake2
+NSec.Cryptography.Blake2b
 NSec.Cryptography.Chacha20Poly1305
 NSec.Cryptography.Ed25519
 NSec.Cryptography.Key

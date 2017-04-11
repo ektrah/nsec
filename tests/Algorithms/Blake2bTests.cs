@@ -4,14 +4,14 @@ using Xunit;
 
 namespace NSec.Tests.Algorithms
 {
-    public static class Blake2Tests
+    public static class Blake2bTests
     {
         #region Properties
 
         [Fact]
         public static void KeyProperties()
         {
-            var a = new Blake2();
+            var a = new Blake2b();
 
             Assert.True(a.MinKeySize >= 0);
             Assert.True(a.DefaultKeySize > 0);
@@ -22,7 +22,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void Properties()
         {
-            var a = new Blake2();
+            var a = new Blake2b();
 
             Assert.Equal(16, a.MinKeySize);
             Assert.Equal(32, a.DefaultKeySize);
@@ -43,7 +43,7 @@ namespace NSec.Tests.Algorithms
         [InlineData(64)]
         public static void ExportImportRaw(int keySize)
         {
-            var a = new Blake2();
+            var a = new Blake2b();
             var b = Utilities.RandomBytes.Slice(0, keySize);
 
             using (var k = Key.Import(a, b, KeyBlobFormat.RawSymmetricKey, KeyFlags.AllowArchiving))
@@ -63,7 +63,7 @@ namespace NSec.Tests.Algorithms
         [InlineData(64)]
         public static void ExportImportNSec(int keySize)
         {
-            var a = new Blake2();
+            var a = new Blake2b();
             var b = Utilities.RandomBytes.Slice(0, keySize);
 
             using (var k1 = Key.Import(a, b, KeyBlobFormat.RawSymmetricKey, KeyFlags.AllowArchiving))
@@ -90,7 +90,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void HashWithNullKey()
         {
-            var a = new Blake2();
+            var a = new Blake2b();
 
             Assert.Throws<ArgumentNullException>("key", () => a.Hash(null, ReadOnlySpan<byte>.Empty));
         }
@@ -98,7 +98,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void HashWithWrongKey()
         {
-            var a = new Blake2();
+            var a = new Blake2b();
 
             using (var k = new Key(new Ed25519()))
             {
@@ -108,7 +108,7 @@ namespace NSec.Tests.Algorithms
 
         public static void HashWithKeySuccess()
         {
-            var a = new Blake2();
+            var a = new Blake2b();
 
             using (var k = new Key(a))
             {
@@ -126,7 +126,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void HashWithSizeWithNullKey()
         {
-            var a = new Blake2();
+            var a = new Blake2b();
 
             Assert.Throws<ArgumentNullException>("key", () => a.Hash(null, ReadOnlySpan<byte>.Empty, 0));
         }
@@ -134,7 +134,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void HashWithSizeWithWrongKey()
         {
-            var a = new Blake2();
+            var a = new Blake2b();
 
             using (var k = new Key(new Ed25519()))
             {
@@ -145,7 +145,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void HashWithSizeTooSmall()
         {
-            var a = new Blake2();
+            var a = new Blake2b();
 
             using (var k = new Key(a))
             {
@@ -156,7 +156,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void HashWithSizeTooLarge()
         {
-            var a = new Blake2();
+            var a = new Blake2b();
 
             using (var k = new Key(a))
             {
@@ -167,7 +167,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void HashWithMinSizeSuccess()
         {
-            var a = new Blake2();
+            var a = new Blake2b();
 
             using (var k = new Key(a))
             {
@@ -181,7 +181,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void HashWithMaxSizeSuccess()
         {
-            var a = new Blake2();
+            var a = new Blake2b();
 
             using (var k = new Key(a))
             {
@@ -199,7 +199,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void HashWithSpanWithNullKey()
         {
-            var a = new Blake2();
+            var a = new Blake2b();
 
             Assert.Throws<ArgumentNullException>("key", () => a.Hash(null, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
@@ -207,7 +207,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void HashWithSpanWithWrongKey()
         {
-            var a = new Blake2();
+            var a = new Blake2b();
 
             using (var k = new Key(new Ed25519()))
             {
@@ -218,7 +218,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void HashWithSpanTooSmall()
         {
-            var a = new Blake2();
+            var a = new Blake2b();
 
             using (var k = new Key(a))
             {
@@ -229,7 +229,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void HashWithSpanTooLarge()
         {
-            var a = new Blake2();
+            var a = new Blake2b();
 
             using (var k = new Key(a))
             {
@@ -240,7 +240,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void HashWithMinSpanSuccess()
         {
-            var a = new Blake2();
+            var a = new Blake2b();
 
             using (var k = new Key(a))
             {
@@ -251,7 +251,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void HashWithMaxSpanSuccess()
         {
-            var a = new Blake2();
+            var a = new Blake2b();
 
             using (var k = new Key(a))
             {
@@ -266,7 +266,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void CreateKey()
         {
-            var a = new Blake2();
+            var a = new Blake2b();
 
             using (var k = new Key(a, KeyFlags.AllowArchiving))
             {

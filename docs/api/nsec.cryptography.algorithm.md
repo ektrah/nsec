@@ -14,7 +14,7 @@ The [[Algorithm|Algorithm Class]] class has no public members.
         * Aes256Gcm
         * ChaCha20Poly1305
     * [[HashAlgorithm|HashAlgorithm Class]]
-        * Blake2
+        * Blake2b
         * Sha256
         * Sha512
     * [[KeyAgreementAlgorithm|KeyAgreementAlgorithm Class]]
