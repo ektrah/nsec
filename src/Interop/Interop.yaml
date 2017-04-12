@@ -9,8 +9,8 @@ Interop.Aes256Gcm.cs:
   - crypto_aead_aes256gcm_NSECBYTES
   functions:
   - crypto_aead_aes256gcm_abytes
-  - crypto_aead_aes256gcm_decrypt
-  - crypto_aead_aes256gcm_encrypt
+  - crypto_aead_aes256gcm_decrypt (IntPtr nsec, SecureMemoryHandle k)
+  - crypto_aead_aes256gcm_encrypt (IntPtr nsec, SecureMemoryHandle k)
   - crypto_aead_aes256gcm_is_available
   - crypto_aead_aes256gcm_keybytes
   - crypto_aead_aes256gcm_npubbytes
@@ -49,8 +49,8 @@ Interop.ChaCha20Poly1305.cs:
   - crypto_aead_chacha20poly1305_ietf_NSECBYTES
   functions:
   - crypto_aead_chacha20poly1305_ietf_abytes
-  - crypto_aead_chacha20poly1305_ietf_decrypt
-  - crypto_aead_chacha20poly1305_ietf_encrypt
+  - crypto_aead_chacha20poly1305_ietf_decrypt (IntPtr nsec, SecureMemoryHandle k)
+  - crypto_aead_chacha20poly1305_ietf_encrypt (IntPtr nsec, SecureMemoryHandle k)
   - crypto_aead_chacha20poly1305_ietf_keybytes
   - crypto_aead_chacha20poly1305_ietf_npubbytes
   - crypto_aead_chacha20poly1305_ietf_nsecbytes
@@ -66,8 +66,8 @@ Interop.X25519.cs:
   - crypto_scalarmult_curve25519_BYTES
   - crypto_scalarmult_curve25519_SCALARBYTES
   functions:
-  - crypto_scalarmult_curve25519
-  - crypto_scalarmult_curve25519_base (byte[] q)
+  - crypto_scalarmult_curve25519 (SecureMemoryHandle q, SecureMemoryHandle n)
+  - crypto_scalarmult_curve25519_base (byte[] q, SecureMemoryHandle n)
   - crypto_scalarmult_curve25519_bytes
   - crypto_scalarmult_curve25519_scalarbytes
 
@@ -80,12 +80,12 @@ Interop.Ed25519.cs:
   - crypto_sign_ed25519_SEEDBYTES
   functions:
   - crypto_sign_ed25519_bytes
-  - crypto_sign_ed25519_detached
+  - crypto_sign_ed25519_detached (SecureMemoryHandle sk)
   - crypto_sign_ed25519_publickeybytes
   - crypto_sign_ed25519_secretkeybytes
-  - crypto_sign_ed25519_seed_keypair (byte[] pk)
+  - crypto_sign_ed25519_seed_keypair (byte[] pk, SecureMemoryHandle sk)
   - crypto_sign_ed25519_seedbytes
-  - crypto_sign_ed25519_sk_to_seed
+  - crypto_sign_ed25519_sk_to_seed (SecureMemoryHandle sk)
   - crypto_sign_ed25519_verify_detached
 
 Interop.HmacSha256.cs:
