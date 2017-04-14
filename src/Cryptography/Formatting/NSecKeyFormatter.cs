@@ -41,7 +41,7 @@ namespace NSec.Cryptography.Formatting
         public int GetBlobSize(
             int keySize)
         {
-            return 8 + keySize;
+            return _blobHeader.Length + sizeof(uint) + keySize;
         }
 
         public bool TryImport(
