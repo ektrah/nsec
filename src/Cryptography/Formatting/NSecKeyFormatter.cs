@@ -53,8 +53,7 @@ namespace NSec.Cryptography.Formatting
 
             if (keySize < _minKeySize ||
                 keySize > _maxKeySize ||
-                blob.Length < _blobHeader.Length + sizeof(uint) ||
-                !blob.StartsWith(_blobHeader) ||
+                !blob.Slice(0, _blobHeader.Length).SequenceEqual(_blobHeader) ||
                 blob.Slice(_blobHeader.Length).ReadLittleEndian() != (uint)keySize)
             {
                 keyHandle = null;
