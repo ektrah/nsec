@@ -40,7 +40,7 @@ namespace NSec.Cryptography
 
         public HkdfSha256() : base(
             supportsSalt: true,
-            maxOutputSize: 255 * crypto_auth_hmacsha256_BYTES)
+            maxOutputSize: byte.MaxValue * crypto_auth_hmacsha256_BYTES)
         {
             if (!s_selfTest.Value)
                 throw Error.Cryptographic_InitializationFailed();
@@ -115,7 +115,7 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> info,
             Span<byte> bytes)
         {
-            Debug.Assert(bytes.Length <= 255 * crypto_auth_hmacsha256_BYTES);
+            Debug.Assert(bytes.Length <= byte.MaxValue * crypto_auth_hmacsha256_BYTES);
 
             Span<byte> pseudorandomKey;
             try
@@ -142,7 +142,7 @@ namespace NSec.Cryptography
             Span<byte> bytes)
         {
             Debug.Assert(pseudorandomKey.Length >= crypto_auth_hmacsha256_BYTES);
-            Debug.Assert(bytes.Length <= 255 * crypto_auth_hmacsha256_BYTES);
+            Debug.Assert(bytes.Length <= byte.MaxValue * crypto_auth_hmacsha256_BYTES);
 
             Span<byte> temp;
             try
