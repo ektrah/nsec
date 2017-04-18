@@ -1,8 +1,5 @@
 using System;
-using System.IO;
-using System.Reflection;
 using NSec.Cryptography.Formatting;
-using Xunit;
 
 namespace NSec.Tests
 {
@@ -19,81 +16,6 @@ namespace NSec.Tests
         {
             for (var i = 0; i < array.Length; i++)
                 array[i] = value;
-        }
-
-        public static TheoryData<string[]> LoadTheoryData(Type type)
-        {
-            var assembly = type.GetTypeInfo().Assembly;
-
-            using (var stream = assembly.GetManifestResourceStream(type.FullName + ".txt"))
-            using (var reader = new StreamReader(stream))
-            {
-                var data = new TheoryData<string[]>();
-                var line = (string[])null;
-                while ((line = reader.ReadLine()?.Split(':')) != null)
-                    data.Add(line);
-                return data;
-            }
-        }
-
-        public static TheoryData<string> LoadTheoryData1(Type type)
-        {
-            var assembly = type.GetTypeInfo().Assembly;
-
-            using (var stream = assembly.GetManifestResourceStream(type.FullName + ".txt"))
-            using (var reader = new StreamReader(stream))
-            {
-                var data = new TheoryData<string>();
-                var line = (string)null;
-                while ((line = reader.ReadLine()) != null)
-                    data.Add(line);
-                return data;
-            }
-        }
-
-        public static TheoryData<string, string> LoadTheoryData2(Type type)
-        {
-            var assembly = type.GetTypeInfo().Assembly;
-
-            using (var stream = assembly.GetManifestResourceStream(type.FullName + ".txt"))
-            using (var reader = new StreamReader(stream))
-            {
-                var data = new TheoryData<string, string>();
-                var line = (string[])null;
-                while ((line = reader.ReadLine()?.Split(':')) != null)
-                    data.Add(line[0], line[1]);
-                return data;
-            }
-        }
-
-        public static TheoryData<string, string, string> LoadTheoryData3(Type type)
-        {
-            var assembly = type.GetTypeInfo().Assembly;
-
-            using (var stream = assembly.GetManifestResourceStream(type.FullName + ".txt"))
-            using (var reader = new StreamReader(stream))
-            {
-                var data = new TheoryData<string, string, string>();
-                var line = (string[])null;
-                while ((line = reader.ReadLine()?.Split(':')) != null)
-                    data.Add(line[0], line[1], line[2]);
-                return data;
-            }
-        }
-
-        public static TheoryData<string, string, string, string> LoadTheoryData4(Type type)
-        {
-            var assembly = type.GetTypeInfo().Assembly;
-
-            using (var stream = assembly.GetManifestResourceStream(type.FullName + ".txt"))
-            using (var reader = new StreamReader(stream))
-            {
-                var data = new TheoryData<string, string, string, string>();
-                var line = (string[])null;
-                while ((line = reader.ReadLine()?.Split(':')) != null)
-                    data.Add(line[0], line[1], line[2], line[3]);
-                return data;
-            }
         }
 
         public static byte[] Substring(this byte[] array, int offset, int length)
