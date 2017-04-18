@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
-    <PackageId>NSec.Cryptography</PackageId>
-    <VersionPrefix>1.0.0</VersionPrefix>
+    <AssemblyName>NSec.Cryptography</AssemblyName>
+    <Version>1.0.0-preview-01</Version>
     <Authors>Klaus Hartke</Authors>
     <Description>Provides modern cryptographic algorithm implementations based on libsodium.
 
