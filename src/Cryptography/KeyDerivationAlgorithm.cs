@@ -75,7 +75,7 @@ namespace NSec.Cryptography
             if (bytes.Length > MaxOutputSize)
                 throw Error.Argument_DeriveInvalidCount(nameof(bytes), MaxOutputSize.ToString());
             if (Utilities.Overlap(bytes, info))
-                throw Error.Argument_OverlapDeriveBytes(nameof(bytes));
+                throw Error.Argument_OverlapInfo(nameof(bytes));
             if (bytes.IsEmpty)
                 return;
 

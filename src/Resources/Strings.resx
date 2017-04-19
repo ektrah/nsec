@@ -183,11 +183,14 @@
   <data name="Argument_OverlapCiphertext" xml:space="preserve">
     <value>The ciphertext must not overlap with the plaintext.</value>
   </data>
-  <data name="Argument_OverlapDeriveBytes" xml:space="preserve">
-    <value>The plaintext must not overlap with the ciphertext.</value>
+  <data name="Argument_OverlapInfo" xml:space="preserve">
+    <value>The output bytes must not overlap with the info.</value>
   </data>
   <data name="Argument_OverlapPlaintext" xml:space="preserve">
-    <value>The output bytes must not overlap with the info.</value>
+    <value>The plaintext must not overlap with the ciphertext.</value>
+  </data>
+  <data name="Argument_OverlapPrk" xml:space="preserve">
+    <value>The output bytes must not overlap with the pseudorandom key.</value>
   </data>
   <data name="Argument_PlaintextLength" xml:space="preserve">
     <value>The plaintext length must be equal to the ciphertext length minus the tag size.</value>

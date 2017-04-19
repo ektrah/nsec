@@ -768,6 +768,16 @@ namespace NSec.Tests.Algorithms
         }
 
         [Fact]
+        public static void ExpandWithKeyOverlapping()
+        {
+            var a = new HkdfSha512();
+            var b = new byte[200];
+
+            Assert.Throws<ArgumentException>("bytes", () => a.Expand(b.AsSpan().Slice(10, a.PseudorandomKeySize), ReadOnlySpan<byte>.Empty, b.AsSpan().Slice(30, 100)));
+            Assert.Throws<ArgumentException>("bytes", () => a.Expand(b.AsSpan().Slice(30, a.PseudorandomKeySize), ReadOnlySpan<byte>.Empty, b.AsSpan().Slice(10, 100)));
+        }
+
+        [Fact]
         public static void ExpandWithInfoOverlapping()
         {
             var a = new HkdfSha512();

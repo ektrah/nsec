@@ -8,8 +8,7 @@ namespace NSec.Cryptography
     {
         private static ResourceManager s_resourceManager;
 
-        private static ResourceManager ResourceManager
-            => s_resourceManager ?? (s_resourceManager = new ResourceManager("NSec.Resources.Strings", typeof(Error).GetTypeInfo().Assembly));
+        private static ResourceManager ResourceManager => s_resourceManager ?? (s_resourceManager = new ResourceManager("NSec.Resources.Strings", typeof(Error).GetTypeInfo().Assembly));
 
         internal static ArgumentException Argument_BadBase16Length(
             string paramName)
@@ -102,16 +101,22 @@ namespace NSec.Cryptography
             return new ArgumentException(ResourceManager.GetString("Argument_OverlapCiphertext"), paramName);
         }
 
-        internal static ArgumentException Argument_OverlapDeriveBytes(
+        internal static ArgumentException Argument_OverlapInfo(
             string paramName)
         {
-            return new ArgumentException(ResourceManager.GetString("Argument_OverlapDeriveBytes"), paramName);
+            return new ArgumentException(ResourceManager.GetString("Argument_OverlapInfo"), paramName);
         }
 
         internal static ArgumentException Argument_OverlapPlaintext(
             string paramName)
         {
             return new ArgumentException(ResourceManager.GetString("Argument_OverlapPlaintext"), paramName);
+        }
+
+        internal static ArgumentException Argument_OverlapPrk(
+            string paramName)
+        {
+            return new ArgumentException(ResourceManager.GetString("Argument_OverlapPrk"), paramName);
         }
 
         internal static ArgumentException Argument_PlaintextLength(
