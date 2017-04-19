@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snippets", "src\Snippets.csproj", "{59217E4F-A2CB-4BD7-A63C-0A38E6225E6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snippets", "src\Snippets.csproj", "{59217E4F-A2CB-4BD7-A63C-0A38E6225E6D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FBFEA3F2-1CBB-4FBD-891C-9725DD17584B}"
 	ProjectSection(SolutionItems) = preProject
