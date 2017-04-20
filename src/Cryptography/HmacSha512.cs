@@ -181,9 +181,9 @@ namespace NSec.Cryptography
                 crypto_auth_hmacsha512_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
                 crypto_auth_hmacsha512_final(ref state, ref temp.DangerousGetPinnableReference());
 
-                int error = sodium_memcmp(ref temp.DangerousGetPinnableReference(), ref mac.DangerousGetPinnableReference(), (UIntPtr)mac.Length);
+                int result = sodium_memcmp(ref temp.DangerousGetPinnableReference(), ref mac.DangerousGetPinnableReference(), (UIntPtr)mac.Length);
 
-                return error == 0;
+                return result == 0;
             }
             finally
             {
