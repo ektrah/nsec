@@ -50,6 +50,35 @@ namespace NSec.Cryptography
             crypto_hash_sha256_final(ref state, ref hash.DangerousGetPinnableReference());
         }
 
+        internal override bool TryVerifyCore(
+            ReadOnlySpan<byte> data,
+            ReadOnlySpan<byte> hash)
+        {
+            Debug.Assert(hash.Length <= crypto_hash_sha256_BYTES);
+
+            Span<byte> temp;
+            try
+            {
+                unsafe
+                {
+                    byte* pointer = stackalloc byte[crypto_hash_sha256_BYTES];
+                    temp = new Span<byte>(pointer, crypto_hash_sha256_BYTES);
+                }
+
+                crypto_hash_sha256_init(out crypto_hash_sha256_state state);
+                crypto_hash_sha256_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
+                crypto_hash_sha256_final(ref state, ref temp.DangerousGetPinnableReference());
+
+                int result = sodium_memcmp(ref temp.DangerousGetPinnableReference(), ref hash.DangerousGetPinnableReference(), (UIntPtr)hash.Length);
+
+                return result == 0;
+            }
+            finally
+            {
+                sodium_memzero(ref temp.DangerousGetPinnableReference(), (UIntPtr)temp.Length);
+            }
+        }
+
         private static bool SelfTest()
         {
             return (crypto_hash_sha256_bytes() == (UIntPtr)crypto_hash_sha256_BYTES)

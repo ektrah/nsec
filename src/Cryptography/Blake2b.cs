@@ -99,6 +99,39 @@ namespace NSec.Cryptography
             HashCore(key.Handle, data, hash);
         }
 
+        public bool TryVerify(
+            Key key,
+            ReadOnlySpan<byte> data,
+            ReadOnlySpan<byte> hash)
+        {
+            if (key == null)
+                throw Error.ArgumentNull_Key(nameof(key));
+            if (key.Algorithm != this)
+                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
+            if (hash.Length < MinHashSize || hash.Length > MaxHashSize)
+                return false;
+
+            return TryVerifyCore(key.Handle, data, hash);
+        }
+
+        public void Verify(
+            Key key,
+            ReadOnlySpan<byte> data,
+            ReadOnlySpan<byte> hash)
+        {
+            if (key == null)
+                throw Error.ArgumentNull_Key(nameof(key));
+            if (key.Algorithm != this)
+                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
+            if (hash.Length < MinHashSize || hash.Length > MaxHashSize)
+                throw Error.Argument_HashSize(nameof(hash), hash.Length.ToString(), MinHashSize.ToString(), MaxHashSize.ToString());
+
+            if (!TryVerifyCore(key.Handle, data, hash))
+            {
+                throw Error.Cryptographic_VerificationFailed();
+            }
+        }
+
         internal override void CreateKey(
             ReadOnlySpan<byte> seed,
             out SecureMemoryHandle keyHandle,
@@ -161,6 +194,36 @@ namespace NSec.Cryptography
             }
         }
 
+        internal override bool TryVerifyCore(
+            ReadOnlySpan<byte> data,
+            ReadOnlySpan<byte> hash)
+        {
+            Debug.Assert(hash.Length >= crypto_generichash_blake2b_BYTES_MIN);
+            Debug.Assert(hash.Length <= crypto_generichash_blake2b_BYTES_MAX);
+
+            Span<byte> temp;
+            try
+            {
+                unsafe
+                {
+                    byte* pointer = stackalloc byte[hash.Length];
+                    temp = new Span<byte>(pointer, hash.Length);
+                }
+
+                crypto_generichash_blake2b_init(out crypto_generichash_blake2b_state state, IntPtr.Zero, UIntPtr.Zero, (UIntPtr)temp.Length);
+                crypto_generichash_blake2b_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
+                crypto_generichash_blake2b_final(ref state, ref temp.DangerousGetPinnableReference(), (UIntPtr)temp.Length);
+
+                int result = sodium_memcmp(ref temp.DangerousGetPinnableReference(), ref hash.DangerousGetPinnableReference(), (UIntPtr)hash.Length);
+
+                return result == 0;
+            }
+            finally
+            {
+                sodium_memzero(ref temp.DangerousGetPinnableReference(), (UIntPtr)temp.Length);
+            }
+        }
+
         private static void HashCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
@@ -186,6 +249,40 @@ namespace NSec.Cryptography
                 && (crypto_generichash_blake2b_keybytes_max() == (UIntPtr)crypto_generichash_blake2b_KEYBYTES_MAX)
                 && (crypto_generichash_blake2b_keybytes_min() == (UIntPtr)crypto_generichash_blake2b_KEYBYTES_MIN)
                 && (crypto_generichash_blake2b_statebytes() == (UIntPtr)Unsafe.SizeOf<crypto_generichash_blake2b_state>());
+        }
+
+        private static bool TryVerifyCore(
+            SecureMemoryHandle keyHandle,
+            ReadOnlySpan<byte> data,
+            ReadOnlySpan<byte> hash)
+        {
+            Debug.Assert(keyHandle != null);
+            Debug.Assert(keyHandle.Length >= crypto_generichash_blake2b_KEYBYTES_MIN);
+            Debug.Assert(keyHandle.Length <= crypto_generichash_blake2b_KEYBYTES_MAX);
+            Debug.Assert(hash.Length >= crypto_generichash_blake2b_BYTES_MIN);
+            Debug.Assert(hash.Length <= crypto_generichash_blake2b_BYTES_MAX);
+
+            Span<byte> temp;
+            try
+            {
+                unsafe
+                {
+                    byte* pointer = stackalloc byte[hash.Length];
+                    temp = new Span<byte>(pointer, hash.Length);
+                }
+
+                crypto_generichash_blake2b_init(out crypto_generichash_blake2b_state state, keyHandle, (UIntPtr)keyHandle.Length, (UIntPtr)temp.Length);
+                crypto_generichash_blake2b_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
+                crypto_generichash_blake2b_final(ref state, ref temp.DangerousGetPinnableReference(), (UIntPtr)temp.Length);
+
+                int result = sodium_memcmp(ref temp.DangerousGetPinnableReference(), ref hash.DangerousGetPinnableReference(), (UIntPtr)hash.Length);
+
+                return result == 0;
+            }
+            finally
+            {
+                sodium_memzero(ref temp.DangerousGetPinnableReference(), (UIntPtr)temp.Length);
+            }
         }
     }
 }

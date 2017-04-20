@@ -81,8 +81,35 @@ namespace NSec.Cryptography
             HashCore(data, hash);
         }
 
+        public bool TryVerify(
+            ReadOnlySpan<byte> data,
+            ReadOnlySpan<byte> hash)
+        {
+            if (hash.Length < _minHashSize || hash.Length > _maxHashSize)
+                return false;
+
+            return TryVerifyCore(data, hash);
+        }
+
+        public void Verify(
+            ReadOnlySpan<byte> data,
+            ReadOnlySpan<byte> hash)
+        {
+            if (hash.Length < _minHashSize || hash.Length > _maxHashSize)
+                throw Error.Argument_HashSize(nameof(hash), hash.Length.ToString(), _minHashSize.ToString(), _maxHashSize.ToString());
+
+            if (!TryVerifyCore(data, hash))
+            {
+                throw Error.Cryptographic_VerificationFailed();
+            }
+        }
+
         internal abstract void HashCore(
             ReadOnlySpan<byte> data,
             Span<byte> hash);
+
+        internal abstract bool TryVerifyCore(
+            ReadOnlySpan<byte> data,
+            ReadOnlySpan<byte> hash);
     }
 }
