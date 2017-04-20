@@ -126,6 +126,49 @@ ArgumentException
     [[MaxHashSize|HashAlgorithm Class#MaxHashSize]].
 
 
+### TryVerify(ReadOnlySpan<byte>, ReadOnlySpan<byte>)
+
+Attempts to verify the hash for the specified input data.
+
+    public bool TryVerify(
+        ReadOnlySpan<byte> data,
+        ReadOnlySpan<byte> hash)
+
+#### Parameters
+
+data
+: The data to be verified.
+
+hash
+: The hash to be verified.
+
+#### Return value
+
+`true` if verification succeeds; otherwise, `false`.
+
+
+### Verify(ReadOnlySpan<byte>, ReadOnlySpan<byte>)
+
+Verifies the hash for the specified input data.
+
+    public void Verify(
+        ReadOnlySpan<byte> data,
+        ReadOnlySpan<byte> hash)
+
+#### Parameters
+
+data
+: The data to be verified.
+
+hash
+: The hash to be verified.
+
+#### Exceptions
+
+CryptographicException
+: Verification failed.
+
+
 ## See also
 
 * API Reference
