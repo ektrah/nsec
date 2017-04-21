@@ -18,9 +18,9 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> first,
             ReadOnlySpan<byte> second)
         {
-            long diff = (long)Unsafe.ByteOffset(ref first.DangerousGetPinnableReference(), ref second.DangerousGetPinnableReference());
+            ulong diff = (ulong)Unsafe.ByteOffset(ref first.DangerousGetPinnableReference(), ref second.DangerousGetPinnableReference());
 
-            return (diff < first.Length) && (diff + second.Length > 0);
+            return (diff < (ulong)first.Length) || (diff > ulong.MaxValue - (ulong)second.Length);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
