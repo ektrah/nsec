@@ -10,7 +10,9 @@ internal static partial class Interop
         {
             private int _length;
 
-            private SecureMemoryHandle() : base(IntPtr.Zero, true)
+            private SecureMemoryHandle() : base(
+                invalidHandleValue: IntPtr.Zero,
+                ownsHandle: true)
             {
             }
 
@@ -18,7 +20,9 @@ internal static partial class Interop
 
             public int Length => _length;
 
-            public static void Alloc(int length, out SecureMemoryHandle handle)
+            public static void Alloc(
+                int length,
+                out SecureMemoryHandle handle)
             {
                 Debug.Assert(length >= 0);
 
@@ -31,7 +35,8 @@ internal static partial class Interop
                 return new Span<byte>(handle.ToPointer(), _length);
             }
 
-            public int Export(Span<byte> span)
+            public int Export(
+                Span<byte> span)
             {
                 bool addedRef = false;
                 try
@@ -49,7 +54,8 @@ internal static partial class Interop
                 }
             }
 
-            public void Import(ReadOnlySpan<byte> span)
+            public void Import(
+                ReadOnlySpan<byte> span)
             {
                 bool addedRef = false;
                 try
