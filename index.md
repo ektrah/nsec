@@ -44,7 +44,7 @@ verify the signature.
 
 ## Installation
 
-Soon&trade; (waiting for .NET Core 2.0 Preview)
+Soon&trade; (waiting for `Span<T>` and `ReadOnlySpan<T>`)
 
 
 ## Documentation
