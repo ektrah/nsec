@@ -229,7 +229,7 @@ namespace NSec.Cryptography.Formatting
             if (base32 == null)
                 throw Error.ArgumentNull_String(nameof(base32));
 
-            return TryDecode(base32.AsSpan(), bytes);
+            return TryDecode(base32.AsReadOnlySpan(), bytes);
         }
 
         public static bool TryDecode(
@@ -391,7 +391,7 @@ namespace NSec.Cryptography.Formatting
             if (base32 == null)
                 throw Error.ArgumentNull_String(nameof(base32));
 
-            return TryGetDecodedLength(base32.AsSpan(), out decodedLength);
+            return TryGetDecodedLength(base32.AsReadOnlySpan(), out decodedLength);
         }
 
         public static bool TryGetDecodedLength(
