@@ -1,5 +1,6 @@
 # NSec
 
+[![Maintenance](https://img.shields.io/maintenance/yes/2017.svg)](https://github.com/ektrah/nsec)
 [![license](https://img.shields.io/github/license/ektrah/nsec.svg)](https://nsec.rocks/license)
 
 [NSec](https://nsec.rocks/) is a new cryptographic library for
