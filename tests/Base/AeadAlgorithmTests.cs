@@ -212,8 +212,8 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
-                var ad = Utilities.RandomBytes.Slice(0, 100);
+                var n = Utilities.RandomBytes.Slice(0, a.NonceSize).ToArray();
+                var ad = Utilities.RandomBytes.Slice(0, 100).ToArray();
 
                 var b = Utilities.RandomBytes.Slice(200, 200).ToArray();
 
@@ -472,8 +472,8 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
-                var ad = Utilities.RandomBytes.Slice(0, 100);
+                var n = Utilities.RandomBytes.Slice(0, a.NonceSize).ToArray();
+                var ad = Utilities.RandomBytes.Slice(0, 100).ToArray();
 
                 var b = Utilities.RandomBytes.Slice(200, 200).ToArray();
 
@@ -754,8 +754,8 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
-                var ad = Utilities.RandomBytes.Slice(0, 100);
+                var n = Utilities.RandomBytes.Slice(0, a.NonceSize).ToArray();
+                var ad = Utilities.RandomBytes.Slice(0, 100).ToArray();
 
                 var b = Utilities.RandomBytes.Slice(200, 200).ToArray();
 
