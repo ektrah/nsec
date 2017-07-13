@@ -1,5 +1,6 @@
 # NSec
 
+[![CircleCI](https://circleci.com/gh/ektrah/nsec.svg?style=shield)](https://circleci.com/gh/ektrah/nsec)
 [![Maintenance](https://img.shields.io/maintenance/yes/2017.svg)](https://github.com/ektrah/nsec)
 [![license](https://img.shields.io/github/license/ektrah/nsec.svg)](https://nsec.rocks/license)
 
