@@ -20,3 +20,5 @@ For more information about NSec, please refer to the following resources:
 | Online documentation:     | https://nsec.rocks/docs/api/nsec.cryptography             |
 | Open issues:              | https://github.com/ektrah/nsec/issues                     |
 | Pull requests:            | https://github.com/ektrah/nsec/pulls                      |
+
+&raquo; [Get notified when NSec is released](https://goo.gl/forms/vymBKq5idhEXJRO82)
