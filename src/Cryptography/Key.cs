@@ -191,7 +191,7 @@ namespace NSec.Cryptography
                 if (_algorithm.TryExportKey(_handle, format, Span<byte>.Empty, out blobSize))
                 {
                     Debug.Assert(blobSize == 0);
-                    return Array.Empty<byte>();
+                    return new byte[0];
                 }
 
                 blob = new byte[blobSize];
@@ -214,7 +214,7 @@ namespace NSec.Cryptography
                 if (_algorithm.TryExportPublicKey(_publicKey.Bytes, format, Span<byte>.Empty, out blobSize))
                 {
                     Debug.Assert(blobSize == 0);
-                    return Array.Empty<byte>();
+                    return new byte[0];
                 }
 
                 blob = new byte[blobSize];
