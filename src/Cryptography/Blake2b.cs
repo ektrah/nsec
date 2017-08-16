@@ -145,21 +145,6 @@ namespace NSec.Cryptography
             keyHandle.Import(seed);
         }
 
-        internal override byte[] ExportKey(
-            SecureMemoryHandle keyHandle,
-            KeyBlobFormat format)
-        {
-            switch (format)
-            {
-            case KeyBlobFormat.RawSymmetricKey:
-                return s_rawKeyFormatter.Export(keyHandle);
-            case KeyBlobFormat.NSecSymmetricKey:
-                return s_nsecKeyFormatter.Export(keyHandle);
-            default:
-                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
-            }
-        }
-
         internal override int GetDefaultSeedSize()
         {
             return crypto_generichash_blake2b_KEYBYTES;
@@ -175,6 +160,23 @@ namespace NSec.Cryptography
             crypto_generichash_blake2b_init(out crypto_generichash_blake2b_state state, IntPtr.Zero, UIntPtr.Zero, (UIntPtr)hash.Length);
             crypto_generichash_blake2b_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
             crypto_generichash_blake2b_final(ref state, ref hash.DangerousGetPinnableReference(), (UIntPtr)hash.Length);
+        }
+
+        internal override bool TryExportKey(
+            SecureMemoryHandle keyHandle,
+            KeyBlobFormat format,
+            Span<byte> blob,
+            out int blobSize)
+        {
+            switch (format)
+            {
+            case KeyBlobFormat.RawSymmetricKey:
+                return s_rawKeyFormatter.TryExport(keyHandle, blob, out blobSize);
+            case KeyBlobFormat.NSecSymmetricKey:
+                return s_nsecKeyFormatter.TryExport(keyHandle, blob, out blobSize);
+            default:
+                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
+            }
         }
 
         internal override bool TryImportKey(

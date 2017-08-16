@@ -19,26 +19,30 @@ namespace NSec.Cryptography
             throw Error.NotSupported_CreateKey();
         }
 
+        // Gets the default size for a seed for creating a libsodium key.
+        internal virtual int GetDefaultSeedSize()
+        {
+            throw Error.NotSupported_CreateKey();
+        }
+
         // Converts a libsodium secret key into a key blob.
-        internal virtual byte[] ExportKey(
+        internal virtual bool TryExportKey(
             SecureMemoryHandle keyHandle,
-            KeyBlobFormat format)
+            KeyBlobFormat format,
+            Span<byte> blob,
+            out int blobSize)
         {
             throw Error.NotSupported_ExportKey();
         }
 
         // Converts a libsodium public key into a key blob.
-        internal virtual byte[] ExportPublicKey(
+        internal virtual bool TryExportPublicKey(
             ReadOnlySpan<byte> publicKeyBytes,
-            KeyBlobFormat format)
+            KeyBlobFormat format,
+            Span<byte> blob,
+            out int blobSize)
         {
             throw Error.NotSupported_ExportKey();
-        }
-
-        // Gets the default size for a seed for creating a libsodium key.
-        internal virtual int GetDefaultSeedSize()
-        {
-            throw Error.NotSupported_CreateKey();
         }
 
         // Converts a key blob into a libsodium secret key.

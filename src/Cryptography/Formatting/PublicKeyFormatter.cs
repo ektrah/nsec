@@ -40,25 +40,41 @@ namespace NSec.Cryptography.Formatting
             _blobTextSize = Armor.GetEncodedSize(_blobSize, s_beginLabel, s_endLabel);
         }
 
-        public byte[] Export(
-            ReadOnlySpan<byte> publicKeyBytes)
+        public bool TryExport(
+            ReadOnlySpan<byte> publicKeyBytes,
+            Span<byte> blob,
+            out int blobSize)
         {
-            byte[] blob = new byte[_blobSize];
+            blobSize = _blobSize;
+
+            if (blob.Length < blobSize)
+            {
+                return false;
+            }
+
             _blobHeader.CopyTo(blob);
-            Serialize(publicKeyBytes, blob.AsSpan().Slice(_blobHeader.Length));
-            return blob;
+            Serialize(publicKeyBytes, blob.Slice(_blobHeader.Length));
+            return true;
         }
 
-        public byte[] ExportText(
-            ReadOnlySpan<byte> publicKeyBytes)
+        public bool TryExportText(
+            ReadOnlySpan<byte> publicKeyBytes,
+            Span<byte> blob,
+            out int blobSize)
         {
+            blobSize = _blobTextSize;
+
+            if (blob.Length < blobSize)
+            {
+                return false;
+            }
+
             byte[] temp = new byte[_blobSize];
             _blobHeader.CopyTo(temp);
             Serialize(publicKeyBytes, temp.AsSpan().Slice(_blobHeader.Length));
 
-            byte[] blob = new byte[_blobTextSize];
             Armor.Encode(temp, s_beginLabel, s_endLabel, blob);
-            return blob;
+            return true;
         }
 
         public bool TryImport(

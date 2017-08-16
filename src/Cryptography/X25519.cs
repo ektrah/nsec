@@ -92,44 +92,6 @@ namespace NSec.Cryptography
             Debug.Assert((publicKeyBytes[crypto_scalarmult_curve25519_SCALARBYTES - 1] & 0x80) == 0);
         }
 
-        internal override byte[] ExportKey(
-            SecureMemoryHandle keyHandle,
-            KeyBlobFormat format)
-        {
-            switch (format)
-            {
-            case KeyBlobFormat.RawPrivateKey:
-                return s_rawPrivateKeyFormatter.Export(keyHandle);
-            case KeyBlobFormat.NSecPrivateKey:
-                return s_nsecPrivateKeyFormatter.Export(keyHandle);
-            case KeyBlobFormat.PkixPrivateKey:
-                return s_pkixPrivateKeyFormatter.Export(keyHandle);
-            case KeyBlobFormat.PkixPrivateKeyText:
-                return s_pkixPrivateKeyFormatter.ExportText(keyHandle);
-            default:
-                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
-            }
-        }
-
-        internal override byte[] ExportPublicKey(
-            ReadOnlySpan<byte> publicKeyBytes,
-            KeyBlobFormat format)
-        {
-            switch (format)
-            {
-            case KeyBlobFormat.RawPublicKey:
-                return s_rawPublicKeyFormatter.Export(publicKeyBytes);
-            case KeyBlobFormat.NSecPublicKey:
-                return s_nsecPublicKeyFormatter.Export(publicKeyBytes);
-            case KeyBlobFormat.PkixPublicKey:
-                return s_pkixPublicKeyFormatter.Export(publicKeyBytes);
-            case KeyBlobFormat.PkixPublicKeyText:
-                return s_pkixPublicKeyFormatter.ExportText(publicKeyBytes);
-            default:
-                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
-            }
-        }
-
         internal override int GetDefaultSeedSize()
         {
             return crypto_scalarmult_curve25519_SCALARBYTES;
@@ -152,6 +114,48 @@ namespace NSec.Cryptography
                 ref otherPartyPublicKey.DangerousGetPinnableReference());
 
             return error == 0;
+        }
+
+        internal override bool TryExportKey(
+            SecureMemoryHandle keyHandle,
+            KeyBlobFormat format,
+            Span<byte> blob,
+            out int blobSize)
+        {
+            switch (format)
+            {
+            case KeyBlobFormat.RawPrivateKey:
+                return s_rawPrivateKeyFormatter.TryExport(keyHandle, blob, out blobSize);
+            case KeyBlobFormat.NSecPrivateKey:
+                return s_nsecPrivateKeyFormatter.TryExport(keyHandle, blob, out blobSize);
+            case KeyBlobFormat.PkixPrivateKey:
+                return s_pkixPrivateKeyFormatter.TryExport(keyHandle, blob, out blobSize);
+            case KeyBlobFormat.PkixPrivateKeyText:
+                return s_pkixPrivateKeyFormatter.TryExportText(keyHandle, blob, out blobSize);
+            default:
+                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
+            }
+        }
+
+        internal override bool TryExportPublicKey(
+            ReadOnlySpan<byte> publicKeyBytes,
+            KeyBlobFormat format,
+            Span<byte> blob,
+            out int blobSize)
+        {
+            switch (format)
+            {
+            case KeyBlobFormat.RawPublicKey:
+                return s_rawPublicKeyFormatter.TryExport(publicKeyBytes, blob, out blobSize);
+            case KeyBlobFormat.NSecPublicKey:
+                return s_nsecPublicKeyFormatter.TryExport(publicKeyBytes, blob, out blobSize);
+            case KeyBlobFormat.PkixPublicKey:
+                return s_pkixPublicKeyFormatter.TryExport(publicKeyBytes, blob, out blobSize);
+            case KeyBlobFormat.PkixPublicKeyText:
+                return s_pkixPublicKeyFormatter.TryExportText(publicKeyBytes, blob, out blobSize);
+            default:
+                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
+            }
         }
 
         internal override bool TryImportKey(

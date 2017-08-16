@@ -24,19 +24,26 @@ namespace NSec.Cryptography.Formatting
             _blobHeader = blobHeader;
         }
 
-        public byte[] Export(
-            SecureMemoryHandle keyHandle)
+        public bool TryExport(
+            SecureMemoryHandle keyHandle,
+            Span<byte> blob,
+            out int blobSize)
         {
             Debug.Assert(keyHandle != null);
             Debug.Assert(keyHandle.Length >= _minKeySize);
             Debug.Assert(keyHandle.Length <= _maxKeySize);
 
-            int blobSize = _blobHeader.Length + sizeof(uint) + keyHandle.Length;
-            byte[] blob = new byte[blobSize];
+            blobSize = _blobHeader.Length + sizeof(uint) + keyHandle.Length;
+
+            if (blob.Length < blobSize)
+            {
+                return false;
+            }
+
             _blobHeader.CopyTo(blob);
-            blob.AsSpan().Slice(_blobHeader.Length).WriteLittleEndian((uint)keyHandle.Length);
-            keyHandle.Export(blob.AsSpan().Slice(_blobHeader.Length + sizeof(uint)));
-            return blob;
+            blob.Slice(_blobHeader.Length).WriteLittleEndian((uint)keyHandle.Length);
+            keyHandle.Export(blob.Slice(_blobHeader.Length + sizeof(uint)));
+            return true;
         }
 
         public bool TryImport(

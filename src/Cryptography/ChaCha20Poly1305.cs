@@ -97,21 +97,6 @@ namespace NSec.Cryptography
             Debug.Assert((ulong)ciphertext.Length == ciphertextLength);
         }
 
-        internal override byte[] ExportKey(
-            SecureMemoryHandle keyHandle,
-            KeyBlobFormat format)
-        {
-            switch (format)
-            {
-            case KeyBlobFormat.RawSymmetricKey:
-                return s_rawKeyFormatter.Export(keyHandle);
-            case KeyBlobFormat.NSecSymmetricKey:
-                return s_nsecKeyFormatter.Export(keyHandle);
-            default:
-                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
-            }
-        }
-
         internal override int GetDefaultSeedSize()
         {
             return crypto_aead_chacha20poly1305_ietf_KEYBYTES;
@@ -144,6 +129,23 @@ namespace NSec.Cryptography
 
             Debug.Assert(error != 0 || (ulong)plaintext.Length == plaintextLength);
             return error == 0;
+        }
+
+        internal override bool TryExportKey(
+            SecureMemoryHandle keyHandle,
+            KeyBlobFormat format,
+            Span<byte> blob,
+            out int blobSize)
+        {
+            switch (format)
+            {
+            case KeyBlobFormat.RawSymmetricKey:
+                return s_rawKeyFormatter.TryExport(keyHandle, blob, out blobSize);
+            case KeyBlobFormat.NSecSymmetricKey:
+                return s_nsecKeyFormatter.TryExport(keyHandle, blob, out blobSize);
+            default:
+                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
+            }
         }
 
         internal override bool TryImportKey(
