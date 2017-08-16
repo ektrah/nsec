@@ -238,13 +238,6 @@ namespace NSec.Cryptography
             return new CryptographicException(ResourceManager.GetString("Cryptographic_KeyAgreementFailed"));
         }
 
-        internal static CryptographicException Cryptographic_LibsodiumOutdated(
-            string arg0,
-            string arg1)
-        {
-            return new CryptographicException(string.Format(ResourceManager.GetString("Cryptographic_LibsodiumOutdated"), arg0, arg1));
-        }
-
         internal static CryptographicException Cryptographic_VerificationFailed()
         {
             return new CryptographicException(ResourceManager.GetString("Cryptographic_VerificationFailed"));
