@@ -27,15 +27,10 @@ namespace NSec.Cryptography.Formatting
             Debug.Assert(keyHandle.Length >= _minKeySize);
             Debug.Assert(keyHandle.Length <= _maxKeySize);
 
-            byte[] blob = new byte[keyHandle.Length];
+            int blobSize = keyHandle.Length;
+            byte[] blob = new byte[blobSize];
             keyHandle.Export(blob);
             return blob;
-        }
-
-        public int GetBlobSize(
-            int keySize)
-        {
-            return keySize;
         }
 
         public bool TryImport(

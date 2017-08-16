@@ -42,10 +42,6 @@ namespace NSec.Cryptography.Formatting
             _blobTextSize = Armor.GetEncodedSize(_blobSize, s_beginLabel, s_endLabel);
         }
 
-        public int BlobSize => _blobSize;
-
-        public int BlobTextSize => _blobTextSize;
-
         public byte[] Export(
             SecureMemoryHandle keyHandle)
         {
@@ -53,7 +49,7 @@ namespace NSec.Cryptography.Formatting
 
             byte[] blob = new byte[_blobSize];
             _blobHeader.CopyTo(blob);
-            Serialize(keyHandle, blob.AsSpan().Slice(_blobHeader.Length, _keySize));
+            Serialize(keyHandle, blob.AsSpan().Slice(_blobHeader.Length));
             return blob;
         }
 
@@ -75,7 +71,7 @@ namespace NSec.Cryptography.Formatting
                 Serialize(keyHandle, temp.Slice(_blobHeader.Length));
 
                 byte[] blob = new byte[_blobTextSize];
-                Armor.Encode(temp, s_beginLabel, s_endLabel, blob.AsSpan().Slice(0, _blobTextSize));
+                Armor.Encode(temp, s_beginLabel, s_endLabel, blob);
                 return blob;
             }
             finally
@@ -84,18 +80,12 @@ namespace NSec.Cryptography.Formatting
             }
         }
 
-        public bool IsValid(
-            ReadOnlySpan<byte> blob)
-        {
-            return blob.Length == _blobSize && blob.StartsWith(_blobHeader);
-        }
-
         public bool TryImport(
             ReadOnlySpan<byte> blob,
             out SecureMemoryHandle keyHandle,
             out byte[] publicKeyBytes)
         {
-            if (!IsValid(blob))
+            if (blob.Length != _blobSize || !blob.StartsWith(_blobHeader))
             {
                 keyHandle = null;
                 publicKeyBytes = null;
