@@ -33,7 +33,7 @@ namespace NSec.Cryptography
             0xDE, 0x36, 0x41, 0xDE, crypto_scalarmult_curve25519_SCALARBYTES, 0, 0, 0
         });
 
-        private static readonly PublicKeyFormatter s_nsecPublicKeyFormatter = new X25519PublicKeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[] 
+        private static readonly PublicKeyFormatter s_nsecPublicKeyFormatter = new X25519PublicKeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[]
         {
             0xDE, 0x37, 0x41, 0xDE, crypto_scalarmult_curve25519_SCALARBYTES, 0, 0, 0
         });
