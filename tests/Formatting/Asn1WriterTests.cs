@@ -142,5 +142,75 @@ namespace NSec.Tests.Formatting
             writer.BeginSequence();
             Assert.Equal(expected, writer.Bytes.ToArray());
         }
+
+        [Fact]
+        public static void Length100()
+        {
+            var value = new byte[100];
+            Utilities.Fill(value, 0xCD);
+
+            var expected = new byte[2 + value.Length];
+            expected[0] = 0x04;
+            expected[1] = (byte)value.Length;
+            value.CopyTo(expected, 2);
+
+            var writer = new Asn1Writer(new byte[expected.Length]);
+            writer.OctetString(value);
+            Assert.Equal(expected, writer.Bytes.ToArray());
+        }
+
+        [Fact]
+        public static void Length200()
+        {
+            var value = new byte[200];
+            Utilities.Fill(value, 0xCD);
+
+            var expected = new byte[3 + value.Length];
+            expected[0] = 0x04;
+            expected[1] = 0x81;
+            expected[2] = (byte)value.Length;
+            value.CopyTo(expected, 3);
+
+            var writer = new Asn1Writer(new byte[expected.Length]);
+            writer.OctetString(value);
+            Assert.Equal(expected, writer.Bytes.ToArray());
+        }
+
+        [Fact]
+        public static void Length400()
+        {
+            var value = new byte[400];
+            Utilities.Fill(value, 0xCD);
+
+            var expected = new byte[4 + value.Length];
+            expected[0] = 0x04;
+            expected[1] = 0x82;
+            expected[2] = (byte)(value.Length >> 8);
+            expected[3] = (byte)(value.Length & 0xFF);
+            value.CopyTo(expected, 4);
+
+            var writer = new Asn1Writer(new byte[expected.Length]);
+            writer.OctetString(value);
+            Assert.Equal(expected, writer.Bytes.ToArray());
+        }
+
+        [Fact]
+        public static void Length100000()
+        {
+            var value = new byte[100000];
+            Utilities.Fill(value, 0xCD);
+
+            var expected = new byte[5 + value.Length];
+            expected[0] = 0x04;
+            expected[1] = 0x83;
+            expected[2] = (byte)(value.Length >> 16);
+            expected[3] = (byte)((value.Length >> 8) & 0xFF);
+            expected[4] = (byte)(value.Length & 0xFF);
+            value.CopyTo(expected, 5);
+
+            var writer = new Asn1Writer(new byte[expected.Length]);
+            writer.OctetString(value);
+            Assert.Equal(expected, writer.Bytes.ToArray());
+        }
     }
 }
