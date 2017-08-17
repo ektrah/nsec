@@ -1,7 +1,6 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/nsec
     docker:
       - image: microsoft/dotnet:1.1-sdk
     environment:
@@ -9,10 +8,20 @@ jobs:
     steps:
       - checkout
       - run:
-          name: dotnet restore
+          name: Restore dependencies
           command: dotnet restore --source "https://api.nuget.org/v3/index.json" --source "https://dotnet.myget.org/F/dotnet-core/api/v3/index.json"
-          working_directory: ~/nsec/tests
       - run:
-          name: dotnet test
-          command: dotnet test
-          working_directory: ~/nsec/tests
+          name: Run unit tests (Debug)
+          command: dotnet test -c Debug -f netcoreapp1.1
+          working_directory: tests
+      - run:
+          name: Run unit tests (Release)
+          command: dotnet test -c Release -f netcoreapp1.1
+          working_directory: tests
+      - run:
+          name: Create NuGet package
+          command: dotnet pack -c Release -o ~/artifacts/
+          working_directory: src
+      - store_artifacts:
+          path: ~/artifacts/
+          destination: /
