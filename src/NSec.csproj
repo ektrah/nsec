@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFramework>netstandard1.1</TargetFramework>
     <AssemblyName>NSec.Cryptography</AssemblyName>
     <Version>1.0.0-preview-01</Version>
     <Authors>Klaus Hartke</Authors>
@@ -41,8 +41,8 @@ NSec.Cryptography.X25519</Description>
 
   <ItemGroup>
     <PackageReference Include="libsodium" Version="1.0.12-preview-01" />
-    <PackageReference Include="System.Memory" Version="4.5.0-preview2-25611-01" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.0-preview2-25611-01" />
+    <PackageReference Include="System.Memory" Version="4.5.0-preview2-25617-01" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.0-preview2-25617-01" />
   </ItemGroup>
 
 </Project>
