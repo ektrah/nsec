@@ -42,10 +42,7 @@ namespace NSec.Cryptography.Formatting
         public void Bool(
             bool value)
         {
-            unchecked
-            {
-                WriteByte((byte)(value ? -1 : 0));
-            }
+            WriteByte((byte)(value ? 0xFF : 0x00));
             WriteLength(1);
             WriteByte(0x01);
         }
@@ -60,14 +57,11 @@ namespace NSec.Cryptography.Formatting
             int value)
         {
             int end = _pos;
-            unchecked
+            WriteByte(unchecked((byte)value));
+            while ((value & ~0x7F) != 0 && (value & ~0x7F) != ~0x7F)
             {
-                WriteByte((byte)value);
-                while ((value & ~0x7F) != 0 && (value & ~0x7F) != ~0x7F)
-                {
-                    value >>= 8;
-                    WriteByte((byte)value);
-                }
+                value >>= 8;
+                WriteByte(unchecked((byte)value));
             }
             WriteLength(end - _pos);
             WriteByte(0x02);
@@ -77,14 +71,11 @@ namespace NSec.Cryptography.Formatting
             long value)
         {
             int end = _pos;
-            unchecked
+            WriteByte(unchecked((byte)value));
+            while ((value & ~0x7F) != 0 && (value & ~0x7F) != ~0x7F)
             {
-                WriteByte((byte)value);
-                while ((value & ~0x7F) != 0 && (value & ~0x7F) != ~0x7F)
-                {
-                    value >>= 8;
-                    WriteByte((byte)value);
-                }
+                value >>= 8;
+                WriteByte(unchecked((byte)value));
             }
             WriteLength(end - _pos);
             WriteByte(0x02);
@@ -142,14 +133,11 @@ namespace NSec.Cryptography.Formatting
             else
             {
                 int end = _pos;
-                unchecked
+                WriteByte(unchecked((byte)length));
+                while ((length & ~0xFF) != 0)
                 {
-                    WriteByte((byte)length);
-                    while ((length & ~0xFF) != 0)
-                    {
-                        length >>= 8;
-                        WriteByte((byte)length);
-                    }
+                    length >>= 8;
+                    WriteByte(unchecked((byte)length));
                 }
                 WriteByte((byte)(0x80 + (end - _pos)));
             }
