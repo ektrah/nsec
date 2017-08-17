@@ -19,8 +19,8 @@ namespace NSec.Cryptography
     //
     //  Parameters:
     //
-    //      Input Size - Between 0 and 2^61-1 bytes. (A Span<byte> can hold
-    //          only up to 2^31-1 bytes.)
+    //      Input Size - Between 0 and 2^61-1 bytes. (A Span<byte> can only
+    //          hold up to 2^31-1 bytes.)
     //
     //      Hash Size - 32 bytes (128 bits of security).
     //

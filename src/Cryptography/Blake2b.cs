@@ -19,8 +19,8 @@ namespace NSec.Cryptography
     //      Key Size - Between 0 and 64 bytes. libsodium recommends a default
     //          size of 32 bytes and a minimum size of 16 bytes.
     //
-    //      Input Size - Between 0 and 2^128-1 bytes. (A Span<byte> can hold
-    //          only up to 2^31-1 bytes.)
+    //      Input Size - Between 0 and 2^128-1 bytes. (A Span<byte> can only
+    //          hold up to 2^31-1 bytes.)
     //
     //      Hash Size - Between 1 and 64 bytes. For 128 bits of security, the
     //          output length should not be less than 32 bytes (BLAKE2b-256).

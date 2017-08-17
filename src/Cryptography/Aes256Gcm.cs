@@ -32,8 +32,8 @@ namespace NSec.Cryptography
     //
     //      Tag Size - 16 bytes.
     //
-    //      Plaintext Size - Between 0 and 2^36-31 bytes. (A Span<byte> can hold
-    //          only up to 2^31-1 bytes.)
+    //      Plaintext Size - Between 0 and 2^36-31 bytes. (A Span<byte> can only
+    //          hold up to 2^31-1 bytes.)
     //
     //      Associated Data Size - Between 0 and 2^61-1 bytes.
     //
