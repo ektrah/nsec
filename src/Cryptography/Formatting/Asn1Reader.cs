@@ -56,15 +56,15 @@ namespace NSec.Cryptography.Formatting
         public bool Bool()
         {
             ReadOnlySpan<byte> bytes = Read(0x01).ApplyTo(_buffer);
-            bool value = false;
+            bool value = default(bool);
 
             if (_failed || bytes.Length != 1 || bytes[0] != 0x00 && bytes[0] != 0xFF)
             {
                 Fail();
             }
-            else if (bytes[0] == 0xFF)
+            else
             {
-                value = true;
+                value = (bytes[0] == 0xFF);
             }
 
             return value;
@@ -89,7 +89,7 @@ namespace NSec.Cryptography.Formatting
         public int Integer32()
         {
             ReadOnlySpan<byte> bytes = Read(0x02).ApplyTo(_buffer);
-            int value = 0;
+            int value = default(int);
 
             if (_failed || IsInvalidInteger(bytes, sizeof(int)))
             {
@@ -110,7 +110,7 @@ namespace NSec.Cryptography.Formatting
         public long Integer64()
         {
             ReadOnlySpan<byte> bytes = Read(0x02).ApplyTo(_buffer);
-            long value = 0;
+            long value = default(long);
 
             if (_failed || IsInvalidInteger(bytes, sizeof(long)))
             {
