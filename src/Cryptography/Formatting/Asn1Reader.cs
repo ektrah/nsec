@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 
 namespace NSec.Cryptography.Formatting
 {
@@ -6,33 +7,65 @@ namespace NSec.Cryptography.Formatting
     internal struct Asn1Reader
     {
         private readonly ReadOnlySpan<byte> _buffer;
-        private readonly StartAndLength[] _stack;
+        private readonly int _maxDepth;
 
         private int _depth;
         private bool _failed;
+
+#pragma warning disable 0414
+        private StartAndLength _stack0;
+        private StartAndLength _stack1;
+        private StartAndLength _stack2;
+        private StartAndLength _stack3;
+        private StartAndLength _stack4;
+        private StartAndLength _stack5;
+        private StartAndLength _stack6;
+        private StartAndLength _stack7;
+        private StartAndLength _stack8;
+#pragma warning restore 0414
 
         public Asn1Reader(
             ReadOnlySpan<byte> buffer,
             int maxDepth = 8)
         {
+            if (maxDepth < 0 || maxDepth > 8)
+                throw new IndexOutOfRangeException();
+
             _buffer = buffer;
+            _maxDepth = 1 + maxDepth;
+
             _depth = 0;
             _failed = false;
-            _stack = new StartAndLength[1 + maxDepth];
-            _stack[_depth] = new StartAndLength(0, buffer.Length);
+
+            _stack0 = new StartAndLength(0, buffer.Length);
+            _stack1 = default(StartAndLength);
+            _stack2 = default(StartAndLength);
+            _stack3 = default(StartAndLength);
+            _stack4 = default(StartAndLength);
+            _stack5 = default(StartAndLength);
+            _stack6 = default(StartAndLength);
+            _stack7 = default(StartAndLength);
+            _stack8 = default(StartAndLength);
         }
 
         public bool Success => !_failed;
 
-        public bool SuccessComplete => !_failed && _depth == 0 && _stack[_depth].IsEmpty;
+        public bool SuccessComplete => !_failed && _depth == 0 && _stack0.IsEmpty;
 
         public void BeginSequence()
         {
             StartAndLength bytes = Read(0x30);
-            if (!_failed)
+
+            if (_failed)
+            {
+                Fail();
+            }
+            else
             {
                 _depth++;
-                _stack[_depth] = bytes;
+                if (_depth == _maxDepth)
+                    throw new IndexOutOfRangeException();
+                Unsafe.Add(ref _stack0, _depth) = bytes;
             }
         }
 
@@ -72,16 +105,14 @@ namespace NSec.Cryptography.Formatting
 
         public void End()
         {
-            if (_failed || !_stack[_depth].IsEmpty)
+            if (_failed || !Unsafe.Add(ref _stack0, _depth).IsEmpty)
             {
                 Fail();
             }
-            else if (_depth == 0)
-            {
-                throw new IndexOutOfRangeException();
-            }
             else
             {
+                if (_depth == 0)
+                    throw new IndexOutOfRangeException();
                 _depth--;
             }
         }
@@ -152,7 +183,7 @@ namespace NSec.Cryptography.Formatting
         {
             _failed = true;
             _depth = 0;
-            _stack[_depth] = default(StartAndLength);
+            _stack0 = default(StartAndLength);
         }
 
         private bool IsInvalidInteger(
@@ -168,7 +199,7 @@ namespace NSec.Cryptography.Formatting
         private StartAndLength Read(
             int tag)
         {
-            StartAndLength top = _stack[_depth];
+            StartAndLength top = Unsafe.Add(ref _stack0, _depth);
             StartAndLength result = default(StartAndLength);
             ReadOnlySpan<byte> span = top.ApplyTo(_buffer);
             int length = 0;
@@ -196,7 +227,7 @@ namespace NSec.Cryptography.Formatting
                 goto fail;
 
             result = top.Slice(pos, length);
-            _stack[_depth] = top.Slice(pos + length);
+            Unsafe.Add(ref _stack0, _depth) = top.Slice(pos + length);
             goto done;
         fail:
             Fail();

@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 
 namespace NSec.Cryptography.Formatting
 {
@@ -6,27 +7,54 @@ namespace NSec.Cryptography.Formatting
     internal struct Asn1Writer
     {
         private readonly Span<byte> _buffer;
-        private readonly int[] _stack;
+        private readonly int _maxDepth;
 
         private int _depth;
         private int _pos;
+
+#pragma warning disable 0414
+        private int _stack0;
+        private int _stack1;
+        private int _stack2;
+        private int _stack3;
+        private int _stack4;
+        private int _stack5;
+        private int _stack6;
+        private int _stack7;
+#pragma warning restore 0414
 
         public Asn1Writer(
             Span<byte> buffer,
             int maxDepth = 8)
         {
+            if (maxDepth < 0 || maxDepth > 8)
+                throw new IndexOutOfRangeException();
+
             _buffer = buffer;
+            _maxDepth = maxDepth;
+
             _depth = 0;
             _pos = buffer.Length;
-            _stack = new int[maxDepth];
+
+            _stack0 = 0;
+            _stack1 = 0;
+            _stack2 = 0;
+            _stack3 = 0;
+            _stack4 = 0;
+            _stack5 = 0;
+            _stack6 = 0;
+            _stack7 = 0;
         }
 
         public ReadOnlySpan<byte> Bytes => _buffer.Slice(_pos);
 
         public void BeginSequence()
         {
+            if (_depth == 0)
+                throw new IndexOutOfRangeException();
+
             _depth--;
-            WriteLength(_stack[_depth] - _pos);
+            WriteLength(Unsafe.Add(ref _stack0, _depth) - _pos);
             WriteByte(0x30);
         }
 
@@ -49,7 +77,10 @@ namespace NSec.Cryptography.Formatting
 
         public void End()
         {
-            _stack[_depth] = _pos;
+            if (_depth == _maxDepth)
+                throw new IndexOutOfRangeException();
+
+            Unsafe.Add(ref _stack0, _depth) = _pos;
             _depth++;
         }
 
