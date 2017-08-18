@@ -132,7 +132,7 @@ namespace NSec.Cryptography.Formatting
         {
             StartAndLength bytes = Read(0x05);
 
-            if (_failed || bytes.Length != 0)
+            if (_failed || !bytes.IsEmpty)
             {
                 Fail();
             }
