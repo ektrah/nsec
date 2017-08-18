@@ -212,5 +212,22 @@ namespace NSec.Tests.Formatting
             writer.OctetString(value);
             Assert.Equal(expected, writer.Bytes.ToArray());
         }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(5)]
+        [InlineData(6)]
+        public static void BufferOverflow(int capacity)
+        {
+            var value = new byte[5];
+            Utilities.RandomBytes.Slice(0, value.Length).CopyTo(value);
+
+            var writer = new Asn1Writer(new byte[capacity]);
+            try { writer.OctetString(value); Assert.True(false); } catch (IndexOutOfRangeException) { } // cannot use Assert.Throws
+        }
     }
 }

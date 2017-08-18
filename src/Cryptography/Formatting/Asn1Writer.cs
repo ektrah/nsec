@@ -107,7 +107,7 @@ namespace NSec.Cryptography.Formatting
             byte value)
         {
             if (_pos == 0)
-                throw new ArgumentException(); // not enough space
+                throw new IndexOutOfRangeException(); // not enough space
 
             _pos--;
             _buffer[_pos] = value;
@@ -117,7 +117,7 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> bytes)
         {
             if (bytes.Length > _pos)
-                throw new ArgumentException(); // not enough space
+                throw new IndexOutOfRangeException(); // not enough space
 
             _pos -= bytes.Length;
             bytes.CopyTo(_buffer.Slice(_pos));
