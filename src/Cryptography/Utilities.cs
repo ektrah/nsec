@@ -14,6 +14,12 @@ namespace NSec.Cryptography
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[] Empty<T>()
+        {
+            return EmptyArray<T>.Value;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe bool Overlap(
             ReadOnlySpan<byte> first,
             ReadOnlySpan<byte> second)
@@ -106,6 +112,11 @@ namespace NSec.Cryptography
         private static void ThrowInternalError()
         {
             throw Error.Cryptographic_InternalError();
+        }
+
+        private static class EmptyArray<T>
+        {
+            internal static readonly T[] Value = new T[0];
         }
     }
 }

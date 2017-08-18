@@ -55,7 +55,7 @@ namespace NSec.Cryptography
             if (count > MaxOutputSize)
                 throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), MaxOutputSize.ToString());
             if (count == 0)
-                return new byte[0];
+                return Utilities.Empty<byte>();
 
             byte[] bytes = new byte[count];
             DeriveBytesCore(sharedSecret.Handle, salt, info, bytes);

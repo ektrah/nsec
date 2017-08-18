@@ -11,7 +11,7 @@ namespace NSec.Cryptography
             if (count < 0)
                 throw Error.ArgumentOutOfRange_GenerateNegativeCount(nameof(count));
             if (count == 0)
-                return new byte[0];
+                return Utilities.Empty<byte>();
 
             Sodium.Initialize();
 

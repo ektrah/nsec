@@ -80,7 +80,7 @@ namespace NSec.Cryptography
             if (_algorithm.TryExportPublicKey(_bytes, format, Span<byte>.Empty, out int blobSize))
             {
                 Debug.Assert(blobSize == 0);
-                return new byte[0];
+                return Utilities.Empty<byte>();
             }
 
             byte[] blob = new byte[blobSize];

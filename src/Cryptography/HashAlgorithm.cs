@@ -62,7 +62,7 @@ namespace NSec.Cryptography
             if (hashSize < _minHashSize || hashSize > _maxHashSize)
                 throw Error.ArgumentOutOfRange_HashSize(nameof(hashSize), hashSize.ToString(), _minHashSize.ToString(), _maxHashSize.ToString());
             if (hashSize == 0)
-                return new byte[0];
+                return Utilities.Empty<byte>();
 
             byte[] hash = new byte[hashSize];
             HashCore(data, hash);
