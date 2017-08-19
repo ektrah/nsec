@@ -29,7 +29,9 @@ namespace NSec.Cryptography.Formatting
             int maxDepth = 8)
         {
             if (maxDepth < 0 || maxDepth > 8)
+            {
                 throw new IndexOutOfRangeException();
+            }
 
             _buffer = buffer;
             _maxDepth = 1 + maxDepth;
@@ -64,7 +66,9 @@ namespace NSec.Cryptography.Formatting
             {
                 _depth++;
                 if (_depth == _maxDepth)
+                {
                     throw new IndexOutOfRangeException();
+                }
                 Unsafe.Add(ref _stack0, _depth) = bytes;
             }
         }
@@ -112,7 +116,9 @@ namespace NSec.Cryptography.Formatting
             else
             {
                 if (_depth == 0)
+                {
                     throw new IndexOutOfRangeException();
+                }
                 _depth--;
             }
         }
@@ -205,7 +211,9 @@ namespace NSec.Cryptography.Formatting
             int length = 0;
 
             if (_failed || span.Length < 2 || span[0] != tag)
+            {
                 goto fail;
+            }
 
             int pos = 2;
             if ((span[1] & 0x80) == 0)
@@ -216,15 +224,23 @@ namespace NSec.Cryptography.Formatting
             {
                 int c = span[1] & 0x7F;
                 if (c == 0 || c > sizeof(int) || c > span.Length - 2 || span[2] == 0)
+                {
                     goto fail;
+                }
                 while (c-- > 0)
+                {
                     length = (length << 8) | span[pos++];
+                }
                 if (length < 0x80)
+                {
                     goto fail;
+                }
             }
 
             if (length > span.Length - pos)
+            {
                 goto fail;
+            }
 
             result = top.Slice(pos, length);
             Unsafe.Add(ref _stack0, _depth) = top.Slice(pos + length);

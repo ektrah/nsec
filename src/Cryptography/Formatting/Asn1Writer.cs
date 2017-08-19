@@ -28,7 +28,9 @@ namespace NSec.Cryptography.Formatting
             int maxDepth = 8)
         {
             if (maxDepth < 0 || maxDepth > 8)
+            {
                 throw new IndexOutOfRangeException();
+            }
 
             _buffer = buffer;
             _maxDepth = maxDepth;
@@ -51,7 +53,9 @@ namespace NSec.Cryptography.Formatting
         public void BeginSequence()
         {
             if (_depth == 0)
+            {
                 throw new IndexOutOfRangeException();
+            }
 
             _depth--;
             WriteLength(Unsafe.Add(ref _stack0, _depth) - _pos);
@@ -78,7 +82,9 @@ namespace NSec.Cryptography.Formatting
         public void End()
         {
             if (_depth == _maxDepth)
+            {
                 throw new IndexOutOfRangeException();
+            }
 
             Unsafe.Add(ref _stack0, _depth) = _pos;
             _depth++;
@@ -138,7 +144,9 @@ namespace NSec.Cryptography.Formatting
             byte value)
         {
             if (_pos == 0)
+            {
                 throw new IndexOutOfRangeException(); // not enough space
+            }
 
             _pos--;
             _buffer[_pos] = value;
@@ -148,7 +156,9 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> bytes)
         {
             if (bytes.Length > _pos)
+            {
                 throw new IndexOutOfRangeException(); // not enough space
+            }
 
             _pos -= bytes.Length;
             bytes.CopyTo(_buffer.Slice(_pos));
