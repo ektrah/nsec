@@ -30,7 +30,9 @@ namespace NSec.Cryptography
             KeyBlobFormat format)
         {
             if (algorithm == null)
+            {
                 throw Error.ArgumentNull_Algorithm(nameof(algorithm));
+            }
 
             if (!algorithm.TryImportPublicKey(blob, format, out byte[] publicKeyBytes))
             {
@@ -47,7 +49,9 @@ namespace NSec.Cryptography
             out PublicKey result)
         {
             if (algorithm == null)
+            {
                 throw Error.ArgumentNull_Algorithm(nameof(algorithm));
+            }
 
             if (!algorithm.TryImportPublicKey(blob, format, out byte[] publicKeyBytes))
             {

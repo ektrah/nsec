@@ -56,7 +56,9 @@ namespace NSec.Cryptography
             tagSize: crypto_aead_chacha20poly1305_ietf_ABYTES)
         {
             if (!s_selfTest.Value)
+            {
                 throw Error.Cryptographic_InitializationFailed();
+            }
         }
 
         internal override void CreateKey(

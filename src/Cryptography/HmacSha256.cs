@@ -56,7 +56,9 @@ namespace NSec.Cryptography
             maxMacSize: crypto_auth_hmacsha256_BYTES)
         {
             if (!s_selfTest.Value)
+            {
                 throw Error.Cryptographic_InitializationFailed();
+            }
         }
 
         internal override void CreateKey(

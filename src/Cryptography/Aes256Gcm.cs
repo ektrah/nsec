@@ -61,9 +61,13 @@ namespace NSec.Cryptography
             tagSize: crypto_aead_aes256gcm_ABYTES)
         {
             if (s_isAvailable.Value == 0)
+            {
                 throw Error.PlatformNotSupported_Algorithm();
+            }
             if (!s_selfTest.Value)
+            {
                 throw Error.Cryptographic_InitializationFailed();
+            }
         }
 
         public static bool IsAvailable => Sodium.TryInitialize() && (s_isAvailable.Value != 0);

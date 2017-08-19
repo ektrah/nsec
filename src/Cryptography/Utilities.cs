@@ -25,7 +25,9 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> second)
         {
             if (second.IsEmpty)
+            {
                 return false;
+            }
 
             IntPtr diff = Unsafe.ByteOffset(ref first.DangerousGetPinnableReference(), ref second.DangerousGetPinnableReference());
 

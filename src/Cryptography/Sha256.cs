@@ -36,7 +36,9 @@ namespace NSec.Cryptography
             maxHashSize: crypto_hash_sha256_BYTES)
         {
             if (!s_selfTest.Value)
+            {
                 throw Error.Cryptographic_InitializationFailed();
+            }
         }
 
         internal override void HashCore(

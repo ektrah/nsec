@@ -77,7 +77,9 @@ namespace NSec.Cryptography
             signatureSize: crypto_sign_ed25519_BYTES)
         {
             if (!s_selfTest.Value)
+            {
                 throw Error.Cryptographic_InitializationFailed();
+            }
         }
 
         internal override void CreateKey(

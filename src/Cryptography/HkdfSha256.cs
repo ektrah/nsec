@@ -43,7 +43,9 @@ namespace NSec.Cryptography
             maxOutputSize: byte.MaxValue * crypto_auth_hmacsha256_BYTES)
         {
             if (!s_selfTest.Value)
+            {
                 throw Error.Cryptographic_InitializationFailed();
+            }
         }
 
         public int PseudorandomKeySize => crypto_auth_hmacsha256_BYTES;

@@ -19,7 +19,9 @@ namespace NSec.Cryptography
             KeyFlags flags = KeyFlags.None)
         {
             if (algorithm == null)
+            {
                 throw Error.ArgumentNull_Algorithm(nameof(algorithm));
+            }
 
             int seedSize = algorithm.GetDefaultSeedSize();
 
@@ -97,7 +99,9 @@ namespace NSec.Cryptography
            KeyFlags flags = KeyFlags.None)
         {
             if (algorithm == null)
+            {
                 throw Error.ArgumentNull_Algorithm(nameof(algorithm));
+            }
 
             SecureMemoryHandle keyHandle = null;
             byte[] publicKeyBytes = null;
@@ -131,7 +135,9 @@ namespace NSec.Cryptography
             out Key result)
         {
             if (algorithm == null)
+            {
                 throw Error.ArgumentNull_Algorithm(nameof(algorithm));
+            }
 
             SecureMemoryHandle keyHandle = null;
             byte[] publicKeyBytes = null;

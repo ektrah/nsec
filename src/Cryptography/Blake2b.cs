@@ -44,7 +44,9 @@ namespace NSec.Cryptography
             maxHashSize: crypto_generichash_blake2b_BYTES_MAX)
         {
             if (!s_selfTest.Value)
+            {
                 throw Error.Cryptographic_InitializationFailed();
+            }
         }
 
         public int DefaultKeySize => crypto_generichash_blake2b_KEYBYTES;

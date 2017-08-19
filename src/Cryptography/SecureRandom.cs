@@ -9,9 +9,9 @@ namespace NSec.Cryptography
             int count)
         {
             if (count < 0)
+            {
                 throw Error.ArgumentOutOfRange_GenerateNegativeCount(nameof(count));
-            if (count == 0)
-                return Utilities.Empty<byte>();
+            }
 
             Sodium.Initialize();
 
@@ -23,9 +23,6 @@ namespace NSec.Cryptography
         public static void GenerateBytes(
             Span<byte> bytes)
         {
-            if (bytes.Length == 0)
-                return;
-
             Sodium.Initialize();
 
             GenerateBytesCore(bytes);

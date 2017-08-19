@@ -74,7 +74,9 @@ namespace NSec.Cryptography
             sharedSecretSize: crypto_scalarmult_curve25519_BYTES)
         {
             if (!s_selfTest.Value)
+            {
                 throw Error.Cryptographic_InitializationFailed();
+            }
         }
 
         internal override void CreateKey(
