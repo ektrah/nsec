@@ -37,7 +37,7 @@ namespace NSec.Cryptography.Formatting
             _keySize = keySize;
             _blobHeader = blobHeader;
             _blobSize = blobHeader.Length + keySize;
-            _blobTextSize = Armor.GetEncodedSize(_blobSize, s_beginLabel, s_endLabel);
+            _blobTextSize = Armor.GetEncodedLength(_blobSize, s_beginLabel, s_endLabel);
         }
 
         public bool TryExport(

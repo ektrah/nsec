@@ -17,7 +17,7 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> endLabel,
             Span<byte> output)
         {
-            Debug.Assert(output.Length == GetEncodedSize(input.Length, beginLabel, endLabel));
+            Debug.Assert(output.Length == GetEncodedLength(input.Length, beginLabel, endLabel));
 
             beginLabel.CopyTo(output);
             output[beginLabel.Length + 0] = (byte)'\r';
@@ -30,17 +30,17 @@ namespace NSec.Cryptography.Formatting
             output[output.Length - 1] = (byte)'\n';
         }
 
-        public static int GetEncodedSize(
+        public static int GetEncodedLength(
             int inputLength,
             ReadOnlySpan<byte> beginLabel,
             ReadOnlySpan<byte> endLabel)
         {
             int base64Length = Base64.GetEncodedLength(inputLength);
-            base64Length += ((base64Length + 64 - 1) / 64) * 2;
+            int crlfLength = ((base64Length + 64 - 1) / 64) * 2;
 
             return
                 beginLabel.Length + 2 +
-                base64Length +
+                base64Length + crlfLength +
                 endLabel.Length + 2;
         }
 
