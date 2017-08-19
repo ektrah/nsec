@@ -91,7 +91,7 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> bytes = Read(0x01).ApplyTo(_buffer);
             bool value = default(bool);
 
-            if (_failed || bytes.Length != 1 || bytes[0] != 0x00 && bytes[0] != 0xFF)
+            if (_failed || bytes.Length != 1 || (bytes[0] != 0x00 && bytes[0] != 0xFF))
             {
                 Fail();
             }
