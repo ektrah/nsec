@@ -10,8 +10,5 @@ internal static partial class Interop
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int sodium_library_version_minor();
-
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern IntPtr sodium_version_string();
     }
 }

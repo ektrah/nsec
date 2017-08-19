@@ -126,7 +126,6 @@ Interop.Random.cs:
   include: include/sodium/randombytes.h
   functions:
   - randombytes_buf
-  - randombytes_buf (SecureMemoryHandle buf)
 
 Interop.Sha256.cs:
   include: include/sodium/crypto_hash_sha256.h
@@ -170,4 +169,3 @@ Interop.Version.cs:
   functions:
   - sodium_library_version_major
   - sodium_library_version_minor
-  - sodium_version_string
