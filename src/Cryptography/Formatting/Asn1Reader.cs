@@ -206,30 +206,30 @@ namespace NSec.Cryptography.Formatting
             int tag)
         {
             StartAndLength top = Unsafe.Add(ref _stack0, _depth);
-            StartAndLength result = default(StartAndLength);
             ReadOnlySpan<byte> span = top.ApplyTo(_buffer);
-            int length = 0;
 
             if (_failed || span.Length < 2 || span[0] != tag)
             {
                 goto fail;
             }
 
-            int pos = 2;
-            if ((span[1] & 0x80) == 0)
+            int start = 2;
+            int length = 0;
+
+            if ((span[1] & ~0x7F) == 0)
             {
                 length = span[1];
             }
             else
             {
-                int c = span[1] & 0x7F;
-                if (c == 0 || c > sizeof(int) || c > span.Length - 2 || span[2] == 0)
+                int count = span[1] & 0x7F;
+                if (count < 1 || count > sizeof(int) || count > span.Length - 2 || span[2] == 0)
                 {
                     goto fail;
                 }
-                while (c-- > 0)
+                while (count-- > 0)
                 {
-                    length = (length << 8) | span[pos++];
+                    length = (length << 8) | span[start++];
                 }
                 if (length < 0x80)
                 {
@@ -237,18 +237,17 @@ namespace NSec.Cryptography.Formatting
                 }
             }
 
-            if (length > span.Length - pos)
+            if (length > span.Length - start)
             {
                 goto fail;
             }
 
-            result = top.Slice(pos, length);
-            Unsafe.Add(ref _stack0, _depth) = top.Slice(pos + length);
-            goto done;
+            Unsafe.Add(ref _stack0, _depth) = top.Slice(start + length);
+            return top.Slice(start, length);
+
         fail:
             Fail();
-        done:
-            return result;
+            return default(StartAndLength);
         }
 
         private struct StartAndLength
