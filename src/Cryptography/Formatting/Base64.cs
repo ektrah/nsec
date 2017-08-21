@@ -57,43 +57,40 @@ namespace NSec.Cryptography.Formatting
             if (bytes.IsEmpty)
                 return;
 
-            unchecked
+            int di = 0;
+            int si = 0;
+            int b0, b1, b2, b3;
+
+            while (bytes.Length - si >= 3)
             {
-                int di = 0;
-                int si = 0;
-                int b0, b1, b2, b3;
-
-                while (bytes.Length - si >= 3)
-                {
-                    Encode3Bytes(bytes[si++], bytes[si++], bytes[si++], out b0, out b1, out b2, out b3);
-                    base64[di++] = (char)b0;
-                    base64[di++] = (char)b1;
-                    base64[di++] = (char)b2;
-                    base64[di++] = (char)b3;
-                }
-
-                switch (bytes.Length - si)
-                {
-                case 1:
-                    Encode3Bytes(bytes[si++], 0, 0, out b0, out b1, out b2, out b3);
-                    base64[di++] = (char)b0;
-                    base64[di++] = (char)b1;
-                    base64[di++] = '=';
-                    base64[di++] = '=';
-                    break;
-
-                case 2:
-                    Encode3Bytes(bytes[si++], bytes[si++], 0, out b0, out b1, out b2, out b3);
-                    base64[di++] = (char)b0;
-                    base64[di++] = (char)b1;
-                    base64[di++] = (char)b2;
-                    base64[di++] = '=';
-                    break;
-                }
-
-                Debug.Assert(si == bytes.Length);
-                Debug.Assert(di == base64.Length);
+                Encode3Bytes(bytes[si++], bytes[si++], bytes[si++], out b0, out b1, out b2, out b3);
+                base64[di++] = (char)b0;
+                base64[di++] = (char)b1;
+                base64[di++] = (char)b2;
+                base64[di++] = (char)b3;
             }
+
+            switch (bytes.Length - si)
+            {
+            case 1:
+                Encode3Bytes(bytes[si++], 0, 0, out b0, out b1, out b2, out b3);
+                base64[di++] = (char)b0;
+                base64[di++] = (char)b1;
+                base64[di++] = '=';
+                base64[di++] = '=';
+                break;
+
+            case 2:
+                Encode3Bytes(bytes[si++], bytes[si++], 0, out b0, out b1, out b2, out b3);
+                base64[di++] = (char)b0;
+                base64[di++] = (char)b1;
+                base64[di++] = (char)b2;
+                base64[di++] = '=';
+                break;
+            }
+
+            Debug.Assert(si == bytes.Length);
+            Debug.Assert(di == base64.Length);
         }
 
         public static void Encode(
@@ -105,43 +102,40 @@ namespace NSec.Cryptography.Formatting
             if (bytes.IsEmpty)
                 return;
 
-            unchecked
+            int di = 0;
+            int si = 0;
+            int b0, b1, b2, b3;
+
+            while (bytes.Length - si >= 3)
             {
-                int di = 0;
-                int si = 0;
-                int b0, b1, b2, b3;
-
-                while (bytes.Length - si >= 3)
-                {
-                    Encode3Bytes(bytes[si++], bytes[si++], bytes[si++], out b0, out b1, out b2, out b3);
-                    base64[di++] = (byte)b0;
-                    base64[di++] = (byte)b1;
-                    base64[di++] = (byte)b2;
-                    base64[di++] = (byte)b3;
-                }
-
-                switch (bytes.Length - si)
-                {
-                case 1:
-                    Encode3Bytes(bytes[si++], 0, 0, out b0, out b1, out b2, out b3);
-                    base64[di++] = (byte)b0;
-                    base64[di++] = (byte)b1;
-                    base64[di++] = (byte)'=';
-                    base64[di++] = (byte)'=';
-                    break;
-
-                case 2:
-                    Encode3Bytes(bytes[si++], bytes[si++], 0, out b0, out b1, out b2, out b3);
-                    base64[di++] = (byte)b0;
-                    base64[di++] = (byte)b1;
-                    base64[di++] = (byte)b2;
-                    base64[di++] = (byte)'=';
-                    break;
-                }
-
-                Debug.Assert(si == bytes.Length);
-                Debug.Assert(di == base64.Length);
+                Encode3Bytes(bytes[si++], bytes[si++], bytes[si++], out b0, out b1, out b2, out b3);
+                base64[di++] = (byte)b0;
+                base64[di++] = (byte)b1;
+                base64[di++] = (byte)b2;
+                base64[di++] = (byte)b3;
             }
+
+            switch (bytes.Length - si)
+            {
+            case 1:
+                Encode3Bytes(bytes[si++], 0, 0, out b0, out b1, out b2, out b3);
+                base64[di++] = (byte)b0;
+                base64[di++] = (byte)b1;
+                base64[di++] = (byte)'=';
+                base64[di++] = (byte)'=';
+                break;
+
+            case 2:
+                Encode3Bytes(bytes[si++], bytes[si++], 0, out b0, out b1, out b2, out b3);
+                base64[di++] = (byte)b0;
+                base64[di++] = (byte)b1;
+                base64[di++] = (byte)b2;
+                base64[di++] = (byte)'=';
+                break;
+            }
+
+            Debug.Assert(si == bytes.Length);
+            Debug.Assert(di == base64.Length);
         }
 
         public static int GetEncodedLength(
@@ -169,43 +163,40 @@ namespace NSec.Cryptography.Formatting
             if (base64.IsEmpty)
                 return true;
 
-            unchecked
+            int err = 0;
+            int di = 0;
+            int si = 0;
+            byte r0, r1, r2;
+
+            while (bytes.Length - di >= 3)
             {
-                int err = 0;
-                int di = 0;
-                int si = 0;
-                byte r0, r1, r2;
-
-                while (bytes.Length - di >= 3)
-                {
-                    err |= Decode3Bytes(base64[si++], base64[si++], base64[si++], base64[si++], out r0, out r1, out r2);
-                    bytes[di++] = r0;
-                    bytes[di++] = r1;
-                    bytes[di++] = r2;
-                }
-
-                switch (bytes.Length - di)
-                {
-                case 1:
-                    err |= Decode3Bytes(base64[si++], base64[si++], 'A', 'A', out r0, out r1, out r2);
-                    err |= CheckPadding(base64[si++]);
-                    err |= CheckPadding(base64[si++]);
-                    bytes[di++] = r0;
-                    break;
-
-                case 2:
-                    err |= Decode3Bytes(base64[si++], base64[si++], base64[si++], 'A', out r0, out r1, out r2);
-                    err |= CheckPadding(base64[si++]);
-                    bytes[di++] = r0;
-                    bytes[di++] = r1;
-                    break;
-                }
-
-                Debug.Assert(si == base64.Length);
-                Debug.Assert(di == bytes.Length);
-
-                return err == 0;
+                err |= Decode3Bytes(base64[si++], base64[si++], base64[si++], base64[si++], out r0, out r1, out r2);
+                bytes[di++] = r0;
+                bytes[di++] = r1;
+                bytes[di++] = r2;
             }
+
+            switch (bytes.Length - di)
+            {
+            case 1:
+                err |= Decode3Bytes(base64[si++], base64[si++], 'A', 'A', out r0, out r1, out r2);
+                err |= CheckPadding(base64[si++]);
+                err |= CheckPadding(base64[si++]);
+                bytes[di++] = r0;
+                break;
+
+            case 2:
+                err |= Decode3Bytes(base64[si++], base64[si++], base64[si++], 'A', out r0, out r1, out r2);
+                err |= CheckPadding(base64[si++]);
+                bytes[di++] = r0;
+                bytes[di++] = r1;
+                break;
+            }
+
+            Debug.Assert(si == base64.Length);
+            Debug.Assert(di == bytes.Length);
+
+            return err == 0;
         }
 
         public static bool TryDecode(
@@ -217,43 +208,40 @@ namespace NSec.Cryptography.Formatting
             if (base64.IsEmpty)
                 return true;
 
-            unchecked
+            int err = 0;
+            int di = 0;
+            int si = 0;
+            byte r0, r1, r2;
+
+            while (bytes.Length - di >= 3)
             {
-                int err = 0;
-                int di = 0;
-                int si = 0;
-                byte r0, r1, r2;
-
-                while (bytes.Length - di >= 3)
-                {
-                    err |= Decode3Bytes(base64[si++], base64[si++], base64[si++], base64[si++], out r0, out r1, out r2);
-                    bytes[di++] = r0;
-                    bytes[di++] = r1;
-                    bytes[di++] = r2;
-                }
-
-                switch (bytes.Length - di)
-                {
-                case 1:
-                    err |= Decode3Bytes(base64[si++], base64[si++], 'A', 'A', out r0, out r1, out r2);
-                    err |= CheckPadding(base64[si++]);
-                    err |= CheckPadding(base64[si++]);
-                    bytes[di++] = r0;
-                    break;
-
-                case 2:
-                    err |= Decode3Bytes(base64[si++], base64[si++], base64[si++], 'A', out r0, out r1, out r2);
-                    err |= CheckPadding(base64[si++]);
-                    bytes[di++] = r0;
-                    bytes[di++] = r1;
-                    break;
-                }
-
-                Debug.Assert(si == base64.Length);
-                Debug.Assert(di == bytes.Length);
-
-                return err == 0;
+                err |= Decode3Bytes(base64[si++], base64[si++], base64[si++], base64[si++], out r0, out r1, out r2);
+                bytes[di++] = r0;
+                bytes[di++] = r1;
+                bytes[di++] = r2;
             }
+
+            switch (bytes.Length - di)
+            {
+            case 1:
+                err |= Decode3Bytes(base64[si++], base64[si++], 'A', 'A', out r0, out r1, out r2);
+                err |= CheckPadding(base64[si++]);
+                err |= CheckPadding(base64[si++]);
+                bytes[di++] = r0;
+                break;
+
+            case 2:
+                err |= Decode3Bytes(base64[si++], base64[si++], base64[si++], 'A', out r0, out r1, out r2);
+                err |= CheckPadding(base64[si++]);
+                bytes[di++] = r0;
+                bytes[di++] = r1;
+                break;
+            }
+
+            Debug.Assert(si == base64.Length);
+            Debug.Assert(di == bytes.Length);
+
+            return err == 0;
         }
 
         public static bool TryGetDecodedLength(

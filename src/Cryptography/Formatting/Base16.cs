@@ -57,22 +57,19 @@ namespace NSec.Cryptography.Formatting
             if (bytes.IsEmpty)
                 return;
 
-            unchecked
+            int di = 0;
+            int si = 0;
+            int b0, b1;
+
+            while (bytes.Length - si >= 1)
             {
-                int di = 0;
-                int si = 0;
-                int b0, b1;
-
-                while (bytes.Length - si >= 1)
-                {
-                    EncodeByte(bytes[si++], out b0, out b1);
-                    base16[di++] = (char)b0;
-                    base16[di++] = (char)b1;
-                }
-
-                Debug.Assert(si == bytes.Length);
-                Debug.Assert(di == base16.Length);
+                EncodeByte(bytes[si++], out b0, out b1);
+                base16[di++] = (char)b0;
+                base16[di++] = (char)b1;
             }
+
+            Debug.Assert(si == bytes.Length);
+            Debug.Assert(di == base16.Length);
         }
 
         public static void Encode(
@@ -84,22 +81,19 @@ namespace NSec.Cryptography.Formatting
             if (bytes.IsEmpty)
                 return;
 
-            unchecked
+            int di = 0;
+            int si = 0;
+            int b0, b1;
+
+            while (bytes.Length - si >= 1)
             {
-                int di = 0;
-                int si = 0;
-                int b0, b1;
-
-                while (bytes.Length - si >= 1)
-                {
-                    EncodeByte(bytes[si++], out b0, out b1);
-                    base16[di++] = (byte)b0;
-                    base16[di++] = (byte)b1;
-                }
-
-                Debug.Assert(si == bytes.Length);
-                Debug.Assert(di == base16.Length);
+                EncodeByte(bytes[si++], out b0, out b1);
+                base16[di++] = (byte)b0;
+                base16[di++] = (byte)b1;
             }
+
+            Debug.Assert(si == bytes.Length);
+            Debug.Assert(di == base16.Length);
         }
 
         public static int GetEncodedLength(
@@ -127,24 +121,21 @@ namespace NSec.Cryptography.Formatting
             if (base16.IsEmpty)
                 return true;
 
-            unchecked
+            int err = 0;
+            int di = 0;
+            int si = 0;
+            byte r0;
+
+            while (bytes.Length - di >= 1)
             {
-                int err = 0;
-                int di = 0;
-                int si = 0;
-                byte r0;
-
-                while (bytes.Length - di >= 1)
-                {
-                    err |= DecodeByte(base16[si++], base16[si++], out r0);
-                    bytes[di++] = r0;
-                }
-
-                Debug.Assert(si == base16.Length);
-                Debug.Assert(di == bytes.Length);
-
-                return err == 0;
+                err |= DecodeByte(base16[si++], base16[si++], out r0);
+                bytes[di++] = r0;
             }
+
+            Debug.Assert(si == base16.Length);
+            Debug.Assert(di == bytes.Length);
+
+            return err == 0;
         }
 
         public static bool TryDecode(
@@ -156,24 +147,21 @@ namespace NSec.Cryptography.Formatting
             if (base16.IsEmpty)
                 return true;
 
-            unchecked
+            int err = 0;
+            int di = 0;
+            int si = 0;
+            byte r0;
+
+            while (bytes.Length - di >= 1)
             {
-                int err = 0;
-                int di = 0;
-                int si = 0;
-                byte r0;
-
-                while (bytes.Length - di >= 1)
-                {
-                    err |= DecodeByte(base16[si++], base16[si++], out r0);
-                    bytes[di++] = r0;
-                }
-
-                Debug.Assert(si == base16.Length);
-                Debug.Assert(di == bytes.Length);
-
-                return err == 0;
+                err |= DecodeByte(base16[si++], base16[si++], out r0);
+                bytes[di++] = r0;
             }
+
+            Debug.Assert(si == base16.Length);
+            Debug.Assert(di == bytes.Length);
+
+            return err == 0;
         }
 
         public static bool TryGetDecodedLength(

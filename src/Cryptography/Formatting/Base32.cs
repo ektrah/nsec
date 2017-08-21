@@ -57,79 +57,76 @@ namespace NSec.Cryptography.Formatting
             if (bytes.IsEmpty)
                 return;
 
-            unchecked
+            int di = 0;
+            int si = 0;
+            int b0, b1, b2, b3, b4, b5, b6, b7;
+
+            while (bytes.Length - si >= 5)
             {
-                int di = 0;
-                int si = 0;
-                int b0, b1, b2, b3, b4, b5, b6, b7;
-
-                while (bytes.Length - si >= 5)
-                {
-                    Encode5Bytes(bytes[si++], bytes[si++], bytes[si++], bytes[si++], bytes[si++], out b0, out b1, out b2, out b3, out b4, out b5, out b6, out b7);
-                    base32[di++] = (char)b0;
-                    base32[di++] = (char)b1;
-                    base32[di++] = (char)b2;
-                    base32[di++] = (char)b3;
-                    base32[di++] = (char)b4;
-                    base32[di++] = (char)b5;
-                    base32[di++] = (char)b6;
-                    base32[di++] = (char)b7;
-                }
-
-                switch (bytes.Length - si)
-                {
-                case 1:
-                    Encode5Bytes(bytes[si++], 0, 0, 0, 0, out b0, out b1, out b2, out b3, out b4, out b5, out b6, out b7);
-                    base32[di++] = (char)b0;
-                    base32[di++] = (char)b1;
-                    base32[di++] = '=';
-                    base32[di++] = '=';
-                    base32[di++] = '=';
-                    base32[di++] = '=';
-                    base32[di++] = '=';
-                    base32[di++] = '=';
-                    break;
-
-                case 2:
-                    Encode5Bytes(bytes[si++], bytes[si++], 0, 0, 0, out b0, out b1, out b2, out b3, out b4, out b5, out b6, out b7);
-                    base32[di++] = (char)b0;
-                    base32[di++] = (char)b1;
-                    base32[di++] = (char)b2;
-                    base32[di++] = (char)b3;
-                    base32[di++] = '=';
-                    base32[di++] = '=';
-                    base32[di++] = '=';
-                    base32[di++] = '=';
-                    break;
-
-                case 3:
-                    Encode5Bytes(bytes[si++], bytes[si++], bytes[si++], 0, 0, out b0, out b1, out b2, out b3, out b4, out b5, out b6, out b7);
-                    base32[di++] = (char)b0;
-                    base32[di++] = (char)b1;
-                    base32[di++] = (char)b2;
-                    base32[di++] = (char)b3;
-                    base32[di++] = (char)b4;
-                    base32[di++] = '=';
-                    base32[di++] = '=';
-                    base32[di++] = '=';
-                    break;
-
-                case 4:
-                    Encode5Bytes(bytes[si++], bytes[si++], bytes[si++], bytes[si++], 0, out b0, out b1, out b2, out b3, out b4, out b5, out b6, out b7);
-                    base32[di++] = (char)b0;
-                    base32[di++] = (char)b1;
-                    base32[di++] = (char)b2;
-                    base32[di++] = (char)b3;
-                    base32[di++] = (char)b4;
-                    base32[di++] = (char)b5;
-                    base32[di++] = (char)b6;
-                    base32[di++] = '=';
-                    break;
-                }
-
-                Debug.Assert(si == bytes.Length);
-                Debug.Assert(di == base32.Length);
+                Encode5Bytes(bytes[si++], bytes[si++], bytes[si++], bytes[si++], bytes[si++], out b0, out b1, out b2, out b3, out b4, out b5, out b6, out b7);
+                base32[di++] = (char)b0;
+                base32[di++] = (char)b1;
+                base32[di++] = (char)b2;
+                base32[di++] = (char)b3;
+                base32[di++] = (char)b4;
+                base32[di++] = (char)b5;
+                base32[di++] = (char)b6;
+                base32[di++] = (char)b7;
             }
+
+            switch (bytes.Length - si)
+            {
+            case 1:
+                Encode5Bytes(bytes[si++], 0, 0, 0, 0, out b0, out b1, out b2, out b3, out b4, out b5, out b6, out b7);
+                base32[di++] = (char)b0;
+                base32[di++] = (char)b1;
+                base32[di++] = '=';
+                base32[di++] = '=';
+                base32[di++] = '=';
+                base32[di++] = '=';
+                base32[di++] = '=';
+                base32[di++] = '=';
+                break;
+
+            case 2:
+                Encode5Bytes(bytes[si++], bytes[si++], 0, 0, 0, out b0, out b1, out b2, out b3, out b4, out b5, out b6, out b7);
+                base32[di++] = (char)b0;
+                base32[di++] = (char)b1;
+                base32[di++] = (char)b2;
+                base32[di++] = (char)b3;
+                base32[di++] = '=';
+                base32[di++] = '=';
+                base32[di++] = '=';
+                base32[di++] = '=';
+                break;
+
+            case 3:
+                Encode5Bytes(bytes[si++], bytes[si++], bytes[si++], 0, 0, out b0, out b1, out b2, out b3, out b4, out b5, out b6, out b7);
+                base32[di++] = (char)b0;
+                base32[di++] = (char)b1;
+                base32[di++] = (char)b2;
+                base32[di++] = (char)b3;
+                base32[di++] = (char)b4;
+                base32[di++] = '=';
+                base32[di++] = '=';
+                base32[di++] = '=';
+                break;
+
+            case 4:
+                Encode5Bytes(bytes[si++], bytes[si++], bytes[si++], bytes[si++], 0, out b0, out b1, out b2, out b3, out b4, out b5, out b6, out b7);
+                base32[di++] = (char)b0;
+                base32[di++] = (char)b1;
+                base32[di++] = (char)b2;
+                base32[di++] = (char)b3;
+                base32[di++] = (char)b4;
+                base32[di++] = (char)b5;
+                base32[di++] = (char)b6;
+                base32[di++] = '=';
+                break;
+            }
+
+            Debug.Assert(si == bytes.Length);
+            Debug.Assert(di == base32.Length);
         }
 
         public static void Encode(
@@ -141,79 +138,76 @@ namespace NSec.Cryptography.Formatting
             if (bytes.IsEmpty)
                 return;
 
-            unchecked
+            int di = 0;
+            int si = 0;
+            int b0, b1, b2, b3, b4, b5, b6, b7;
+
+            while (bytes.Length - si >= 5)
             {
-                int di = 0;
-                int si = 0;
-                int b0, b1, b2, b3, b4, b5, b6, b7;
-
-                while (bytes.Length - si >= 5)
-                {
-                    Encode5Bytes(bytes[si++], bytes[si++], bytes[si++], bytes[si++], bytes[si++], out b0, out b1, out b2, out b3, out b4, out b5, out b6, out b7);
-                    base32[di++] = (byte)b0;
-                    base32[di++] = (byte)b1;
-                    base32[di++] = (byte)b2;
-                    base32[di++] = (byte)b3;
-                    base32[di++] = (byte)b4;
-                    base32[di++] = (byte)b5;
-                    base32[di++] = (byte)b6;
-                    base32[di++] = (byte)b7;
-                }
-
-                switch (bytes.Length - si)
-                {
-                case 1:
-                    Encode5Bytes(bytes[si++], 0, 0, 0, 0, out b0, out b1, out b2, out b3, out b4, out b5, out b6, out b7);
-                    base32[di++] = (byte)b0;
-                    base32[di++] = (byte)b1;
-                    base32[di++] = (byte)'=';
-                    base32[di++] = (byte)'=';
-                    base32[di++] = (byte)'=';
-                    base32[di++] = (byte)'=';
-                    base32[di++] = (byte)'=';
-                    base32[di++] = (byte)'=';
-                    break;
-
-                case 2:
-                    Encode5Bytes(bytes[si++], bytes[si++], 0, 0, 0, out b0, out b1, out b2, out b3, out b4, out b5, out b6, out b7);
-                    base32[di++] = (byte)b0;
-                    base32[di++] = (byte)b1;
-                    base32[di++] = (byte)b2;
-                    base32[di++] = (byte)b3;
-                    base32[di++] = (byte)'=';
-                    base32[di++] = (byte)'=';
-                    base32[di++] = (byte)'=';
-                    base32[di++] = (byte)'=';
-                    break;
-
-                case 3:
-                    Encode5Bytes(bytes[si++], bytes[si++], bytes[si++], 0, 0, out b0, out b1, out b2, out b3, out b4, out b5, out b6, out b7);
-                    base32[di++] = (byte)b0;
-                    base32[di++] = (byte)b1;
-                    base32[di++] = (byte)b2;
-                    base32[di++] = (byte)b3;
-                    base32[di++] = (byte)b4;
-                    base32[di++] = (byte)'=';
-                    base32[di++] = (byte)'=';
-                    base32[di++] = (byte)'=';
-                    break;
-
-                case 4:
-                    Encode5Bytes(bytes[si++], bytes[si++], bytes[si++], bytes[si++], 0, out b0, out b1, out b2, out b3, out b4, out b5, out b6, out b7);
-                    base32[di++] = (byte)b0;
-                    base32[di++] = (byte)b1;
-                    base32[di++] = (byte)b2;
-                    base32[di++] = (byte)b3;
-                    base32[di++] = (byte)b4;
-                    base32[di++] = (byte)b5;
-                    base32[di++] = (byte)b6;
-                    base32[di++] = (byte)'=';
-                    break;
-                }
-
-                Debug.Assert(si == bytes.Length);
-                Debug.Assert(di == base32.Length);
+                Encode5Bytes(bytes[si++], bytes[si++], bytes[si++], bytes[si++], bytes[si++], out b0, out b1, out b2, out b3, out b4, out b5, out b6, out b7);
+                base32[di++] = (byte)b0;
+                base32[di++] = (byte)b1;
+                base32[di++] = (byte)b2;
+                base32[di++] = (byte)b3;
+                base32[di++] = (byte)b4;
+                base32[di++] = (byte)b5;
+                base32[di++] = (byte)b6;
+                base32[di++] = (byte)b7;
             }
+
+            switch (bytes.Length - si)
+            {
+            case 1:
+                Encode5Bytes(bytes[si++], 0, 0, 0, 0, out b0, out b1, out b2, out b3, out b4, out b5, out b6, out b7);
+                base32[di++] = (byte)b0;
+                base32[di++] = (byte)b1;
+                base32[di++] = (byte)'=';
+                base32[di++] = (byte)'=';
+                base32[di++] = (byte)'=';
+                base32[di++] = (byte)'=';
+                base32[di++] = (byte)'=';
+                base32[di++] = (byte)'=';
+                break;
+
+            case 2:
+                Encode5Bytes(bytes[si++], bytes[si++], 0, 0, 0, out b0, out b1, out b2, out b3, out b4, out b5, out b6, out b7);
+                base32[di++] = (byte)b0;
+                base32[di++] = (byte)b1;
+                base32[di++] = (byte)b2;
+                base32[di++] = (byte)b3;
+                base32[di++] = (byte)'=';
+                base32[di++] = (byte)'=';
+                base32[di++] = (byte)'=';
+                base32[di++] = (byte)'=';
+                break;
+
+            case 3:
+                Encode5Bytes(bytes[si++], bytes[si++], bytes[si++], 0, 0, out b0, out b1, out b2, out b3, out b4, out b5, out b6, out b7);
+                base32[di++] = (byte)b0;
+                base32[di++] = (byte)b1;
+                base32[di++] = (byte)b2;
+                base32[di++] = (byte)b3;
+                base32[di++] = (byte)b4;
+                base32[di++] = (byte)'=';
+                base32[di++] = (byte)'=';
+                base32[di++] = (byte)'=';
+                break;
+
+            case 4:
+                Encode5Bytes(bytes[si++], bytes[si++], bytes[si++], bytes[si++], 0, out b0, out b1, out b2, out b3, out b4, out b5, out b6, out b7);
+                base32[di++] = (byte)b0;
+                base32[di++] = (byte)b1;
+                base32[di++] = (byte)b2;
+                base32[di++] = (byte)b3;
+                base32[di++] = (byte)b4;
+                base32[di++] = (byte)b5;
+                base32[di++] = (byte)b6;
+                base32[di++] = (byte)'=';
+                break;
+            }
+
+            Debug.Assert(si == bytes.Length);
+            Debug.Assert(di == base32.Length);
         }
 
         public static int GetEncodedLength(
@@ -241,71 +235,68 @@ namespace NSec.Cryptography.Formatting
             if (base32.IsEmpty)
                 return true;
 
-            unchecked
+            int err = 0;
+            int di = 0;
+            int si = 0;
+            byte r0, r1, r2, r3, r4;
+
+            while (bytes.Length - di >= 5)
             {
-                int err = 0;
-                int di = 0;
-                int si = 0;
-                byte r0, r1, r2, r3, r4;
-
-                while (bytes.Length - di >= 5)
-                {
-                    err |= Decode5Bytes(base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], out r0, out r1, out r2, out r3, out r4);
-                    bytes[di++] = r0;
-                    bytes[di++] = r1;
-                    bytes[di++] = r2;
-                    bytes[di++] = r3;
-                    bytes[di++] = r4;
-                }
-
-                switch (bytes.Length - di)
-                {
-                case 1:
-                    err |= Decode5Bytes(base32[si++], base32[si++], 'A', 'A', 'A', 'A', 'A', 'A', out r0, out r1, out r2, out r3, out r4);
-                    err |= CheckPadding(base32[si++]);
-                    err |= CheckPadding(base32[si++]);
-                    err |= CheckPadding(base32[si++]);
-                    err |= CheckPadding(base32[si++]);
-                    err |= CheckPadding(base32[si++]);
-                    err |= CheckPadding(base32[si++]);
-                    bytes[di++] = r0;
-                    break;
-
-                case 2:
-                    err |= Decode5Bytes(base32[si++], base32[si++], base32[si++], base32[si++], 'A', 'A', 'A', 'A', out r0, out r1, out r2, out r3, out r4);
-                    err |= CheckPadding(base32[si++]);
-                    err |= CheckPadding(base32[si++]);
-                    err |= CheckPadding(base32[si++]);
-                    err |= CheckPadding(base32[si++]);
-                    bytes[di++] = r0;
-                    bytes[di++] = r1;
-                    break;
-
-                case 3:
-                    err |= Decode5Bytes(base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], 'A', 'A', 'A', out r0, out r1, out r2, out r3, out r4);
-                    err |= CheckPadding(base32[si++]);
-                    err |= CheckPadding(base32[si++]);
-                    err |= CheckPadding(base32[si++]);
-                    bytes[di++] = r0;
-                    bytes[di++] = r1;
-                    bytes[di++] = r2;
-                    break;
-
-                case 4:
-                    err |= Decode5Bytes(base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], 'A', out r0, out r1, out r2, out r3, out r4);
-                    err |= CheckPadding(base32[si++]);
-                    bytes[di++] = r0;
-                    bytes[di++] = r1;
-                    bytes[di++] = r2;
-                    bytes[di++] = r3;
-                    break;
-                }
-
-                Debug.Assert(si == base32.Length);
-                Debug.Assert(di == bytes.Length);
-
-                return err == 0;
+                err |= Decode5Bytes(base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], out r0, out r1, out r2, out r3, out r4);
+                bytes[di++] = r0;
+                bytes[di++] = r1;
+                bytes[di++] = r2;
+                bytes[di++] = r3;
+                bytes[di++] = r4;
             }
+
+            switch (bytes.Length - di)
+            {
+            case 1:
+                err |= Decode5Bytes(base32[si++], base32[si++], 'A', 'A', 'A', 'A', 'A', 'A', out r0, out r1, out r2, out r3, out r4);
+                err |= CheckPadding(base32[si++]);
+                err |= CheckPadding(base32[si++]);
+                err |= CheckPadding(base32[si++]);
+                err |= CheckPadding(base32[si++]);
+                err |= CheckPadding(base32[si++]);
+                err |= CheckPadding(base32[si++]);
+                bytes[di++] = r0;
+                break;
+
+            case 2:
+                err |= Decode5Bytes(base32[si++], base32[si++], base32[si++], base32[si++], 'A', 'A', 'A', 'A', out r0, out r1, out r2, out r3, out r4);
+                err |= CheckPadding(base32[si++]);
+                err |= CheckPadding(base32[si++]);
+                err |= CheckPadding(base32[si++]);
+                err |= CheckPadding(base32[si++]);
+                bytes[di++] = r0;
+                bytes[di++] = r1;
+                break;
+
+            case 3:
+                err |= Decode5Bytes(base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], 'A', 'A', 'A', out r0, out r1, out r2, out r3, out r4);
+                err |= CheckPadding(base32[si++]);
+                err |= CheckPadding(base32[si++]);
+                err |= CheckPadding(base32[si++]);
+                bytes[di++] = r0;
+                bytes[di++] = r1;
+                bytes[di++] = r2;
+                break;
+
+            case 4:
+                err |= Decode5Bytes(base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], 'A', out r0, out r1, out r2, out r3, out r4);
+                err |= CheckPadding(base32[si++]);
+                bytes[di++] = r0;
+                bytes[di++] = r1;
+                bytes[di++] = r2;
+                bytes[di++] = r3;
+                break;
+            }
+
+            Debug.Assert(si == base32.Length);
+            Debug.Assert(di == bytes.Length);
+
+            return err == 0;
         }
 
         public static bool TryDecode(
@@ -317,71 +308,68 @@ namespace NSec.Cryptography.Formatting
             if (base32.IsEmpty)
                 return true;
 
-            unchecked
+            int err = 0;
+            int di = 0;
+            int si = 0;
+            byte r0, r1, r2, r3, r4;
+
+            while (bytes.Length - di >= 5)
             {
-                int err = 0;
-                int di = 0;
-                int si = 0;
-                byte r0, r1, r2, r3, r4;
-
-                while (bytes.Length - di >= 5)
-                {
-                    err |= Decode5Bytes(base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], out r0, out r1, out r2, out r3, out r4);
-                    bytes[di++] = r0;
-                    bytes[di++] = r1;
-                    bytes[di++] = r2;
-                    bytes[di++] = r3;
-                    bytes[di++] = r4;
-                }
-
-                switch (bytes.Length - di)
-                {
-                case 1:
-                    err |= Decode5Bytes(base32[si++], base32[si++], 'A', 'A', 'A', 'A', 'A', 'A', out r0, out r1, out r2, out r3, out r4);
-                    err |= CheckPadding(base32[si++]);
-                    err |= CheckPadding(base32[si++]);
-                    err |= CheckPadding(base32[si++]);
-                    err |= CheckPadding(base32[si++]);
-                    err |= CheckPadding(base32[si++]);
-                    err |= CheckPadding(base32[si++]);
-                    bytes[di++] = r0;
-                    break;
-
-                case 2:
-                    err |= Decode5Bytes(base32[si++], base32[si++], base32[si++], base32[si++], 'A', 'A', 'A', 'A', out r0, out r1, out r2, out r3, out r4);
-                    err |= CheckPadding(base32[si++]);
-                    err |= CheckPadding(base32[si++]);
-                    err |= CheckPadding(base32[si++]);
-                    err |= CheckPadding(base32[si++]);
-                    bytes[di++] = r0;
-                    bytes[di++] = r1;
-                    break;
-
-                case 3:
-                    err |= Decode5Bytes(base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], 'A', 'A', 'A', out r0, out r1, out r2, out r3, out r4);
-                    err |= CheckPadding(base32[si++]);
-                    err |= CheckPadding(base32[si++]);
-                    err |= CheckPadding(base32[si++]);
-                    bytes[di++] = r0;
-                    bytes[di++] = r1;
-                    bytes[di++] = r2;
-                    break;
-
-                case 4:
-                    err |= Decode5Bytes(base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], 'A', out r0, out r1, out r2, out r3, out r4);
-                    err |= CheckPadding(base32[si++]);
-                    bytes[di++] = r0;
-                    bytes[di++] = r1;
-                    bytes[di++] = r2;
-                    bytes[di++] = r3;
-                    break;
-                }
-
-                Debug.Assert(si == base32.Length);
-                Debug.Assert(di == bytes.Length);
-
-                return err == 0;
+                err |= Decode5Bytes(base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], out r0, out r1, out r2, out r3, out r4);
+                bytes[di++] = r0;
+                bytes[di++] = r1;
+                bytes[di++] = r2;
+                bytes[di++] = r3;
+                bytes[di++] = r4;
             }
+
+            switch (bytes.Length - di)
+            {
+            case 1:
+                err |= Decode5Bytes(base32[si++], base32[si++], 'A', 'A', 'A', 'A', 'A', 'A', out r0, out r1, out r2, out r3, out r4);
+                err |= CheckPadding(base32[si++]);
+                err |= CheckPadding(base32[si++]);
+                err |= CheckPadding(base32[si++]);
+                err |= CheckPadding(base32[si++]);
+                err |= CheckPadding(base32[si++]);
+                err |= CheckPadding(base32[si++]);
+                bytes[di++] = r0;
+                break;
+
+            case 2:
+                err |= Decode5Bytes(base32[si++], base32[si++], base32[si++], base32[si++], 'A', 'A', 'A', 'A', out r0, out r1, out r2, out r3, out r4);
+                err |= CheckPadding(base32[si++]);
+                err |= CheckPadding(base32[si++]);
+                err |= CheckPadding(base32[si++]);
+                err |= CheckPadding(base32[si++]);
+                bytes[di++] = r0;
+                bytes[di++] = r1;
+                break;
+
+            case 3:
+                err |= Decode5Bytes(base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], 'A', 'A', 'A', out r0, out r1, out r2, out r3, out r4);
+                err |= CheckPadding(base32[si++]);
+                err |= CheckPadding(base32[si++]);
+                err |= CheckPadding(base32[si++]);
+                bytes[di++] = r0;
+                bytes[di++] = r1;
+                bytes[di++] = r2;
+                break;
+
+            case 4:
+                err |= Decode5Bytes(base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], base32[si++], 'A', out r0, out r1, out r2, out r3, out r4);
+                err |= CheckPadding(base32[si++]);
+                bytes[di++] = r0;
+                bytes[di++] = r1;
+                bytes[di++] = r2;
+                bytes[di++] = r3;
+                break;
+            }
+
+            Debug.Assert(si == base32.Length);
+            Debug.Assert(di == bytes.Length);
+
+            return err == 0;
         }
 
         public static bool TryGetDecodedLength(
