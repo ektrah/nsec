@@ -35,6 +35,8 @@ internal static partial class Interop
             ulong inlen);
 
         [StructLayout(LayoutKind.Explicit, Size = 208, Pack = 8)]
-        internal struct crypto_hash_sha512_state { }
+        internal struct crypto_hash_sha512_state
+        {
+        }
     }
 }

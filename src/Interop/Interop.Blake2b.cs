@@ -60,6 +60,8 @@ internal static partial class Interop
             ulong inlen);
 
         [StructLayout(LayoutKind.Explicit, Size = 384, Pack = 8)]
-        internal struct crypto_generichash_blake2b_state { }
+        internal struct crypto_generichash_blake2b_state
+        {
+        }
     }
 }

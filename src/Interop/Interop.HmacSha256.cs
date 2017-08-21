@@ -47,6 +47,8 @@ internal static partial class Interop
             ulong inlen);
 
         [StructLayout(LayoutKind.Explicit, Size = 208, Pack = 8)]
-        internal struct crypto_auth_hmacsha256_state { }
+        internal struct crypto_auth_hmacsha256_state
+        {
+        }
     }
 }
