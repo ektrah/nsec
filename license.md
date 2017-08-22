@@ -1,7 +1,7 @@
 # License
 
-The NSec documentation by Klaus Hartke is licensed under a [Creative Commons
-Attribution 4.0 International
+The NSec documentation by [Klaus Hartke](mailto:contact@nsec.rocks) is licensed
+under a [Creative Commons Attribution 4.0 International
 License](https://creativecommons.org/licenses/by/4.0/).
 
 Sample code is licensed under the [CC0 1.0 Universal (CC0 1.0) Public Domain
