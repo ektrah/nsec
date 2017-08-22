@@ -57,7 +57,13 @@ the current instance of the [[SharedSecret|SharedSecret Class]] class.
     public void Dispose()
 
 
-## See also
+## Thread Safety
+
+Any public static members of this type are thread safe. Any instance members are
+not guaranteed to be thread safe.
+
+
+## See Also
 
 * API Reference
     * [[KeyAgreementAlgorithm Class]]

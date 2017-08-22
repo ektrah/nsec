@@ -4,9 +4,6 @@ Represents a key derivation algorithm.
 
     public abstract class KeyDerivationAlgorithm : Algorithm
 
-Key derivation is deterministic, i.e., the same argument values result in the
-same derived value.
-
 
 ## Inheritance Hierarchy
 
@@ -186,7 +183,17 @@ ObjectDisposedException
 : `sharedSecret` has been disposed.
 
 
-## See also
+## Thread Safety
+
+All members of this type are thread safe.
+
+
+## Purity
+
+All methods give the same result for the same arguments.
+
+
+## See Also
 
 * API Reference
     * [[Algorithm Class]]

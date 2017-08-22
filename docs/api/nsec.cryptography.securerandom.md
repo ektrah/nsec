@@ -42,3 +42,8 @@ sequence of values.
 
 bytes
 : The span to fill with random values.
+
+
+## Thread Safety
+
+All members of this type are thread safe.

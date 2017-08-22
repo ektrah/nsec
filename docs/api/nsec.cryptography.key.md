@@ -239,7 +239,13 @@ ObjectDisposedException
 : The key has been disposed.
 
 
-## See also
+## Thread Safety
+
+Any public static members of this type are thread safe. Any instance members are
+not guaranteed to be thread safe.
+
+
+## See Also
 
 * API Reference
     * [[Algorithm Class]]

@@ -284,7 +284,17 @@ ObjectDisposedException
 : `key` has been disposed.
 
 
-## See also
+## Thread Safety
+
+All members of this type are thread safe.
+
+
+## Purity
+
+All methods give the same result for the same arguments.
+
+
+## See Also
 
 * API Reference
     * [[Algorithm Class]]

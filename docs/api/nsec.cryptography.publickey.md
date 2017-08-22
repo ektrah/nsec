@@ -192,7 +192,13 @@ The hash code returned may differ between NSec versions and platforms, such as
 32-bit and 64-bit platforms.
 
 
-## See also
+## Thread Safety
+
+Any public static members of this type are thread safe. Any instance members are
+not guaranteed to be thread safe.
+
+
+## See Also
 
 * API Reference
     * [[Algorithm Class]]
