@@ -9,6 +9,7 @@ Represents a message authentication code (MAC) algorithm.
 
 * [[Algorithm|Algorithm Class]]
     * **MacAlgorithm**
+        * Blake2bMac
         * HmacSha256
         * HmacSha512
 
