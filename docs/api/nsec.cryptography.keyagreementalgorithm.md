@@ -68,7 +68,7 @@ key
 : The private key to use to create the shared secret.
 
 otherPartyPublicKey
-: The public key from the other party to use to create the shared secret.
+: The public key of the other party to use to create the shared secret.
 
 #### Return value
 
@@ -106,7 +106,7 @@ key
 : The private key to use to create the shared secret.
 
 otherPartyPublicKey
-: The public key from the other party to use to create the shared secret.
+: The public key of the other party to use to create the shared secret.
 
 result
 : When this method returns, contains a new instance of the

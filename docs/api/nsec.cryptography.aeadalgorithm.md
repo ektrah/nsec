@@ -73,11 +73,11 @@ key
 
 nonce
 : The nonce to use for decryption.
-    This must be the same nonce used for encryption.
+    This must be the same nonce as used for encryption.
 
 associatedData
 : Optional additional data to be authenticated.
-    This must be the same additional data used for encryption.
+    This must be the same additional data as used for encryption.
 
 ciphertext
 : The encrypted data to be decrypted and authenticated.
@@ -124,22 +124,21 @@ key
 
 nonce
 : The nonce to use for decryption.
-    This must be the same nonce used for encryption.
+    This must be the same nonce as used for encryption.
 
 associatedData
 : Optional additional data to be authenticated.
-    This must be the same additional data used for encryption.
+    This must be the same additional data as used for encryption.
 
 ciphertext
 : The encrypted data to be decrypted and authenticated.
 
 plaintext
 : The span to fill with the decrypted and authenticated data.
-    The length of the span must be `ciphertext.Length` minus
-    [[TagSize|AeadAlgorithm Class#TagSize]].
-: `plaintext` and `ciphertext` may point at the same memory location for
-    in-place decryption. Otherwise, `plaintext` must not overlap with
-    `ciphertext`.
+    The length of the span must be equal to `ciphertext.Length` minus
+    [[TagSize|AeadAlgorithm Class#TagSize]]. `plaintext` must not overlap with
+    `ciphertext`, except that `plaintext` and `ciphertext` may point at the same
+    memory location for in-place decryption.
 
 #### Exceptions
 
@@ -161,7 +160,7 @@ ArgumentException
 : `plaintext` overlaps with `ciphertext`.
 
 CryptographicException
-: `ciphertext.length` is less than
+: `ciphertext.Length` is less than
     [[TagSize|AeadAlgorithm Class#TagSize]].
 
 CryptographicException
@@ -189,7 +188,8 @@ key
 
 nonce
 : The nonce to use for encryption.
-    The nonce must not be used more than once with the specified key.
+    The nonce must not be used more than once to encrypt data with the specified
+    key.
 
 associatedData
 : Optional additional data to be authenticated during decryption.
@@ -240,7 +240,8 @@ key
 
 nonce
 : The nonce to use for encryption.
-    The nonce must not be used more than once with the specified key.
+    The nonce must not be used more than once to encrypt data with the specified
+    key.
 
 associatedData
 : Optional additional data to be authenticated during decryption.
@@ -250,11 +251,10 @@ plaintext
 
 ciphertext
 : The span to fill with the encrypted data and the authentication tag.
-    The length of the span must be `plaintext.Length` plus
-    [[TagSize|AeadAlgorithm Class#TagSize]].
-: `ciphertext` and `plaintext` may point at the same memory location for
-    in-place encryption . Otherwise, `ciphertext` must not overlap with
-    `plaintext`.
+    The length of the span must be equal to `plaintext.Length` plus
+    [[TagSize|AeadAlgorithm Class#TagSize]]. `ciphertext` must not overlap with
+    `plaintext`, except that `ciphertext` and `plaintext` may point at the same
+    memory location for in-place encryption.
 
 #### Exceptions
 
@@ -302,11 +302,11 @@ key
 
 nonce
 : The nonce to use for decryption.
-    This must be the same nonce used for encryption.
+    This must be the same nonce as used for encryption.
 
 associatedData
 : Optional additional data to be authenticated.
-    This must be the same additional data used for encryption.
+    This must be the same additional data as used for encryption.
 
 ciphertext
 : The encrypted data to be decrypted and authenticated.
@@ -354,22 +354,21 @@ key
 
 nonce
 : The nonce to use for decryption.
-    This must be the same nonce used for encryption.
+    This must be the same nonce as used for encryption.
 
 associatedData
 : Optional additional data to be authenticated.
-    This must be the same additional data used for encryption.
+    This must be the same additional data as used for encryption.
 
 ciphertext
 : The encrypted data to be decrypted and authenticated.
 
 plaintext
 : The span to fill with the decrypted and authenticated data.
-    The length of the span must be `ciphertext.Length` minus
-    [[TagSize|AeadAlgorithm Class#TagSize]].
-: `plaintext` and `ciphertext` may point at the same memory location for
-    in-place decryption. Otherwise, `plaintext` must not overlap with
-    `ciphertext`.
+    The length of the span must be equal to `ciphertext.Length` minus
+    [[TagSize|AeadAlgorithm Class#TagSize]]. `plaintext` must not overlap with
+    `ciphertext`, except that `plaintext` and `ciphertext` may point at the same
+    memory location for in-place decryption.
 
 #### Return value
 
