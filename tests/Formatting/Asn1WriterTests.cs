@@ -99,7 +99,11 @@ namespace NSec.Tests.Formatting
         [Fact]
         public static void SequenceStackOverflow()
         {
-            var writer = new Asn1Writer(new byte[2], 3);
+            Assert.Equal(6, Asn1Writer.MaxDepth);
+            var writer = new Asn1Writer(new byte[2]);
+            writer.End();
+            writer.End();
+            writer.End();
             writer.End();
             writer.End();
             writer.End();
@@ -120,7 +124,7 @@ namespace NSec.Tests.Formatting
         [InlineData(4, new byte[] { 0x30, 0x06, 0x30, 0x04, 0x30, 0x02, 0x30, 0x00 })]
         public static void Sequence(int depth, byte[] expected)
         {
-            var writer = new Asn1Writer(new byte[expected.Length], depth);
+            var writer = new Asn1Writer(new byte[expected.Length]);
             for (var i = 0; i < depth; i++)
                 writer.End();
             for (var i = 0; i < depth; i++)
@@ -135,7 +139,7 @@ namespace NSec.Tests.Formatting
         [InlineData(new int[] { 1, 2, 3 }, new byte[] { 0x30, 0x09, 0x02, 0x01, 0x01, 0x02, 0x01, 0x02, 0x02, 0x01, 0x03 })]
         public static void IntegerSequence(int[] values, byte[] expected)
         {
-            var writer = new Asn1Writer(new byte[expected.Length], 1);
+            var writer = new Asn1Writer(new byte[expected.Length]);
             writer.End();
             for (var i = 0; i < values.Length; i++)
                 writer.Integer(values[values.Length - i - 1]);

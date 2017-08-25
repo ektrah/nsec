@@ -6,11 +6,7 @@ namespace NSec.Cryptography.Formatting
     // ITU-T X.690 5.0 DER
     internal struct Asn1Writer
     {
-        private readonly Span<byte> _buffer;
-        private readonly int _maxDepth;
-
-        private int _depth;
-        private int _pos;
+        internal const int MaxDepth = 6;
 
 #pragma warning disable 0414
         private int _stack0;
@@ -19,33 +15,27 @@ namespace NSec.Cryptography.Formatting
         private int _stack3;
         private int _stack4;
         private int _stack5;
-        private int _stack6;
-        private int _stack7;
 #pragma warning restore 0414
 
+        private readonly Span<byte> _buffer;
+
+        private int _depth;
+        private int _pos;
+
         public Asn1Writer(
-            Span<byte> buffer,
-            int maxDepth = 8)
+            Span<byte> buffer)
         {
-            if (maxDepth < 0 || maxDepth > 8)
-            {
-                throw new IndexOutOfRangeException();
-            }
+            _stack0 = default;
+            _stack1 = default;
+            _stack2 = default;
+            _stack3 = default;
+            _stack4 = default;
+            _stack5 = default;
 
             _buffer = buffer;
-            _maxDepth = maxDepth;
 
             _depth = 0;
             _pos = buffer.Length;
-
-            _stack0 = 0;
-            _stack1 = 0;
-            _stack2 = 0;
-            _stack3 = 0;
-            _stack4 = 0;
-            _stack5 = 0;
-            _stack6 = 0;
-            _stack7 = 0;
         }
 
         public ReadOnlySpan<byte> Bytes => _buffer.Slice(_pos);
@@ -81,7 +71,7 @@ namespace NSec.Cryptography.Formatting
 
         public void End()
         {
-            if (_depth == _maxDepth)
+            if (_depth == MaxDepth)
             {
                 throw new IndexOutOfRangeException();
             }

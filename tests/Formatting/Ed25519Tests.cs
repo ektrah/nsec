@@ -30,9 +30,9 @@ namespace NSec.Tests.Formatting
                 reader.End();
                 Assert.True(reader.SuccessComplete);
 
-                var reader2 = new Asn1Reader(curvePrivateKey);
-                Assert.Equal(b.ToArray(), reader2.OctetString().ToArray());
-                Assert.True(reader2.SuccessComplete);
+                reader = new Asn1Reader(curvePrivateKey);
+                Assert.Equal(b.ToArray(), reader.OctetString().ToArray());
+                Assert.True(reader.SuccessComplete);
             }
         }
 

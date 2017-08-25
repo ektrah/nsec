@@ -6,48 +6,34 @@ namespace NSec.Cryptography.Formatting
     // ITU-T X.690 5.0 DER
     internal struct Asn1Reader
     {
-        private readonly ReadOnlySpan<byte> _buffer;
-        private readonly int _maxDepth;
+        internal const int MaxDepth = 7;
+
+#pragma warning disable 0414
+        private ReadOnlySpan<byte> _stack0;
+        private ReadOnlySpan<byte> _stack1;
+        private ReadOnlySpan<byte> _stack2;
+        private ReadOnlySpan<byte> _stack3;
+        private ReadOnlySpan<byte> _stack4;
+        private ReadOnlySpan<byte> _stack5;
+        private ReadOnlySpan<byte> _stack6;
+#pragma warning restore 0414
 
         private int _depth;
         private bool _failed;
 
-#pragma warning disable 0414
-        private StartAndLength _stack0;
-        private StartAndLength _stack1;
-        private StartAndLength _stack2;
-        private StartAndLength _stack3;
-        private StartAndLength _stack4;
-        private StartAndLength _stack5;
-        private StartAndLength _stack6;
-        private StartAndLength _stack7;
-        private StartAndLength _stack8;
-#pragma warning restore 0414
-
         public Asn1Reader(
-            ReadOnlySpan<byte> buffer,
-            int maxDepth = 8)
+            ReadOnlySpan<byte> buffer)
         {
-            if (maxDepth < 0 || maxDepth > 8)
-            {
-                throw new IndexOutOfRangeException();
-            }
-
-            _buffer = buffer;
-            _maxDepth = 1 + maxDepth;
+            _stack0 = buffer;
+            _stack1 = default;
+            _stack2 = default;
+            _stack3 = default;
+            _stack4 = default;
+            _stack5 = default;
+            _stack6 = default;
 
             _depth = 0;
             _failed = false;
-
-            _stack0 = new StartAndLength(0, buffer.Length);
-            _stack1 = default(StartAndLength);
-            _stack2 = default(StartAndLength);
-            _stack3 = default(StartAndLength);
-            _stack4 = default(StartAndLength);
-            _stack5 = default(StartAndLength);
-            _stack6 = default(StartAndLength);
-            _stack7 = default(StartAndLength);
-            _stack8 = default(StartAndLength);
         }
 
         public bool Success => !_failed;
@@ -56,16 +42,14 @@ namespace NSec.Cryptography.Formatting
 
         public void BeginSequence()
         {
-            StartAndLength bytes = Read(0x30);
-
-            if (_failed)
+            if (!TryRead(0x30, out ReadOnlySpan<byte> bytes))
             {
                 Fail();
             }
             else
             {
                 _depth++;
-                if (_depth == _maxDepth)
+                if (_depth == MaxDepth)
                 {
                     throw new IndexOutOfRangeException();
                 }
@@ -75,10 +59,9 @@ namespace NSec.Cryptography.Formatting
 
         public ReadOnlySpan<byte> BitString()
         {
-            ReadOnlySpan<byte> bytes = Read(0x03).ApplyTo(_buffer);
-            ReadOnlySpan<byte> value = default(ReadOnlySpan<byte>);
+            ReadOnlySpan<byte> value = default;
 
-            if (_failed || bytes.Length == 0 || bytes[0] != 0)
+            if (!TryRead(0x03, out ReadOnlySpan<byte> bytes) || bytes.Length == 0 || bytes[0] != 0)
             {
                 Fail();
             }
@@ -92,16 +75,15 @@ namespace NSec.Cryptography.Formatting
 
         public bool Bool()
         {
-            ReadOnlySpan<byte> bytes = Read(0x01).ApplyTo(_buffer);
-            bool value = default(bool);
+            bool value = default;
 
-            if (_failed || bytes.Length != 1 || (bytes[0] != 0x00 && bytes[0] != 0xFF))
+            if (!TryRead(0x01, out ReadOnlySpan<byte> bytes) || bytes.Length != 1 || (bytes[0] != 0x00 && bytes[0] != 0xFF))
             {
                 Fail();
             }
             else
             {
-                value = (bytes[0] == 0xFF);
+                value = (bytes[0] != 0x00);
             }
 
             return value;
@@ -125,10 +107,9 @@ namespace NSec.Cryptography.Formatting
 
         public int Integer32()
         {
-            ReadOnlySpan<byte> bytes = Read(0x02).ApplyTo(_buffer);
-            int value = default(int);
+            int value = default;
 
-            if (_failed || IsInvalidInteger(bytes, sizeof(int)))
+            if (!TryRead(0x02, out ReadOnlySpan<byte> bytes) || IsInvalidInteger(bytes, sizeof(int)))
             {
                 Fail();
             }
@@ -146,10 +127,9 @@ namespace NSec.Cryptography.Formatting
 
         public long Integer64()
         {
-            ReadOnlySpan<byte> bytes = Read(0x02).ApplyTo(_buffer);
-            long value = default(long);
+            long value = default;
 
-            if (_failed || IsInvalidInteger(bytes, sizeof(long)))
+            if (!TryRead(0x02, out ReadOnlySpan<byte> bytes) || IsInvalidInteger(bytes, sizeof(long)))
             {
                 Fail();
             }
@@ -167,9 +147,7 @@ namespace NSec.Cryptography.Formatting
 
         public void Null()
         {
-            StartAndLength bytes = Read(0x05);
-
-            if (_failed || !bytes.IsEmpty)
+            if (!TryRead(0x05, out ReadOnlySpan<byte> bytes) || !bytes.IsEmpty)
             {
                 Fail();
             }
@@ -177,19 +155,29 @@ namespace NSec.Cryptography.Formatting
 
         public ReadOnlySpan<byte> ObjectIdentifier()
         {
-            return Read(0x06).ApplyTo(_buffer);
+            if (!TryRead(0x06, out ReadOnlySpan<byte> bytes))
+            {
+                Fail();
+            }
+
+            return bytes;
         }
 
         public ReadOnlySpan<byte> OctetString()
         {
-            return Read(0x04).ApplyTo(_buffer);
+            if (!TryRead(0x04, out ReadOnlySpan<byte> bytes))
+            {
+                Fail();
+            }
+
+            return bytes;
         }
 
         private void Fail()
         {
             _failed = true;
             _depth = 0;
-            _stack0 = default(StartAndLength);
+            _stack0 = default;
         }
 
         private bool IsInvalidInteger(
@@ -202,15 +190,15 @@ namespace NSec.Cryptography.Formatting
                 || bytes.Length > 1 && bytes[0] == 0xFF && (bytes[1] & 0x80) == 0x80;
         }
 
-        private StartAndLength Read(
-            int tag)
+        private bool TryRead(
+            int tag,
+            out ReadOnlySpan<byte> result)
         {
-            StartAndLength top = Unsafe.Add(ref _stack0, _depth);
-            ReadOnlySpan<byte> span = top.ApplyTo(_buffer);
+            ReadOnlySpan<byte> span = Unsafe.Add(ref _stack0, _depth);
 
             if (_failed || span.Length < 2 || span[0] != tag)
             {
-                goto fail;
+                return false;
             }
 
             int start = 2;
@@ -225,7 +213,7 @@ namespace NSec.Cryptography.Formatting
                 int count = span[1] & 0x7F;
                 if (count < 1 || count > sizeof(int) || count > span.Length - 2 || span[2] == 0)
                 {
-                    goto fail;
+                    return false;
                 }
                 while (count-- > 0)
                 {
@@ -233,34 +221,18 @@ namespace NSec.Cryptography.Formatting
                 }
                 if (length < 0x80)
                 {
-                    goto fail;
+                    return false;
                 }
             }
 
             if (length > span.Length - start)
             {
-                goto fail;
+                return false;
             }
 
-            Unsafe.Add(ref _stack0, _depth) = top.Slice(start + length);
-            return top.Slice(start, length);
-
-        fail:
-            Fail();
-            return default(StartAndLength);
-        }
-
-        private struct StartAndLength
-        {
-            private int _start;
-            private int _length;
-            public StartAndLength(int start, int length) { _start = start; _length = length; }
-            public bool IsEmpty => _length == 0;
-            public int Length => _length;
-            public int Start => _start;
-            public ReadOnlySpan<byte> ApplyTo(ReadOnlySpan<byte> buffer) { return buffer.Slice(_start, _length); }
-            public StartAndLength Slice(int start) { return new StartAndLength(_start + start, _length - start); }
-            public StartAndLength Slice(int start, int length) { return new StartAndLength(_start + start, length); }
+            Unsafe.Add(ref _stack0, _depth) = span.Slice(start + length);
+            result = span.Slice(start, length);
+            return true;
         }
     }
 }
