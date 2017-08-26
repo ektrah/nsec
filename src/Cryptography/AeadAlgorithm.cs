@@ -210,18 +210,12 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> ciphertext,
             Span<byte> plaintext);
 
-        internal virtual bool TryReadAlgorithmIdentifier(
+        internal abstract bool TryReadAlgorithmIdentifier(
             ref Asn1Reader reader,
-            out ReadOnlySpan<byte> nonce)
-        {
-            throw Error.NotSupported_Operation();
-        }
+            out ReadOnlySpan<byte> nonce);
 
-        internal virtual void WriteAlgorithmIdentifier(
+        internal abstract void WriteAlgorithmIdentifier(
             ref Asn1Writer writer,
-            ReadOnlySpan<byte> nonce)
-        {
-            throw Error.NotSupported_Operation();
-        }
+            ReadOnlySpan<byte> nonce);
     }
 }
