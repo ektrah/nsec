@@ -20,7 +20,7 @@ namespace NSec.Cryptography.Formatting
             Debug.Assert(span.Length == crypto_scalarmult_curve25519_SCALARBYTES);
 
             byte[] publicKeyBytes = span.ToArray();
-            publicKeyBytes[crypto_scalarmult_curve25519_SCALARBYTES - 1] &= 0x7F;
+            publicKeyBytes[publicKeyBytes.Length - 1] &= 0x7F;
             return publicKeyBytes;
         }
 

@@ -26,7 +26,7 @@ namespace NSec.Cryptography.Formatting
             keyHandle.Import(span);
             crypto_scalarmult_curve25519_base(publicKeyBytes, keyHandle);
 
-            Debug.Assert((publicKeyBytes[crypto_scalarmult_curve25519_SCALARBYTES - 1] & 0x80) == 0);
+            Debug.Assert((publicKeyBytes[publicKeyBytes.Length - 1] & 0x80) == 0);
         }
 
         protected override void Serialize(
