@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard1.1</TargetFramework>
@@ -25,13 +25,13 @@ NSec.Cryptography.X25519</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <LangVersion>latest</LangVersion>
+    <LangVersion>7.2</LangVersion>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <LangVersion>latest</LangVersion>
+    <LangVersion>7.2</LangVersion>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
@@ -43,8 +43,9 @@ NSec.Cryptography.X25519</Description>
 
   <ItemGroup>
     <PackageReference Include="libsodium" Version="1.0.13-preview-01" />
-    <PackageReference Include="System.Memory" Version="4.5.0-preview2-25621-02" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.0-preview2-25621-02" />
+    <PackageReference Include="Microsoft.NETCore.Compilers" Version="2.6.0-rdonly-ref-61915-01" PrivateAssets="All" />
+    <PackageReference Include="System.Memory" Version="4.5.0-preview2-25627-02" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.0-preview2-25627-02" />
   </ItemGroup>
 
 </Project>

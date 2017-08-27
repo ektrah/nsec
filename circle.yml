@@ -9,7 +9,7 @@ jobs:
       - checkout
       - run:
           name: Restore dependencies
-          command: dotnet restore --source "https://api.nuget.org/v3/index.json" --source "https://dotnet.myget.org/F/dotnet-core/api/v3/index.json"
+          command: dotnet restore --source "https://api.nuget.org/v3/index.json" --source "https://dotnet.myget.org/F/dotnet-core/api/v3/index.json" --source "https://dotnet.myget.org/F/roslyn/api/v3/index.json"
       - run:
           name: Run unit tests (Debug)
           command: dotnet test -c Debug -f netcoreapp1.1

@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 namespace NSec.Cryptography.Formatting
 {
     // ITU-T X.690 5.0 DER
-    internal struct Asn1Writer
+    internal ref struct Asn1Writer
     {
         internal const int MaxDepth = 6;
 
