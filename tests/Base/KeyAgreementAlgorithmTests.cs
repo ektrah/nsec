@@ -217,7 +217,7 @@ namespace NSec.Tests.Base
                 var actual = k.Export(KeyBlobFormat.RawPrivateKey);
 
                 var unexpected = new byte[actual.Length];
-                Utilities.Fill(unexpected, 0xDB);
+                Utilities.Fill(unexpected, actual[0]);
 
                 Assert.NotEqual(unexpected, actual);
             }
