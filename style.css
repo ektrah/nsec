@@ -165,6 +165,10 @@ nav > ul {
         color: #AAA;
     }
 
+    .s {
+        font-style: italic;
+    }
+
     a, .k {
         color: #0071BC;
         text-decoration: none;
