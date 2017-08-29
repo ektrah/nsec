@@ -77,6 +77,7 @@ namespace NSec.Tests
 
         public static readonly TheoryData<Type> KeylessAlgorithms = new TheoryData<Type>
         {
+            typeof(Blake2b),
             typeof(HkdfSha256),
             typeof(HkdfSha512),
             typeof(Sha256),
