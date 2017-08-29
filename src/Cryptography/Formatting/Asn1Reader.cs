@@ -305,7 +305,8 @@ namespace NSec.Cryptography.Formatting
 
             public Span Slice(int start, int length)
             {
-                if (unchecked((uint)start > (uint)_length) || unchecked((uint)length > (uint)(_length - start)))
+                if (unchecked((uint)start > (uint)_length) ||
+                    unchecked((uint)length > (uint)(_length - start)))
                 {
                     throw new ArgumentOutOfRangeException(nameof(start));
                 }
