@@ -17,15 +17,8 @@ namespace NSec.Tests.Formatting
             Test(a, a.KeySize, KeyBlobFormat.RawSymmetricKey, a.KeySize, KeyBlobFormat.NSecSymmetricKey, blobHeader);
         }
 
-        [Fact]
-        public static void Blake2bMac()
-        {
-            var a = new Blake2bMac();
-
-            Test(a, a.DefaultKeySize, KeyBlobFormat.RawSymmetricKey, a.DefaultKeySize, KeyBlobFormat.NSecSymmetricKey, new byte[] { 0xDE, 0x32, 0x45, 0xDE });
-        }
-
         [Theory]
+        [InlineData(typeof(Blake2bMac), new byte[] { 0xDE, 0x32, 0x45, 0xDE })]
         [InlineData(typeof(HmacSha256), new byte[] { 0xDE, 0x33, 0x46, 0xDE })]
         [InlineData(typeof(HmacSha512), new byte[] { 0xDE, 0x33, 0x47, 0xDE })]
         public static void Mac(Type algorithmType, byte[] blobHeader)
