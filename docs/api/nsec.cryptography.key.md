@@ -220,7 +220,7 @@ format
 : One of the [[KeyBlobFormat|KeyBlobFormat Enum]] values that specifies the
     format of the key BLOB.
 
-#### Returns
+#### Return value
 
 A BLOB that contains the key in the specified format.
 

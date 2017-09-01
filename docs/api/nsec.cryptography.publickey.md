@@ -119,7 +119,7 @@ class is equal to another instance of the same type.
 other
 : An object to compare with this object.
 
-#### Returns
+#### Return value
 
 `true` if the current object is equal to the `other` parameter; otherwise,
 `false`.
@@ -138,7 +138,7 @@ class is equal to the specified object.
 obj
 : An object to compare with this object.
 
-#### Returns
+#### Return value
 
 `true` if the current object is equal to the `obj` parameter; otherwise,
 `false`.
@@ -158,7 +158,7 @@ format
 : One of the [[KeyBlobFormat|KeyBlobFormat Enum]] values that specifies the
     format of the public key BLOB.
 
-#### Returns
+#### Return value
 
 A BLOB that contains the public key in the specified format.
 
@@ -177,7 +177,7 @@ Returns the hash code for the current [[PublicKey|PublicKey Class]] object.
 
     public override int GetHashCode()
 
-#### Returns
+#### Return value
 
 A 32-bit signed integer hash code.
 
