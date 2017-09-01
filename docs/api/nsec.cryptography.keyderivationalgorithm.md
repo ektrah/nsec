@@ -25,7 +25,7 @@ Gets the maximum size, in bytes, of the key derivation output.
 
     public int MaxOutputSize { get; }
 
-#### Property value
+#### Property Value
 
 The maximum size, in bytes, of the key derivation output.
 
@@ -36,7 +36,7 @@ Gets a value that indicates whether the algorithm supports the use of salt.
 
     public bool SupportsSalt { get; }
 
-#### Property value
+#### Property Value
 
 `true` if the algorithm supports the use of salt; otherwise, `false`.
 
@@ -68,7 +68,7 @@ info
 count
 : The number of bytes to derive.
 
-#### Return value
+#### Return Value
 
 An array of bytes that contains the derived bytes.
 
@@ -163,7 +163,7 @@ flags
 : A bitwise combination of [[KeyFlags|KeyFlags Enum]] values that specifies
     the flags for the new key.
     
-#### Return value
+#### Return Value
 
 A new instance of the [[Key|Key Class]] class that represents the derived key.
 

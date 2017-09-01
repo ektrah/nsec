@@ -17,7 +17,7 @@ Gets the algorithm for the public key.
 
     public Algorithm Algorithm { get; }
 
-#### Property value
+#### Property Value
 
 An instance of the [[Algorithm|Algorithm Class]] class.
 
@@ -46,7 +46,7 @@ format
 : One of the [[KeyBlobFormat|KeyBlobFormat Enum]] values that specifies the
     format of the public key BLOB.
 
-#### Return value
+#### Return Value
 
 A new instance of the [[PublicKey|PublicKey Class]] class that represents the
 imported key.
@@ -93,7 +93,7 @@ result
     [[PublicKey|PublicKey Class]] class that represents the imported public key,
     or `null` if the import failed.
 
-#### Return value
+#### Return Value
 
 `true` if the public key BLOB was imported; otherwise, `false`.
 
@@ -119,7 +119,7 @@ class is equal to another instance of the same type.
 other
 : An object to compare with this object.
 
-#### Return value
+#### Return Value
 
 `true` if the current object is equal to the `other` parameter; otherwise,
 `false`.
@@ -138,7 +138,7 @@ class is equal to the specified object.
 obj
 : An object to compare with this object.
 
-#### Return value
+#### Return Value
 
 `true` if the current object is equal to the `obj` parameter; otherwise,
 `false`.
@@ -158,7 +158,7 @@ format
 : One of the [[KeyBlobFormat|KeyBlobFormat Enum]] values that specifies the
     format of the public key BLOB.
 
-#### Return value
+#### Return Value
 
 A BLOB that contains the public key in the specified format.
 
@@ -177,7 +177,7 @@ Returns the hash code for the current [[PublicKey|PublicKey Class]] object.
 
     public override int GetHashCode()
 
-#### Return value
+#### Return Value
 
 A 32-bit signed integer hash code.
 

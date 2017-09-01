@@ -24,7 +24,7 @@ Gets the private key size, in bytes.
 
     public int PrivateKeySize { get; }
 
-#### Property value
+#### Property Value
 
 The private key size, in bytes.
 
@@ -35,7 +35,7 @@ Gets the public key size, in bytes.
 
     public int PublicKeySize { get; }
 
-#### Property value
+#### Property Value
 
 The public key size, in bytes.
 
@@ -46,7 +46,7 @@ Gets the size, in bytes, of the shared secret resulting from key agreement.
 
     public int SharedSecretSize { get; }
 
-#### Property value
+#### Property Value
 
 The shared secret size, in bytes.
 
@@ -70,7 +70,7 @@ key
 otherPartyPublicKey
 : The public key of the other party to use to create the shared secret.
 
-#### Return value
+#### Return Value
 
 A new instance of the [[SharedSecret|SharedSecret Class]] class that represents
 the shared secret created from `key` and `otherPartyPublicKey`.
@@ -113,7 +113,7 @@ result
     [[SharedSecret|SharedSecret Class]] class that represents the shared
     secret, or `null` if key agreement failed.
 
-#### Return value
+#### Return Value
 
 `true` if key agreement succeeds; otherwise, `false`.
 

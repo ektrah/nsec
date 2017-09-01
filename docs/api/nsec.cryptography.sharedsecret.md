@@ -18,7 +18,7 @@ Gets the size, in bytes, of the shared secret.
 
     public int Size { get; }
 
-#### Property value
+#### Property Value
 
 The size, in bytes, of the shared secret.
 
@@ -38,7 +38,7 @@ Imports the specified shared secret.
 sharedSecret
 : The shared secret to import.
 
-#### Return value
+#### Return Value
 
 A new instance of the [[SharedSecret|SharedSecret Class]] class that represents
 the imported shared secret.

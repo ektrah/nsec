@@ -26,7 +26,7 @@ Gets the default key size, in bytes.
 
     public int DefaultKeySize { get; }
 
-#### Property value
+#### Property Value
 
 The default key size, in bytes.
 
@@ -37,7 +37,7 @@ Gets the default MAC size, in bytes.
 
     public int DefaultMacSize { get; }
 
-#### Property value
+#### Property Value
 
 The default MAC size, in bytes.
 
@@ -48,7 +48,7 @@ Gets the maximum key size, in bytes.
 
     public int MaxKeySize { get; }
 
-#### Property value
+#### Property Value
 
 The maximum key size, in bytes.
 
@@ -59,7 +59,7 @@ Gets the maximum MAC size, in bytes.
 
     public int MaxMacSize { get; }
 
-#### Property value
+#### Property Value
 
 The maximum MAC size, in bytes.
 
@@ -70,7 +70,7 @@ Gets the minimum key size, in bytes.
 
     public int MinKeySize { get; }
 
-#### Property value
+#### Property Value
 
 The minimum key size, in bytes.
 
@@ -81,7 +81,7 @@ Gets the minimum MAC size, in bytes.
 
     public int MinMacSize { get; }
 
-#### Property value
+#### Property Value
 
 The minimum MAC size, in bytes.
 
@@ -106,7 +106,7 @@ key
 data
 : The data to be signed.
 
-#### Return value
+#### Return Value
 
 The computed message authentication code.
 
@@ -144,7 +144,7 @@ data
 macSize
 : The size, in bytes, of the message authentication code to compute.
 
-#### Return value
+#### Return Value
 
 The computed message authentication code.
 
@@ -226,7 +226,7 @@ data
 mac
 : The message authentication code to be verified.
 
-#### Return value
+#### Return Value
 
 `true` if verification succeeds; otherwise, `false`.
 

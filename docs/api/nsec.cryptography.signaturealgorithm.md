@@ -24,7 +24,7 @@ Gets the private size, in bytes.
 
     public int PrivateKeySize { get; }
 
-#### Property value
+#### Property Value
 
 The private key size, in bytes.
 
@@ -35,7 +35,7 @@ Gets the public key size, in bytes.
 
     public int PublicKeySize { get; }
 
-#### Property value
+#### Property Value
 
 The public key size, in bytes.
 
@@ -46,7 +46,7 @@ Gets the signature size, in bytes.
 
     public int SignatureSize { get; }
 
-#### Property value
+#### Property Value
 
 The signature size, in bytes.
 
@@ -71,7 +71,7 @@ key
 data
 : The data to be signed.
 
-#### Return value
+#### Return Value
 
 The data's signature.
 
@@ -149,7 +149,7 @@ data
 signature
 : The signature to be verified.
 
-#### Return value
+#### Return Value
 
 `true` if verification succeeds; otherwise, `false`.
 

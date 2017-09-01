@@ -26,7 +26,7 @@ Gets the default hash size, in bytes.
 
     public int DefaultHashSize { get; }
 
-#### Property value
+#### Property Value
 
 The default hash size, in bytes.
 
@@ -38,7 +38,7 @@ Gets the maximum hash size, in bytes.
 
     public int MaxHashSize { get; }
 
-#### Property value
+#### Property Value
 
 The maximum hash size, in bytes.
 
@@ -49,7 +49,7 @@ Gets the minimum hash size, in bytes.
 
     public int MinHashSize { get; }
 
-#### Property value
+#### Property Value
 
 The minimum hash size, in bytes.
 
@@ -70,7 +70,7 @@ bytes.
 data
 : The input data to compute the hash for.
 
-#### Return value
+#### Return Value
 
 The computed hash.
 
@@ -91,7 +91,7 @@ data
 hashSize
 : The size, in bytes, of the hash to compute.
 
-#### Return value
+#### Return Value
 
 The computed hash.
 
@@ -142,7 +142,7 @@ data
 hash
 : The hash to be verified.
 
-#### Return value
+#### Return Value
 
 `true` if verification succeeds; otherwise, `false`.
 

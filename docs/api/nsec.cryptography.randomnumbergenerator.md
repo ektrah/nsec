@@ -17,7 +17,7 @@ Gets the default [[RandomNumberGenerator|RandomNumberGenerator Class]] instance.
 
     public static RandomNumberGenerator Default { get; }
 
-#### Property value
+#### Property Value
 
 An instance of the [[RandomNumberGenerator|RandomNumberGenerator Class]] class
 that provides the default random number generator.
@@ -39,7 +39,7 @@ an array of bytes.
 count
 : The number of bytes to generate.
 
-#### Return value
+#### Return Value
 
 An array of bytes that contains the generated values.
 
@@ -80,7 +80,7 @@ flags
 : A bitwise combination of [[KeyFlags|KeyFlags Enum]] values that specifies
     the flags for the new key.
 
-#### Return value
+#### Return Value
 
 A new instance of the [[Key|Key Class]] class that represents the new key.
 

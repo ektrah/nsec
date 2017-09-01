@@ -25,7 +25,7 @@ Gets the key size, in bytes.
 
     public int KeySize { get; }
 
-#### Property value
+#### Property Value
 
 The key size, in bytes.
 
@@ -36,7 +36,7 @@ Gets the nonce size, in bytes.
 
     public int NonceSize { get; }
 
-#### Property value
+#### Property Value
 
 The nonce size, in bytes.
 
@@ -47,7 +47,7 @@ Gets the authentication tag size, in bytes.
 
     public int TagSize { get; }
 
-#### Property value
+#### Property Value
 
 The authentication tag size, in bytes.
 
@@ -82,7 +82,7 @@ associatedData
 ciphertext
 : The encrypted data to be decrypted and authenticated.
 
-#### Return value
+#### Return Value
 
 An array of bytes that contains the decrypted and authenticated data.
 
@@ -197,7 +197,7 @@ associatedData
 plaintext
 : The data to be encrypted.
 
-#### Return value
+#### Return Value
 
 An array of bytes that contains the encrypted data and the authentication tag.
 
@@ -315,7 +315,7 @@ plaintext
 : When this method returns, contains an array of bytes that contains the
     decrypted and authenticated data, or `null` if authentication failed.
 
-#### Return value
+#### Return Value
 
 `true` if authentication succeeds; otherwise, `false`.
 
@@ -370,7 +370,7 @@ plaintext
     `ciphertext`, except that `plaintext` and `ciphertext` may point at the same
     memory location for in-place decryption.
 
-#### Return value
+#### Return Value
 
 `true` if authentication succeeds; otherwise, `false`.
 

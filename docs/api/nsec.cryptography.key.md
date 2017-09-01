@@ -52,7 +52,7 @@ Gets the algorithm for the key.
 
     public Algorithm Algorithm { get; }
 
-#### Property value
+#### Property Value
 
 An instance of the [[Algorithm|Algorithm Class]] class.
 
@@ -63,7 +63,7 @@ Gets the flags for the key.
 
     public KeyFlags Flags { get; }
 
-#### Property value
+#### Property Value
 
 A bitwise combination of [[KeyFlags|KeyFlags Enum]] values that specifies the
 flags for the key.
@@ -76,7 +76,7 @@ represents a key pair.
 
     public PublicKey PublicKey { get; }
 
-#### Property value
+#### Property Value
 
 An instance of the [[PublicKey|PublicKey Class]] class if the current instance
 of the [[Key|Key Class]] class represents a key pair; otherwise, `null`.
@@ -102,7 +102,7 @@ flags
 : A bitwise combination of [[KeyFlags|KeyFlags Enum]] values that specifies
     the flags for the new key.
 
-#### Return value
+#### Return Value
 
 A new instance of the [[Key|Key Class]] class that represents the new key.
 
@@ -147,7 +147,7 @@ flags
 : A bitwise combination of [[KeyFlags|KeyFlags Enum]] values that specifies
     the flags for the imported key.
 
-#### Return value
+#### Return Value
 
 A new instance of the [[Key|Key Class]] class that represents the imported key.
 
@@ -197,7 +197,7 @@ result
 : When this method returns, contains a new instance of the [[Key|Key Class]]
     class that represents the imported key, or `null` if the import failed.
 
-#### Return value
+#### Return Value
 
 `true` if the import succeeds; otherwise, `false`.
 
@@ -236,7 +236,7 @@ format
 : One of the [[KeyBlobFormat|KeyBlobFormat Enum]] values that specifies the
     format of the key BLOB.
 
-#### Return value
+#### Return Value
 
 A BLOB that contains the key in the specified format.
 
