@@ -143,8 +143,9 @@ nav > ul {
         content: '';
         display: block;
         background: url(nsec.svg) center no-repeat;
-        height: 148px;
-        padding: 4em 0;
+        background-size: contain;
+        height: 8em;
+        margin: 2em 0;
     }
 
     pre[data-lang]:before {
@@ -181,11 +182,21 @@ nav > ul {
         font-size: 14px;
         padding: 0 2em;
     }
+
+    header:before {
+        height: 10em;
+        margin: 3em 0;
+    }
 }
 
 @media screen and (min-width:40em) {
     body {
         font-size: 15px;
         padding: 0 3em;
+    }
+
+    header:before {
+        height: 12em;
+        margin: 4em 0;
     }
 }
