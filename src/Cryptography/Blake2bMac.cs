@@ -131,10 +131,6 @@ namespace NSec.Cryptography
             Debug.Assert(mac.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(mac.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
-            // There is no crypto_generichash_blake2b_verify function,
-            // so we calculate the MAC ourselves and call sodium_memcmp to
-            // compare the expected MAC with the actual MAC.
-
             Span<byte> temp;
             try
             {
