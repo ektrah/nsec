@@ -3,15 +3,15 @@
 The NSec documentation by [Klaus Hartke](mailto:contact@nsec.rocks) is licensed
 under a [Creative Commons Attribution 4.0 International
 License](https://creativecommons.org/licenses/by/4.0/).
-
-Sample code is licensed under the [CC0 1.0 Universal (CC0 1.0) Public Domain
+All sample code is licensed under the [CC0 1.0 Universal (CC0 1.0) Public Domain
 Dedication](https://creativecommons.org/publicdomain/zero/1.0/).
 
-The NSec logo is not covered by the above licenses and may not be used without
-permission except when reproducing the unmodified NSec documentation.
+The NSec logo by [Klaus Hartke](mailto:contact@nsec.rocks) is not covered by the
+above licenses and may not be used without permission except when reproducing
+the unmodified NSec documentation.
 
 
-## License notice for NSec
+## License Notice for NSec
 
 [NSec](https://github.com/ektrah/nsec) is licensed under the MIT license.
 
@@ -36,7 +36,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
-## License notice for libsodium
+## License Notice for libsodium
 
 NSec is based on and contains code derived from
 [libsodium](https://github.com/jedisct1/libsodium),
@@ -57,7 +57,7 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 
-## License notice for RFC 6234
+## License Notice for RFC 6234
 
 NSec contains code derived from the sample code in
 [RFC 6234](https://tools.ietf.org/html/rfc6234),
@@ -91,7 +91,7 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-## License notice for .NET Core Libraries
+## License Notice for .NET Core Libraries
 
 NSec contains code derived from the
 [.NET Core Libraries](https://github.com/dotnet/corefx/),
@@ -118,7 +118,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
-## License notice for .NET Core Lab
+## License Notice for .NET Core Lab
 
 NSec contains code derived from libraries in the
 [.NET Core Lab](https://github.com/dotnet/corefxlab/),
@@ -145,9 +145,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
-## License notice for Constant-Time Encoding
+## License Notice for Hex and Base64 Implementation
 
-This software contains code derived from Steve Thomas' [Hex and Base64
+NSec contains code derived from Steve Thomas's [Hex and Base64
 implementation](https://github.com/Sc00bz/ConstTimeEncoding), which is available
 under the MIT license.
 
