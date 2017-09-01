@@ -96,6 +96,10 @@ flags
 : A bitwise combination of [[KeyFlags|KeyFlags Enum]] values that specifies
     the flags for the new key.
 
+#### Return value
+
+A new instance of the [[Key|Key Class]] class that represents the new key.
+
 #### Exceptions
 
 ArgumentNullException
