@@ -62,7 +62,7 @@ Soon&trade; (waiting for .NET Core 2.1)
     * [[KeyBlobFormat Enum]]
     * [[KeyFlags Enum]]
 * [[PublicKey Class]]
-* [[SecureRandom Class]]
+* [[RandomNumberGenerator Class]]
 * [[SharedSecret Class]]
 
 
