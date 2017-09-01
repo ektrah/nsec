@@ -89,7 +89,7 @@ namespace NSec.Cryptography
             Algorithm algorithm,
             KeyFlags flags = KeyFlags.None)
         {
-            return new Key(algorithm, flags);
+            return RandomNumberGenerator.Default.GenerateKey(algorithm, flags);
         }
 
         public static Key Import(
