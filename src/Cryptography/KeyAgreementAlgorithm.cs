@@ -7,7 +7,7 @@ namespace NSec.Cryptography
     //
     //  A key agreement algorithm
     //
-    //  Possible Instances
+    //  Candidates
     //
     //      | Algorithm  | Reference  | Key Size | Shared Secret Size |
     //      | ---------- | ---------- | -------- | ------------------ |

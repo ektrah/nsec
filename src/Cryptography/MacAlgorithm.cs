@@ -7,7 +7,7 @@ namespace NSec.Cryptography
     //
     //  A message authentication code (MAC) algorithm
     //
-    //  Possible Instances
+    //  Candidates
     //
     //      | Algorithm    | Reference       | Key Size | Nonce Size | Customization | MAC Size  |
     //      | ------------ | --------------- | -------- | ---------- | ------------- | --------  |

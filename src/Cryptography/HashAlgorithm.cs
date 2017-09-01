@@ -6,7 +6,7 @@ namespace NSec.Cryptography
     //
     //  A cryptographic hash algorithm
     //
-    //  Possible Instances
+    //  Candidates
     //
     //      | Algorithm | Reference       | Customization | Hash Size |
     //      | --------- | --------------- | ------------- | --------- |
