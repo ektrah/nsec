@@ -39,7 +39,7 @@ namespace NSec.Cryptography
                     seed = new Span<byte>(pointer, seedSize);
                 }
 
-                SecureRandom.GenerateBytesCore(seed);
+                RandomNumberGenerator.Default.GenerateBytesCore(seed);
                 algorithm.CreateKey(seed, out keyHandle, out publicKeyBytes);
                 success = true;
             }

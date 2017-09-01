@@ -23,5 +23,5 @@
     * [[KeyBlobFormat Enum]]
     * [[KeyFlags Enum]]
 * [[PublicKey Class]]
-* [[SecureRandom Class]]
+* [[RandomNumberGenerator Class]]
 * [[SharedSecret Class]]
