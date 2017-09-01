@@ -136,8 +136,6 @@ nav > ul {
         margin: 0 auto;
         padding: 0 1em;
         overflow-wrap: break-word;
-        border-left: 1px solid #EEE;
-        border-right: 1px solid #EEE;
         overflow-y: scroll;
     }
 
@@ -147,7 +145,6 @@ nav > ul {
         background: url(nsec.svg) center no-repeat;
         height: 148px;
         padding: 4em 0;
-        border-bottom: 1px solid #EEE;
     }
 
     pre[data-lang]:before {
