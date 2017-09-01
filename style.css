@@ -27,7 +27,7 @@ code, pre {
 }
 
 code, pre, th {
-    background: #F8F8F8;
+    background: #FAFAFA;
 }
 
 pre {
@@ -36,14 +36,14 @@ pre {
 }
 
 pre, th {
-    border-top: 1px solid #EEE;
-    border-bottom: 1px solid #EEE;
+    border-top: 1px solid #EAEAEA;
+    border-bottom: 1px solid #EAEAEA;
 }
 
 code {
     display: inline-block;
     padding: .1em .3em;
-    border: 1px solid #EEE;
+    border: 1px solid #EAEAEA;
 }
 
 blockquote, dd, ol, ul {
@@ -69,7 +69,7 @@ th {
 }
 
 .admonition {
-    border: 1px solid #EEE;
+    border: 1px solid #EAEAEA;
     border-left: .5em solid #0071BC;
     padding: 0 1em;
 }
@@ -91,11 +91,11 @@ header, footer {
     }
 
 footer {
-    padding: 1em 0 4em;
+    margin: 2em 0 4em;
 }
 
     footer, footer a, footer a:visited {
-        color: #DDD;
+        color: #CCC;
     }
 
 nav ol, nav ul {
@@ -156,7 +156,7 @@ nav > ul {
         margin: -.5em;
         padding: .1em .3em;
         background: white;
-        border: 1px solid #EEE;
+        border: 1px solid #EAEAEA;
     }
 
     .c {
