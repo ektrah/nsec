@@ -46,7 +46,9 @@ namespace NSec.Cryptography.Formatting
 
         public void BeginSequence()
         {
-            if (!TryRead(0x30, out Span span))
+            Span span = Read(0x30);
+
+            if (_failed)
             {
                 Fail();
             }
@@ -63,9 +65,10 @@ namespace NSec.Cryptography.Formatting
 
         public ReadOnlySpan<byte> BitString()
         {
+            Span span = Read(0x03);
             ReadOnlySpan<byte> value = default;
 
-            if (!TryRead(0x03, out Span span) || span.IsEmpty)
+            if (_failed || span.IsEmpty)
             {
                 Fail();
             }
@@ -87,9 +90,10 @@ namespace NSec.Cryptography.Formatting
 
         public bool Bool()
         {
+            Span span = Read(0x01);
             bool value = default;
 
-            if (!TryRead(0x01, out Span span) || span.Length != 1)
+            if (_failed || span.Length != 1)
             {
                 Fail();
             }
@@ -127,9 +131,10 @@ namespace NSec.Cryptography.Formatting
 
         public int Integer32()
         {
+            Span span = Read(0x02);
             int value = default;
 
-            if (!TryRead(0x02, out Span span))
+            if (_failed)
             {
                 Fail();
             }
@@ -155,9 +160,10 @@ namespace NSec.Cryptography.Formatting
 
         public long Integer64()
         {
+            Span span = Read(0x02);
             long value = default;
 
-            if (!TryRead(0x02, out Span span))
+            if (_failed)
             {
                 Fail();
             }
@@ -183,7 +189,9 @@ namespace NSec.Cryptography.Formatting
 
         public void Null()
         {
-            if (!TryRead(0x05, out Span span) || !span.IsEmpty)
+            Span span = Read(0x05);
+
+            if (_failed || !span.IsEmpty)
             {
                 Fail();
             }
@@ -191,7 +199,9 @@ namespace NSec.Cryptography.Formatting
 
         public ReadOnlySpan<byte> ObjectIdentifier()
         {
-            if (!TryRead(0x06, out Span span))
+            Span span = Read(0x06);
+
+            if (_failed)
             {
                 Fail();
             }
@@ -201,7 +211,9 @@ namespace NSec.Cryptography.Formatting
 
         public ReadOnlySpan<byte> OctetString()
         {
-            if (!TryRead(0x04, out Span span))
+            Span span = Read(0x04);
+
+            if (_failed)
             {
                 Fail();
             }
@@ -226,17 +238,15 @@ namespace NSec.Cryptography.Formatting
                 || bytes.Length > 1 && bytes[0] == 0xFF && (bytes[1] & 0x80) == 0x80;
         }
 
-        private bool TryRead(
-            int tag,
-            out Span result)
+        private Span Read(
+            int tag)
         {
             Span span = Unsafe.Add(ref _stack0, _depth);
             ReadOnlySpan<byte> bytes = span[_buffer];
 
             if (_failed || bytes.Length < 2 || bytes[0] != tag)
             {
-                result = default;
-                return false;
+                goto failed;
             }
 
             int start = 2;
@@ -251,8 +261,7 @@ namespace NSec.Cryptography.Formatting
                 int count = bytes[1] & 0x7F;
                 if (count < 1 || count > sizeof(int) || count > bytes.Length - 2 || bytes[2] == 0)
                 {
-                    result = default;
-                    return false;
+                    goto failed;
                 }
                 while (count-- > 0)
                 {
@@ -260,20 +269,20 @@ namespace NSec.Cryptography.Formatting
                 }
                 if (length < 0x80)
                 {
-                    result = default;
-                    return false;
+                    goto failed;
                 }
             }
 
             if (length > bytes.Length - start)
             {
-                result = default;
-                return false;
+                goto failed;
             }
 
             Unsafe.Add(ref _stack0, _depth) = span.Slice(start + length);
-            result = span.Slice(start, length);
-            return true;
+            return span.Slice(start, length);
+        failed:
+            Fail();
+            return default;
         }
 
         private struct Span
