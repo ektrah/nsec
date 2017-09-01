@@ -144,8 +144,8 @@ nav > ul {
         display: block;
         background: url(nsec.svg) center no-repeat;
         background-size: contain;
-        height: 8em;
-        margin: 2em 0;
+        height: 10em;
+        border: 2em solid transparent;
     }
 
     pre[data-lang]:before {
@@ -184,8 +184,8 @@ nav > ul {
     }
 
     header:before {
-        height: 10em;
-        margin: 3em 0;
+        height: 11em;
+        border: 3em solid transparent;
     }
 }
 
@@ -197,6 +197,6 @@ nav > ul {
 
     header:before {
         height: 12em;
-        margin: 4em 0;
+        border: 4em solid transparent;
     }
 }
