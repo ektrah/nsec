@@ -65,24 +65,16 @@ namespace NSec.Cryptography.Formatting
 
         public ReadOnlySpan<byte> BitString()
         {
-            Span span = Read(0x03);
+            ReadOnlySpan<byte> bytes = Read(0x03).ApplyTo(_buffer);
             ReadOnlySpan<byte> value = default;
 
-            if (_failed || span.IsEmpty)
+            if (_failed || bytes.IsEmpty || bytes[0] != 0)
             {
                 Fail();
             }
             else
             {
-                ReadOnlySpan<byte> bytes = span[_buffer];
-                if (bytes[0] != 0)
-                {
-                    Fail();
-                }
-                else
-                {
-                    value = bytes.Slice(1);
-                }
+                value = bytes.Slice(1);
             }
 
             return value;
@@ -90,24 +82,16 @@ namespace NSec.Cryptography.Formatting
 
         public bool Bool()
         {
-            Span span = Read(0x01);
+            ReadOnlySpan<byte> bytes = Read(0x01).ApplyTo(_buffer);
             bool value = default;
 
-            if (_failed || span.Length != 1)
+            if (_failed || bytes.Length != 1 || (bytes[0] != 0x00 && bytes[0] != 0xFF))
             {
                 Fail();
             }
             else
             {
-                ReadOnlySpan<byte> bytes = span[_buffer];
-                if (bytes[0] != 0x00 && bytes[0] != 0xFF)
-                {
-                    Fail();
-                }
-                else
-                {
-                    value = (bytes[0] != 0x00);
-                }
+                value = (bytes[0] != 0x00);
             }
 
             return value;
@@ -131,27 +115,19 @@ namespace NSec.Cryptography.Formatting
 
         public int Integer32()
         {
-            Span span = Read(0x02);
+            ReadOnlySpan<byte> bytes = Read(0x02).ApplyTo(_buffer);
             int value = default;
 
-            if (_failed)
+            if (_failed || IsInvalidInteger(bytes, sizeof(int)))
             {
                 Fail();
             }
             else
             {
-                ReadOnlySpan<byte> bytes = span[_buffer];
-                if (IsInvalidInteger(bytes, sizeof(int)))
+                value = -(bytes[0] >> 7);
+                for (int i = 0; i < bytes.Length; i++)
                 {
-                    Fail();
-                }
-                else
-                {
-                    value = -(bytes[0] >> 7);
-                    for (int i = 0; i < bytes.Length; i++)
-                    {
-                        value = (value << 8) | bytes[i];
-                    }
+                    value = (value << 8) | bytes[i];
                 }
             }
 
@@ -160,27 +136,19 @@ namespace NSec.Cryptography.Formatting
 
         public long Integer64()
         {
-            Span span = Read(0x02);
+            ReadOnlySpan<byte> bytes = Read(0x02).ApplyTo(_buffer);
             long value = default;
 
-            if (_failed)
+            if (_failed || IsInvalidInteger(bytes, sizeof(long)))
             {
                 Fail();
             }
             else
             {
-                ReadOnlySpan<byte> bytes = span[_buffer];
-                if (IsInvalidInteger(bytes, sizeof(long)))
+                value = -(bytes[0] >> 7);
+                for (int i = 0; i < bytes.Length; i++)
                 {
-                    Fail();
-                }
-                else
-                {
-                    value = -(bytes[0] >> 7);
-                    for (int i = 0; i < bytes.Length; i++)
-                    {
-                        value = (value << 8) | bytes[i];
-                    }
+                    value = (value << 8) | bytes[i];
                 }
             }
 
@@ -199,26 +167,12 @@ namespace NSec.Cryptography.Formatting
 
         public ReadOnlySpan<byte> ObjectIdentifier()
         {
-            Span span = Read(0x06);
-
-            if (_failed)
-            {
-                Fail();
-            }
-
-            return span[_buffer];
+            return Read(0x06).ApplyTo(_buffer);
         }
 
         public ReadOnlySpan<byte> OctetString()
         {
-            Span span = Read(0x04);
-
-            if (_failed)
-            {
-                Fail();
-            }
-
-            return span[_buffer];
+            return Read(0x04).ApplyTo(_buffer);
         }
 
         private void Fail()
@@ -242,7 +196,7 @@ namespace NSec.Cryptography.Formatting
             int tag)
         {
             Span span = Unsafe.Add(ref _stack0, _depth);
-            ReadOnlySpan<byte> bytes = span[_buffer];
+            ReadOnlySpan<byte> bytes = span.ApplyTo(_buffer);
 
             if (_failed || bytes.Length < 2 || bytes[0] != tag)
             {
@@ -300,7 +254,10 @@ namespace NSec.Cryptography.Formatting
 
             public int Length => _length;
 
-            public ReadOnlySpan<byte> this[ReadOnlySpan<byte> buffer] => buffer.Slice(_start, _length);
+            public ReadOnlySpan<byte> ApplyTo(ReadOnlySpan<byte> buffer)
+            {
+                return buffer.Slice(_start, _length);
+            }
 
             public Span Slice(int start)
             {
