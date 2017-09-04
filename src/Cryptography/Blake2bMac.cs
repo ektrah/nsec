@@ -131,15 +131,9 @@ namespace NSec.Cryptography
             Debug.Assert(mac.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(mac.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
-            Span<byte> temp;
+            Span<byte> temp = stackalloc byte[mac.Length];
             try
             {
-                unsafe
-                {
-                    byte* pointer = stackalloc byte[mac.Length];
-                    temp = new Span<byte>(pointer, mac.Length);
-                }
-
                 crypto_generichash_blake2b_init(out crypto_generichash_blake2b_state state, keyHandle, (UIntPtr)keyHandle.Length, (UIntPtr)temp.Length);
                 crypto_generichash_blake2b_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
                 crypto_generichash_blake2b_final(ref state, ref temp.DangerousGetPinnableReference(), (UIntPtr)temp.Length);

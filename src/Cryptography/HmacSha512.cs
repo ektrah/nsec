@@ -107,15 +107,9 @@ namespace NSec.Cryptography
             }
             else
             {
-                Span<byte> temp;
+                Span<byte> temp = stackalloc byte[crypto_auth_hmacsha512_BYTES];
                 try
                 {
-                    unsafe
-                    {
-                        byte* pointer = stackalloc byte[crypto_auth_hmacsha512_BYTES];
-                        temp = new Span<byte>(pointer, crypto_auth_hmacsha512_BYTES);
-                    }
-
                     crypto_auth_hmacsha512_final(ref state, ref temp.DangerousGetPinnableReference());
                     temp.Slice(0, mac.Length).CopyTo(mac);
                 }
@@ -172,15 +166,9 @@ namespace NSec.Cryptography
             // so we calculate the MAC ourselves and call sodium_memcmp to
             // compare the expected MAC with the actual MAC.
 
-            Span<byte> temp;
+            Span<byte> temp = stackalloc byte[crypto_auth_hmacsha512_BYTES];
             try
             {
-                unsafe
-                {
-                    byte* pointer = stackalloc byte[crypto_auth_hmacsha512_BYTES];
-                    temp = new Span<byte>(pointer, crypto_auth_hmacsha512_BYTES);
-                }
-
                 crypto_auth_hmacsha512_init(out crypto_auth_hmacsha512_state state, keyHandle, (UIntPtr)keyHandle.Length);
                 crypto_auth_hmacsha512_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
                 crypto_auth_hmacsha512_final(ref state, ref temp.DangerousGetPinnableReference());

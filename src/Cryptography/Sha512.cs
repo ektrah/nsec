@@ -64,15 +64,9 @@ namespace NSec.Cryptography
             }
             else
             {
-                Span<byte> temp;
+                Span<byte> temp = stackalloc byte[crypto_hash_sha512_BYTES];
                 try
                 {
-                    unsafe
-                    {
-                        byte* pointer = stackalloc byte[crypto_hash_sha512_BYTES];
-                        temp = new Span<byte>(pointer, crypto_hash_sha512_BYTES);
-                    }
-
                     crypto_hash_sha512_final(ref state, ref temp.DangerousGetPinnableReference());
                     temp.Slice(0, hash.Length).CopyTo(hash);
                 }
@@ -89,15 +83,9 @@ namespace NSec.Cryptography
         {
             Debug.Assert(hash.Length <= crypto_hash_sha512_BYTES);
 
-            Span<byte> temp;
+            Span<byte> temp = stackalloc byte[crypto_hash_sha512_BYTES];
             try
             {
-                unsafe
-                {
-                    byte* pointer = stackalloc byte[crypto_hash_sha512_BYTES];
-                    temp = new Span<byte>(pointer, crypto_hash_sha512_BYTES);
-                }
-
                 crypto_hash_sha512_init(out crypto_hash_sha512_state state);
                 crypto_hash_sha512_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
                 crypto_hash_sha512_final(ref state, ref temp.DangerousGetPinnableReference());

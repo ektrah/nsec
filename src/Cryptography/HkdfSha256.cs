@@ -121,15 +121,9 @@ namespace NSec.Cryptography
         {
             Debug.Assert(bytes.Length <= byte.MaxValue * crypto_auth_hmacsha256_BYTES);
 
-            Span<byte> pseudorandomKey;
+            Span<byte> pseudorandomKey = stackalloc byte[crypto_auth_hmacsha256_BYTES];
             try
             {
-                unsafe
-                {
-                    byte* pointer = stackalloc byte[crypto_auth_hmacsha256_BYTES];
-                    pseudorandomKey = new Span<byte>(pointer, crypto_auth_hmacsha256_BYTES);
-                }
-
                 ExtractCore(inputKeyingMaterial, salt, pseudorandomKey);
 
                 ExpandCore(pseudorandomKey, info, bytes);
@@ -148,15 +142,9 @@ namespace NSec.Cryptography
             Debug.Assert(pseudorandomKey.Length >= crypto_auth_hmacsha256_BYTES);
             Debug.Assert(bytes.Length <= byte.MaxValue * crypto_auth_hmacsha256_BYTES);
 
-            Span<byte> temp;
+            Span<byte> temp = stackalloc byte[crypto_auth_hmacsha256_BYTES];
             try
             {
-                unsafe
-                {
-                    byte* pointer = stackalloc byte[crypto_auth_hmacsha256_BYTES];
-                    temp = new Span<byte>(pointer, crypto_auth_hmacsha256_BYTES);
-                }
-
                 int tempLength = 0;
                 int offset = 0;
                 byte counter = 0;

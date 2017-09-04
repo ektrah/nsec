@@ -69,12 +69,7 @@ namespace NSec.Cryptography.Formatting
                 return false;
             }
 
-            Span<byte> temp;
-            unsafe
-            {
-                byte* pointer = stackalloc byte[_blobSize];
-                temp = new Span<byte>(pointer, _blobSize);
-            }
+            Span<byte> temp = stackalloc byte[_blobSize];
 
             _blobHeader.CopyTo(temp);
             Serialize(publicKeyBytes, temp.Slice(_blobHeader.Length));
@@ -101,12 +96,7 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> blob,
             out byte[] result)
         {
-            Span<byte> temp;
-            unsafe
-            {
-                byte* pointer = stackalloc byte[_blobSize];
-                temp = new Span<byte>(pointer, _blobSize);
-            }
+            Span<byte> temp = stackalloc byte[_blobSize];
 
             if (!Armor.TryDecode(blob, s_beginLabel, s_endLabel, temp))
             {

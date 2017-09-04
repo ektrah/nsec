@@ -58,15 +58,9 @@ namespace NSec.Cryptography
         {
             Debug.Assert(hash.Length <= crypto_hash_sha256_BYTES);
 
-            Span<byte> temp;
+            Span<byte> temp = stackalloc byte[crypto_hash_sha256_BYTES];
             try
             {
-                unsafe
-                {
-                    byte* pointer = stackalloc byte[crypto_hash_sha256_BYTES];
-                    temp = new Span<byte>(pointer, crypto_hash_sha256_BYTES);
-                }
-
                 crypto_hash_sha256_init(out crypto_hash_sha256_state state);
                 crypto_hash_sha256_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
                 crypto_hash_sha256_final(ref state, ref temp.DangerousGetPinnableReference());

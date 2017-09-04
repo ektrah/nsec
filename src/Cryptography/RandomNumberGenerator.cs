@@ -44,21 +44,15 @@ namespace NSec.Cryptography
             }
 
             int seedSize = algorithm.GetDefaultSeedSize();
+            Debug.Assert(seedSize <= 64);
 
             SecureMemoryHandle keyHandle = null;
             byte[] publicKeyBytes = null;
             bool success = false;
-            Span<byte> seed;
+            Span<byte> seed = stackalloc byte[seedSize];
 
             try
             {
-                unsafe
-                {
-                    Debug.Assert(seedSize <= 64);
-                    byte* pointer = stackalloc byte[seedSize];
-                    seed = new Span<byte>(pointer, seedSize);
-                }
-
                 GenerateBytesCore(seed);
                 algorithm.CreateKey(seed, out keyHandle, out publicKeyBytes);
                 success = true;
