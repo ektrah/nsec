@@ -14,6 +14,7 @@
         * HkdfSha256 Class
         * HkdfSha512 Class
     * [[MacAlgorithm Class]]
+        * Blake2bMac Class
         * HmacSha256 Class
         * HmacSha512 Class
     * [[SignatureAlgorithm Class]]

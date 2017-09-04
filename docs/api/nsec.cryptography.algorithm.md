@@ -23,6 +23,7 @@ The [[Algorithm|Algorithm Class]] class has no public members.
         * HkdfSha256
         * HkdfSha512
     * [[MacAlgorithm|MacAlgorithm Class]]
+        * Blake2bMac
         * HmacSha256
         * HmacSha512
     * [[SignatureAlgorithm|SignatureAlgorithm Class]]
