@@ -134,6 +134,7 @@ nav > ul {
         max-width: 50em;
         min-height: 100%;
         margin: 0 auto;
+        font-size: 15px;
         padding: 0 1em;
         overflow-wrap: break-word;
         overflow-y: scroll;
@@ -179,7 +180,6 @@ nav > ul {
 
 @media screen and (min-width:30em) {
     body {
-        font-size: 14px;
         padding: 0 2em;
     }
 
@@ -191,7 +191,6 @@ nav > ul {
 
 @media screen and (min-width:40em) {
     body {
-        font-size: 15px;
         padding: 0 3em;
     }
 
