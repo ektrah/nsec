@@ -26,7 +26,7 @@ needed.
 allocate memory on the heap. NSec follows libsodium's lead and avoids
 allocations and expensive copies in almost all cases. Only methods that return
 byte arrays, keys or shared secrets do allocate memory and should therefore be
-kept outside of hot paths.
+kept off hot paths.
 
 * **Agile** -- NSec features a simple object model with cryptographic agility in
 mind. All algorithms derive from a small set of base classes. This helps writing
