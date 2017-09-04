@@ -137,8 +137,8 @@ plaintext
 : The span to fill with the decrypted and authenticated data.
     The length of the span must be equal to `ciphertext.Length` minus
     [[TagSize|AeadAlgorithm Class#TagSize]]. `plaintext` must not overlap with
-    `ciphertext`, except that `plaintext` and `ciphertext` may point at the same
-    memory location for in-place decryption.
+    `ciphertext`, except if `plaintext` and `ciphertext` point exactly at the
+    same memory location (in-place decryption).
 
 #### Exceptions
 
@@ -253,8 +253,8 @@ ciphertext
 : The span to fill with the encrypted data and the authentication tag.
     The length of the span must be equal to `plaintext.Length` plus
     [[TagSize|AeadAlgorithm Class#TagSize]]. `ciphertext` must not overlap with
-    `plaintext`, except that `ciphertext` and `plaintext` may point at the same
-    memory location for in-place encryption.
+    `plaintext`, except if `ciphertext` and `plaintext` point exactly at the
+    same memory location (in-place encryption).
 
 #### Exceptions
 
@@ -313,7 +313,7 @@ ciphertext
 
 plaintext
 : When this method returns, contains an array of bytes that contains the
-    decrypted and authenticated data, or `null` if authentication failed.
+    decrypted and authenticated data, or `null` if authentication fails.
 
 #### Return Value
 
@@ -367,8 +367,8 @@ plaintext
 : The span to fill with the decrypted and authenticated data.
     The length of the span must be equal to `ciphertext.Length` minus
     [[TagSize|AeadAlgorithm Class#TagSize]]. `plaintext` must not overlap with
-    `ciphertext`, except that `plaintext` and `ciphertext` may point at the same
-    memory location for in-place decryption.
+    `ciphertext`, except if `plaintext` and `ciphertext` point exactly at the
+    same memory location (in-place decryption).
 
 #### Return Value
 
