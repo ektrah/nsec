@@ -23,7 +23,7 @@ Gets the size, in bytes, of the shared secret.
 The size, in bytes, of the shared secret.
 
 
-## Methods
+## Static Methods
 
 
 ### Import(ReadOnlySpan<byte>)
@@ -47,6 +47,9 @@ the imported shared secret.
 
 ArgumentException
 : The length of `sharedSecret` is greater than 128.
+
+
+## Methods
 
 
 ### Dispose()

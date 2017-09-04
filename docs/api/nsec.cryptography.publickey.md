@@ -22,7 +22,7 @@ Gets the algorithm for the public key.
 An instance of the [[Algorithm|Algorithm Class]] class.
 
 
-## Methods
+## Static Methods
 
 
 ### Import(Algorithm, ReadOnlySpan<byte>, KeyBlobFormat)
@@ -104,6 +104,9 @@ ArgumentNullException
 
 NotSupportedException
 : The specified algorithm does not support importing public keys.
+
+
+## Methods
 
 
 ### Equals(PublicKey)

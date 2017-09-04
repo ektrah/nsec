@@ -82,7 +82,7 @@ An instance of the [[PublicKey|PublicKey Class]] class if the current instance
 of the [[Key|Key Class]] class represents a key pair; otherwise, `null`.
 
 
-## Methods
+## Static Methods
 
 
 ### Create(Algorithm, KeyFlags)
@@ -211,6 +211,9 @@ ArgumentException
 
 NotSupportedException
 : The specified algorithm does not support importing keys.
+
+
+## Methods
 
 
 ### Dispose()

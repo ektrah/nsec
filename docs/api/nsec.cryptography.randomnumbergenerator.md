@@ -8,7 +8,7 @@ Provides methods for generating random data.
 ## [TOC] Summary
 
 
-## Properties
+## Static Properties
 
 
 ### Default
