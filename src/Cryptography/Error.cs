@@ -41,6 +41,12 @@ namespace NSec.Cryptography
             return new ArgumentException(string.Format(ResourceManager.GetString("Argument_DeriveInvalidCount"), arg0), paramName);
         }
 
+        internal static ArgumentException Argument_DestinationTooShort(
+            string paramName)
+        {
+            return new ArgumentException(ResourceManager.GetString("Argument_DestinationTooShort"), paramName);
+        }
+
         internal static ArgumentException Argument_FormatNotSupported(
             string paramName,
             string arg0)
@@ -88,11 +94,29 @@ namespace NSec.Cryptography
             return new ArgumentException(string.Format(ResourceManager.GetString("Argument_MacSize"), arg0, arg1, arg2), paramName);
         }
 
+        internal static ArgumentException Argument_NonceFixedCounterSize(
+            string paramName)
+        {
+            return new ArgumentException(ResourceManager.GetString("Argument_NonceFixedCounterSize"), paramName);
+        }
+
+        internal static ArgumentException Argument_NonceFixedSize(
+            string paramName)
+        {
+            return new ArgumentException(ResourceManager.GetString("Argument_NonceFixedSize"), paramName);
+        }
+
         internal static ArgumentException Argument_NonceLength(
             string paramName,
             string arg0)
         {
             return new ArgumentException(string.Format(ResourceManager.GetString("Argument_NonceLength"), arg0), paramName);
+        }
+
+        internal static ArgumentException Argument_NonceXorSize(
+            string paramName)
+        {
+            return new ArgumentException(ResourceManager.GetString("Argument_NonceXorSize"), paramName);
         }
 
         internal static ArgumentException Argument_OverlapCiphertext(
@@ -218,6 +242,24 @@ namespace NSec.Cryptography
             return new ArgumentOutOfRangeException(paramName, string.Format(ResourceManager.GetString("ArgumentOutOfRange_MacSize"), arg0, arg1, arg2));
         }
 
+        internal static ArgumentOutOfRangeException ArgumentOutOfRange_NonceAddend(
+            string paramName)
+        {
+            return new ArgumentOutOfRangeException(paramName, ResourceManager.GetString("ArgumentOutOfRange_NonceAddend"));
+        }
+
+        internal static ArgumentOutOfRangeException ArgumentOutOfRange_NonceCounterSize(
+            string paramName)
+        {
+            return new ArgumentOutOfRangeException(paramName, ResourceManager.GetString("ArgumentOutOfRange_NonceCounterSize"));
+        }
+
+        internal static ArgumentOutOfRangeException ArgumentOutOfRange_NonceFixedCounterSize(
+            string paramName)
+        {
+            return new ArgumentOutOfRangeException(paramName, ResourceManager.GetString("ArgumentOutOfRange_NonceFixedCounterSize"));
+        }
+
         internal static CryptographicException Cryptographic_DecryptionFailed()
         {
             return new CryptographicException(ResourceManager.GetString("Cryptographic_DecryptionFailed"));
@@ -296,6 +338,11 @@ namespace NSec.Cryptography
         internal static ObjectDisposedException ObjectDisposed_Key()
         {
             return new ObjectDisposedException(ResourceManager.GetString("ObjectDisposed_Key"));
+        }
+
+        internal static OverflowException Overflow_NonceCounter()
+        {
+            return new OverflowException(ResourceManager.GetString("Overflow_NonceCounter"));
         }
 
         internal static PlatformNotSupportedException PlatformNotSupported_Algorithm()

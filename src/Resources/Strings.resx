@@ -144,6 +144,15 @@
   <data name="ArgumentOutOfRange_MacSize" xml:space="preserve">
     <value>MAC size '{0}' is out of range. Must be between {1} and {2}.</value>
   </data>
+  <data name="ArgumentOutOfRange_NonceAddend" xml:space="preserve">
+    <value>The addend cannot be negative.</value>
+  </data>
+  <data name="ArgumentOutOfRange_NonceCounterSize" xml:space="preserve">
+    <value>The nonce must have a length between 0 and 15 bytes.</value>
+  </data>
+  <data name="ArgumentOutOfRange_NonceFixedCounterSize" xml:space="preserve">
+    <value>The total length of the nonce must be between 0 and 15 bytes.</value>
+  </data>
   <data name="Argument_BadBase16Length" xml:space="preserve">
     <value>Invalid length for a Base16 span.</value>
   </data>
@@ -158,6 +167,9 @@
   </data>
   <data name="Argument_DeriveInvalidCount" xml:space="preserve">
     <value>The number of bytes to derive must be less than or equal to the maximum output size '{0}'.</value>
+  </data>
+  <data name="Argument_DestinationTooShort" xml:space="preserve">
+    <value>Destination is too short.</value>
   </data>
   <data name="Argument_FormatNotSupported" xml:space="preserve">
     <value>The key BLOB format '{0}' is not supported by the algorithm.</value>
@@ -177,8 +189,17 @@
   <data name="Argument_MacSize" xml:space="preserve">
     <value>MAC size '{0}' is out of range. Must be between {1} and {2}.</value>
   </data>
+  <data name="Argument_NonceFixedCounterSize" xml:space="preserve">
+    <value>The total length of the nonce must be between 0 and 15 bytes.</value>
+  </data>
+  <data name="Argument_NonceFixedSize" xml:space="preserve">
+    <value>The fixed part of the nonce must have a length between 0 and 15 bytes.</value>
+  </data>
   <data name="Argument_NonceLength" xml:space="preserve">
     <value>The nonce must have a length of '{0}' bytes.</value>
+  </data>
+  <data name="Argument_NonceXorSize" xml:space="preserve">
+    <value>The right-hand side must have the same length as the nonce.</value>
   </data>
   <data name="Argument_OverlapCiphertext" xml:space="preserve">
     <value>The ciphertext must not overlap with the plaintext.</value>
@@ -257,6 +278,9 @@
   </data>
   <data name="ObjectDisposed_Key" xml:space="preserve">
     <value>The key has been disposed.</value>
+  </data>
+  <data name="Overflow_NonceCounter" xml:space="preserve">
+    <value>Increasing the counter of the nonce resulted in an overflow.</value>
   </data>
   <data name="PlatformNotSupported_Algorithm" xml:space="preserve">
     <value>The cryptographic algorithm is not supported on this platform.</value>
