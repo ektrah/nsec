@@ -110,7 +110,7 @@ namespace NSec.Cryptography
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
-            if (int.MaxValue - plaintext.Length < _tagSize)
+            if (plaintext.Length > int.MaxValue - _tagSize)
                 throw Error.Argument_PlaintextTooLong(nameof(plaintext));
 
             byte[] ciphertext = new byte[plaintext.Length + _tagSize];
@@ -131,7 +131,7 @@ namespace NSec.Cryptography
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
-            if (int.MaxValue - plaintext.Length < _tagSize)
+            if (plaintext.Length > int.MaxValue - _tagSize)
                 throw Error.Argument_PlaintextTooLong(nameof(plaintext));
             if (ciphertext.Length != plaintext.Length + _tagSize)
                 throw Error.Argument_CiphertextLength(nameof(ciphertext));
