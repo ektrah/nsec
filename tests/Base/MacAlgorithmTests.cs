@@ -21,6 +21,12 @@ namespace NSec.Tests.Base
             { typeof(HmacSha512), 128 }, // B
             { typeof(HmacSha512), 160 },
             { typeof(HmacSha512), 192 },
+
+            { typeof(Blake2bMac),  16 },
+            { typeof(Blake2bMac),  24 },
+            { typeof(Blake2bMac),  32 },
+            { typeof(Blake2bMac),  48 },
+            { typeof(Blake2bMac),  64 },
         };
 
         #region Properties
