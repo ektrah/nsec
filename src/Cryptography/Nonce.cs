@@ -87,9 +87,9 @@ namespace NSec.Cryptography
             Unsafe.CopyBlockUnaligned(ref Unsafe.Add(ref _value0, fixedField.Length), ref counterField.DangerousGetPinnableReference(), (uint)counterField.Length);
         }
 
-        public int CounterSize => _size & 0xF;
+        public int CounterFieldSize => _size & 0xF;
 
-        public int FixedSize => _size >> 4;
+        public int FixedFieldSize => _size >> 4;
 
         public int Size => (_size >> 4) + (_size & 0xF);
 
@@ -103,7 +103,7 @@ namespace NSec.Cryptography
             }
 
             int offset = nonce.Size - 1;
-            int size = nonce.CounterSize;
+            int size = nonce.CounterFieldSize;
             int carry = addend;
 
             for (int i = 0; i < size; i++)

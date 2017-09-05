@@ -39,8 +39,8 @@ namespace NSec.Tests.Core
             var array = new byte[expected.Length];
 
             Assert.Equal(expected.Length, actual.Size);
-            Assert.Equal(0, actual.FixedSize);
-            Assert.Equal(expected.Length, actual.CounterSize);
+            Assert.Equal(0, actual.FixedFieldSize);
+            Assert.Equal(expected.Length, actual.CounterFieldSize);
             Assert.Equal(expected, actual.ToArray());
             Assert.Equal(Base16.Encode(expected), actual.ToString());
             Assert.Equal(expected.Length, actual.CopyTo(array));
@@ -60,8 +60,8 @@ namespace NSec.Tests.Core
             var array = new byte[expected.Length];
 
             Assert.Equal(expected.Length, actual.Size);
-            Assert.Equal(0, actual.FixedSize);
-            Assert.Equal(expected.Length, actual.CounterSize);
+            Assert.Equal(0, actual.FixedFieldSize);
+            Assert.Equal(expected.Length, actual.CounterFieldSize);
             Assert.Equal(expected, actual.ToArray());
             Assert.Equal(Base16.Encode(expected), actual.ToString());
             Assert.Equal(expected.Length, actual.CopyTo(array));
@@ -97,8 +97,8 @@ namespace NSec.Tests.Core
             var array = new byte[expected.Length];
 
             Assert.Equal(expected.Length, actual.Size);
-            Assert.Equal(@fixed.Length, actual.FixedSize);
-            Assert.Equal(counterSize, actual.CounterSize);
+            Assert.Equal(@fixed.Length, actual.FixedFieldSize);
+            Assert.Equal(counterSize, actual.CounterFieldSize);
             Assert.Equal(expected, actual.ToArray());
             Assert.Equal(Base16.Encode(expected), actual.ToString());
             Assert.Equal(expected.Length, actual.CopyTo(array));
@@ -141,8 +141,8 @@ namespace NSec.Tests.Core
             var array = new byte[expected.Length];
 
             Assert.Equal(expected.Length, actual.Size);
-            Assert.Equal(@fixed.Length, actual.FixedSize);
-            Assert.Equal(counter.Length, actual.CounterSize);
+            Assert.Equal(@fixed.Length, actual.FixedFieldSize);
+            Assert.Equal(counter.Length, actual.CounterFieldSize);
             Assert.Equal(expected, actual.ToArray());
             Assert.Equal(Base16.Encode(expected), actual.ToString());
             Assert.Equal(expected.Length, actual.CopyTo(array));
@@ -337,8 +337,8 @@ namespace NSec.Tests.Core
 
             Assert.Equal(expected, actual.ToArray());
             Assert.Equal(expected.Length, actual.Size);
-            Assert.Equal(expected.Length, actual.FixedSize);
-            Assert.Equal(0, actual.CounterSize);
+            Assert.Equal(expected.Length, actual.FixedFieldSize);
+            Assert.Equal(0, actual.CounterFieldSize);
         }
 
         [Fact]
