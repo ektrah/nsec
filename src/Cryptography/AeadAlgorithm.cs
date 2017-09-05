@@ -33,7 +33,7 @@ namespace NSec.Cryptography
             int tagSize)
         {
             Debug.Assert(keySize > 0);
-            Debug.Assert(nonceSize > 0);
+            Debug.Assert(nonceSize >= 0 && nonceSize <= Nonce.MaxSize);
             Debug.Assert(tagSize > 0);
 
             _keySize = keySize;
@@ -49,7 +49,7 @@ namespace NSec.Cryptography
 
         public byte[] Decrypt(
             Key key,
-            ReadOnlySpan<byte> nonce,
+            Nonce nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> ciphertext)
         {
@@ -57,14 +57,14 @@ namespace NSec.Cryptography
                 throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (nonce.Length != _nonceSize)
+            if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
             if (ciphertext.Length < _tagSize)
                 throw Error.Cryptographic_DecryptionFailed();
 
             byte[] plaintext = new byte[ciphertext.Length - _tagSize];
 
-            if (!TryDecryptCore(key.Handle, nonce, associatedData, ciphertext, plaintext))
+            if (!TryDecryptCore(key.Handle, ref nonce, associatedData, ciphertext, plaintext))
             {
                 throw Error.Cryptographic_DecryptionFailed();
             }
@@ -74,7 +74,7 @@ namespace NSec.Cryptography
 
         public void Decrypt(
             Key key,
-            ReadOnlySpan<byte> nonce,
+            Nonce nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> ciphertext,
             Span<byte> plaintext)
@@ -83,7 +83,7 @@ namespace NSec.Cryptography
                 throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (nonce.Length != _nonceSize)
+            if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
             if (ciphertext.Length < _tagSize)
                 throw Error.Cryptographic_DecryptionFailed();
@@ -92,7 +92,7 @@ namespace NSec.Cryptography
             if (Utilities.Overlap(plaintext, ciphertext) && !Utilities.AreSameStart(plaintext, ciphertext))
                 throw Error.Argument_OverlapPlaintext(nameof(plaintext));
 
-            if (!TryDecryptCore(key.Handle, nonce, associatedData, ciphertext, plaintext))
+            if (!TryDecryptCore(key.Handle, ref nonce, associatedData, ciphertext, plaintext))
             {
                 throw Error.Cryptographic_DecryptionFailed();
             }
@@ -100,7 +100,7 @@ namespace NSec.Cryptography
 
         public byte[] Encrypt(
             Key key,
-            ReadOnlySpan<byte> nonce,
+            Nonce nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> plaintext)
         {
@@ -108,19 +108,19 @@ namespace NSec.Cryptography
                 throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (nonce.Length != _nonceSize)
+            if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
             if (int.MaxValue - plaintext.Length < _tagSize)
                 throw Error.Argument_PlaintextTooLong(nameof(plaintext));
 
             byte[] ciphertext = new byte[plaintext.Length + _tagSize];
-            EncryptCore(key.Handle, nonce, associatedData, plaintext, ciphertext);
+            EncryptCore(key.Handle, ref nonce, associatedData, plaintext, ciphertext);
             return ciphertext;
         }
 
         public void Encrypt(
             Key key,
-            ReadOnlySpan<byte> nonce,
+            Nonce nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext)
@@ -129,7 +129,7 @@ namespace NSec.Cryptography
                 throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (nonce.Length != _nonceSize)
+            if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
             if (int.MaxValue - plaintext.Length < _tagSize)
                 throw Error.Argument_PlaintextTooLong(nameof(plaintext));
@@ -138,12 +138,12 @@ namespace NSec.Cryptography
             if (Utilities.Overlap(ciphertext, plaintext) && !Utilities.AreSameStart(ciphertext, plaintext))
                 throw Error.Argument_OverlapCiphertext(nameof(ciphertext));
 
-            EncryptCore(key.Handle, nonce, associatedData, plaintext, ciphertext);
+            EncryptCore(key.Handle, ref nonce, associatedData, plaintext, ciphertext);
         }
 
         public bool TryDecrypt(
             Key key,
-            ReadOnlySpan<byte> nonce,
+            Nonce nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> ciphertext,
             out byte[] plaintext)
@@ -152,7 +152,7 @@ namespace NSec.Cryptography
                 throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (nonce.Length != _nonceSize)
+            if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
 
             if (ciphertext.Length < _tagSize)
@@ -163,7 +163,7 @@ namespace NSec.Cryptography
 
             byte[] result = new byte[ciphertext.Length - _tagSize];
 
-            if (!TryDecryptCore(key.Handle, nonce, associatedData, ciphertext, result))
+            if (!TryDecryptCore(key.Handle, ref nonce, associatedData, ciphertext, result))
             {
                 plaintext = null;
                 return false;
@@ -175,7 +175,7 @@ namespace NSec.Cryptography
 
         public bool TryDecrypt(
             Key key,
-            ReadOnlySpan<byte> nonce,
+            Nonce nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> ciphertext,
             Span<byte> plaintext)
@@ -184,7 +184,7 @@ namespace NSec.Cryptography
                 throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (nonce.Length != _nonceSize)
+            if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
             if (ciphertext.Length < _tagSize)
                 return false;
@@ -193,19 +193,19 @@ namespace NSec.Cryptography
             if (Utilities.Overlap(plaintext, ciphertext) && !Utilities.AreSameStart(plaintext, ciphertext))
                 throw Error.Argument_OverlapPlaintext(nameof(plaintext));
 
-            return TryDecryptCore(key.Handle, nonce, associatedData, ciphertext, plaintext);
+            return TryDecryptCore(key.Handle, ref nonce, associatedData, ciphertext, plaintext);
         }
 
         internal abstract void EncryptCore(
             SecureMemoryHandle keyHandle,
-            ReadOnlySpan<byte> nonce,
+            ref Nonce nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext);
 
         internal abstract bool TryDecryptCore(
             SecureMemoryHandle keyHandle,
-            ReadOnlySpan<byte> nonce,
+            ref Nonce nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> ciphertext,
             Span<byte> plaintext);

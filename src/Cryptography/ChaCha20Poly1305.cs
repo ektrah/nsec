@@ -75,14 +75,14 @@ namespace NSec.Cryptography
 
         internal override void EncryptCore(
             SecureMemoryHandle keyHandle,
-            ReadOnlySpan<byte> nonce,
+            ref Nonce nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext)
         {
             Debug.Assert(keyHandle != null);
             Debug.Assert(keyHandle.Length == crypto_aead_chacha20poly1305_ietf_KEYBYTES);
-            Debug.Assert(nonce.Length == crypto_aead_chacha20poly1305_ietf_NPUBBYTES);
+            Debug.Assert(nonce.Size == crypto_aead_chacha20poly1305_ietf_NPUBBYTES);
             Debug.Assert(ciphertext.Length == plaintext.Length + crypto_aead_chacha20poly1305_ietf_ABYTES);
 
             crypto_aead_chacha20poly1305_ietf_encrypt(
@@ -93,7 +93,7 @@ namespace NSec.Cryptography
                 ref associatedData.DangerousGetPinnableReference(),
                 (ulong)associatedData.Length,
                 IntPtr.Zero,
-                ref nonce.DangerousGetPinnableReference(),
+                ref nonce,
                 keyHandle);
 
             Debug.Assert((ulong)ciphertext.Length == ciphertextLength);
@@ -106,14 +106,14 @@ namespace NSec.Cryptography
 
         internal override bool TryDecryptCore(
             SecureMemoryHandle keyHandle,
-            ReadOnlySpan<byte> nonce,
+            ref Nonce nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> ciphertext,
             Span<byte> plaintext)
         {
             Debug.Assert(keyHandle != null);
             Debug.Assert(keyHandle.Length == crypto_aead_chacha20poly1305_ietf_KEYBYTES);
-            Debug.Assert(nonce.Length == crypto_aead_chacha20poly1305_ietf_NPUBBYTES);
+            Debug.Assert(nonce.Size == crypto_aead_chacha20poly1305_ietf_NPUBBYTES);
             Debug.Assert(plaintext.Length == ciphertext.Length - crypto_aead_chacha20poly1305_ietf_ABYTES);
 
             int error = crypto_aead_chacha20poly1305_ietf_decrypt(
@@ -124,7 +124,7 @@ namespace NSec.Cryptography
                 (ulong)ciphertext.Length,
                 ref associatedData.DangerousGetPinnableReference(),
                 (ulong)associatedData.Length,
-                ref nonce.DangerousGetPinnableReference(),
+                ref nonce,
                 keyHandle);
 
             // libsodium clears the plaintext if decryption fails.
