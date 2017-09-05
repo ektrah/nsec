@@ -295,7 +295,7 @@ namespace NSec.Cryptography
         {
             Span<byte> bytes = stackalloc byte[Size];
             Unsafe.CopyBlockUnaligned(ref bytes.DangerousGetPinnableReference(), ref _value0, (uint)bytes.Length);
-            return Base16.Encode(bytes);
+            return string.Concat("[", Base16.Encode(bytes).Insert(2 * FixedFieldSize, "]["), "]");
         }
     }
 }
