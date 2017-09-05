@@ -34,17 +34,14 @@ namespace NSec.Tests.Core
         [Fact]
         public static void Ctor()
         {
-            var expected = new byte[0];
             var actual = new Nonce();
-            var array = new byte[expected.Length];
 
-            Assert.Equal(expected.Length, actual.Size);
+            Assert.Equal(0, actual.Size);
             Assert.Equal(0, actual.FixedFieldSize);
-            Assert.Equal(expected.Length, actual.CounterFieldSize);
-            Assert.Equal(expected, actual.ToArray());
-            Assert.Equal("[][" + Base16.Encode(expected) + "]", actual.ToString());
-            Assert.Equal(expected.Length, actual.CopyTo(array));
-            Assert.Equal(expected, array);
+            Assert.Equal(0, actual.CounterFieldSize);
+            Assert.Equal(new byte[0], actual.ToArray());
+            Assert.Equal("[][]", actual.ToString());
+            Assert.Equal(0, actual.CopyTo(Span<byte>.Empty));
         }
 
         #endregion
@@ -57,6 +54,7 @@ namespace NSec.Tests.Core
         {
             var expected = new byte[size];
             var actual = new Nonce(size);
+
             var array = new byte[expected.Length];
 
             Assert.Equal(expected.Length, actual.Size);
@@ -88,19 +86,21 @@ namespace NSec.Tests.Core
         [MemberData(nameof(Sizes))]
         public static void CtorWithFixedAndCounterSize(int size)
         {
-            var @fixed = Utilities.RandomBytes.Slice(0, size / 2);
-            var counter = new byte[size - @fixed.Length];
+            var fixedField = Utilities.RandomBytes.Slice(0, size / 2);
+            var counterField = new byte[size - fixedField.Length];
 
             var expected = new byte[size];
-            @fixed.CopyTo(expected);
-            var actual = new Nonce(@fixed, counter.Length);
+            var actual = new Nonce(fixedField, counterField.Length);
+
             var array = new byte[expected.Length];
 
+            fixedField.CopyTo(expected);
+
             Assert.Equal(expected.Length, actual.Size);
-            Assert.Equal(@fixed.Length, actual.FixedFieldSize);
-            Assert.Equal(counter.Length, actual.CounterFieldSize);
+            Assert.Equal(fixedField.Length, actual.FixedFieldSize);
+            Assert.Equal(counterField.Length, actual.CounterFieldSize);
             Assert.Equal(expected, actual.ToArray());
-            Assert.Equal("[" + Base16.Encode(@fixed) + "][" + Base16.Encode(counter) + "]", actual.ToString());
+            Assert.Equal("[" + Base16.Encode(fixedField) + "][" + Base16.Encode(counterField) + "]", actual.ToString());
             Assert.Equal(expected.Length, actual.CopyTo(array));
             Assert.Equal(expected, array);
         }
@@ -131,20 +131,22 @@ namespace NSec.Tests.Core
         [MemberData(nameof(Sizes))]
         public static void CtorWithFixedAndCounter(int size)
         {
-            var @fixed = Utilities.RandomBytes.Slice(0, size / 2);
-            var counter = Utilities.RandomBytes.Slice(size / 2, size - @fixed.Length);
+            var fixedField = Utilities.RandomBytes.Slice(0, size / 2);
+            var counterField = Utilities.RandomBytes.Slice(size / 2, size - fixedField.Length);
 
             var expected = new byte[size];
-            @fixed.CopyTo(expected);
-            counter.CopyTo(expected.AsSpan().Slice(@fixed.Length));
-            var actual = new Nonce(@fixed, counter);
+            var actual = new Nonce(fixedField, counterField);
+
             var array = new byte[expected.Length];
 
+            fixedField.CopyTo(expected);
+            counterField.CopyTo(expected.AsSpan().Slice(fixedField.Length));
+
             Assert.Equal(expected.Length, actual.Size);
-            Assert.Equal(@fixed.Length, actual.FixedFieldSize);
-            Assert.Equal(counter.Length, actual.CounterFieldSize);
+            Assert.Equal(fixedField.Length, actual.FixedFieldSize);
+            Assert.Equal(counterField.Length, actual.CounterFieldSize);
             Assert.Equal(expected, actual.ToArray());
-            Assert.Equal("[" + Base16.Encode(@fixed) + "][" + Base16.Encode(counter) + "]", actual.ToString());
+            Assert.Equal("[" + Base16.Encode(fixedField) + "][" + Base16.Encode(counterField) + "]", actual.ToString());
             Assert.Equal(expected.Length, actual.CopyTo(array));
             Assert.Equal(expected, array);
         }
@@ -208,9 +210,11 @@ namespace NSec.Tests.Core
         public static void CompareSize(int second)
         {
             const int first = 5;
-            var expected = Math.Sign(first.CompareTo(second));
+
             var left = new Nonce(first);
             var right = new Nonce(second);
+
+            var expected = Math.Sign(first.CompareTo(second));
             var actual = left.CompareTo(right);
 
             Assert.Equal(expected, actual);
@@ -233,9 +237,10 @@ namespace NSec.Tests.Core
         [InlineData(0x1000, 0x10000000)]
         public static void CompareValue(int first, int second)
         {
-            var expected = Math.Sign(first.CompareTo(second));
             var left = new Nonce(4) + first;
             var right = new Nonce(4) + second;
+
+            var expected = Math.Sign(first.CompareTo(second));
             var actual = left.CompareTo(right);
 
             Assert.Equal(expected, actual);
@@ -327,6 +332,7 @@ namespace NSec.Tests.Core
         {
             var bytes1 = Utilities.RandomBytes.Slice(0, 12);
             var bytes2 = Utilities.RandomBytes.Slice(12, bytes1.Length);
+
             var expected = new byte[bytes1.Length];
             var actual = new Nonce(ReadOnlySpan<byte>.Empty, bytes1) ^ bytes2;
 
@@ -354,10 +360,11 @@ namespace NSec.Tests.Core
         [Fact]
         public static void Layout()
         {
+            var fixedField = new byte[] { 0x01, 0x02, 0x03, 0x04 };
+            var counterField = 0x05060708;
+
             var expected = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08 };
-            var @fixed = new byte[] { 0x01, 0x02, 0x03, 0x04 };
-            var counter = 0x05060708;
-            var actual = new Nonce(@fixed, 4) + counter;
+            var actual = new Nonce(fixedField, 4) + counterField;
 
             Assert.Equal(expected, actual.ToArray());
         }
