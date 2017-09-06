@@ -55,14 +55,14 @@ The authentication tag size, in bytes.
 ## Methods
 
 
-### Decrypt(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
+### Decrypt(Key, Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
 
 Decrypts and authenticates the specified data using the specified key and
 returns the result as an array of bytes.
 
     public byte[] Decrypt(
         Key key,
-        ReadOnlySpan<byte> nonce,
+        Nonce nonce,
         ReadOnlySpan<byte> associatedData,
         ReadOnlySpan<byte> ciphertext)
 
@@ -96,7 +96,7 @@ ArgumentException
     [[AeadAlgorithm|AeadAlgorithm Class]] object.
 
 ArgumentException
-: `nonce.Length` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
+: `nonce.Size` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
 
 CryptographicException
 : Authentication failed.
@@ -105,14 +105,14 @@ ObjectDisposedException
 : `key` has been disposed.
 
 
-### Decrypt(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
+### Decrypt(Key, Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
 
 Decrypts and authenticates the specified data using the specified key and fills
 the specified span of bytes with the result.
 
     public void Decrypt(
         Key key,
-        ReadOnlySpan<byte> nonce,
+        Nonce nonce,
         ReadOnlySpan<byte> associatedData,
         ReadOnlySpan<byte> ciphertext,
         Span<byte> plaintext)
@@ -150,7 +150,7 @@ ArgumentException
     [[AeadAlgorithm|AeadAlgorithm Class]] object.
 
 ArgumentException
-: `nonce.Length` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
+: `nonce.Size` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
 
 ArgumentException
 : `plaintext.Length` is not equal to `ciphertext.Length` minus
@@ -170,14 +170,14 @@ ObjectDisposedException
 : `key` has been disposed.
 
 
-### Encrypt(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
+### Encrypt(Key, Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
 
 Encrypts the specified data using the specified key and returns the result,
 which includes an authentication tag, as an array of bytes.
 
     public byte[] Encrypt(
         Key key,
-        ReadOnlySpan<byte> nonce,
+        Nonce nonce,
         ReadOnlySpan<byte> associatedData,
         ReadOnlySpan<byte> plaintext)
 
@@ -211,7 +211,7 @@ ArgumentException
     [[AeadAlgorithm|AeadAlgorithm Class]] object.
 
 ArgumentException
-: `nonce.Length` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
+: `nonce.Size` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
 
 ArgumentException
 : `plaintext.Length` plus [[TagSize|AeadAlgorithm Class#TagSize]]
@@ -221,14 +221,14 @@ ObjectDisposedException
 : `key` has been disposed.
 
 
-### Encrypt(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
+### Encrypt(Key, Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
 
 Encrypts the specified data using the specified key and fills the specified
 span of bytes with the result, which includes an authentication tag.
 
     public void Encrypt(
         Key key,
-        ReadOnlySpan<byte> nonce,
+        Nonce nonce,
         ReadOnlySpan<byte> associatedData,
         ReadOnlySpan<byte> plaintext,
         Span<byte> ciphertext)
@@ -266,7 +266,7 @@ ArgumentException
     [[AeadAlgorithm|AeadAlgorithm Class]] object.
 
 ArgumentException
-: `nonce.Length` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
+: `nonce.Size` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
 
 ArgumentException
 : `plaintext.Length` plus [[TagSize|AeadAlgorithm Class#TagSize]]
@@ -283,14 +283,14 @@ ObjectDisposedException
 : `key` has been disposed.
 
 
-### TryDecrypt(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>, ReadOnlySpan<byte>, out byte[])
+### TryDecrypt(Key, Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>, out byte[])
 
 Attempts to decrypt and authenticate the specified data using the specified key.
 If successful, the result is passed as an array of bytes to the caller.
 
     public bool TryDecrypt(
         Key key,
-        ReadOnlySpan<byte> nonce,
+        Nonce nonce,
         ReadOnlySpan<byte> associatedData,
         ReadOnlySpan<byte> ciphertext,
         out byte[] plaintext)
@@ -329,20 +329,20 @@ ArgumentException
     [[AeadAlgorithm|AeadAlgorithm Class]] object.
 
 ArgumentException
-: `nonce.Length` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
+: `nonce.Size` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
 
 ObjectDisposedException
 : `key` has been disposed.
 
 
-### TryDecrypt(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
+### TryDecrypt(Key, Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
 
 Attempts to decrypt and authenticate the specified data using the specified key.
 If successful, the specified span of bytes is filled with the result.
 
     public bool TryDecrypt(
         Key key,
-        ReadOnlySpan<byte> nonce,
+        Nonce nonce,
         ReadOnlySpan<byte> associatedData,
         ReadOnlySpan<byte> ciphertext,
         Span<byte> plaintext)
@@ -384,7 +384,7 @@ ArgumentException
     [[AeadAlgorithm|AeadAlgorithm Class]] object.
 
 ArgumentException
-: `nonce.Length` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
+: `nonce.Size` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
 
 ArgumentException
 : `plaintext.Length` is not equal to `ciphertext.Length` minus
@@ -412,3 +412,4 @@ All methods give the same result for the same arguments.
 * API Reference
     * [[Algorithm Class]]
     * [[Key Class]]
+    * [[Nonce Struct]]

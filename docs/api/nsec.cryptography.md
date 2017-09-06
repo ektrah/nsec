@@ -23,6 +23,7 @@
 * [[Key Class]]
     * [[KeyBlobFormat Enum]]
     * [[KeyFlags Enum]]
+* [[Nonce Struct]]
 * [[PublicKey Class]]
 * [[RandomNumberGenerator Class]]
 * [[SharedSecret Class]]
