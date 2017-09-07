@@ -162,15 +162,9 @@ namespace NSec.Cryptography
             }
 
             byte[] result = new byte[ciphertext.Length - _tagSize];
-
-            if (!TryDecryptCore(key.Handle, ref nonce, associatedData, ciphertext, result))
-            {
-                plaintext = null;
-                return false;
-            }
-
-            plaintext = result;
-            return true;
+            bool success = TryDecryptCore(key.Handle, ref nonce, associatedData, ciphertext, result);
+            plaintext = success ? result : null;
+            return success;
         }
 
         public bool TryDecrypt(
