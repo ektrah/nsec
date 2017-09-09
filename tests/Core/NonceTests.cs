@@ -275,6 +275,15 @@ namespace NSec.Tests.Core
             Assert.Equal(expected, actual.ToArray());
         }
 
+        [Fact]
+        public static void AddMax()
+        {
+            var expected = new byte[] { 0, 0, 255, 255, 255, 254 };
+            var actual = new Nonce(new byte[] { }, new byte[] { 0, 0, 127, 255, 255, 255 }) + int.MaxValue;
+
+            Assert.Equal(expected, actual.ToArray());
+        }
+
         [Theory]
         [InlineData(new byte[] { 0xFF, 0xFF, 0xFF, 0xFF }, 1)]
         [InlineData(new byte[] { 0xFF, 0xF0, 0xBD, 0xBF }, 1000001)]
