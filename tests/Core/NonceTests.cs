@@ -268,18 +268,10 @@ namespace NSec.Tests.Core
         [InlineData(new byte[] { 0xFE, 0xED, 0xDC, 0xCB, 0x01, 0xFE, 0x01, 0x00 }, new byte[] { 0x00, 0xFF, 0x00, 0xFF }, 0x00FF0001)]
         [InlineData(new byte[] { 0xFE, 0xED, 0xDC, 0xCB, 0x01, 0x00, 0x00, 0x00 }, new byte[] { 0x00, 0xFF, 0xFF, 0xFF }, 0x00000001)]
         [InlineData(new byte[] { 0xFE, 0xED, 0xDC, 0xCB, 0xFE, 0xE1, 0x6E, 0x45 }, new byte[] { 0xA3, 0x33, 0x78, 0x51 }, 0x5BADF5F4)]
+        [InlineData(new byte[] { 0xFE, 0xED, 0xDC, 0xCB, 0xFF, 0xFF, 0xFF, 0xFE }, new byte[] { 0x7F, 0xFF, 0xFF, 0xFF }, int.MaxValue)]
         public static void AddCarry(byte[] expected, byte[] left, int right)
         {
             var actual = new Nonce(new byte[] { 0xFE, 0xED, 0xDC, 0xCB }, left) + right;
-
-            Assert.Equal(expected, actual.ToArray());
-        }
-
-        [Fact]
-        public static void AddMax()
-        {
-            var expected = new byte[] { 0, 0, 255, 255, 255, 254 };
-            var actual = new Nonce(new byte[] { }, new byte[] { 0, 0, 127, 255, 255, 255 }) + int.MaxValue;
 
             Assert.Equal(expected, actual.ToArray());
         }
