@@ -104,13 +104,14 @@ namespace NSec.Cryptography
 
             int offset = nonce.Size - 1;
             int size = nonce.CounterFieldSize;
-            int carry = addend;
+            uint carry = (uint)addend;
 
             for (int i = 0; i < size; i++)
             {
                 Debug.Assert(offset - i >= 0 && offset - i < MaxSize);
                 ref byte n = ref Unsafe.Add(ref nonce._value0, offset - i);
-                n = unchecked((byte)(carry += n));
+                carry += n;
+                n = unchecked((byte)carry);
                 carry >>= 8;
             }
 
