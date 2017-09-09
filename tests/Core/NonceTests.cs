@@ -336,11 +336,15 @@ namespace NSec.Tests.Core
 
         #region Operator ^
 
-        [Fact]
-        public static void Xor()
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        public static void Xor(int start)
         {
-            var bytes1 = Utilities.RandomBytes.Slice(0, 12);
-            var bytes2 = Utilities.RandomBytes.Slice(12, bytes1.Length);
+            var bytes1 = Utilities.RandomBytes.Slice(start * 24, 12);
+            var bytes2 = Utilities.RandomBytes.Slice(start * 24 + 12, 12);
 
             var expected = new byte[bytes1.Length];
             var actual = new Nonce(ReadOnlySpan<byte>.Empty, bytes1) ^ bytes2;
