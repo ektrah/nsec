@@ -29,17 +29,23 @@ namespace NSec.Cryptography
             SecureMemoryHandle keyHandle = null;
             byte[] publicKeyBytes = null;
             bool success = false;
-            Span<byte> seed = stackalloc byte[seedSize];
 
             try
             {
-                RandomNumberGenerator.Default.GenerateBytesCore(seed);
-                algorithm.CreateKey(seed, out keyHandle, out publicKeyBytes);
-                success = true;
+                Span<byte> seed = stackalloc byte[seedSize];
+                try
+                {
+                    RandomNumberGenerator.Default.GenerateBytesCore(seed);
+                    algorithm.CreateKey(seed, out keyHandle, out publicKeyBytes);
+                    success = true;
+                }
+                finally
+                {
+                    sodium_memzero(ref seed.DangerousGetPinnableReference(), (UIntPtr)seed.Length);
+                }
             }
             finally
             {
-                sodium_memzero(ref seed.DangerousGetPinnableReference(), (UIntPtr)seed.Length);
                 if (!success && keyHandle != null)
                 {
                     keyHandle.Dispose();
