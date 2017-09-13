@@ -82,13 +82,14 @@ Feature requests are welcome, too.
 
 ## Note
 
-*"Cryptography is not magic pixie dust that you can sprinkle on a system to make
-it secure."*
-
 NSec aims to provide careful abstractions to make the work with modern
 cryptographic primitives relatively easy and pain-free. However, the primitives
 are not very useful by themselves and need to be combined into higher-level
-security protocols, such as TLS. Don't roll your own security protocols.
+security protocols (such as TLS or JSON Web Token). Don't roll your own security
+protocols.
+
+*"Cryptography is not magic pixie dust that you can sprinkle on a system to make
+it secure."*
 
 
 ## License
