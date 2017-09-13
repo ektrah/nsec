@@ -191,6 +191,10 @@ nonce
     The nonce must not be used more than once to encrypt data with the specified
     key.
 
+!!! Note
+    Using the same nonce with the same key more than once leads to catastrophic
+    loss of security.
+
 associatedData
 : Optional additional data to be authenticated during decryption.
 
@@ -242,6 +246,10 @@ nonce
 : The nonce to use for encryption.
     The nonce must not be used more than once to encrypt data with the specified
     key.
+
+!!! Note
+    Using the same nonce with the same key more than once leads to catastrophic
+    loss of security.
 
 associatedData
 : Optional additional data to be authenticated during decryption.
