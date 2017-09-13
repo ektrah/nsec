@@ -201,6 +201,47 @@ namespace NSec.Tests.Core
             Assert.True(expected != actual);
         }
 
+        [Fact]
+        public static void EqualBytes()
+        {
+            var bytes1 = new byte[Nonce.MaxSize];
+            var bytes2 = new byte[Nonce.MaxSize];
+
+            for (var i = 0; i < bytes1.Length; i++)
+            {
+                bytes1[i] = 1;
+                for (var j = 0; j < bytes2.Length; j++)
+                {
+                    bytes2[j] = 1;
+
+                    var expected = new Nonce(bytes1, 0);
+                    var actual = new Nonce(bytes2, 0);
+
+                    if (i == j)
+                    {
+                        Assert.Equal(expected, actual);
+                        Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
+                        Assert.True(actual.Equals(expected));
+                        Assert.True(actual.Equals((object)expected));
+                        Assert.True(actual == expected);
+                        Assert.False(actual != expected);
+                    }
+                    else
+                    {
+                        Assert.NotEqual(expected, actual);
+                        Assert.NotEqual(expected.GetHashCode(), actual.GetHashCode());
+                        Assert.False(expected.Equals(actual));
+                        Assert.False(expected.Equals((object)actual));
+                        Assert.False(expected == actual);
+                        Assert.True(expected != actual);
+                    }
+
+                    bytes2[j] = 0;
+                }
+                bytes1[i] = 0;
+            }
+        }
+
         #endregion
 
         #region CompareTo
@@ -248,6 +289,37 @@ namespace NSec.Tests.Core
             Assert.Equal(expected <= 0, left <= right);
             Assert.Equal(expected > 0, left > right);
             Assert.Equal(expected >= 0, left >= right);
+        }
+
+        [Fact]
+        public static void CompareBytes()
+        {
+            var bytes1 = new byte[Nonce.MaxSize];
+            var bytes2 = new byte[Nonce.MaxSize];
+
+            for (var i = 0; i < bytes1.Length; i++)
+            {
+                bytes1[i] = 1;
+                for (var j = 0; j < bytes2.Length; j++)
+                {
+                    bytes2[j] = 1;
+
+                    var left = new Nonce(bytes1, 0);
+                    var right = new Nonce(bytes2, 0);
+
+                    var expected = j.CompareTo(i);
+                    var actual = left.CompareTo(right);
+
+                    Assert.Equal(expected, actual);
+                    Assert.Equal(expected < 0, left < right);
+                    Assert.Equal(expected <= 0, left <= right);
+                    Assert.Equal(expected > 0, left > right);
+                    Assert.Equal(expected >= 0, left >= right);
+
+                    bytes2[j] = 0;
+                }
+                bytes1[i] = 0;
+            }
         }
 
         #endregion
