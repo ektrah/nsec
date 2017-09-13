@@ -201,16 +201,17 @@ namespace NSec.Tests.Formatting
         [Fact]
         public static void Length100000()
         {
-            var value = new byte[100000];
-            Utilities.Fill(value, 0xCD);
+            const int length = 100000;
 
-            var expected = new byte[5 + value.Length];
+            var expected = new byte[5 + length];
             expected[0] = 0x04;
             expected[1] = 0x83;
-            expected[2] = (byte)(value.Length >> 16);
-            expected[3] = (byte)((value.Length >> 8) & 0xFF);
-            expected[4] = (byte)(value.Length & 0xFF);
-            value.CopyTo(expected, 5);
+            expected[2] = length >> 16;
+            expected[3] = (length >> 8) & 0xFF;
+            expected[4] = length & 0xFF;
+
+            var value = expected.AsSpan().Slice(5);
+            value.Fill(0xCD);
 
             var writer = new Asn1Writer(new byte[expected.Length]);
             writer.OctetString(value);
