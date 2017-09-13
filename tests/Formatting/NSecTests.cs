@@ -60,24 +60,6 @@ namespace NSec.Tests.Formatting
             Test(a, a.PrivateKeySize, KeyBlobFormat.RawPrivateKey, a.PublicKeySize, KeyBlobFormat.NSecPublicKey, new byte[] { 0xDE, 0x37, 0x41, 0xDE });
         }
 
-        [Fact]
-        public static void BlobHeader()
-        {
-            for (var i = 0; i < 128; i++)
-            {
-                for (var j = 0; j < 128; j++)
-                {
-                    var b = new byte[] { 0xDE, (byte)i, (byte)j, 0xDE, 0, 0, 0, 0 };
-
-                    Assert.Throws<DecoderFallbackException>(() => new UTF8Encoding(false, true).GetString(b));
-                    Assert.Throws<DecoderFallbackException>(() => new UnicodeEncoding(true, false, true).GetString(b));
-                    Assert.Throws<DecoderFallbackException>(() => new UnicodeEncoding(false, false, true).GetString(b));
-                    Assert.Throws<DecoderFallbackException>(() => new UTF32Encoding(true, false, true).GetString(b));
-                    Assert.Throws<DecoderFallbackException>(() => new UTF32Encoding(false, false, true).GetString(b));
-                }
-            }
-        }
-
         private static void Test(Algorithm a, int seedSize, KeyBlobFormat importFormat, int keySize, KeyBlobFormat format, byte[] blobHeader)
         {
             var b = Utilities.RandomBytes.Slice(0, seedSize);
