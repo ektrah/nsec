@@ -1,33 +1,21 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using NSec.Cryptography.Formatting;
 
 namespace NSec.Cryptography
 {
     // RFC 5116
+    [StructLayout(LayoutKind.Explicit)]
     public struct Nonce : IComparable<Nonce>, IEquatable<Nonce>
     {
         public const int MaxSize = 15;
 
-#pragma warning disable 0169
+        [FieldOffset(0)]
         private byte _value0;
-        private byte _value1;
-        private byte _value2;
-        private byte _value3;
-        private byte _value4;
-        private byte _value5;
-        private byte _value6;
-        private byte _value7;
-        private byte _value8;
-        private byte _value9;
-        private byte _value10;
-        private byte _value11;
-        private byte _value12;
-        private byte _value13;
-        private byte _value14;
-#pragma warning restore 0169
 
+        [FieldOffset(MaxSize)]
         private byte _size;
 
         public Nonce(
