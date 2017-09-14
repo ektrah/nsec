@@ -13,7 +13,7 @@ namespace NSec.Cryptography
         public const int MaxSize = 15;
 
         [FieldOffset(0)]
-        private byte _value0;
+        private byte _bytes;
 
         [FieldOffset(MaxSize)]
         private byte _size;
@@ -50,7 +50,7 @@ namespace NSec.Cryptography
 
             _size = (byte)((fixedField.Length << 4) | counterFieldSize);
 
-            Unsafe.CopyBlockUnaligned(ref _value0, ref fixedField.DangerousGetPinnableReference(), (uint)fixedField.Length);
+            Unsafe.CopyBlockUnaligned(ref _bytes, ref fixedField.DangerousGetPinnableReference(), (uint)fixedField.Length);
         }
 
         public Nonce(
@@ -71,8 +71,8 @@ namespace NSec.Cryptography
 
             _size = (byte)((fixedField.Length << 4) | counterField.Length);
 
-            Unsafe.CopyBlockUnaligned(ref _value0, ref fixedField.DangerousGetPinnableReference(), (uint)fixedField.Length);
-            Unsafe.CopyBlockUnaligned(ref Unsafe.Add(ref _value0, fixedField.Length), ref counterField.DangerousGetPinnableReference(), (uint)counterField.Length);
+            Unsafe.CopyBlockUnaligned(ref _bytes, ref fixedField.DangerousGetPinnableReference(), (uint)fixedField.Length);
+            Unsafe.CopyBlockUnaligned(ref Unsafe.Add(ref _bytes, fixedField.Length), ref counterField.DangerousGetPinnableReference(), (uint)counterField.Length);
         }
 
         public int CounterFieldSize => _size & 0xF;
@@ -100,7 +100,7 @@ namespace NSec.Cryptography
                 {
                     pos--;
                     Debug.Assert(pos >= 0 && pos < MaxSize);
-                    ref byte n = ref Unsafe.Add(ref nonce._value0, pos);
+                    ref byte n = ref Unsafe.Add(ref nonce._bytes, pos);
                     carry += n;
                     n = unchecked((byte)carry);
                     carry >>= 8;
@@ -139,7 +139,7 @@ namespace NSec.Cryptography
 
             nonce._size = (byte)(bytes.Length << 4);
 
-            ref byte first = ref nonce._value0;
+            ref byte first = ref nonce._bytes;
             ref byte second = ref bytes.DangerousGetPinnableReference();
 
             int length = bytes.Length;
@@ -230,8 +230,8 @@ namespace NSec.Cryptography
 
             for (int i = 0; x == y && i < Unsafe.SizeOf<Nonce>(); i += sizeof(uint))
             {
-                x = Utilities.FromBigEndian(Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref _value0, i)));
-                y = Utilities.FromBigEndian(Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref other._value0, i)));
+                x = Utilities.FromBigEndian(Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref _bytes, i)));
+                y = Utilities.FromBigEndian(Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref other._bytes, i)));
             }
 
             return x.CompareTo(y);
@@ -246,7 +246,7 @@ namespace NSec.Cryptography
                 throw Error.Argument_DestinationTooShort(nameof(destination));
             }
 
-            Unsafe.CopyBlockUnaligned(ref destination.DangerousGetPinnableReference(), ref _value0, (uint)size);
+            Unsafe.CopyBlockUnaligned(ref destination.DangerousGetPinnableReference(), ref _bytes, (uint)size);
             return size;
         }
 
@@ -255,10 +255,10 @@ namespace NSec.Cryptography
         {
             Debug.Assert(Unsafe.SizeOf<Nonce>() == 16);
 
-            return Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref _value0, 0x0)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref other._value0, 0x0))
-                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref _value0, 0x4)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref other._value0, 0x4))
-                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref _value0, 0x8)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref other._value0, 0x8))
-                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref _value0, 0xC)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref other._value0, 0xC));
+            return Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref _bytes, 0x0)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref other._bytes, 0x0))
+                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref _bytes, 0x4)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref other._bytes, 0x4))
+                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref _bytes, 0x8)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref other._bytes, 0x8))
+                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref _bytes, 0xC)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref other._bytes, 0xC));
         }
 
         public override bool Equals(
@@ -272,24 +272,24 @@ namespace NSec.Cryptography
             Debug.Assert(Unsafe.SizeOf<Nonce>() == 16);
 
             int hashCode = 0;
-            hashCode = Utilities.CombineHash(Unsafe.ReadUnaligned<int>(ref Unsafe.Add(ref _value0, 0x0)), hashCode);
-            hashCode = Utilities.CombineHash(Unsafe.ReadUnaligned<int>(ref Unsafe.Add(ref _value0, 0x4)), hashCode);
-            hashCode = Utilities.CombineHash(Unsafe.ReadUnaligned<int>(ref Unsafe.Add(ref _value0, 0x8)), hashCode);
-            hashCode = Utilities.CombineHash(Unsafe.ReadUnaligned<int>(ref Unsafe.Add(ref _value0, 0xC)), hashCode);
+            hashCode = Utilities.CombineHash(Unsafe.ReadUnaligned<int>(ref Unsafe.Add(ref _bytes, 0x0)), hashCode);
+            hashCode = Utilities.CombineHash(Unsafe.ReadUnaligned<int>(ref Unsafe.Add(ref _bytes, 0x4)), hashCode);
+            hashCode = Utilities.CombineHash(Unsafe.ReadUnaligned<int>(ref Unsafe.Add(ref _bytes, 0x8)), hashCode);
+            hashCode = Utilities.CombineHash(Unsafe.ReadUnaligned<int>(ref Unsafe.Add(ref _bytes, 0xC)), hashCode);
             return hashCode;
         }
 
         public byte[] ToArray()
         {
             byte[] bytes = new byte[Size];
-            Unsafe.CopyBlockUnaligned(ref bytes.AsSpan().DangerousGetPinnableReference(), ref _value0, (uint)bytes.Length);
+            Unsafe.CopyBlockUnaligned(ref bytes.AsSpan().DangerousGetPinnableReference(), ref _bytes, (uint)bytes.Length);
             return bytes;
         }
 
         public override string ToString()
         {
             Span<byte> bytes = stackalloc byte[Size];
-            Unsafe.CopyBlockUnaligned(ref bytes.DangerousGetPinnableReference(), ref _value0, (uint)bytes.Length);
+            Unsafe.CopyBlockUnaligned(ref bytes.DangerousGetPinnableReference(), ref _bytes, (uint)bytes.Length);
             return string.Concat("[", Base16.Encode(bytes).Insert(2 * FixedFieldSize, "]["), "]");
         }
     }
