@@ -90,23 +90,26 @@ namespace NSec.Cryptography
                 throw Error.ArgumentOutOfRange_NonceAddend(nameof(addend));
             }
 
-            int offset = nonce.Size - 1;
-            int size = nonce.CounterFieldSize;
             uint carry = (uint)addend;
+            int end = nonce.FixedFieldSize;
+            int pos = nonce.Size;
 
-            for (int i = 0; i < size; i++)
+            while (carry != 0)
             {
-                Debug.Assert(offset - i >= 0 && offset - i < MaxSize);
-                ref byte n = ref Unsafe.Add(ref nonce._value0, offset - i);
-                carry += n;
-                n = unchecked((byte)carry);
-                carry >>= 8;
-            }
-
-            if (carry != 0)
-            {
-                nonce = default;
-                return false;
+                if (pos > end)
+                {
+                    pos--;
+                    Debug.Assert(pos >= 0 && pos < MaxSize);
+                    ref byte n = ref Unsafe.Add(ref nonce._value0, pos);
+                    carry += n;
+                    n = unchecked((byte)carry);
+                    carry >>= 8;
+                }
+                else
+                {
+                    nonce = default;
+                    return false;
+                }
             }
 
             return true;
@@ -136,10 +139,26 @@ namespace NSec.Cryptography
 
             nonce._size = (byte)(bytes.Length << 4);
 
-            for (int i = 0; i < bytes.Length; i++)
+            ref byte first = ref nonce._value0;
+            ref byte second = ref bytes.DangerousGetPinnableReference();
+
+            int length = bytes.Length;
+            int i = 0;
+
+            while (length - i >= sizeof(int))
+            {
+                ref byte x = ref Unsafe.Add(ref first, i);
+                ref byte y = ref Unsafe.Add(ref second, i);
+
+                Unsafe.WriteUnaligned(ref x, Unsafe.ReadUnaligned<int>(ref x) ^ Unsafe.ReadUnaligned<int>(ref y));
+                i += sizeof(int);
+            }
+
+            while (i != length)
             {
                 Debug.Assert(i >= 0 && i < MaxSize);
-                Unsafe.Add(ref nonce._value0, i) ^= bytes[i];
+                Unsafe.Add(ref first, i) ^= Unsafe.Add(ref second, i);
+                i++;
             }
 
             return nonce;
@@ -204,18 +223,18 @@ namespace NSec.Cryptography
         public int CompareTo(
             Nonce other)
         {
-            int gt = ((other._size - _size) >> 31) & 1;
-            int eq = (((other._size ^ _size) - 1) >> 31) & 1;
+            Debug.Assert(Unsafe.SizeOf<Nonce>() % sizeof(uint) == 0);
 
-            for (int i = 0; i < MaxSize; i++)
+            uint x = _size;
+            uint y = other._size;
+
+            for (int i = 0; x == y && i < Unsafe.SizeOf<Nonce>(); i += sizeof(uint))
             {
-                int x = Unsafe.Add(ref _value0, i);
-                int y = Unsafe.Add(ref other._value0, i);
-                gt |= ((y - x) >> 31) & eq;
-                eq &= ((y ^ x) - 1) >> 31;
+                x = Utilities.FromBigEndian(Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref _value0, i)));
+                y = Utilities.FromBigEndian(Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref other._value0, i)));
             }
 
-            return gt + gt + eq - 1;
+            return x.CompareTo(y);
         }
 
         public int CopyTo(
@@ -234,16 +253,12 @@ namespace NSec.Cryptography
         public bool Equals(
             Nonce other)
         {
-            int eq = other._size ^ _size;
+            Debug.Assert(Unsafe.SizeOf<Nonce>() == 16);
 
-            for (int i = 0; i < MaxSize; i++)
-            {
-                int x = Unsafe.Add(ref _value0, i);
-                int y = Unsafe.Add(ref other._value0, i);
-                eq |= y ^ x;
-            }
-
-            return (((eq - 1) >> 31) & 1) - 1 == 0;
+            return Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref _value0, 0x0)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref other._value0, 0x0))
+                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref _value0, 0x4)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref other._value0, 0x4))
+                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref _value0, 0x8)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref other._value0, 0x8))
+                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref _value0, 0xC)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref other._value0, 0xC));
         }
 
         public override bool Equals(
@@ -254,23 +269,14 @@ namespace NSec.Cryptography
 
         public override int GetHashCode()
         {
-            unchecked
-            {
-                // FNV-1a
-                const uint FNV32Prime = 0x01000193U;
-                const uint FNV32Basis = 0x811C9DC5U;
+            Debug.Assert(Unsafe.SizeOf<Nonce>() == 16);
 
-                uint hashCode = FNV32Basis;
-
-                hashCode = (hashCode ^ _size) * FNV32Prime;
-
-                for (int i = 0; i < MaxSize; i++)
-                {
-                    hashCode = (hashCode ^ Unsafe.Add(ref _value0, i)) * FNV32Prime;
-                }
-
-                return (int)hashCode;
-            }
+            int hashCode = 0;
+            hashCode = Utilities.CombineHash(Unsafe.ReadUnaligned<int>(ref Unsafe.Add(ref _value0, 0x0)), hashCode);
+            hashCode = Utilities.CombineHash(Unsafe.ReadUnaligned<int>(ref Unsafe.Add(ref _value0, 0x4)), hashCode);
+            hashCode = Utilities.CombineHash(Unsafe.ReadUnaligned<int>(ref Unsafe.Add(ref _value0, 0x8)), hashCode);
+            hashCode = Utilities.CombineHash(Unsafe.ReadUnaligned<int>(ref Unsafe.Add(ref _value0, 0xC)), hashCode);
+            return hashCode;
         }
 
         public byte[] ToArray()
