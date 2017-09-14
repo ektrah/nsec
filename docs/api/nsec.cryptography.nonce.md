@@ -37,16 +37,19 @@ field and a zero-length counter field.
     public Nonce()
 
 
-### Nonce(int)
+### Nonce(int, int)
 
-Initializes a new instance of [[Nonce|Nonce Struct]] with a zero-length fixed
-field and a counter field of the specified size. The counter field is
-initialized to zero.
+Initializes a new instance of [[Nonce|Nonce Struct]] with a fixed field and a
+counter field of the specified sizes. Both fields are initialized to zeros.
 
     public Nonce(
+        int fixedFieldSize,
         int counterFieldSize)
 
 #### Parameters
+
+fixedFieldSize
+: The size of the fixed field.
 
 counterFieldSize
 : The size of the counter field.
@@ -54,8 +57,11 @@ counterFieldSize
 #### Exceptions
 
 ArgumentOutOfRangeException
+: `fixedFieldSize` is greater than [[MaxSize|Nonce Struct#MaxSize]].
+
+ArgumentOutOfRangeException
 : `counterFieldSize` is less than 0 or greater than [[MaxSize|Nonce
-    Struct#MaxSize]].
+    Struct#MaxSize]] minus `fixedFieldSize`.
 
 
 ### Nonce(ReadOnlySpan<byte>, int)

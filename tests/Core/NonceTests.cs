@@ -53,7 +53,7 @@ namespace NSec.Tests.Core
         public static void CtorWithCounterSize(int size)
         {
             var expected = new byte[size];
-            var actual = new Nonce(size);
+            var actual = new Nonce(0, size);
 
             var array = new byte[expected.Length];
 
@@ -67,15 +67,27 @@ namespace NSec.Tests.Core
         }
 
         [Fact]
+        public static void CtorWithNegativeFixedSize()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>("fixedFieldSize", () => new Nonce(-1, 0));
+        }
+
+        [Fact]
+        public static void CtorWithFixedSizeGreater15()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>("fixedFieldSize", () => new Nonce(16, 0));
+        }
+
+        [Fact]
         public static void CtorWithNegativeCounterSize()
         {
-            Assert.Throws<ArgumentOutOfRangeException>("counterFieldSize", () => new Nonce(-1));
+            Assert.Throws<ArgumentOutOfRangeException>("counterFieldSize", () => new Nonce(0, -1));
         }
 
         [Fact]
         public static void CtorWithCounterSizeGreater15()
         {
-            Assert.Throws<ArgumentOutOfRangeException>("counterFieldSize", () => new Nonce(16));
+            Assert.Throws<ArgumentOutOfRangeException>("counterFieldSize", () => new Nonce(0, 16));
         }
 
         #endregion
@@ -252,8 +264,8 @@ namespace NSec.Tests.Core
         {
             const int first = 5;
 
-            var left = new Nonce(first);
-            var right = new Nonce(second);
+            var left = new Nonce(0, first);
+            var right = new Nonce(0, second);
 
             var expected = Math.Sign(first.CompareTo(second));
             var actual = left.CompareTo(right);
@@ -278,8 +290,8 @@ namespace NSec.Tests.Core
         [InlineData(0x1000, 0x10000000)]
         public static void CompareValue(int first, int second)
         {
-            var left = new Nonce(4) + first;
-            var right = new Nonce(4) + second;
+            var left = new Nonce(0, 4) + first;
+            var right = new Nonce(0, 4) + second;
 
             var expected = Math.Sign(first.CompareTo(second));
             var actual = left.CompareTo(right);
@@ -427,7 +439,7 @@ namespace NSec.Tests.Core
         [Fact]
         public static void XorWrongLength()
         {
-            Assert.Throws<ArgumentException>("bytes", () => new Nonce(12) ^ new byte[11]);
+            Assert.Throws<ArgumentException>("bytes", () => new Nonce(0, 12) ^ new byte[11]);
         }
 
         #endregion

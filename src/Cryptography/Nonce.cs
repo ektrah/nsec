@@ -19,17 +19,22 @@ namespace NSec.Cryptography
         private byte _size;
 
         public Nonce(
+            int fixedFieldSize,
             int counterFieldSize)
             : this()
         {
-            if (counterFieldSize < 0 || counterFieldSize > MaxSize)
+            if (fixedFieldSize < 0 || fixedFieldSize > MaxSize)
+            {
+                throw Error.ArgumentOutOfRange_NonceFixedCounterSize(nameof(fixedFieldSize));
+            }
+            if (counterFieldSize < 0 || counterFieldSize > MaxSize - fixedFieldSize)
             {
                 throw Error.ArgumentOutOfRange_NonceCounterSize(nameof(counterFieldSize));
             }
 
             Debug.Assert(MaxSize >= 0x0 && MaxSize <= 0xF);
 
-            _size = (byte)counterFieldSize;
+            _size = (byte)((fixedFieldSize << 4) | counterFieldSize);
         }
 
         public Nonce(
