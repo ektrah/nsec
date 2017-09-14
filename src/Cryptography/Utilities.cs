@@ -14,9 +14,24 @@ namespace NSec.Cryptography
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int CombineHash(
+            int newKey,
+            int currentKey)
+        {
+            return unchecked((currentKey * (int)0xA5555529) + newKey);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T[] Empty<T>()
         {
             return EmptyArray<T>.Value;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static uint FromBigEndian(
+            uint value)
+        {
+            return BitConverter.IsLittleEndian ? Reverse(value) : value;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
