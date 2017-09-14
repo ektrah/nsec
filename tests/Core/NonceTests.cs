@@ -407,8 +407,8 @@ namespace NSec.Tests.Core
         [InlineData(3)]
         public static void Xor(int start)
         {
-            var bytes1 = Utilities.RandomBytes.Slice(start * 24, 12);
-            var bytes2 = Utilities.RandomBytes.Slice(start * 24 + 12, 12);
+            var bytes1 = Utilities.RandomBytes.Slice(start * 24, 12 + start);
+            var bytes2 = Utilities.RandomBytes.Slice(start * 24 + 100, 12 + start);
 
             var expected = new byte[bytes1.Length];
             var actual = new Nonce(ReadOnlySpan<byte>.Empty, bytes1) ^ bytes2;
