@@ -262,7 +262,7 @@ namespace NSec.Tests.Algorithms
                 var actual = k.Export(KeyBlobFormat.RawSymmetricKey);
 
                 var unexpected = new byte[actual.Length];
-                Utilities.Fill(unexpected, 0xDB);
+                Utilities.Fill(unexpected, actual[0]);
 
                 Assert.NotEqual(unexpected, actual);
             }
