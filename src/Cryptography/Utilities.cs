@@ -6,14 +6,6 @@ namespace NSec.Cryptography
     internal static class Utilities
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool AreSameStart(
-            ReadOnlySpan<byte> first,
-            ReadOnlySpan<byte> second)
-        {
-            return Unsafe.AreSame(ref first.DangerousGetPinnableReference(), ref second.DangerousGetPinnableReference());
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int CombineHash(
             int newKey,
             int currentKey)
@@ -39,12 +31,22 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> first,
             ReadOnlySpan<byte> second)
         {
+            return Overlap(first, second, out _);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static unsafe bool Overlap(
+            ReadOnlySpan<byte> first,
+            ReadOnlySpan<byte> second,
+            out IntPtr diff)
+        {
             if (second.IsEmpty)
             {
+                diff = IntPtr.Zero;
                 return false;
             }
 
-            IntPtr diff = Unsafe.ByteOffset(ref first.DangerousGetPinnableReference(), ref second.DangerousGetPinnableReference());
+            diff = Unsafe.ByteOffset(ref first.DangerousGetPinnableReference(), ref second.DangerousGetPinnableReference());
 
             return (sizeof(IntPtr) == sizeof(int))
                 ? unchecked((uint)diff < (uint)first.Length || (uint)diff > (uint)-second.Length)
