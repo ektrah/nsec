@@ -1,0 +1,15 @@
+version: '{build}'
+image:
+  - Visual Studio 2017
+environment:
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+install:
+  - dotnet restore --source "https://api.nuget.org/v3/index.json" --source "https://dotnet.myget.org/F/dotnet-core/api/v3/index.json" --source "https://dotnet.myget.org/F/roslyn/api/v3/index.json"
+build_script:
+  - dotnet build src -c Release
+test_script:
+  - dotnet test tests -c Release
+after_test:
+  - dotnet pack src -c Release
+artifacts:
+  - path: '**\*.nupkg'
