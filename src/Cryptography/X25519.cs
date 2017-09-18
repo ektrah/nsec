@@ -14,7 +14,7 @@ namespace NSec.Cryptography
     //
     //      RFC 7748 - Elliptic Curves for Security
     //
-    //      draft-ietf-curdle-pkix-05 - Algorithm Identifiers for Ed25519,
+    //      draft-ietf-curdle-pkix-06 - Algorithm Identifiers for Ed25519,
     //          Ed448, X25519 and X448 for use in the Internet X.509 Public Key
     //          Infrastructure
     //
