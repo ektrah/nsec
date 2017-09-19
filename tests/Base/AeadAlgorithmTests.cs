@@ -20,7 +20,8 @@ namespace NSec.Tests.Base
 
             Assert.True(a.KeySize > 0);
             Assert.InRange(a.NonceSize, 0, Nonce.MaxSize);
-            Assert.True(a.TagSize > 0);
+            Assert.InRange(a.TagSize, 0, 255);
+            Assert.InRange(a.MaxPlaintextSize, 65535, int.MaxValue - a.TagSize);
         }
 
         #endregion

@@ -30,6 +30,17 @@ Gets the key size, in bytes.
 The key size, in bytes.
 
 
+### MaxPlaintextSize
+
+Gets the maximum plaintext size that can be encrypted at once, in bytes.
+
+    public int MaxPlaintextSize { get; }
+
+#### Property Value
+
+The maximum plaintext size, in bytes.
+
+
 ### NonceSize
 
 Gets the nonce size, in bytes.
@@ -218,8 +229,8 @@ ArgumentException
 : `nonce.Size` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
 
 ArgumentException
-: `plaintext.Length` plus [[TagSize|AeadAlgorithm Class#TagSize]]
-    is greater than `Int32.MaxValue`.
+: `plaintext.Length` is greater than
+    [[NonceSize|AeadAlgorithm Class#MaxPlaintextSize]].
 
 ObjectDisposedException
 : `key` has been disposed.
@@ -277,8 +288,8 @@ ArgumentException
 : `nonce.Size` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
 
 ArgumentException
-: `plaintext.Length` plus [[TagSize|AeadAlgorithm Class#TagSize]]
-    is greater than `Int32.MaxValue`.
+: `plaintext.Length` is greater than
+    [[NonceSize|AeadAlgorithm Class#MaxPlaintextSize]].
 
 ArgumentException
 : `ciphertext.Length` is not equal to `plaintext.Length` plus

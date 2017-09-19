@@ -150,9 +150,10 @@ namespace NSec.Cryptography
         }
 
         internal static ArgumentException Argument_PlaintextTooLong(
-            string paramName)
+            string paramName,
+            string arg0)
         {
-            return new ArgumentException(ResourceManager.GetString("Argument_PlaintextTooLong"), paramName);
+            return new ArgumentException(string.Format(ResourceManager.GetString("Argument_PlaintextTooLong"), arg0), paramName);
         }
 
         internal static ArgumentException Argument_SaltNotSupported(

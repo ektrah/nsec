@@ -217,7 +217,7 @@
     <value>The plaintext length must be equal to the ciphertext length minus the tag size.</value>
   </data>
   <data name="Argument_PlaintextTooLong" xml:space="preserve">
-    <value>The plaintext is too long.</value>
+    <value>The length of the plaintext must be less than or equal to {0}.</value>
   </data>
   <data name="Argument_SaltNotSupported" xml:space="preserve">
     <value>Salt is not supported and must be an empty span.</value>

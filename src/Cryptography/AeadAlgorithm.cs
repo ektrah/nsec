@@ -24,24 +24,30 @@ namespace NSec.Cryptography
     public abstract class AeadAlgorithm : Algorithm
     {
         private readonly int _keySize;
+        private readonly int _maxPlaintextSize;
         private readonly int _nonceSize;
         private readonly int _tagSize;
 
         internal AeadAlgorithm(
             int keySize,
             int nonceSize,
-            int tagSize)
+            int tagSize,
+            int maxPlaintextSize)
         {
             Debug.Assert(keySize > 0);
             Debug.Assert(nonceSize >= 0 && nonceSize <= Nonce.MaxSize);
-            Debug.Assert(tagSize > 0);
+            Debug.Assert(tagSize >= 0 && tagSize <= 255);
+            Debug.Assert(maxPlaintextSize >= 65535 && maxPlaintextSize <= int.MaxValue - tagSize);
 
             _keySize = keySize;
             _nonceSize = nonceSize;
             _tagSize = tagSize;
+            _maxPlaintextSize = maxPlaintextSize;
         }
 
         public int KeySize => _keySize;
+
+        public int MaxPlaintextSize => _maxPlaintextSize;
 
         public int NonceSize => _nonceSize;
 
@@ -59,7 +65,7 @@ namespace NSec.Cryptography
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
-            if (ciphertext.Length < _tagSize)
+            if (ciphertext.Length < _tagSize || ciphertext.Length - _tagSize > _maxPlaintextSize)
                 throw Error.Cryptographic_DecryptionFailed();
 
             byte[] plaintext = new byte[ciphertext.Length - _tagSize];
@@ -85,7 +91,7 @@ namespace NSec.Cryptography
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
-            if (ciphertext.Length < _tagSize)
+            if (ciphertext.Length < _tagSize || ciphertext.Length - _tagSize > _maxPlaintextSize)
                 throw Error.Cryptographic_DecryptionFailed();
             if (plaintext.Length != ciphertext.Length - _tagSize)
                 throw Error.Argument_PlaintextLength(nameof(plaintext));
@@ -110,8 +116,8 @@ namespace NSec.Cryptography
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
-            if (plaintext.Length > int.MaxValue - _tagSize)
-                throw Error.Argument_PlaintextTooLong(nameof(plaintext));
+            if (plaintext.Length > _maxPlaintextSize)
+                throw Error.Argument_PlaintextTooLong(nameof(plaintext), _maxPlaintextSize.ToString());
 
             byte[] ciphertext = new byte[plaintext.Length + _tagSize];
             EncryptCore(key.Handle, ref nonce, associatedData, plaintext, ciphertext);
@@ -131,8 +137,8 @@ namespace NSec.Cryptography
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
-            if (plaintext.Length > int.MaxValue - _tagSize)
-                throw Error.Argument_PlaintextTooLong(nameof(plaintext));
+            if (plaintext.Length > _maxPlaintextSize)
+                throw Error.Argument_PlaintextTooLong(nameof(plaintext), _maxPlaintextSize.ToString());
             if (ciphertext.Length != plaintext.Length + _tagSize)
                 throw Error.Argument_CiphertextLength(nameof(ciphertext));
             if (Utilities.Overlap(ciphertext, plaintext, out IntPtr diff) && diff != IntPtr.Zero)
@@ -155,7 +161,7 @@ namespace NSec.Cryptography
             if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
 
-            if (ciphertext.Length < _tagSize)
+            if (ciphertext.Length < _tagSize || ciphertext.Length - _tagSize > _maxPlaintextSize)
             {
                 plaintext = null;
                 return false;
@@ -180,7 +186,7 @@ namespace NSec.Cryptography
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
-            if (ciphertext.Length < _tagSize)
+            if (ciphertext.Length < _tagSize || ciphertext.Length - _tagSize > _maxPlaintextSize)
                 return false;
             if (plaintext.Length != ciphertext.Length - _tagSize)
                 throw Error.Argument_PlaintextLength(nameof(plaintext));
