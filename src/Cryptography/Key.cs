@@ -8,7 +8,7 @@ namespace NSec.Cryptography
     public sealed class Key : IDisposable
     {
         private readonly Algorithm _algorithm;
-        private readonly KeyFlags _flags;
+        private readonly KeyExportPolicies _exportPolicy;
         private readonly SecureMemoryHandle _handle;
         private readonly PublicKey _publicKey;
 
@@ -16,7 +16,7 @@ namespace NSec.Cryptography
 
         public Key(
             Algorithm algorithm,
-            KeyFlags flags = KeyFlags.None)
+            KeyExportPolicies exportPolicy = KeyExportPolicies.None)
         {
             if (algorithm == null)
             {
@@ -55,14 +55,14 @@ namespace NSec.Cryptography
             keyHandle.MakeReadOnly();
 
             _algorithm = algorithm;
-            _flags = flags;
+            _exportPolicy = exportPolicy;
             _handle = keyHandle;
             _publicKey = (publicKeyBytes) != null ? new PublicKey(algorithm, publicKeyBytes) : null;
         }
 
         internal Key(
             Algorithm algorithm,
-            KeyFlags flags,
+            KeyExportPolicies exportPolicy,
             SecureMemoryHandle keyHandle,
             byte[] publicKeyBytes)
         {
@@ -72,14 +72,14 @@ namespace NSec.Cryptography
             keyHandle.MakeReadOnly();
 
             _algorithm = algorithm;
-            _flags = flags;
+            _exportPolicy = exportPolicy;
             _handle = keyHandle;
             _publicKey = (publicKeyBytes) != null ? new PublicKey(algorithm, publicKeyBytes) : null;
         }
 
         public Algorithm Algorithm => _algorithm;
 
-        public KeyFlags Flags => _flags;
+        public KeyExportPolicies ExportPolicy => _exportPolicy;
 
         public PublicKey PublicKey => _publicKey;
 
@@ -87,16 +87,16 @@ namespace NSec.Cryptography
 
         public static Key Create(
             Algorithm algorithm,
-            KeyFlags flags = KeyFlags.None)
+            KeyExportPolicies exportPolicy = KeyExportPolicies.None)
         {
-            return RandomNumberGenerator.Default.GenerateKey(algorithm, flags);
+            return RandomNumberGenerator.Default.GenerateKey(algorithm, exportPolicy);
         }
 
         public static Key Import(
            Algorithm algorithm,
            ReadOnlySpan<byte> blob,
            KeyBlobFormat format,
-           KeyFlags flags = KeyFlags.None)
+           KeyExportPolicies exportPolicy = KeyExportPolicies.None)
         {
             if (algorithm == null)
             {
@@ -124,14 +124,14 @@ namespace NSec.Cryptography
                 throw Error.Format_InvalidBlob();
             }
 
-            return new Key(algorithm, flags, keyHandle, publicKeyBytes);
+            return new Key(algorithm, exportPolicy, keyHandle, publicKeyBytes);
         }
 
         public static bool TryImport(
             Algorithm algorithm,
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
-            KeyFlags flags,
+            KeyExportPolicies exportPolicy,
             out Key result)
         {
             if (algorithm == null)
@@ -155,7 +155,7 @@ namespace NSec.Cryptography
                 }
             }
 
-            result = success ? new Key(algorithm, flags, keyHandle, publicKeyBytes) : null;
+            result = success ? new Key(algorithm, exportPolicy, keyHandle, publicKeyBytes) : null;
             return success;
         }
 
@@ -177,8 +177,8 @@ namespace NSec.Cryptography
                     throw Error.ObjectDisposed_Key();
                 }
 
-                bool allowExport = (_flags & KeyFlags.AllowExport) != 0;
-                bool allowArchiving = (_flags & KeyFlags.AllowArchiving) != 0;
+                bool allowExport = (_exportPolicy & KeyExportPolicies.AllowExport) != 0;
+                bool allowArchiving = (_exportPolicy & KeyExportPolicies.AllowArchiving) != 0;
 
                 if (!allowExport)
                 {

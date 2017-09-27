@@ -63,22 +63,22 @@ bytes
 : The span to fill with random values.
 
 
-### GenerateKey(Algorithm, KeyFlags)
+### GenerateKey(Algorithm, KeyExportPolicies)
 
 Generates a new cryptographic key for the specified algorithm.
 
     public Key GenerateKey(
         Algorithm algorithm,
-        KeyFlags flags = KeyFlags.None)
+        KeyExportPolicies exportPolicy = KeyExportPolicies.None)
 
 #### Parameters
 
 algorithm
 : The algorithm for the key.
 
-flags
-: A bitwise combination of [[KeyFlags|KeyFlags Enum]] values that specifies
-    the flags for the new key.
+exportPolicy
+: A bitwise combination of [[KeyExportPolicies|KeyExportPolicies Enum]] values
+    that specifies the export policy for the generated key.
 
 #### Return Value
 

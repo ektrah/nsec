@@ -1,9 +1,9 @@
-# KeyFlags Enum
+# KeyExportPolicies Enum
 
-Specifies the flags for a [[Key|Key Class]] object.
+Specifies the key export policies for a [[key|Key Class]].
 
     [Flags]
-    public enum KeyFlags
+    public enum KeyExportPolicies
 
 
 ## Members
@@ -15,7 +15,7 @@ AllowExport
 : The private key can be exported multiple times.
 
 None
-: The private key can not be exported.
+: The private key cannot be exported.
 
 
 ## See Also

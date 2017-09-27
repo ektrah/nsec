@@ -228,7 +228,7 @@ namespace NSec.Tests.Base
         {
             var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(a, KeyFlags.AllowArchiving))
+            using (var k = new Key(a, KeyExportPolicies.AllowArchiving))
             {
                 var actual = k.Export(KeyBlobFormat.RawPrivateKey);
 

@@ -3,7 +3,7 @@ using System;
 namespace NSec.Cryptography
 {
     [Flags]
-    public enum KeyFlags
+    public enum KeyExportPolicies
     {
         // Secret key can not be exported
         None = 0,

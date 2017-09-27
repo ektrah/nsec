@@ -36,7 +36,7 @@ namespace NSec.Cryptography
 
         public Key GenerateKey(
             Algorithm algorithm,
-            KeyFlags flags = KeyFlags.None)
+            KeyExportPolicies exportPolicy = KeyExportPolicies.None)
         {
             if (algorithm == null)
             {
@@ -72,7 +72,7 @@ namespace NSec.Cryptography
                 }
             }
 
-            return new Key(algorithm, flags, keyHandle, publicKeyBytes);
+            return new Key(algorithm, exportPolicy, keyHandle, publicKeyBytes);
         }
 
         internal abstract void GenerateBytesCore(

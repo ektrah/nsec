@@ -11,22 +11,22 @@ Represents a symmetric key or an asymmetric key pair.
 ## Constructors
 
 
-### Key(Algorithm, KeyFlags)
+### Key(Algorithm, KeyExportPolicies)
 
 Initializes a new instance of the [[Key|Key Class]] class with a random key.
 
     public Key(
         Algorithm algorithm,
-        KeyFlags flags = KeyFlags.None)
+        KeyExportPolicies exportPolicy = KeyExportPolicies.None)
 
 #### Parameters
 
 algorithm
 : The algorithm for the key.
 
-flags
-: A bitwise combination of [[KeyFlags|KeyFlags Enum]] values that specifies
-    the flags for the new key.
+exportPolicy
+: A bitwise combination of [[KeyExportPolicies|KeyExportPolicies Enum]] values
+    that specifies the export policy for the new key.
 
 #### Exceptions
 
@@ -39,8 +39,8 @@ NotSupportedException
 #### Remarks
 
 This constructor is a shortcut for
-[[RandomNumberGenerator.Default.GenerateKey(Algorithm, KeyFlags)|RandomNumberGenerator
-Class#GenerateKey(Algorithm, KeyFlags)]].
+[[RandomNumberGenerator.Default.GenerateKey(Algorithm, KeyExportPolicies)|RandomNumberGenerator
+Class#GenerateKey(Algorithm, KeyExportPolicies)]].
 
 
 ## Properties
@@ -57,17 +57,16 @@ Gets the algorithm for the key.
 An instance of the [[Algorithm|Algorithm Class]] class.
 
 
-### Flags
+### ExportPolicy
 
-Gets the flags for the key.
+Gets the export policy for the key.
 
-    public KeyFlags Flags { get; }
+    public KeyExportPolicies ExportPolicy { get; }
 
 #### Property Value
 
-A bitwise combination of [[KeyFlags|KeyFlags Enum]] values that specifies the
-flags for the key.
-
+A bitwise combination of [[KeyExportPolicies|KeyExportPolicies Enum]] values
+that specifies the export policy for the key.
 
 ### PublicKey
 
@@ -85,22 +84,22 @@ of the [[Key|Key Class]] class represents a key pair; otherwise, `null`.
 ## Static Methods
 
 
-### Create(Algorithm, KeyFlags)
+### Create(Algorithm, KeyExportPolicies)
 
 Creates a new instance of the [[Key|Key Class]] class with a random key.
 
     public static Key Create(
         Algorithm algorithm,
-        KeyFlags flags = KeyFlags.None)
+        KeyExportPolicies exportPolicy = KeyExportPolicies.None)
 
 #### Parameters
 
 algorithm
 : The algorithm for the key.
 
-flags
-: A bitwise combination of [[KeyFlags|KeyFlags Enum]] values that specifies
-    the flags for the new key.
+exportPolicy
+: A bitwise combination of [[KeyExportPolicies|KeyExportPolicies Enum]] values
+    that specifies the export policy for the new key.
 
 #### Return Value
 
@@ -117,11 +116,11 @@ NotSupportedException
 #### Remarks
 
 This method is a shortcut for
-[[RandomNumberGenerator.Default.GenerateKey(Algorithm, KeyFlags)|RandomNumberGenerator
-Class#GenerateKey(Algorithm, KeyFlags)]].
+[[RandomNumberGenerator.Default.GenerateKey(Algorithm, KeyExportPolicies)|RandomNumberGenerator
+Class#GenerateKey(Algorithm, KeyExportPolicies)]].
 
 
-### Import(Algorithm, ReadOnlySpan<byte>, KeyBlobFormat, KeyFlags)
+### Import(Algorithm, ReadOnlySpan<byte>, KeyBlobFormat, KeyExportPolicies)
 
 Imports the specified key BLOB in the specified format.
 
@@ -129,7 +128,7 @@ Imports the specified key BLOB in the specified format.
         Algorithm algorithm,
         ReadOnlySpan<byte> blob,
         KeyBlobFormat format,
-        KeyFlags flags = KeyFlags.None)
+        KeyExportPolicies exportPolicy = KeyExportPolicies.None)
 
 #### Parameters
 
@@ -143,9 +142,9 @@ format
 : One of the [[KeyBlobFormat|KeyBlobFormat Enum]] values that specifies the
     format of the key BLOB.
 
-flags
-: A bitwise combination of [[KeyFlags|KeyFlags Enum]] values that specifies
-    the flags for the imported key.
+exportPolicy
+: A bitwise combination of [[KeyExportPolicies|KeyExportPolicies Enum]] values
+    that specifies the export policy for the imported key.
 
 #### Return Value
 
@@ -166,7 +165,7 @@ NotSupportedException
 : The specified algorithm does not support importing keys.
 
 
-### TryImport(Algorithm, ReadOnlySpan<byte>, KeyBlobFormat, KeyFlags, out Key)
+### TryImport(Algorithm, ReadOnlySpan<byte>, KeyBlobFormat, KeyExportPolicies, out Key)
 
 Attempts to import the specified key BLOB in the specified format.
 
@@ -174,7 +173,7 @@ Attempts to import the specified key BLOB in the specified format.
         Algorithm algorithm,
         ReadOnlySpan<byte> blob,
         KeyBlobFormat format,
-        KeyFlags flags,
+        KeyExportPolicies exportPolicy,
         out Key result)
 
 #### Parameters
@@ -189,9 +188,9 @@ format
 : One of the [[KeyBlobFormat|KeyBlobFormat Enum]] values that specifies the
     format of the key BLOB.
 
-flags
-: A bitwise combination of [[KeyFlags|KeyFlags Enum]] values that specifies
-    the flags for the imported key.
+exportPolicy
+: A bitwise combination of [[KeyExportPolicies|KeyExportPolicies Enum]] values
+    that specifies the export policy for the imported key.
 
 result
 : When this method returns, contains a new instance of the [[Key|Key Class]]
@@ -249,7 +248,7 @@ ArgumentException
 : The algorithm for the key does not support the specified format.
 
 InvalidOperationException
-: The flags for the key do not allow the key to be exported.
+: The export policy for the key do not allow the key to be exported.
 
 NotSupportedException
 : The algorithm for the key does not support exporting keys.
@@ -269,5 +268,5 @@ not guaranteed to be thread safe.
 * API Reference
     * [[Algorithm Class]]
     * [[KeyBlobFormat Enum]]
-    * [[KeyFlags Enum]]
+    * [[KeyExportPolicies Enum]]
     * [[PublicKey Class]]

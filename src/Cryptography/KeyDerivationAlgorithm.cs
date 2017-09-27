@@ -87,7 +87,7 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> info,
             Algorithm algorithm,
-            KeyFlags flags = KeyFlags.None)
+            KeyExportPolicies exportPolicy = KeyExportPolicies.None)
         {
             if (sharedSecret == null)
                 throw Error.ArgumentNull_SharedSecret(nameof(sharedSecret));
@@ -127,7 +127,7 @@ namespace NSec.Cryptography
                 }
             }
 
-            return new Key(algorithm, flags, keyHandle, publicKeyBytes);
+            return new Key(algorithm, exportPolicy, keyHandle, publicKeyBytes);
         }
 
         internal abstract void DeriveBytesCore(

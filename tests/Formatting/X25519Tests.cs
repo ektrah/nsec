@@ -16,7 +16,7 @@ namespace NSec.Tests.Formatting
             var a = new X25519();
             var b = Utilities.RandomBytes.Slice(0, a.PrivateKeySize);
 
-            using (var k = Key.Import(a, b, KeyBlobFormat.RawPrivateKey, KeyFlags.AllowExport))
+            using (var k = Key.Import(a, b, KeyBlobFormat.RawPrivateKey, KeyExportPolicies.AllowExport))
             {
                 var blob = k.Export(KeyBlobFormat.PkixPrivateKey);
 
@@ -42,7 +42,7 @@ namespace NSec.Tests.Formatting
             var a = new X25519();
             var b = Utilities.RandomBytes.Slice(0, a.PrivateKeySize);
 
-            using (var k = Key.Import(a, b, KeyBlobFormat.RawPrivateKey, KeyFlags.AllowExport))
+            using (var k = Key.Import(a, b, KeyBlobFormat.RawPrivateKey, KeyExportPolicies.AllowExport))
             {
                 var expected = Encoding.UTF8.GetBytes(
                     "-----BEGIN PRIVATE KEY-----\r\n" +

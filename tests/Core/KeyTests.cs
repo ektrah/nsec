@@ -22,10 +22,10 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(a, KeyFlags.None))
+            using (var k = new Key(a, KeyExportPolicies.None))
             {
                 Assert.Same(a, k.Algorithm);
-                Assert.Equal(KeyFlags.None, k.Flags);
+                Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
                 Assert.NotNull(k.PublicKey);
                 Assert.Same(a, k.PublicKey.Algorithm);
             }
@@ -37,10 +37,10 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(a, KeyFlags.None))
+            using (var k = new Key(a, KeyExportPolicies.None))
             {
                 Assert.Same(a, k.Algorithm);
-                Assert.Equal(KeyFlags.None, k.Flags);
+                Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
                 Assert.Null(k.PublicKey);
             }
         }
@@ -51,10 +51,10 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            var k = new Key(a, KeyFlags.None);
+            var k = new Key(a, KeyExportPolicies.None);
             k.Dispose();
             Assert.Same(a, k.Algorithm);
-            Assert.Equal(KeyFlags.None, k.Flags);
+            Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
             Assert.NotNull(k.PublicKey);
             Assert.Same(a, k.PublicKey.Algorithm);
         }
@@ -65,10 +65,10 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            var k = new Key(a, KeyFlags.None);
+            var k = new Key(a, KeyExportPolicies.None);
             k.Dispose();
             Assert.Same(a, k.Algorithm);
-            Assert.Equal(KeyFlags.None, k.Flags);
+            Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
             Assert.Null(k.PublicKey);
         }
 
@@ -165,7 +165,7 @@ namespace NSec.Tests.Core
         [Fact]
         public static void TryImportWithNullAlgorithm()
         {
-            Assert.Throws<ArgumentNullException>("algorithm", () => Key.TryImport(null, ReadOnlySpan<byte>.Empty, 0, KeyFlags.None, out Key k));
+            Assert.Throws<ArgumentNullException>("algorithm", () => Key.TryImport(null, ReadOnlySpan<byte>.Empty, 0, KeyExportPolicies.None, out Key k));
         }
 
         [Theory]
@@ -175,7 +175,7 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.Throws<ArgumentException>("format", () => Key.TryImport(a, ReadOnlySpan<byte>.Empty, (KeyBlobFormat)int.MinValue, KeyFlags.None, out Key k));
+            Assert.Throws<ArgumentException>("format", () => Key.TryImport(a, ReadOnlySpan<byte>.Empty, (KeyBlobFormat)int.MinValue, KeyExportPolicies.None, out Key k));
         }
 
         [Theory]
@@ -185,7 +185,7 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.Throws<ArgumentException>("format", () => Key.TryImport(a, ReadOnlySpan<byte>.Empty, (KeyBlobFormat)int.MaxValue, KeyFlags.None, out Key k));
+            Assert.Throws<ArgumentException>("format", () => Key.TryImport(a, ReadOnlySpan<byte>.Empty, (KeyBlobFormat)int.MaxValue, KeyExportPolicies.None, out Key k));
         }
 
         [Theory]
@@ -194,7 +194,7 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.False(Key.TryImport(a, ReadOnlySpan<byte>.Empty, format, KeyFlags.None, out Key k));
+            Assert.False(Key.TryImport(a, ReadOnlySpan<byte>.Empty, format, KeyExportPolicies.None, out Key k));
         }
 
         [Theory]
@@ -203,7 +203,7 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.False(Key.TryImport(a, ReadOnlySpan<byte>.Empty, format, KeyFlags.None, out Key k));
+            Assert.False(Key.TryImport(a, ReadOnlySpan<byte>.Empty, format, KeyExportPolicies.None, out Key k));
         }
 
         #endregion
@@ -217,9 +217,9 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(a, KeyFlags.AllowExport))
+            using (var k = new Key(a, KeyExportPolicies.AllowExport))
             {
-                Assert.Equal(KeyFlags.AllowExport, k.Flags);
+                Assert.Equal(KeyExportPolicies.AllowExport, k.ExportPolicy);
 
                 Assert.Throws<ArgumentException>("format", () => k.Export((KeyBlobFormat)int.MinValue));
             }
@@ -232,9 +232,9 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(a, KeyFlags.None))
+            using (var k = new Key(a, KeyExportPolicies.None))
             {
-                Assert.Equal(KeyFlags.None, k.Flags);
+                Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
 
                 Assert.Throws<ArgumentException>("format", () => k.Export((KeyBlobFormat)int.MaxValue));
             }
@@ -246,9 +246,9 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(a, KeyFlags.None))
+            using (var k = new Key(a, KeyExportPolicies.None))
             {
-                Assert.Equal(KeyFlags.None, k.Flags);
+                Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
 
                 Assert.NotNull(k.Export(format));
                 Assert.NotNull(k.Export(format));
@@ -262,9 +262,9 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(a, KeyFlags.None))
+            using (var k = new Key(a, KeyExportPolicies.None))
             {
-                Assert.Equal(KeyFlags.None, k.Flags);
+                Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
 
                 Assert.Throws<InvalidOperationException>(() => k.Export(format));
                 Assert.Throws<InvalidOperationException>(() => k.Export(format));
@@ -278,9 +278,9 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(a, KeyFlags.None))
+            using (var k = new Key(a, KeyExportPolicies.None))
             {
-                Assert.Equal(KeyFlags.None, k.Flags);
+                Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
 
                 Assert.Throws<InvalidOperationException>(() => k.Export(format));
                 Assert.Throws<InvalidOperationException>(() => k.Export(format));
@@ -294,9 +294,9 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(a, KeyFlags.AllowExport))
+            using (var k = new Key(a, KeyExportPolicies.AllowExport))
             {
-                Assert.Equal(KeyFlags.AllowExport, k.Flags);
+                Assert.Equal(KeyExportPolicies.AllowExport, k.ExportPolicy);
 
                 Assert.NotNull(k.Export(format));
                 Assert.NotNull(k.Export(format));
@@ -310,9 +310,9 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(a, KeyFlags.AllowExport))
+            using (var k = new Key(a, KeyExportPolicies.AllowExport))
             {
-                Assert.Equal(KeyFlags.AllowExport, k.Flags);
+                Assert.Equal(KeyExportPolicies.AllowExport, k.ExportPolicy);
 
                 Assert.NotNull(k.Export(format));
                 Assert.NotNull(k.Export(format));
@@ -326,9 +326,9 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(a, KeyFlags.AllowArchiving))
+            using (var k = new Key(a, KeyExportPolicies.AllowArchiving))
             {
-                Assert.Equal(KeyFlags.AllowArchiving, k.Flags);
+                Assert.Equal(KeyExportPolicies.AllowArchiving, k.ExportPolicy);
 
                 Assert.NotNull(k.Export(format));
                 Assert.Throws<InvalidOperationException>(() => k.Export(format));
@@ -342,9 +342,9 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(a, KeyFlags.AllowArchiving))
+            using (var k = new Key(a, KeyExportPolicies.AllowArchiving))
             {
-                Assert.Equal(KeyFlags.AllowArchiving, k.Flags);
+                Assert.Equal(KeyExportPolicies.AllowArchiving, k.ExportPolicy);
 
                 Assert.NotNull(k.Export(format));
                 Assert.Throws<InvalidOperationException>(() => k.Export(format));
@@ -358,7 +358,7 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            var k = new Key(a, KeyFlags.None);
+            var k = new Key(a, KeyExportPolicies.None);
             k.Dispose();
 
             k.Export(KeyBlobFormat.RawPublicKey);
@@ -372,7 +372,7 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            var k = new Key(a, KeyFlags.AllowExport);
+            var k = new Key(a, KeyExportPolicies.AllowExport);
             k.Dispose();
 
             Assert.Throws<ObjectDisposedException>(() => k.Export(KeyBlobFormat.RawPrivateKey));
@@ -386,7 +386,7 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            var k = new Key(a, KeyFlags.AllowExport);
+            var k = new Key(a, KeyExportPolicies.AllowExport);
             k.Dispose();
 
             Assert.Throws<ObjectDisposedException>(() => k.Export(KeyBlobFormat.RawSymmetricKey));
