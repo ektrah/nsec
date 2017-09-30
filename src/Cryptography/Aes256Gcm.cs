@@ -71,7 +71,7 @@ namespace NSec.Cryptography
             }
         }
 
-        public static bool IsAvailable => Sodium.TryInitialize() && (s_isAvailable.Value != 0);
+        public static bool IsSupported => Sodium.TryInitialize() && (s_isAvailable.Value != 0);
 
         internal override void CreateKey(
             ReadOnlySpan<byte> seed,
