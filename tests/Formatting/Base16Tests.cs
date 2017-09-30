@@ -104,5 +104,23 @@ namespace NSec.Tests.Formatting
                 Assert.False(Base16.TryDecode(base16, actual));
             }
         }
+
+        [Fact]
+        public static void DecodeNull()
+        {
+            Assert.Throws<ArgumentNullException>("base16", () => Base16.Decode((string)null));
+        }
+
+        [Fact]
+        public static void TryDecodeNull()
+        {
+            Assert.Throws<ArgumentNullException>("base16", () => Base16.TryDecode((string)null, Span<byte>.Empty));
+        }
+
+        [Fact]
+        public static void TryGetDecodedLengthNull()
+        {
+            Assert.Throws<ArgumentNullException>("base16", () => Base16.TryGetDecodedLength((string)null, out var decodedLength));
+        }
     }
 }
