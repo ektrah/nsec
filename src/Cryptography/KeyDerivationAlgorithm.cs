@@ -130,13 +130,13 @@ namespace NSec.Cryptography
             return new Key(algorithm, exportPolicy, keyHandle, publicKeyBytes);
         }
 
-        internal abstract void DeriveBytesCore(
+        private protected abstract void DeriveBytesCore(
             ReadOnlySpan<byte> inputKeyingMaterial,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> info,
             Span<byte> bytes);
 
-        internal virtual void DeriveBytesCore(
+        private protected virtual void DeriveBytesCore(
             SecureMemoryHandle inputKeyingMaterial,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> info,
@@ -158,7 +158,7 @@ namespace NSec.Cryptography
             }
         }
 
-        internal virtual void DeriveKeyCore(
+        private protected virtual void DeriveKeyCore(
             ReadOnlySpan<byte> inputKeyingMaterial,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> info,
@@ -180,7 +180,7 @@ namespace NSec.Cryptography
             }
         }
 
-        internal virtual void DeriveKeyCore(
+        private protected virtual void DeriveKeyCore(
             SecureMemoryHandle inputKeyingMaterial,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> info,

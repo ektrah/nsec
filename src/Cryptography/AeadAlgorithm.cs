@@ -196,14 +196,14 @@ namespace NSec.Cryptography
             return TryDecryptCore(key.Handle, ref nonce, associatedData, ciphertext, plaintext);
         }
 
-        internal abstract void EncryptCore(
+        private protected abstract void EncryptCore(
             SecureMemoryHandle keyHandle,
             ref Nonce nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext);
 
-        internal abstract bool TryDecryptCore(
+        private protected abstract bool TryDecryptCore(
             SecureMemoryHandle keyHandle,
             ref Nonce nonce,
             ReadOnlySpan<byte> associatedData,

@@ -101,7 +101,7 @@ namespace NSec.Cryptography
             return crypto_scalarmult_curve25519_SCALARBYTES;
         }
 
-        internal override bool TryAgreeCore(
+        private protected override bool TryAgreeCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> otherPartyPublicKey,
             out SecureMemoryHandle sharedSecretHandle)

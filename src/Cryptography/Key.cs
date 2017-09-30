@@ -35,7 +35,7 @@ namespace NSec.Cryptography
                 Span<byte> seed = stackalloc byte[seedSize];
                 try
                 {
-                    RandomNumberGenerator.Default.GenerateBytesCore(seed);
+                    RandomNumberGenerator.Default.GenerateBytes(seed);
                     algorithm.CreateKey(seed, out keyHandle, out publicKeyBytes);
                     success = true;
                 }

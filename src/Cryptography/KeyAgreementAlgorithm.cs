@@ -111,7 +111,7 @@ namespace NSec.Cryptography
             return success;
         }
 
-        internal abstract bool TryAgreeCore(
+        private protected abstract bool TryAgreeCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> otherPartyPublicKey,
             out SecureMemoryHandle sharedSecretHandle);

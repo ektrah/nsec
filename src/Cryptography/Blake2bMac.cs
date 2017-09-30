@@ -70,7 +70,7 @@ namespace NSec.Cryptography
             return crypto_generichash_blake2b_KEYBYTES;
         }
 
-        internal override void SignCore(
+        private protected override void SignCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             Span<byte> mac)
@@ -120,7 +120,7 @@ namespace NSec.Cryptography
             }
         }
 
-        internal override bool TryVerifyCore(
+        private protected override bool TryVerifyCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> mac)

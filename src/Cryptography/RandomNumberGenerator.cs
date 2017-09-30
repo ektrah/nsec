@@ -75,7 +75,7 @@ namespace NSec.Cryptography
             return new Key(algorithm, exportPolicy, keyHandle, publicKeyBytes);
         }
 
-        internal abstract void GenerateBytesCore(
+        private protected abstract void GenerateBytesCore(
             Span<byte> bytes);
     }
 }

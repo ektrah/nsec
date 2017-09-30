@@ -113,7 +113,7 @@ namespace NSec.Cryptography
             ExtractCore(sharedSecret.Handle, salt, pseudorandomKey);
         }
 
-        internal override void DeriveBytesCore(
+        private protected override void DeriveBytesCore(
             ReadOnlySpan<byte> inputKeyingMaterial,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> info,

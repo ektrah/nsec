@@ -147,12 +147,12 @@ namespace NSec.Cryptography
             }
         }
 
-        internal abstract void SignCore(
+        private protected abstract void SignCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             Span<byte> mac);
 
-        internal abstract bool TryVerifyCore(
+        private protected abstract bool TryVerifyCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> mac);

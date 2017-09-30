@@ -76,7 +76,7 @@ namespace NSec.Cryptography
             return SHA256HashSize;
         }
 
-        internal override void SignCore(
+        private protected override void SignCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             Span<byte> mac)
@@ -151,7 +151,7 @@ namespace NSec.Cryptography
             }
         }
 
-        internal override bool TryVerifyCore(
+        private protected override bool TryVerifyCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> mac)

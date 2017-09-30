@@ -41,7 +41,7 @@ namespace NSec.Cryptography
             }
         }
 
-        internal override void HashCore(
+        private protected override void HashCore(
             ReadOnlySpan<byte> data,
             Span<byte> hash)
         {
@@ -52,7 +52,7 @@ namespace NSec.Cryptography
             crypto_hash_sha256_final(ref state, ref hash.DangerousGetPinnableReference());
         }
 
-        internal override bool TryVerifyCore(
+        private protected override bool TryVerifyCore(
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> hash)
         {

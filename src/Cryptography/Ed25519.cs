@@ -101,7 +101,7 @@ namespace NSec.Cryptography
             return crypto_sign_ed25519_SEEDBYTES;
         }
 
-        internal override void SignCore(
+        private protected override void SignCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             Span<byte> signature)
@@ -203,7 +203,7 @@ namespace NSec.Cryptography
             }
         }
 
-        internal override bool TryVerifyCore(
+        private protected override bool TryVerifyCore(
             ReadOnlySpan<byte> publicKey,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> signature)

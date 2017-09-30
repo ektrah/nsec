@@ -9,7 +9,7 @@ namespace NSec.Cryptography
         {
         }
 
-        internal override void GenerateBytesCore(
+        private protected override void GenerateBytesCore(
             Span<byte> bytes)
         {
             randombytes_buf(ref bytes.DangerousGetPinnableReference(), (UIntPtr)bytes.Length);

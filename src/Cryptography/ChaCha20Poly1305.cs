@@ -74,7 +74,7 @@ namespace NSec.Cryptography
             keyHandle.Import(seed);
         }
 
-        internal override void EncryptCore(
+        private protected override void EncryptCore(
             SecureMemoryHandle keyHandle,
             ref Nonce nonce,
             ReadOnlySpan<byte> associatedData,
@@ -105,7 +105,7 @@ namespace NSec.Cryptography
             return crypto_aead_chacha20poly1305_ietf_KEYBYTES;
         }
 
-        internal override bool TryDecryptCore(
+        private protected override bool TryDecryptCore(
             SecureMemoryHandle keyHandle,
             ref Nonce nonce,
             ReadOnlySpan<byte> associatedData,

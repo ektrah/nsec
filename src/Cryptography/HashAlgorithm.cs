@@ -104,11 +104,11 @@ namespace NSec.Cryptography
             }
         }
 
-        internal abstract void HashCore(
+        private protected abstract void HashCore(
             ReadOnlySpan<byte> data,
             Span<byte> hash);
 
-        internal abstract bool TryVerifyCore(
+        private protected abstract bool TryVerifyCore(
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> hash);
     }

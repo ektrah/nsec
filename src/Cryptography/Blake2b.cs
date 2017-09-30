@@ -38,7 +38,7 @@ namespace NSec.Cryptography
             }
         }
 
-        internal override void HashCore(
+        private protected override void HashCore(
             ReadOnlySpan<byte> data,
             Span<byte> hash)
         {
@@ -50,7 +50,7 @@ namespace NSec.Cryptography
             crypto_generichash_blake2b_final(ref state, ref hash.DangerousGetPinnableReference(), (UIntPtr)hash.Length);
         }
 
-        internal override bool TryVerifyCore(
+        private protected override bool TryVerifyCore(
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> hash)
         {
