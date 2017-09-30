@@ -8,14 +8,9 @@ namespace NSec.Tests
     {
         #region Algorithms By Base Class
 
-        public static readonly TheoryData<Type> AeadAlgorithms = Aes256Gcm.IsAvailable
-            ? new TheoryData<Type>
+        public static readonly TheoryData<Type> AeadAlgorithms = new TheoryData<Type>
         {
             typeof(Aes256Gcm),
-            typeof(ChaCha20Poly1305),
-        }
-            : new TheoryData<Type>
-        {
             typeof(ChaCha20Poly1305),
         };
 
@@ -58,17 +53,9 @@ namespace NSec.Tests
             typeof(Ed25519),
         };
 
-        public static readonly TheoryData<Type> SymmetricAlgorithms = Aes256Gcm.IsAvailable
-            ? new TheoryData<Type>
+        public static readonly TheoryData<Type> SymmetricAlgorithms = new TheoryData<Type>
         {
             typeof(Aes256Gcm),
-            typeof(Blake2bMac),
-            typeof(ChaCha20Poly1305),
-            typeof(HmacSha256),
-            typeof(HmacSha512),
-        }
-            : new TheoryData<Type>
-        {
             typeof(Blake2bMac),
             typeof(ChaCha20Poly1305),
             typeof(HmacSha256),
@@ -112,22 +99,10 @@ namespace NSec.Tests
             { typeof(Ed25519), KeyBlobFormat.PkixPrivateKeyText },
         };
 
-        public static readonly TheoryData<Type, KeyBlobFormat> SymmetricKeyBlobFormats = Aes256Gcm.IsAvailable
-            ? new TheoryData<Type, KeyBlobFormat>
+        public static readonly TheoryData<Type, KeyBlobFormat> SymmetricKeyBlobFormats = new TheoryData<Type, KeyBlobFormat>
         {
             { typeof(Aes256Gcm), KeyBlobFormat.RawSymmetricKey },
             { typeof(Aes256Gcm), KeyBlobFormat.NSecSymmetricKey },
-            { typeof(Blake2bMac), KeyBlobFormat.RawSymmetricKey },
-            { typeof(Blake2bMac), KeyBlobFormat.NSecSymmetricKey },
-            { typeof(ChaCha20Poly1305), KeyBlobFormat.RawSymmetricKey },
-            { typeof(ChaCha20Poly1305), KeyBlobFormat.NSecSymmetricKey },
-            { typeof(HmacSha256), KeyBlobFormat.RawSymmetricKey },
-            { typeof(HmacSha256), KeyBlobFormat.NSecSymmetricKey },
-            { typeof(HmacSha512), KeyBlobFormat.RawSymmetricKey },
-            { typeof(HmacSha512), KeyBlobFormat.NSecSymmetricKey },
-        }
-            : new TheoryData<Type, KeyBlobFormat>
-        {
             { typeof(Blake2bMac), KeyBlobFormat.RawSymmetricKey },
             { typeof(Blake2bMac), KeyBlobFormat.NSecSymmetricKey },
             { typeof(ChaCha20Poly1305), KeyBlobFormat.RawSymmetricKey },
