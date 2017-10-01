@@ -166,6 +166,9 @@ Interop.Utils.cs:
 
 Interop.Version.cs:
   include: include/sodium/version.h
+  constants:
+  - SODIUM_LIBRARY_VERSION_MAJOR
+  - SODIUM_LIBRARY_VERSION_MINOR
   functions:
   - sodium_library_version_major
   - sodium_library_version_minor
