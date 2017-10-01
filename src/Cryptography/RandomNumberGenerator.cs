@@ -8,7 +8,7 @@ namespace NSec.Cryptography
     {
         private static readonly Lazy<DefaultRandomNumberGenerator> s_default = new Lazy<DefaultRandomNumberGenerator>(isThreadSafe: true);
 
-        internal RandomNumberGenerator()
+        private protected RandomNumberGenerator()
         {
             Sodium.Initialize();
         }

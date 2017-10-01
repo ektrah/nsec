@@ -22,7 +22,7 @@ namespace NSec.Cryptography
         private readonly int _publicKeySize;
         private readonly int _sharedSecretSize;
 
-        internal KeyAgreementAlgorithm(
+        private protected KeyAgreementAlgorithm(
             int privateKeySize,
             int publicKeySize,
             int sharedSecretSize)

@@ -5,7 +5,7 @@ namespace NSec.Cryptography
 {
     public abstract class Algorithm
     {
-        internal Algorithm()
+        private protected Algorithm()
         {
             Sodium.Initialize();
         }

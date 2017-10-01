@@ -29,7 +29,7 @@ namespace NSec.Cryptography
         private readonly int _minKeySize;
         private readonly int _minMacSize;
 
-        internal MacAlgorithm(
+        private protected MacAlgorithm(
             int minKeySize,
             int defaultKeySize,
             int maxKeySize,

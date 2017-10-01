@@ -28,7 +28,7 @@ namespace NSec.Cryptography
         private readonly int _nonceSize;
         private readonly int _tagSize;
 
-        internal AeadAlgorithm(
+        private protected AeadAlgorithm(
             int keySize,
             int nonceSize,
             int tagSize,

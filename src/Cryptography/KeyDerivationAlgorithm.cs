@@ -26,7 +26,7 @@ namespace NSec.Cryptography
         private readonly int _maxOutputSize;
         private readonly bool _supportsSalt;
 
-        internal KeyDerivationAlgorithm(
+        private protected KeyDerivationAlgorithm(
             bool supportsSalt,
             int maxOutputSize)
         {

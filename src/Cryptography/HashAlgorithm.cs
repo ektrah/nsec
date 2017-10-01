@@ -26,7 +26,7 @@ namespace NSec.Cryptography
         private readonly int _maxHashSize;
         private readonly int _minHashSize;
 
-        internal HashAlgorithm(
+        private protected HashAlgorithm(
             int minHashSize,
             int defaultHashSize,
             int maxHashSize)

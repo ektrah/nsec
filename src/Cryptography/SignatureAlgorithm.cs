@@ -22,7 +22,7 @@ namespace NSec.Cryptography
         private readonly int _publicKeySize;
         private readonly int _signatureSize;
 
-        internal SignatureAlgorithm(
+        private protected SignatureAlgorithm(
             int privateKeySize,
             int publicKeySize,
             int signatureSize)
