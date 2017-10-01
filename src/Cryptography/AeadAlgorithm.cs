@@ -10,16 +10,24 @@ namespace NSec.Cryptography
     //
     //  Candidates
     //
-    //      | Algorithm         | Reference | Key Size | Nonce Size | Tag Size |
-    //      | ----------------- | --------- | -------- | ---------- | -------- |
-    //      | AES_128_CCM       | RFC 5116  | 16       | 12         | 16       |
-    //      | AES_256_CCM       | RFC 5116  | 32       | 12         | 16       |
-    //      | AES_128_GCM       | RFC 5116  | 16       | 12         | 16       |
-    //      | AES_256_GCM       | RFC 5116  | 32       | 12         | 16       |
-    //      | AES_128_OCB       | RFC 7253  | 16       | 1..15      | 8,12,16  |
-    //      | AES_192_OCB       | RFC 7253  | 24       | 1..15      | 8,12,16  |
-    //      | AES_256_OCB       | RFC 7253  | 32       | 1..15      | 8,12,16  |
-    //      | CHACHA20_POLY1305 | RFC 7539  | 32       | 12         | 16       |
+    //      | Algorithm          | Reference | Key Size | Nonce Size | Tag Size | Max. Plaintext Size |
+    //      | ------------------ | --------- | -------- | ---------- | -------- | ------------------- |
+    //      | ChaCha20-Poly1305  | RFC 7539  | 32       | 12         | 16       | 2^38-64             |
+    //      | AES-128-CCM        | RFC 5116  | 16       | 12         | 16       | 2^24-1              |
+    //      | AES-256-CCM        | RFC 5116  | 32       | 12         | 16       | 2^24-1              |
+    //      | AES-128-GCM        | RFC 5116  | 16       | 12         | 16       | 2^36-31             |
+    //      | AES-256-GCM        | RFC 5116  | 32       | 12         | 16       | 2^36-31             |
+    //      | AES-128-OCB        | RFC 7253  | 16       | 1..15      | 8,12,16  | unbounded           |
+    //      | AES-192-OCB        | RFC 7253  | 24       | 1..15      | 8,12,16  | unbounded           |
+    //      | AES-256-OCB        | RFC 7253  | 32       | 1..15      | 8,12,16  | unbounded           |
+    //      | AES-CCM-16-64-128  | RFC 8152  | 16       | 13         | 8        | 2^16-1              |
+    //      | AES-CCM-16-64-256  | RFC 8152  | 32       | 13         | 8        | 2^16-1              |
+    //      | AES-CCM-64-64-128  | RFC 8152  | 16       | 7          | 8        | 2^64-1              |
+    //      | AES-CCM-64-64-256  | RFC 8152  | 32       | 7          | 8        | 2^64-1              |
+    //      | AES-CCM-16-128-128 | RFC 8152  | 16       | 13         | 16       | 2^16-1              |
+    //      | AES-CCM-16-128-256 | RFC 8152  | 32       | 13         | 16       | 2^16-1              |
+    //      | AES-CCM-64-128-128 | RFC 8152  | 16       | 7          | 16       | 2^64-1              |
+    //      | AES-CCM-64-128-256 | RFC 8152  | 32       | 7          | 16       | 2^64-1              |
     //
     public abstract class AeadAlgorithm : Algorithm
     {
