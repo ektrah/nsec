@@ -12,9 +12,9 @@ It provides modern cryptographic primitives in a modern API based on the new
 `Span<T>` and `ReadOnlySpan<T>` types. NSec aims to be easy to use, secure by
 default, fast, and agile.
 
-NSec runs on .NET Core 1.1, .NET Core 2.0, and later on Windows, Linux and Mac.
-Using NSec requires a **C# 7.2** or later compiler (included in Visual Studio
-2017 and the .NET Core SDK beginning with versions 15.5 and 2.1, respectively).
+NSec runs on .NET Core 1.1 and later on Windows, Linux and Mac. Using NSec
+requires a C# 7.2 compiler (included in Visual Studio 2017 beginning with
+version 15.5 and the .NET Core SDK beginning with version 2.1).
 
 For more information about NSec, please refer to the following resources:
 
