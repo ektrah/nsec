@@ -11,10 +11,14 @@ namespace NSec.Cryptography.Formatting
             string base16)
         {
             if (!TryGetDecodedLength(base16, out int length))
+            {
                 throw Error.Format_BadBase16();
+            }
             byte[] result = new byte[length];
             if (!TryDecode(base16, result))
+            {
                 throw Error.Format_BadBase16();
+            }
             return result;
         }
 
@@ -22,10 +26,14 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<char> base16)
         {
             if (!TryGetDecodedLength(base16, out int length))
+            {
                 throw Error.Format_BadBase16();
+            }
             byte[] result = new byte[length];
             if (!TryDecode(base16, result))
+            {
                 throw Error.Format_BadBase16();
+            }
             return result;
         }
 
@@ -33,10 +41,14 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> base16)
         {
             if (!TryGetDecodedLength(base16, out int length))
+            {
                 throw Error.Format_BadBase16();
+            }
             byte[] result = new byte[length];
             if (!TryDecode(base16, result))
+            {
                 throw Error.Format_BadBase16();
+            }
             return result;
         }
 
@@ -53,9 +65,13 @@ namespace NSec.Cryptography.Formatting
             Span<char> base16)
         {
             if (base16.Length != GetEncodedLength(bytes.Length))
+            {
                 throw Error.Argument_BadBase16Length(nameof(base16));
+            }
             if (bytes.IsEmpty)
+            {
                 return;
+            }
 
             int di = 0;
             int si = 0;
@@ -77,9 +93,13 @@ namespace NSec.Cryptography.Formatting
             Span<byte> base16)
         {
             if (base16.Length != GetEncodedLength(bytes.Length))
+            {
                 throw Error.Argument_BadBase16Length(nameof(base16));
+            }
             if (bytes.IsEmpty)
+            {
                 return;
+            }
 
             int di = 0;
             int si = 0;
@@ -107,7 +127,9 @@ namespace NSec.Cryptography.Formatting
             Span<byte> bytes)
         {
             if (base16 == null)
+            {
                 throw Error.ArgumentNull_String(nameof(base16));
+            }
 
             return TryDecode(base16.AsReadOnlySpan(), bytes);
         }
@@ -117,9 +139,13 @@ namespace NSec.Cryptography.Formatting
             Span<byte> bytes)
         {
             if (base16.Length != GetEncodedLength(bytes.Length))
+            {
                 throw Error.Argument_BadBase16Length(nameof(base16));
+            }
             if (base16.IsEmpty)
+            {
                 return true;
+            }
 
             int err = 0;
             int di = 0;
@@ -143,9 +169,13 @@ namespace NSec.Cryptography.Formatting
             Span<byte> bytes)
         {
             if (base16.Length != GetEncodedLength(bytes.Length))
+            {
                 throw Error.Argument_BadBase16Length(nameof(base16));
+            }
             if (base16.IsEmpty)
+            {
                 return true;
+            }
 
             int err = 0;
             int di = 0;
@@ -169,7 +199,9 @@ namespace NSec.Cryptography.Formatting
             out int decodedLength)
         {
             if (base16 == null)
+            {
                 throw Error.ArgumentNull_String(nameof(base16));
+            }
 
             return TryGetDecodedLength(base16.AsReadOnlySpan(), out decodedLength);
         }

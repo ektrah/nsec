@@ -11,10 +11,14 @@ namespace NSec.Cryptography.Formatting
             string base64)
         {
             if (!TryGetDecodedLength(base64, out int length))
+            {
                 throw Error.Format_BadBase64();
+            }
             byte[] result = new byte[length];
             if (!TryDecode(base64, result))
+            {
                 throw Error.Format_BadBase64();
+            }
             return result;
         }
 
@@ -22,10 +26,14 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<char> base64)
         {
             if (!TryGetDecodedLength(base64, out int length))
+            {
                 throw Error.Format_BadBase64();
+            }
             byte[] result = new byte[length];
             if (!TryDecode(base64, result))
+            {
                 throw Error.Format_BadBase64();
+            }
             return result;
         }
 
@@ -33,10 +41,14 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> base64)
         {
             if (!TryGetDecodedLength(base64, out int length))
+            {
                 throw Error.Format_BadBase64();
+            }
             byte[] result = new byte[length];
             if (!TryDecode(base64, result))
+            {
                 throw Error.Format_BadBase64();
+            }
             return result;
         }
 
@@ -53,9 +65,13 @@ namespace NSec.Cryptography.Formatting
             Span<char> base64)
         {
             if (base64.Length != GetEncodedLength(bytes.Length))
+            {
                 throw Error.Argument_BadBase64Length(nameof(base64));
+            }
             if (bytes.IsEmpty)
+            {
                 return;
+            }
 
             int di = 0;
             int si = 0;
@@ -98,9 +114,13 @@ namespace NSec.Cryptography.Formatting
             Span<byte> base64)
         {
             if (base64.Length != GetEncodedLength(bytes.Length))
+            {
                 throw Error.Argument_BadBase64Length(nameof(base64));
+            }
             if (bytes.IsEmpty)
+            {
                 return;
+            }
 
             int di = 0;
             int si = 0;
@@ -149,7 +169,9 @@ namespace NSec.Cryptography.Formatting
             Span<byte> bytes)
         {
             if (base64 == null)
+            {
                 throw Error.ArgumentNull_String(nameof(base64));
+            }
 
             return TryDecode(base64.AsReadOnlySpan(), bytes);
         }
@@ -159,9 +181,13 @@ namespace NSec.Cryptography.Formatting
             Span<byte> bytes)
         {
             if (base64.Length != GetEncodedLength(bytes.Length))
+            {
                 throw Error.Argument_BadBase64Length(nameof(base64));
+            }
             if (base64.IsEmpty)
+            {
                 return true;
+            }
 
             int err = 0;
             int di = 0;
@@ -204,9 +230,13 @@ namespace NSec.Cryptography.Formatting
             Span<byte> bytes)
         {
             if (base64.Length != GetEncodedLength(bytes.Length))
+            {
                 throw Error.Argument_BadBase64Length(nameof(base64));
+            }
             if (base64.IsEmpty)
+            {
                 return true;
+            }
 
             int err = 0;
             int di = 0;
@@ -249,7 +279,9 @@ namespace NSec.Cryptography.Formatting
             out int decodedLength)
         {
             if (base64 == null)
+            {
                 throw Error.ArgumentNull_String(nameof(base64));
+            }
 
             return TryGetDecodedLength(base64.AsReadOnlySpan(), out decodedLength);
         }
