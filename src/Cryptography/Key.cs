@@ -177,12 +177,9 @@ namespace NSec.Cryptography
                     throw Error.ObjectDisposed_Key();
                 }
 
-                bool allowExport = (_exportPolicy & KeyExportPolicies.AllowExport) != 0;
-                bool allowArchiving = (_exportPolicy & KeyExportPolicies.AllowArchiving) != 0;
-
-                if (!allowExport)
+                if ((_exportPolicy & KeyExportPolicies.AllowPlaintextExport) == 0)
                 {
-                    if (!allowArchiving)
+                    if ((_exportPolicy & KeyExportPolicies.AllowPlaintextArchiving) == 0)
                     {
                         throw Error.InvalidOperation_ExportNotAllowed();
                     }

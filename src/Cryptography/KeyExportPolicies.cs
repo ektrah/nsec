@@ -9,9 +9,9 @@ namespace NSec.Cryptography
         None = 0,
 
         // Secret key can be exported multiple times
-        AllowExport = 1,
+        AllowPlaintextExport = 1,
 
         // Secret key can be exported one time
-        AllowArchiving = 2,
+        AllowPlaintextArchiving = 2,
     }
 }

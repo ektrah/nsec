@@ -217,9 +217,9 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(a, KeyExportPolicies.AllowExport))
+            using (var k = new Key(a, KeyExportPolicies.AllowPlaintextExport))
             {
-                Assert.Equal(KeyExportPolicies.AllowExport, k.ExportPolicy);
+                Assert.Equal(KeyExportPolicies.AllowPlaintextExport, k.ExportPolicy);
 
                 Assert.Throws<ArgumentException>("format", () => k.Export((KeyBlobFormat)int.MinValue));
             }
@@ -294,9 +294,9 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(a, KeyExportPolicies.AllowExport))
+            using (var k = new Key(a, KeyExportPolicies.AllowPlaintextExport))
             {
-                Assert.Equal(KeyExportPolicies.AllowExport, k.ExportPolicy);
+                Assert.Equal(KeyExportPolicies.AllowPlaintextExport, k.ExportPolicy);
 
                 Assert.NotNull(k.Export(format));
                 Assert.NotNull(k.Export(format));
@@ -310,9 +310,9 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(a, KeyExportPolicies.AllowExport))
+            using (var k = new Key(a, KeyExportPolicies.AllowPlaintextExport))
             {
-                Assert.Equal(KeyExportPolicies.AllowExport, k.ExportPolicy);
+                Assert.Equal(KeyExportPolicies.AllowPlaintextExport, k.ExportPolicy);
 
                 Assert.NotNull(k.Export(format));
                 Assert.NotNull(k.Export(format));
@@ -326,9 +326,9 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(a, KeyExportPolicies.AllowArchiving))
+            using (var k = new Key(a, KeyExportPolicies.AllowPlaintextArchiving))
             {
-                Assert.Equal(KeyExportPolicies.AllowArchiving, k.ExportPolicy);
+                Assert.Equal(KeyExportPolicies.AllowPlaintextArchiving, k.ExportPolicy);
 
                 Assert.NotNull(k.Export(format));
                 Assert.Throws<InvalidOperationException>(() => k.Export(format));
@@ -342,9 +342,9 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(a, KeyExportPolicies.AllowArchiving))
+            using (var k = new Key(a, KeyExportPolicies.AllowPlaintextArchiving))
             {
-                Assert.Equal(KeyExportPolicies.AllowArchiving, k.ExportPolicy);
+                Assert.Equal(KeyExportPolicies.AllowPlaintextArchiving, k.ExportPolicy);
 
                 Assert.NotNull(k.Export(format));
                 Assert.Throws<InvalidOperationException>(() => k.Export(format));
@@ -372,7 +372,7 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            var k = new Key(a, KeyExportPolicies.AllowExport);
+            var k = new Key(a, KeyExportPolicies.AllowPlaintextExport);
             k.Dispose();
 
             Assert.Throws<ObjectDisposedException>(() => k.Export(KeyBlobFormat.RawPrivateKey));
@@ -386,7 +386,7 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            var k = new Key(a, KeyExportPolicies.AllowExport);
+            var k = new Key(a, KeyExportPolicies.AllowPlaintextExport);
             k.Dispose();
 
             Assert.Throws<ObjectDisposedException>(() => k.Export(KeyBlobFormat.RawSymmetricKey));

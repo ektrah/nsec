@@ -8,10 +8,10 @@ Specifies the key export policies for a [[key|Key Class]].
 
 ## Members
 
-AllowArchiving
+AllowPlaintextArchiving
 : The private key can be exported one time for archiving purposes.
 
-AllowExport
+AllowPlaintextExport
 : The private key can be exported multiple times.
 
 None
