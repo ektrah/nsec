@@ -5,8 +5,8 @@ internal static partial class Interop
 {
     internal static partial class Libsodium
     {
-        internal const int SODIUM_LIBRARY_VERSION_MAJOR = 9;
-        internal const int SODIUM_LIBRARY_VERSION_MINOR = 6;
+        internal const int SODIUM_LIBRARY_VERSION_MAJOR = 10;
+        internal const int SODIUM_LIBRARY_VERSION_MINOR = 0;
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int sodium_library_version_major();
