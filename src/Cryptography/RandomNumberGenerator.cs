@@ -6,7 +6,7 @@ namespace NSec.Cryptography
 {
     public abstract class RandomNumberGenerator
     {
-        private static readonly Lazy<DefaultRandomNumberGenerator> s_default = new Lazy<DefaultRandomNumberGenerator>(isThreadSafe: true);
+        private static readonly Lazy<RandomNumberGenerator.System> s_default = new Lazy<RandomNumberGenerator.System>(isThreadSafe: true);
 
         private protected RandomNumberGenerator()
         {
@@ -77,5 +77,14 @@ namespace NSec.Cryptography
 
         private protected abstract void GenerateBytesCore(
             Span<byte> bytes);
+
+        internal sealed class System : RandomNumberGenerator
+        {
+            private protected override void GenerateBytesCore(
+                Span<byte> bytes)
+            {
+                randombytes_buf(ref bytes.DangerousGetPinnableReference(), (UIntPtr)bytes.Length);
+            }
+        }
     }
 }
