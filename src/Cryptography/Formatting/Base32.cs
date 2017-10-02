@@ -68,10 +68,6 @@ namespace NSec.Cryptography.Formatting
             {
                 throw Error.Argument_BadBase32Length(nameof(base32));
             }
-            if (bytes.IsEmpty)
-            {
-                return;
-            }
 
             int di = 0;
             int si = 0;
@@ -152,10 +148,6 @@ namespace NSec.Cryptography.Formatting
             if (base32.Length != GetEncodedLength(bytes.Length))
             {
                 throw Error.Argument_BadBase32Length(nameof(base32));
-            }
-            if (bytes.IsEmpty)
-            {
-                return;
             }
 
             int di = 0;
@@ -256,10 +248,6 @@ namespace NSec.Cryptography.Formatting
             {
                 throw Error.Argument_BadBase32Length(nameof(base32));
             }
-            if (base32.IsEmpty)
-            {
-                return true;
-            }
 
             int err = 0;
             int di = 0;
@@ -332,10 +320,6 @@ namespace NSec.Cryptography.Formatting
             if (base32.Length != GetEncodedLength(bytes.Length))
             {
                 throw Error.Argument_BadBase32Length(nameof(base32));
-            }
-            if (base32.IsEmpty)
-            {
-                return true;
             }
 
             int err = 0;

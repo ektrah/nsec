@@ -68,10 +68,6 @@ namespace NSec.Cryptography.Formatting
             {
                 throw Error.Argument_BadBase64Length(nameof(base64));
             }
-            if (bytes.IsEmpty)
-            {
-                return;
-            }
 
             int di = 0;
             int si = 0;
@@ -116,10 +112,6 @@ namespace NSec.Cryptography.Formatting
             if (base64.Length != GetEncodedLength(bytes.Length))
             {
                 throw Error.Argument_BadBase64Length(nameof(base64));
-            }
-            if (bytes.IsEmpty)
-            {
-                return;
             }
 
             int di = 0;
@@ -184,10 +176,6 @@ namespace NSec.Cryptography.Formatting
             {
                 throw Error.Argument_BadBase64Length(nameof(base64));
             }
-            if (base64.IsEmpty)
-            {
-                return true;
-            }
 
             int err = 0;
             int di = 0;
@@ -232,10 +220,6 @@ namespace NSec.Cryptography.Formatting
             if (base64.Length != GetEncodedLength(bytes.Length))
             {
                 throw Error.Argument_BadBase64Length(nameof(base64));
-            }
-            if (base64.IsEmpty)
-            {
-                return true;
             }
 
             int err = 0;
