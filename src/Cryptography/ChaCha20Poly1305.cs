@@ -39,10 +39,7 @@ namespace NSec.Cryptography
     //
     public sealed class ChaCha20Poly1305 : AeadAlgorithm
     {
-        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(crypto_aead_chacha20poly1305_ietf_KEYBYTES, crypto_aead_chacha20poly1305_ietf_KEYBYTES, new byte[]
-        {
-            0xDE, 0x31, 0x43, 0xDE
-        });
+        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(crypto_aead_chacha20poly1305_ietf_KEYBYTES, crypto_aead_chacha20poly1305_ietf_KEYBYTES, new byte[] { 0xDE, 0x31, 0x43, 0xDE });
 
         private static readonly Oid s_oid = new Oid(1, 2, 840, 113549, 1, 9, 16, 3, 18);
 

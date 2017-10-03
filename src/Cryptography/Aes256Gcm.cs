@@ -44,10 +44,7 @@ namespace NSec.Cryptography
     {
         private static readonly Lazy<int> s_isAvailable = new Lazy<int>(new Func<int>(crypto_aead_aes256gcm_is_available));
 
-        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(crypto_aead_aes256gcm_KEYBYTES, crypto_aead_aes256gcm_KEYBYTES, new byte[]
-        {
-            0xDE, 0x31, 0x44, 0xDE
-        });
+        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(crypto_aead_aes256gcm_KEYBYTES, crypto_aead_aes256gcm_KEYBYTES, new byte[] { 0xDE, 0x31, 0x44, 0xDE });
 
         private static readonly Oid s_oid = new Oid(2, 16, 840, 1, 101, 3, 4, 1, 46);
 
