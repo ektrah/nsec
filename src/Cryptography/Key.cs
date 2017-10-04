@@ -191,21 +191,16 @@ namespace NSec.Cryptography
 
                 _exported = true;
 
-                if (_algorithm.TryExportKey(_handle, format, Span<byte>.Empty, out blobSize))
-                {
-                    Debug.Assert(blobSize == 0);
-                    return Utilities.Empty<byte>();
-                }
-
+                _algorithm.TryExportKey(_handle, format, Span<byte>.Empty, out blobSize);
                 blob = new byte[blobSize];
 
-                if (_algorithm.TryExportKey(_handle, format, blob, out blobSize))
+                if (!_algorithm.TryExportKey(_handle, format, blob, out blobSize))
                 {
-                    Debug.Assert(blobSize == blob.Length);
-                    return blob;
+                    throw Error.Cryptographic_InternalError();
                 }
 
-                throw Error.Cryptographic_InternalError();
+                Debug.Assert(blobSize == blob.Length);
+                return blob;
             }
             else
             {
@@ -214,21 +209,16 @@ namespace NSec.Cryptography
                     throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
                 }
 
-                if (_algorithm.TryExportPublicKey(_publicKey.Bytes, format, Span<byte>.Empty, out blobSize))
-                {
-                    Debug.Assert(blobSize == 0);
-                    return Utilities.Empty<byte>();
-                }
-
+                _algorithm.TryExportPublicKey(_publicKey.Bytes, format, Span<byte>.Empty, out blobSize);
                 blob = new byte[blobSize];
 
-                if (_algorithm.TryExportPublicKey(_publicKey.Bytes, format, blob, out blobSize))
+                if (!_algorithm.TryExportPublicKey(_publicKey.Bytes, format, blob, out blobSize))
                 {
-                    Debug.Assert(blobSize == blob.Length);
-                    return blob;
+                    throw Error.Cryptographic_InternalError();
                 }
 
-                throw Error.Cryptographic_InternalError();
+                Debug.Assert(blobSize == blob.Length);
+                return blob;
             }
         }
     }

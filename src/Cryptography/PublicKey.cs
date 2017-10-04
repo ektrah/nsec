@@ -81,21 +81,16 @@ namespace NSec.Cryptography
         public byte[] Export(
             KeyBlobFormat format)
         {
-            if (_algorithm.TryExportPublicKey(_bytes, format, Span<byte>.Empty, out int blobSize))
-            {
-                Debug.Assert(blobSize == 0);
-                return Utilities.Empty<byte>();
-            }
-
+            _algorithm.TryExportPublicKey(_bytes, format, Span<byte>.Empty, out int blobSize);
             byte[] blob = new byte[blobSize];
 
-            if (_algorithm.TryExportPublicKey(_bytes, format, blob, out blobSize))
+            if (!_algorithm.TryExportPublicKey(_bytes, format, blob, out blobSize))
             {
-                Debug.Assert(blobSize == blob.Length);
-                return blob;
+                throw Error.Cryptographic_InternalError();
             }
 
-            throw Error.Cryptographic_InternalError();
+            Debug.Assert(blobSize == blob.Length);
+            return blob;
         }
 
         public override int GetHashCode()
