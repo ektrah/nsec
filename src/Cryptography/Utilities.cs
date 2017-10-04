@@ -14,12 +14,6 @@ namespace NSec.Cryptography
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T[] Empty<T>()
-        {
-            return EmptyArray<T>.Value;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint FromBigEndian(
             uint value)
         {
@@ -131,11 +125,6 @@ namespace NSec.Cryptography
         private static void ThrowInternalError()
         {
             throw Error.Cryptographic_InternalError();
-        }
-
-        private static class EmptyArray<T>
-        {
-            internal static readonly T[] Value = new T[0];
         }
     }
 }
