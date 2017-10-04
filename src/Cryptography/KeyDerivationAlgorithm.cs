@@ -54,8 +54,6 @@ namespace NSec.Cryptography
                 throw Error.ArgumentOutOfRange_DeriveNegativeCount(nameof(count));
             if (count > MaxOutputSize)
                 throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), MaxOutputSize.ToString());
-            if (count == 0)
-                return Utilities.Empty<byte>();
 
             byte[] bytes = new byte[count];
             DeriveBytesCore(sharedSecret.Handle, salt, info, bytes);
@@ -76,8 +74,6 @@ namespace NSec.Cryptography
                 throw Error.Argument_DeriveInvalidCount(nameof(bytes), MaxOutputSize.ToString());
             if (Utilities.Overlap(bytes, info))
                 throw Error.Argument_OverlapInfo(nameof(bytes));
-            if (bytes.IsEmpty)
-                return;
 
             DeriveBytesCore(sharedSecret.Handle, salt, info, bytes);
         }
