@@ -103,7 +103,7 @@ namespace NSec.Cryptography
                 throw Error.Cryptographic_DecryptionFailed();
             if (plaintext.Length != ciphertext.Length - _tagSize)
                 throw Error.Argument_PlaintextLength(nameof(plaintext));
-            if (Utilities.Overlap(plaintext, ciphertext, out IntPtr diff) && diff != IntPtr.Zero)
+            if (Utilities.Overlap(plaintext, ciphertext, out IntPtr byteOffset) && byteOffset != IntPtr.Zero)
                 throw Error.Argument_OverlapPlaintext(nameof(plaintext));
 
             if (!TryDecryptCore(key.Handle, ref nonce, associatedData, ciphertext, plaintext))
@@ -149,7 +149,7 @@ namespace NSec.Cryptography
                 throw Error.Argument_PlaintextTooLong(nameof(plaintext), _maxPlaintextSize.ToString());
             if (ciphertext.Length != plaintext.Length + _tagSize)
                 throw Error.Argument_CiphertextLength(nameof(ciphertext));
-            if (Utilities.Overlap(ciphertext, plaintext, out IntPtr diff) && diff != IntPtr.Zero)
+            if (Utilities.Overlap(ciphertext, plaintext, out IntPtr byteOffset) && byteOffset != IntPtr.Zero)
                 throw Error.Argument_OverlapCiphertext(nameof(ciphertext));
 
             EncryptCore(key.Handle, ref nonce, associatedData, plaintext, ciphertext);
@@ -198,7 +198,7 @@ namespace NSec.Cryptography
                 return false;
             if (plaintext.Length != ciphertext.Length - _tagSize)
                 throw Error.Argument_PlaintextLength(nameof(plaintext));
-            if (Utilities.Overlap(plaintext, ciphertext, out IntPtr diff) && diff != IntPtr.Zero)
+            if (Utilities.Overlap(plaintext, ciphertext, out IntPtr byteOffset) && byteOffset != IntPtr.Zero)
                 throw Error.Argument_OverlapPlaintext(nameof(plaintext));
 
             return TryDecryptCore(key.Handle, ref nonce, associatedData, ciphertext, plaintext);
