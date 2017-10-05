@@ -32,19 +32,13 @@ namespace NSec.Cryptography
         public static unsafe bool Overlap(
             ReadOnlySpan<byte> first,
             ReadOnlySpan<byte> second,
-            out IntPtr diff)
+            out IntPtr byteOffset)
         {
-            if (second.IsEmpty)
-            {
-                diff = IntPtr.Zero;
-                return false;
-            }
-
-            diff = Unsafe.ByteOffset(ref first.DangerousGetPinnableReference(), ref second.DangerousGetPinnableReference());
+            byteOffset = Unsafe.ByteOffset(ref first.DangerousGetPinnableReference(), ref second.DangerousGetPinnableReference());
 
             return (sizeof(IntPtr) == sizeof(int))
-                ? unchecked((uint)diff < (uint)first.Length || (uint)diff > (uint)-second.Length)
-                : unchecked((ulong)diff < (ulong)first.Length || (ulong)diff > (ulong)-second.Length);
+                ? second.Length != 0 && unchecked((uint)byteOffset < (uint)first.Length || (uint)byteOffset > (uint)-second.Length)
+                : second.Length != 0 && unchecked((ulong)byteOffset < (ulong)first.Length || (ulong)byteOffset > (ulong)-second.Length);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
