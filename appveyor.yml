@@ -13,3 +13,5 @@ after_test:
   - dotnet pack src -c Release
 artifacts:
   - path: '**\*.nupkg'
+nuget:
+  disable_publish_on_pr: true
