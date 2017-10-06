@@ -43,10 +43,10 @@ NSec.Cryptography.X25519</Description>
 
   <ItemGroup>
     <PackageReference Include="libsodium" Version="[1.0.15]" />
-    <PackageReference Include="Microsoft.NETCore.Compilers" Version="2.6.0-beta1-62126-01" PrivateAssets="All" />
-    <PackageReference Include="System.Memory" Version="4.5.0-preview1-25730-02" />
-    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0-preview1-25730-02" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.0-preview1-25730-02" />
+    <PackageReference Include="Microsoft.NETCore.Compilers" Version="2.6.0-beta1-62205-01" PrivateAssets="All" />
+    <PackageReference Include="System.Memory" Version="4.5.0-preview1-25806-02" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0-preview1-25806-02" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.0-preview1-25806-02" />
   </ItemGroup>
 
 </Project>
