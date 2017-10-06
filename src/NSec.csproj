@@ -3,7 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.1</TargetFramework>
     <AssemblyName>NSec.Cryptography</AssemblyName>
-    <Version>1.0.0-preview-01</Version>
+    <Version Condition="$(Version) == ''">$(APPVEYOR_REPO_TAG_NAME)</Version>
+    <Version Condition="$(Version) == ''">$(CIRCLE_TAG)</Version>
+    <Version Condition="$(Version) == ''">$([System.DateTime]::UtcNow.ToString(y.M'-alpha-'ddHHmm))</Version>
     <Authors>Klaus Hartke</Authors>
     <Description>Provides modern cryptographic algorithm implementations based on libsodium.
 
