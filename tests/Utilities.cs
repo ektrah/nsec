@@ -1,5 +1,4 @@
 using System;
-using NSec.Cryptography.Formatting;
 
 namespace NSec.Tests
 {
@@ -7,23 +6,11 @@ namespace NSec.Tests
     {
         public static ReadOnlySpan<byte> RandomBytes => s_randomBytes;
 
-        public static byte[] DecodeHex(this string s)
-        {
-            return Base16.Decode(s);
-        }
+        public static byte[] DecodeHex(this string hex) => NSec.Cryptography.Formatting.Base16.Decode(hex);
 
-        public static void Fill(byte[] array, byte value)
-        {
-            for (var i = 0; i < array.Length; i++)
-                array[i] = value;
-        }
+        public static void Fill(byte[] array, byte value) => new Span<byte>(array).Fill(value);
 
-        public static byte[] Substring(this byte[] array, int offset, int length)
-        {
-            var result = new byte[length];
-            Buffer.BlockCopy(array, offset, result, 0, length);
-            return result;
-        }
+        public static byte[] Substring(this byte[] array, int offset, int length) => new ReadOnlySpan<byte>(array, offset, length).ToArray();
 
         #region Random Bytes
 
