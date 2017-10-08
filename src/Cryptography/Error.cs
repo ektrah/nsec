@@ -8,7 +8,7 @@ namespace NSec.Cryptography
     {
         private static ResourceManager s_resourceManager;
 
-        private static ResourceManager ResourceManager => s_resourceManager ?? (s_resourceManager = new ResourceManager("NSec.Resources.Strings", typeof(Error).GetTypeInfo().Assembly));
+        private static ResourceManager ResourceManager => s_resourceManager ?? (s_resourceManager = new ResourceManager(typeof(Error).FullName, typeof(Error).GetTypeInfo().Assembly));
 
         internal static ArgumentException Argument_BadBase16Length(
             string paramName)

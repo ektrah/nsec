@@ -2,10 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.1</TargetFramework>
-    <AssemblyName>NSec.Cryptography</AssemblyName>
+    <RootNamespace>NSec</RootNamespace>
+    <EnableDefaultItems>false</EnableDefaultItems>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <Version Condition="$(Version) == ''">$(APPVEYOR_REPO_TAG_NAME)</Version>
     <Version Condition="$(Version) == ''">$(CIRCLE_TAG)</Version>
-    <Version Condition="$(Version) == ''">$([System.DateTime]::UtcNow.ToString(y.M'-alpha-'ddHHmm))</Version>
+    <Version Condition="$(Version) == ''">$([System.DateTime]::UtcNow.ToString(y.M.0'-alpha-'ddHHmm))</Version>
     <Authors>Klaus Hartke</Authors>
     <Description>Provides modern cryptographic algorithm implementations based on libsodium.
 
@@ -37,6 +41,12 @@ NSec.Cryptography.X25519</Description>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Cryptography\**\*.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+    <Compile Include="Interop\**\*.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+    <EmbeddedResource Include="Cryptography\**\*.resx" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Include="..\LICENSE" Link="LICENSE" PackagePath="" />

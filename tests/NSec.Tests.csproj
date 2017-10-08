@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\NSec.csproj" />
+    <ProjectReference Include="..\src\NSec.Cryptography.csproj" />
   </ItemGroup>
 
   <ItemGroup>
