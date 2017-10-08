@@ -12,16 +12,13 @@ jobs:
           command: dotnet restore --source "https://api.nuget.org/v3/index.json" --source "https://dotnet.myget.org/F/dotnet-core/api/v3/index.json" --source "https://dotnet.myget.org/F/roslyn/api/v3/index.json"
       - run:
           name: Run unit tests (Debug)
-          command: dotnet test -c Debug -f netcoreapp2.0
-          working_directory: tests
+          command: dotnet test tests -c Debug
       - run:
           name: Run unit tests (Release)
-          command: dotnet test -c Release -f netcoreapp2.0
-          working_directory: tests
+          command: dotnet test tests -c Release
       - run:
           name: Create NuGet package
           command: dotnet pack -c Release -o ~/artifacts/
-          working_directory: src
       - store_artifacts:
           path: ~/artifacts/
           destination: /

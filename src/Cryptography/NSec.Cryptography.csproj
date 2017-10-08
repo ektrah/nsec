@@ -2,8 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.1</TargetFramework>
-    <RootNamespace>NSec</RootNamespace>
-    <EnableDefaultItems>false</EnableDefaultItems>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -43,14 +41,12 @@ NSec.Cryptography.X25519</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Cryptography\**\*.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
-    <Compile Include="Interop\**\*.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
-    <EmbeddedResource Include="Cryptography\**\*.resx" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+    <Compile Include="..\Interop\**\*.cs" Link="Interop\%(RecursiveDir)\%(Filename)%(Extension)" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\LICENSE" Link="LICENSE" PackagePath="" />
-    <Content Include="..\NOTICE" Link="NOTICE" PackagePath="" />
+    <Content Include="..\..\LICENSE" Link="LICENSE" PackagePath="" Visible="false" />
+    <Content Include="..\..\NOTICE" Link="NOTICE" PackagePath="" Visible="false" />
   </ItemGroup>
 
   <ItemGroup>
