@@ -37,7 +37,7 @@ namespace NSec.Cryptography.Formatting
             return result;
         }
 
-        public static byte[] Decode(
+        public static byte[] DecodeUtf8(
             ReadOnlySpan<byte> base16)
         {
             if (!TryGetDecodedLength(base16, out int length))
@@ -45,7 +45,7 @@ namespace NSec.Cryptography.Formatting
                 throw Error.Format_BadBase16();
             }
             byte[] result = new byte[length];
-            if (!TryDecode(base16, result))
+            if (!TryDecodeUtf8(base16, result))
             {
                 throw Error.Format_BadBase16();
             }
@@ -84,7 +84,7 @@ namespace NSec.Cryptography.Formatting
             Debug.Assert(di == base16.Length);
         }
 
-        public static void Encode(
+        public static void EncodeUtf8(
             ReadOnlySpan<byte> bytes,
             Span<byte> base16)
         {
@@ -152,7 +152,7 @@ namespace NSec.Cryptography.Formatting
             return err == 0;
         }
 
-        public static bool TryDecode(
+        public static bool TryDecodeUtf8(
             ReadOnlySpan<byte> base16,
             Span<byte> bytes)
         {

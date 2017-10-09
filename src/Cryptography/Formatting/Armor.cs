@@ -88,7 +88,7 @@ namespace NSec.Cryptography.Formatting
 
             while (input.Length - i >= 48)
             {
-                Base64.Encode(input.Slice(i, 48), output.Slice(j, 64));
+                Base64.EncodeUtf8(input.Slice(i, 48), output.Slice(j, 64));
                 output[j + 64 + 0] = (byte)'\r';
                 output[j + 64 + 1] = (byte)'\n';
                 i += 48;
@@ -98,7 +98,7 @@ namespace NSec.Cryptography.Formatting
             if (input.Length - i > 0)
             {
                 int length = Base64.GetEncodedLength(input.Length - i);
-                Base64.Encode(input.Slice(i), output.Slice(j, length));
+                Base64.EncodeUtf8(input.Slice(i), output.Slice(j, length));
                 output[j + length + 0] = (byte)'\r';
                 output[j + length + 1] = (byte)'\n';
             }
