@@ -1,14 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\Common.props" />
 
   <PropertyGroup>
     <TargetFramework>netstandard1.1</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version Condition="$(Version) == ''">$(APPVEYOR_REPO_TAG_NAME)</Version>
-    <Version Condition="$(Version) == ''">$(CIRCLE_TAG)</Version>
-    <Version Condition="$(Version) == ''">$([System.DateTime]::UtcNow.ToString(y.M.0'-alpha-'ddHHmm))</Version>
-    <Authors>Klaus Hartke</Authors>
     <Description>Provides modern cryptographic algorithm implementations based on libsodium.
 
 Commonly Used Types:
@@ -17,15 +14,7 @@ NSec.Cryptography.Chacha20Poly1305
 NSec.Cryptography.Ed25519
 NSec.Cryptography.Key
 NSec.Cryptography.X25519</Description>
-    <Copyright>© 2017 Klaus Hartke</Copyright>
-    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageLicenseUrl>https://nsec.rocks/license</PackageLicenseUrl>
-    <PackageProjectUrl>https://nsec.rocks/</PackageProjectUrl>
-    <PackageIconUrl>https://goo.gl/iN8fpR</PackageIconUrl>
-    <RepositoryUrl>https://github.com/ektrah/nsec.git</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
     <PackageTags>aead aes-gcm blake2b chacha20-poly1305 crypto cryptography curve25519 dotnet-core ed25519 encryption hash hkdf hmac libsodium security sha256 sha512 x25519</PackageTags>
-    <MinClientVersion>4.0</MinClientVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -51,10 +40,9 @@ NSec.Cryptography.X25519</Description>
 
   <ItemGroup>
     <PackageReference Include="libsodium" Version="[1.0.15]" />
-    <PackageReference Include="Microsoft.NETCore.Compilers" Version="2.6.0-beta1-62205-01" PrivateAssets="All" />
-    <PackageReference Include="System.Memory" Version="4.5.0-preview1-25806-02" />
-    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0-preview1-25806-02" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.0-preview1-25806-02" />
+    <PackageReference Include="System.Memory" Version="4.5.0-preview1-25810-03" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0-preview1-25810-03" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.0-preview1-25810-03" />
   </ItemGroup>
 
 </Project>
