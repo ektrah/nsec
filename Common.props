@@ -14,7 +14,7 @@
 
   <PropertyGroup>
     <Version Condition="$(GitTag) != ''">$(GitTag)</Version>
-    <Version Condition="$(GitTag) == '' AND $(GitBranch) != ''">$([System.DateTime]::UtcNow.ToString(y.M.0'-alpha-'ddHHmm))+$(GitBranch)</Version>
+    <Version Condition="$(GitTag) == '' AND $(GitBranch) != ''">$([System.DateTime]::UtcNow.ToString(y.M.0'-alpha-'ddHHmm))-$(GitBranch)</Version>
     <Version Condition="$(GitTag) == '' AND $(GitBranch) == ''">$([System.DateTime]::UtcNow.ToString(y.M.0'-alpha-'ddHHmm))</Version>
     <Authors>Klaus Hartke</Authors>
     <Copyright>© 2017 Klaus Hartke</Copyright>
