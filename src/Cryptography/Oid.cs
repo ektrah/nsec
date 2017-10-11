@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace NSec.Cryptography
 {
-    internal struct Oid
+    internal readonly struct Oid
     {
         private readonly byte[] _bytes;
 
@@ -26,7 +26,7 @@ namespace NSec.Cryptography
             _bytes = bytes;
         }
 
-        public ReadOnlySpan<byte> Bytes => _bytes ?? default(ReadOnlySpan<byte>);
+        public ReadOnlySpan<byte> Bytes => _bytes;
 
         private static int Encode(
             uint value,
