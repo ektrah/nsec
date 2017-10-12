@@ -37,7 +37,7 @@ namespace NSec.Tests.Rfc
                 var m = msg.DecodeHex();
 
                 var expected = mac.DecodeHex();
-                var actual = a.Sign(k, m, expected.Length);
+                var actual = a.Mac(k, m, expected.Length);
                 Assert.Equal(expected, actual);
 
                 Assert.True(a.TryVerify(k, m, expected));

@@ -96,7 +96,7 @@ namespace NSec.Tests.Base
 
         #endregion
 
-        #region Sign #1
+        #region Mac #1
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
@@ -104,7 +104,7 @@ namespace NSec.Tests.Base
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.Throws<ArgumentNullException>("key", () => a.Sign(null, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Mac(null, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
@@ -115,7 +115,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(new Ed25519()))
             {
-                Assert.Throws<ArgumentException>("key", () => a.Sign(k, ReadOnlySpan<byte>.Empty));
+                Assert.Throws<ArgumentException>("key", () => a.Mac(k, ReadOnlySpan<byte>.Empty));
             }
         }
 
@@ -129,8 +129,8 @@ namespace NSec.Tests.Base
             {
                 var data = Utilities.RandomBytes.Slice(0, 100);
 
-                var expected = a.Sign(k, data);
-                var actual = a.Sign(k, data);
+                var expected = a.Mac(k, data);
+                var actual = a.Mac(k, data);
 
                 Assert.NotNull(actual);
                 Assert.Equal(a.DefaultMacSize, actual.Length);
@@ -140,7 +140,7 @@ namespace NSec.Tests.Base
 
         #endregion
 
-        #region Sign #2
+        #region Mac #2
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
@@ -148,7 +148,7 @@ namespace NSec.Tests.Base
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.Throws<ArgumentNullException>("key", () => a.Sign(null, ReadOnlySpan<byte>.Empty, 0));
+            Assert.Throws<ArgumentNullException>("key", () => a.Mac(null, ReadOnlySpan<byte>.Empty, 0));
         }
 
         [Theory]
@@ -159,7 +159,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(new Ed25519()))
             {
-                Assert.Throws<ArgumentException>("key", () => a.Sign(k, ReadOnlySpan<byte>.Empty, 0));
+                Assert.Throws<ArgumentException>("key", () => a.Mac(k, ReadOnlySpan<byte>.Empty, 0));
             }
         }
 
@@ -173,7 +173,7 @@ namespace NSec.Tests.Base
             {
                 using (var k = new Key(a))
                 {
-                    Assert.Throws<ArgumentOutOfRangeException>("macSize", () => a.Sign(k, ReadOnlySpan<byte>.Empty, a.MinMacSize - 1));
+                    Assert.Throws<ArgumentOutOfRangeException>("macSize", () => a.Mac(k, ReadOnlySpan<byte>.Empty, a.MinMacSize - 1));
                 }
             }
         }
@@ -186,7 +186,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                Assert.Throws<ArgumentOutOfRangeException>("macSize", () => a.Sign(k, ReadOnlySpan<byte>.Empty, a.MaxMacSize + 1));
+                Assert.Throws<ArgumentOutOfRangeException>("macSize", () => a.Mac(k, ReadOnlySpan<byte>.Empty, a.MaxMacSize + 1));
             }
         }
 
@@ -200,8 +200,8 @@ namespace NSec.Tests.Base
             {
                 var data = Utilities.RandomBytes.Slice(0, 100);
 
-                var expected = a.Sign(k, data, a.MinMacSize);
-                var actual = a.Sign(k, data, a.MinMacSize);
+                var expected = a.Mac(k, data, a.MinMacSize);
+                var actual = a.Mac(k, data, a.MinMacSize);
 
                 Assert.NotNull(actual);
                 Assert.Equal(a.MinMacSize, actual.Length);
@@ -219,8 +219,8 @@ namespace NSec.Tests.Base
             {
                 var data = Utilities.RandomBytes.Slice(0, 100);
 
-                var expected = a.Sign(k, data, a.MaxMacSize);
-                var actual = a.Sign(k, data, a.MaxMacSize);
+                var expected = a.Mac(k, data, a.MaxMacSize);
+                var actual = a.Mac(k, data, a.MaxMacSize);
 
                 Assert.NotNull(actual);
                 Assert.Equal(a.MaxMacSize, actual.Length);
@@ -230,7 +230,7 @@ namespace NSec.Tests.Base
 
         #endregion
 
-        #region Sign #3
+        #region Mac #3
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
@@ -238,7 +238,7 @@ namespace NSec.Tests.Base
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.Throws<ArgumentNullException>("key", () => a.Sign(null, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Mac(null, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
@@ -249,7 +249,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(new Ed25519()))
             {
-                Assert.Throws<ArgumentException>("key", () => a.Sign(k, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+                Assert.Throws<ArgumentException>("key", () => a.Mac(k, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
             }
         }
 
@@ -263,7 +263,7 @@ namespace NSec.Tests.Base
             {
                 using (var k = new Key(a))
                 {
-                    Assert.Throws<ArgumentException>("mac", () => a.Sign(k, ReadOnlySpan<byte>.Empty, new byte[a.MinMacSize - 1]));
+                    Assert.Throws<ArgumentException>("mac", () => a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MinMacSize - 1]));
                 }
             }
         }
@@ -276,7 +276,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                Assert.Throws<ArgumentException>("mac", () => a.Sign(k, ReadOnlySpan<byte>.Empty, new byte[a.MaxMacSize + 1]));
+                Assert.Throws<ArgumentException>("mac", () => a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MaxMacSize + 1]));
             }
         }
 
@@ -293,8 +293,8 @@ namespace NSec.Tests.Base
                 var expected = new byte[a.MinMacSize];
                 var actual = new byte[a.MinMacSize];
 
-                a.Sign(k, data, expected);
-                a.Sign(k, data, actual);
+                a.Mac(k, data, expected);
+                a.Mac(k, data, actual);
                 Assert.Equal(expected, actual);
             }
         }
@@ -312,8 +312,8 @@ namespace NSec.Tests.Base
                 var expected = new byte[a.MaxMacSize];
                 var actual = new byte[a.MaxMacSize];
 
-                a.Sign(k, data, expected);
-                a.Sign(k, data, actual);
+                a.Mac(k, data, expected);
+                a.Mac(k, data, actual);
 
                 Assert.Equal(expected, actual);
             }
@@ -332,8 +332,8 @@ namespace NSec.Tests.Base
                 var expected = new byte[a.DefaultMacSize];
                 var actual = data.AsSpan().Slice(0, a.DefaultMacSize);
 
-                a.Sign(k, data, expected);
-                a.Sign(k, data, actual);
+                a.Mac(k, data, expected);
+                a.Mac(k, data, actual);
 
                 Assert.Equal(expected, actual.ToArray());
             }
@@ -401,7 +401,7 @@ namespace NSec.Tests.Base
             {
                 var d = ReadOnlySpan<byte>.Empty;
 
-                var mac = a.Sign(k, d, a.MinMacSize);
+                var mac = a.Mac(k, d, a.MinMacSize);
 
                 Assert.True(a.TryVerify(k, d, mac));
             }
@@ -417,7 +417,7 @@ namespace NSec.Tests.Base
             {
                 var d = ReadOnlySpan<byte>.Empty;
 
-                var mac = a.Sign(k, d, a.MaxMacSize);
+                var mac = a.Mac(k, d, a.MaxMacSize);
 
                 Assert.True(a.TryVerify(k, d, mac));
             }
@@ -485,7 +485,7 @@ namespace NSec.Tests.Base
             {
                 var d = ReadOnlySpan<byte>.Empty;
 
-                var mac = a.Sign(k, d, a.MinMacSize);
+                var mac = a.Mac(k, d, a.MinMacSize);
 
                 a.Verify(k, d, mac);
             }
@@ -501,7 +501,7 @@ namespace NSec.Tests.Base
             {
                 var d = ReadOnlySpan<byte>.Empty;
 
-                var mac = a.Sign(k, d, a.MaxMacSize);
+                var mac = a.Mac(k, d, a.MaxMacSize);
 
                 a.Verify(k, d, mac);
             }

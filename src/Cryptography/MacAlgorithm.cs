@@ -68,7 +68,7 @@ namespace NSec.Cryptography
 
         public int MinMacSize => _minMacSize;
 
-        public byte[] Sign(
+        public byte[] Mac(
             Key key,
             ReadOnlySpan<byte> data)
         {
@@ -78,11 +78,11 @@ namespace NSec.Cryptography
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
 
             byte[] mac = new byte[_defaultMacSize];
-            SignCore(key.Handle, data, mac);
+            MacCore(key.Handle, data, mac);
             return mac;
         }
 
-        public byte[] Sign(
+        public byte[] Mac(
             Key key,
             ReadOnlySpan<byte> data,
             int macSize)
@@ -95,11 +95,11 @@ namespace NSec.Cryptography
                 throw Error.ArgumentOutOfRange_MacSize(nameof(macSize), macSize.ToString(), _minMacSize.ToString(), _maxMacSize.ToString());
 
             byte[] mac = new byte[macSize];
-            SignCore(key.Handle, data, mac);
+            MacCore(key.Handle, data, mac);
             return mac;
         }
 
-        public void Sign(
+        public void Mac(
             Key key,
             ReadOnlySpan<byte> data,
             Span<byte> mac)
@@ -111,7 +111,7 @@ namespace NSec.Cryptography
             if (mac.Length < _minMacSize || mac.Length > _maxMacSize)
                 throw Error.Argument_MacSize(nameof(mac), mac.Length.ToString(), _minMacSize.ToString(), _maxMacSize.ToString());
 
-            SignCore(key.Handle, data, mac);
+            MacCore(key.Handle, data, mac);
         }
 
         public bool TryVerify(
@@ -147,7 +147,7 @@ namespace NSec.Cryptography
             }
         }
 
-        private protected abstract void SignCore(
+        private protected abstract void MacCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             Span<byte> mac);

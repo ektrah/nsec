@@ -74,14 +74,14 @@ namespace NSec.Tests.Algorithms
 
         #endregion
 
-        #region Sign #1
+        #region Mac #1
 
         [Fact]
         public static void HashWithNullKey()
         {
             var a = new Blake2bMac();
 
-            Assert.Throws<ArgumentNullException>("key", () => a.Sign(null, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Mac(null, ReadOnlySpan<byte>.Empty));
         }
 
         [Fact]
@@ -91,7 +91,7 @@ namespace NSec.Tests.Algorithms
 
             using (var k = new Key(new Ed25519()))
             {
-                Assert.Throws<ArgumentException>("key", () => a.Sign(k, ReadOnlySpan<byte>.Empty));
+                Assert.Throws<ArgumentException>("key", () => a.Mac(k, ReadOnlySpan<byte>.Empty));
             }
         }
 
@@ -101,7 +101,7 @@ namespace NSec.Tests.Algorithms
 
             using (var k = new Key(a))
             {
-                var b = a.Sign(k, ReadOnlySpan<byte>.Empty);
+                var b = a.Mac(k, ReadOnlySpan<byte>.Empty);
 
                 Assert.NotNull(b);
                 Assert.Equal(a.DefaultMacSize, b.Length);
@@ -110,14 +110,14 @@ namespace NSec.Tests.Algorithms
 
         #endregion
 
-        #region Sign #2
+        #region Mac #2
 
         [Fact]
         public static void HashWithSizeWithNullKey()
         {
             var a = new Blake2bMac();
 
-            Assert.Throws<ArgumentNullException>("key", () => a.Sign(null, ReadOnlySpan<byte>.Empty, 0));
+            Assert.Throws<ArgumentNullException>("key", () => a.Mac(null, ReadOnlySpan<byte>.Empty, 0));
         }
 
         [Fact]
@@ -127,7 +127,7 @@ namespace NSec.Tests.Algorithms
 
             using (var k = new Key(new Ed25519()))
             {
-                Assert.Throws<ArgumentException>("key", () => a.Sign(k, ReadOnlySpan<byte>.Empty, 0));
+                Assert.Throws<ArgumentException>("key", () => a.Mac(k, ReadOnlySpan<byte>.Empty, 0));
             }
         }
 
@@ -138,7 +138,7 @@ namespace NSec.Tests.Algorithms
 
             using (var k = new Key(a))
             {
-                Assert.Throws<ArgumentOutOfRangeException>("macSize", () => a.Sign(k, ReadOnlySpan<byte>.Empty, a.MinMacSize - 1));
+                Assert.Throws<ArgumentOutOfRangeException>("macSize", () => a.Mac(k, ReadOnlySpan<byte>.Empty, a.MinMacSize - 1));
             }
         }
 
@@ -149,7 +149,7 @@ namespace NSec.Tests.Algorithms
 
             using (var k = new Key(a))
             {
-                Assert.Throws<ArgumentOutOfRangeException>("macSize", () => a.Sign(k, ReadOnlySpan<byte>.Empty, a.MaxMacSize + 1));
+                Assert.Throws<ArgumentOutOfRangeException>("macSize", () => a.Mac(k, ReadOnlySpan<byte>.Empty, a.MaxMacSize + 1));
             }
         }
 
@@ -160,7 +160,7 @@ namespace NSec.Tests.Algorithms
 
             using (var k = new Key(a))
             {
-                var b = a.Sign(k, ReadOnlySpan<byte>.Empty, a.MinMacSize);
+                var b = a.Mac(k, ReadOnlySpan<byte>.Empty, a.MinMacSize);
 
                 Assert.NotNull(b);
                 Assert.Equal(a.MinMacSize, b.Length);
@@ -174,7 +174,7 @@ namespace NSec.Tests.Algorithms
 
             using (var k = new Key(a))
             {
-                var b = a.Sign(k, ReadOnlySpan<byte>.Empty, a.MaxMacSize);
+                var b = a.Mac(k, ReadOnlySpan<byte>.Empty, a.MaxMacSize);
 
                 Assert.NotNull(b);
                 Assert.Equal(a.MaxMacSize, b.Length);
@@ -183,14 +183,14 @@ namespace NSec.Tests.Algorithms
 
         #endregion
 
-        #region Sign #3
+        #region Mac #3
 
         [Fact]
         public static void HashWithSpanWithNullKey()
         {
             var a = new Blake2bMac();
 
-            Assert.Throws<ArgumentNullException>("key", () => a.Sign(null, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Mac(null, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Fact]
@@ -200,7 +200,7 @@ namespace NSec.Tests.Algorithms
 
             using (var k = new Key(new Ed25519()))
             {
-                Assert.Throws<ArgumentException>("key", () => a.Sign(k, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+                Assert.Throws<ArgumentException>("key", () => a.Mac(k, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
             }
         }
 
@@ -211,7 +211,7 @@ namespace NSec.Tests.Algorithms
 
             using (var k = new Key(a))
             {
-                Assert.Throws<ArgumentException>("mac", () => a.Sign(k, ReadOnlySpan<byte>.Empty, new byte[a.MinMacSize - 1]));
+                Assert.Throws<ArgumentException>("mac", () => a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MinMacSize - 1]));
             }
         }
 
@@ -222,7 +222,7 @@ namespace NSec.Tests.Algorithms
 
             using (var k = new Key(a))
             {
-                Assert.Throws<ArgumentException>("mac", () => a.Sign(k, ReadOnlySpan<byte>.Empty, new byte[a.MaxMacSize + 1]));
+                Assert.Throws<ArgumentException>("mac", () => a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MaxMacSize + 1]));
             }
         }
 
@@ -233,7 +233,7 @@ namespace NSec.Tests.Algorithms
 
             using (var k = new Key(a))
             {
-                a.Sign(k, ReadOnlySpan<byte>.Empty, new byte[a.MinMacSize]);
+                a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MinMacSize]);
             }
         }
 
@@ -244,7 +244,7 @@ namespace NSec.Tests.Algorithms
 
             using (var k = new Key(a))
             {
-                a.Sign(k, ReadOnlySpan<byte>.Empty, new byte[a.MaxMacSize]);
+                a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MaxMacSize]);
             }
         }
 

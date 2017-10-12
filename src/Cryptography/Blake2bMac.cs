@@ -67,7 +67,7 @@ namespace NSec.Cryptography
             return crypto_generichash_blake2b_KEYBYTES;
         }
 
-        private protected override void SignCore(
+        private protected override void MacCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             Span<byte> mac)

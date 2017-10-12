@@ -76,7 +76,7 @@ namespace NSec.Cryptography
             return SHA512HashSize;
         }
 
-        private protected override void SignCore(
+        private protected override void MacCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             Span<byte> mac)

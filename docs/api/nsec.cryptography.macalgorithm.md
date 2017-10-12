@@ -89,22 +89,22 @@ The minimum MAC size, in bytes.
 ## Methods
 
 
-### Sign(Key, ReadOnlySpan<byte>)
+### Mac(Key, ReadOnlySpan<byte>)
 
 Computes a message authentication code for the specified input data using the
 specified key and returns it as an array of bytes.
 
-    public byte[] Sign(
+    public byte[] Mac(
         Key key,
         ReadOnlySpan<byte> data)
 
 #### Parameters
 
 key
-: The key to use for signing.
+: The key to use for computing the message authentication code.
 
 data
-: The data to be signed.
+: The data to be authenticated.
 
 #### Return Value
 
@@ -123,12 +123,12 @@ ObjectDisposedException
 : `key` has been disposed.
 
 
-### Sign(Key, ReadOnlySpan<byte>, int)
+### Mac(Key, ReadOnlySpan<byte>, int)
 
 Computes a message authentication code for the specified input data using the
 specified key and returns it as an array of bytes of the specified size.
 
-    public byte[] Sign(
+    public byte[] Mac(
         Key key,
         ReadOnlySpan<byte> data,
         int macSize)
@@ -136,10 +136,10 @@ specified key and returns it as an array of bytes of the specified size.
 #### Parameters
 
 key
-: The key to use for signing.
+: The key to use for computing the message authentication code.
 
 data
-: The data to be signed.
+: The data to be authenticated.
 
 macSize
 : The size, in bytes, of the message authentication code to compute.
@@ -166,12 +166,12 @@ ObjectDisposedException
 : `key` has been disposed.
 
 
-### Sign(Key, ReadOnlySpan<byte>, Span<byte>)
+### Mac(Key, ReadOnlySpan<byte>, Span<byte>)
 
 Fills the specified span of bytes with a message authentication code for the
 specified input data using the specified key.
 
-    public void Sign(
+    public void Mac(
         Key key,
         ReadOnlySpan<byte> data,
         Span<byte> mac)
@@ -179,10 +179,10 @@ specified input data using the specified key.
 #### Parameters
 
 key
-: The key to use for signing.
+: The key to use for computing the message authentication code.
 
 data
-: The data to be signed.
+: The data to be authenticated.
 
 mac
 : The span to fill with the computed message authentication code.
