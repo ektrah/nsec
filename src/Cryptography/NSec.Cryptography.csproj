@@ -1,4 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\Dependencies.props" />
   <Import Project="..\..\Package.props" />
 
   <PropertyGroup>
@@ -39,10 +41,10 @@ NSec.Cryptography.X25519</Description>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="libsodium" Version="[1.0.15]" />
-    <PackageReference Include="System.Memory" Version="4.5.0-preview1-25810-03" />
-    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0-preview1-25810-03" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.0-preview1-25810-03" />
+    <PackageReference Include="libsodium" Version="$(LibsodiumVersion)" />
+    <PackageReference Include="System.Memory" Version="$(SystemMemoryVersion)" />
+    <PackageReference Include="System.Numerics.Vectors" Version="$(SystemNumericsVectorsVersion)" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="$(SystemRuntimeCompilerServicesUnsafeVersion)" />
   </ItemGroup>
 
 </Project>
