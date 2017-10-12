@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\Common.props" />
+  <Import Project="..\..\Package.props" />
 
   <PropertyGroup>
     <TargetFramework>netstandard1.1</TargetFramework>

@@ -25,8 +25,4 @@
     <MinClientVersion>4.0</MinClientVersion>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NETCore.Compilers" Version="2.6.0-beta1-62205-01" PrivateAssets="All" />
-  </ItemGroup>
-
 </Project>
