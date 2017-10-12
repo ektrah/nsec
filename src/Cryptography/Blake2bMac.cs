@@ -67,22 +67,6 @@ namespace NSec.Cryptography
             return crypto_generichash_blake2b_KEYBYTES;
         }
 
-        private protected override void MacCore(
-            SecureMemoryHandle keyHandle,
-            ReadOnlySpan<byte> data,
-            Span<byte> mac)
-        {
-            Debug.Assert(keyHandle != null);
-            Debug.Assert(keyHandle.Length >= crypto_generichash_blake2b_KEYBYTES_MIN);
-            Debug.Assert(keyHandle.Length <= crypto_generichash_blake2b_KEYBYTES_MAX);
-            Debug.Assert(mac.Length >= crypto_generichash_blake2b_BYTES_MIN);
-            Debug.Assert(mac.Length <= crypto_generichash_blake2b_BYTES_MAX);
-
-            crypto_generichash_blake2b_init(out crypto_generichash_blake2b_state state, keyHandle, (UIntPtr)keyHandle.Length, (UIntPtr)mac.Length);
-            crypto_generichash_blake2b_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
-            crypto_generichash_blake2b_final(ref state, ref mac.DangerousGetPinnableReference(), (UIntPtr)mac.Length);
-        }
-
         internal override bool TryExportKey(
             SecureMemoryHandle keyHandle,
             KeyBlobFormat format,
@@ -115,6 +99,22 @@ namespace NSec.Cryptography
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
+        }
+
+        private protected override void MacCore(
+                            SecureMemoryHandle keyHandle,
+            ReadOnlySpan<byte> data,
+            Span<byte> mac)
+        {
+            Debug.Assert(keyHandle != null);
+            Debug.Assert(keyHandle.Length >= crypto_generichash_blake2b_KEYBYTES_MIN);
+            Debug.Assert(keyHandle.Length <= crypto_generichash_blake2b_KEYBYTES_MAX);
+            Debug.Assert(mac.Length >= crypto_generichash_blake2b_BYTES_MIN);
+            Debug.Assert(mac.Length <= crypto_generichash_blake2b_BYTES_MAX);
+
+            crypto_generichash_blake2b_init(out crypto_generichash_blake2b_state state, keyHandle, (UIntPtr)keyHandle.Length, (UIntPtr)mac.Length);
+            crypto_generichash_blake2b_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
+            crypto_generichash_blake2b_final(ref state, ref mac.DangerousGetPinnableReference(), (UIntPtr)mac.Length);
         }
 
         private protected override bool TryVerifyCore(

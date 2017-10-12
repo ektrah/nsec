@@ -76,8 +76,42 @@ namespace NSec.Cryptography
             return SHA512HashSize;
         }
 
-        private protected override void MacCore(
+        internal override bool TryExportKey(
             SecureMemoryHandle keyHandle,
+            KeyBlobFormat format,
+            Span<byte> blob,
+            out int blobSize)
+        {
+            switch (format)
+            {
+            case KeyBlobFormat.RawSymmetricKey:
+                return s_rawKeyFormatter.TryExport(keyHandle, blob, out blobSize);
+            case KeyBlobFormat.NSecSymmetricKey:
+                return s_nsecKeyFormatter.TryExport(keyHandle, blob, out blobSize);
+            default:
+                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
+            }
+        }
+
+        internal override bool TryImportKey(
+            ReadOnlySpan<byte> blob,
+            KeyBlobFormat format,
+            out SecureMemoryHandle keyHandle,
+            out byte[] publicKeyBytes)
+        {
+            switch (format)
+            {
+            case KeyBlobFormat.RawSymmetricKey:
+                return s_rawKeyFormatter.TryImport(blob, out keyHandle, out publicKeyBytes);
+            case KeyBlobFormat.NSecSymmetricKey:
+                return s_nsecKeyFormatter.TryImport(blob, out keyHandle, out publicKeyBytes);
+            default:
+                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
+            }
+        }
+
+        private protected override void MacCore(
+                            SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             Span<byte> mac)
         {
@@ -114,40 +148,6 @@ namespace NSec.Cryptography
                 {
                     sodium_memzero(ref temp.DangerousGetPinnableReference(), (UIntPtr)temp.Length);
                 }
-            }
-        }
-
-        internal override bool TryExportKey(
-            SecureMemoryHandle keyHandle,
-            KeyBlobFormat format,
-            Span<byte> blob,
-            out int blobSize)
-        {
-            switch (format)
-            {
-            case KeyBlobFormat.RawSymmetricKey:
-                return s_rawKeyFormatter.TryExport(keyHandle, blob, out blobSize);
-            case KeyBlobFormat.NSecSymmetricKey:
-                return s_nsecKeyFormatter.TryExport(keyHandle, blob, out blobSize);
-            default:
-                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
-            }
-        }
-
-        internal override bool TryImportKey(
-            ReadOnlySpan<byte> blob,
-            KeyBlobFormat format,
-            out SecureMemoryHandle keyHandle,
-            out byte[] publicKeyBytes)
-        {
-            switch (format)
-            {
-            case KeyBlobFormat.RawSymmetricKey:
-                return s_rawKeyFormatter.TryImport(blob, out keyHandle, out publicKeyBytes);
-            case KeyBlobFormat.NSecSymmetricKey:
-                return s_nsecKeyFormatter.TryImport(blob, out keyHandle, out publicKeyBytes);
-            default:
-                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
         }
 
