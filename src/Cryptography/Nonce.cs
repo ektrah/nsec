@@ -1,4 +1,5 @@
 using System;
+using System.Buffers.Binary;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -235,8 +236,13 @@ namespace NSec.Cryptography
 
             for (int i = 0; x == y && i < Unsafe.SizeOf<Nonce>(); i += sizeof(uint))
             {
-                x = Utilities.FromBigEndian(Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref _bytes, i)));
-                y = Utilities.FromBigEndian(Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref other._bytes, i)));
+                x = BitConverter.IsLittleEndian
+                    ? BinaryPrimitives.ReverseEndianness(Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref _bytes, i)))
+                    : Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref _bytes, i));
+
+                y = BitConverter.IsLittleEndian
+                    ? BinaryPrimitives.ReverseEndianness(Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref other._bytes, i)))
+                    : Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref other._bytes, i));
             }
 
             return x.CompareTo(y);
@@ -276,12 +282,12 @@ namespace NSec.Cryptography
         {
             Debug.Assert(Unsafe.SizeOf<Nonce>() == 16);
 
-            int hashCode = 0;
-            hashCode = Utilities.CombineHash(Unsafe.ReadUnaligned<int>(ref Unsafe.Add(ref _bytes, 0x0)), hashCode);
-            hashCode = Utilities.CombineHash(Unsafe.ReadUnaligned<int>(ref Unsafe.Add(ref _bytes, 0x4)), hashCode);
-            hashCode = Utilities.CombineHash(Unsafe.ReadUnaligned<int>(ref Unsafe.Add(ref _bytes, 0x8)), hashCode);
-            hashCode = Utilities.CombineHash(Unsafe.ReadUnaligned<int>(ref Unsafe.Add(ref _bytes, 0xC)), hashCode);
-            return hashCode;
+            uint hashCode = 0;
+            hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref _bytes, 0x0)));
+            hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref _bytes, 0x4)));
+            hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref _bytes, 0x8)));
+            hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref _bytes, 0xC)));
+            return unchecked((int)hashCode);
         }
 
         public byte[] ToArray()

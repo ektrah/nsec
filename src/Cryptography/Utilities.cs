@@ -1,26 +1,10 @@
 using System;
 using System.Runtime.CompilerServices;
-using System.Buffers.Binary;
 
 namespace NSec.Cryptography
 {
     internal static class Utilities
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int CombineHash(
-            int newKey,
-            int currentKey)
-        {
-            return unchecked((currentKey * (int)0xA5555529) + newKey);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint FromBigEndian(
-            uint value)
-        {
-            return BitConverter.IsLittleEndian ? BinaryPrimitives.ReverseEndianness(value) : value;
-        }
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe bool Overlap(
             ReadOnlySpan<byte> first,
