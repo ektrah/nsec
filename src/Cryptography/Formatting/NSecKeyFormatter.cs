@@ -1,4 +1,5 @@
 using System;
+using System.Buffers.Binary;
 using System.Diagnostics;
 using static Interop.Libsodium;
 
@@ -41,7 +42,7 @@ namespace NSec.Cryptography.Formatting
             }
 
             _blobHeader.CopyTo(blob);
-            blob.Slice(_blobHeader.Length).WriteLittleEndian((uint)keyHandle.Length);
+            BinaryPrimitives.WriteUInt32LittleEndian(blob.Slice(_blobHeader.Length), (uint)keyHandle.Length);
             keyHandle.Export(blob.Slice(_blobHeader.Length + sizeof(uint)));
             return true;
         }
@@ -56,7 +57,7 @@ namespace NSec.Cryptography.Formatting
             if (keySize < _minKeySize ||
                 keySize > _maxKeySize ||
                 !blob.Slice(0, _blobHeader.Length).SequenceEqual(_blobHeader) ||
-                blob.Slice(_blobHeader.Length).ReadLittleEndian() != (uint)keySize)
+                BinaryPrimitives.ReadUInt32LittleEndian(blob.Slice(_blobHeader.Length)) != (uint)keySize)
             {
                 keyHandle = null;
                 publicKeyBytes = null;
