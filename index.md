@@ -60,7 +60,7 @@ Soon&trade; (waiting for .NET Core 2.1)
     * [[SignatureAlgorithm Class]]
 * [[Key Class]]
     * [[KeyBlobFormat Enum]]
-    * [[KeyFlags Enum]]
+    * [[KeyExportPolicies Enum]]
 * [[Nonce Struct]]
 * [[PublicKey Class]]
 * [[RandomNumberGenerator Class]]
