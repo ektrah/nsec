@@ -1,0 +1,32 @@
+﻿<Project>
+
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(APPVEYOR)' == 'true'">
+    <GitBranch Condition="'$(APPVEYOR_REPO_BRANCH)' != '' and '$(APPVEYOR_PULL_REQUEST_NUMBER)' == ''">$(APPVEYOR_REPO_BRANCH)</GitBranch>
+    <GitBranch Condition="'$(APPVEYOR_REPO_BRANCH)' != '' and '$(APPVEYOR_PULL_REQUEST_NUMBER)' != ''">$(APPVEYOR_REPO_BRANCH).$(APPVEYOR_PULL_REQUEST_NUMBER)</GitBranch>
+    <GitTag Condition="'$(APPVEYOR_REPO_TAG)' == 'true'">$(APPVEYOR_REPO_TAG_NAME)</GitTag>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(CIRCLECI)' == 'true'">
+    <GitBranch Condition="'$(CIRCLE_BRANCH)' != '' and '$(CIRCLE_PR_NUMBER)' == ''">$(CIRCLE_BRANCH)</GitBranch>
+    <GitBranch Condition="'$(CIRCLE_BRANCH)' != '' and '$(CIRCLE_PR_NUMBER)' != ''">$(CIRCLE_BRANCH).$(CIRCLE_PR_NUMBER)</GitBranch>
+    <GitTag Condition="'$(CIRCLE_TAG)' != ''">$(CIRCLE_TAG)</GitTag>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Version Condition="'$(GitTag)' != ''">$(GitTag)</Version>
+    <Version Condition="'$(GitTag)' == '' and '$(GitBranch)' != ''">$([System.DateTime]::UtcNow.ToString(y.M.0'-alpha-'ddHHmm))-$(GitBranch)</Version>
+    <Version Condition="'$(GitTag)' == '' and '$(GitBranch)' == ''">$([System.DateTime]::UtcNow.ToString(y.M.0'-alpha-'ddHHmm))</Version>
+    <Authors>Klaus Hartke</Authors>
+    <Copyright>&#169; $([System.DateTime]::UtcNow.ToString(yyyy)) Klaus Hartke</Copyright>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageLicenseUrl>https://nsec.rocks/license</PackageLicenseUrl>
+    <PackageProjectUrl>https://nsec.rocks/</PackageProjectUrl>
+    <PackageIconUrl>https://goo.gl/iN8fpR</PackageIconUrl>
+    <MinClientVersion>4.0</MinClientVersion>
+  </PropertyGroup>
+
+</Project>
