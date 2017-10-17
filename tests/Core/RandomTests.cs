@@ -20,7 +20,7 @@ namespace NSec.Tests.Core
             var bytes = RandomNumberGenerator.Default.GenerateBytes(0);
 
             Assert.NotNull(bytes);
-            Assert.Equal(0, bytes.Length);
+            Assert.Empty(bytes);
         }
 
         [Theory]

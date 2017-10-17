@@ -95,7 +95,7 @@ namespace NSec.Tests.Base
                 var b = a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, 0);
 
                 Assert.NotNull(b);
-                Assert.Equal(0, b.Length);
+                Assert.Empty(b);
             }
         }
 

@@ -342,7 +342,7 @@ namespace NSec.Tests.Base
 
                 var pt = a.Decrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ct);
                 Assert.NotNull(pt);
-                Assert.Equal(0, pt.Length);
+                Assert.Empty(pt);
             }
         }
 
@@ -603,7 +603,7 @@ namespace NSec.Tests.Base
 
                 Assert.True(a.TryDecrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ct, out byte[] pt));
                 Assert.NotNull(pt);
-                Assert.Equal(0, pt.Length);
+                Assert.Empty(pt);
             }
         }
 
