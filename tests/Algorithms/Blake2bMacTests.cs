@@ -95,6 +95,7 @@ namespace NSec.Tests.Algorithms
             }
         }
 
+        [Fact]
         public static void HashWithKeySuccess()
         {
             var a = new Blake2bMac();
