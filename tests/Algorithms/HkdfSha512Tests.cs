@@ -541,7 +541,7 @@ namespace NSec.Tests.Algorithms
 
             Assert.Equal(16320, a.MaxOutputSize);
             Assert.Equal(64, a.PseudorandomKeySize);
-            Assert.Equal(true, a.SupportsSalt);
+            Assert.True(a.SupportsSalt);
         }
 
         #endregion

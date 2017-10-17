@@ -26,7 +26,7 @@ namespace NSec.Tests.Formatting
         public static void BoolInvalid(byte[] value)
         {
             var reader = new Asn1Reader(value);
-            Assert.Equal(false, reader.Bool());
+            Assert.False(reader.Bool());
             Assert.False(reader.Success);
             Assert.False(reader.SuccessComplete);
         }
