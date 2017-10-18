@@ -3,13 +3,13 @@
   <PropertyGroup>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <GeneratedInternalsVisibleToFile Condition="'$(GeneratedInternalsVisibleToFile)' == ''">$(IntermediateOutputPath)$(MSBuildProjectName).InternalsVisibleTo$(DefaultLanguageSourceExtension)</GeneratedInternalsVisibleToFile>
-    <GeneratedInternalsVisibleTo Condition="'$(GeneratedInternalsVisibleTo)' == ''">true</GeneratedInternalsVisibleTo>
+    <GenerateInternalsVisibleTo Condition="'$(GenerateInternalsVisibleTo)' == ''">true</GenerateInternalsVisibleTo>
   </PropertyGroup>
 
   <Target Name="GenerateInternalsVisibleTo"
           BeforeTargets="CoreCompile"
           DependsOnTargets="PrepareForBuild;CoreGenerateInternalsVisibleTo"
-          Condition="'$(GeneratedInternalsVisibleTo)' == 'true'" />
+          Condition="'$(GenerateInternalsVisibleTo)' == 'true'" />
 
   <Target Name="GetInternalsVisibleToAttributes">
     <ItemGroup Condition="'@(InternalsVisibleTo)' != ''">
