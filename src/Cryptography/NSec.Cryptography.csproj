@@ -30,6 +30,7 @@ NSec.Cryptography.X25519</Description>
 
   <ItemGroup>
     <Compile Include="..\Interop\**\*.cs" Link="Interop\%(RecursiveDir)\%(Filename)%(Extension)" />
+    <None Include="..\Interop\*.yaml" Link="Interop\%(RecursiveDir)\%(Filename)%(Extension)" />
   </ItemGroup>
 
   <ItemGroup>
