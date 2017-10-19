@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2002
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSec.Cryptography", "src\Cryptography\NSec.Cryptography.csproj", "{839872CC-6AF4-456B-A55B-F82EE7B4822E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSec.Tests", "tests\NSec.Tests.csproj", "{97BF2648-69D2-4A17-888F-2A13E5C5CB28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "tests\Tests.csproj", "{97BF2648-69D2-4A17-888F-2A13E5C5CB28}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NSec", "NSec", "{DF40D4F3-D18D-45F3-87DD-2A8378354B57}"
 	ProjectSection(SolutionItems) = preProject
