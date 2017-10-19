@@ -15,3 +15,9 @@ artifacts:
   - path: '**\*.nupkg'
 nuget:
   disable_publish_on_pr: true
+deploy:
+- provider: NuGet
+  server: https://www.myget.org/F/nsec/api/v2
+  api_key:
+    secure: TjONMhmq3TB/PqRQwd5PCT0TAwhJFB2XL3krFHV61JYOQIl75PvXMosF0XJndkya
+  skip_symbols: true
