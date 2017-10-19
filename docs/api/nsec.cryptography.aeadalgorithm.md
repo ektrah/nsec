@@ -66,14 +66,14 @@ The authentication tag size, in bytes.
 ## Methods
 
 
-### Decrypt(Key, Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
+### Decrypt(Key, in Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
 
 Decrypts and authenticates the specified data using the specified key and
 returns the result as an array of bytes.
 
     public byte[] Decrypt(
         Key key,
-        Nonce nonce,
+        in Nonce nonce,
         ReadOnlySpan<byte> associatedData,
         ReadOnlySpan<byte> ciphertext)
 
@@ -116,14 +116,14 @@ ObjectDisposedException
 : `key` has been disposed.
 
 
-### Decrypt(Key, Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
+### Decrypt(Key, in Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
 
 Decrypts and authenticates the specified data using the specified key and fills
 the specified span of bytes with the result.
 
     public void Decrypt(
         Key key,
-        Nonce nonce,
+        in Nonce nonce,
         ReadOnlySpan<byte> associatedData,
         ReadOnlySpan<byte> ciphertext,
         Span<byte> plaintext)
@@ -181,14 +181,14 @@ ObjectDisposedException
 : `key` has been disposed.
 
 
-### Encrypt(Key, Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
+### Encrypt(Key, in Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
 
 Encrypts the specified data using the specified key and returns the result,
 which includes an authentication tag, as an array of bytes.
 
     public byte[] Encrypt(
         Key key,
-        Nonce nonce,
+        in Nonce nonce,
         ReadOnlySpan<byte> associatedData,
         ReadOnlySpan<byte> plaintext)
 
@@ -236,14 +236,14 @@ ObjectDisposedException
 : `key` has been disposed.
 
 
-### Encrypt(Key, Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
+### Encrypt(Key, in Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
 
 Encrypts the specified data using the specified key and fills the specified
 span of bytes with the result, which includes an authentication tag.
 
     public void Encrypt(
         Key key,
-        Nonce nonce,
+        in Nonce nonce,
         ReadOnlySpan<byte> associatedData,
         ReadOnlySpan<byte> plaintext,
         Span<byte> ciphertext)
@@ -302,14 +302,14 @@ ObjectDisposedException
 : `key` has been disposed.
 
 
-### TryDecrypt(Key, Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>, out byte[])
+### TryDecrypt(Key, in Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>, out byte[])
 
 Attempts to decrypt and authenticate the specified data using the specified key.
 If successful, the result is passed as an array of bytes to the caller.
 
     public bool TryDecrypt(
         Key key,
-        Nonce nonce,
+        in Nonce nonce,
         ReadOnlySpan<byte> associatedData,
         ReadOnlySpan<byte> ciphertext,
         out byte[] plaintext)
@@ -354,14 +354,14 @@ ObjectDisposedException
 : `key` has been disposed.
 
 
-### TryDecrypt(Key, Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
+### TryDecrypt(Key, in Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
 
 Attempts to decrypt and authenticate the specified data using the specified key.
 If successful, the specified span of bytes is filled with the result.
 
     public bool TryDecrypt(
         Key key,
-        Nonce nonce,
+        in Nonce nonce,
         ReadOnlySpan<byte> associatedData,
         ReadOnlySpan<byte> ciphertext,
         Span<byte> plaintext)

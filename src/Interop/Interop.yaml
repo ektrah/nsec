@@ -9,8 +9,8 @@ Interop.Aes256Gcm.cs:
   - crypto_aead_aes256gcm_NSECBYTES
   functions:
   - crypto_aead_aes256gcm_abytes
-  - crypto_aead_aes256gcm_decrypt (IntPtr nsec, ref NSec.Cryptography.Nonce npub, SecureMemoryHandle k)
-  - crypto_aead_aes256gcm_encrypt (IntPtr nsec, ref NSec.Cryptography.Nonce npub, SecureMemoryHandle k)
+  - crypto_aead_aes256gcm_decrypt (IntPtr nsec, in NSec.Cryptography.Nonce npub, SecureMemoryHandle k)
+  - crypto_aead_aes256gcm_encrypt (IntPtr nsec, in NSec.Cryptography.Nonce npub, SecureMemoryHandle k)
   - crypto_aead_aes256gcm_is_available
   - crypto_aead_aes256gcm_keybytes
   - crypto_aead_aes256gcm_npubbytes
@@ -49,8 +49,8 @@ Interop.ChaCha20Poly1305.cs:
   - crypto_aead_chacha20poly1305_ietf_NSECBYTES
   functions:
   - crypto_aead_chacha20poly1305_ietf_abytes
-  - crypto_aead_chacha20poly1305_ietf_decrypt (IntPtr nsec, ref NSec.Cryptography.Nonce npub, SecureMemoryHandle k)
-  - crypto_aead_chacha20poly1305_ietf_encrypt (IntPtr nsec, ref NSec.Cryptography.Nonce npub, SecureMemoryHandle k)
+  - crypto_aead_chacha20poly1305_ietf_decrypt (IntPtr nsec, in NSec.Cryptography.Nonce npub, SecureMemoryHandle k)
+  - crypto_aead_chacha20poly1305_ietf_encrypt (IntPtr nsec, in NSec.Cryptography.Nonce npub, SecureMemoryHandle k)
   - crypto_aead_chacha20poly1305_ietf_keybytes
   - crypto_aead_chacha20poly1305_ietf_npubbytes
   - crypto_aead_chacha20poly1305_ietf_nsecbytes

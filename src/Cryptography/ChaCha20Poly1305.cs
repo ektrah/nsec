@@ -73,7 +73,7 @@ namespace NSec.Cryptography
 
         private protected override void EncryptCore(
             SecureMemoryHandle keyHandle,
-            ref Nonce nonce,
+            in Nonce nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext)
@@ -91,7 +91,7 @@ namespace NSec.Cryptography
                 ref associatedData.DangerousGetPinnableReference(),
                 (ulong)associatedData.Length,
                 IntPtr.Zero,
-                ref nonce,
+                in nonce,
                 keyHandle);
 
             Debug.Assert((ulong)ciphertext.Length == ciphertextLength);
@@ -104,7 +104,7 @@ namespace NSec.Cryptography
 
         private protected override bool TryDecryptCore(
             SecureMemoryHandle keyHandle,
-            ref Nonce nonce,
+            in Nonce nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> ciphertext,
             Span<byte> plaintext)
@@ -122,7 +122,7 @@ namespace NSec.Cryptography
                 (ulong)ciphertext.Length,
                 ref associatedData.DangerousGetPinnableReference(),
                 (ulong)associatedData.Length,
-                ref nonce,
+                in nonce,
                 keyHandle);
 
             // libsodium clears the plaintext if decryption fails.

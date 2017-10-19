@@ -22,7 +22,7 @@ internal static partial class Interop
             ulong clen,
             ref byte ad,
             ulong adlen,
-            ref NSec.Cryptography.Nonce npub,
+            in NSec.Cryptography.Nonce npub,
             SecureMemoryHandle k);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
@@ -34,7 +34,7 @@ internal static partial class Interop
             ref byte ad,
             ulong adlen,
             IntPtr nsec,
-            ref NSec.Cryptography.Nonce npub,
+            in NSec.Cryptography.Nonce npub,
             SecureMemoryHandle k);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
