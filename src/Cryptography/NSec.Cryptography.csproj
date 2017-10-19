@@ -44,4 +44,8 @@ NSec.Cryptography.X25519</Description>
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="$(SystemRuntimeCompilerServicesUnsafeVersion)" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="NSec.Tests.97bf2648-69d2-4a17-888f-2a13e5c5cb28" />
+  </ItemGroup>
+
 </Project>
