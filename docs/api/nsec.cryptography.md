@@ -25,5 +25,5 @@
     * [[KeyExportPolicies Enum]]
 * [[Nonce Struct]]
 * [[PublicKey Class]]
-* [[RandomNumberGenerator Class]]
+* [[RandomGenerator Class]]
 * [[SharedSecret Class]]

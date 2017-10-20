@@ -39,7 +39,7 @@ NotSupportedException
 #### Remarks
 
 This constructor is a shortcut for
-[[RandomNumberGenerator.Default.GenerateKey(Algorithm, KeyExportPolicies)|RandomNumberGenerator
+[[RandomGenerator.Default.GenerateKey(Algorithm, KeyExportPolicies)|RandomGenerator
 Class#GenerateKey(Algorithm, KeyExportPolicies)]].
 
 
@@ -116,7 +116,7 @@ NotSupportedException
 #### Remarks
 
 This method is a shortcut for
-[[RandomNumberGenerator.Default.GenerateKey(Algorithm, KeyExportPolicies)|RandomNumberGenerator
+[[RandomGenerator.Default.GenerateKey(Algorithm, KeyExportPolicies)|RandomGenerator
 Class#GenerateKey(Algorithm, KeyExportPolicies)]].
 
 

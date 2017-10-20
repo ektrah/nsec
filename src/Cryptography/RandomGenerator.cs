@@ -4,16 +4,16 @@ using static Interop.Libsodium;
 
 namespace NSec.Cryptography
 {
-    public abstract class RandomNumberGenerator
+    public abstract class RandomGenerator
     {
-        private static readonly Lazy<RandomNumberGenerator.System> s_default = new Lazy<RandomNumberGenerator.System>(isThreadSafe: true);
+        private static readonly Lazy<RandomGenerator.System> s_default = new Lazy<RandomGenerator.System>(isThreadSafe: true);
 
-        private protected RandomNumberGenerator()
+        private protected RandomGenerator()
         {
             Sodium.Initialize();
         }
 
-        public static RandomNumberGenerator Default => s_default.Value;
+        public static RandomGenerator Default => s_default.Value;
 
         public byte[] GenerateBytes(
             int count)
@@ -78,7 +78,7 @@ namespace NSec.Cryptography
         private protected abstract void GenerateBytesCore(
             Span<byte> bytes);
 
-        internal sealed class System : RandomNumberGenerator
+        internal sealed class System : RandomGenerator
         {
             private protected override void GenerateBytesCore(
                 Span<byte> bytes)

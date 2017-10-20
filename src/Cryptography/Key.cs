@@ -35,7 +35,7 @@ namespace NSec.Cryptography
                 Span<byte> seed = stackalloc byte[seedSize];
                 try
                 {
-                    RandomNumberGenerator.Default.GenerateBytes(seed);
+                    RandomGenerator.Default.GenerateBytes(seed);
                     algorithm.CreateKey(seed, out keyHandle, out publicKeyBytes);
                     success = true;
                 }
@@ -89,7 +89,7 @@ namespace NSec.Cryptography
             Algorithm algorithm,
             KeyExportPolicies exportPolicy = KeyExportPolicies.None)
         {
-            return RandomNumberGenerator.Default.GenerateKey(algorithm, exportPolicy);
+            return RandomGenerator.Default.GenerateKey(algorithm, exportPolicy);
         }
 
         public static Key Import(

@@ -11,13 +11,13 @@ namespace NSec.Tests.Core
         [Fact]
         public static void GenerateBytesWithNegativeCount()
         {
-            Assert.Throws<ArgumentOutOfRangeException>("count", () => RandomNumberGenerator.Default.GenerateBytes(-1));
+            Assert.Throws<ArgumentOutOfRangeException>("count", () => RandomGenerator.Default.GenerateBytes(-1));
         }
 
         [Fact]
         public static void GenerateBytesWithZeroCount()
         {
-            var bytes = RandomNumberGenerator.Default.GenerateBytes(0);
+            var bytes = RandomGenerator.Default.GenerateBytes(0);
 
             Assert.NotNull(bytes);
             Assert.Empty(bytes);
@@ -29,7 +29,7 @@ namespace NSec.Tests.Core
         [InlineData(63)]
         public static void GenerateBytesWithCount(int count)
         {
-            var bytes = RandomNumberGenerator.Default.GenerateBytes(count);
+            var bytes = RandomGenerator.Default.GenerateBytes(count);
 
             Assert.NotNull(bytes);
             Assert.Equal(count, bytes.Length);
@@ -43,7 +43,7 @@ namespace NSec.Tests.Core
         [Fact]
         public static void GenerateBytesWithEmptySpan()
         {
-            RandomNumberGenerator.Default.GenerateBytes(new byte[0]);
+            RandomGenerator.Default.GenerateBytes(new byte[0]);
         }
 
         [Theory]
@@ -54,7 +54,7 @@ namespace NSec.Tests.Core
         {
             var bytes = new byte[count];
 
-            RandomNumberGenerator.Default.GenerateBytes(bytes);
+            RandomGenerator.Default.GenerateBytes(bytes);
 
             Assert.NotEqual(new byte[count], bytes);
         }
