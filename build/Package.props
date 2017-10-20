@@ -5,18 +5,23 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(APPVEYOR)' == 'true'">
-    <GitBranch Condition="'$(APPVEYOR_REPO_BRANCH)' != '' and '$(APPVEYOR_PULL_REQUEST_NUMBER)' == ''">$(APPVEYOR_REPO_BRANCH)</GitBranch>
-    <GitBranch Condition="'$(APPVEYOR_REPO_BRANCH)' != '' and '$(APPVEYOR_PULL_REQUEST_NUMBER)' != ''">$(APPVEYOR_REPO_BRANCH).$(APPVEYOR_PULL_REQUEST_NUMBER)</GitBranch>
+    <GitBranch Condition="'$(APPVEYOR_REPO_BRANCH)' != ''">$(APPVEYOR_REPO_BRANCH)</GitBranch>
     <GitTag Condition="'$(APPVEYOR_REPO_TAG)' == 'true'">$(APPVEYOR_REPO_TAG_NAME)</GitTag>
+    <IsRelease Condition="'$(GitTag)' != '' and !$(GitTag.Contains('-'))">true</IsRelease>
+    <IsPullRequest Condition="'$(APPVEYOR_PULL_REQUEST_NUMBER)' != ''">true</IsPullRequest>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(CIRCLECI)' == 'true'">
-    <GitBranch Condition="'$(CIRCLE_BRANCH)' != '' and '$(CIRCLE_PR_NUMBER)' == ''">$(CIRCLE_BRANCH)</GitBranch>
-    <GitBranch Condition="'$(CIRCLE_BRANCH)' != '' and '$(CIRCLE_PR_NUMBER)' != ''">$(CIRCLE_BRANCH).$(CIRCLE_PR_NUMBER)</GitBranch>
+    <GitBranch Condition="'$(CIRCLE_BRANCH)' != ''">$(CIRCLE_BRANCH)</GitBranch>
     <GitTag Condition="'$(CIRCLE_TAG)' != ''">$(CIRCLE_TAG)</GitTag>
+    <IsRelease Condition="'$(GitTag)' != '' and !$(GitTag.Contains('-'))">true</IsRelease>
+    <IsPullRequest Condition="'$(CIRCLE_PR_NUMBER)' != ''">true</IsPullRequest>
   </PropertyGroup>
 
   <PropertyGroup>
+    <IsRelease Condition="'$(IsRelease)' == ''">false</IsRelease>
+    <IsPullRequest Condition="'$(IsPullRequest)' == ''">false</IsPullRequest>
+    <IsPackable Condition="'$(IsPullRequest)' == 'true'">false</IsPackable>
     <Version Condition="'$(GitTag)' != ''">$(GitTag)</Version>
     <Version Condition="'$(GitTag)' == '' and '$(GitBranch)' != ''">$([System.DateTime]::UtcNow.ToString(y.M.0'-alpha-'ddHHmm))-$(GitBranch)</Version>
     <Version Condition="'$(GitTag)' == '' and '$(GitBranch)' == ''">$([System.DateTime]::UtcNow.ToString(y.M.0'-alpha-'ddHHmm))</Version>
