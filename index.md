@@ -13,7 +13,7 @@ wraps these primitives in a modern .NET API based on the new `Span<T>` and
 provides a strongly typed data model that represents keys and shared secrets
 with specific classes rather than naked byte arrays. This avoids, for example,
 accidentally using a key with a wrong algorithm. There are still some hard
-problems that NSec does not solve, though, such as nonce generation and key
+problems that NSec does not help with, though, such as nonce generation and key
 management.
 
 * **Secure** -- In addition to the security provided by the cryptographic
@@ -63,7 +63,7 @@ Soon&trade; (waiting for .NET Core 2.1)
     * [[KeyExportPolicies Enum]]
 * [[Nonce Struct]]
 * [[PublicKey Class]]
-* [[RandomNumberGenerator Class]]
+* [[RandomGenerator Class]]
 * [[SharedSecret Class]]
 
 
@@ -72,25 +72,27 @@ Soon&trade; (waiting for .NET Core 2.1)
 NSec is an open source project.
 Contributions to the code or documentation are highly welcome.
 
-Development of NSec takes place on its 
+The development of NSec takes place in its
 [GitHub repository](https://github.com/ektrah/nsec).
 The easiest way to contribute is by
 [submitting a pull request](https://github.com/ektrah/nsec/pulls).
-If you've found an problem with NSec, please
-[open a new issue](https://github.com/ektrah/nsec/issues).
+Please ask before making a significant pull request (e.g., implementing
+features or refactoring code.)
+If you've found a problem with NSec, please
+[open an issue](https://github.com/ektrah/nsec/issues).
 Feature requests are welcome, too.
 
 
 ## Note
+
+*"Cryptography is not magic pixie dust that you can sprinkle on a system to make
+it secure."*
 
 NSec aims to provide careful abstractions to make the work with modern
 cryptographic primitives relatively easy and pain-free. However, the primitives
 are not very useful by themselves and need to be combined into higher-level
 security protocols (such as TLS or JSON Web Token). Don't roll your own security
 protocols.
-
-*"Cryptography is not magic pixie dust that you can sprinkle on a system to make
-it secure."*
 
 
 ## License
