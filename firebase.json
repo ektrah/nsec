@@ -2,6 +2,13 @@
   "hosting": {
     "public": "public",
     "cleanUrls": true,
-    "trailingSlash": false
+    "trailingSlash": false,
+    "redirects": [
+      {
+        "source": "/docs/api/nsec.cryptography.randomnumbergenerator",
+        "destination": "/docs/api/nsec.cryptography.randomgenerator",
+        "type": 301
+      }
+    ]
   }
 }
