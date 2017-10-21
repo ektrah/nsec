@@ -80,10 +80,10 @@ namespace NSec.Cryptography.Nacl
 
         private static bool SelfTest()
         {
-            return (crypto_secretbox_xsalsa20poly1305_keybytes() == (UIntPtr)crypto_secretbox_xsalsa20poly1305_KEYBYTES)
-                && (crypto_secretbox_xsalsa20poly1305_macbytes() == (UIntPtr)crypto_secretbox_xsalsa20poly1305_MACBYTES)
-                && (crypto_secretbox_xsalsa20poly1305_noncebytes() == (UIntPtr)crypto_secretbox_xsalsa20poly1305_NONCEBYTES)
-                && (Marshal.PtrToStringAnsi(crypto_secretbox_primitive()) == "xsalsa20poly1305");
+            return (crypto_secretbox_keybytes() == (UIntPtr)crypto_secretbox_xsalsa20poly1305_KEYBYTES)
+                && (crypto_secretbox_macbytes() == (UIntPtr)crypto_secretbox_xsalsa20poly1305_MACBYTES)
+                && (crypto_secretbox_noncebytes() == (UIntPtr)crypto_secretbox_xsalsa20poly1305_NONCEBYTES)
+                && (Marshal.PtrToStringAnsi(crypto_secretbox_primitive()) == crypto_secretbox_PRIMITIVE);
         }
     }
 }
