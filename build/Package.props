@@ -21,10 +21,13 @@
   <PropertyGroup>
     <IsRelease Condition="'$(IsRelease)' == ''">false</IsRelease>
     <IsPullRequest Condition="'$(IsPullRequest)' == ''">false</IsPullRequest>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <IsPackable Condition="'$(IsPullRequest)' == 'true'">false</IsPackable>
-    <Version Condition="'$(GitTag)' != ''">$(GitTag)</Version>
-    <Version Condition="'$(GitTag)' == '' and '$(GitBranch)' != ''">$([System.DateTime]::UtcNow.ToString(y.M.0'-alpha-'ddHHmm))-$(GitBranch)</Version>
-    <Version Condition="'$(GitTag)' == '' and '$(GitBranch)' == ''">$([System.DateTime]::UtcNow.ToString(y.M.0'-alpha-'ddHHmm))</Version>
+    <Version Condition="'$(Version)' == '' and '$(GitTag)' != ''">$(GitTag)</Version>
+    <Version Condition="'$(Version)' == '' and '$(GitBranch)' != '' and '$(GitBranch)' != 'master'">$([System.DateTime]::UtcNow.ToString(y.M.0'-alpha-'ddHHmm))-$(GitBranch)</Version>
+    <Version Condition="'$(Version)' == ''">$([System.DateTime]::UtcNow.ToString(y.M.0'-alpha-'ddHHmm))</Version>
     <Authors>Klaus Hartke</Authors>
     <Copyright>&#169; $([System.DateTime]::UtcNow.ToString(yyyy)) Klaus Hartke</Copyright>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
