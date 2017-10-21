@@ -20,7 +20,7 @@ namespace NSec.Cryptography.Nacl
             Debug.Assert(keySize > 0);
             Debug.Assert(nonceSize >= 0);
             Debug.Assert(macSize >= 0);
-            Debug.Assert(maxPlaintextSize <= int.MaxValue - macSize);
+            Debug.Assert(maxPlaintextSize >= 0 && maxPlaintextSize <= int.MaxValue - macSize);
 
             _keySize = keySize;
             _nonceSize = nonceSize;
