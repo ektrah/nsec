@@ -1,12 +1,15 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using NSec.Cryptography.Formatting;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography.Nacl
 {
     public sealed class NaclXSalsa20Poly1305 : NaclSecretBoxAlgorithm
     {
+        private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(crypto_secretbox_xsalsa20poly1305_KEYBYTES, crypto_secretbox_xsalsa20poly1305_KEYBYTES);
+
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
         public NaclXSalsa20Poly1305() : base(
@@ -76,6 +79,38 @@ namespace NSec.Cryptography.Nacl
                 keyHandle);
 
             return error == 0;
+        }
+
+        internal override bool TryExportKey(
+            SecureMemoryHandle keyHandle,
+            KeyBlobFormat format,
+            Span<byte> blob,
+            out int blobSize)
+        {
+            switch (format)
+            {
+            case KeyBlobFormat.RawSymmetricKey:
+                return s_rawKeyFormatter.TryExport(keyHandle, blob, out blobSize);
+            case KeyBlobFormat.NSecSymmetricKey: // TODO
+            default:
+                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
+            }
+        }
+
+        internal override bool TryImportKey(
+            ReadOnlySpan<byte> blob,
+            KeyBlobFormat format,
+            out SecureMemoryHandle keyHandle,
+            out byte[] publicKeyBytes)
+        {
+            switch (format)
+            {
+            case KeyBlobFormat.RawSymmetricKey:
+                return s_rawKeyFormatter.TryImport(blob, out keyHandle, out publicKeyBytes);
+            case KeyBlobFormat.NSecSymmetricKey: // TODO
+            default:
+                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
+            }
         }
 
         private static bool SelfTest()
