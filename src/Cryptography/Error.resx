@@ -144,6 +144,9 @@
   <data name="ArgumentOutOfRange_MacSize" xml:space="preserve">
     <value>MAC size '{0}' is out of range. Must be between {1} and {2}.</value>
   </data>
+  <data name="ArgumentOutOfRange_MustBePositive" xml:space="preserve">
+    <value>'{0}' must be greater than zero.</value>
+  </data>
   <data name="ArgumentOutOfRange_NonceAddend" xml:space="preserve">
     <value>The addend cannot be negative.</value>
   </data>
@@ -188,6 +191,9 @@
   </data>
   <data name="Argument_MacSize" xml:space="preserve">
     <value>MAC size '{0}' is out of range. Must be between {1} and {2}.</value>
+  </data>
+  <data name="Argument_MinMaxValue" xml:space="preserve">
+    <value>'{0}' cannot be greater than {1}.</value>
   </data>
   <data name="Argument_NonceFixedCounterSize" xml:space="preserve">
     <value>The total length of the nonce must be between 0 and 15 bytes.</value>

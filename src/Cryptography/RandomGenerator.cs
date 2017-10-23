@@ -34,6 +34,34 @@ namespace NSec.Cryptography
             GenerateBytesCore(bytes);
         }
 
+        public int GenerateInt32()
+        {
+            return unchecked((int)(GenerateUInt32() & 0x7FFFFFFF));
+        }
+
+        public int GenerateInt32(
+            int maxValue)
+        {
+            if (maxValue < 0)
+            {
+                throw Error.ArgumentOutOfRange_MustBePositive(nameof(maxValue), nameof(maxValue));
+            }
+
+            return unchecked((int)GenerateUInt32((uint)maxValue));
+        }
+
+        public int GenerateInt32(
+            int minValue,
+            int maxValue)
+        {
+            if (minValue > maxValue)
+            {
+                throw Error.Argument_MinMaxValue(nameof(minValue), nameof(minValue), nameof(maxValue));
+            }
+
+            return unchecked((int)((uint)minValue + GenerateUInt32((uint)maxValue - (uint)minValue)));
+        }
+
         public Key GenerateKey(
             Algorithm algorithm,
             KeyExportPolicies exportPolicy = KeyExportPolicies.None)
@@ -75,8 +103,47 @@ namespace NSec.Cryptography
             return new Key(algorithm, exportPolicy, keyHandle, publicKeyBytes);
         }
 
+        public uint GenerateUInt32()
+        {
+            return GenerateUInt32Core();
+        }
+
+        public uint GenerateUInt32(
+            uint maxValue)
+        {
+            if (maxValue < 2)
+            {
+                return 0;
+            }
+
+            uint min = unchecked((uint)-(int)maxValue) % maxValue;
+
+            uint value;
+            do
+            {
+                value = GenerateUInt32();
+            }
+            while (value < min);
+
+            return value % maxValue;
+        }
+
+        public uint GenerateUInt32(
+            uint minValue,
+            uint maxValue)
+        {
+            if (minValue > maxValue)
+            {
+                throw Error.Argument_MinMaxValue(nameof(minValue), nameof(minValue), nameof(maxValue));
+            }
+
+            return minValue + GenerateUInt32(maxValue - minValue);
+        }
+
         private protected abstract void GenerateBytesCore(
             Span<byte> bytes);
+
+        private protected abstract uint GenerateUInt32Core();
 
         internal sealed class System : RandomGenerator
         {
@@ -84,6 +151,12 @@ namespace NSec.Cryptography
                 Span<byte> bytes)
             {
                 randombytes_buf(ref bytes.DangerousGetPinnableReference(), (UIntPtr)bytes.Length);
+            }
+
+            private protected override uint GenerateUInt32Core()
+            {
+                randombytes_buf(out uint value, (UIntPtr)sizeof(uint));
+                return value;
             }
         }
     }

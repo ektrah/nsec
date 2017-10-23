@@ -94,6 +94,14 @@ namespace NSec.Cryptography
             return new ArgumentException(string.Format(ResourceManager.GetString("Argument_MacSize"), arg0, arg1, arg2), paramName);
         }
 
+        internal static ArgumentException Argument_MinMaxValue(
+            string paramName,
+            string arg0,
+            string arg1)
+        {
+            return new ArgumentException(string.Format(ResourceManager.GetString("Argument_MinMaxValue"), arg0, arg1), paramName);
+        }
+
         internal static ArgumentException Argument_NonceFixedCounterSize(
             string paramName)
         {
@@ -241,6 +249,13 @@ namespace NSec.Cryptography
             string arg2)
         {
             return new ArgumentOutOfRangeException(paramName, string.Format(ResourceManager.GetString("ArgumentOutOfRange_MacSize"), arg0, arg1, arg2));
+        }
+
+        internal static ArgumentOutOfRangeException ArgumentOutOfRange_MustBePositive(
+            string paramName,
+            string arg0)
+        {
+            return new ArgumentOutOfRangeException(paramName, string.Format(ResourceManager.GetString("ArgumentOutOfRange_MustBePositive"), arg0));
         }
 
         internal static ArgumentOutOfRangeException ArgumentOutOfRange_NonceAddend(
