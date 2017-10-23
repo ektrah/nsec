@@ -126,6 +126,7 @@ Interop.Random.cs:
   include: include/sodium/randombytes.h
   functions:
   - randombytes_buf
+  - randombytes_buf (out uint buf)
 
 Interop.Sha256.cs:
   include: include/sodium/crypto_hash_sha256.h
