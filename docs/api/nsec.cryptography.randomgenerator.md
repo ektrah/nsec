@@ -59,8 +59,7 @@ ArgumentOutOfRangeException
 
 ### GenerateBytes(Span<byte>)
 
-Fills the specified span of bytes with a cryptographically strong random
-sequence of values.
+Fills a span of bytes with a cryptographically strong random sequence of values.
 
     public void GenerateBytes(
         Span<byte> bytes)
