@@ -256,7 +256,7 @@ namespace NSec.Cryptography
             return x.CompareTo(y);
         }
 
-        public int CopyTo(
+        public void CopyTo(
             Span<byte> destination)
         {
             int size = Size;
@@ -266,7 +266,6 @@ namespace NSec.Cryptography
             }
 
             Unsafe.CopyBlockUnaligned(ref destination.DangerousGetPinnableReference(), ref Unsafe.AsRef(in _bytes), (uint)size);
-            return size;
         }
 
         public bool Equals(

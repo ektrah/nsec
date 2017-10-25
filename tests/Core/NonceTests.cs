@@ -41,7 +41,7 @@ namespace NSec.Tests.Core
             Assert.Equal(0, actual.CounterFieldSize);
             Assert.Equal(new byte[0], actual.ToArray());
             Assert.Equal("[][]", actual.ToString());
-            Assert.Equal(0, actual.CopyTo(Span<byte>.Empty));
+            actual.CopyTo(Span<byte>.Empty);
         }
 
         #endregion
@@ -62,7 +62,7 @@ namespace NSec.Tests.Core
             Assert.Equal(expected.Length, actual.CounterFieldSize);
             Assert.Equal(expected, actual.ToArray());
             Assert.Equal("[][" + Base16.Encode(expected) + "]", actual.ToString());
-            Assert.Equal(expected.Length, actual.CopyTo(array));
+            actual.CopyTo(array);
             Assert.Equal(expected, array);
         }
 
@@ -113,7 +113,7 @@ namespace NSec.Tests.Core
             Assert.Equal(counterField.Length, actual.CounterFieldSize);
             Assert.Equal(expected, actual.ToArray());
             Assert.Equal("[" + Base16.Encode(fixedField) + "][" + Base16.Encode(counterField) + "]", actual.ToString());
-            Assert.Equal(expected.Length, actual.CopyTo(array));
+            actual.CopyTo(array);
             Assert.Equal(expected, array);
         }
 
@@ -159,7 +159,7 @@ namespace NSec.Tests.Core
             Assert.Equal(counterField.Length, actual.CounterFieldSize);
             Assert.Equal(expected, actual.ToArray());
             Assert.Equal("[" + Base16.Encode(fixedField) + "][" + Base16.Encode(counterField) + "]", actual.ToString());
-            Assert.Equal(expected.Length, actual.CopyTo(array));
+            actual.CopyTo(array);
             Assert.Equal(expected, array);
         }
 
