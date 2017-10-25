@@ -184,7 +184,6 @@ namespace NSec.Cryptography
 
             ref byte first = ref Unsafe.AsRef(in nonce._bytes);
             ref byte second = ref bytes.DangerousGetPinnableReference();
-
             int length = bytes.Length;
             int i = 0;
 
@@ -216,29 +215,32 @@ namespace NSec.Cryptography
             Nonce nonce,
             ReadOnlySpan<byte> bytes)
         {
-            Xor(ref nonce, bytes);
-            return nonce;
+            Nonce result = nonce;
+            Xor(ref result, bytes);
+            return result;
         }
 
         public static Nonce operator +(
             Nonce nonce,
             int value)
         {
-            if (!TryAdd(ref nonce, value))
+            Nonce result = nonce;
+            if (!TryAdd(ref result, value))
             {
                 throw Error.Overflow_NonceCounter();
             }
-            return nonce;
+            return result;
         }
 
         public static Nonce operator ++(
             Nonce nonce)
         {
-            if (!TryAdd(ref nonce, 1))
+            Nonce result = nonce;
+            if (!TryAdd(ref result, 1))
             {
                 throw Error.Overflow_NonceCounter();
             }
-            return nonce;
+            return result;
         }
 
         public static bool operator <(
