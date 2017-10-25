@@ -87,6 +87,34 @@ namespace NSec.Cryptography
 
         public int Size => (_size >> 4) + (_size & 0xF);
 
+        public static int Compare(
+            in Nonce left,
+            in Nonce right)
+        {
+            Debug.Assert(Unsafe.SizeOf<Nonce>() == 16);
+
+            ref byte first = ref Unsafe.AsRef(in left._bytes);
+            ref byte second = ref Unsafe.AsRef(in right._bytes);
+            uint x = left._size;
+            uint y = right._size;
+            int i = 0;
+
+            while (x == y && i < 16)
+            {
+                x = BitConverter.IsLittleEndian
+                    ? BinaryPrimitives.ReverseEndianness(Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, i)))
+                    : Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, i));
+
+                y = BitConverter.IsLittleEndian
+                    ? BinaryPrimitives.ReverseEndianness(Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, i)))
+                    : Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, i));
+
+                i += sizeof(uint);
+            }
+
+            return x.CompareTo(y);
+        }
+
         public static bool Equals(
             in Nonce left,
             in Nonce right)
@@ -213,14 +241,14 @@ namespace NSec.Cryptography
             Nonce left,
             Nonce right)
         {
-            return left.CompareTo(right) < 0;
+            return Compare(in left, in right) < 0;
         }
 
         public static bool operator <=(
             Nonce left,
             Nonce right)
         {
-            return left.CompareTo(right) <= 0;
+            return Compare(in left, in right) <= 0;
         }
 
         public static bool operator ==(
@@ -234,41 +262,20 @@ namespace NSec.Cryptography
             Nonce left,
             Nonce right)
         {
-            return left.CompareTo(right) > 0;
+            return Compare(in left, in right) > 0;
         }
 
         public static bool operator >=(
             Nonce left,
             Nonce right)
         {
-            return left.CompareTo(right) >= 0;
+            return Compare(in left, in right) >= 0;
         }
 
         public int CompareTo(
             Nonce other)
         {
-            Debug.Assert(Unsafe.SizeOf<Nonce>() == 16);
-
-            ref byte first = ref Unsafe.AsRef(in _bytes);
-            ref byte second = ref Unsafe.AsRef(in other._bytes);
-            uint x = _size;
-            uint y = other._size;
-            int i = 0;
-
-            while (x == y && i < 16)
-            {
-                x = BitConverter.IsLittleEndian
-                    ? BinaryPrimitives.ReverseEndianness(Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, i)))
-                    : Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, i));
-
-                y = BitConverter.IsLittleEndian
-                    ? BinaryPrimitives.ReverseEndianness(Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, i)))
-                    : Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, i));
-
-                i += sizeof(uint);
-            }
-
-            return x.CompareTo(y);
+            return Compare(in this, in other);
         }
 
         public void CopyTo(
