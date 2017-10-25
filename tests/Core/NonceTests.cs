@@ -371,7 +371,7 @@ namespace NSec.Tests.Core
         [Fact]
         public static void AddNegative()
         {
-            Assert.Throws<ArgumentOutOfRangeException>("addend", () => new Nonce() + (-1));
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => new Nonce() + (-1));
         }
 
         #endregion

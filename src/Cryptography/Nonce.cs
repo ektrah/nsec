@@ -104,15 +104,15 @@ namespace NSec.Cryptography
 
         public static bool TryAdd(
             ref Nonce nonce,
-            int addend)
+            int value)
         {
-            if (addend < 0)
+            if (value < 0)
             {
-                throw Error.ArgumentOutOfRange_NonceAddend(nameof(addend));
+                throw Error.ArgumentOutOfRange_NonceAddend(nameof(value));
             }
 
             ref byte source = ref Unsafe.AsRef(in nonce._bytes);
-            uint carry = (uint)addend;
+            uint carry = (uint)value;
             int end = nonce.FixedFieldSize;
             int pos = nonce.Size;
 
@@ -190,9 +190,9 @@ namespace NSec.Cryptography
 
         public static Nonce operator +(
             Nonce nonce,
-            int addend)
+            int value)
         {
-            if (!TryAdd(ref nonce, addend))
+            if (!TryAdd(ref nonce, value))
             {
                 throw Error.Overflow_NonceCounter();
             }
