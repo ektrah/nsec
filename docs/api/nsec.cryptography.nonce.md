@@ -202,7 +202,7 @@ right
 `true` if `left` and `right` are equal; otherwise, `false`.
 
 
-### TryAdd(Nonce, int)
+### TryAdd(ref Nonce, int)
 
 Attempts to add the specified value to the counter field of the specified
 [[Nonce|Nonce Struct]].
@@ -231,7 +231,7 @@ ArgumentOutOfRangeException
 : `value` is negative.
 
 
-### TryIncrement(Nonce)
+### TryIncrement(ref Nonce)
 
 Attempts to increment the counter field of the specified [[Nonce|Nonce Struct]]
 by 1.
