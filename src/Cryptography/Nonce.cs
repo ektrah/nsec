@@ -171,6 +171,40 @@ namespace NSec.Cryptography
             return TryAdd(ref nonce, 1);
         }
 
+        public static void Xor(
+            ref Nonce nonce,
+            ReadOnlySpan<byte> bytes)
+        {
+            if (bytes.Length != nonce.Size)
+            {
+                throw Error.Argument_NonceXorSize(nameof(bytes));
+            }
+
+            Unsafe.AsRef(in nonce._size) = (byte)((bytes.Length << 4) | 0);
+
+            ref byte first = ref Unsafe.AsRef(in nonce._bytes);
+            ref byte second = ref bytes.DangerousGetPinnableReference();
+
+            int length = bytes.Length;
+            int i = 0;
+
+            while (length - i >= sizeof(uint))
+            {
+                Debug.Assert(i >= 0 && i + 3 < MaxSize);
+                Unsafe.WriteUnaligned(ref Unsafe.Add(ref first, i),
+                    Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, i)) ^
+                    Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, i)));
+                i += sizeof(uint);
+            }
+
+            while (i != length)
+            {
+                Debug.Assert(i >= 0 && i < MaxSize);
+                Unsafe.Add(ref first, i) ^= Unsafe.Add(ref second, i);
+                i++;
+            }
+        }
+
         public static bool operator !=(
             Nonce left,
             Nonce right)
@@ -182,38 +216,8 @@ namespace NSec.Cryptography
             Nonce nonce,
             ReadOnlySpan<byte> bytes)
         {
-            if (bytes.Length != nonce.Size)
-            {
-                throw Error.Argument_NonceXorSize(nameof(bytes));
-            }
-
-            Nonce result = default(Nonce);
-            Unsafe.AsRef(in result._size) = (byte)(bytes.Length << 4);
-
-            ref byte destination = ref Unsafe.AsRef(in result._bytes);
-            ref byte first = ref Unsafe.AsRef(in nonce._bytes);
-            ref byte second = ref bytes.DangerousGetPinnableReference();
-
-            int length = bytes.Length;
-            int i = 0;
-
-            while (length - i >= sizeof(int))
-            {
-                Debug.Assert(i >= 0 && i + 3 < MaxSize);
-                Unsafe.WriteUnaligned(ref Unsafe.Add(ref destination, i),
-                    Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, i)) ^
-                    Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, i)));
-                i += sizeof(int);
-            }
-
-            while (i != length)
-            {
-                Debug.Assert(i >= 0 && i < MaxSize);
-                Unsafe.Add(ref destination, i) = unchecked((byte)(Unsafe.Add(ref first, i) ^ Unsafe.Add(ref second, i)));
-                i++;
-            }
-
-            return result;
+            Xor(ref nonce, bytes);
+            return nonce;
         }
 
         public static Nonce operator +(
