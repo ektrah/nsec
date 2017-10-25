@@ -87,6 +87,21 @@ namespace NSec.Cryptography
 
         public int Size => (_size >> 4) + (_size & 0xF);
 
+        public static bool Equals(
+            in Nonce left,
+            in Nonce right)
+        {
+            Debug.Assert(Unsafe.SizeOf<Nonce>() == 16);
+
+            ref byte first = ref Unsafe.AsRef(in left._bytes);
+            ref byte second = ref Unsafe.AsRef(in right._bytes);
+
+            return Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, 0x0)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, 0x0))
+                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, 0x4)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, 0x4))
+                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, 0x8)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, 0x8))
+                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, 0xC)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, 0xC));
+        }
+
         public static bool TryAdd(
             ref Nonce nonce,
             int addend)
@@ -132,7 +147,7 @@ namespace NSec.Cryptography
             Nonce left,
             Nonce right)
         {
-            return !left.Equals(right);
+            return !Equals(in left, in right);
         }
 
         public static Nonce operator ^(
@@ -212,7 +227,7 @@ namespace NSec.Cryptography
             Nonce left,
             Nonce right)
         {
-            return left.Equals(right);
+            return Equals(in left, in right);
         }
 
         public static bool operator >(
@@ -271,21 +286,13 @@ namespace NSec.Cryptography
         public bool Equals(
             Nonce other)
         {
-            Debug.Assert(Unsafe.SizeOf<Nonce>() == 16);
-
-            ref byte first = ref Unsafe.AsRef(in _bytes);
-            ref byte second = ref Unsafe.AsRef(in other._bytes);
-
-            return Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, 0x0)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, 0x0))
-                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, 0x4)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, 0x4))
-                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, 0x8)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, 0x8))
-                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, 0xC)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, 0xC));
+            return Equals(in this, in other);
         }
 
         public override bool Equals(
             object obj)
         {
-            return (obj is Nonce other) && Equals(other);
+            return (obj is Nonce other) && Equals(in this, in other);
         }
 
         public override int GetHashCode()
