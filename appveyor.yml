@@ -3,18 +3,19 @@ image:
   - Visual Studio 2017
 environment:
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
 install:
-  - dotnet restore --source "https://api.nuget.org/v3/index.json" --source "https://dotnet.myget.org/F/dotnet-core/api/v3/index.json" --source "https://dotnet.myget.org/F/roslyn/api/v3/index.json"
+  - dotnet restore -s "https://api.nuget.org/v3/index.json" -s "https://dotnet.myget.org/F/dotnet-core/api/v3/index.json" -s "https://dotnet.myget.org/F/roslyn/api/v3/index.json"
 build: off
 test_script:
-  - dotnet test tests -c Debug
-  - dotnet test tests -c Release
+  - dotnet test tests -c Debug -f netcoreapp2.0
+  - dotnet test tests -c Release -f netcoreapp2.0
+  - dotnet test tests -c Debug -f netcoreapp1.1
+  - dotnet test tests -c Release -f netcoreapp1.1
 after_test:
   - dotnet pack -c Release
 artifacts:
   - path: '**\*.nupkg'
-nuget:
-  disable_publish_on_pr: true
 deploy:
 - provider: NuGet
   server: https://www.myget.org/F/nsec/api/v2
