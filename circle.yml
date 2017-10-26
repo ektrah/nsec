@@ -39,10 +39,29 @@ shared:
         curl -fsLo ~/dotnet-install.sh 'https://dot.net/v1/dotnet-install.sh'
         bash ~/dotnet-install.sh --channel 2.0 --version latest --install-dir ~/.dotnet --no-path
         echo 'export PATH=~/.dotnet:$PATH' >> $BASH_ENV
+  generate-restore-graph: &generate-restore-graph
+    run:
+      name: Generate restore graph
+      command: dotnet msbuild -t:GenerateRestoreGraphFile
+      working_directory: tests
+      environment:
+        RestoreGraphOutputPath: /tmp/restore.json
+        Version: 1.0.0-restore
+  restore-cache: &restore-cache
+    restore_cache:
+      keys:
+        - 'nuget-packages-{{ checksum "/tmp/restore.json" }}-{{ .Environment.CIRCLE_JOB }}'
+        - 'nuget-packages-{{ checksum "/tmp/restore.json" }}'
+        - 'nuget-packages'
   dotnet-restore: &dotnet-restore
     run:
       name: Restore dependencies
       command: dotnet restore -s 'https://api.nuget.org/v3/index.json' -s 'https://dotnet.myget.org/F/dotnet-core/api/v3/index.json' -s 'https://dotnet.myget.org/F/roslyn/api/v3/index.json' --disable-parallel
+  save-cache: &save-cache
+    save_cache:
+      key: 'nuget-packages-{{ checksum "/tmp/restore.json" }}-{{ .Environment.CIRCLE_JOB }}'
+      paths:
+        - ~/.nuget/packages
   dotnet-test-debug-1-1: &dotnet-test-debug-1-1
     run:
       name: Run unit tests (Debug)
@@ -77,7 +96,10 @@ jobs:
       - *dotnet-install-1-1
       - *dotnet-install-2-0
       - checkout
+      - *generate-restore-graph
+      - *restore-cache
       - *dotnet-restore
+      - *save-cache
       - *dotnet-test-debug-1-1
       - *dotnet-test-release-1-1
 
@@ -89,12 +111,15 @@ jobs:
       - run:
           name: Install prerequisites
           command: |
-            apt-get update
-            apt-get install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu52
+            apt-get -qq update
+            apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu52
       - *dotnet-install-1-1
       - *dotnet-install-2-0
       - checkout
+      - *generate-restore-graph
+      - *restore-cache
       - *dotnet-restore
+      - *save-cache
       - *dotnet-test-debug-1-1
       - *dotnet-test-release-1-1
 
@@ -109,7 +134,10 @@ jobs:
       - *dotnet-install-1-1
       - *dotnet-install-2-0
       - checkout
+      - *generate-restore-graph
+      - *restore-cache
       - *dotnet-restore
+      - *save-cache
       - *dotnet-test-debug-1-1
       - *dotnet-test-release-1-1
 
@@ -121,12 +149,15 @@ jobs:
       - run:
           name: Install prerequisites
           command: |
-            apt-get update
-            apt-get install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu52
+            apt-get -qq update
+            apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu52
       - *dotnet-install-1-1
       - *dotnet-install-2-0
       - checkout
+      - *generate-restore-graph
+      - *restore-cache
       - *dotnet-restore
+      - *save-cache
       - *dotnet-test-debug-1-1
       - *dotnet-test-release-1-1
 
@@ -138,12 +169,15 @@ jobs:
       - run:
           name: Install prerequisites
           command: |
-            apt-get update
-            apt-get install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu55 libcurl3
+            apt-get -qq update
+            apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu55 libcurl3
       - *dotnet-install-1-1
       - *dotnet-install-2-0
       - checkout
+      - *generate-restore-graph
+      - *restore-cache
       - *dotnet-restore
+      - *save-cache
       - *dotnet-test-debug-1-1
       - *dotnet-test-release-1-1
 
@@ -157,7 +191,10 @@ jobs:
           command: yum install -q -y curl ca-certificates libunwind libicu
       - *dotnet-install-2-0
       - checkout
+      - *generate-restore-graph
+      - *restore-cache
       - *dotnet-restore
+      - *save-cache
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
@@ -169,11 +206,14 @@ jobs:
       - run:
           name: Install prerequisites
           command: |
-            apt-get update
-            apt-get install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu52
+            apt-get -qq update
+            apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu52
       - *dotnet-install-2-0
       - checkout
+      - *generate-restore-graph
+      - *restore-cache
       - *dotnet-restore
+      - *save-cache
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
@@ -185,11 +225,14 @@ jobs:
       - run:
           name: Install prerequisites
           command: |
-            apt-get update
-            apt-get install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8
+            apt-get -qq update
+            apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8
       - *dotnet-install-2-0
       - checkout
+      - *generate-restore-graph
+      - *restore-cache
       - *dotnet-restore
+      - *save-cache
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
@@ -203,7 +246,10 @@ jobs:
           command: dnf install -q -y curl ca-certificates findutils tar libunwind libicu
       - *dotnet-install-2-0
       - checkout
+      - *generate-restore-graph
+      - *restore-cache
       - *dotnet-restore
+      - *save-cache
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
@@ -217,7 +263,10 @@ jobs:
           command: dnf install -q -y curl ca-certificates findutils libunwind libicu
       - *dotnet-install-2-0
       - checkout
+      - *generate-restore-graph
+      - *restore-cache
       - *dotnet-restore
+      - *save-cache
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
@@ -231,7 +280,10 @@ jobs:
           command: dnf install -q -y curl ca-certificates findutils libunwind libicu compat-openssl10
       - *dotnet-install-2-0
       - checkout
+      - *generate-restore-graph
+      - *restore-cache
       - *dotnet-restore
+      - *save-cache
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
@@ -245,7 +297,10 @@ jobs:
           command: zypper -q install -y --no-recommends curl ca-certificates tar ncurses-utils libunwind libicu
       - *dotnet-install-2-0
       - checkout
+      - *generate-restore-graph
+      - *restore-cache
       - *dotnet-restore
+      - *save-cache
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
@@ -259,7 +314,10 @@ jobs:
           command: zypper -q install -y --no-recommends curl ca-certificates tar ncurses-utils libunwind libicu
       - *dotnet-install-2-0
       - checkout
+      - *generate-restore-graph
+      - *restore-cache
       - *dotnet-restore
+      - *save-cache
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
@@ -271,11 +329,14 @@ jobs:
       - run:
           name: Install prerequisites
           command: |
-            apt-get update
-            apt-get install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu52
+            apt-get -qq update
+            apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu52
       - *dotnet-install-2-0
       - checkout
+      - *generate-restore-graph
+      - *restore-cache
       - *dotnet-restore
+      - *save-cache
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
@@ -287,11 +348,14 @@ jobs:
       - run:
           name: Install prerequisites
           command: |
-            apt-get update
-            apt-get install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu55 libcurl3
+            apt-get -qq update
+            apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu55 libcurl3
       - *dotnet-install-2-0
       - checkout
+      - *generate-restore-graph
+      - *restore-cache
       - *dotnet-restore
+      - *save-cache
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
@@ -303,10 +367,13 @@ jobs:
       - run:
           name: Install prerequisites
           command: |
-            apt-get update
-            apt-get install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu57
+            apt-get -qq update
+            apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu57
       - *dotnet-install-2-0
       - checkout
+      - *generate-restore-graph
+      - *restore-cache
       - *dotnet-restore
+      - *save-cache
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
