@@ -239,10 +239,10 @@ namespace NSec.Cryptography.Formatting
             return default;
         }
 
-        private struct Span
+        private readonly struct Span
         {
-            private int _start;
-            private int _length;
+            private readonly int _start;
+            private readonly int _length;
 
             public Span(int start, int length)
             {
