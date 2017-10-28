@@ -83,8 +83,7 @@ namespace NSec.Cryptography
             Debug.Assert(seed.Length == crypto_scalarmult_curve25519_SCALARBYTES);
 
             publicKeyBytes = new byte[crypto_scalarmult_curve25519_SCALARBYTES];
-            SecureMemoryHandle.Alloc(crypto_scalarmult_curve25519_SCALARBYTES, out keyHandle);
-            keyHandle.Import(seed);
+            SecureMemoryHandle.Import(seed, out keyHandle);
             crypto_scalarmult_curve25519_base(publicKeyBytes, keyHandle);
 
             Debug.Assert((publicKeyBytes[crypto_scalarmult_curve25519_SCALARBYTES - 1] & 0x80) == 0);

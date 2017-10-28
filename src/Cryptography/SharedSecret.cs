@@ -38,8 +38,7 @@ namespace NSec.Cryptography
 
             try
             {
-                SecureMemoryHandle.Alloc(sharedSecret.Length, out sharedSecretHandle);
-                sharedSecretHandle.Import(sharedSecret);
+                SecureMemoryHandle.Import(sharedSecret, out sharedSecretHandle);
                 success = true;
             }
             finally

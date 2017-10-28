@@ -58,8 +58,7 @@ namespace NSec.Cryptography
             Debug.Assert(seed.Length <= crypto_generichash_blake2b_KEYBYTES_MAX);
 
             publicKeyBytes = null;
-            SecureMemoryHandle.Alloc(seed.Length, out keyHandle);
-            keyHandle.Import(seed);
+            SecureMemoryHandle.Import(seed, out keyHandle);
         }
 
         internal override int GetDefaultSeedSize()

@@ -22,8 +22,7 @@ namespace NSec.Cryptography.Formatting
             Debug.Assert(span.Length == crypto_scalarmult_curve25519_SCALARBYTES);
 
             publicKeyBytes = new byte[crypto_scalarmult_curve25519_SCALARBYTES];
-            SecureMemoryHandle.Alloc(span.Length, out keyHandle);
-            keyHandle.Import(span);
+            SecureMemoryHandle.Import(span, out keyHandle);
             crypto_scalarmult_curve25519_base(publicKeyBytes, keyHandle);
 
             Debug.Assert((publicKeyBytes[publicKeyBytes.Length - 1] & 0x80) == 0);

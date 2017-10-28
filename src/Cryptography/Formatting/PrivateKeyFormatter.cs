@@ -137,8 +137,7 @@ namespace NSec.Cryptography.Formatting
             Debug.Assert(span.Length == _keySize);
 
             publicKeyBytes = null;
-            SecureMemoryHandle.Alloc(span.Length, out keyHandle);
-            keyHandle.Import(span);
+            SecureMemoryHandle.Import(span, out keyHandle);
         }
 
         protected virtual void Serialize(

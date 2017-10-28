@@ -67,8 +67,7 @@ namespace NSec.Cryptography
             out byte[] publicKeyBytes)
         {
             publicKeyBytes = null;
-            SecureMemoryHandle.Alloc(seed.Length, out keyHandle);
-            keyHandle.Import(seed);
+            SecureMemoryHandle.Import(seed, out keyHandle);
         }
 
         internal override int GetDefaultSeedSize()

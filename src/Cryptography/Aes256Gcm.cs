@@ -78,8 +78,7 @@ namespace NSec.Cryptography
             Debug.Assert(seed.Length == crypto_aead_aes256gcm_KEYBYTES);
 
             publicKeyBytes = null;
-            SecureMemoryHandle.Alloc(seed.Length, out keyHandle);
-            keyHandle.Import(seed);
+            SecureMemoryHandle.Import(seed, out keyHandle);
         }
 
         private protected override void EncryptCore(

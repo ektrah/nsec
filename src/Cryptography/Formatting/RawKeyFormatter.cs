@@ -55,8 +55,7 @@ namespace NSec.Cryptography.Formatting
             }
 
             publicKeyBytes = null;
-            SecureMemoryHandle.Alloc(keySize, out keyHandle);
-            keyHandle.Import(blob);
+            SecureMemoryHandle.Import(blob, out keyHandle);
             return true;
         }
     }
