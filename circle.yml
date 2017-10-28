@@ -28,13 +28,13 @@ shared:
     TERM: dumb
   dotnet-install-1-1: &dotnet-install-1-1
     run:
-      name: Install .NET Core 1.1 Runtime
+      name: Installing .NET Core 1.1 Runtime
       command: |
         curl -fsLo ~/dotnet-install.sh 'https://dot.net/v1/dotnet-install.sh'
         bash ~/dotnet-install.sh --channel 1.1 --version latest --install-dir ~/.dotnet --no-path --shared-runtime
   dotnet-install-2-0: &dotnet-install-2-0
     run:
-      name: Install .NET Core 2.0 SDK
+      name: Installing .NET Core 2.0 SDK
       command: |
         curl -fsLo ~/dotnet-install.sh 'https://dot.net/v1/dotnet-install.sh'
         bash ~/dotnet-install.sh --channel 2.0 --version latest --install-dir ~/.dotnet --no-path
@@ -50,7 +50,6 @@ shared:
   restore-cache: &restore-cache
     restore_cache:
       keys:
-        - 'nuget-packages-{{ checksum "/tmp/restore.json" }}-{{ .Environment.CIRCLE_JOB }}'
         - 'nuget-packages-{{ checksum "/tmp/restore.json" }}'
         - 'nuget-packages'
   dotnet-restore: &dotnet-restore
@@ -59,7 +58,7 @@ shared:
       command: dotnet restore -s 'https://api.nuget.org/v3/index.json' -s 'https://dotnet.myget.org/F/dotnet-core/api/v3/index.json' -s 'https://dotnet.myget.org/F/roslyn/api/v3/index.json' --disable-parallel
   save-cache: &save-cache
     save_cache:
-      key: 'nuget-packages-{{ checksum "/tmp/restore.json" }}-{{ .Environment.CIRCLE_JOB }}'
+      key: 'nuget-packages-{{ checksum "/tmp/restore.json" }}'
       paths:
         - ~/.nuget/packages
   dotnet-test-debug-1-1: &dotnet-test-debug-1-1
