@@ -107,7 +107,7 @@ namespace NSec.Cryptography
         }
 
         private protected override void MacCore(
-                            SecureMemoryHandle keyHandle,
+            SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             Span<byte> mac)
         {
