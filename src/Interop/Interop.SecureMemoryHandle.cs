@@ -30,6 +30,14 @@ internal static partial class Interop
                 handle._length = length;
             }
 
+            public static void Import(
+                ReadOnlySpan<byte> span,
+                out SecureMemoryHandle handle)
+            {
+                Alloc(span.Length, out handle);
+                handle.Import(span);
+            }
+
             public unsafe Span<byte> DangerousGetSpan()
             {
                 return new Span<byte>(handle.ToPointer(), _length);
