@@ -6,7 +6,7 @@
 
   <PropertyGroup>
     <LibsodiumVersion>[1.0.15]</LibsodiumVersion>
-    <RoslynVersion>2.6.0-beta2-62225-04</RoslynVersion>
+    <RoslynVersion>2.6.0-beta3-62227-02</RoslynVersion>
     <SystemMemoryVersion>4.5.0-preview1-25825-08</SystemMemoryVersion>
     <SystemRuntimeCompilerServicesUnsafeVersion>4.5.0-preview1-25825-08</SystemRuntimeCompilerServicesUnsafeVersion>
   </PropertyGroup>
