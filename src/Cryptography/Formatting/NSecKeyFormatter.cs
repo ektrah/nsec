@@ -52,12 +52,13 @@ namespace NSec.Cryptography.Formatting
             out SecureMemoryHandle keyHandle,
             out byte[] publicKeyBytes)
         {
-            int keySize = blob.Length - (_blobHeader.Length + sizeof(uint));
+            int start = _blobHeader.Length + sizeof(uint);
+            int length = blob.Length - start;
 
-            if (keySize < _minKeySize ||
-                keySize > _maxKeySize ||
+            if (length < _minKeySize ||
+                length > _maxKeySize ||
                 !blob.Slice(0, _blobHeader.Length).SequenceEqual(_blobHeader) ||
-                BinaryPrimitives.ReadUInt32LittleEndian(blob.Slice(_blobHeader.Length)) != (uint)keySize)
+                BinaryPrimitives.ReadUInt32LittleEndian(blob.Slice(_blobHeader.Length, sizeof(uint))) != (uint)length)
             {
                 keyHandle = null;
                 publicKeyBytes = null;
@@ -65,7 +66,7 @@ namespace NSec.Cryptography.Formatting
             }
 
             publicKeyBytes = null;
-            SecureMemoryHandle.Import(blob.Slice(_blobHeader.Length + sizeof(uint)), out keyHandle);
+            SecureMemoryHandle.Import(blob.Slice(start, length), out keyHandle);
             return true;
         }
     }

@@ -45,9 +45,8 @@ namespace NSec.Cryptography.Formatting
             out SecureMemoryHandle keyHandle,
             out byte[] publicKeyBytes)
         {
-            int keySize = blob.Length;
-
-            if (keySize < _minKeySize || keySize > _maxKeySize)
+            if (blob.Length < _minKeySize ||
+                blob.Length > _maxKeySize)
             {
                 keyHandle = null;
                 publicKeyBytes = null;
