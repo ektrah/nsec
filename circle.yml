@@ -38,6 +38,7 @@ shared:
       command: |
         curl -fsLo ~/dotnet-install.sh 'https://dot.net/v1/dotnet-install.sh'
         bash ~/dotnet-install.sh --channel 2.0 --version latest --install-dir ~/.dotnet --no-path
+        ~/.dotnet/dotnet --info
         echo 'export PATH=~/.dotnet:$PATH' >> $BASH_ENV
   generate-restore-graph: &generate-restore-graph
     run:
