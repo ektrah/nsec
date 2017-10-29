@@ -4,22 +4,17 @@ workflows:
   version: 2
   test:
     jobs:
-      - netcore1.1-centos7.4
-      - netcore1.1-debian8.9
-      - netcore1.1-fedora24
-      - netcore1.1-ubuntu14.04
-      - netcore1.1-ubuntu16.04
-      - netcore2.0-centos7.4
-      - netcore2.0-debian8.9
-      - netcore2.0-debian9.2
-      - netcore2.0-fedora24
-      - netcore2.0-fedora25
-      - netcore2.0-fedora26
-      - netcore2.0-opensuse42.2
-      - netcore2.0-opensuse42.3
-      - netcore2.0-ubuntu14.04
-      - netcore2.0-ubuntu16.04
-      - netcore2.0-ubuntu17.04
+      - centos7.4
+      - debian8.9
+      - debian9.2
+      - fedora24
+      - fedora25
+      - fedora26
+      - opensuse42.2
+      - opensuse42.3
+      - ubuntu14.04
+      - ubuntu16.04
+      - ubuntu17.04
 
 shared:
   environment: &environment
@@ -70,131 +65,32 @@ shared:
         - ~/.nuget/packages
   dotnet-test-debug-1-1: &dotnet-test-debug-1-1
     run:
-      name: Run unit tests (Debug)
-      command: dotnet test -c Debug -f netcoreapp1.1
-      working_directory: tests
+      name: Running Tests (Debug) (.NET Core 1.1)
+      command: dotnet test tests -c Debug -f netcoreapp1.1
   dotnet-test-release-1-1: &dotnet-test-release-1-1
     run:
-      name: Run unit tests (Release)
-      command: dotnet test -c Release -f netcoreapp1.1
-      working_directory: tests
+      name: Running Tests (Release) (.NET Core 1.1)
+      command: dotnet test tests -c Release -f netcoreapp1.1
   dotnet-test-debug-2-0: &dotnet-test-debug-2-0
     run:
-      name: Run unit tests (Debug)
-      command: dotnet test -c Debug -f netcoreapp2.0
-      working_directory: tests
+      name: Running Tests (Debug) (.NET Core 2.0)
+      command: dotnet test tests -c Debug -f netcoreapp2.0
   dotnet-test-release-2-0: &dotnet-test-release-2-0
     run:
-      name: Run unit tests (Release)
-      command: dotnet test -c Release -f netcoreapp2.0
-      working_directory: tests
+      name: Running Tests (Release) (.NET Core 2.0)
+      command: dotnet test tests -c Release -f netcoreapp2.0
 
 jobs:
 
-  netcore1.1-centos7.4:
+  centos7.4:
     docker:
       - image: centos:7.4.1708
     environment: *environment
     steps:
       - run:
-          name: Install prerequisites
+          name: Install Prerequisites
           command: yum install -q -y curl ca-certificates libunwind libicu
       - *dotnet-install-1-1
-      - *dotnet-install-2-1
-      - checkout
-      - *generate-restore-graph
-      - *restore-cache
-      - *dotnet-restore
-      - *save-cache
-      - *dotnet-test-debug-1-1
-      - *dotnet-test-release-1-1
-
-  netcore1.1-debian8.9:
-    docker:
-      - image: debian:8.9
-    environment: *environment
-    steps:
-      - run:
-          name: Install prerequisites
-          command: |
-            apt-get -qq update
-            apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu52
-      - *dotnet-install-1-1
-      - *dotnet-install-2-1
-      - checkout
-      - *generate-restore-graph
-      - *restore-cache
-      - *dotnet-restore
-      - *save-cache
-      - *dotnet-test-debug-1-1
-      - *dotnet-test-release-1-1
-
-  netcore1.1-fedora24:
-    docker:
-      - image: fedora:24
-    environment: *environment
-    steps:
-      - run:
-          name: Install prerequisites
-          command: dnf install -q -y curl ca-certificates findutils tar libunwind libicu
-      - *dotnet-install-1-1
-      - *dotnet-install-2-1
-      - checkout
-      - *generate-restore-graph
-      - *restore-cache
-      - *dotnet-restore
-      - *save-cache
-      - *dotnet-test-debug-1-1
-      - *dotnet-test-release-1-1
-
-  netcore1.1-ubuntu14.04:
-    docker:
-      - image: ubuntu:14.04
-    environment: *environment
-    steps:
-      - run:
-          name: Install prerequisites
-          command: |
-            apt-get -qq update
-            apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu52
-      - *dotnet-install-1-1
-      - *dotnet-install-2-1
-      - checkout
-      - *generate-restore-graph
-      - *restore-cache
-      - *dotnet-restore
-      - *save-cache
-      - *dotnet-test-debug-1-1
-      - *dotnet-test-release-1-1
-
-  netcore1.1-ubuntu16.04:
-    docker:
-      - image: ubuntu:16.04
-    environment: *environment
-    steps:
-      - run:
-          name: Install prerequisites
-          command: |
-            apt-get -qq update
-            apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu55 libcurl3
-      - *dotnet-install-1-1
-      - *dotnet-install-2-1
-      - checkout
-      - *generate-restore-graph
-      - *restore-cache
-      - *dotnet-restore
-      - *save-cache
-      - *dotnet-test-debug-1-1
-      - *dotnet-test-release-1-1
-
-  netcore2.0-centos7.4:
-    docker:
-      - image: centos:7.4.1708
-    environment: *environment
-    steps:
-      - run:
-          name: Install prerequisites
-          command: yum install -q -y curl ca-certificates libunwind libicu
       - *dotnet-install-2-0
       - *dotnet-install-2-1
       - checkout
@@ -204,17 +100,20 @@ jobs:
       - *save-cache
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
+      - *dotnet-test-debug-1-1
+      - *dotnet-test-release-1-1
 
-  netcore2.0-debian8.9:
+  debian8.9:
     docker:
       - image: debian:8.9
     environment: *environment
     steps:
       - run:
-          name: Install prerequisites
+          name: Install Prerequisites
           command: |
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu52
+      - *dotnet-install-1-1
       - *dotnet-install-2-0
       - *dotnet-install-2-1
       - checkout
@@ -224,14 +123,16 @@ jobs:
       - *save-cache
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
+      - *dotnet-test-debug-1-1
+      - *dotnet-test-release-1-1
 
-  netcore2.0-debian9.2:
+  debian9.2:
     docker:
       - image: debian:9.2
     environment: *environment
     steps:
       - run:
-          name: Install prerequisites
+          name: Install Prerequisites
           command: |
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8
@@ -245,14 +146,15 @@ jobs:
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
-  netcore2.0-fedora24:
+  fedora24:
     docker:
       - image: fedora:24
     environment: *environment
     steps:
       - run:
-          name: Install prerequisites
+          name: Install Prerequisites
           command: dnf install -q -y curl ca-certificates findutils tar libunwind libicu
+      - *dotnet-install-1-1
       - *dotnet-install-2-0
       - *dotnet-install-2-1
       - checkout
@@ -262,14 +164,16 @@ jobs:
       - *save-cache
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
+      - *dotnet-test-debug-1-1
+      - *dotnet-test-release-1-1
 
-  netcore2.0-fedora25:
+  fedora25:
     docker:
       - image: fedora:25
     environment: *environment
     steps:
       - run:
-          name: Install prerequisites
+          name: Install Prerequisites
           command: dnf install -q -y curl ca-certificates findutils libunwind libicu
       - *dotnet-install-2-0
       - *dotnet-install-2-1
@@ -281,13 +185,13 @@ jobs:
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
-  netcore2.0-fedora26:
+  fedora26:
     docker:
       - image: fedora:26
     environment: *environment
     steps:
       - run:
-          name: Install prerequisites
+          name: Install Prerequisites
           command: dnf install -q -y curl ca-certificates findutils libunwind libicu compat-openssl10
       - *dotnet-install-2-0
       - *dotnet-install-2-1
@@ -299,13 +203,13 @@ jobs:
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
-  netcore2.0-opensuse42.2:
+  opensuse42.2:
     docker:
       - image: opensuse:42.2
     environment: *environment
     steps:
       - run:
-          name: Install prerequisites
+          name: Install Prerequisites
           command: zypper -q install -y --no-recommends curl ca-certificates tar ncurses-utils libunwind libicu
       - *dotnet-install-2-0
       - *dotnet-install-2-1
@@ -317,13 +221,13 @@ jobs:
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
-  netcore2.0-opensuse42.3:
+  opensuse42.3:
     docker:
       - image: opensuse:42.3
     environment: *environment
     steps:
       - run:
-          name: Install prerequisites
+          name: Install Prerequisites
           command: zypper -q install -y --no-recommends curl ca-certificates tar ncurses-utils libunwind libicu
       - *dotnet-install-2-0
       - *dotnet-install-2-1
@@ -335,16 +239,17 @@ jobs:
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
-  netcore2.0-ubuntu14.04:
+  ubuntu14.04:
     docker:
       - image: ubuntu:14.04
     environment: *environment
     steps:
       - run:
-          name: Install prerequisites
+          name: Install Prerequisites
           command: |
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu52
+      - *dotnet-install-1-1
       - *dotnet-install-2-0
       - *dotnet-install-2-1
       - checkout
@@ -354,17 +259,20 @@ jobs:
       - *save-cache
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
+      - *dotnet-test-debug-1-1
+      - *dotnet-test-release-1-1
 
-  netcore2.0-ubuntu16.04:
+  ubuntu16.04:
     docker:
       - image: ubuntu:16.04
     environment: *environment
     steps:
       - run:
-          name: Install prerequisites
+          name: Install Prerequisites
           command: |
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu55 libcurl3
+      - *dotnet-install-1-1
       - *dotnet-install-2-0
       - *dotnet-install-2-1
       - checkout
@@ -374,14 +282,16 @@ jobs:
       - *save-cache
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
+      - *dotnet-test-debug-1-1
+      - *dotnet-test-release-1-1
 
-  netcore2.0-ubuntu17.04:
+  ubuntu17.04:
     docker:
       - image: ubuntu:17.04
     environment: *environment
     steps:
       - run:
-          name: Install prerequisites
+          name: Install Prerequisites
           command: |
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu57
