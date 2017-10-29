@@ -6,13 +6,8 @@
 
   <PropertyGroup>
     <LibsodiumVersion>[1.0.15]</LibsodiumVersion>
-    <RoslynVersion>2.6.0-beta3-62227-02</RoslynVersion>
-    <SystemMemoryVersion>4.5.0-preview1-25829-01</SystemMemoryVersion>
-    <SystemRuntimeCompilerServicesUnsafeVersion>4.5.0-preview1-25829-01</SystemRuntimeCompilerServicesUnsafeVersion>
+    <SystemMemoryVersion>4.5.0-preview1-25829-02</SystemMemoryVersion>
+    <SystemRuntimeCompilerServicesUnsafeVersion>4.5.0-preview1-25829-02</SystemRuntimeCompilerServicesUnsafeVersion>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NETCore.Compilers" Version="$(RoslynVersion)" PrivateAssets="All" />
-  </ItemGroup>
 
 </Project>
