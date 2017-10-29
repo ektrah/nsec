@@ -41,7 +41,7 @@ namespace NSec.Cryptography
     {
         private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(crypto_aead_chacha20poly1305_ietf_KEYBYTES, crypto_aead_chacha20poly1305_ietf_KEYBYTES, new byte[] { 0xDE, 0x31, 0x43, 0xDE });
 
-        private static readonly Oid s_oid = new Oid(1, 2, 840, 113549, 1, 9, 16, 3, 18);
+        private static readonly Asn1Oid s_oid = new Asn1Oid(1, 2, 840, 113549, 1, 9, 16, 3, 18);
 
         private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(crypto_aead_chacha20poly1305_ietf_KEYBYTES, crypto_aead_chacha20poly1305_ietf_KEYBYTES);
 

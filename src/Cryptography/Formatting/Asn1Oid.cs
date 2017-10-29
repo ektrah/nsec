@@ -1,13 +1,14 @@
 using System;
 using System.Diagnostics;
 
-namespace NSec.Cryptography
+namespace NSec.Cryptography.Formatting
 {
-    internal readonly struct Oid
+    // ITU-T X.690 5.0 DER
+    internal readonly struct Asn1Oid
     {
         private readonly byte[] _bytes;
 
-        public Oid(
+        public Asn1Oid(
             uint first,
             uint second,
             params uint[] rest)
