@@ -41,8 +41,6 @@ namespace NSec.Cryptography
 
         private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(SHA512HashSize, int.MaxValue, new byte[] { 0xDE, 0x33, 0x47, 0xDE });
 
-        private static readonly Oid s_oid = new Oid(1, 2, 840, 113549, 2, 11);
-
         private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(SHA512HashSize, int.MaxValue);
 
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));

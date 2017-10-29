@@ -34,8 +34,6 @@ namespace NSec.Cryptography
 
         private static readonly PublicKeyFormatter s_nsecPublicKeyFormatter = new X25519PublicKeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[] { 0xDE, 0x37, 0x41, 0xDE, crypto_scalarmult_curve25519_SCALARBYTES, 0, 0, 0 });
 
-        private static readonly Oid s_oid = new Oid(1, 3, 101, 110);
-
         private static readonly PrivateKeyFormatter s_pkixPrivateKeyFormatter = new X25519PrivateKeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[]
         {
             // +-- SEQUENCE (3 elements)
