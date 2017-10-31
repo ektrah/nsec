@@ -3,7 +3,7 @@ using System.Buffers.Binary;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using NSec.Cryptography.Formatting;
+using System.Text;
 
 namespace NSec.Cryptography
 {
@@ -332,9 +332,20 @@ namespace NSec.Cryptography
 
         public override string ToString()
         {
-            Span<byte> bytes = stackalloc byte[Size];
-            Unsafe.CopyBlockUnaligned(ref bytes.DangerousGetPinnableReference(), ref Unsafe.AsRef(in _bytes), (uint)bytes.Length);
-            return string.Concat("[", Base16.Encode(bytes).Insert(2 * FixedFieldSize, "]["), "]");
+            ref byte source = ref Unsafe.AsRef(in _bytes);
+            int init = FixedFieldSize;
+            int size = Size;
+            StringBuilder sb = new StringBuilder(size * 2 + 4).Append('[');
+            for (int i = 0; i < init; i++)
+            {
+                sb.Append(Unsafe.Add(ref source, i).ToString("X2"));
+            }
+            sb.Append(']').Append('[');
+            for (int i = init; i < size; i++)
+            {
+                sb.Append(Unsafe.Add(ref source, i).ToString("X2"));
+            }
+            return sb.Append(']').ToString();
         }
     }
 }
