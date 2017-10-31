@@ -23,19 +23,19 @@ shared:
     TERM: dumb
   dotnet-install-1-1: &dotnet-install-1-1
     run:
-      name: Installing .NET Core 1.1 Runtime
+      name: Install .NET Core 1.1 Runtime
       command: |
         if [ ! -f ~/dotnet-install.sh ]; then curl -fsLo ~/dotnet-install.sh 'https://dot.net/v1/dotnet-install.sh'; fi
         bash ~/dotnet-install.sh --channel 1.1 --version latest --install-dir ~/.dotnet --no-path --shared-runtime
   dotnet-install-2-0: &dotnet-install-2-0
     run:
-      name: Installing .NET Core 2.0 Runtime
+      name: Install .NET Core 2.0 Runtime
       command: |
         if [ ! -f ~/dotnet-install.sh ]; then curl -fsLo ~/dotnet-install.sh 'https://dot.net/v1/dotnet-install.sh'; fi
         bash ~/dotnet-install.sh --channel 2.0 --version latest --install-dir ~/.dotnet --no-path --shared-runtime
   dotnet-install-2-1: &dotnet-install-2-1
     run:
-      name: Installing .NET Core 2.1 SDK
+      name: Install .NET Core 2.1 SDK
       command: |
         if [ ! -f ~/dotnet-install.sh ]; then curl -fsLo ~/dotnet-install.sh 'https://dot.net/v1/dotnet-install.sh'; fi
         bash ~/dotnet-install.sh --channel release/15.5 --version latest --install-dir ~/.dotnet --no-path
@@ -43,7 +43,7 @@ shared:
         echo 'export PATH=~/.dotnet:$PATH' >> $BASH_ENV
   generate-restore-graph: &generate-restore-graph
     run:
-      name: Generate restore graph
+      name: Generate Dependency Graph
       command: dotnet msbuild -t:GenerateRestoreGraphFile
       working_directory: tests
       environment:
@@ -56,7 +56,7 @@ shared:
         - 'nuget-packages'
   dotnet-restore: &dotnet-restore
     run:
-      name: Restore dependencies
+      name: Restore Dependencies
       command: dotnet restore -s 'https://api.nuget.org/v3/index.json' -s 'https://dotnet.myget.org/F/dotnet-core/api/v3/index.json' --disable-parallel
   save-cache: &save-cache
     save_cache:
@@ -65,19 +65,19 @@ shared:
         - ~/.nuget/packages
   dotnet-test-debug-1-1: &dotnet-test-debug-1-1
     run:
-      name: Running Tests (Debug) (.NET Core 1.1)
+      name: Run unit tests (Debug) (.NET Core 1.1)
       command: dotnet test tests -c Debug -f netcoreapp1.1
   dotnet-test-release-1-1: &dotnet-test-release-1-1
     run:
-      name: Running Tests (Release) (.NET Core 1.1)
+      name: Run unit tests (Release) (.NET Core 1.1)
       command: dotnet test tests -c Release -f netcoreapp1.1
   dotnet-test-debug-2-0: &dotnet-test-debug-2-0
     run:
-      name: Running Tests (Debug) (.NET Core 2.0)
+      name: Run unit tests (Debug) (.NET Core 2.0)
       command: dotnet test tests -c Debug -f netcoreapp2.0
   dotnet-test-release-2-0: &dotnet-test-release-2-0
     run:
-      name: Running Tests (Release) (.NET Core 2.0)
+      name: Run unit tests (Release) (.NET Core 2.0)
       command: dotnet test tests -c Release -f netcoreapp2.0
 
 jobs:
