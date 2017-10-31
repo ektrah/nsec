@@ -39,7 +39,7 @@ namespace NSec.Cryptography.Formatting
             _keySize = keySize;
             _blobHeader = blobHeader;
             _blobSize = blobHeader.Length + keySize;
-            _blobTextSize = Armor.GetEncodedLength(_blobSize, s_beginLabel, s_endLabel);
+            _blobTextSize = Armor.GetEncodedToUtf8Length(_blobSize, s_beginLabel, s_endLabel);
         }
 
         public bool TryExport(
@@ -81,7 +81,7 @@ namespace NSec.Cryptography.Formatting
                 _blobHeader.CopyTo(temp);
                 Serialize(keyHandle, temp.Slice(_blobHeader.Length));
 
-                Armor.Encode(temp, s_beginLabel, s_endLabel, blob);
+                Armor.EncodeToUtf8(temp, s_beginLabel, s_endLabel, blob);
                 return true;
             }
             finally
@@ -114,7 +114,7 @@ namespace NSec.Cryptography.Formatting
             Span<byte> temp = stackalloc byte[_blobSize];
             try
             {
-                if (!Armor.TryDecode(blob, s_beginLabel, s_endLabel, temp))
+                if (!Armor.TryDecodeFromUtf8(blob, s_beginLabel, s_endLabel, temp, out int written) || written != _blobSize)
                 {
                     keyHandle = null;
                     publicKeyBytes = null;

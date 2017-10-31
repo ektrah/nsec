@@ -1,170 +1,192 @@
 using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace NSec.Cryptography.Formatting
 {
     // RFC 7468
     internal static class Armor
     {
-        private static readonly byte[] s_fiveHyphens =
+        public static void EncodeToUtf8(
+            ReadOnlySpan<byte> bytes,
+            ReadOnlySpan<byte> utf8BeginLabel,
+            ReadOnlySpan<byte> utf8EndLabel,
+            Span<byte> utf8)
         {
-            0x2D, 0x2D, 0x2D, 0x2D, 0x2D,
-        };
+            Debug.Assert(utf8.Length == GetEncodedToUtf8Length(bytes.Length, utf8BeginLabel, utf8EndLabel));
 
-        public static void Encode(
-            ReadOnlySpan<byte> input,
-            ReadOnlySpan<byte> beginLabel,
-            ReadOnlySpan<byte> endLabel,
-            Span<byte> output)
-        {
-            Debug.Assert(output.Length == GetEncodedLength(input.Length, beginLabel, endLabel));
-
-            beginLabel.CopyTo(output);
-            output[beginLabel.Length + 0] = (byte)'\r';
-            output[beginLabel.Length + 1] = (byte)'\n';
-
-            EncodeBase64(input, output.Slice(beginLabel.Length + 2));
-
-            endLabel.CopyTo(output.Slice(output.Length - 2 - endLabel.Length));
-            output[output.Length - 2] = (byte)'\r';
-            output[output.Length - 1] = (byte)'\n';
-        }
-
-        public static int GetEncodedLength(
-            int inputLength,
-            ReadOnlySpan<byte> beginLabel,
-            ReadOnlySpan<byte> endLabel)
-        {
-            int base64Length = Base64.GetEncodedLength(inputLength);
-            int crlfLength = ((base64Length + 64 - 1) / 64) * 2;
-
-            return
-                beginLabel.Length + 2 +
-                base64Length + crlfLength +
-                endLabel.Length + 2;
-        }
-
-        public static bool TryDecode(
-            ReadOnlySpan<byte> input,
-            ReadOnlySpan<byte> beginLabel,
-            ReadOnlySpan<byte> endLabel,
-            Span<byte> output)
-        {
-            return TryDecode(input, beginLabel, endLabel, output, out int bytesWritten) && (bytesWritten == output.Length);
-        }
-
-        public static bool TryDecode(
-            ReadOnlySpan<byte> input,
-            ReadOnlySpan<byte> beginLabel,
-            ReadOnlySpan<byte> endLabel,
-            Span<byte> output,
-            out int bytesWritten)
-        {
-            int i = input.IndexOf(s_fiveHyphens);
-            if (i < 0 || !input.Slice(i).StartsWith(beginLabel))
-            {
-                bytesWritten = 0;
-                return false;
-            }
-
-            input = input.Slice(i + beginLabel.Length);
-
-            i = DecodeBase64(input, output, out bytesWritten);
-            if (i < 0 || !input.Slice(i).StartsWith(endLabel))
-            {
-                bytesWritten = 0;
-                return false;
-            }
-
-            return true;
-        }
-
-        private static void EncodeBase64(
-            ReadOnlySpan<byte> input,
-            Span<byte> output)
-        {
+            int remaining;
             int i = 0;
             int j = 0;
 
-            while (input.Length - i >= 48)
+            utf8BeginLabel.CopyTo(utf8.Slice(j));
+            j += utf8BeginLabel.Length;
+            utf8[j++] = (byte)'\r';
+            utf8[j++] = (byte)'\n';
+
+            while ((remaining = bytes.Length - i) > 0)
             {
-                Base64.EncodeUtf8(input.Slice(i, 48), output.Slice(j, 64));
-                output[j + 64 + 0] = (byte)'\r';
-                output[j + 64 + 1] = (byte)'\n';
-                i += 48;
-                j += 64 + 2;
+                System.Buffers.Text.Base64.EncodeToUtf8(
+                    bytes.Slice(i, remaining <= 48 ? remaining : 48),
+                    utf8.Slice(j),
+                    out int consumed,
+                    out int written,
+                    isFinalBlock: true);
+                i += consumed;
+                j += written;
+                utf8[j++] = (byte)'\r';
+                utf8[j++] = (byte)'\n';
             }
 
-            if (input.Length - i > 0)
-            {
-                int length = Base64.GetEncodedLength(input.Length - i);
-                Base64.EncodeUtf8(input.Slice(i), output.Slice(j, length));
-                output[j + length + 0] = (byte)'\r';
-                output[j + length + 1] = (byte)'\n';
-            }
+            utf8EndLabel.CopyTo(utf8.Slice(j));
+            j += utf8EndLabel.Length;
+            utf8[j++] = (byte)'\r';
+            utf8[j++] = (byte)'\n';
+
+            Debug.Assert(i == bytes.Length);
+            Debug.Assert(j == utf8.Length);
         }
 
-        private static int DecodeBase64(
-            ReadOnlySpan<byte> input,
-            Span<byte> output,
-            out int bytesWritten)
+        public static int GetEncodedToUtf8Length(
+            int inputLength,
+            ReadOnlySpan<byte> utf8BeginLabel,
+            ReadOnlySpan<byte> utf8EndLabel)
         {
+            int base64Utf8Length = System.Buffers.Text.Base64.GetMaxEncodedToUtf8Length(inputLength);
+            int crlfCount = (base64Utf8Length + 63) / 64;
+
+            return utf8BeginLabel.Length + 2 +
+                   base64Utf8Length + crlfCount * 2 +
+                   utf8EndLabel.Length + 2;
+        }
+
+        public static bool TryDecodeFromUtf8(
+            ReadOnlySpan<byte> utf8,
+            ReadOnlySpan<byte> utf8BeginLabel,
+            ReadOnlySpan<byte> utf8EndLabel,
+            Span<byte> bytes,
+            out int written)
+        {
+            Debug.Assert(!utf8BeginLabel.IsEmpty && utf8BeginLabel[0] == '-');
+            Debug.Assert(!utf8EndLabel.IsEmpty && utf8EndLabel[0] == '-');
+
+            ref sbyte decodingMap = ref s_decodingMap[0];
+
+            int padding = 0;
             int buffer = 0;
             int filled = 0;
             int i = 0;
             int j = 0;
 
-            while (i < input.Length)
+            for (; i < utf8.Length; i++)
             {
-                int ch = input[i];
-                if (ch == '=' || ch == '-')
-                {
-                    break;
-                }
-                i++;
+                int ch = utf8[i];
                 if (ch == ' ' || ch >= '\t' && ch <= '\r')
                 {
                     continue;
                 }
-                int digit = Base64.Decode6Bits(ch);
-                if (digit == -1)
+                break;
+            }
+
+            if (!utf8.Slice(i).StartsWith(utf8BeginLabel))
+            {
+                written = 0;
+                return false;
+            }
+            i += utf8BeginLabel.Length;
+
+            for (; i < utf8.Length; i++)
+            {
+                int ch = utf8[i];
+                if (ch == ' ' || ch >= '\t' && ch <= '\r')
                 {
-                    bytesWritten = 0;
-                    return -1;
+                    continue;
+                }
+                int digit = Unsafe.Add(ref decodingMap, ch);
+                if (digit < 0)
+                {
+                    break;
                 }
                 buffer = (buffer << 6) | digit;
                 filled += 6;
                 if (filled >= 8)
                 {
-                    if (j == output.Length)
+                    if (j == bytes.Length)
                     {
-                        bytesWritten = 0;
-                        return -1;
+                        written = 0;
+                        return false;
                     }
-                    output[j] = (byte)((buffer >> (filled - 8)) & 0xFF);
+                    bytes[j++] = (byte)((buffer >> (filled - 8)) & 255);
                     filled -= 8;
-                    j++;
                 }
             }
 
-            while (i < input.Length)
+            for (; i < utf8.Length; i++)
             {
-                int ch = input[i];
-                if (ch == '-')
-                {
-                    break;
-                }
-                i++;
-                if (ch == '=' || ch == ' ' || ch >= '\t' && ch <= '\r')
+                int ch = utf8[i];
+                if (ch == ' ' || ch >= '\t' && ch <= '\r')
                 {
                     continue;
                 }
-                bytesWritten = 0;
-                return -1;
+                if (ch == '=')
+                {
+                    padding++;
+                    filled += 6;
+                    if (filled >= 8)
+                    {
+                        filled -= 8;
+                    }
+                    continue;
+                }
+                break;
             }
 
-            bytesWritten = j;
-            return i;
+            if (!utf8.Slice(i).StartsWith(utf8EndLabel))
+            {
+                written = 0;
+                return false;
+            }
+            i += utf8EndLabel.Length;
+
+            for (; i < utf8.Length; i++)
+            {
+                int ch = utf8[i];
+                if (ch == ' ' || ch >= '\t' && ch <= '\r')
+                {
+                    continue;
+                }
+                break;
+            }
+
+            if (i < utf8.Length || filled > 0 || padding > 2)
+            {
+                written = 0;
+                return false;
+            }
+
+            Debug.Assert(i == utf8.Length);
+            written = j;
+            return true;
         }
+
+        private static readonly sbyte[] s_decodingMap =
+        {
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, -1, -1, -1, 63,
+            52, 53, 54, 55, 56, 57, 58, 59, 60, 61, -1, -1, -1, -1, -1, -1,
+            -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
+            15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, -1,
+            -1, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+            41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        };
     }
 }
