@@ -354,7 +354,7 @@ namespace NSec.Cryptography.Formatting
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static int Decode6Bits(
+        private static int Decode6Bits(
             int src)
         {
             unchecked
