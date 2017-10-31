@@ -61,7 +61,7 @@ namespace NSec.Tests.Core
             Assert.Equal(0, actual.FixedFieldSize);
             Assert.Equal(expected.Length, actual.CounterFieldSize);
             Assert.Equal(expected, actual.ToArray());
-            Assert.Equal("[][" + Base16.Encode(expected) + "]", actual.ToString());
+            Assert.Equal("[][" + expected.EncodeHex() + "]", actual.ToString());
             actual.CopyTo(array);
             Assert.Equal(expected, array);
         }
@@ -98,7 +98,7 @@ namespace NSec.Tests.Core
         [MemberData(nameof(Sizes))]
         public static void CtorWithFixedAndCounterSize(int size)
         {
-            var fixedField = Utilities.RandomBytes.Slice(0, size / 2);
+            var fixedField = Utilities.RandomBytes.Slice(0, size / 2).ToArray();
             var counterField = new byte[size - fixedField.Length];
 
             var expected = new byte[size];
@@ -112,7 +112,7 @@ namespace NSec.Tests.Core
             Assert.Equal(fixedField.Length, actual.FixedFieldSize);
             Assert.Equal(counterField.Length, actual.CounterFieldSize);
             Assert.Equal(expected, actual.ToArray());
-            Assert.Equal("[" + Base16.Encode(fixedField) + "][" + Base16.Encode(counterField) + "]", actual.ToString());
+            Assert.Equal("[" + fixedField.EncodeHex() + "][" + counterField.EncodeHex() + "]", actual.ToString());
             actual.CopyTo(array);
             Assert.Equal(expected, array);
         }
@@ -143,8 +143,8 @@ namespace NSec.Tests.Core
         [MemberData(nameof(Sizes))]
         public static void CtorWithFixedAndCounter(int size)
         {
-            var fixedField = Utilities.RandomBytes.Slice(0, size / 2);
-            var counterField = Utilities.RandomBytes.Slice(size / 2, size - fixedField.Length);
+            var fixedField = Utilities.RandomBytes.Slice(0, size / 2).ToArray();
+            var counterField = Utilities.RandomBytes.Slice(size / 2, size - fixedField.Length).ToArray();
 
             var expected = new byte[size];
             var actual = new Nonce(fixedField, counterField);
@@ -158,7 +158,7 @@ namespace NSec.Tests.Core
             Assert.Equal(fixedField.Length, actual.FixedFieldSize);
             Assert.Equal(counterField.Length, actual.CounterFieldSize);
             Assert.Equal(expected, actual.ToArray());
-            Assert.Equal("[" + Base16.Encode(fixedField) + "][" + Base16.Encode(counterField) + "]", actual.ToString());
+            Assert.Equal("[" + fixedField.EncodeHex() + "][" + counterField.EncodeHex() + "]", actual.ToString());
             actual.CopyTo(array);
             Assert.Equal(expected, array);
         }

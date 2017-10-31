@@ -8,6 +8,8 @@ namespace NSec.Tests
 
         public static byte[] DecodeHex(this string hex) => NSec.Cryptography.Formatting.Base16.Decode(hex);
 
+        public static string EncodeHex(this byte[] bytes) => NSec.Cryptography.Formatting.Base16.Encode(bytes);
+
         public static void Fill(byte[] array, byte value) => new Span<byte>(array).Fill(value);
 
         public static byte[] Substring(this byte[] array, int offset, int length) => new ReadOnlySpan<byte>(array, offset, length).ToArray();
