@@ -22,8 +22,8 @@ namespace NSec.Cryptography
             byteOffset = Unsafe.ByteOffset(ref first.DangerousGetPinnableReference(), ref second.DangerousGetPinnableReference());
 
             return (sizeof(IntPtr) == sizeof(int))
-                ? second.Length != 0 && unchecked((uint)byteOffset < (uint)first.Length || (uint)byteOffset > (uint)-second.Length)
-                : second.Length != 0 && unchecked((ulong)byteOffset < (ulong)first.Length || (ulong)byteOffset > (ulong)-second.Length);
+                ? !first.IsEmpty && !second.IsEmpty && unchecked((uint)byteOffset < (uint)first.Length || (uint)byteOffset > (uint)-second.Length)
+                : !first.IsEmpty && !second.IsEmpty && unchecked((ulong)byteOffset < (ulong)first.Length || (ulong)byteOffset > (ulong)-second.Length);
         }
     }
 }
