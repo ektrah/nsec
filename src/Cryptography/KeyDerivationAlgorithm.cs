@@ -153,49 +153,5 @@ namespace NSec.Cryptography
                 }
             }
         }
-
-        private protected virtual void DeriveKeyCore(
-            ReadOnlySpan<byte> inputKeyingMaterial,
-            ReadOnlySpan<byte> salt,
-            ReadOnlySpan<byte> info,
-            SecureMemoryHandle keyHandle)
-        {
-            bool addedRef = false;
-            try
-            {
-                keyHandle.DangerousAddRef(ref addedRef);
-
-                DeriveBytesCore(inputKeyingMaterial, salt, info, keyHandle.DangerousGetSpan());
-            }
-            finally
-            {
-                if (addedRef)
-                {
-                    keyHandle.DangerousRelease();
-                }
-            }
-        }
-
-        private protected virtual void DeriveKeyCore(
-            SecureMemoryHandle inputKeyingMaterial,
-            ReadOnlySpan<byte> salt,
-            ReadOnlySpan<byte> info,
-            SecureMemoryHandle keyHandle)
-        {
-            bool addedRef = false;
-            try
-            {
-                keyHandle.DangerousAddRef(ref addedRef);
-
-                DeriveBytesCore(inputKeyingMaterial, salt, info, keyHandle.DangerousGetSpan());
-            }
-            finally
-            {
-                if (addedRef)
-                {
-                    keyHandle.DangerousRelease();
-                }
-            }
-        }
     }
 }
