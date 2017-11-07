@@ -29,16 +29,6 @@ NSec.Cryptography.X25519</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\Interop\**\*.cs" Link="Interop\%(RecursiveDir)\%(Filename)%(Extension)" />
-    <None Include="..\Interop\*.yaml" Link="Interop\%(RecursiveDir)\%(Filename)%(Extension)" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="..\..\LICENSE" Link="LICENSE" PackagePath="" Visible="false" />
-    <Content Include="..\..\NOTICE" Link="NOTICE" PackagePath="" Visible="false" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="libsodium" Version="$(LibsodiumVersion)" />
     <PackageReference Include="System.Memory" Version="$(SystemMemoryVersion)" />
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="$(SystemRuntimeCompilerServicesUnsafeVersion)" />
@@ -47,5 +37,7 @@ NSec.Cryptography.X25519</Description>
   <ItemGroup>
     <InternalsVisibleTo Include="NSec.Tests.97bf2648-69d2-4a17-888f-2a13e5c5cb28" />
   </ItemGroup>
+
+  <Import Project="..\Interop\Interop.projitems" Label="Shared" />
 
 </Project>

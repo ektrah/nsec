@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27019.1
+VisualStudioVersion = 15.0.27102.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSec.Cryptography", "src\Cryptography\NSec.Cryptography.csproj", "{839872CC-6AF4-456B-A55B-F82EE7B4822E}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Interop", "src\Interop\Interop.shproj", "{F9492D32-4406-41EE-B90E-F9AE33F0F4DC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "tests\Tests.csproj", "{97BF2648-69D2-4A17-888F-2A13E5C5CB28}"
 EndProject
@@ -32,6 +34,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D24568A9-54F
 	EndProjectSection
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		src\Interop\Interop.projitems*{f9492d32-4406-41ee-b90e-f9ae33f0f4dc}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

@@ -1,0 +1,27 @@
+﻿<Project>
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <SharedGUID>f9492d32-4406-41ee-b90e-f9ae33f0f4dc</SharedGUID>
+    <HasSharedItems>true</HasSharedItems>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Interop.Aes256Gcm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interop.Blake2b.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interop.ChaCha20Poly1305.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interop.Core.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interop.Ed25519.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interop.HmacSha256.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interop.HmacSha512.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interop.Libraries.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interop.Random.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interop.SecureMemoryHandle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interop.Sha256.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interop.Sha512.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interop.Utils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interop.Version.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interop.X25519.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Interop.yaml" />
+  </ItemGroup>
+</Project>

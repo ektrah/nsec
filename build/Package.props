@@ -37,4 +37,9 @@
     <MinClientVersion>4.0</MinClientVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)..\LICENSE" PackagePath="" />
+    <Content Include="$(MSBuildThisFileDirectory)..\NOTICE" PackagePath="" />
+  </ItemGroup>
+
 </Project>
