@@ -105,7 +105,7 @@ namespace NSec.Tests.Core
 
             var array = new byte[expected.Length];
 
-            fixedField.CopyTo(expected);
+            fixedField.CopyTo(expected, 0);
 
             Assert.Equal(expected.Length, actual.Size);
             Assert.Equal(fixedField.Length, actual.FixedFieldSize);
@@ -150,7 +150,7 @@ namespace NSec.Tests.Core
 
             var array = new byte[expected.Length];
 
-            fixedField.CopyTo(expected);
+            fixedField.CopyTo(expected, 0);
             counterField.CopyTo(expected.AsSpan().Slice(fixedField.Length));
 
             Assert.Equal(expected.Length, actual.Size);
