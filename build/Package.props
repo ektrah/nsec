@@ -38,8 +38,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)..\LICENSE" PackagePath="" />
-    <Content Include="$(MSBuildThisFileDirectory)..\NOTICE" PackagePath="" />
+    <Content Include="$(MSBuildThisFileDirectory)..\LICENSE" PackagePath="" Visible="false" />
+    <Content Include="$(MSBuildThisFileDirectory)..\NOTICE" PackagePath="" Visible="false" />
   </ItemGroup>
 
 </Project>
