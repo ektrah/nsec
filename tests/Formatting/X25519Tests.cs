@@ -8,7 +8,7 @@ namespace NSec.Tests.Formatting
 {
     public static class X25519Tests
     {
-        private static readonly byte[] s_oid = { 0x2B, 0x65, 0x6E };
+        private static readonly byte[] s_oid = new Asn1Oid(1, 3, 101, 110).Bytes.ToArray();
 
         [Fact]
         public static void PkixPrivateKey()
@@ -26,12 +26,10 @@ namespace NSec.Tests.Formatting
                 reader.BeginSequence();
                 Assert.Equal(s_oid, reader.ObjectIdentifier().ToArray());
                 reader.End();
-                var curvePrivateKey = reader.OctetString();
+                var curvePrivateKey = new Asn1Reader(reader.OctetString());
+                Assert.Equal(b.ToArray(), curvePrivateKey.OctetString().ToArray());
+                Assert.True(curvePrivateKey.SuccessComplete);
                 reader.End();
-                Assert.True(reader.SuccessComplete);
-
-                reader = new Asn1Reader(curvePrivateKey);
-                Assert.Equal(b.ToArray(), reader.OctetString().ToArray());
                 Assert.True(reader.SuccessComplete);
             }
         }
