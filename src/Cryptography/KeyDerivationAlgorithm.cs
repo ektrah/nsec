@@ -72,7 +72,7 @@ namespace NSec.Cryptography
                 throw Error.Argument_SaltNotSupported(nameof(salt));
             if (bytes.Length > MaxOutputSize)
                 throw Error.Argument_DeriveInvalidCount(nameof(bytes), MaxOutputSize.ToString());
-            if (Utilities.Overlap(bytes, info))
+            if (bytes.Overlaps(info))
                 throw Error.Argument_OverlapInfo(nameof(bytes));
 
             DeriveBytesCore(sharedSecret.Handle, salt, info, bytes);
