@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 namespace NSec.Cryptography.Formatting
 {
     // RFC 4648
-    public static class Base64
+    internal /*public*/ static class Base64
     {
         public static byte[] Decode(
             string base64)
