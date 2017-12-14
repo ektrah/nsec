@@ -48,9 +48,9 @@ namespace NSec.Cryptography
             }
         }
 
-        public int PseudorandomKeySize => crypto_auth_hmacsha512_BYTES;
+        internal /*public*/ int PseudorandomKeySize => crypto_auth_hmacsha512_BYTES;
 
-        public byte[] Expand(
+        internal /*public*/ byte[] Expand(
             ReadOnlySpan<byte> pseudorandomKey,
             ReadOnlySpan<byte> info,
             int count)
@@ -67,7 +67,7 @@ namespace NSec.Cryptography
             return bytes;
         }
 
-        public void Expand(
+        internal /*public*/ void Expand(
             ReadOnlySpan<byte> pseudorandomKey,
             ReadOnlySpan<byte> info,
             Span<byte> bytes)
@@ -84,7 +84,7 @@ namespace NSec.Cryptography
             ExpandCore(pseudorandomKey, info, bytes);
         }
 
-        public byte[] Extract(
+        internal /*public*/ byte[] Extract(
             SharedSecret sharedSecret,
             ReadOnlySpan<byte> salt)
         {
@@ -96,7 +96,7 @@ namespace NSec.Cryptography
             return pseudorandomKey;
         }
 
-        public void Extract(
+        internal /*public*/ void Extract(
             SharedSecret sharedSecret,
             ReadOnlySpan<byte> salt,
             Span<byte> pseudorandomKey)
