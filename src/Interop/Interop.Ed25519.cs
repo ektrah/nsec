@@ -17,7 +17,7 @@ internal static partial class Interop
         internal static extern int crypto_sign_ed25519_detached(
             ref byte sig,
             out ulong siglen_p,
-            ref byte m,
+            in byte m,
             ulong mlen,
             SecureMemoryHandle sk);
 
@@ -31,7 +31,7 @@ internal static partial class Interop
         internal static extern int crypto_sign_ed25519_seed_keypair(
             byte[] pk,
             SecureMemoryHandle sk,
-            ref byte seed);
+            in byte seed);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern UIntPtr crypto_sign_ed25519_seedbytes();
@@ -43,9 +43,9 @@ internal static partial class Interop
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int crypto_sign_ed25519_verify_detached(
-            ref byte sig,
-            ref byte m,
+            in byte sig,
+            in byte m,
             ulong mlen,
-            ref byte pk);
+            in byte pk);
     }
 }

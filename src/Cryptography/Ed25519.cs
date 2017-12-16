@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using NSec.Cryptography.Formatting;
 using static Interop.Libsodium;
 
@@ -85,7 +86,7 @@ namespace NSec.Cryptography
 
             publicKeyBytes = new byte[crypto_sign_ed25519_PUBLICKEYBYTES];
             SecureMemoryHandle.Alloc(crypto_sign_ed25519_SECRETKEYBYTES, out keyHandle);
-            crypto_sign_ed25519_seed_keypair(publicKeyBytes, keyHandle, ref seed.DangerousGetPinnableReference());
+            crypto_sign_ed25519_seed_keypair(publicKeyBytes, keyHandle, in MemoryMarshal.GetReference(seed));
         }
 
         internal override int GetDefaultSeedSize()
@@ -103,9 +104,9 @@ namespace NSec.Cryptography
             Debug.Assert(signature.Length == crypto_sign_ed25519_BYTES);
 
             crypto_sign_ed25519_detached(
-                ref signature.DangerousGetPinnableReference(),
+                ref MemoryMarshal.GetReference(signature),
                 out ulong signatureLength,
-                ref data.DangerousGetPinnableReference(),
+                in MemoryMarshal.GetReference(data),
                 (ulong)data.Length,
                 keyHandle);
 
@@ -204,10 +205,10 @@ namespace NSec.Cryptography
             Debug.Assert(signature.Length == crypto_sign_ed25519_BYTES);
 
             int error = crypto_sign_ed25519_verify_detached(
-                ref signature.DangerousGetPinnableReference(),
-                ref data.DangerousGetPinnableReference(),
+                in MemoryMarshal.GetReference(signature),
+                in MemoryMarshal.GetReference(data),
                 (ulong)data.Length,
-                ref publicKey.DangerousGetPinnableReference());
+                in MemoryMarshal.GetReference(publicKey));
 
             return error == 0;
         }

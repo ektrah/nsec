@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
@@ -89,7 +90,7 @@ namespace NSec.Cryptography
                 }
                 finally
                 {
-                    sodium_memzero(ref seed.DangerousGetPinnableReference(), (UIntPtr)seed.Length);
+                    sodium_memzero(ref MemoryMarshal.GetReference(seed), (UIntPtr)seed.Length);
                 }
             }
             finally
@@ -150,7 +151,7 @@ namespace NSec.Cryptography
             private protected override void GenerateBytesCore(
                 Span<byte> bytes)
             {
-                randombytes_buf(ref bytes.DangerousGetPinnableReference(), (UIntPtr)bytes.Length);
+                randombytes_buf(ref MemoryMarshal.GetReference(bytes), (UIntPtr)bytes.Length);
             }
 
             private protected override uint GenerateUInt32Core()

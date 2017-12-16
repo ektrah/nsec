@@ -18,9 +18,9 @@ internal static partial class Interop
             ref byte m,
             out ulong mlen_p,
             IntPtr nsec,
-            ref byte c,
+            in byte c,
             ulong clen,
-            ref byte ad,
+            in byte ad,
             ulong adlen,
             in NSec.Cryptography.Nonce npub,
             SecureMemoryHandle k);
@@ -29,9 +29,9 @@ internal static partial class Interop
         internal static extern int crypto_aead_chacha20poly1305_ietf_encrypt(
             ref byte c,
             out ulong clen_p,
-            ref byte m,
+            in byte m,
             ulong mlen,
-            ref byte ad,
+            in byte ad,
             ulong adlen,
             IntPtr nsec,
             in NSec.Cryptography.Nonce npub,

@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using NSec.Cryptography.Formatting;
 using static Interop.Libsodium;
 
@@ -106,7 +107,7 @@ namespace NSec.Cryptography
             int error = crypto_scalarmult_curve25519(
                 sharedSecretHandle,
                 keyHandle,
-                ref otherPartyPublicKey.DangerousGetPinnableReference());
+                in MemoryMarshal.GetReference(otherPartyPublicKey));
 
             return error == 0;
         }

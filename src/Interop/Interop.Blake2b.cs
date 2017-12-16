@@ -56,7 +56,7 @@ internal static partial class Interop
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int crypto_generichash_blake2b_update(
             ref crypto_generichash_blake2b_state state,
-            ref byte @in,
+            in byte @in,
             ulong inlen);
 
         [StructLayout(LayoutKind.Explicit, Size = 384, Pack = 8)]

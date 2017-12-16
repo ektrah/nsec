@@ -25,7 +25,7 @@ internal static partial class Interop
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int crypto_hash_sha256_update(
             ref crypto_hash_sha256_state state,
-            ref byte @in,
+            in byte @in,
             ulong inlen);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]

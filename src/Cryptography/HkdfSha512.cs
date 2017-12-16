@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
@@ -126,7 +127,7 @@ namespace NSec.Cryptography
             }
             finally
             {
-                sodium_memzero(ref pseudorandomKey.DangerousGetPinnableReference(), (UIntPtr)pseudorandomKey.Length);
+                sodium_memzero(ref MemoryMarshal.GetReference(pseudorandomKey), (UIntPtr)pseudorandomKey.Length);
             }
         }
 
@@ -150,11 +151,11 @@ namespace NSec.Cryptography
                 {
                     counter++;
 
-                    crypto_auth_hmacsha512_init(out crypto_auth_hmacsha512_state state, ref pseudorandomKey.DangerousGetPinnableReference(), (UIntPtr)pseudorandomKey.Length);
-                    crypto_auth_hmacsha512_update(ref state, ref temp.DangerousGetPinnableReference(), (ulong)tempLength);
-                    crypto_auth_hmacsha512_update(ref state, ref info.DangerousGetPinnableReference(), (ulong)info.Length);
-                    crypto_auth_hmacsha512_update(ref state, ref counter, sizeof(byte));
-                    crypto_auth_hmacsha512_final(ref state, ref temp.DangerousGetPinnableReference());
+                    crypto_auth_hmacsha512_init(out crypto_auth_hmacsha512_state state, in MemoryMarshal.GetReference(pseudorandomKey), (UIntPtr)pseudorandomKey.Length);
+                    crypto_auth_hmacsha512_update(ref state, in MemoryMarshal.GetReference(temp), (ulong)tempLength);
+                    crypto_auth_hmacsha512_update(ref state, in MemoryMarshal.GetReference(info), (ulong)info.Length);
+                    crypto_auth_hmacsha512_update(ref state, in counter, sizeof(byte));
+                    crypto_auth_hmacsha512_final(ref state, ref MemoryMarshal.GetReference(temp));
 
                     tempLength = crypto_auth_hmacsha512_BYTES;
 
@@ -169,7 +170,7 @@ namespace NSec.Cryptography
             }
             finally
             {
-                sodium_memzero(ref temp.DangerousGetPinnableReference(), (UIntPtr)temp.Length);
+                sodium_memzero(ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length);
             }
         }
 
@@ -185,9 +186,9 @@ namespace NSec.Cryptography
             // an empty span seems to yield the same result as a string of
             // HashLen zeros, so we're ignoring this corner case here.
 
-            crypto_auth_hmacsha512_init(out crypto_auth_hmacsha512_state state, ref salt.DangerousGetPinnableReference(), (UIntPtr)salt.Length);
-            crypto_auth_hmacsha512_update(ref state, ref inputKeyingMaterial.DangerousGetPinnableReference(), (ulong)inputKeyingMaterial.Length);
-            crypto_auth_hmacsha512_final(ref state, ref pseudorandomKey.DangerousGetPinnableReference());
+            crypto_auth_hmacsha512_init(out crypto_auth_hmacsha512_state state, in MemoryMarshal.GetReference(salt), (UIntPtr)salt.Length);
+            crypto_auth_hmacsha512_update(ref state, in MemoryMarshal.GetReference(inputKeyingMaterial), (ulong)inputKeyingMaterial.Length);
+            crypto_auth_hmacsha512_final(ref state, ref MemoryMarshal.GetReference(pseudorandomKey));
         }
 
         private static void ExtractCore(

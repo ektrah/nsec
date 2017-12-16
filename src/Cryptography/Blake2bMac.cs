@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using NSec.Cryptography.Formatting;
 using static Interop.Libsodium;
 
@@ -110,8 +111,8 @@ namespace NSec.Cryptography
             Debug.Assert(mac.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
             crypto_generichash_blake2b_init(out crypto_generichash_blake2b_state state, keyHandle, (UIntPtr)keyHandle.Length, (UIntPtr)mac.Length);
-            crypto_generichash_blake2b_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
-            crypto_generichash_blake2b_final(ref state, ref mac.DangerousGetPinnableReference(), (UIntPtr)mac.Length);
+            crypto_generichash_blake2b_update(ref state, in MemoryMarshal.GetReference(data), (ulong)data.Length);
+            crypto_generichash_blake2b_final(ref state, ref MemoryMarshal.GetReference(mac), (UIntPtr)mac.Length);
         }
 
         private protected override bool TryVerifyCore(
@@ -129,16 +130,16 @@ namespace NSec.Cryptography
             try
             {
                 crypto_generichash_blake2b_init(out crypto_generichash_blake2b_state state, keyHandle, (UIntPtr)keyHandle.Length, (UIntPtr)temp.Length);
-                crypto_generichash_blake2b_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
-                crypto_generichash_blake2b_final(ref state, ref temp.DangerousGetPinnableReference(), (UIntPtr)temp.Length);
+                crypto_generichash_blake2b_update(ref state, in MemoryMarshal.GetReference(data), (ulong)data.Length);
+                crypto_generichash_blake2b_final(ref state, ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length);
 
-                int result = sodium_memcmp(ref temp.DangerousGetPinnableReference(), ref mac.DangerousGetPinnableReference(), (UIntPtr)mac.Length);
+                int result = sodium_memcmp(in MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(mac), (UIntPtr)mac.Length);
 
                 return result == 0;
             }
             finally
             {
-                sodium_memzero(ref temp.DangerousGetPinnableReference(), (UIntPtr)temp.Length);
+                sodium_memzero(ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length);
             }
         }
 

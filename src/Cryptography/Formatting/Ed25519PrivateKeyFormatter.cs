@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography.Formatting
@@ -23,7 +24,7 @@ namespace NSec.Cryptography.Formatting
 
             publicKeyBytes = new byte[crypto_sign_ed25519_PUBLICKEYBYTES];
             SecureMemoryHandle.Alloc(crypto_sign_ed25519_SECRETKEYBYTES, out keyHandle);
-            crypto_sign_ed25519_seed_keypair(publicKeyBytes, keyHandle, ref span.DangerousGetPinnableReference());
+            crypto_sign_ed25519_seed_keypair(publicKeyBytes, keyHandle, in MemoryMarshal.GetReference(span));
         }
 
         protected override void Serialize(
@@ -34,7 +35,7 @@ namespace NSec.Cryptography.Formatting
             Debug.Assert(keyHandle.Length == crypto_sign_ed25519_SECRETKEYBYTES);
             Debug.Assert(span.Length == crypto_sign_ed25519_SEEDBYTES);
 
-            crypto_sign_ed25519_sk_to_seed(ref span.DangerousGetPinnableReference(), keyHandle);
+            crypto_sign_ed25519_sk_to_seed(ref MemoryMarshal.GetReference(span), keyHandle);
         }
     }
 }

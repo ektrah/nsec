@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using NSec.Cryptography.Formatting;
 using static Interop.Libsodium;
 
@@ -120,7 +121,7 @@ namespace NSec.Cryptography
             // the block size.
 
             crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, keyHandle, (UIntPtr)keyHandle.Length);
-            crypto_auth_hmacsha256_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
+            crypto_auth_hmacsha256_update(ref state, in MemoryMarshal.GetReference(data), (ulong)data.Length);
 
             // crypto_auth_hmacsha256_final expects an output buffer with a size
             // of exactly crypto_auth_hmacsha256_BYTES, so we need to copy when
@@ -128,19 +129,19 @@ namespace NSec.Cryptography
 
             if (mac.Length == crypto_auth_hmacsha256_BYTES)
             {
-                crypto_auth_hmacsha256_final(ref state, ref mac.DangerousGetPinnableReference());
+                crypto_auth_hmacsha256_final(ref state, ref MemoryMarshal.GetReference(mac));
             }
             else
             {
                 Span<byte> temp = stackalloc byte[crypto_auth_hmacsha256_BYTES];
                 try
                 {
-                    crypto_auth_hmacsha256_final(ref state, ref temp.DangerousGetPinnableReference());
+                    crypto_auth_hmacsha256_final(ref state, ref MemoryMarshal.GetReference(temp));
                     temp.Slice(0, mac.Length).CopyTo(mac);
                 }
                 finally
                 {
-                    sodium_memzero(ref temp.DangerousGetPinnableReference(), (UIntPtr)temp.Length);
+                    sodium_memzero(ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length);
                 }
             }
         }
@@ -161,16 +162,16 @@ namespace NSec.Cryptography
             try
             {
                 crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, keyHandle, (UIntPtr)keyHandle.Length);
-                crypto_auth_hmacsha256_update(ref state, ref data.DangerousGetPinnableReference(), (ulong)data.Length);
-                crypto_auth_hmacsha256_final(ref state, ref temp.DangerousGetPinnableReference());
+                crypto_auth_hmacsha256_update(ref state, in MemoryMarshal.GetReference(data), (ulong)data.Length);
+                crypto_auth_hmacsha256_final(ref state, ref MemoryMarshal.GetReference(temp));
 
-                int result = sodium_memcmp(ref temp.DangerousGetPinnableReference(), ref mac.DangerousGetPinnableReference(), (UIntPtr)mac.Length);
+                int result = sodium_memcmp(in MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(mac), (UIntPtr)mac.Length);
 
                 return result == 0;
             }
             finally
             {
-                sodium_memzero(ref temp.DangerousGetPinnableReference(), (UIntPtr)temp.Length);
+                sodium_memzero(ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length);
             }
         }
 

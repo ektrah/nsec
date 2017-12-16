@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
@@ -112,7 +113,7 @@ namespace NSec.Cryptography
                 }
                 finally
                 {
-                    sodium_memzero(ref seed.DangerousGetPinnableReference(), (UIntPtr)seed.Length);
+                    sodium_memzero(ref MemoryMarshal.GetReference(seed), (UIntPtr)seed.Length);
                 }
             }
             finally
