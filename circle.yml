@@ -42,6 +42,9 @@ workflows:
       - ubuntu17.10:
           requires:
             - ubuntu16.04
+      - macos-xcode-9.2:
+          requires:
+            - ubuntu16.04
 
 shared:
   environment: &environment
@@ -79,15 +82,25 @@ shared:
   restore-cache: &restore-cache
     restore_cache:
       keys:
-        - 'nuget-packages-{{ checksum "/tmp/restore.json" }}'
-        - 'nuget-packages'
+        - 'linux-nuget-packages-{{ checksum "/tmp/restore.json" }}'
+        - 'linux-nuget-packages'
+  restore-cache-macos: &restore-cache-macos
+    restore_cache:
+      keys:
+        - 'macos-nuget-packages-{{ checksum "/tmp/restore.json" }}'
+        - 'macos-nuget-packages'
   dotnet-restore: &dotnet-restore
     run:
       name: Restore Dependencies
       command: dotnet restore -s 'https://api.nuget.org/v3/index.json' -s 'https://dotnet.myget.org/F/dotnet-core/api/v3/index.json' --disable-parallel
   save-cache: &save-cache
     save_cache:
-      key: 'nuget-packages-{{ checksum "/tmp/restore.json" }}'
+      key: 'linux-nuget-packages-{{ checksum "/tmp/restore.json" }}'
+      paths:
+        - ~/.nuget/packages
+  save-cache-macos: &save-cache-macos
+    save_cache:
+      key: 'macos-nuget-packages-{{ checksum "/tmp/restore.json" }}'
       paths:
         - ~/.nuget/packages
   dotnet-test-debug-1-1: &dotnet-test-debug-1-1
@@ -369,3 +382,21 @@ jobs:
       - *save-cache
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
+
+  macos-xcode-9.2:
+    macos:
+      xcode: "9.2.0"
+    environment: *environment
+    steps:
+      - *dotnet-install-1-1
+      - *dotnet-install-2-0
+      - *dotnet-install-2-1
+      - checkout
+      - *generate-restore-graph
+      - *restore-cache-macos
+      - *dotnet-restore
+      - *save-cache-macos
+      - *dotnet-test-debug-2-0
+      - *dotnet-test-release-2-0
+      - *dotnet-test-debug-1-1
+      - *dotnet-test-release-1-1
