@@ -9,7 +9,7 @@
 [.NET Core](https://dot.net/) based on
 [libsodium](https://libsodium.org/) &#x2764;.
 It provides modern cryptographic primitives in a modern API based on the new
-[`Span<T>` and `ReadOnlySpan<T>` types](https://channel9.msdn.com/Events/Connect/2017/T125).
+[`Span<T>` and `ReadOnlySpan<T>` types](https://msdn.microsoft.com/en-us/magazine/mt814808).
 NSec aims to be easy to use, secure by default, fast, and agile.
 
 NSec runs on .NET Core 1.1 and later on Windows, Linux and Mac. Using NSec
