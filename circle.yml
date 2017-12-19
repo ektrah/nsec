@@ -42,7 +42,7 @@ workflows:
       - ubuntu17.10:
           requires:
             - ubuntu16.04
-      - macos-xcode-9.2:
+      - macos-xcode9.2:
           requires:
             - ubuntu16.04
 
@@ -383,7 +383,7 @@ jobs:
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
-  macos-xcode-9.2:
+  macos-xcode9.2:
     macos:
       xcode: "9.2.0"
     environment: *environment
