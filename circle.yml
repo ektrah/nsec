@@ -6,42 +6,42 @@ workflows:
     jobs:
       - centos7.4:
           requires:
-            - ubuntu16.04
+            - macos-xcode9.2
       - debian8.10:
           requires:
-            - ubuntu16.04
+            - macos-xcode9.2
       - debian9.3:
           requires:
-            - ubuntu16.04
+            - macos-xcode9.2
       - fedora24:
           requires:
-            - ubuntu16.04
+            - macos-xcode9.2
       - fedora25:
           requires:
-            - ubuntu16.04
+            - macos-xcode9.2
       - fedora26:
           requires:
-            - ubuntu16.04
+            - macos-xcode9.2
       - fedora27:
           requires:
-            - ubuntu16.04
+            - macos-xcode9.2
       - opensuse42.2:
           requires:
-            - ubuntu16.04
+            - macos-xcode9.2
       - opensuse42.3:
           requires:
-            - ubuntu16.04
+            - macos-xcode9.2
       - ubuntu14.04:
           requires:
-            - ubuntu16.04
+            - macos-xcode9.2
       - ubuntu16.04:
           requires:
       - ubuntu17.04:
           requires:
-            - ubuntu16.04
+            - macos-xcode9.2
       - ubuntu17.10:
           requires:
-            - ubuntu16.04
+            - macos-xcode9.2
       - macos-xcode9.2:
           requires:
             - ubuntu16.04
