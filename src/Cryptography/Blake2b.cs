@@ -37,19 +37,24 @@ namespace NSec.Cryptography
             }
         }
 
-        private protected override void HashCore(
+        private protected override unsafe void HashCore(
             ReadOnlySpan<byte> data,
             Span<byte> hash)
         {
             Debug.Assert(hash.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(hash.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
-            crypto_generichash_blake2b_init(out crypto_generichash_blake2b_state state, IntPtr.Zero, UIntPtr.Zero, (UIntPtr)hash.Length);
-            crypto_generichash_blake2b_update(ref state, in MemoryMarshal.GetReference(data), (ulong)data.Length);
-            crypto_generichash_blake2b_final(ref state, ref MemoryMarshal.GetReference(hash), (UIntPtr)hash.Length);
+            byte* tempState = stackalloc byte[64 + sizeof(crypto_generichash_blake2b_state)];
+            crypto_generichash_blake2b_state* state = sizeof(byte*) == 4
+                ? (crypto_generichash_blake2b_state*)(((uint)tempState + 63u) & ~63u)
+                : (crypto_generichash_blake2b_state*)(((ulong)tempState + 63ul) & ~63ul);
+
+            crypto_generichash_blake2b_init(out *state, IntPtr.Zero, UIntPtr.Zero, (UIntPtr)hash.Length);
+            crypto_generichash_blake2b_update(ref *state, in MemoryMarshal.GetReference(data), (ulong)data.Length);
+            crypto_generichash_blake2b_final(ref *state, ref MemoryMarshal.GetReference(hash), (UIntPtr)hash.Length);
         }
 
-        private protected override bool TryVerifyCore(
+        private protected override unsafe bool TryVerifyCore(
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> hash)
         {
@@ -59,9 +64,14 @@ namespace NSec.Cryptography
             Span<byte> temp = stackalloc byte[hash.Length];
             try
             {
-                crypto_generichash_blake2b_init(out crypto_generichash_blake2b_state state, IntPtr.Zero, UIntPtr.Zero, (UIntPtr)temp.Length);
-                crypto_generichash_blake2b_update(ref state, in MemoryMarshal.GetReference(data), (ulong)data.Length);
-                crypto_generichash_blake2b_final(ref state, ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length);
+                byte* tempState = stackalloc byte[64 + sizeof(crypto_generichash_blake2b_state)];
+                crypto_generichash_blake2b_state* state = sizeof(byte*) == 4
+                    ? (crypto_generichash_blake2b_state*)(((uint)tempState + 63u) & ~63u)
+                    : (crypto_generichash_blake2b_state*)(((ulong)tempState + 63ul) & ~63ul);
+
+                crypto_generichash_blake2b_init(out *state, IntPtr.Zero, UIntPtr.Zero, (UIntPtr)temp.Length);
+                crypto_generichash_blake2b_update(ref *state, in MemoryMarshal.GetReference(data), (ulong)data.Length);
+                crypto_generichash_blake2b_final(ref *state, ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length);
 
                 int result = sodium_memcmp(in MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(hash), (UIntPtr)hash.Length);
 
