@@ -27,7 +27,8 @@ namespace NSec.Cryptography
             // sodium_init() returns 0 on success, -1 on failure, and 1 if the
             // library had already been initialized. We call sodium_init() only
             // once, but if another library p/invokes into libsodium it might
-            // have already been initialized.
+            // already have been initialized.
+
             return sodium_library_version_major() == SODIUM_LIBRARY_VERSION_MAJOR
                 && sodium_library_version_minor() == SODIUM_LIBRARY_VERSION_MINOR
                 && sodium_set_misuse_handler(s_misuseHandler) == 0

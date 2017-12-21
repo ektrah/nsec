@@ -53,8 +53,8 @@ namespace NSec.Cryptography
             crypto_hash_sha512_init(out crypto_hash_sha512_state state);
             crypto_hash_sha512_update(ref state, in MemoryMarshal.GetReference(data), (ulong)data.Length);
 
-            // crypto_hash_sha512_final expects an output buffer with a size of
-            // exactly crypto_hash_sha512_BYTES, so we need to copy when a
+            // crypto_hash_sha512_final expects an output buffer with a length
+            // of exactly crypto_hash_sha512_BYTES. So we need to copy when a
             // truncated output is requested.
 
             if (hash.Length == crypto_hash_sha512_BYTES)
