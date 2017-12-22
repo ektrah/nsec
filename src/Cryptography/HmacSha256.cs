@@ -134,15 +134,8 @@ namespace NSec.Cryptography
             else
             {
                 Span<byte> temp = stackalloc byte[crypto_auth_hmacsha256_BYTES];
-                try
-                {
-                    crypto_auth_hmacsha256_final(ref state, ref MemoryMarshal.GetReference(temp));
-                    temp.Slice(0, mac.Length).CopyTo(mac);
-                }
-                finally
-                {
-                    sodium_memzero(ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length);
-                }
+                crypto_auth_hmacsha256_final(ref state, ref MemoryMarshal.GetReference(temp));
+                temp.Slice(0, mac.Length).CopyTo(mac);
             }
         }
 
@@ -159,20 +152,14 @@ namespace NSec.Cryptography
             // compare the expected MAC with the actual MAC.
 
             Span<byte> temp = stackalloc byte[crypto_auth_hmacsha256_BYTES];
-            try
-            {
-                crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, keyHandle, (UIntPtr)keyHandle.Length);
-                crypto_auth_hmacsha256_update(ref state, in MemoryMarshal.GetReference(data), (ulong)data.Length);
-                crypto_auth_hmacsha256_final(ref state, ref MemoryMarshal.GetReference(temp));
 
-                int result = sodium_memcmp(in MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(mac), (UIntPtr)mac.Length);
+            crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, keyHandle, (UIntPtr)keyHandle.Length);
+            crypto_auth_hmacsha256_update(ref state, in MemoryMarshal.GetReference(data), (ulong)data.Length);
+            crypto_auth_hmacsha256_final(ref state, ref MemoryMarshal.GetReference(temp));
 
-                return result == 0;
-            }
-            finally
-            {
-                sodium_memzero(ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length);
-            }
+            int result = sodium_memcmp(in MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(mac), (UIntPtr)mac.Length);
+
+            return result == 0;
         }
 
         private static bool SelfTest()
