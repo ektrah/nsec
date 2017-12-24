@@ -1,5 +1,4 @@
 using System;
-using System.Buffers.Binary;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -9,7 +8,7 @@ namespace NSec.Cryptography
 {
     // RFC 5116
     [StructLayout(LayoutKind.Explicit)]
-    public readonly struct Nonce : IComparable<Nonce>, IEquatable<Nonce>
+    public readonly struct Nonce : IEquatable<Nonce>
     {
         public const int MaxSize = 15;
 
@@ -86,34 +85,6 @@ namespace NSec.Cryptography
         public int FixedFieldSize => _size >> 4;
 
         public int Size => (_size >> 4) + (_size & 0xF);
-
-        public static int Compare(
-            in Nonce left,
-            in Nonce right)
-        {
-            Debug.Assert(Unsafe.SizeOf<Nonce>() == 16);
-
-            ref readonly byte first = ref left._bytes;
-            ref readonly byte second = ref right._bytes;
-            uint x = left._size;
-            uint y = right._size;
-            int i = 0;
-
-            while (x == y && i < 16)
-            {
-                x = BitConverter.IsLittleEndian
-                    ? BinaryPrimitives.ReverseEndianness(Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref Unsafe.AsRef(in first), i)))
-                    : Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref Unsafe.AsRef(in first), i));
-
-                y = BitConverter.IsLittleEndian
-                    ? BinaryPrimitives.ReverseEndianness(Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref Unsafe.AsRef(in second), i)))
-                    : Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref Unsafe.AsRef(second), i));
-
-                i += sizeof(uint);
-            }
-
-            return x.CompareTo(y);
-        }
 
         public static bool Equals(
             in Nonce left,
@@ -246,45 +217,11 @@ namespace NSec.Cryptography
             return result;
         }
 
-        public static bool operator <(
-            Nonce left,
-            Nonce right)
-        {
-            return Compare(in left, in right) < 0;
-        }
-
-        public static bool operator <=(
-            Nonce left,
-            Nonce right)
-        {
-            return Compare(in left, in right) <= 0;
-        }
-
         public static bool operator ==(
             Nonce left,
             Nonce right)
         {
             return Equals(in left, in right);
-        }
-
-        public static bool operator >(
-            Nonce left,
-            Nonce right)
-        {
-            return Compare(in left, in right) > 0;
-        }
-
-        public static bool operator >=(
-            Nonce left,
-            Nonce right)
-        {
-            return Compare(in left, in right) >= 0;
-        }
-
-        public int CompareTo(
-            Nonce other)
-        {
-            return Compare(in this, in other);
         }
 
         public void CopyTo(
