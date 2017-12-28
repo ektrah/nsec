@@ -10,13 +10,22 @@ namespace NSec.Cryptography
     [StructLayout(LayoutKind.Explicit)]
     public readonly struct Nonce : IEquatable<Nonce>
     {
-        public const int MaxSize = 15;
+        public const int MaxSize = 24;
 
         [FieldOffset(0)]
         private readonly byte _bytes;
 
-        [FieldOffset(MaxSize)]
-        private readonly byte _size;
+        [FieldOffset(MaxSize + 0)]
+        private readonly byte _fixedFieldSize;
+
+        [FieldOffset(MaxSize + 1)]
+        private readonly byte _counterFieldSize;
+
+        [FieldOffset(MaxSize + 2)]
+        private readonly byte _reserved0;
+
+        [FieldOffset(MaxSize + 3)]
+        private readonly byte _reserved1;
 
         public Nonce(
             int fixedFieldSize,
@@ -32,9 +41,8 @@ namespace NSec.Cryptography
                 throw Error.ArgumentOutOfRange_NonceCounterSize(nameof(counterFieldSize));
             }
 
-            Debug.Assert(MaxSize >= 0x0 && MaxSize <= 0xF);
-
-            _size = (byte)((fixedFieldSize << 4) | counterFieldSize);
+            _fixedFieldSize = (byte)fixedFieldSize;
+            _counterFieldSize = (byte)counterFieldSize;
         }
 
         public Nonce(
@@ -51,9 +59,8 @@ namespace NSec.Cryptography
                 throw Error.ArgumentOutOfRange_NonceFixedCounterSize(nameof(counterFieldSize));
             }
 
-            Debug.Assert(MaxSize >= 0x0 && MaxSize <= 0xF);
-
-            _size = (byte)((fixedField.Length << 4) | counterFieldSize);
+            _fixedFieldSize = (byte)fixedField.Length;
+            _counterFieldSize = (byte)counterFieldSize;
 
             Unsafe.CopyBlockUnaligned(ref _bytes, ref Unsafe.AsRef(in MemoryMarshal.GetReference(fixedField)), (uint)fixedField.Length);
         }
@@ -72,33 +79,38 @@ namespace NSec.Cryptography
                 throw Error.Argument_NonceFixedCounterSize(nameof(counterField));
             }
 
-            Debug.Assert(MaxSize >= 0x0 && MaxSize <= 0xF);
-
-            _size = (byte)((fixedField.Length << 4) | counterField.Length);
+            _fixedFieldSize = (byte)fixedField.Length;
+            _counterFieldSize = (byte)counterField.Length;
 
             Unsafe.CopyBlockUnaligned(ref _bytes, ref Unsafe.AsRef(in MemoryMarshal.GetReference(fixedField)), (uint)fixedField.Length);
             Unsafe.CopyBlockUnaligned(ref Unsafe.Add(ref _bytes, fixedField.Length), ref Unsafe.AsRef(in MemoryMarshal.GetReference(counterField)), (uint)counterField.Length);
         }
 
-        public int CounterFieldSize => _size & 0xF;
+        public int CounterFieldSize => _counterFieldSize;
 
-        public int FixedFieldSize => _size >> 4;
+        public int FixedFieldSize => _fixedFieldSize;
 
-        public int Size => (_size >> 4) + (_size & 0xF);
+        public int Size => _fixedFieldSize + _counterFieldSize;
 
         public static bool Equals(
             in Nonce left,
             in Nonce right)
         {
-            Debug.Assert(Unsafe.SizeOf<Nonce>() == 16);
+            if (Unsafe.SizeOf<Nonce>() != 28)
+            {
+                throw Error.Cryptographic_InternalError();
+            }
 
             ref byte first = ref Unsafe.AsRef(in left._bytes);
             ref byte second = ref Unsafe.AsRef(in right._bytes);
 
-            return Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, 0x0)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, 0x0))
-                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, 0x4)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, 0x4))
-                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, 0x8)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, 0x8))
-                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, 0xC)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, 0xC));
+            return Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, 0)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, 0))
+                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, 4)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, 4))
+                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, 8)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, 8))
+                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, 12)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, 12))
+                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, 16)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, 16))
+                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, 20)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, 20))
+                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, 24)) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, 24));
         }
 
         public static bool TryAdd(
@@ -151,7 +163,8 @@ namespace NSec.Cryptography
                 throw Error.Argument_NonceXorSize(nameof(bytes));
             }
 
-            Unsafe.AsRef(in nonce._size) = (byte)((bytes.Length << 4) | 0);
+            Unsafe.AsRef(in nonce._fixedFieldSize) = (byte)bytes.Length;
+            Unsafe.AsRef(in nonce._counterFieldSize) = 0;
 
             ref byte first = ref Unsafe.AsRef(in nonce._bytes);
             ref byte second = ref Unsafe.AsRef(in MemoryMarshal.GetReference(bytes));
@@ -249,15 +262,21 @@ namespace NSec.Cryptography
 
         public override int GetHashCode()
         {
-            Debug.Assert(Unsafe.SizeOf<Nonce>() == 16);
+            if (Unsafe.SizeOf<Nonce>() != 28)
+            {
+                throw Error.Cryptographic_InternalError();
+            }
 
             ref byte bytes = ref Unsafe.AsRef(in _bytes);
             uint hashCode = 0;
 
-            hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref bytes, 0x0)));
-            hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref bytes, 0x4)));
-            hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref bytes, 0x8)));
-            hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref bytes, 0xC)));
+            hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref bytes, 0)));
+            hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref bytes, 4)));
+            hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref bytes, 8)));
+            hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref bytes, 12)));
+            hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref bytes, 16)));
+            hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref bytes, 20)));
+            hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref bytes, 24)));
 
             return unchecked((int)hashCode);
         }
