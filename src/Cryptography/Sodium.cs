@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
@@ -11,28 +10,45 @@ namespace NSec.Cryptography
 
         public static void Initialize()
         {
-            if (!s_initialized.Value)
-            {
-                throw Error.Cryptographic_InitializationFailed();
-            }
+            _ = s_initialized.Value;
         }
 
-        public static bool TryInitialize()
+        public static bool IsAes256GcmSupported()
         {
             return s_initialized.Value;
         }
 
         private static bool InitializeCore()
         {
-            // sodium_init() returns 0 on success, -1 on failure, and 1 if the
-            // library had already been initialized. We call sodium_init() only
-            // once, but if another library p/invokes into libsodium it might
-            // already have been initialized.
+            try
+            {
+                if (sodium_library_version_major() != SODIUM_LIBRARY_VERSION_MAJOR ||
+                    sodium_library_version_minor() != SODIUM_LIBRARY_VERSION_MINOR)
+                {
+                    throw Error.Cryptographic_InitializationFailed(9643.ToString("X"));
+                }
 
-            return sodium_library_version_major() == SODIUM_LIBRARY_VERSION_MAJOR
-                && sodium_library_version_minor() == SODIUM_LIBRARY_VERSION_MINOR
-                && sodium_set_misuse_handler(s_misuseHandler) == 0
-                && sodium_init() >= 0;
+                if (sodium_set_misuse_handler(s_misuseHandler) != 0)
+                {
+                    throw Error.Cryptographic_InitializationFailed(9739.ToString("X"));
+                }
+
+                // sodium_init() returns 0 on success, -1 on failure, and 1 if the
+                // library had already been initialized. We call sodium_init() only
+                // once, but if another library p/invokes into libsodium it might
+                // already have been initialized.
+
+                if (sodium_init() < 0)
+                {
+                    throw Error.Cryptographic_InitializationFailed(9817.ToString("X"));
+                }
+
+                return crypto_aead_aes256gcm_is_available() != 0;
+            }
+            catch (DllNotFoundException e)
+            {
+                throw Error.Cryptographic_DllNotFound(e);
+            }
         }
 
         private static void InternalError()

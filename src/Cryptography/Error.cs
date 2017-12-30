@@ -281,9 +281,16 @@ namespace NSec.Cryptography
             return new CryptographicException(ResourceManager.GetString("Cryptographic_DecryptionFailed"));
         }
 
-        internal static CryptographicException Cryptographic_InitializationFailed()
+        internal static CryptographicException Cryptographic_DllNotFound(
+            Exception innerException)
         {
-            return new CryptographicException(ResourceManager.GetString("Cryptographic_InitializationFailed"));
+            return new CryptographicException(ResourceManager.GetString("Cryptographic_DllNotFound"), innerException);
+        }
+
+        internal static CryptographicException Cryptographic_InitializationFailed(
+            string arg0)
+        {
+            return new CryptographicException(string.Format(ResourceManager.GetString("Cryptographic_InitializationFailed"), arg0));
         }
 
         internal static CryptographicException Cryptographic_InternalError()

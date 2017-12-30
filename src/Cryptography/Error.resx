@@ -151,10 +151,10 @@
     <value>The addend cannot be negative.</value>
   </data>
   <data name="ArgumentOutOfRange_NonceCounterSize" xml:space="preserve">
-    <value>The nonce must have a length between 0 and 15 bytes.</value>
+    <value>The nonce must have a length between 0 and 24 bytes.</value>
   </data>
   <data name="ArgumentOutOfRange_NonceFixedCounterSize" xml:space="preserve">
-    <value>The total length of the nonce must be between 0 and 15 bytes.</value>
+    <value>The total length of the nonce must be between 0 and 24 bytes.</value>
   </data>
   <data name="Argument_BadBase16Length" xml:space="preserve">
     <value>Invalid length for a Base16 span.</value>
@@ -166,7 +166,7 @@
     <value>Invalid length for a Base64 span.</value>
   </data>
   <data name="Argument_CiphertextLength" xml:space="preserve">
-    <value>The ciphertext length must be equal to the plaintet length plus the tag size.</value>
+    <value>The length of the ciphertext must be equal to the length of the plaintext plus the tag size.</value>
   </data>
   <data name="Argument_DeriveInvalidCount" xml:space="preserve">
     <value>The number of bytes to derive must be less than or equal to the maximum output size '{0}'.</value>
@@ -175,7 +175,7 @@
     <value>Destination is too short.</value>
   </data>
   <data name="Argument_FormatNotSupported" xml:space="preserve">
-    <value>The key BLOB format '{0}' is not supported by the algorithm.</value>
+    <value>The key BLOB format '{0}' is not supported by the specified algorithm.</value>
   </data>
   <data name="Argument_HashSize" xml:space="preserve">
     <value>Hash size '{0}' is out of range. Must be between {1} and {2}.</value>
@@ -187,7 +187,7 @@
     <value>The length of the pseudorandom key must be equal to {0}.</value>
   </data>
   <data name="Argument_KeyWrongAlgorithm" xml:space="preserve">
-    <value>This key is for algorithm '{0}'. Expected '{1}'.</value>
+    <value>The specified key is for algorithm '{0}'. Expected '{1}'.</value>
   </data>
   <data name="Argument_MacSize" xml:space="preserve">
     <value>MAC size '{0}' is out of range. Must be between {1} and {2}.</value>
@@ -196,10 +196,10 @@
     <value>'{0}' cannot be greater than {1}.</value>
   </data>
   <data name="Argument_NonceFixedCounterSize" xml:space="preserve">
-    <value>The total length of the nonce must be between 0 and 15 bytes.</value>
+    <value>The total length of the nonce must be between 0 and 24 bytes.</value>
   </data>
   <data name="Argument_NonceFixedSize" xml:space="preserve">
-    <value>The fixed part of the nonce must have a length between 0 and 15 bytes.</value>
+    <value>The fixed part of the nonce must have a length between 0 and 24 bytes.</value>
   </data>
   <data name="Argument_NonceLength" xml:space="preserve">
     <value>The nonce must have a length of '{0}' bytes.</value>
@@ -220,19 +220,19 @@
     <value>The output bytes must not overlap with the pseudorandom key.</value>
   </data>
   <data name="Argument_PlaintextLength" xml:space="preserve">
-    <value>The plaintext length must be equal to the ciphertext length minus the tag size.</value>
+    <value>The length of the plaintext must be equal to the length of the ciphertext minus the tag size.</value>
   </data>
   <data name="Argument_PlaintextTooLong" xml:space="preserve">
     <value>The length of the plaintext must be less than or equal to {0}.</value>
   </data>
   <data name="Argument_SaltNotSupported" xml:space="preserve">
-    <value>Salt is not supported and must be an empty span.</value>
+    <value>A salt is not supported by this algorithm and must be an empty span.</value>
   </data>
   <data name="Argument_SharedSecretLength" xml:space="preserve">
     <value>The length of the shared secret must be less than or equal to {0}.</value>
   </data>
   <data name="Argument_SignatureLength" xml:space="preserve">
-    <value>The signature must have a length of '{0}' bytes.</value>
+    <value>The signature must have a length of {0} bytes.</value>
   </data>
   <data name="Argument_SpanBlob" xml:space="preserve">
     <value>The span is not large enough to fit the key BLOB.</value>
@@ -240,8 +240,11 @@
   <data name="Cryptographic_DecryptionFailed" xml:space="preserve">
     <value>Decryption failed.</value>
   </data>
+  <data name="Cryptographic_DllNotFound" xml:space="preserve">
+    <value>Could not initialize platform-specific components. NSec may not be not supported on this platform. See https://nsec.rocks/install for more information.</value>
+  </data>
   <data name="Cryptographic_InitializationFailed" xml:space="preserve">
-    <value>Initialization failed.</value>
+    <value>An error occurred while initializing cryptographic primitives. (Error Code: 0x{0})</value>
   </data>
   <data name="Cryptographic_InternalError" xml:space="preserve">
     <value>An internal error occurred.</value>
@@ -286,9 +289,9 @@
     <value>The key has been disposed.</value>
   </data>
   <data name="Overflow_NonceCounter" xml:space="preserve">
-    <value>Increasing the counter of the nonce resulted in an overflow.</value>
+    <value>Increasing the counter of the nonce results in an overflow.</value>
   </data>
   <data name="PlatformNotSupported_Algorithm" xml:space="preserve">
-    <value>The cryptographic algorithm is not supported on this platform.</value>
+    <value>The algorithm is not supported on this platform.</value>
   </data>
 </root>

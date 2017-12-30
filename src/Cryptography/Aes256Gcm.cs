@@ -43,8 +43,6 @@ namespace NSec.Cryptography
     //
     public sealed class Aes256Gcm : AeadAlgorithm
     {
-        private static readonly Lazy<int> s_isAvailable = new Lazy<int>(new Func<int>(crypto_aead_aes256gcm_is_available));
-
         private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(crypto_aead_aes256gcm_KEYBYTES, crypto_aead_aes256gcm_KEYBYTES, new byte[] { 0xDE, 0x31, 0x44, 0xDE });
 
         private static readonly Asn1Oid s_oid = new Asn1Oid(2, 16, 840, 1, 101, 3, 4, 1, 46);
@@ -59,17 +57,17 @@ namespace NSec.Cryptography
             tagSize: crypto_aead_aes256gcm_ABYTES,
             maxPlaintextSize: int.MaxValue - crypto_aead_aes256gcm_ABYTES)
         {
-            if (s_isAvailable.Value == 0)
+            if (!Sodium.IsAes256GcmSupported())
             {
                 throw Error.PlatformNotSupported_Algorithm();
             }
             if (!s_selfTest.Value)
             {
-                throw Error.Cryptographic_InitializationFailed();
+                throw Error.Cryptographic_InitializationFailed(9539.ToString("X"));
             }
         }
 
-        public static bool IsSupported => Sodium.TryInitialize() && (s_isAvailable.Value != 0);
+        public static bool IsSupported => Sodium.IsAes256GcmSupported();
 
         internal override void CreateKey(
             ReadOnlySpan<byte> seed,

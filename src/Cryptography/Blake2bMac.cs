@@ -44,7 +44,7 @@ namespace NSec.Cryptography
         {
             if (!s_selfTest.Value)
             {
-                throw Error.Cryptographic_InitializationFailed();
+                throw Error.Cryptographic_InitializationFailed(9391.ToString("X"));
             }
         }
 
