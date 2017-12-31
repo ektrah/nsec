@@ -7,7 +7,7 @@ namespace NSec.Cryptography
 {
     public abstract class RandomGenerator
     {
-        private static readonly Lazy<RandomGenerator.System> s_default = new Lazy<RandomGenerator.System>(isThreadSafe: true);
+        private static readonly Lazy<RandomGenerator.System> s_default = new Lazy<RandomGenerator.System>();
 
         private protected RandomGenerator()
         {
