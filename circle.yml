@@ -13,19 +13,10 @@ workflows:
       - debian9.3:
           requires:
             - macos-xcode9.2
-      - fedora24:
-          requires:
-            - macos-xcode9.2
-      - fedora25:
-          requires:
-            - macos-xcode9.2
       - fedora26:
           requires:
             - macos-xcode9.2
       - fedora27:
-          requires:
-            - macos-xcode9.2
-      - opensuse42.2:
           requires:
             - macos-xcode9.2
       - opensuse42.3:
@@ -36,9 +27,6 @@ workflows:
             - macos-xcode9.2
       - ubuntu16.04:
           requires:
-      - ubuntu17.04:
-          requires:
-            - macos-xcode9.2
       - ubuntu17.10:
           requires:
             - macos-xcode9.2
@@ -186,45 +174,6 @@ jobs:
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
-  fedora24:
-    docker:
-      - image: fedora:24
-    environment: *environment
-    steps:
-      - run:
-          name: Install Prerequisites
-          command: dnf install -q -y curl ca-certificates findutils tar libunwind libicu
-      - *dotnet-install-1-1
-      - *dotnet-install-2-0
-      - *dotnet-install-2-1
-      - checkout
-      - *generate-restore-graph
-      - *restore-cache
-      - *dotnet-restore
-      - *save-cache
-      - *dotnet-test-debug-2-0
-      - *dotnet-test-release-2-0
-      - *dotnet-test-debug-1-1
-      - *dotnet-test-release-1-1
-
-  fedora25:
-    docker:
-      - image: fedora:25
-    environment: *environment
-    steps:
-      - run:
-          name: Install Prerequisites
-          command: dnf install -q -y curl ca-certificates findutils libunwind libicu
-      - *dotnet-install-2-0
-      - *dotnet-install-2-1
-      - checkout
-      - *generate-restore-graph
-      - *restore-cache
-      - *dotnet-restore
-      - *save-cache
-      - *dotnet-test-debug-2-0
-      - *dotnet-test-release-2-0
-
   fedora26:
     docker:
       - image: fedora:26
@@ -251,24 +200,6 @@ jobs:
       - run:
           name: Install Prerequisites
           command: dnf install -q -y curl ca-certificates findutils libunwind libicu compat-openssl10
-      - *dotnet-install-2-0
-      - *dotnet-install-2-1
-      - checkout
-      - *generate-restore-graph
-      - *restore-cache
-      - *dotnet-restore
-      - *save-cache
-      - *dotnet-test-debug-2-0
-      - *dotnet-test-release-2-0
-
-  opensuse42.2:
-    docker:
-      - image: opensuse:42.2
-    environment: *environment
-    steps:
-      - run:
-          name: Install Prerequisites
-          command: zypper -q install -y --no-recommends curl ca-certificates tar ncurses-utils libunwind libicu
       - *dotnet-install-2-0
       - *dotnet-install-2-1
       - checkout
@@ -342,26 +273,6 @@ jobs:
       - *dotnet-test-release-2-0
       - *dotnet-test-debug-1-1
       - *dotnet-test-release-1-1
-
-  ubuntu17.04:
-    docker:
-      - image: ubuntu:17.04
-    environment: *environment
-    steps:
-      - run:
-          name: Install Prerequisites
-          command: |
-            apt-get -qq update
-            apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu57
-      - *dotnet-install-2-0
-      - *dotnet-install-2-1
-      - checkout
-      - *generate-restore-graph
-      - *restore-cache
-      - *dotnet-restore
-      - *save-cache
-      - *dotnet-test-debug-2-0
-      - *dotnet-test-release-2-0
 
   ubuntu17.10:
     docker:
