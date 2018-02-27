@@ -241,7 +241,7 @@
     <value>Decryption failed.</value>
   </data>
   <data name="Cryptographic_DllNotFound" xml:space="preserve">
-    <value>Could not initialize platform-specific components. NSec may not be not supported on this platform. See https://nsec.rocks/install for more information.</value>
+    <value>Could not initialize platform-specific components. NSec may not be supported on this platform. See https://nsec.rocks/docs/install for more information.</value>
   </data>
   <data name="Cryptographic_InitializationFailed" xml:space="preserve">
     <value>An error occurred while initializing cryptographic primitives. (Error Code: 0x{0})</value>
