@@ -56,7 +56,7 @@ shared:
       name: Install .NET Core 2.1 SDK
       command: |
         if [ ! -f ~/dotnet-install.sh ]; then curl -fsLo ~/dotnet-install.sh 'https://dot.net/v1/dotnet-install.sh'; fi
-        bash ~/dotnet-install.sh --channel release/2.1 --version latest --install-dir ~/.dotnet --no-path
+        bash ~/dotnet-install.sh --channel release/2.1 --version 2.1.300-preview1-008174 --install-dir ~/.dotnet --no-path
         ~/.dotnet/dotnet --info
         echo 'export PATH=~/.dotnet:$PATH' >> $BASH_ENV
   generate-restore-graph: &generate-restore-graph
@@ -107,6 +107,14 @@ shared:
     run:
       name: Run unit tests (Release) (.NET Core 2.0)
       command: dotnet test tests -c Release -f netcoreapp2.0
+  dotnet-test-debug-2-1: &dotnet-test-debug-2-1
+    run:
+      name: Run unit tests (Debug) (.NET Core 2.1)
+      command: dotnet test tests -c Debug -f netcoreapp2.1
+  dotnet-test-release-2-1: &dotnet-test-release-2-1
+    run:
+      name: Run unit tests (Release) (.NET Core 2.1)
+      command: dotnet test tests -c Release -f netcoreapp2.1
 
 jobs:
 
@@ -149,6 +157,8 @@ jobs:
       - *restore-cache
       - *dotnet-restore
       - *save-cache
+      - *dotnet-test-debug-2-1
+      - *dotnet-test-release-2-1
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
       - *dotnet-test-debug-1-1
@@ -171,6 +181,8 @@ jobs:
       - *restore-cache
       - *dotnet-restore
       - *save-cache
+      - *dotnet-test-debug-2-1
+      - *dotnet-test-release-2-1
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
@@ -189,6 +201,8 @@ jobs:
       - *restore-cache
       - *dotnet-restore
       - *save-cache
+      - *dotnet-test-debug-2-1
+      - *dotnet-test-release-2-1
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
@@ -207,6 +221,8 @@ jobs:
       - *restore-cache
       - *dotnet-restore
       - *save-cache
+      - *dotnet-test-debug-2-1
+      - *dotnet-test-release-2-1
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
@@ -225,6 +241,8 @@ jobs:
       - *restore-cache
       - *dotnet-restore
       - *save-cache
+      - *dotnet-test-debug-2-1
+      - *dotnet-test-release-2-1
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
@@ -246,6 +264,8 @@ jobs:
       - *restore-cache
       - *dotnet-restore
       - *save-cache
+      - *dotnet-test-debug-2-1
+      - *dotnet-test-release-2-1
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
       - *dotnet-test-debug-1-1
@@ -269,6 +289,8 @@ jobs:
       - *restore-cache
       - *dotnet-restore
       - *save-cache
+      - *dotnet-test-debug-2-1
+      - *dotnet-test-release-2-1
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
       - *dotnet-test-debug-1-1
@@ -291,6 +313,8 @@ jobs:
       - *restore-cache
       - *dotnet-restore
       - *save-cache
+      - *dotnet-test-debug-2-1
+      - *dotnet-test-release-2-1
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
@@ -307,6 +331,8 @@ jobs:
       - *restore-cache-macos
       - *dotnet-restore
       - *save-cache-macos
+      - *dotnet-test-debug-2-1
+      - *dotnet-test-release-2-1
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
       - *dotnet-test-debug-1-1
