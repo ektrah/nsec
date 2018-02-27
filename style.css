@@ -27,23 +27,19 @@ code, pre {
 }
 
 code, pre, th {
-    background: #FAFAFA;
+    background: #FDFDFD;
 }
 
 pre {
+    border-left: .5em solid #F0F0F0;
     padding: 1em;
     white-space: pre-wrap;
-}
-
-pre, th {
-    border-top: 1px solid #EAEAEA;
-    border-bottom: 1px solid #EAEAEA;
 }
 
 code {
     display: inline-block;
     padding: .1em .3em;
-    border: 1px solid #EAEAEA;
+    border: 1px solid #F0F0F0;
 }
 
 blockquote, dd, ol, ul {
@@ -60,6 +56,11 @@ table {
     margin: 1em auto;
 }
 
+th {
+    border-top: 1px solid #F0F0F0;
+    border-bottom: 1px solid #F0F0F0;
+}
+
 th, td {
     padding: .2em 1em;
 }
@@ -69,9 +70,10 @@ th {
 }
 
 .admonition {
-    border: 1px solid #0071BC;
+    background: #FBFDFF;
+    border: 0 solid #0071BC;
     border-left: .5em solid #0071BC;
-    padding: 0 1em;
+    padding: .5em 1em;
 }
 
     .admonition > * {
@@ -155,13 +157,13 @@ nav > ul {
 
     pre[data-lang]:before {
         content: attr(data-lang);
-        color: #AAA;
+        color: #CCC;
         float: right;
         display: inline-block;
         margin: -.5em;
         padding: .1em .3em;
         background: white;
-        border: 1px solid #EAEAEA;
+        border: 1px solid #F0F0F0;
     }
 
     .c {
