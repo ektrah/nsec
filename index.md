@@ -44,7 +44,11 @@ verify the signature.
 
 ## Installation
 
-Soon&trade; (waiting for .NET Core 2.1)
+    $ dotnet add package NSec.Cryptography --version 18.2.0-preview1
+
+NSec runs on .NET Core 1.1, 2.0, and later on Windows, Linux and Mac. Working
+with NSec requires a C# 7.2 (or later) compiler. See [[Installation]] for
+details.
 
 
 ## Documentation
