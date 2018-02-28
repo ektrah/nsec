@@ -12,16 +12,12 @@ It provides modern cryptographic primitives in a modern API based on the new
 [`Span<T>` and `ReadOnlySpan<T>` types](https://msdn.microsoft.com/en-us/magazine/mt814808).
 NSec aims to be easy to use, secure by default, fast, and agile.
 
-NSec runs on .NET Core 1.1 and later on Windows, Linux and Mac. Using NSec
-requires a C# 7.2 compiler (included in Visual Studio 2017 beginning with
-version 15.5 and the .NET Core SDK beginning with version 2.1).
-
 For more information about NSec, please refer to the following resources:
 
 |                           |                                                  |
 |:------------------------- |:------------------------------------------------ |
 | Project homepage:         | https://nsec.rocks/                              |
-| Installation:             | Soon&trade; (waiting for .NET Core 2.1)<br>&raquo; [Get notified when NSec is released](https://goo.gl/forms/vymBKq5idhEXJRO82) |
+| Installation:             | https://nsec.rocks/docs/install                  |
 | Online documentation:     | https://nsec.rocks/docs/api/nsec.cryptography    |
 | Open issues:              | https://github.com/ektrah/nsec/issues            |
 | Pull requests:            | https://github.com/ektrah/nsec/pulls             |
