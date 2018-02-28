@@ -39,7 +39,7 @@ to **latest** or **7.2** (or later).
 
 Running NSec is supported on the following platforms and .NET Core versions:
 
-| OS            | Version  | Architectures | .NET Core Runtime     |
+| OS            | Version  | Architectures | .NET Core Runtimes    |
 |:------------- |:-------- |:------------- |:--------------------- |
 | Windows 10    | 1709     | x64 / x86     | 2.1.0 / 2.0.5 / 1.1.6 |
 |               |          |               |                       |
