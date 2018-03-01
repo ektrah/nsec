@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Description>Provides modern cryptographic algorithm implementations based on libsodium.
+    <Description>Provides modern cryptographic algorithm implementations for .NET Core based on libsodium.
 
 Commonly Used Types:
 NSec.Cryptography.Blake2b
