@@ -165,7 +165,7 @@ namespace NSec.Cryptography.Formatting
                 throw Error.ArgumentNull_String(nameof(base64));
             }
 
-            return TryDecode(base64.AsReadOnlySpan(), bytes);
+            return TryDecode(base64.AsSpan(), bytes);
         }
 
         public static bool TryDecode(
@@ -267,7 +267,7 @@ namespace NSec.Cryptography.Formatting
                 throw Error.ArgumentNull_String(nameof(base64));
             }
 
-            return TryGetDecodedLength(base64.AsReadOnlySpan(), out decodedLength);
+            return TryGetDecodedLength(base64.AsSpan(), out decodedLength);
         }
 
         public static bool TryGetDecodedLength(

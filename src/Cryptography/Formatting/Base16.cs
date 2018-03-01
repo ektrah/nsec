@@ -123,7 +123,7 @@ namespace NSec.Cryptography.Formatting
                 throw Error.ArgumentNull_String(nameof(base16));
             }
 
-            return TryDecode(base16.AsReadOnlySpan(), bytes);
+            return TryDecode(base16.AsSpan(), bytes);
         }
 
         public static bool TryDecode(
@@ -187,7 +187,7 @@ namespace NSec.Cryptography.Formatting
                 throw Error.ArgumentNull_String(nameof(base16));
             }
 
-            return TryGetDecodedLength(base16.AsReadOnlySpan(), out decodedLength);
+            return TryGetDecodedLength(base16.AsSpan(), out decodedLength);
         }
 
         public static bool TryGetDecodedLength(
