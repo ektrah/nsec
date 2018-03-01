@@ -14,6 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Interop.HmacSha512.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop.Libraries.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop.MisuseHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interop.Nacl.XSalsa20Poly1305.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop.Random.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop.SecureMemoryHandle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop.Sha256.cs" />
@@ -23,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Interop.X25519.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Interop.Nacl.yaml" />
     <None Include="$(MSBuildThisFileDirectory)Interop.yaml" />
   </ItemGroup>
 </Project>

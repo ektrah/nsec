@@ -76,7 +76,7 @@ namespace NSec.Cryptography.Nacl
                 throw Error.Cryptographic_DecryptionFailed();
             if (plaintext.Length != ciphertext.Length - _macSize)
                 throw Error.Argument_PlaintextLength(nameof(plaintext));
-            if (Utilities.Overlap(plaintext, ciphertext))
+            if (plaintext.Overlaps(ciphertext))
                 throw Error.Argument_OverlapPlaintext(nameof(plaintext));
 
             if (!TryDecryptCore(key.Handle, nonce, ciphertext, plaintext))
@@ -120,7 +120,7 @@ namespace NSec.Cryptography.Nacl
                 throw Error.Argument_PlaintextTooLong(nameof(plaintext), _maxPlaintextSize.ToString());
             if (ciphertext.Length != _macSize + plaintext.Length)
                 throw Error.Argument_CiphertextLength(nameof(ciphertext));
-            if (Utilities.Overlap(ciphertext, plaintext))
+            if (ciphertext.Overlaps(plaintext))
                 throw Error.Argument_OverlapCiphertext(nameof(ciphertext));
 
             EncryptCore(key.Handle, nonce, plaintext, ciphertext);
@@ -167,7 +167,7 @@ namespace NSec.Cryptography.Nacl
                 return false;
             if (plaintext.Length != ciphertext.Length - _macSize)
                 throw Error.Argument_PlaintextLength(nameof(plaintext));
-            if (Utilities.Overlap(plaintext, ciphertext))
+            if (plaintext.Overlaps(ciphertext))
                 throw Error.Argument_OverlapPlaintext(nameof(plaintext));
 
             return TryDecryptCore(key.Handle, nonce, ciphertext, plaintext);

@@ -20,7 +20,7 @@ namespace NSec.Cryptography.Nacl
         {
             if (!s_selfTest.Value)
             {
-                throw Error.Cryptographic_InitializationFailed();
+                throw Error.Cryptographic_InitializationFailed(8513.ToString("X"));
             }
         }
 
@@ -48,10 +48,10 @@ namespace NSec.Cryptography.Nacl
             Debug.Assert(ciphertext.Length == crypto_secretbox_xsalsa20poly1305_MACBYTES + plaintext.Length);
 
             crypto_secretbox_easy(
-                ref ciphertext.DangerousGetPinnableReference(),
-                ref plaintext.DangerousGetPinnableReference(),
+                ref MemoryMarshal.GetReference(ciphertext),
+                ref MemoryMarshal.GetReference(plaintext),
                 (ulong)plaintext.Length,
-                ref nonce.DangerousGetPinnableReference(),
+                ref MemoryMarshal.GetReference(nonce),
                 keyHandle);
         }
 
@@ -72,10 +72,10 @@ namespace NSec.Cryptography.Nacl
             Debug.Assert(plaintext.Length == ciphertext.Length - crypto_secretbox_xsalsa20poly1305_MACBYTES);
 
             int error = crypto_secretbox_open_easy(
-                ref plaintext.DangerousGetPinnableReference(),
-                ref ciphertext.DangerousGetPinnableReference(),
+                ref MemoryMarshal.GetReference(plaintext),
+                ref MemoryMarshal.GetReference(ciphertext),
                 (ulong)ciphertext.Length,
-                ref nonce.DangerousGetPinnableReference(),
+                ref MemoryMarshal.GetReference(nonce),
                 keyHandle);
 
             return error == 0;
