@@ -119,7 +119,6 @@ Interop.HmacSha512.cs:
   - crypto_auth_hmacsha512_keybytes
   - crypto_auth_hmacsha512_statebytes
   - crypto_auth_hmacsha512_update
-  - crypto_auth_hmacsha512_update (ref uint in)
   structs:
   - crypto_auth_hmacsha512_state
 
@@ -153,7 +152,6 @@ Interop.Sha512.cs:
   - crypto_hash_sha512_init
   - crypto_hash_sha512_statebytes
   - crypto_hash_sha512_update
-  - crypto_hash_sha512_update (ref uint in)
   structs:
   - crypto_hash_sha512_state
 
