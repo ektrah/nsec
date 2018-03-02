@@ -24,7 +24,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Interop.X25519.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)Interop.Nacl.yaml" />
     <None Include="$(MSBuildThisFileDirectory)Interop.yaml" />
   </ItemGroup>
 </Project>
