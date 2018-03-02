@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace NSec.Cryptography.Formatting
 {
-    internal class PublicKeyFormatter
+    internal abstract class PublicKeyFormatter
     {
         private static readonly byte[] s_beginLabel =
         {
@@ -107,22 +107,11 @@ namespace NSec.Cryptography.Formatting
             return TryImport(temp, out result);
         }
 
-        protected virtual byte[] Deserialize(
-            ReadOnlySpan<byte> span)
-        {
-            Debug.Assert(span.Length == _blobSize - _blobHeader.Length);
+        protected abstract byte[] Deserialize(
+            ReadOnlySpan<byte> span);
 
-            return span.ToArray();
-        }
-
-        protected virtual void Serialize(
+        protected abstract void Serialize(
             ReadOnlySpan<byte> publicKeyBytes,
-            Span<byte> span)
-        {
-            Debug.Assert(publicKeyBytes.Length == _blobSize - _blobHeader.Length);
-            Debug.Assert(span.Length == _blobSize - _blobHeader.Length);
-
-            publicKeyBytes.CopyTo(span);
-        }
+            Span<byte> span);
     }
 }

@@ -5,7 +5,7 @@ using static Interop.Libsodium;
 
 namespace NSec.Cryptography.Formatting
 {
-    internal class PrivateKeyFormatter
+    internal abstract class PrivateKeyFormatter
     {
         private static readonly byte[] s_beginLabel =
         {
@@ -130,26 +130,13 @@ namespace NSec.Cryptography.Formatting
             }
         }
 
-        protected virtual void Deserialize(
+        protected abstract void Deserialize(
             ReadOnlySpan<byte> span,
             out SecureMemoryHandle keyHandle,
-            out byte[] publicKeyBytes)
-        {
-            Debug.Assert(span.Length == _keySize);
+            out byte[] publicKeyBytes);
 
-            publicKeyBytes = null;
-            SecureMemoryHandle.Import(span, out keyHandle);
-        }
-
-        protected virtual void Serialize(
+        protected abstract void Serialize(
             SecureMemoryHandle keyHandle,
-            Span<byte> span)
-        {
-            Debug.Assert(keyHandle != null);
-            Debug.Assert(keyHandle.Length == _keySize);
-            Debug.Assert(span.Length == _keySize);
-
-            keyHandle.Export(span);
-        }
+            Span<byte> span);
     }
 }

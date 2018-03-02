@@ -36,7 +36,7 @@ namespace NSec.Cryptography
     {
         private static readonly PrivateKeyFormatter s_nsecPrivateKeyFormatter = new Ed25519PrivateKeyFormatter(crypto_sign_ed25519_SEEDBYTES, new byte[] { 0xDE, 0x34, 0x42, 0xDE, crypto_sign_ed25519_SEEDBYTES, 0, 0, 0 });
 
-        private static readonly PublicKeyFormatter s_nsecPublicKeyFormatter = new PublicKeyFormatter(crypto_sign_ed25519_PUBLICKEYBYTES, new byte[] { 0xDE, 0x35, 0x42, 0xDE, crypto_sign_ed25519_PUBLICKEYBYTES, 0, 0, 0 });
+        private static readonly PublicKeyFormatter s_nsecPublicKeyFormatter = new Ed25519PublicKeyFormatter(crypto_sign_ed25519_PUBLICKEYBYTES, new byte[] { 0xDE, 0x35, 0x42, 0xDE, crypto_sign_ed25519_PUBLICKEYBYTES, 0, 0, 0 });
 
         private static readonly PrivateKeyFormatter s_pkixPrivateKeyFormatter = new Ed25519PrivateKeyFormatter(crypto_sign_ed25519_SEEDBYTES, new byte[]
         {
@@ -50,7 +50,7 @@ namespace NSec.Cryptography
             0x03, 0x2B, 0x65, 0x70, 0x04, 0x22, 0x04, 0x20,
         });
 
-        private static readonly PublicKeyFormatter s_pkixPublicKeyFormatter = new PublicKeyFormatter(crypto_sign_ed25519_PUBLICKEYBYTES, new byte[]
+        private static readonly PublicKeyFormatter s_pkixPublicKeyFormatter = new Ed25519PublicKeyFormatter(crypto_sign_ed25519_PUBLICKEYBYTES, new byte[]
         {
             // +-- SEQUENCE (2 elements)
             //     +-- SEQUENCE (1 element)
@@ -62,7 +62,7 @@ namespace NSec.Cryptography
 
         private static readonly PrivateKeyFormatter s_rawPrivateKeyFormatter = new Ed25519PrivateKeyFormatter(crypto_sign_ed25519_SEEDBYTES, new byte[] { });
 
-        private static readonly PublicKeyFormatter s_rawPublicKeyFormatter = new PublicKeyFormatter(crypto_sign_ed25519_PUBLICKEYBYTES, new byte[] { });
+        private static readonly PublicKeyFormatter s_rawPublicKeyFormatter = new Ed25519PublicKeyFormatter(crypto_sign_ed25519_PUBLICKEYBYTES, new byte[] { });
 
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
