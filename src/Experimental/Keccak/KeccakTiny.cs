@@ -7,7 +7,7 @@
  * but not liability.
  */
 
-namespace NSec.Cryptography.Experimental
+namespace NSec.Cryptography.Experimental.Keccak
 {
 internal static partial class KeccakTiny
 {

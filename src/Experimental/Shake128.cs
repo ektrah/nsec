@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
-using static NSec.Cryptography.Experimental.KeccakTiny;
+using static NSec.Cryptography.Experimental.Keccak.KeccakTiny;
 
 namespace NSec.Cryptography.Experimental
 {
