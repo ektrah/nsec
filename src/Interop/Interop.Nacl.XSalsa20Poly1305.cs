@@ -13,9 +13,9 @@ internal static partial class Interop
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int crypto_secretbox_easy(
             ref byte c,
-            ref byte m,
+            in byte m,
             ulong mlen,
-            ref byte n,
+            in byte n,
             SecureMemoryHandle k);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
@@ -30,9 +30,9 @@ internal static partial class Interop
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int crypto_secretbox_open_easy(
             ref byte m,
-            ref byte c,
+            in byte c,
             ulong clen,
-            ref byte n,
+            in byte n,
             SecureMemoryHandle k);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]

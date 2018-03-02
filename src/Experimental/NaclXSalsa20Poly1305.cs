@@ -49,9 +49,9 @@ namespace NSec.Cryptography.Experimental
 
             crypto_secretbox_easy(
                 ref MemoryMarshal.GetReference(ciphertext),
-                ref MemoryMarshal.GetReference(plaintext),
+                in MemoryMarshal.GetReference(plaintext),
                 (ulong)plaintext.Length,
-                ref MemoryMarshal.GetReference(nonce),
+                in MemoryMarshal.GetReference(nonce),
                 keyHandle);
         }
 
@@ -73,9 +73,9 @@ namespace NSec.Cryptography.Experimental
 
             int error = crypto_secretbox_open_easy(
                 ref MemoryMarshal.GetReference(plaintext),
-                ref MemoryMarshal.GetReference(ciphertext),
+                in MemoryMarshal.GetReference(ciphertext),
                 (ulong)ciphertext.Length,
-                ref MemoryMarshal.GetReference(nonce),
+                in MemoryMarshal.GetReference(nonce),
                 keyHandle);
 
             return error == 0;
