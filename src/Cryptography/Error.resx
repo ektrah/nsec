@@ -151,10 +151,10 @@
     <value>The addend cannot be negative.</value>
   </data>
   <data name="ArgumentOutOfRange_NonceCounterSize" xml:space="preserve">
-    <value>The nonce must have a length between 0 and 24 bytes.</value>
+    <value>The nonce must have a length between 0 and {0} bytes.</value>
   </data>
   <data name="ArgumentOutOfRange_NonceFixedCounterSize" xml:space="preserve">
-    <value>The total length of the nonce must be between 0 and 24 bytes.</value>
+    <value>The total length of the nonce must be between 0 and {0} bytes.</value>
   </data>
   <data name="Argument_BadBase16Length" xml:space="preserve">
     <value>Invalid length for a Base16 span.</value>
@@ -196,10 +196,10 @@
     <value>'{0}' cannot be greater than {1}.</value>
   </data>
   <data name="Argument_NonceFixedCounterSize" xml:space="preserve">
-    <value>The total length of the nonce must be between 0 and 24 bytes.</value>
+    <value>The total length of the nonce must be between 0 and {0} bytes.</value>
   </data>
   <data name="Argument_NonceFixedSize" xml:space="preserve">
-    <value>The fixed part of the nonce must have a length between 0 and 24 bytes.</value>
+    <value>The fixed part of the nonce must have a length between 0 and {0} bytes.</value>
   </data>
   <data name="Argument_NonceLength" xml:space="preserve">
     <value>The nonce must have a length of '{0}' bytes.</value>

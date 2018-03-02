@@ -103,15 +103,17 @@ namespace NSec.Cryptography
         }
 
         internal static ArgumentException Argument_NonceFixedCounterSize(
-            string paramName)
+            string paramName,
+            string arg0)
         {
-            return new ArgumentException(ResourceManager.GetString("Argument_NonceFixedCounterSize"), paramName);
+            return new ArgumentException(string.Format(ResourceManager.GetString("Argument_NonceFixedCounterSize"), arg0), paramName);
         }
 
         internal static ArgumentException Argument_NonceFixedSize(
-            string paramName)
+            string paramName,
+            string arg0)
         {
-            return new ArgumentException(ResourceManager.GetString("Argument_NonceFixedSize"), paramName);
+            return new ArgumentException(string.Format(ResourceManager.GetString("Argument_NonceFixedSize"), arg0), paramName);
         }
 
         internal static ArgumentException Argument_NonceLength(
@@ -265,15 +267,17 @@ namespace NSec.Cryptography
         }
 
         internal static ArgumentOutOfRangeException ArgumentOutOfRange_NonceCounterSize(
-            string paramName)
+            string paramName,
+            string arg0)
         {
-            return new ArgumentOutOfRangeException(paramName, ResourceManager.GetString("ArgumentOutOfRange_NonceCounterSize"));
+            return new ArgumentOutOfRangeException(paramName, string.Format(ResourceManager.GetString("ArgumentOutOfRange_NonceCounterSize"), arg0));
         }
 
         internal static ArgumentOutOfRangeException ArgumentOutOfRange_NonceFixedCounterSize(
-            string paramName)
+            string paramName,
+            string arg0)
         {
-            return new ArgumentOutOfRangeException(paramName, ResourceManager.GetString("ArgumentOutOfRange_NonceFixedCounterSize"));
+            return new ArgumentOutOfRangeException(paramName, string.Format(ResourceManager.GetString("ArgumentOutOfRange_NonceFixedCounterSize"), arg0));
         }
 
         internal static CryptographicException Cryptographic_DecryptionFailed()

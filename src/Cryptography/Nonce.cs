@@ -34,11 +34,11 @@ namespace NSec.Cryptography
         {
             if (fixedFieldSize < 0 || fixedFieldSize > MaxSize)
             {
-                throw Error.ArgumentOutOfRange_NonceFixedCounterSize(nameof(fixedFieldSize));
+                throw Error.ArgumentOutOfRange_NonceFixedCounterSize(nameof(fixedFieldSize), MaxSize.ToString());
             }
             if (counterFieldSize < 0 || counterFieldSize > MaxSize - fixedFieldSize)
             {
-                throw Error.ArgumentOutOfRange_NonceCounterSize(nameof(counterFieldSize));
+                throw Error.ArgumentOutOfRange_NonceCounterSize(nameof(counterFieldSize), MaxSize.ToString());
             }
 
             _fixedFieldSize = (byte)fixedFieldSize;
@@ -52,11 +52,11 @@ namespace NSec.Cryptography
         {
             if (fixedField.Length > MaxSize)
             {
-                throw Error.Argument_NonceFixedSize(nameof(fixedField));
+                throw Error.Argument_NonceFixedSize(nameof(fixedField), MaxSize.ToString());
             }
             if (counterFieldSize < 0 || counterFieldSize > MaxSize - fixedField.Length)
             {
-                throw Error.ArgumentOutOfRange_NonceFixedCounterSize(nameof(counterFieldSize));
+                throw Error.ArgumentOutOfRange_NonceFixedCounterSize(nameof(counterFieldSize), MaxSize.ToString());
             }
 
             _fixedFieldSize = (byte)fixedField.Length;
@@ -72,11 +72,11 @@ namespace NSec.Cryptography
         {
             if (fixedField.Length > MaxSize)
             {
-                throw Error.Argument_NonceFixedSize(nameof(fixedField));
+                throw Error.Argument_NonceFixedSize(nameof(fixedField), MaxSize.ToString());
             }
             if (counterField.Length > MaxSize - fixedField.Length)
             {
-                throw Error.Argument_NonceFixedCounterSize(nameof(counterField));
+                throw Error.Argument_NonceFixedCounterSize(nameof(counterField), MaxSize.ToString());
             }
 
             _fixedFieldSize = (byte)fixedField.Length;
