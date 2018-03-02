@@ -1,4 +1,6 @@
 using System;
+using System.Buffers.Binary;
+using System.Runtime.InteropServices;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography.Experimental
@@ -29,46 +31,36 @@ namespace NSec.Cryptography.Experimental
         {
         }
 
-        internal override void DeriveBytesCore(
+        private protected override void DeriveBytesCore(
             ReadOnlySpan<byte> inputKeyingMaterial,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> info,
             Span<byte> bytes)
         {
-            Span<byte> temp;
-            try
+            Span<byte> temp = stackalloc byte[crypto_auth_hmacsha256_BYTES];
+            int offset = 0;
+            uint counter = 0;
+            int chunkSize;
+
+            while ((chunkSize = bytes.Length - offset) > 0)
             {
-                unsafe
+                counter++;
+
+                uint counterBigEndian = BitConverter.IsLittleEndian ? BinaryPrimitives.ReverseEndianness(counter) : counter;
+
+                crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, in MemoryMarshal.GetReference(salt), (UIntPtr)salt.Length);
+                crypto_auth_hmacsha256_update(ref state, ref counterBigEndian, sizeof(uint));
+                crypto_auth_hmacsha256_update(ref state, in MemoryMarshal.GetReference(inputKeyingMaterial), (ulong)inputKeyingMaterial.Length);
+                crypto_auth_hmacsha256_update(ref state, in MemoryMarshal.GetReference(info), (ulong)info.Length);
+                crypto_auth_hmacsha256_final(ref state, ref MemoryMarshal.GetReference(temp));
+
+                if (chunkSize > crypto_auth_hmacsha256_BYTES)
                 {
-                    byte* pointer = stackalloc byte[crypto_auth_hmacsha256_BYTES];
-                    temp = new Span<byte>(pointer, crypto_auth_hmacsha256_BYTES);
+                    chunkSize = crypto_auth_hmacsha256_BYTES;
                 }
 
-                int offset = 0;
-                uint counter = 0;
-                int chunkSize;
-
-                while ((chunkSize = bytes.Length - offset) > 0)
-                {
-                    counter++;
-
-                    uint counterBigEndian = Utilities.ToBigEndian(counter);
-
-                    crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, ref salt.DangerousGetPinnableReference(), (UIntPtr)salt.Length);
-                    crypto_auth_hmacsha256_update(ref state, ref counterBigEndian, sizeof(uint));
-                    crypto_auth_hmacsha256_update(ref state, ref inputKeyingMaterial.DangerousGetPinnableReference(), (ulong)inputKeyingMaterial.Length);
-                    crypto_auth_hmacsha256_update(ref state, ref info.DangerousGetPinnableReference(), (ulong)info.Length);
-                    crypto_auth_hmacsha256_final(ref state, ref temp.DangerousGetPinnableReference());
-
-                    if (chunkSize > crypto_auth_hmacsha256_BYTES)
-                        chunkSize = crypto_auth_hmacsha256_BYTES;
-                    temp.Slice(0, chunkSize).CopyTo(bytes.Slice(offset));
-                    offset += chunkSize;
-                }
-            }
-            finally
-            {
-                sodium_memzero(ref temp.DangerousGetPinnableReference(), (UIntPtr)temp.Length);
+                temp.Slice(0, chunkSize).CopyTo(bytes.Slice(offset));
+                offset += chunkSize;
             }
         }
     }
