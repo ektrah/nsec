@@ -1,7 +1,7 @@
 using System;
 using static Interop.Libsodium;
 
-namespace NSec.Cryptography
+namespace NSec.Cryptography.Experimental
 {
     //
     //  ANSI X9.63 Key Derivation Function
