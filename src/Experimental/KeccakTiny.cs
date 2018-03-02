@@ -7,7 +7,7 @@
  * but not liability.
  */
 
-internal static partial class Interop
+namespace NSec.Cryptography.Experimental
 {
 internal static partial class KeccakTiny
 {

@@ -1,12 +1,12 @@
 using System;
-using static Interop.KeccakTiny;
+using static NSec.Cryptography.Experimental.KeccakTiny;
 
-namespace NSec.Cryptography
+namespace NSec.Cryptography.Experimental
 {
     //
-    //  SHA3-512
+    //  SHAKE256
     //
-    //      SHA-3 Permutation-Based Hash with a 512-bit message digest
+    //      SHA-3 Extendable-Output Function with 256-bit security strength
     //
     //  References:
     //
@@ -18,16 +18,16 @@ namespace NSec.Cryptography
     //      Input Size - The SHA-3 functions are defined on messages of any bit
     //          length, including the empty string.
     //
-    //      Hash Size - 64 bytes (256 bits of security).
+    //      Hash Size - Any.
     //
-    public sealed class Sha3_512 : HashAlgorithm
+    public sealed class Shake256 : HashAlgorithm
     {
-        private static readonly Oid s_oid = new Oid(2, 16, 840, 1, 101, 3, 4, 2, 10);
+        private static readonly Oid s_oid = new Oid(2, 16, 840, 1, 101, 3, 4, 2, 12);
 
-        public Sha3_512() : base(
-            minHashSize: 32,
+        public Shake256() : base(
+            minHashSize: 0,
             defaultHashSize: 64,
-            maxHashSize: 64)
+            maxHashSize: int.MaxValue)
         {
         }
 
@@ -35,7 +35,7 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> data,
             Span<byte> hash)
         {
-            sha3_512(
+            shake256(
                 ref hash.DangerousGetPinnableReference(),
                 (ulong)hash.Length,
                 ref data.DangerousGetPinnableReference(),
