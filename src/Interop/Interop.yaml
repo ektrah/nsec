@@ -59,6 +59,7 @@ Interop.Core.cs:
   include: include/sodium/core.h
   functions:
   - sodium_init
+  - sodium_set_misuse_handler (MisuseHandler handler)
 
 Interop.X25519.cs:
   include: include/sodium/crypto_scalarmult_curve25519.h
