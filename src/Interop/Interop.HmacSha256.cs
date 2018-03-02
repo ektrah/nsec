@@ -43,7 +43,7 @@ internal static partial class Interop
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int crypto_auth_hmacsha256_update(
             ref crypto_auth_hmacsha256_state state,
-            ref uint @in,
+            in uint @in,
             ulong inlen);
 
         [StructLayout(LayoutKind.Explicit, Size = 208, Pack = 8)]

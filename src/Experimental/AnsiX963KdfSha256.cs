@@ -48,7 +48,7 @@ namespace NSec.Cryptography.Experimental
 
                 crypto_hash_sha256_init(out crypto_hash_sha256_state state);
                 crypto_hash_sha256_update(ref state, in MemoryMarshal.GetReference(inputKeyingMaterial), (ulong)inputKeyingMaterial.Length);
-                crypto_hash_sha256_update(ref state, ref counterBigEndian, sizeof(uint));
+                crypto_hash_sha256_update(ref state, in counterBigEndian, sizeof(uint));
                 crypto_hash_sha256_update(ref state, in MemoryMarshal.GetReference(info), (ulong)info.Length);
                 crypto_hash_sha256_final(ref state, ref MemoryMarshal.GetReference(temp));
 

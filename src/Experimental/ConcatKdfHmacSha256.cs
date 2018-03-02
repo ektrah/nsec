@@ -49,7 +49,7 @@ namespace NSec.Cryptography.Experimental
                 uint counterBigEndian = BitConverter.IsLittleEndian ? BinaryPrimitives.ReverseEndianness(counter) : counter;
 
                 crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, in MemoryMarshal.GetReference(salt), (UIntPtr)salt.Length);
-                crypto_auth_hmacsha256_update(ref state, ref counterBigEndian, sizeof(uint));
+                crypto_auth_hmacsha256_update(ref state, in counterBigEndian, sizeof(uint));
                 crypto_auth_hmacsha256_update(ref state, in MemoryMarshal.GetReference(inputKeyingMaterial), (ulong)inputKeyingMaterial.Length);
                 crypto_auth_hmacsha256_update(ref state, in MemoryMarshal.GetReference(info), (ulong)info.Length);
                 crypto_auth_hmacsha256_final(ref state, ref MemoryMarshal.GetReference(temp));
