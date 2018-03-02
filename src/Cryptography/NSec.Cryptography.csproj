@@ -35,6 +35,7 @@ NSec.Cryptography.X25519</Description>
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="NSec.Cryptography.Experimental" />
     <InternalsVisibleTo Include="NSec.Tests.97bf2648-69d2-4a17-888f-2a13e5c5cb28" />
   </ItemGroup>
 

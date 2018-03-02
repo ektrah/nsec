@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSec.Cryptography", "src\Cryptography\NSec.Cryptography.csproj", "{839872CC-6AF4-456B-A55B-F82EE7B4822E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSec.Cryptography.Experimental", "src\Experimental\NSec.Cryptography.Experimental.csproj", "{5D5C8827-A74C-4B29-961F-CB8613C33F5C}"
+EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Interop", "src\Interop\Interop.shproj", "{F9492D32-4406-41EE-B90E-F9AE33F0F4DC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "tests\Tests.csproj", "{97BF2648-69D2-4A17-888F-2A13E5C5CB28}"
@@ -46,6 +48,10 @@ Global
 		{839872CC-6AF4-456B-A55B-F82EE7B4822E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{839872CC-6AF4-456B-A55B-F82EE7B4822E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{839872CC-6AF4-456B-A55B-F82EE7B4822E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D5C8827-A74C-4B29-961F-CB8613C33F5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D5C8827-A74C-4B29-961F-CB8613C33F5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D5C8827-A74C-4B29-961F-CB8613C33F5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D5C8827-A74C-4B29-961F-CB8613C33F5C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{97BF2648-69D2-4A17-888F-2A13E5C5CB28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{97BF2648-69D2-4A17-888F-2A13E5C5CB28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97BF2648-69D2-4A17-888F-2A13E5C5CB28}.Release|Any CPU.ActiveCfg = Release|Any CPU
