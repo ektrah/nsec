@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <IsPackable>false</IsPackable>
+    <Description>Experimental code</Description>
+    <IsPackable Condition="'$(IsRelease)' == 'true'">false</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
