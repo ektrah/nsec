@@ -138,7 +138,7 @@ namespace NSec.Cryptography
                 throw Error.Argument_MinMaxValue(nameof(minValue), nameof(minValue), nameof(maxValue));
             }
 
-            return minValue + GenerateUInt32(maxValue - minValue);
+            return unchecked(minValue + GenerateUInt32(maxValue - minValue));
         }
 
         private protected abstract void GenerateBytesCore(
