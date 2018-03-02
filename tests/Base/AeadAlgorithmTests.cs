@@ -67,6 +67,11 @@ namespace NSec.Tests.Base
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
+            if (a.NonceSize == Nonce.MaxSize)
+            {
+                return;
+            }
+
             using (var k = new Key(a))
             {
                 Assert.Throws<ArgumentException>("nonce", () => a.Encrypt(k, new Nonce(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
@@ -130,6 +135,11 @@ namespace NSec.Tests.Base
         public static void EncryptWithSpanWithNonceTooLarge(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
+
+            if (a.NonceSize == Nonce.MaxSize)
+            {
+                return;
+            }
 
             using (var k = new Key(a))
             {
@@ -310,6 +320,11 @@ namespace NSec.Tests.Base
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
+            if (a.NonceSize == Nonce.MaxSize)
+            {
+                return;
+            }
+
             using (var k = new Key(a))
             {
                 Assert.Throws<ArgumentException>("nonce", () => a.Decrypt(k, new Nonce(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
@@ -388,6 +403,11 @@ namespace NSec.Tests.Base
         public static void DecryptWithSpanWithNonceTooLarge(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
+
+            if (a.NonceSize == Nonce.MaxSize)
+            {
+                return;
+            }
 
             using (var k = new Key(a))
             {
@@ -549,6 +569,11 @@ namespace NSec.Tests.Base
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
+            if (a.NonceSize == Nonce.MaxSize)
+            {
+                return;
+            }
+
             using (var k = new Key(a))
             {
                 Assert.Throws<ArgumentException>("nonce", () => a.TryDecrypt(k, new Nonce(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out byte[] pt));
@@ -649,6 +674,11 @@ namespace NSec.Tests.Base
         public static void TryDecryptWithSpanWithNonceTooLarge(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
+
+            if (a.NonceSize == Nonce.MaxSize)
+            {
+                return;
+            }
 
             using (var k = new Key(a))
             {

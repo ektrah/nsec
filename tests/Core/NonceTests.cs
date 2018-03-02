@@ -23,7 +23,7 @@ namespace NSec.Tests.Core
         [Fact]
         public static void Constants()
         {
-            Assert.Equal(24, Nonce.MaxSize);
+            Assert.Equal(32, Nonce.MaxSize);
         }
 
         #endregion
@@ -72,9 +72,9 @@ namespace NSec.Tests.Core
         }
 
         [Fact]
-        public static void CtorWithFixedSizeGreater24()
+        public static void CtorWithFixedSizeGreater32()
         {
-            Assert.Throws<ArgumentOutOfRangeException>("fixedFieldSize", () => new Nonce(25, 0));
+            Assert.Throws<ArgumentOutOfRangeException>("fixedFieldSize", () => new Nonce(32 + 1, 0));
         }
 
         [Fact]
@@ -84,9 +84,9 @@ namespace NSec.Tests.Core
         }
 
         [Fact]
-        public static void CtorWithCounterSizeGreater24()
+        public static void CtorWithCounterSizeGreater32()
         {
-            Assert.Throws<ArgumentOutOfRangeException>("counterFieldSize", () => new Nonce(0, 25));
+            Assert.Throws<ArgumentOutOfRangeException>("counterFieldSize", () => new Nonce(0, 32 + 1));
         }
 
         #endregion
@@ -117,9 +117,9 @@ namespace NSec.Tests.Core
         }
 
         [Fact]
-        public static void CtorWithFixedLargerThan24AndCounterSize()
+        public static void CtorWithFixedLargerThan32AndCounterSize()
         {
-            Assert.Throws<ArgumentException>("fixedField", () => new Nonce(Utilities.RandomBytes.Slice(0, 25), -1));
+            Assert.Throws<ArgumentException>("fixedField", () => new Nonce(Utilities.RandomBytes.Slice(0, 32 + 1), -1));
         }
 
         [Fact]
@@ -129,9 +129,9 @@ namespace NSec.Tests.Core
         }
 
         [Fact]
-        public static void CtorWithFixedAndCounterSizeGreater24()
+        public static void CtorWithFixedAndCounterSizeGreater32()
         {
-            Assert.Throws<ArgumentOutOfRangeException>("counterFieldSize", () => new Nonce(Utilities.RandomBytes.Slice(0, 4), 21));
+            Assert.Throws<ArgumentOutOfRangeException>("counterFieldSize", () => new Nonce(Utilities.RandomBytes.Slice(0, 4), 32 - 4 + 1));
         }
 
         #endregion
@@ -163,15 +163,15 @@ namespace NSec.Tests.Core
         }
 
         [Fact]
-        public static void CtorWithFixedLargerThan24AndCounter()
+        public static void CtorWithFixedLargerThan32AndCounter()
         {
-            Assert.Throws<ArgumentException>("fixedField", () => new Nonce(Utilities.RandomBytes.Slice(0, 25), Utilities.RandomBytes.Slice(0, 0)));
+            Assert.Throws<ArgumentException>("fixedField", () => new Nonce(Utilities.RandomBytes.Slice(0, 32 + 1), Utilities.RandomBytes.Slice(0, 0)));
         }
 
         [Fact]
-        public static void CtorWithFixedAndCounterLargerThan24()
+        public static void CtorWithFixedAndCounterLargerThan32()
         {
-            Assert.Throws<ArgumentException>("counterField", () => new Nonce(Utilities.RandomBytes.Slice(0, 4), Utilities.RandomBytes.Slice(0, 21)));
+            Assert.Throws<ArgumentException>("counterField", () => new Nonce(Utilities.RandomBytes.Slice(0, 4), Utilities.RandomBytes.Slice(0, 32 - 4 + 1)));
         }
 
         #endregion
@@ -338,8 +338,8 @@ namespace NSec.Tests.Core
         [InlineData(3)]
         public static void Xor(int start)
         {
-            var bytes1 = Utilities.RandomBytes.Slice(start * 24, 12 + start);
-            var bytes2 = Utilities.RandomBytes.Slice(start * 24 + 100, 12 + start);
+            var bytes1 = Utilities.RandomBytes.Slice(start * 32, 12 + start);
+            var bytes2 = Utilities.RandomBytes.Slice(start * 32 + 100, 12 + start);
 
             var expected = new byte[bytes1.Length];
             var actual = new Nonce(ReadOnlySpan<byte>.Empty, bytes1) ^ bytes2;
