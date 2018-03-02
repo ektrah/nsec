@@ -4,7 +4,7 @@ using static Interop.Libsodium;
 
 namespace NSec.Cryptography.Formatting
 {
-    internal class RawKeyFormatter
+    internal sealed class RawKeyFormatter
     {
         private readonly int _maxKeySize;
         private readonly int _minKeySize;

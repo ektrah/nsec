@@ -5,7 +5,7 @@ using static Interop.Libsodium;
 
 namespace NSec.Cryptography.Formatting
 {
-    internal class NSecKeyFormatter
+    internal sealed class NSecKeyFormatter
     {
         private readonly byte[] _blobHeader;
         private readonly int _maxKeySize;
