@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using static NSec.Cryptography.Experimental.KeccakTiny;
 
 namespace NSec.Cryptography.Experimental
@@ -22,8 +23,6 @@ namespace NSec.Cryptography.Experimental
     //
     public sealed class Shake128 : HashAlgorithm
     {
-        private static readonly Oid s_oid = new Oid(2, 16, 840, 1, 101, 3, 4, 2, 11);
-
         public Shake128() : base(
             minHashSize: 0,
             defaultHashSize: 32,
@@ -31,15 +30,22 @@ namespace NSec.Cryptography.Experimental
         {
         }
 
-        internal override void HashCore(
+        private protected override void HashCore(
             ReadOnlySpan<byte> data,
             Span<byte> hash)
         {
             shake128(
-                ref hash.DangerousGetPinnableReference(),
+                ref MemoryMarshal.GetReference(hash),
                 (ulong)hash.Length,
-                ref data.DangerousGetPinnableReference(),
+                ref MemoryMarshal.GetReference(data),
                 (ulong)data.Length);
+        }
+
+        private protected override bool TryVerifyCore(
+            ReadOnlySpan<byte> data,
+            ReadOnlySpan<byte> hash)
+        {
+            throw new NotImplementedException(); // TODO: Shake128.TryVerifyCore
         }
     }
 }

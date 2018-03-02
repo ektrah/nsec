@@ -1,5 +1,6 @@
 using System;
 using NSec.Cryptography;
+using NSec.Cryptography.Experimental;
 using Xunit;
 
 namespace NSec.Tests
@@ -73,6 +74,10 @@ namespace NSec.Tests
             typeof(HkdfSha512),
             typeof(Sha256),
             typeof(Sha512),
+            typeof(Sha3_256),
+            typeof(Sha3_512),
+            typeof(Shake128),
+            typeof(Shake256),
         };
 
         #endregion

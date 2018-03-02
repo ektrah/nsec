@@ -1,5 +1,5 @@
 using System;
-using NSec.Cryptography;
+using NSec.Cryptography.Experimental;
 using Xunit;
 
 namespace NSec.Tests.Algorithms
@@ -8,16 +8,21 @@ namespace NSec.Tests.Algorithms
     {
         private static readonly string s_hashOfEmpty = "a7ffc6f8bf1ed76651c14756a061d662f580ff4de43b49fa82d80a4b80f8434a";
 
+        #region Properties
+
         [Fact]
         public static void Properties()
         {
             var a = new Sha3_256();
 
             Assert.Equal(32, a.MinHashSize);
-            Assert.True(a.DefaultHashSize >= a.MinHashSize);
-            Assert.True(a.MaxHashSize >= a.DefaultHashSize);
+            Assert.Equal(32, a.DefaultHashSize);
             Assert.Equal(32, a.MaxHashSize);
         }
+
+        #endregion
+
+        #region Hash #1
 
         [Fact]
         public static void HashEmpty()
@@ -31,6 +36,10 @@ namespace NSec.Tests.Algorithms
             Assert.Equal(expected, actual);
         }
 
+        #endregion
+
+        #region Hash #2
+
         [Fact]
         public static void HashEmptyWithSize()
         {
@@ -43,6 +52,10 @@ namespace NSec.Tests.Algorithms
             Assert.Equal(expected, actual);
         }
 
+        #endregion
+
+        #region Hash #3
+
         [Fact]
         public static void HashEmptyWithSpan()
         {
@@ -54,5 +67,7 @@ namespace NSec.Tests.Algorithms
             a.Hash(ReadOnlySpan<byte>.Empty, actual);
             Assert.Equal(expected, actual);
         }
+
+        #endregion
     }
 }
