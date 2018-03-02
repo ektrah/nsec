@@ -28,7 +28,7 @@ using static Interop.Libsodium;
 
 using norx_word_t = System.UInt64;
 
-internal static partial class Interop
+namespace NSec.Cryptography.Experimental.Norx
 {
 internal static partial class Norx6441
 {
@@ -427,7 +427,7 @@ static unsafe int norx_aead_decrypt(
 
 
 
-internal static partial class Interop
+namespace NSec.Cryptography.Experimental.Norx
 {
     internal static partial class Norx6441
     {

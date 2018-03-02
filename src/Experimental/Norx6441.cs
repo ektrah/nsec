@@ -2,9 +2,9 @@ using System;
 using System.Diagnostics;
 using NSec.Cryptography.Formatting;
 using static Interop.Libsodium;
-using static Interop.Norx6441;
+using static NSec.Cryptography.Experimental.Norx.Norx6441;
 
-namespace NSec.Cryptography
+namespace NSec.Cryptography.Experimental
 {
     //
     //  NORX64-4-1
