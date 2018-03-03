@@ -15,7 +15,7 @@ internal static partial class Interop
             ref byte c,
             in byte m,
             ulong mlen,
-            in byte n,
+            in NSec.Cryptography.Nonce n,
             SecureMemoryHandle k);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
@@ -32,7 +32,7 @@ internal static partial class Interop
             ref byte m,
             in byte c,
             ulong clen,
-            in byte n,
+            in NSec.Cryptography.Nonce n,
             SecureMemoryHandle k);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]

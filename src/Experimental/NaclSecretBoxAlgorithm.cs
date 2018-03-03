@@ -18,7 +18,7 @@ namespace NSec.Cryptography.Experimental
             int maxPlaintextSize)
         {
             Debug.Assert(keySize > 0);
-            Debug.Assert(nonceSize >= 0);
+            Debug.Assert(nonceSize >= 0 && nonceSize <= Nonce.MaxSize);
             Debug.Assert(macSize >= 0);
             Debug.Assert(maxPlaintextSize >= 0 && maxPlaintextSize <= int.MaxValue - macSize);
 
@@ -38,14 +38,14 @@ namespace NSec.Cryptography.Experimental
 
         public byte[] Decrypt(
             Key key,
-            ReadOnlySpan<byte> nonce,
+            in Nonce nonce,
             ReadOnlySpan<byte> ciphertext)
         {
             if (key == null)
                 throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (nonce.Length != _nonceSize)
+            if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
             if (ciphertext.Length < _macSize || ciphertext.Length - _macSize > _maxPlaintextSize)
                 throw Error.Cryptographic_DecryptionFailed();
@@ -62,7 +62,7 @@ namespace NSec.Cryptography.Experimental
 
         public void Decrypt(
             Key key,
-            ReadOnlySpan<byte> nonce,
+            in Nonce nonce,
             ReadOnlySpan<byte> ciphertext,
             Span<byte> plaintext)
         {
@@ -70,7 +70,7 @@ namespace NSec.Cryptography.Experimental
                 throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (nonce.Length != _nonceSize)
+            if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
             if (ciphertext.Length < _macSize || ciphertext.Length - _macSize > _maxPlaintextSize)
                 throw Error.Cryptographic_DecryptionFailed();
@@ -87,14 +87,14 @@ namespace NSec.Cryptography.Experimental
 
         public byte[] Encrypt(
             Key key,
-            ReadOnlySpan<byte> nonce,
+            in Nonce nonce,
             ReadOnlySpan<byte> plaintext)
         {
             if (key == null)
                 throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (nonce.Length != _nonceSize)
+            if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
             if (plaintext.Length > _maxPlaintextSize)
                 throw Error.Argument_PlaintextTooLong(nameof(plaintext), _maxPlaintextSize.ToString());
@@ -106,7 +106,7 @@ namespace NSec.Cryptography.Experimental
 
         public void Encrypt(
             Key key,
-            ReadOnlySpan<byte> nonce,
+            in Nonce nonce,
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext)
         {
@@ -114,7 +114,7 @@ namespace NSec.Cryptography.Experimental
                 throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (nonce.Length != _nonceSize)
+            if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
             if (plaintext.Length > _maxPlaintextSize)
                 throw Error.Argument_PlaintextTooLong(nameof(plaintext), _maxPlaintextSize.ToString());
@@ -128,7 +128,7 @@ namespace NSec.Cryptography.Experimental
 
         public bool TryDecrypt(
             Key key,
-            ReadOnlySpan<byte> nonce,
+            in Nonce nonce,
             ReadOnlySpan<byte> ciphertext,
             out byte[] plaintext)
         {
@@ -136,7 +136,7 @@ namespace NSec.Cryptography.Experimental
                 throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (nonce.Length != _nonceSize)
+            if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
 
             if (ciphertext.Length < _macSize || ciphertext.Length - _macSize > _maxPlaintextSize)
@@ -153,7 +153,7 @@ namespace NSec.Cryptography.Experimental
 
         public bool TryDecrypt(
             Key key,
-            ReadOnlySpan<byte> nonce,
+            in Nonce nonce,
             ReadOnlySpan<byte> ciphertext,
             Span<byte> plaintext)
         {
@@ -161,7 +161,7 @@ namespace NSec.Cryptography.Experimental
                 throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (nonce.Length != _nonceSize)
+            if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
             if (ciphertext.Length < _macSize || ciphertext.Length - _macSize > _maxPlaintextSize)
                 return false;
@@ -175,13 +175,13 @@ namespace NSec.Cryptography.Experimental
 
         internal abstract void EncryptCore(
             SecureMemoryHandle keyHandle,
-            ReadOnlySpan<byte> nonce,
+            in Nonce nonce,
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext);
 
         internal abstract bool TryDecryptCore(
             SecureMemoryHandle keyHandle,
-            ReadOnlySpan<byte> nonce,
+            in Nonce nonce,
             ReadOnlySpan<byte> ciphertext,
             Span<byte> plaintext);
     }

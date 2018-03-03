@@ -132,11 +132,11 @@ Interop.Nacl.XSalsa20Poly1305.cs:
   - crypto_secretbox_xsalsa20poly1305_MACBYTES
   - crypto_secretbox_xsalsa20poly1305_NONCEBYTES
   functions:
-  - crypto_secretbox_easy (SecureMemoryHandle k)
+  - crypto_secretbox_easy (in NSec.Cryptography.Nonce n, SecureMemoryHandle k)
   - crypto_secretbox_keybytes
   - crypto_secretbox_macbytes
   - crypto_secretbox_noncebytes
-  - crypto_secretbox_open_easy (SecureMemoryHandle k)
+  - crypto_secretbox_open_easy (in NSec.Cryptography.Nonce n, SecureMemoryHandle k)
   - crypto_secretbox_primitive
 
 Interop.Random.cs:

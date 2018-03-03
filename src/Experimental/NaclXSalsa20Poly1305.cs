@@ -32,26 +32,25 @@ namespace NSec.Cryptography.Experimental
             Debug.Assert(seed.Length == crypto_secretbox_xsalsa20poly1305_KEYBYTES);
 
             publicKeyBytes = null;
-            SecureMemoryHandle.Alloc(seed.Length, out keyHandle);
-            keyHandle.Import(seed);
+            SecureMemoryHandle.Import(seed, out keyHandle);
         }
 
         internal override void EncryptCore(
             SecureMemoryHandle keyHandle,
-            ReadOnlySpan<byte> nonce,
+            in Nonce nonce,
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext)
         {
             Debug.Assert(keyHandle != null);
             Debug.Assert(keyHandle.Length == crypto_secretbox_xsalsa20poly1305_KEYBYTES);
-            Debug.Assert(nonce.Length == crypto_secretbox_xsalsa20poly1305_NONCEBYTES);
+            Debug.Assert(nonce.Size == crypto_secretbox_xsalsa20poly1305_NONCEBYTES);
             Debug.Assert(ciphertext.Length == crypto_secretbox_xsalsa20poly1305_MACBYTES + plaintext.Length);
 
             crypto_secretbox_easy(
                 ref MemoryMarshal.GetReference(ciphertext),
                 in MemoryMarshal.GetReference(plaintext),
                 (ulong)plaintext.Length,
-                in MemoryMarshal.GetReference(nonce),
+                in nonce,
                 keyHandle);
         }
 
@@ -62,21 +61,23 @@ namespace NSec.Cryptography.Experimental
 
         internal override bool TryDecryptCore(
             SecureMemoryHandle keyHandle,
-            ReadOnlySpan<byte> nonce,
+            in Nonce nonce,
             ReadOnlySpan<byte> ciphertext,
             Span<byte> plaintext)
         {
             Debug.Assert(keyHandle != null);
             Debug.Assert(keyHandle.Length == crypto_secretbox_xsalsa20poly1305_KEYBYTES);
-            Debug.Assert(nonce.Length == crypto_secretbox_xsalsa20poly1305_NONCEBYTES);
+            Debug.Assert(nonce.Size == crypto_secretbox_xsalsa20poly1305_NONCEBYTES);
             Debug.Assert(plaintext.Length == ciphertext.Length - crypto_secretbox_xsalsa20poly1305_MACBYTES);
 
             int error = crypto_secretbox_open_easy(
                 ref MemoryMarshal.GetReference(plaintext),
                 in MemoryMarshal.GetReference(ciphertext),
                 (ulong)ciphertext.Length,
-                in MemoryMarshal.GetReference(nonce),
+                in nonce,
                 keyHandle);
+
+            // TODO: clear plaintext if decryption fails
 
             return error == 0;
         }
@@ -91,7 +92,7 @@ namespace NSec.Cryptography.Experimental
             {
             case KeyBlobFormat.RawSymmetricKey:
                 return s_rawKeyFormatter.TryExport(keyHandle, blob, out blobSize);
-            case KeyBlobFormat.NSecSymmetricKey: // TODO
+            case KeyBlobFormat.NSecSymmetricKey: // TODO: NaclXSalsa20Poly1305 NSecSymmetricKey format
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
@@ -107,7 +108,7 @@ namespace NSec.Cryptography.Experimental
             {
             case KeyBlobFormat.RawSymmetricKey:
                 return s_rawKeyFormatter.TryImport(blob, out keyHandle, out publicKeyBytes);
-            case KeyBlobFormat.NSecSymmetricKey: // TODO
+            case KeyBlobFormat.NSecSymmetricKey: // TODO: NaclXSalsa20Poly1305 NSecSymmetricKey format
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
