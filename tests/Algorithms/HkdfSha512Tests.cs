@@ -773,8 +773,8 @@ namespace NSec.Tests.Algorithms
             var a = new HkdfSha512();
             var b = new byte[200];
 
-            Assert.Throws<ArgumentException>("bytes", () => a.Expand(b.AsSpan().Slice(10, a.PseudorandomKeySize), ReadOnlySpan<byte>.Empty, b.AsSpan().Slice(30, 100)));
-            Assert.Throws<ArgumentException>("bytes", () => a.Expand(b.AsSpan().Slice(30, a.PseudorandomKeySize), ReadOnlySpan<byte>.Empty, b.AsSpan().Slice(10, 100)));
+            Assert.Throws<ArgumentException>("bytes", () => a.Expand(b.AsSpan(10, a.PseudorandomKeySize), ReadOnlySpan<byte>.Empty, b.AsSpan(30, 100)));
+            Assert.Throws<ArgumentException>("bytes", () => a.Expand(b.AsSpan(30, a.PseudorandomKeySize), ReadOnlySpan<byte>.Empty, b.AsSpan(10, 100)));
         }
 
         [Fact]
@@ -790,8 +790,8 @@ namespace NSec.Tests.Algorithms
 
                 var prk = a.Extract(s, ReadOnlySpan<byte>.Empty);
 
-                Assert.Throws<ArgumentException>("bytes", () => a.Expand(prk, b.AsSpan().Slice(10, 100), b.AsSpan().Slice(60, 100)));
-                Assert.Throws<ArgumentException>("bytes", () => a.Expand(prk, b.AsSpan().Slice(60, 100), b.AsSpan().Slice(10, 100)));
+                Assert.Throws<ArgumentException>("bytes", () => a.Expand(prk, b.AsSpan(10, 100), b.AsSpan(60, 100)));
+                Assert.Throws<ArgumentException>("bytes", () => a.Expand(prk, b.AsSpan(60, 100), b.AsSpan(10, 100)));
             }
         }
 

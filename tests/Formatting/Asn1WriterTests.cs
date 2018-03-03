@@ -210,7 +210,7 @@ namespace NSec.Tests.Formatting
             expected[3] = (length >> 8) & 0xFF;
             expected[4] = length & 0xFF;
 
-            var value = expected.AsSpan().Slice(5);
+            var value = expected.AsSpan(5);
             value.Fill(0xCD);
 
             var writer = new Asn1Writer(new byte[expected.Length]);

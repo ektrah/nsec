@@ -186,8 +186,8 @@ namespace NSec.Tests.Base
                 var actual = new byte[b.Length + a.TagSize];
                 Utilities.RandomBytes.Slice(200, actual.Length).CopyTo(actual);
 
-                a.Encrypt(k, new Nonce(actual.AsSpan().Slice(10, a.NonceSize), 0), ad, b, expected);
-                a.Encrypt(k, new Nonce(actual.AsSpan().Slice(10, a.NonceSize), 0), ad, b, actual);
+                a.Encrypt(k, new Nonce(actual.AsSpan(10, a.NonceSize), 0), ad, b, expected);
+                a.Encrypt(k, new Nonce(actual.AsSpan(10, a.NonceSize), 0), ad, b, actual);
 
                 Assert.Equal(expected, actual);
             }
@@ -228,8 +228,8 @@ namespace NSec.Tests.Base
 
                 var b = Utilities.RandomBytes.Slice(200, 200).ToArray();
 
-                Assert.Throws<ArgumentException>("ciphertext", () => a.Encrypt(k, n, ad, b.AsSpan().Slice(10, 100), b.AsSpan().Slice(60, 100 + a.TagSize)));
-                Assert.Throws<ArgumentException>("ciphertext", () => a.Encrypt(k, n, ad, b.AsSpan().Slice(60, 100), b.AsSpan().Slice(10, 100 + a.TagSize)));
+                Assert.Throws<ArgumentException>("ciphertext", () => a.Encrypt(k, n, ad, b.AsSpan(10, 100), b.AsSpan(60, 100 + a.TagSize)));
+                Assert.Throws<ArgumentException>("ciphertext", () => a.Encrypt(k, n, ad, b.AsSpan(60, 100), b.AsSpan(10, 100 + a.TagSize)));
             }
         }
 
@@ -270,8 +270,8 @@ namespace NSec.Tests.Base
                 var actual = new byte[L + a.TagSize];
                 Utilities.RandomBytes.Slice(0, L).CopyTo(actual);
 
-                a.Encrypt(k, n, ad, actual.AsSpan().Slice(0, L), expected);
-                a.Encrypt(k, n, ad, actual.AsSpan().Slice(0, L), actual);
+                a.Encrypt(k, n, ad, actual.AsSpan(0, L), expected);
+                a.Encrypt(k, n, ad, actual.AsSpan(0, L), actual);
 
                 Assert.Equal(expected, actual);
             }
@@ -457,9 +457,9 @@ namespace NSec.Tests.Base
                 var expected = b.ToArray();
                 var actual = Utilities.RandomBytes.Slice(200, L).ToArray();
 
-                var ciphertext = a.Encrypt(k, n, actual.AsSpan().Slice(10, 100), expected);
+                var ciphertext = a.Encrypt(k, n, actual.AsSpan(10, 100), expected);
 
-                a.Decrypt(k, n, actual.AsSpan().Slice(10, 100), ciphertext, actual);
+                a.Decrypt(k, n, actual.AsSpan(10, 100), ciphertext, actual);
                 Assert.Equal(expected, actual);
             }
         }
@@ -477,8 +477,8 @@ namespace NSec.Tests.Base
 
                 var b = Utilities.RandomBytes.Slice(200, 200).ToArray();
 
-                Assert.Throws<ArgumentException>("plaintext", () => a.Decrypt(k, n, ad, b.AsSpan().Slice(10, 100 + a.TagSize), b.AsSpan().Slice(60, 100)));
-                Assert.Throws<ArgumentException>("plaintext", () => a.Decrypt(k, n, ad, b.AsSpan().Slice(60, 100 + a.TagSize), b.AsSpan().Slice(10, 100)));
+                Assert.Throws<ArgumentException>("plaintext", () => a.Decrypt(k, n, ad, b.AsSpan(10, 100 + a.TagSize), b.AsSpan(60, 100)));
+                Assert.Throws<ArgumentException>("plaintext", () => a.Decrypt(k, n, ad, b.AsSpan(60, 100 + a.TagSize), b.AsSpan(10, 100)));
             }
         }
 
@@ -520,8 +520,8 @@ namespace NSec.Tests.Base
                 a.Encrypt(k, n, ad, Utilities.RandomBytes.Slice(0, L), actual);
                 a.Encrypt(k, n, ad, Utilities.RandomBytes.Slice(0, L), expected);
 
-                a.Decrypt(k, n, ad, actual, expected.AsSpan().Slice(0, L));
-                a.Decrypt(k, n, ad, actual, actual.AsSpan().Slice(0, L));
+                a.Decrypt(k, n, ad, actual, expected.AsSpan(0, L));
+                a.Decrypt(k, n, ad, actual, actual.AsSpan(0, L));
                 Assert.Equal(expected, actual);
             }
         }
@@ -728,9 +728,9 @@ namespace NSec.Tests.Base
                 var expected = b.ToArray();
                 var actual = Utilities.RandomBytes.Slice(200, L).ToArray();
 
-                var ciphertext = a.Encrypt(k, n, actual.AsSpan().Slice(10, 100), expected);
+                var ciphertext = a.Encrypt(k, n, actual.AsSpan(10, 100), expected);
 
-                Assert.True(a.TryDecrypt(k, n, actual.AsSpan().Slice(10, 100), ciphertext, actual));
+                Assert.True(a.TryDecrypt(k, n, actual.AsSpan(10, 100), ciphertext, actual));
                 Assert.Equal(expected, actual);
             }
         }
@@ -748,8 +748,8 @@ namespace NSec.Tests.Base
 
                 var b = Utilities.RandomBytes.Slice(200, 200).ToArray();
 
-                Assert.Throws<ArgumentException>("plaintext", () => a.TryDecrypt(k, n, ad, b.AsSpan().Slice(10, 100 + a.TagSize), b.AsSpan().Slice(60, 100)));
-                Assert.Throws<ArgumentException>("plaintext", () => a.TryDecrypt(k, n, ad, b.AsSpan().Slice(60, 100 + a.TagSize), b.AsSpan().Slice(10, 100)));
+                Assert.Throws<ArgumentException>("plaintext", () => a.TryDecrypt(k, n, ad, b.AsSpan(10, 100 + a.TagSize), b.AsSpan(60, 100)));
+                Assert.Throws<ArgumentException>("plaintext", () => a.TryDecrypt(k, n, ad, b.AsSpan(60, 100 + a.TagSize), b.AsSpan(10, 100)));
             }
         }
 
@@ -791,8 +791,8 @@ namespace NSec.Tests.Base
                 a.Encrypt(k, n, ad, Utilities.RandomBytes.Slice(0, L), actual);
                 a.Encrypt(k, n, ad, Utilities.RandomBytes.Slice(0, L), expected);
 
-                Assert.True(a.TryDecrypt(k, n, ad, actual, expected.AsSpan().Slice(0, L)));
-                Assert.True(a.TryDecrypt(k, n, ad, actual, actual.AsSpan().Slice(0, L)));
+                Assert.True(a.TryDecrypt(k, n, ad, actual, expected.AsSpan(0, L)));
+                Assert.True(a.TryDecrypt(k, n, ad, actual, actual.AsSpan(0, L)));
                 Assert.Equal(expected, actual);
             }
         }

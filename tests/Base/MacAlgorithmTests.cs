@@ -330,7 +330,7 @@ namespace NSec.Tests.Base
                 var data = Utilities.RandomBytes.Slice(0, 100).ToArray();
 
                 var expected = new byte[a.DefaultMacSize];
-                var actual = data.AsSpan().Slice(0, a.DefaultMacSize);
+                var actual = data.AsSpan(0, a.DefaultMacSize);
 
                 a.Mac(k, data, expected);
                 a.Mac(k, data, actual);

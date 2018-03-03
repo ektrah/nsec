@@ -70,8 +70,8 @@ namespace NSec.Tests.Formatting
 
                 Assert.NotNull(blob);
                 Assert.Equal(blobHeader.Length + sizeof(uint) + keySize, blob.Length);
-                Assert.Equal(blobHeader, blob.AsSpan().Slice(0, blobHeader.Length).ToArray());
-                Assert.Equal(BitConverter.GetBytes(keySize), blob.AsSpan().Slice(blobHeader.Length, sizeof(int)).ToArray());
+                Assert.Equal(blobHeader, blob.AsSpan(0, blobHeader.Length).ToArray());
+                Assert.Equal(BitConverter.GetBytes(keySize), blob.AsSpan(blobHeader.Length, sizeof(int)).ToArray());
             }
         }
     }

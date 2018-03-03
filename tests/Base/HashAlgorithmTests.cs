@@ -139,7 +139,7 @@ namespace NSec.Tests.Base
             var data = Utilities.RandomBytes.Slice(0, 100).ToArray();
 
             var expected = new byte[a.DefaultHashSize];
-            var actual = data.AsSpan().Slice(0, a.DefaultHashSize);
+            var actual = data.AsSpan(0, a.DefaultHashSize);
 
             a.Hash(data, expected);
             a.Hash(data, actual);

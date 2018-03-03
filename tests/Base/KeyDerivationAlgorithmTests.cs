@@ -180,8 +180,8 @@ namespace NSec.Tests.Base
             {
                 var b = new byte[200];
 
-                Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, b.AsSpan().Slice(10, 100), b.AsSpan().Slice(60, 100)));
-                Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, b.AsSpan().Slice(60, 100), b.AsSpan().Slice(10, 100)));
+                Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, b.AsSpan(10, 100), b.AsSpan(60, 100)));
+                Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, b.AsSpan(60, 100), b.AsSpan(10, 100)));
             }
         }
 
