@@ -7,12 +7,10 @@ namespace NSec.Cryptography.Formatting
 {
     internal sealed class Ed25519PrivateKeyFormatter : PrivateKeyFormatter
     {
-        public Ed25519PrivateKeyFormatter(
-            int keySize,
-            byte[] blobHeader)
-            : base(keySize, blobHeader)
+        public Ed25519PrivateKeyFormatter(byte[] blobHeader) : base(
+            crypto_sign_ed25519_SEEDBYTES,
+            blobHeader)
         {
-            Debug.Assert(keySize == crypto_sign_ed25519_SEEDBYTES);
         }
 
         protected override void Deserialize(
