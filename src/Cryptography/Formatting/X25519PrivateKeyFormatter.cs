@@ -6,12 +6,10 @@ namespace NSec.Cryptography.Formatting
 {
     internal sealed class X25519PrivateKeyFormatter : PrivateKeyFormatter
     {
-        public X25519PrivateKeyFormatter(
-            int keySize,
-            byte[] blobHeader)
-            : base(keySize, blobHeader)
+        public X25519PrivateKeyFormatter(byte[] blobHeader) : base(
+            crypto_scalarmult_curve25519_SCALARBYTES,
+            blobHeader)
         {
-            Debug.Assert(keySize == crypto_scalarmult_curve25519_SCALARBYTES);
         }
 
         protected override void Deserialize(

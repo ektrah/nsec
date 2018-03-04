@@ -31,11 +31,11 @@ namespace NSec.Cryptography
     //
     public sealed class X25519 : KeyAgreementAlgorithm
     {
-        private static readonly PrivateKeyFormatter s_nsecPrivateKeyFormatter = new X25519PrivateKeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[] { 0xDE, 0x36, 0x41, 0xDE, crypto_scalarmult_curve25519_SCALARBYTES, 0, 0, 0 });
+        private static readonly PrivateKeyFormatter s_nsecPrivateKeyFormatter = new X25519PrivateKeyFormatter(new byte[] { 0xDE, 0x36, 0x41, 0xDE, crypto_scalarmult_curve25519_SCALARBYTES, 0, 0, 0 });
 
-        private static readonly PublicKeyFormatter s_nsecPublicKeyFormatter = new X25519PublicKeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[] { 0xDE, 0x37, 0x41, 0xDE, crypto_scalarmult_curve25519_SCALARBYTES, 0, 0, 0 });
+        private static readonly PublicKeyFormatter s_nsecPublicKeyFormatter = new X25519PublicKeyFormatter(new byte[] { 0xDE, 0x37, 0x41, 0xDE, crypto_scalarmult_curve25519_SCALARBYTES, 0, 0, 0 });
 
-        private static readonly PrivateKeyFormatter s_pkixPrivateKeyFormatter = new X25519PrivateKeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[]
+        private static readonly PrivateKeyFormatter s_pkixPrivateKeyFormatter = new X25519PrivateKeyFormatter(new byte[]
         {
             // +-- SEQUENCE (3 elements)
             //     +-- INTEGER 0
@@ -47,7 +47,7 @@ namespace NSec.Cryptography
             0x03, 0x2B, 0x65, 0x6E, 0x04, 0x22, 0x04, 0x20,
         });
 
-        private static readonly PublicKeyFormatter s_pkixPublicKeyFormatter = new X25519PublicKeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[]
+        private static readonly PublicKeyFormatter s_pkixPublicKeyFormatter = new X25519PublicKeyFormatter(new byte[]
         {
             // +-- SEQUENCE (2 elements)
             //     +-- SEQUENCE (1 element)
@@ -57,9 +57,9 @@ namespace NSec.Cryptography
             0x6E, 0x03, 0x21, 0x00,
         });
 
-        private static readonly PrivateKeyFormatter s_rawPrivateKeyFormatter = new X25519PrivateKeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[] { });
+        private static readonly PrivateKeyFormatter s_rawPrivateKeyFormatter = new X25519PrivateKeyFormatter(new byte[] { });
 
-        private static readonly PublicKeyFormatter s_rawPublicKeyFormatter = new X25519PublicKeyFormatter(crypto_scalarmult_curve25519_SCALARBYTES, new byte[] { });
+        private static readonly PublicKeyFormatter s_rawPublicKeyFormatter = new X25519PublicKeyFormatter(new byte[] { });
 
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
