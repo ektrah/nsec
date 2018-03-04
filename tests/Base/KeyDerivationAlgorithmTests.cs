@@ -154,17 +154,18 @@ namespace NSec.Tests.Base
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
             var x = new X25519();
 
+            if (!a.SupportsSalt)
+            {
+                return;
+            }
+
             using (var k = new Key(x))
             using (var s = x.Agree(k, k.PublicKey))
             {
-                var actual = new byte[100];
-                var expected = new byte[100];
-                Utilities.RandomBytes.Slice(0, 100).CopyTo(actual);
+                var b = new byte[200];
 
-                a.DeriveBytes(s, actual, ReadOnlySpan<byte>.Empty, expected);
-                a.DeriveBytes(s, actual, ReadOnlySpan<byte>.Empty, actual);
-
-                Assert.Equal(expected, actual);
+                Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, b.AsSpan(10, 100), ReadOnlySpan<byte>.Empty, b.AsSpan(60, 100)));
+                Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, b.AsSpan(60, 100), ReadOnlySpan<byte>.Empty, b.AsSpan(10, 100)));
             }
         }
 

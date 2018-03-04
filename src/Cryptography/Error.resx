@@ -219,6 +219,9 @@
   <data name="Argument_OverlapPrk" xml:space="preserve">
     <value>The output bytes must not overlap with the pseudorandom key.</value>
   </data>
+  <data name="Argument_OverlapSalt" xml:space="preserve">
+    <value>The output bytes must not overlap with the salt.</value>
+  </data>
   <data name="Argument_PlaintextLength" xml:space="preserve">
     <value>The length of the plaintext must be equal to the length of the ciphertext minus the tag size.</value>
   </data>

@@ -153,6 +153,12 @@ namespace NSec.Cryptography
             return new ArgumentException(ResourceManager.GetString("Argument_OverlapPrk"), paramName);
         }
 
+        internal static ArgumentException Argument_OverlapSalt(
+            string paramName)
+        {
+            return new ArgumentException(ResourceManager.GetString("Argument_OverlapSalt"), paramName);
+        }
+
         internal static ArgumentException Argument_PlaintextLength(
             string paramName)
         {
