@@ -10,6 +10,15 @@ namespace NSec.Cryptography.Formatting
         private readonly int _minKeySize;
 
         public RawKeyFormatter(
+            int keySize)
+        {
+            Debug.Assert(keySize >= 0);
+
+            _minKeySize = keySize;
+            _maxKeySize = keySize;
+        }
+
+        public RawKeyFormatter(
             int minKeySize,
             int maxKeySize)
         {

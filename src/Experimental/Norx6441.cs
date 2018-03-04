@@ -32,7 +32,7 @@ namespace NSec.Cryptography.Experimental
     //
     public sealed class Norx6441 : AeadAlgorithm
     {
-        private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(crypto_aead_norx6441_KEYBYTES, crypto_aead_norx6441_KEYBYTES);
+        private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(crypto_aead_norx6441_KEYBYTES);
 
         public Norx6441() : base(
             keySize: crypto_aead_norx6441_KEYBYTES,

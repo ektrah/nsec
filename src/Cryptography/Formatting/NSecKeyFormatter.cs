@@ -12,6 +12,18 @@ namespace NSec.Cryptography.Formatting
         private readonly int _minKeySize;
 
         public NSecKeyFormatter(
+            int keySize,
+            byte[] blobHeader)
+        {
+            Debug.Assert(keySize >= 0);
+            Debug.Assert(blobHeader != null);
+
+            _minKeySize = keySize;
+            _maxKeySize = keySize;
+            _blobHeader = blobHeader;
+        }
+
+        public NSecKeyFormatter(
             int minKeySize,
             int maxKeySize,
             byte[] blobHeader)

@@ -8,7 +8,7 @@ namespace NSec.Cryptography.Experimental
 {
     public sealed class NaclXSalsa20Poly1305 : NaclSecretBoxAlgorithm
     {
-        private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(crypto_secretbox_xsalsa20poly1305_KEYBYTES, crypto_secretbox_xsalsa20poly1305_KEYBYTES);
+        private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(crypto_secretbox_xsalsa20poly1305_KEYBYTES);
 
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
