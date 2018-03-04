@@ -147,9 +147,9 @@ ciphertext
 plaintext
 : The span to fill with the decrypted and authenticated data.
     The length of the span must be equal to `ciphertext.Length` minus
-    [[TagSize|AeadAlgorithm Class#TagSize]]. `plaintext` must not overlap with
-    `ciphertext`, except if `plaintext` and `ciphertext` point at exactly the
-    same memory location (in-place decryption).
+    [[TagSize|AeadAlgorithm Class#TagSize]]. `plaintext` must not overlap in
+    memory with `ciphertext`, except if `plaintext` and `ciphertext` point at
+    exactly the same memory location (in-place decryption).
 
 #### Exceptions
 
@@ -168,7 +168,7 @@ ArgumentException
     [[TagSize|AeadAlgorithm Class#TagSize]].
 
 ArgumentException
-: `plaintext` overlaps with `ciphertext`.
+: `plaintext` overlaps in memory with `ciphertext`.
 
 CryptographicException
 : `ciphertext.Length` is less than
@@ -271,9 +271,9 @@ plaintext
 ciphertext
 : The span to fill with the encrypted data and the authentication tag.
     The length of the span must be equal to `plaintext.Length` plus
-    [[TagSize|AeadAlgorithm Class#TagSize]]. `ciphertext` must not overlap with
-    `plaintext`, except if `ciphertext` and `plaintext` point at exactly the
-    same memory location (in-place encryption).
+    [[TagSize|AeadAlgorithm Class#TagSize]]. `ciphertext` must not overlap in
+    memory with `plaintext`, except if `ciphertext` and `plaintext` point at
+    exactly the same memory location (in-place encryption).
 
 #### Exceptions
 
@@ -296,7 +296,7 @@ ArgumentException
     [[TagSize|AeadAlgorithm Class#TagSize]].
 
 ArgumentException
-: `ciphertext` overlaps with `plaintext`.
+: `ciphertext` overlaps in memory with `plaintext`.
 
 ObjectDisposedException
 : `key` has been disposed.
@@ -385,9 +385,9 @@ ciphertext
 plaintext
 : The span to fill with the decrypted and authenticated data.
     The length of the span must be equal to `ciphertext.Length` minus
-    [[TagSize|AeadAlgorithm Class#TagSize]]. `plaintext` must not overlap with
-    `ciphertext`, except if `plaintext` and `ciphertext` point at exactly the
-    same memory location (in-place decryption).
+    [[TagSize|AeadAlgorithm Class#TagSize]]. `plaintext` must not overlap in
+    memory with `ciphertext`, except if `plaintext` and `ciphertext` point at
+    exactly the same memory location (in-place decryption).
 
 #### Return Value
 
@@ -410,7 +410,7 @@ ArgumentException
     [[TagSize|AeadAlgorithm Class#TagSize]].
 
 ArgumentException
-: `plaintext` overlaps with `ciphertext`.
+: `plaintext` overlaps in memory with `ciphertext`.
 
 ObjectDisposedException
 : `key` has been disposed.
