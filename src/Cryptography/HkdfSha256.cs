@@ -140,30 +140,37 @@ namespace NSec.Cryptography
             Debug.Assert(bytes.Length <= byte.MaxValue * crypto_auth_hmacsha256_BYTES);
 
             Span<byte> temp = stackalloc byte[crypto_auth_hmacsha256_BYTES];
-            int tempLength = 0;
-            int offset = 0;
-            byte counter = 0;
-            int chunkSize;
-
-            while ((chunkSize = bytes.Length - offset) > 0)
+            try
             {
-                counter++;
+                int tempLength = 0;
+                int offset = 0;
+                byte counter = 0;
+                int chunkSize;
 
-                crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, in MemoryMarshal.GetReference(pseudorandomKey), (UIntPtr)pseudorandomKey.Length);
-                crypto_auth_hmacsha256_update(ref state, in MemoryMarshal.GetReference(temp), (ulong)tempLength);
-                crypto_auth_hmacsha256_update(ref state, in MemoryMarshal.GetReference(info), (ulong)info.Length);
-                crypto_auth_hmacsha256_update(ref state, in counter, sizeof(byte));
-                crypto_auth_hmacsha256_final(ref state, ref MemoryMarshal.GetReference(temp));
-
-                tempLength = crypto_auth_hmacsha256_BYTES;
-
-                if (chunkSize > crypto_auth_hmacsha256_BYTES)
+                while ((chunkSize = bytes.Length - offset) > 0)
                 {
-                    chunkSize = crypto_auth_hmacsha256_BYTES;
-                }
+                    counter++;
 
-                temp.Slice(0, chunkSize).CopyTo(bytes.Slice(offset));
-                offset += chunkSize;
+                    crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, in MemoryMarshal.GetReference(pseudorandomKey), (UIntPtr)pseudorandomKey.Length);
+                    crypto_auth_hmacsha256_update(ref state, in MemoryMarshal.GetReference(temp), (ulong)tempLength);
+                    crypto_auth_hmacsha256_update(ref state, in MemoryMarshal.GetReference(info), (ulong)info.Length);
+                    crypto_auth_hmacsha256_update(ref state, in counter, sizeof(byte));
+                    crypto_auth_hmacsha256_final(ref state, ref MemoryMarshal.GetReference(temp));
+
+                    tempLength = crypto_auth_hmacsha256_BYTES;
+
+                    if (chunkSize > crypto_auth_hmacsha256_BYTES)
+                    {
+                        chunkSize = crypto_auth_hmacsha256_BYTES;
+                    }
+
+                    temp.Slice(0, chunkSize).CopyTo(bytes.Slice(offset));
+                    offset += chunkSize;
+                }
+            }
+            finally
+            {
+                sodium_memzero(ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length);
             }
         }
 

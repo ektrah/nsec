@@ -1,5 +1,6 @@
 using System;
 using System.Buffers.Binary;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static Interop.Libsodium;
 
@@ -37,30 +38,39 @@ namespace NSec.Cryptography.Experimental
             ReadOnlySpan<byte> info,
             Span<byte> bytes)
         {
+            Debug.Assert(salt.IsEmpty);
+
             Span<byte> temp = stackalloc byte[crypto_hash_sha256_BYTES];
-            int offset = 0;
-            uint counter = 0;
-            int chunkSize;
-
-            while ((chunkSize = bytes.Length - offset) > 0)
+            try
             {
-                counter++;
+                int offset = 0;
+                uint counter = 0;
+                int chunkSize;
 
-                uint counterBigEndian = BitConverter.IsLittleEndian ? BinaryPrimitives.ReverseEndianness(counter) : counter;
-
-                crypto_hash_sha256_init(out crypto_hash_sha256_state state);
-                crypto_hash_sha256_update(ref state, in counterBigEndian, sizeof(uint));
-                crypto_hash_sha256_update(ref state, in MemoryMarshal.GetReference(inputKeyingMaterial), (ulong)inputKeyingMaterial.Length);
-                crypto_hash_sha256_update(ref state, in MemoryMarshal.GetReference(info), (ulong)info.Length);
-                crypto_hash_sha256_final(ref state, ref MemoryMarshal.GetReference(temp));
-
-                if (chunkSize > crypto_hash_sha256_BYTES)
+                while ((chunkSize = bytes.Length - offset) > 0)
                 {
-                    chunkSize = crypto_hash_sha256_BYTES;
-                }
+                    counter++;
 
-                temp.Slice(0, chunkSize).CopyTo(bytes.Slice(offset));
-                offset += chunkSize;
+                    uint counterBigEndian = BitConverter.IsLittleEndian ? BinaryPrimitives.ReverseEndianness(counter) : counter;
+
+                    crypto_hash_sha256_init(out crypto_hash_sha256_state state);
+                    crypto_hash_sha256_update(ref state, in counterBigEndian, sizeof(uint));
+                    crypto_hash_sha256_update(ref state, in MemoryMarshal.GetReference(inputKeyingMaterial), (ulong)inputKeyingMaterial.Length);
+                    crypto_hash_sha256_update(ref state, in MemoryMarshal.GetReference(info), (ulong)info.Length);
+                    crypto_hash_sha256_final(ref state, ref MemoryMarshal.GetReference(temp));
+
+                    if (chunkSize > crypto_hash_sha256_BYTES)
+                    {
+                        chunkSize = crypto_hash_sha256_BYTES;
+                    }
+
+                    temp.Slice(0, chunkSize).CopyTo(bytes.Slice(offset));
+                    offset += chunkSize;
+                }
+            }
+            finally
+            {
+                sodium_memzero(ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length);
             }
         }
     }
