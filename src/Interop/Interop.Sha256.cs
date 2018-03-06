@@ -34,7 +34,7 @@ internal static partial class Interop
             in uint @in,
             ulong inlen);
 
-        [StructLayout(LayoutKind.Explicit, Size = 104, Pack = 8)]
+        [StructLayout(LayoutKind.Explicit, Size = 104)]
         internal struct crypto_hash_sha256_state
         {
         }
