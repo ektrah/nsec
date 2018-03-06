@@ -44,8 +44,8 @@ namespace NSec.Cryptography
             Debug.Assert(hash.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(hash.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
-            Span<byte> stateBuffer = stackalloc byte[crypto_generichash_blake2b_state.Pack + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
-            ref crypto_generichash_blake2b_state state = ref crypto_generichash_blake2b_state.AlignPinnedState(ref MemoryMarshal.GetReference(stateBuffer));
+            Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
+            ref crypto_generichash_blake2b_state state = ref AlignPinnedReference(ref MemoryMarshal.GetReference(buffer));
 
             crypto_generichash_blake2b_init(out state, IntPtr.Zero, UIntPtr.Zero, (UIntPtr)hash.Length);
             crypto_generichash_blake2b_update(ref state, in MemoryMarshal.GetReference(data), (ulong)data.Length);
@@ -59,8 +59,8 @@ namespace NSec.Cryptography
             Debug.Assert(hash.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(hash.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
-            Span<byte> stateBuffer = stackalloc byte[crypto_generichash_blake2b_state.Pack + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
-            ref crypto_generichash_blake2b_state state = ref crypto_generichash_blake2b_state.AlignPinnedState(ref MemoryMarshal.GetReference(stateBuffer));
+            Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
+            ref crypto_generichash_blake2b_state state = ref AlignPinnedReference(ref MemoryMarshal.GetReference(buffer));
 
             Span<byte> temp = stackalloc byte[hash.Length];
 
@@ -71,6 +71,14 @@ namespace NSec.Cryptography
             int result = sodium_memcmp(in MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(hash), (UIntPtr)hash.Length);
 
             return result == 0;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static unsafe ref crypto_generichash_blake2b_state AlignPinnedReference(ref byte value)
+        {
+            return ref sizeof(byte*) == sizeof(uint)
+                ? ref Unsafe.AsRef<crypto_generichash_blake2b_state>((void*)(((uint)Unsafe.AsPointer(ref value) + 63u) & ~63u))
+                : ref Unsafe.AsRef<crypto_generichash_blake2b_state>((void*)(((ulong)Unsafe.AsPointer(ref value) + 63ul) & ~63ul));
         }
 
         private static bool SelfTest()

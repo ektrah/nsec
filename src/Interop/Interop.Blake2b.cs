@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
@@ -63,15 +62,6 @@ internal static partial class Interop
         [StructLayout(LayoutKind.Explicit, Size = 384, Pack = 64)]
         internal struct crypto_generichash_blake2b_state
         {
-            internal const int Pack = 64;
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            internal static unsafe ref crypto_generichash_blake2b_state AlignPinnedState(ref byte value)
-            {
-                return ref Unsafe.AsRef<crypto_generichash_blake2b_state>(sizeof(byte*) == sizeof(uint)
-                    ? (void*)(((uint)Unsafe.AsPointer(ref value) + 63u) & ~63u)
-                    : (void*)(((ulong)Unsafe.AsPointer(ref value) + 63ul) & ~63ul));
-            }
         }
     }
 }
