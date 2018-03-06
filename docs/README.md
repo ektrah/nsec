@@ -1,1 +1,1 @@
-This directory contains the sources for the [NSec documentation](https://nsec.rocks/docs).
+Sources for the [NSec documentation](https://nsec.rocks/docs).
