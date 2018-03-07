@@ -3,14 +3,14 @@ using System.Text;
 using NSec.Cryptography;
 using Xunit;
 
-namespace Snippets
+namespace Examples
 {
-    public static class General
+    public static class Teaser
     {
         [Fact]
-        public static void ReadmeExample()
+        public static void Example()
         {
-            #region README Example
+            #region Teaser
 
             // select the Ed25519 signature algorithm
             var algorithm = new Ed25519();
@@ -24,7 +24,7 @@ namespace Snippets
                 // sign the data with the private key
                 var signature = algorithm.Sign(key, data);
 
-                // verify signature and data with the public key
+                // verify data and signature with the public key
                 algorithm.Verify(key.PublicKey, data, signature);
             }
 

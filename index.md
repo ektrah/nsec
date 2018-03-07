@@ -38,7 +38,7 @@ easy to support multiple algorithms or switch algorithms should the need arise.
 The following C# example shows how to use NSec to sign data with Ed25519 and
 verify the signature.
 
-    {{README Example}}
+    {{Teaser}}
 
 
 ## Installation
