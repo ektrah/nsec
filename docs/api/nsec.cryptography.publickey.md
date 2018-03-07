@@ -189,7 +189,7 @@ A 32-bit signed integer hash code.
 The [[PublicKey|PublicKey Class]] class overrides the [[GetHashCode|PublicKey
 Class#GetHashCode()]] method so that [[PublicKey|PublicKey Class]] objects can
 be used as elements of a HashSet<T> or keys of a Dictionary<TKey, TValue>. The
-hash code is not a fingerprint that can be used to identify the public key.
+hash code is **not** a fingerprint that can be used to identify the public key.
 
 The hash code returned may differ between NSec versions and platforms, such as
 32-bit and 64-bit platforms.
