@@ -1,5 +1,9 @@
+*.g.cs
 *.log
+*.suo
+*.user
 *~
+.cookie
 .firebaserc
 .vs
 bin
