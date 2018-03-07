@@ -1,6 +1,6 @@
 # Key Class
 
-Represents a symmetric key or an asymmetric key pair.
+Represents a symmetric key or asymmetric key pair.
 
     public sealed class Key : IDisposable
 
