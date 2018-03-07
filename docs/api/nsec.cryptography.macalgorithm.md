@@ -292,7 +292,7 @@ All members of this type are thread safe.
 
 ## Purity
 
-All methods give the same result for the same arguments.
+All methods yield the same result for the same arguments.
 
 
 ## See Also
