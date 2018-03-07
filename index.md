@@ -1,6 +1,6 @@
 # NSec
 
-NSec is a modern and easy-to-use cryptography library for
+NSec is a modern and easy-to-use cryptographic library for
 [.NET Core](https://dot.net/core) based on
 [libsodium](https://libsodium.org/).
 
@@ -12,15 +12,15 @@ wraps these primitives in a modern .NET API based on [the new `Span<T>` and
 * **Easy-to-use** -- NSec wants you to fall into the "pit of success." It
 provides a strongly typed data model that represents keys and shared secrets
 with specific classes rather than naked byte arrays. This avoids, for example,
-accidentally using a key with a wrong algorithm. However, there are still some
-hard problems that NSec cannot help with in a sufficiently generic way, such as
-nonce generation and key management.
+accidentally using a key with a wrong algorithm. There are still some hard
+problems that NSec cannot help with in a sufficiently generic way, though, such
+as nonce generation and key management.
 
 * **Secure** -- In addition to the security provided by the cryptographic
-primitives, NSec attempts to make the use of these primitives secure by default
-where possible. For example, all sensitive data such as keys is stored in
-libsodium's secure memory rather than on the managed heap, and is securely
-erased when no longer needed.
+primitives, NSec tries to make the use of these primitives secure by default.
+For example, all sensitive data such as keys is stored in libsodium's secure
+memory rather than on the managed heap, and is securely erased when no longer
+needed.
 
 * **Fast** -- libsodium is fast and cryptographic operations in libsodium never
 allocate memory on the heap. NSec follows libsodium's lead and avoids almost all
@@ -35,8 +35,8 @@ easy to support multiple algorithms or switch algorithms should the need arise.
 
 ## Example
 
-The following C# example shows how to use NSec to sign data with Ed25519 and
-verify the signature.
+The following C# example shows how to use NSec to sign some data with Ed25519
+and verify the signature:
 
     {{Teaser}}
 
