@@ -1,0 +1,204 @@
+body {
+    font: 13px/1.618 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+footer, header, main, nav {
+    display: block;
+}
+
+dd, dl, dt, li, ol, ul {
+    margin: .3em 0 0;
+}
+
+    dt + dd {
+        margin: 0;
+    }
+
+main > * {
+    margin: 1em 0 1em 1.5em;
+}
+
+h1, h2, h3 {
+    margin: 1.5em 0 1em;
+}
+
+code, pre {
+    font: 1em Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+
+code, pre, th {
+    background: #FDFDFD;
+}
+
+pre {
+    border-left: .5em solid #F0F0F0;
+    padding: 1em;
+    white-space: pre-wrap;
+}
+
+code {
+    display: inline-block;
+    padding: .1em .3em;
+    border: 1px solid #F0F0F0;
+}
+
+blockquote, dd, ol, ul {
+    padding: 0 0 0 2em;
+}
+
+cite, dt {
+    font-style: italic;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 1em auto;
+}
+
+th {
+    border-top: 1px solid #F0F0F0;
+    border-bottom: 1px solid #F0F0F0;
+    font-weight: 500;
+}
+
+th, td {
+    padding: .2em 1em;
+}
+
+.admonition {
+    background: #FBFDFF;
+    border: 0 solid #0071BC;
+    border-left: .5em solid #0071BC;
+    padding: .5em 1em;
+}
+
+    .admonition > * {
+        margin: 0.5em 0;
+    }
+
+.admonition-title {
+    font-weight: bold;
+}
+
+header, footer {
+    font-size: smaller;
+}
+
+    header li {
+        display: inline;
+    }
+
+footer {
+    margin: 3em 0;
+}
+
+    footer, footer a, footer a:visited {
+        color: #CCC;
+    }
+
+nav ol, nav ul {
+    list-style: none;
+}
+
+nav > ol, nav > ul {
+    padding: 0;
+}
+
+nav > ul {
+    margin: 1em 0 1em 1.5em;
+}
+
+@media print {
+    h1, h2, h3, h4, h5, h6 {
+        page-break-after: avoid;
+    }
+
+    a, a:visited {
+        color: #000;
+        text-decoration: underline;
+    }
+}
+
+@media screen {
+
+    html {
+        width: 100%;
+        height: 100%;
+    }
+
+    body {
+        color: #333;
+        background: #FFF;
+        max-width: 50em;
+        min-height: 100%;
+        margin: 0 auto;
+        font-size: 15px;
+        padding: 0 1em;
+        overflow-wrap: break-word;
+        overflow-y: scroll;
+    }
+
+    header {
+        padding-top: 4px;
+    }
+
+        header:before {
+            content: '';
+            display: block;
+            background: url(nsec.svg) center no-repeat;
+            background-size: contain;
+            height: 10em;
+            margin: 2em;
+        }
+
+    pre[data-lang]:before {
+        content: attr(data-lang);
+        color: #CCC;
+        float: right;
+        display: inline-block;
+        margin: -.5em;
+        padding: .1em .3em;
+        background: white;
+        border: 1px solid #F0F0F0;
+    }
+
+    .c {
+        color: #AAA;
+    }
+
+    .s {
+        font-style: italic;
+    }
+
+    a, .k {
+        color: #0071BC;
+        text-decoration: none;
+    }
+
+        a:active, a:hover {
+            text-decoration: underline;
+        }
+}
+
+@media screen and (min-width:30em) {
+    body {
+        padding: 0 2em;
+    }
+
+    header:before {
+        height: 11em;
+        margin: 3em;
+    }
+}
+
+@media screen and (min-width:40em) {
+    body {
+        padding: 0 3em;
+    }
+
+    header:before {
+        height: 12em;
+        margin: 4em;
+    }
+}
