@@ -1,32 +1,31 @@
 # NSec
 
-NSec is a modern and easy-to-use crypto library for
-[.NET Core](https://dotnet.github.io/) based on
+NSec is a modern and easy-to-use cryptography library for
+[.NET Core](https://dot.net/core) based on
 [libsodium](https://libsodium.org/).
 
 * **Modern** -- libsodium provides a small set of high-quality, modern
 cryptographic primitives, including X25519, Ed25519 and ChaCha20-Poly1305. NSec
-wraps these primitives in a modern .NET API based on the new [`Span<T>` and
+wraps these primitives in a modern .NET API based on [the new `Span<T>` and
 `ReadOnlySpan<T>` types](https://msdn.microsoft.com/en-us/magazine/mt814808).
 
 * **Easy-to-use** -- NSec wants you to fall into the "pit of success." It
 provides a strongly typed data model that represents keys and shared secrets
 with specific classes rather than naked byte arrays. This avoids, for example,
-accidentally using a key with a wrong algorithm. There are still some hard
-problems that NSec does not help with, though, such as nonce generation and key
-management.
+accidentally using a key with a wrong algorithm. However, there are still some
+hard problems that NSec cannot help with in a sufficiently generic way, such as
+nonce generation and key management.
 
 * **Secure** -- In addition to the security provided by the cryptographic
-primitives, NSec tries to make the use of these primitives secure by default.
-For example, all sensitive data such as keys is stored in libsodium's secure
-memory rather than on the managed heap and is securely erased when no longer
-needed.
+primitives, NSec attempts to make the use of these primitives secure by default
+where possible. For example, all sensitive data such as keys is stored in
+libsodium's secure memory rather than on the managed heap, and is securely
+erased when no longer needed.
 
-* **Fast** -- libsodium is fast, and cryptographic operations in libsodium never
-allocate memory on the heap. NSec follows libsodium's lead and avoids
-allocations and expensive copies in almost all cases. Only methods that return
-byte arrays, keys or shared secrets do allocate memory and should therefore be
-kept off hot paths.
+* **Fast** -- libsodium is fast and cryptographic operations in libsodium never
+allocate memory on the heap. NSec follows libsodium's lead and avoids almost all
+allocations and expensive copies. Only methods that return byte arrays, keys or
+shared secrets do allocate memory and should therefore be avoided in hot paths.
 
 * **Agile** -- NSec features a simple object model with cryptographic agility in
 mind. All algorithms derive from a small set of base classes. This helps writing
@@ -46,9 +45,8 @@ verify the signature.
 
     $ dotnet add package NSec.Cryptography --version 18.2.0-preview1
 
-NSec runs on .NET Core 1.1, 2.0, and later on Windows, Linux and Mac. Working
-with NSec requires a C# 7.2 (or later) compiler. See [[Installation]] for
-details.
+NSec runs on .NET Core 1.1, 2.0, and 2.1 on Windows, Linux and Mac, and requires
+a C# 7.2 (or later) compiler. See [[Installation]] for additional details.
 
 
 ## Documentation
@@ -64,6 +62,7 @@ details.
     * [[SignatureAlgorithm Class]]
 * [[Key Class]]
     * [[KeyBlobFormat Enum]]
+    * [[KeyCreationParameters Struct]]
     * [[KeyExportPolicies Enum]]
 * [[Nonce Struct]]
 * [[PublicKey Class]]
@@ -84,7 +83,7 @@ Please ask before making a significant pull request (e.g., implementing
 features or refactoring code.)
 If you've found a problem with NSec, please
 [open an issue](https://github.com/ektrah/nsec/issues).
-Feature requests are welcome, too.
+Feature requests and questions are welcome, too.
 
 
 ## Note
@@ -102,4 +101,4 @@ protocols.
 ## License
 
 NSec is licensed under the [[MIT license|License]].
-The NSec documentation is licensed under [[a Creative Commons license|License]].
+This documentation is licensed under [[a Creative Commons license|License]].

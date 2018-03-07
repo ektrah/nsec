@@ -24,7 +24,7 @@ namespace Snippets
                 // sign the data with the private key
                 var signature = algorithm.Sign(key, data);
 
-                // verify the signature and the data with the public key
+                // verify signature and data with the public key
                 algorithm.Verify(key.PublicKey, data, signature);
             }
 

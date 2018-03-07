@@ -59,14 +59,11 @@ table {
 th {
     border-top: 1px solid #F0F0F0;
     border-bottom: 1px solid #F0F0F0;
+    font-weight: 500;
 }
 
 th, td {
     padding: .2em 1em;
-}
-
-th {
-    font-weight: 500;
 }
 
 .admonition {
@@ -93,7 +90,7 @@ header, footer {
     }
 
 footer {
-    margin: 2em 0 4em;
+    margin: 3em 0;
 }
 
     footer, footer a, footer a:visited {
