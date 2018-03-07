@@ -65,7 +65,7 @@ namespace NSec.Cryptography
 
         public Key GenerateKey(
             Algorithm algorithm,
-            KeyExportPolicies exportPolicy = KeyExportPolicies.None)
+            in KeyCreationParameters creationParameters = default)
         {
             if (algorithm == null)
             {
@@ -101,7 +101,7 @@ namespace NSec.Cryptography
                 }
             }
 
-            return new Key(algorithm, exportPolicy, keyHandle, publicKeyBytes);
+            return new Key(algorithm, in creationParameters, keyHandle, publicKeyBytes);
         }
 
         public uint GenerateUInt32()

@@ -64,7 +64,7 @@ namespace NSec.Tests.Formatting
         {
             var b = Utilities.RandomBytes.Slice(0, seedSize);
 
-            using (var k = Key.Import(a, b, importFormat, KeyExportPolicies.AllowPlaintextArchiving))
+            using (var k = Key.Import(a, b, importFormat, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
             {
                 var blob = k.Export(format);
 

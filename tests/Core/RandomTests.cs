@@ -195,7 +195,7 @@ namespace NSec.Tests.Core
         {
             var a = (Algorithm)Activator.CreateInstance(algorithmType);
 
-            using (var key = RandomGenerator.Default.GenerateKey(a, KeyExportPolicies.None))
+            using (var key = RandomGenerator.Default.GenerateKey(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }))
             {
                 Assert.NotNull(key);
                 Assert.Same(a, key.Algorithm);

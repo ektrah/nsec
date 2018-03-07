@@ -35,7 +35,7 @@ namespace NSec.Tests.Algorithms
             var a = new Blake2bMac();
             var b = Utilities.RandomBytes.Slice(0, keySize);
 
-            using (var k = Key.Import(a, b, KeyBlobFormat.RawSymmetricKey, KeyExportPolicies.AllowPlaintextArchiving))
+            using (var k = Key.Import(a, b, KeyBlobFormat.RawSymmetricKey, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
             {
                 Assert.Equal(KeyExportPolicies.AllowPlaintextArchiving, k.ExportPolicy);
 
@@ -55,14 +55,14 @@ namespace NSec.Tests.Algorithms
             var a = new Blake2bMac();
             var b = Utilities.RandomBytes.Slice(0, keySize);
 
-            using (var k1 = Key.Import(a, b, KeyBlobFormat.RawSymmetricKey, KeyExportPolicies.AllowPlaintextArchiving))
+            using (var k1 = Key.Import(a, b, KeyBlobFormat.RawSymmetricKey, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
             {
                 Assert.Equal(KeyExportPolicies.AllowPlaintextArchiving, k1.ExportPolicy);
 
                 var n = k1.Export(KeyBlobFormat.NSecSymmetricKey);
                 Assert.NotNull(n);
 
-                using (var k2 = Key.Import(a, n, KeyBlobFormat.NSecSymmetricKey, KeyExportPolicies.AllowPlaintextArchiving))
+                using (var k2 = Key.Import(a, n, KeyBlobFormat.NSecSymmetricKey, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
                 {
                     var expected = b.ToArray();
                     var actual = k2.Export(KeyBlobFormat.RawSymmetricKey);
@@ -258,7 +258,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = new Blake2bMac();
 
-            using (var k = new Key(a, KeyExportPolicies.AllowPlaintextArchiving))
+            using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
             {
                 var actual = k.Export(KeyBlobFormat.RawSymmetricKey);
 

@@ -22,3 +22,4 @@ None
 
 * API Reference
     * [[Key Class]]
+    * [[KeyCreationParameters Struct]]

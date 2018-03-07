@@ -17,7 +17,7 @@ namespace NSec.Cryptography
 
         public Key(
             Algorithm algorithm,
-            KeyExportPolicies exportPolicy = KeyExportPolicies.None)
+            in KeyCreationParameters creationParameters = default)
         {
             if (algorithm == null)
             {
@@ -56,14 +56,14 @@ namespace NSec.Cryptography
             keyHandle.MakeReadOnly();
 
             _algorithm = algorithm;
-            _exportPolicy = exportPolicy;
+            _exportPolicy = creationParameters.ExportPolicy;
             _handle = keyHandle;
             _publicKey = (publicKeyBytes) != null ? new PublicKey(algorithm, publicKeyBytes) : null;
         }
 
         internal Key(
             Algorithm algorithm,
-            KeyExportPolicies exportPolicy,
+            in KeyCreationParameters creationParameters,
             SecureMemoryHandle keyHandle,
             byte[] publicKeyBytes)
         {
@@ -73,7 +73,7 @@ namespace NSec.Cryptography
             keyHandle.MakeReadOnly();
 
             _algorithm = algorithm;
-            _exportPolicy = exportPolicy;
+            _exportPolicy = creationParameters.ExportPolicy;
             _handle = keyHandle;
             _publicKey = (publicKeyBytes) != null ? new PublicKey(algorithm, publicKeyBytes) : null;
         }
@@ -88,16 +88,16 @@ namespace NSec.Cryptography
 
         public static Key Create(
             Algorithm algorithm,
-            KeyExportPolicies exportPolicy = KeyExportPolicies.None)
+            in KeyCreationParameters creationParameters = default)
         {
-            return RandomGenerator.Default.GenerateKey(algorithm, exportPolicy);
+            return RandomGenerator.Default.GenerateKey(algorithm, in creationParameters);
         }
 
         public static Key Import(
            Algorithm algorithm,
            ReadOnlySpan<byte> blob,
            KeyBlobFormat format,
-           KeyExportPolicies exportPolicy = KeyExportPolicies.None)
+           in KeyCreationParameters creationParameters = default)
         {
             if (algorithm == null)
             {
@@ -125,15 +125,15 @@ namespace NSec.Cryptography
                 throw Error.Format_InvalidBlob();
             }
 
-            return new Key(algorithm, exportPolicy, keyHandle, publicKeyBytes);
+            return new Key(algorithm, in creationParameters, keyHandle, publicKeyBytes);
         }
 
         public static bool TryImport(
             Algorithm algorithm,
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
-            KeyExportPolicies exportPolicy,
-            out Key result)
+            out Key result,
+            in KeyCreationParameters creationParameters = default)
         {
             if (algorithm == null)
             {
@@ -156,7 +156,7 @@ namespace NSec.Cryptography
                 }
             }
 
-            result = success ? new Key(algorithm, exportPolicy, keyHandle, publicKeyBytes) : null;
+            result = success ? new Key(algorithm, in creationParameters, keyHandle, publicKeyBytes) : null;
             return success;
         }
 
