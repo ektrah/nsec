@@ -134,7 +134,7 @@ ObjectDisposedException
 : `sharedSecret` has been disposed.
 
 
-### DeriveKey(SharedSecret, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Algorithm, KeyExportPolicies)
+### DeriveKey(SharedSecret, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Algorithm, in KeyCreationParameters)
 
 Derives a key for the specified algorithm from a shared secret.
 
@@ -143,7 +143,7 @@ Derives a key for the specified algorithm from a shared secret.
         ReadOnlySpan<byte> salt,
         ReadOnlySpan<byte> info,
         Algorithm algorithm,
-        KeyExportPolicies exportPolicy = KeyExportPolicies.None)
+        in KeyCreationParameters creationParameters = default)
 
 #### Parameters
 
@@ -159,10 +159,10 @@ info
 algorithm
 : The algorithm for the new key.
 
-exportPolicy
-: A bitwise combination of [[KeyExportPolicies|KeyExportPolicies Enum]] values
-    that specifies the export policy for the derived key.
-    
+creationParameters
+: A [[KeyCreationParameters|KeyCreationParameters Struct]] value that specifies
+    advanced parameters for the creation of the [[Key|Key Class]] instance.
+
 #### Return Value
 
 A new instance of the [[Key|Key Class]] class that represents the derived key.
@@ -190,7 +190,7 @@ All members of this type are thread safe.
 
 ## Purity
 
-All methods give the same result for the same arguments.
+All methods yield the same result for the same arguments.
 
 
 ## See Also

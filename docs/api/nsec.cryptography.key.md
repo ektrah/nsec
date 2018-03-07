@@ -1,6 +1,6 @@
 # Key Class
 
-Represents a symmetric key or an asymmetric key pair.
+Represents a symmetric key or asymmetric key pair.
 
     public sealed class Key : IDisposable
 
@@ -11,22 +11,22 @@ Represents a symmetric key or an asymmetric key pair.
 ## Constructors
 
 
-### Key(Algorithm, KeyExportPolicies)
+### Key(Algorithm, in KeyCreationParameters)
 
 Initializes a new instance of the [[Key|Key Class]] class with a random key.
 
     public Key(
         Algorithm algorithm,
-        KeyExportPolicies exportPolicy = KeyExportPolicies.None)
+        in KeyCreationParameters creationParameters = default)
 
 #### Parameters
 
 algorithm
 : The algorithm for the key.
 
-exportPolicy
-: A bitwise combination of [[KeyExportPolicies|KeyExportPolicies Enum]] values
-    that specifies the export policy for the new key.
+creationParameters
+: A [[KeyCreationParameters|KeyCreationParameters Struct]] value that specifies
+    advanced parameters for the creation of the [[Key|Key Class]] instance.
 
 #### Exceptions
 
@@ -39,8 +39,9 @@ NotSupportedException
 #### Remarks
 
 This constructor is a shortcut for
-[[RandomGenerator.Default.GenerateKey(Algorithm, KeyExportPolicies)|RandomGenerator
-Class#GenerateKey(Algorithm, KeyExportPolicies)]].
+[[RandomGenerator.Default.GenerateKey(Algorithm, in
+KeyCreationParameters)|RandomGenerator Class#GenerateKey(Algorithm, in
+KeyCreationParameters)]].
 
 
 ## Properties
@@ -84,22 +85,22 @@ of the [[Key|Key Class]] class represents a key pair; otherwise, `null`.
 ## Static Methods
 
 
-### Create(Algorithm, KeyExportPolicies)
+### Create(Algorithm, in KeyCreationParameters)
 
 Creates a new instance of the [[Key|Key Class]] class with a random key.
 
     public static Key Create(
         Algorithm algorithm,
-        KeyExportPolicies exportPolicy = KeyExportPolicies.None)
+        in KeyCreationParameters creationParameters = default)
 
 #### Parameters
 
 algorithm
 : The algorithm for the key.
 
-exportPolicy
-: A bitwise combination of [[KeyExportPolicies|KeyExportPolicies Enum]] values
-    that specifies the export policy for the new key.
+creationParameters
+: A [[KeyCreationParameters|KeyCreationParameters Struct]] value that specifies
+    advanced parameters for the creation of the [[Key|Key Class]] instance.
 
 #### Return Value
 
@@ -116,11 +117,12 @@ NotSupportedException
 #### Remarks
 
 This method is a shortcut for
-[[RandomGenerator.Default.GenerateKey(Algorithm, KeyExportPolicies)|RandomGenerator
-Class#GenerateKey(Algorithm, KeyExportPolicies)]].
+[[RandomGenerator.Default.GenerateKey(Algorithm, in
+KeyCreationParameters)|RandomGenerator Class#GenerateKey(Algorithm, in
+KeyCreationParameters)]].
 
 
-### Import(Algorithm, ReadOnlySpan<byte>, KeyBlobFormat, KeyExportPolicies)
+### Import(Algorithm, ReadOnlySpan<byte>, KeyBlobFormat, in KeyCreationParameters)
 
 Imports the specified key BLOB in the specified format.
 
@@ -128,7 +130,7 @@ Imports the specified key BLOB in the specified format.
         Algorithm algorithm,
         ReadOnlySpan<byte> blob,
         KeyBlobFormat format,
-        KeyExportPolicies exportPolicy = KeyExportPolicies.None)
+        in KeyCreationParameters creationParameters = default)
 
 #### Parameters
 
@@ -142,9 +144,9 @@ format
 : One of the [[KeyBlobFormat|KeyBlobFormat Enum]] values that specifies the
     format of the key BLOB.
 
-exportPolicy
-: A bitwise combination of [[KeyExportPolicies|KeyExportPolicies Enum]] values
-    that specifies the export policy for the imported key.
+creationParameters
+: A [[KeyCreationParameters|KeyCreationParameters Struct]] value that specifies
+    advanced parameters for the creation of the [[Key|Key Class]] instance.
 
 #### Return Value
 
@@ -165,7 +167,7 @@ NotSupportedException
 : The specified algorithm does not support importing keys.
 
 
-### TryImport(Algorithm, ReadOnlySpan<byte>, KeyBlobFormat, KeyExportPolicies, out Key)
+### TryImport(Algorithm, ReadOnlySpan<byte>, KeyBlobFormat, out Key, in KeyCreationParameters)
 
 Attempts to import the specified key BLOB in the specified format.
 
@@ -173,8 +175,8 @@ Attempts to import the specified key BLOB in the specified format.
         Algorithm algorithm,
         ReadOnlySpan<byte> blob,
         KeyBlobFormat format,
-        KeyExportPolicies exportPolicy,
-        out Key result)
+        out Key result,
+        in KeyCreationParameters creationParameters = default)
 
 #### Parameters
 
@@ -188,13 +190,13 @@ format
 : One of the [[KeyBlobFormat|KeyBlobFormat Enum]] values that specifies the
     format of the key BLOB.
 
-exportPolicy
-: A bitwise combination of [[KeyExportPolicies|KeyExportPolicies Enum]] values
-    that specifies the export policy for the imported key.
-
 result
 : When this method returns, contains a new instance of the [[Key|Key Class]]
-    class that represents the imported key, or `null` if the import failed.
+    class that represents the imported key, or `null` if the import fails.
+
+creationParameters
+: A [[KeyCreationParameters|KeyCreationParameters Struct]] value that specifies
+    advanced parameters for the creation of the [[Key|Key Class]] instance.
 
 #### Return Value
 
@@ -268,5 +270,6 @@ not guaranteed to be thread safe.
 * API Reference
     * [[Algorithm Class]]
     * [[KeyBlobFormat Enum]]
+    * [[KeyCreationParameters Struct]]
     * [[KeyExportPolicies Enum]]
     * [[PublicKey Class]]

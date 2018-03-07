@@ -134,22 +134,22 @@ ArgumentException
 : `minValue` is greater than `maxValue`.
 
 
-### GenerateKey(Algorithm, KeyExportPolicies)
+### GenerateKey(Algorithm, in KeyCreationParameters)
 
 Generates a new cryptographic key for the specified algorithm.
 
     public Key GenerateKey(
         Algorithm algorithm,
-        KeyExportPolicies exportPolicy = KeyExportPolicies.None)
+        in KeyCreationParameters creationParameters = default)
 
 #### Parameters
 
 algorithm
 : The algorithm for the key.
 
-exportPolicy
-: A bitwise combination of [[KeyExportPolicies|KeyExportPolicies Enum]] values
-    that specifies the export policy for the generated key.
+creationParameters
+: A [[KeyCreationParameters|KeyCreationParameters Struct]] value that specifies
+    advanced parameters for the creation of the [[Key|Key Class]] instance.
 
 #### Return Value
 

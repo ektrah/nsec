@@ -8,17 +8,18 @@ Specifies the key export policies for a [[key|Key Class]].
 
 ## Members
 
-AllowPlaintextArchiving
-: The private key can be exported one time for archiving purposes.
+None
+: The private key cannot be exported.
 
 AllowPlaintextExport
 : The private key can be exported multiple times.
 
-None
-: The private key cannot be exported.
+AllowPlaintextArchiving
+: The private key can be exported one time for archiving purposes.
 
 
 ## See Also
 
 * API Reference
     * [[Key Class]]
+    * [[KeyCreationParameters Struct]]

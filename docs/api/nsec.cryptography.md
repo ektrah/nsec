@@ -22,6 +22,7 @@
 * [[CryptographicException Class]]
 * [[Key Class]]
     * [[KeyBlobFormat Enum]]
+    * [[KeyCreationParameters Struct]]
     * [[KeyExportPolicies Enum]]
 * [[Nonce Struct]]
 * [[PublicKey Class]]

@@ -16,11 +16,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NSec", "NSec", "{DF40D4F3-D
 		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
+		404.md = 404.md
 		appveyor.yml = appveyor.yml
 		circle.yml = circle.yml
+		firebase.json = firebase.json
+		index.md = index.md
 		LICENSE = LICENSE
 		NOTICE = NOTICE
+		notice.md = notice.md
 		README.md = README.md
+		style.css = style.css
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{99A04338-7321-4B8B-AA29-496C18328F90}"

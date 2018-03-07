@@ -2,7 +2,7 @@
 
 Represents a nonce for [[authenticated encryption|AeadAlgorithm Class]].
 
-    public readonly struct Nonce : IComparable<Nonce>, IEquatable<Nonce>
+    public readonly struct Nonce : IEquatable<Nonce>
 
 A nonce consists of two fields: a fixed field and a counter field. The counter
 fields of successive nonces form a monotonically increasing sequence, when those
@@ -21,7 +21,7 @@ that are generated for a given key.
 
 Represents the largest possible size of a nonce, in bytes.
 
-    public const int MaxSize = 15;
+    public const int MaxSize = 32;
 
 This field is constant and read-only.
 
@@ -158,28 +158,6 @@ The total size of the nonce, in bytes.
 ## Static Methods
 
 
-### Compare(in Nonce, in Nonce)
-
-Compares two specified [[Nonce|Nonce Struct]] values and returns an indication
-of their relative position in the sort order.
-
-    public static int Compare(
-        in Nonce left,
-        in Nonce right)
-
-#### Parameters
-
-left
-: The first value to compare.
-
-right
-: The second value to compare.
-
-#### Return Value
-
-A value that indicates the relative order of the nonces being compared.
-
-
 ### Equals(in Nonce, in Nonce)
 
 Returns a value indicating whether two specified instances of [[Nonce|Nonce
@@ -274,24 +252,6 @@ ArgumentException
 
 
 ## Methods
-
-
-### CompareTo(Nonce)
-
-Compares the current [[Nonce|Nonce Struct]] to the specified [[Nonce|Nonce
-Struct]] and returns an indication of their relative position in the sort order.
-
-    public int CompareTo(
-        Nonce other)
-
-#### Parameters
-
-other
-: The nonce to compare to the current nonce.
-
-#### Return Value
-
-A value that indicates the relative order of the nonces being compared.
 
 
 ### CopyTo(Span<byte>)
@@ -437,50 +397,6 @@ right
 `true` if `left` and `right` are equal; otherwise, `false`.
 
 
-### GreaterThan(Nonce, Nonce)
-
-Returns a value indicating whether a specified [[Nonce|Nonce Struct]] is greater
-than another specified [[Nonce|Nonce Struct]].
-
-    public static bool operator >(
-        Nonce left,
-        Nonce right)
-
-#### Parameters
-
-left
-: The first value to compare.
-
-right
-: The second value to compare.
-
-#### Return Value
-
-`true` if `left` is greater than `right`; otherwise, `false`.
-
-
-### GreaterThanOrEqual(Nonce, Nonce)
-
-Returns a value indicating whether a specified [[Nonce|Nonce Struct]] is greater
-than or equal to another specified [[Nonce|Nonce Struct]].
-
-    public static bool operator >=(
-        Nonce left,
-        Nonce right)
-
-#### Parameters
-
-left
-: The first value to compare.
-
-right
-: The second value to compare.
-
-#### Return Value
-
-`true` if `left` is greater than or equal to `right`; otherwise, `false`.
-
-
 ### Increment(Nonce)
 
 Increments the counter field of the specified [[Nonce|Nonce Struct]] by 1.
@@ -523,50 +439,6 @@ right
 #### Return Value
 
 `true` if `left` and `right` are not equal; otherwise, `false`.
-
-
-### LessThan(Nonce, Nonce)
-
-Returns a value indicating whether a specified [[Nonce|Nonce Struct]] is less
-than another specified [[Nonce|Nonce Struct]].
-
-    public static bool operator <(
-        Nonce left,
-        Nonce right)
-
-#### Parameters
-
-left
-: The first value to compare.
-
-right
-: The second value to compare.
-
-#### Return Value
-
-`true` if `left` is less than `right`; otherwise, `false`.
-
-
-### LessThanOrEqual(Nonce, Nonce)
-
-Returns a value indicating whether a specified [[Nonce|Nonce Struct]] is less
-than or equal to another specified [[Nonce|Nonce Struct]].
-
-    public static bool operator <=(
-        Nonce left,
-        Nonce right)
-
-#### Parameters
-
-left
-: The first value to compare.
-
-right
-: The second value to compare.
-
-#### Return Value
-
-`true` if `left` is less than or equal to `right`; otherwise, `false`.
 
 
 ### Xor(Nonce, ReadOnlySpan<byte>)
