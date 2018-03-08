@@ -7,6 +7,7 @@ using System.Text;
 namespace NSec.Cryptography
 {
     // RFC 5116
+    [DebuggerDisplay("{GetDebuggerDisplay(),nq}")]
     [StructLayout(LayoutKind.Explicit)]
     public readonly struct Nonce : IEquatable<Nonce>
     {
@@ -296,7 +297,7 @@ namespace NSec.Cryptography
             return bytes;
         }
 
-        public override string ToString()
+        internal string GetDebuggerDisplay()
         {
             ref byte bytes = ref Unsafe.AsRef(in _bytes);
             int init = FixedFieldSize;

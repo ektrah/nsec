@@ -39,7 +39,7 @@ namespace NSec.Tests.Core
             Assert.Equal(0, actual.FixedFieldSize);
             Assert.Equal(0, actual.CounterFieldSize);
             Assert.Equal(new byte[0], actual.ToArray());
-            Assert.Equal("[][]", actual.ToString());
+            Assert.Equal("[][]", actual.GetDebuggerDisplay());
             actual.CopyTo(Span<byte>.Empty);
         }
 
@@ -60,7 +60,7 @@ namespace NSec.Tests.Core
             Assert.Equal(0, actual.FixedFieldSize);
             Assert.Equal(expected.Length, actual.CounterFieldSize);
             Assert.Equal(expected, actual.ToArray());
-            Assert.Equal("[][" + expected.EncodeHex() + "]", actual.ToString());
+            Assert.Equal("[][" + expected.EncodeHex() + "]", actual.GetDebuggerDisplay());
             actual.CopyTo(array);
             Assert.Equal(expected, array);
         }
@@ -111,7 +111,7 @@ namespace NSec.Tests.Core
             Assert.Equal(fixedField.Length, actual.FixedFieldSize);
             Assert.Equal(counterField.Length, actual.CounterFieldSize);
             Assert.Equal(expected, actual.ToArray());
-            Assert.Equal("[" + fixedField.EncodeHex() + "][" + counterField.EncodeHex() + "]", actual.ToString());
+            Assert.Equal("[" + fixedField.EncodeHex() + "][" + counterField.EncodeHex() + "]", actual.GetDebuggerDisplay());
             actual.CopyTo(array);
             Assert.Equal(expected, array);
         }
@@ -157,7 +157,7 @@ namespace NSec.Tests.Core
             Assert.Equal(fixedField.Length, actual.FixedFieldSize);
             Assert.Equal(counterField.Length, actual.CounterFieldSize);
             Assert.Equal(expected, actual.ToArray());
-            Assert.Equal("[" + fixedField.EncodeHex() + "][" + counterField.EncodeHex() + "]", actual.ToString());
+            Assert.Equal("[" + fixedField.EncodeHex() + "][" + counterField.EncodeHex() + "]", actual.GetDebuggerDisplay());
             actual.CopyTo(array);
             Assert.Equal(expected, array);
         }
