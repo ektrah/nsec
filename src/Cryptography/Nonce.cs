@@ -159,36 +159,31 @@ namespace NSec.Cryptography
 
         public static void Xor(
             ref Nonce nonce,
-            ReadOnlySpan<byte> bytes)
+            in Nonce other)
         {
-            if (bytes.Length != nonce.Size)
+            if (Unsafe.SizeOf<Nonce>() != 9 * sizeof(uint))
             {
-                throw Error.Argument_NonceXorSize(nameof(bytes));
+                throw Error.Cryptographic_InternalError();
+            }
+            if (other.Size != nonce.Size)
+            {
+                throw Error.Argument_NonceXorSize(nameof(other));
             }
 
-            Unsafe.AsRef(in nonce._fixedFieldSize) = (byte)bytes.Length;
+            Unsafe.AsRef(in nonce._fixedFieldSize) += nonce._counterFieldSize;
             Unsafe.AsRef(in nonce._counterFieldSize) = 0;
 
-            ref byte first = ref Unsafe.AsRef(in nonce._bytes);
-            ref byte second = ref Unsafe.AsRef(in MemoryMarshal.GetReference(bytes));
-            int length = bytes.Length;
-            int i = 0;
+            ref byte x = ref Unsafe.AsRef(in nonce._bytes);
+            ref byte y = ref Unsafe.AsRef(in other._bytes);
 
-            while (length - i >= sizeof(uint))
-            {
-                Debug.Assert(i >= 0 && i + 3 < MaxSize);
-                Unsafe.WriteUnaligned(ref Unsafe.Add(ref first, i),
-                    Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref first, i)) ^
-                    Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref second, i)));
-                i += sizeof(uint);
-            }
-
-            while (i < length)
-            {
-                Debug.Assert(i >= 0 && i < MaxSize);
-                Unsafe.Add(ref first, i) ^= Unsafe.Add(ref second, i);
-                i++;
-            }
+            Unsafe.WriteUnaligned(ref Unsafe.Add(ref x, 0 * sizeof(uint)), Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 0 * sizeof(uint))) ^ Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 0 * sizeof(uint))));
+            Unsafe.WriteUnaligned(ref Unsafe.Add(ref x, 1 * sizeof(uint)), Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 1 * sizeof(uint))) ^ Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 1 * sizeof(uint))));
+            Unsafe.WriteUnaligned(ref Unsafe.Add(ref x, 2 * sizeof(uint)), Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 2 * sizeof(uint))) ^ Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 2 * sizeof(uint))));
+            Unsafe.WriteUnaligned(ref Unsafe.Add(ref x, 3 * sizeof(uint)), Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 3 * sizeof(uint))) ^ Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 3 * sizeof(uint))));
+            Unsafe.WriteUnaligned(ref Unsafe.Add(ref x, 4 * sizeof(uint)), Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 4 * sizeof(uint))) ^ Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 4 * sizeof(uint))));
+            Unsafe.WriteUnaligned(ref Unsafe.Add(ref x, 5 * sizeof(uint)), Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 5 * sizeof(uint))) ^ Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 5 * sizeof(uint))));
+            Unsafe.WriteUnaligned(ref Unsafe.Add(ref x, 6 * sizeof(uint)), Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 6 * sizeof(uint))) ^ Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 6 * sizeof(uint))));
+            Unsafe.WriteUnaligned(ref Unsafe.Add(ref x, 7 * sizeof(uint)), Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 7 * sizeof(uint))) ^ Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 7 * sizeof(uint))));
         }
 
         public static bool operator !=(
@@ -199,11 +194,11 @@ namespace NSec.Cryptography
         }
 
         public static Nonce operator ^(
-            Nonce nonce,
-            ReadOnlySpan<byte> bytes)
+            Nonce left,
+            Nonce right)
         {
-            Nonce result = nonce;
-            Xor(ref result, bytes);
+            Nonce result = left;
+            Xor(ref result, in right);
             return result;
         }
 

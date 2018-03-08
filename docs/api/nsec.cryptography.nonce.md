@@ -216,27 +216,27 @@ nonce
 `true`.
 
 
-### Xor(ref Nonce, ReadOnlySpan<byte>)
+### Xor(ref Nonce, in Nonce)
 
 Performs a bitwise exclusive Or (XOr) operation on the specified [[Nonce|Nonce
-Struct]] and the specified span of bytes.
+Struct]] values and stores the result in the first parameter.
 
     public static void Xor(
         ref Nonce nonce,
-        ReadOnlySpan<byte> bytes)
+        in Nonce other)
 
 #### Parameters
 
 nonce
-: The nonce to perform the XOr operation on.
+: A nonce to perform the XOr operation on.
 
-bytes
-: The span of bytes to XOr with the nonce.
+other
+: A nonce to perform the XOr operation on.
 
 #### Exceptions
 
 ArgumentException
-: The length of the span of bytes is not equal to the size of the nonce.
+: The sizes of the two nonces are not the same.
 
 
 ## Methods
@@ -429,11 +429,10 @@ right
 `true` if `left` and `right` are not equal; otherwise, `false`.
 
 
-### Xor(Nonce, ReadOnlySpan<byte>)
+### Xor(Nonce, Nonce)
 
 Returns a new [[Nonce|Nonce Struct]] by performing a bitwise exclusive Or (XOr)
-operation on the specified [[Nonce|Nonce Struct]] and the specified span of
-bytes.
+operation on the specified [[Nonce|Nonce Struct]] values.
 
     public static Nonce operator ^(
         Nonce nonce,
@@ -442,19 +441,19 @@ bytes.
 #### Parameters
 
 nonce
-: The nonce to xor with the span of bytes.
+: A nonce to perform the XOr operation on.
 
 bytes
-: The span of bytes to xor with the nonce.
+: A nonce to perform the XOr operation on.
 
 #### Return Value
 
-The resulting nonce.
+The result of the the XOr operation.
 
 #### Exceptions
 
 ArgumentException
-: The length of the span of bytes is not equal to the size of the nonce.
+: The sizes of the two nonces are not the same.
 
 
 ## Thread Safety

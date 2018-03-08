@@ -342,7 +342,7 @@ namespace NSec.Tests.Core
             var bytes2 = Utilities.RandomBytes.Slice(start * 32 + 100, 12 + start);
 
             var expected = new byte[bytes1.Length];
-            var actual = new Nonce(ReadOnlySpan<byte>.Empty, bytes1) ^ bytes2;
+            var actual = new Nonce(ReadOnlySpan<byte>.Empty, bytes1) ^ new Nonce(bytes2, 0);
 
             for (var i = 0; i < expected.Length; i++)
             {
@@ -358,7 +358,7 @@ namespace NSec.Tests.Core
         [Fact]
         public static void XorWrongLength()
         {
-            Assert.Throws<ArgumentException>("bytes", () => new Nonce(0, 12) ^ new byte[11]);
+            Assert.Throws<ArgumentException>("other", () => new Nonce(0, 12) ^ new Nonce(new byte[11], 0));
         }
 
         #endregion
