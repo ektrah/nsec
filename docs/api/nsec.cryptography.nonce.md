@@ -14,14 +14,14 @@ that are generated for a given key.
 ## [TOC] Summary
 
 
-## Constants
+## Static Fields
 
 
 ### MaxSize
 
 Represents the largest possible size of a nonce, in bytes.
 
-    public const int MaxSize = 32;
+    public static readonly int MaxSize = 32;
 
 This field is constant and read-only.
 

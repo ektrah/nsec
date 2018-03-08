@@ -11,21 +11,22 @@ namespace NSec.Cryptography
     [StructLayout(LayoutKind.Explicit)]
     public readonly struct Nonce : IEquatable<Nonce>
     {
-        public const int MaxSize = 32;
+        private const int maxSize = 32;
+        public static readonly int MaxSize = maxSize;
 
         [FieldOffset(0)]
         private readonly byte _bytes;
 
-        [FieldOffset(MaxSize + 0)]
+        [FieldOffset(maxSize + 0)]
         private readonly byte _fixedFieldSize;
 
-        [FieldOffset(MaxSize + 1)]
+        [FieldOffset(maxSize + 1)]
         private readonly byte _counterFieldSize;
 
-        [FieldOffset(MaxSize + 2)]
+        [FieldOffset(maxSize + 2)]
         private readonly byte _reserved0;
 
-        [FieldOffset(MaxSize + 3)]
+        [FieldOffset(maxSize + 3)]
         private readonly byte _reserved1;
 
         public Nonce(
@@ -33,13 +34,13 @@ namespace NSec.Cryptography
             int counterFieldSize)
             : this()
         {
-            if (fixedFieldSize < 0 || fixedFieldSize > MaxSize)
+            if (fixedFieldSize < 0 || fixedFieldSize > maxSize)
             {
-                throw Error.ArgumentOutOfRange_NonceFixedCounterSize(nameof(fixedFieldSize), MaxSize.ToString());
+                throw Error.ArgumentOutOfRange_NonceFixedCounterSize(nameof(fixedFieldSize), maxSize.ToString());
             }
-            if (counterFieldSize < 0 || counterFieldSize > MaxSize - fixedFieldSize)
+            if (counterFieldSize < 0 || counterFieldSize > maxSize - fixedFieldSize)
             {
-                throw Error.ArgumentOutOfRange_NonceCounterSize(nameof(counterFieldSize), MaxSize.ToString());
+                throw Error.ArgumentOutOfRange_NonceCounterSize(nameof(counterFieldSize), maxSize.ToString());
             }
 
             _fixedFieldSize = (byte)fixedFieldSize;
@@ -51,13 +52,13 @@ namespace NSec.Cryptography
             int counterFieldSize)
             : this()
         {
-            if (fixedField.Length > MaxSize)
+            if (fixedField.Length > maxSize)
             {
-                throw Error.Argument_NonceFixedSize(nameof(fixedField), MaxSize.ToString());
+                throw Error.Argument_NonceFixedSize(nameof(fixedField), maxSize.ToString());
             }
-            if (counterFieldSize < 0 || counterFieldSize > MaxSize - fixedField.Length)
+            if (counterFieldSize < 0 || counterFieldSize > maxSize - fixedField.Length)
             {
-                throw Error.ArgumentOutOfRange_NonceFixedCounterSize(nameof(counterFieldSize), MaxSize.ToString());
+                throw Error.ArgumentOutOfRange_NonceFixedCounterSize(nameof(counterFieldSize), maxSize.ToString());
             }
 
             _fixedFieldSize = (byte)fixedField.Length;
@@ -71,13 +72,13 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> counterField)
             : this()
         {
-            if (fixedField.Length > MaxSize)
+            if (fixedField.Length > maxSize)
             {
-                throw Error.Argument_NonceFixedSize(nameof(fixedField), MaxSize.ToString());
+                throw Error.Argument_NonceFixedSize(nameof(fixedField), maxSize.ToString());
             }
-            if (counterField.Length > MaxSize - fixedField.Length)
+            if (counterField.Length > maxSize - fixedField.Length)
             {
-                throw Error.Argument_NonceFixedCounterSize(nameof(counterField), MaxSize.ToString());
+                throw Error.Argument_NonceFixedCounterSize(nameof(counterField), maxSize.ToString());
             }
 
             _fixedFieldSize = (byte)fixedField.Length;
@@ -138,7 +139,7 @@ namespace NSec.Cryptography
                 if (pos > end)
                 {
                     pos--;
-                    Debug.Assert(pos >= 0 && pos < MaxSize);
+                    Debug.Assert(pos >= 0 && pos < maxSize);
                     ref byte n = ref Unsafe.Add(ref bytes, pos);
                     carry += n;
                     n = unchecked((byte)carry);
