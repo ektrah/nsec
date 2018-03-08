@@ -18,8 +18,7 @@ namespace NSec.Cryptography.Formatting
         private Span _stack6;
 #pragma warning restore 0414
 
-        private readonly ReadOnlySpan<byte> _buffer;
-
+        private ReadOnlySpan<byte> _buffer;
         private int _depth;
         private bool _failed;
 
@@ -35,7 +34,6 @@ namespace NSec.Cryptography.Formatting
             _stack6 = default;
 
             _buffer = buffer;
-
             _depth = 0;
             _failed = false;
         }

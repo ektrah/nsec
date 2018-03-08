@@ -17,8 +17,7 @@ namespace NSec.Cryptography.Formatting
         private int _stack5;
 #pragma warning restore 0414
 
-        private readonly Span<byte> _buffer;
-
+        private Span<byte> _buffer;
         private int _depth;
         private int _pos;
 
@@ -33,7 +32,6 @@ namespace NSec.Cryptography.Formatting
             _stack5 = default;
 
             _buffer = buffer;
-
             _depth = 0;
             _pos = buffer.Length;
         }
