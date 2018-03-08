@@ -14,6 +14,18 @@ that are generated for a given key.
 ## [TOC] Summary
 
 
+## Constants
+
+
+### MaxSize
+
+Represents the largest possible size of a nonce, in bytes.
+
+    public const int MaxSize = 32;
+
+This field is constant and read-only.
+
+
 ## Constructors
 
 
