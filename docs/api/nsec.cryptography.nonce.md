@@ -167,6 +167,10 @@ right
 
 `true` if `left` and `right` are equal; otherwise, `false`.
 
+#### Remarks
+
+This method is equivalent to `left.Equals(right)` but faster.
+
 
 ### TryAdd(ref Nonce, int)
 
@@ -196,6 +200,10 @@ otherwise, `true`.
 ArgumentOutOfRangeException
 : `value` is negative.
 
+#### Remarks
+
+This method is equivalent to `nonce += value;` but faster.
+
 
 ### TryIncrement(ref Nonce)
 
@@ -214,6 +222,10 @@ nonce
 
 `false` if the increment overflows the counter field of the nonce; otherwise,
 `true`.
+
+#### Remarks
+
+This method is equivalent to `nonce++;` but faster.
 
 
 ### Xor(ref Nonce, in Nonce)
@@ -237,6 +249,10 @@ other
 
 ArgumentException
 : The sizes of the two nonces are not the same.
+
+#### Remarks
+
+This method is equivalent to `nonce ^= other;` but faster.
 
 
 ## Methods
