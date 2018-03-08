@@ -4,11 +4,11 @@ Represents a nonce for [[authenticated encryption|AeadAlgorithm Class]].
 
     public readonly struct Nonce : IEquatable<Nonce>
 
-A nonce consists of two fields: a fixed field and a counter field. The counter
-fields of successive nonces form a monotonically increasing sequence, when those
-fields are regarded as unsigned integers in big-endian byte order. The length of
-both the fixed field and the counter field must remain constant for all nonces
-that are generated for a given key.
+A nonce consists of two fields: a fixed field and a counter field. The fixed
+field remains constant for all nonces that are generated for a given key. The
+counter fields of successive nonces form a monotonically increasing sequence,
+when those fields are regarded as unsigned integers in big-endian byte order.
+Both fields can be set to a length of zero if unused.
 
 
 ## [TOC] Summary
