@@ -365,8 +365,8 @@ A string representation of the current [[Nonce|Nonce Struct]].
 
 ### Addition(Nonce, int)
 
-Adds the specified value to the counter field of the specified [[Nonce|Nonce
-Struct]].
+Returns a new [[Nonce|Nonce Struct]] by adding the specified value to the
+counter field of the specified [[Nonce|Nonce Struct]].
 
     public static Nonce operator +(
         Nonce nonce,
@@ -415,7 +415,8 @@ right
 
 ### Increment(Nonce)
 
-Increments the counter field of the specified [[Nonce|Nonce Struct]] by 1.
+Returns a new [[Nonce|Nonce Struct]] by incrementing the counter field of the
+specified [[Nonce|Nonce Struct]] by 1.
 
     public static Nonce operator ++(
         Nonce nonce)
@@ -463,15 +464,15 @@ Returns a new [[Nonce|Nonce Struct]] by performing a bitwise exclusive Or (XOr)
 operation on the specified [[Nonce|Nonce Struct]] values.
 
     public static Nonce operator ^(
-        Nonce nonce,
-        ReadOnlySpan<byte> bytes)
+        Nonce left,
+        Nonce right)
 
 #### Parameters
 
-nonce
+left
 : A nonce to perform the XOr operation on.
 
-bytes
+right
 : A nonce to perform the XOr operation on.
 
 #### Return Value
