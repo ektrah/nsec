@@ -10,7 +10,7 @@ namespace NSec.Cryptography
     [StructLayout(LayoutKind.Explicit)]
     public readonly struct Nonce : IEquatable<Nonce>
     {
-        public const int MaxSize = 32;
+        internal const int MaxSize = 32;
 
         [FieldOffset(0)]
         private readonly byte _bytes;
