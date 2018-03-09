@@ -34,18 +34,15 @@ namespace NSec.Cryptography
     //
     public sealed class HmacSha256 : MacAlgorithm
     {
-        private const int SHA256HashSize = 32; // "L" in RFC 2104
-        private const int SHA256MessageBlockSize = 64; // "B" in RFC 2104
+        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(crypto_hash_sha256_BYTES, int.MaxValue, new byte[] { 0xDE, 0x33, 0x46, 0xDE });
 
-        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(SHA256HashSize, int.MaxValue, new byte[] { 0xDE, 0x33, 0x46, 0xDE });
-
-        private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(SHA256HashSize, int.MaxValue);
+        private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(crypto_hash_sha256_BYTES, int.MaxValue);
 
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
         public HmacSha256() : base(
-            minKeySize: SHA256HashSize,
-            defaultKeySize: SHA256HashSize,
+            minKeySize: crypto_hash_sha256_BYTES,
+            defaultKeySize: crypto_hash_sha256_BYTES,
             maxKeySize: int.MaxValue,
             minMacSize: 16,
             defaultMacSize: crypto_auth_hmacsha256_BYTES,
@@ -68,7 +65,7 @@ namespace NSec.Cryptography
 
         internal override int GetDefaultSeedSize()
         {
-            return SHA256HashSize;
+            return crypto_hash_sha256_BYTES;
         }
 
         internal override bool TryExportKey(

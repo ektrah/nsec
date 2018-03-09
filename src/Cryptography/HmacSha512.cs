@@ -37,18 +37,15 @@ namespace NSec.Cryptography
     //
     public sealed class HmacSha512 : MacAlgorithm
     {
-        private const int SHA512HashSize = 64; // "L" in RFC 2104
-        private const int SHA512MessageBlockSize = 128; // "B" in RFC 2104
+        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(crypto_hash_sha512_BYTES, int.MaxValue, new byte[] { 0xDE, 0x33, 0x47, 0xDE });
 
-        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(SHA512HashSize, int.MaxValue, new byte[] { 0xDE, 0x33, 0x47, 0xDE });
-
-        private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(SHA512HashSize, int.MaxValue);
+        private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(crypto_hash_sha512_BYTES, int.MaxValue);
 
         private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
 
         public HmacSha512() : base(
-            minKeySize: SHA512HashSize,
-            defaultKeySize: SHA512HashSize,
+            minKeySize: crypto_hash_sha512_BYTES,
+            defaultKeySize: crypto_hash_sha512_BYTES,
             maxKeySize: int.MaxValue,
             minMacSize: 16,
             defaultMacSize: crypto_auth_hmacsha512_BYTES,
@@ -71,7 +68,7 @@ namespace NSec.Cryptography
 
         internal override int GetDefaultSeedSize()
         {
-            return SHA512HashSize;
+            return crypto_hash_sha512_BYTES;
         }
 
         internal override bool TryExportKey(
