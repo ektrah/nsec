@@ -42,10 +42,7 @@ namespace NSec.Tests.Base
             Assert.True(a.DefaultKeySize >= a.MinKeySize);
             Assert.True(a.MaxKeySize >= a.DefaultKeySize);
 
-            Assert.True(a.MinMacSize >= 0);
-            Assert.True(a.DefaultMacSize > 0);
-            Assert.True(a.DefaultMacSize >= a.MinMacSize);
-            Assert.True(a.MaxMacSize >= a.DefaultMacSize);
+            Assert.True(a.MacSize > 0);
         }
 
         #endregion
@@ -133,97 +130,7 @@ namespace NSec.Tests.Base
                 var actual = a.Mac(k, data);
 
                 Assert.NotNull(actual);
-                Assert.Equal(a.DefaultMacSize, actual.Length);
-                Assert.Equal(expected, actual);
-            }
-        }
-
-        #endregion
-
-        #region Mac #2
-
-        [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void SignWithCountWithNullKey(Type algorithmType)
-        {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
-            Assert.Throws<ArgumentNullException>("key", () => a.Mac(null, ReadOnlySpan<byte>.Empty, 0));
-        }
-
-        [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void SignWithCountWithWrongKey(Type algorithmType)
-        {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
-            using (var k = new Key(new Ed25519()))
-            {
-                Assert.Throws<ArgumentException>("key", () => a.Mac(k, ReadOnlySpan<byte>.Empty, 0));
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void SignWithCountTooSmall(Type algorithmType)
-        {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
-            if (a.MinMacSize > 0)
-            {
-                using (var k = new Key(a))
-                {
-                    Assert.Throws<ArgumentOutOfRangeException>("macSize", () => a.Mac(k, ReadOnlySpan<byte>.Empty, a.MinMacSize - 1));
-                }
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void SignWithCountTooLarge(Type algorithmType)
-        {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
-            using (var k = new Key(a))
-            {
-                Assert.Throws<ArgumentOutOfRangeException>("macSize", () => a.Mac(k, ReadOnlySpan<byte>.Empty, a.MaxMacSize + 1));
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void SignWithCountMinSuccess(Type algorithmType)
-        {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
-            using (var k = new Key(a))
-            {
-                var data = Utilities.RandomBytes.Slice(0, 100);
-
-                var expected = a.Mac(k, data, a.MinMacSize);
-                var actual = a.Mac(k, data, a.MinMacSize);
-
-                Assert.NotNull(actual);
-                Assert.Equal(a.MinMacSize, actual.Length);
-                Assert.Equal(expected, actual);
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void SignWithCountMaxSuccess(Type algorithmType)
-        {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
-            using (var k = new Key(a))
-            {
-                var data = Utilities.RandomBytes.Slice(0, 100);
-
-                var expected = a.Mac(k, data, a.MaxMacSize);
-                var actual = a.Mac(k, data, a.MaxMacSize);
-
-                Assert.NotNull(actual);
-                Assert.Equal(a.MaxMacSize, actual.Length);
+                Assert.Equal(a.MacSize, actual.Length);
                 Assert.Equal(expected, actual);
             }
         }
@@ -259,12 +166,9 @@ namespace NSec.Tests.Base
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
-            if (a.MinMacSize > 0)
+            using (var k = new Key(a))
             {
-                using (var k = new Key(a))
-                {
-                    Assert.Throws<ArgumentException>("mac", () => a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MinMacSize - 1]));
-                }
+                Assert.Throws<ArgumentException>("mac", () => a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize - 1]));
             }
         }
 
@@ -276,13 +180,13 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                Assert.Throws<ArgumentException>("mac", () => a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MaxMacSize + 1]));
+                Assert.Throws<ArgumentException>("mac", () => a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize + 1]));
             }
         }
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void SignWithSpanMinSuccess(Type algorithmType)
+        public static void SignWithSpanSuccess(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
@@ -290,31 +194,11 @@ namespace NSec.Tests.Base
             {
                 var data = Utilities.RandomBytes.Slice(0, 100);
 
-                var expected = new byte[a.MinMacSize];
-                var actual = new byte[a.MinMacSize];
+                var expected = new byte[a.MacSize];
+                var actual = new byte[a.MacSize];
 
                 a.Mac(k, data, expected);
                 a.Mac(k, data, actual);
-                Assert.Equal(expected, actual);
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void SignWithSpanMaxSuccess(Type algorithmType)
-        {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
-            using (var k = new Key(a))
-            {
-                var data = Utilities.RandomBytes.Slice(0, 100);
-
-                var expected = new byte[a.MaxMacSize];
-                var actual = new byte[a.MaxMacSize];
-
-                a.Mac(k, data, expected);
-                a.Mac(k, data, actual);
-
                 Assert.Equal(expected, actual);
             }
         }
@@ -329,8 +213,8 @@ namespace NSec.Tests.Base
             {
                 var data = Utilities.RandomBytes.Slice(0, 100).ToArray();
 
-                var expected = new byte[a.DefaultMacSize];
-                var actual = data.AsSpan(0, a.DefaultMacSize);
+                var expected = new byte[a.MacSize];
+                var actual = data.AsSpan(0, a.MacSize);
 
                 a.Mac(k, data, expected);
                 a.Mac(k, data, actual);
@@ -370,12 +254,9 @@ namespace NSec.Tests.Base
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
-            if (a.MinMacSize > 0)
+            using (var k = new Key(a))
             {
-                using (var k = new Key(a))
-                {
-                    Assert.False(a.TryVerify(k, ReadOnlySpan<byte>.Empty, new byte[a.MinMacSize - 1]));
-                }
+                Assert.False(a.TryVerify(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize - 1]));
             }
         }
 
@@ -387,13 +268,13 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                Assert.False(a.TryVerify(k, ReadOnlySpan<byte>.Empty, new byte[a.MaxMacSize + 1]));
+                Assert.False(a.TryVerify(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize + 1]));
             }
         }
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void TryVerifyWithSpanMinSuccess(Type algorithmType)
+        public static void TryVerifyWithSpanSuccess(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
@@ -401,23 +282,7 @@ namespace NSec.Tests.Base
             {
                 var d = ReadOnlySpan<byte>.Empty;
 
-                var mac = a.Mac(k, d, a.MinMacSize);
-
-                Assert.True(a.TryVerify(k, d, mac));
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void TryVerifyWithSpanMaxSuccess(Type algorithmType)
-        {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
-            using (var k = new Key(a))
-            {
-                var d = ReadOnlySpan<byte>.Empty;
-
-                var mac = a.Mac(k, d, a.MaxMacSize);
+                var mac = a.Mac(k, d);
 
                 Assert.True(a.TryVerify(k, d, mac));
             }
@@ -454,12 +319,9 @@ namespace NSec.Tests.Base
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
-            if (a.MinMacSize > 0)
+            using (var k = new Key(a))
             {
-                using (var k = new Key(a))
-                {
-                    Assert.Throws<ArgumentException>("mac", () => a.Verify(k, ReadOnlySpan<byte>.Empty, new byte[a.MinMacSize - 1]));
-                }
+                Assert.Throws<CryptographicException>(() => a.Verify(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize - 1]));
             }
         }
 
@@ -471,13 +333,13 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                Assert.Throws<ArgumentException>("mac", () => a.Verify(k, ReadOnlySpan<byte>.Empty, new byte[a.MaxMacSize + 1]));
+                Assert.Throws<CryptographicException>(() => a.Verify(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize + 1]));
             }
         }
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void VerifyWithSpanMinSuccess(Type algorithmType)
+        public static void VerifyWithSpanSuccess(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
@@ -485,23 +347,7 @@ namespace NSec.Tests.Base
             {
                 var d = ReadOnlySpan<byte>.Empty;
 
-                var mac = a.Mac(k, d, a.MinMacSize);
-
-                a.Verify(k, d, mac);
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void VerifyWithSpanMaxSuccess(Type algorithmType)
-        {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
-            using (var k = new Key(a))
-            {
-                var d = ReadOnlySpan<byte>.Empty;
-
-                var mac = a.Mac(k, d, a.MaxMacSize);
+                var mac = a.Mac(k, d);
 
                 a.Verify(k, d, mac);
             }

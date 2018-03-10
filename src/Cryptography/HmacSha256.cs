@@ -45,9 +45,7 @@ namespace NSec.Cryptography
             minKeySize: crypto_hash_sha256_BYTES,
             defaultKeySize: crypto_hash_sha256_BYTES,
             maxKeySize: int.MaxValue,
-            minMacSize: 16,
-            defaultMacSize: crypto_auth_hmacsha256_BYTES,
-            maxMacSize: crypto_auth_hmacsha256_BYTES)
+            macSize: crypto_auth_hmacsha256_BYTES)
         {
             if (s_selfTest == 0)
             {
@@ -112,32 +110,11 @@ namespace NSec.Cryptography
             Span<byte> mac)
         {
             Debug.Assert(keyHandle != null);
-            Debug.Assert(mac.Length <= crypto_auth_hmacsha256_BYTES);
-
-            // crypto_auth_hmacsha256 requires a key with a length of exactly
-            // crypto_auth_hmacsha256_KEYBYTES. crypto_auth_hmacsha256_init
-            // accepts a key of arbitrary length. So we use _init here.
-
-            // crypto_auth_hmacsha256_init hashes the key if it is larger than
-            // the block size.
+            Debug.Assert(mac.Length == crypto_auth_hmacsha256_BYTES);
 
             crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, keyHandle, (UIntPtr)keyHandle.Length);
             crypto_auth_hmacsha256_update(ref state, in MemoryMarshal.GetReference(data), (ulong)data.Length);
-
-            // crypto_auth_hmacsha256_final expects an output buffer with a size
-            // of exactly crypto_auth_hmacsha256_BYTES, so we need to copy when
-            // a truncated output is requested.
-
-            if (mac.Length == crypto_auth_hmacsha256_BYTES)
-            {
-                crypto_auth_hmacsha256_final(ref state, ref MemoryMarshal.GetReference(mac));
-            }
-            else
-            {
-                Span<byte> temp = stackalloc byte[crypto_auth_hmacsha256_BYTES];
-                crypto_auth_hmacsha256_final(ref state, ref MemoryMarshal.GetReference(temp));
-                temp.Slice(0, mac.Length).CopyTo(mac);
-            }
+            crypto_auth_hmacsha256_final(ref state, ref MemoryMarshal.GetReference(mac));
         }
 
         private protected override bool TryVerifyCore(
@@ -147,10 +124,6 @@ namespace NSec.Cryptography
         {
             Debug.Assert(keyHandle != null);
             Debug.Assert(mac.Length <= crypto_auth_hmacsha256_BYTES);
-
-            // crypto_auth_hmacsha256_verify does not support truncated HMACs,
-            // so we calculate the MAC ourselves and call sodium_memcmp to
-            // compare the expected MAC with the actual MAC.
 
             Span<byte> temp = stackalloc byte[crypto_auth_hmacsha256_BYTES];
 

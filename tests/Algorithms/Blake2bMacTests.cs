@@ -17,9 +17,7 @@ namespace NSec.Tests.Algorithms
             Assert.Equal(32, a.DefaultKeySize);
             Assert.Equal(64, a.MaxKeySize);
 
-            Assert.Equal(16, a.MinMacSize);
-            Assert.Equal(32, a.DefaultMacSize);
-            Assert.Equal(64, a.MaxMacSize);
+            Assert.Equal(32, a.MacSize);
         }
 
         #endregion
@@ -105,80 +103,7 @@ namespace NSec.Tests.Algorithms
                 var b = a.Mac(k, ReadOnlySpan<byte>.Empty);
 
                 Assert.NotNull(b);
-                Assert.Equal(a.DefaultMacSize, b.Length);
-            }
-        }
-
-        #endregion
-
-        #region Mac #2
-
-        [Fact]
-        public static void HashWithSizeWithNullKey()
-        {
-            var a = new Blake2bMac();
-
-            Assert.Throws<ArgumentNullException>("key", () => a.Mac(null, ReadOnlySpan<byte>.Empty, 0));
-        }
-
-        [Fact]
-        public static void HashWithSizeWithWrongKey()
-        {
-            var a = new Blake2bMac();
-
-            using (var k = new Key(new Ed25519()))
-            {
-                Assert.Throws<ArgumentException>("key", () => a.Mac(k, ReadOnlySpan<byte>.Empty, 0));
-            }
-        }
-
-        [Fact]
-        public static void HashWithSizeTooSmall()
-        {
-            var a = new Blake2bMac();
-
-            using (var k = new Key(a))
-            {
-                Assert.Throws<ArgumentOutOfRangeException>("macSize", () => a.Mac(k, ReadOnlySpan<byte>.Empty, a.MinMacSize - 1));
-            }
-        }
-
-        [Fact]
-        public static void HashWithSizeTooLarge()
-        {
-            var a = new Blake2bMac();
-
-            using (var k = new Key(a))
-            {
-                Assert.Throws<ArgumentOutOfRangeException>("macSize", () => a.Mac(k, ReadOnlySpan<byte>.Empty, a.MaxMacSize + 1));
-            }
-        }
-
-        [Fact]
-        public static void HashWithMinSizeSuccess()
-        {
-            var a = new Blake2bMac();
-
-            using (var k = new Key(a))
-            {
-                var b = a.Mac(k, ReadOnlySpan<byte>.Empty, a.MinMacSize);
-
-                Assert.NotNull(b);
-                Assert.Equal(a.MinMacSize, b.Length);
-            }
-        }
-
-        [Fact]
-        public static void HashWithMaxSizeSuccess()
-        {
-            var a = new Blake2bMac();
-
-            using (var k = new Key(a))
-            {
-                var b = a.Mac(k, ReadOnlySpan<byte>.Empty, a.MaxMacSize);
-
-                Assert.NotNull(b);
-                Assert.Equal(a.MaxMacSize, b.Length);
+                Assert.Equal(a.MacSize, b.Length);
             }
         }
 
@@ -212,7 +137,7 @@ namespace NSec.Tests.Algorithms
 
             using (var k = new Key(a))
             {
-                Assert.Throws<ArgumentException>("mac", () => a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MinMacSize - 1]));
+                Assert.Throws<ArgumentException>("mac", () => a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize - 1]));
             }
         }
 
@@ -223,29 +148,18 @@ namespace NSec.Tests.Algorithms
 
             using (var k = new Key(a))
             {
-                Assert.Throws<ArgumentException>("mac", () => a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MaxMacSize + 1]));
+                Assert.Throws<ArgumentException>("mac", () => a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize + 1]));
             }
         }
 
         [Fact]
-        public static void HashWithMinSpanSuccess()
+        public static void HashWithSpanSuccess()
         {
             var a = new Blake2bMac();
 
             using (var k = new Key(a))
             {
-                a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MinMacSize]);
-            }
-        }
-
-        [Fact]
-        public static void HashWithMaxSpanSuccess()
-        {
-            var a = new Blake2bMac();
-
-            using (var k = new Key(a))
-            {
-                a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MaxMacSize]);
+                a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize]);
             }
         }
 

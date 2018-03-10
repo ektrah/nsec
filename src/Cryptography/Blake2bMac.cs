@@ -39,10 +39,29 @@ namespace NSec.Cryptography
             minKeySize: crypto_generichash_blake2b_KEYBYTES_MIN,
             defaultKeySize: crypto_generichash_blake2b_KEYBYTES,
             maxKeySize: crypto_generichash_blake2b_KEYBYTES_MAX,
-            minMacSize: crypto_generichash_blake2b_BYTES_MIN,
-            defaultMacSize: crypto_generichash_blake2b_BYTES,
-            maxMacSize: crypto_generichash_blake2b_BYTES_MAX)
+            macSize: crypto_generichash_blake2b_BYTES)
         {
+            Debug.Assert(MacSize >= crypto_generichash_blake2b_BYTES_MIN);
+            Debug.Assert(MacSize <= crypto_generichash_blake2b_BYTES_MAX);
+
+            if (s_selfTest == 0)
+            {
+                SelfTest();
+                Interlocked.Exchange(ref s_selfTest, 1);
+            }
+        }
+
+        public Blake2bMac(int macSize) : base(
+            minKeySize: crypto_generichash_blake2b_KEYBYTES_MIN,
+            defaultKeySize: crypto_generichash_blake2b_KEYBYTES,
+            maxKeySize: crypto_generichash_blake2b_KEYBYTES_MAX,
+            macSize: macSize)
+        {
+            if (macSize < crypto_generichash_blake2b_BYTES_MIN ||
+                macSize > crypto_generichash_blake2b_BYTES_MAX)
+            {
+                throw new ArgumentOutOfRangeException(); // TODO
+            }
             if (s_selfTest == 0)
             {
                 SelfTest();

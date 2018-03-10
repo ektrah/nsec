@@ -28,37 +28,28 @@ namespace NSec.Cryptography
         private static HmacSha512 s_HmacSha512;
 
         private readonly int _defaultKeySize;
-        private readonly int _defaultMacSize;
+        private readonly int _macSize;
         private readonly int _maxKeySize;
-        private readonly int _maxMacSize;
         private readonly int _minKeySize;
-        private readonly int _minMacSize;
 
         private protected MacAlgorithm(
             int minKeySize,
             int defaultKeySize,
             int maxKeySize,
-            int minMacSize,
-            int defaultMacSize,
-            int maxMacSize)
+            int macSize)
         {
             Debug.Assert(minKeySize >= 0);
             Debug.Assert(defaultKeySize > 0);
             Debug.Assert(defaultKeySize >= minKeySize);
             Debug.Assert(maxKeySize >= defaultKeySize);
 
-            Debug.Assert(minMacSize >= 0);
-            Debug.Assert(defaultMacSize > 0);
-            Debug.Assert(defaultMacSize >= minMacSize);
-            Debug.Assert(maxMacSize >= defaultMacSize);
+            Debug.Assert(macSize > 0);
 
             _minKeySize = minKeySize;
             _defaultKeySize = defaultKeySize;
             _maxKeySize = maxKeySize;
 
-            _minMacSize = minMacSize;
-            _defaultMacSize = defaultMacSize;
-            _maxMacSize = maxMacSize;
+            _macSize = macSize;
         }
 
         public static Blake2bMac Blake2b
@@ -105,43 +96,26 @@ namespace NSec.Cryptography
 
         public int DefaultKeySize => _defaultKeySize;
 
-        public int DefaultMacSize => _defaultMacSize;
+        public int MacSize => _macSize;
 
         public int MaxKeySize => _maxKeySize;
 
-        public int MaxMacSize => _maxMacSize;
-
         public int MinKeySize => _minKeySize;
-
-        public int MinMacSize => _minMacSize;
 
         public byte[] Mac(
             Key key,
             ReadOnlySpan<byte> data)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
+            }
 
-            byte[] mac = new byte[_defaultMacSize];
-            MacCore(key.Handle, data, mac);
-            return mac;
-        }
-
-        public byte[] Mac(
-            Key key,
-            ReadOnlySpan<byte> data,
-            int macSize)
-        {
-            if (key == null)
-                throw Error.ArgumentNull_Key(nameof(key));
-            if (key.Algorithm != this)
-                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (macSize < _minMacSize || macSize > _maxMacSize)
-                throw Error.ArgumentOutOfRange_MacSize(nameof(macSize), macSize.ToString(), _minMacSize.ToString(), _maxMacSize.ToString());
-
-            byte[] mac = new byte[macSize];
+            byte[] mac = new byte[_macSize];
             MacCore(key.Handle, data, mac);
             return mac;
         }
@@ -152,11 +126,17 @@ namespace NSec.Cryptography
             Span<byte> mac)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (mac.Length < _minMacSize || mac.Length > _maxMacSize)
-                throw Error.Argument_MacSize(nameof(mac), mac.Length.ToString(), _minMacSize.ToString(), _maxMacSize.ToString());
+            }
+            if (mac.Length != _macSize)
+            {
+                throw Error.Argument_MacSize(nameof(mac), mac.Length.ToString(), _macSize.ToString(), _macSize.ToString()); // TODO
+            }
 
             MacCore(key.Handle, data, mac);
         }
@@ -167,13 +147,15 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> mac)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (mac.Length < _minMacSize || mac.Length > _maxMacSize)
-                return false;
+            }
 
-            return TryVerifyCore(key.Handle, data, mac);
+            return mac.Length == _macSize && TryVerifyCore(key.Handle, data, mac);
         }
 
         public void Verify(
@@ -182,13 +164,15 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> mac)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (mac.Length < _minMacSize || mac.Length > _maxMacSize)
-                throw Error.Argument_MacSize(nameof(mac), mac.Length.ToString(), _minMacSize.ToString(), _maxMacSize.ToString());
+            }
 
-            if (!TryVerifyCore(key.Handle, data, mac))
+            if (!(mac.Length == _macSize && TryVerifyCore(key.Handle, data, mac)))
             {
                 throw Error.Cryptographic_VerificationFailed();
             }

@@ -17,9 +17,7 @@ namespace NSec.Tests.Algorithms
             Assert.Equal(64, a.DefaultKeySize);
             Assert.Equal(int.MaxValue, a.MaxKeySize);
 
-            Assert.Equal(16, a.MinMacSize);
-            Assert.Equal(64, a.DefaultMacSize);
-            Assert.Equal(64, a.MaxMacSize);
+            Assert.Equal(64, a.MacSize);
         }
 
         #endregion
