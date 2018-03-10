@@ -19,10 +19,11 @@ namespace NSec.Tests.Rfc
 
         public static readonly TheoryData<string, string, string> Rfc4868TestVectors = new TheoryData<string, string, string>
         {
-            { "0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b", "4869205468657265", "198a607eb44bfbc69903a0f1cf2bbdc5" },
-            { "4a6566654a6566654a6566654a6566654a6566654a6566654a6566654a656665", "7768617420646f2079612077616e7420666f72206e6f7468696e673f", "167f928588c5cc2eef8e3093caa0e87c" },
-            { "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "cdcb1220d1ecccea91e53aba3092f962" },
-            { "0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20", "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd", "372efcf9b40b35c2115b1346903d2ef4" },
+            // Section 2.7.2.1
+            { "0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b", "4869205468657265", "198a607eb44bfbc69903a0f1cf2bbdc5ba0aa3f3d9ae3c1c7a3b1696a0b68cf7" },
+            { "4a6566654a6566654a6566654a6566654a6566654a6566654a6566654a656665", "7768617420646f2079612077616e7420666f72206e6f7468696e673f", "167f928588c5cc2eef8e3093caa0e87c9ff566a14794aa61648d81621a2a40c6" },
+            { "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "cdcb1220d1ecccea91e53aba3092f962e549fe6ce9ed7fdc43191fbde45c30b0" },
+            { "0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20", "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd", "372efcf9b40b35c2115b1346903d2ef42fced46f0846e7257bb156d3d7b30d3f" },
         };
 
         [Theory]
@@ -37,7 +38,7 @@ namespace NSec.Tests.Rfc
                 var m = msg.DecodeHex();
 
                 var expected = mac.DecodeHex();
-                var actual = a.Mac(k, m, expected.Length);
+                var actual = a.Mac(k, m);
                 Assert.Equal(expected, actual);
 
                 Assert.True(a.TryVerify(k, m, expected));
