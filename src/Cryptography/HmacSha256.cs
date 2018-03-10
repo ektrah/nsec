@@ -94,9 +94,11 @@ namespace NSec.Cryptography
 
         internal override void InitializeCore(
             SecureMemoryHandle keyHandle,
+            int macSize,
             out IncrementalMac.State state)
         {
             Debug.Assert(keyHandle != null);
+            Debug.Assert(macSize == crypto_auth_hmacsha256_BYTES);
 
             crypto_auth_hmacsha256_init(out state.hmacsha256, keyHandle, (UIntPtr)keyHandle.Length);
         }

@@ -188,6 +188,7 @@ namespace NSec.Cryptography
 
         internal abstract void InitializeCore(
             SecureMemoryHandle keyHandle,
+            int macSize,
             out IncrementalMac.State state);
 
         internal abstract void UpdateCore(

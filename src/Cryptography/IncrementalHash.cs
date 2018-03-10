@@ -115,7 +115,7 @@ namespace NSec.Cryptography
             bool success = false;
             try
             {
-                algorithm.InitializeCore(out state.InnerState);
+                algorithm.InitializeCore(algorithm.HashSize, out state.InnerState);
                 state.Algorithm = algorithm;
                 success = true;
             }

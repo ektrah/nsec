@@ -65,8 +65,11 @@ namespace NSec.Cryptography
         }
 
         internal override void InitializeCore(
+            int hashSize,
             out IncrementalHash.State state)
         {
+            Debug.Assert(hashSize == crypto_hash_sha256_BYTES);
+
             crypto_hash_sha256_init(out state.sha256);
         }
 

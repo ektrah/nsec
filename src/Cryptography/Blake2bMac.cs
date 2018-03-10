@@ -114,13 +114,16 @@ namespace NSec.Cryptography
 
         internal override void InitializeCore(
             SecureMemoryHandle keyHandle,
+            int macSize,
             out IncrementalMac.State state)
         {
             Debug.Assert(keyHandle != null);
             Debug.Assert(keyHandle.Length >= crypto_generichash_blake2b_KEYBYTES_MIN);
             Debug.Assert(keyHandle.Length <= crypto_generichash_blake2b_KEYBYTES_MAX);
+            Debug.Assert(macSize >= crypto_generichash_blake2b_BYTES_MIN);
+            Debug.Assert(macSize <= crypto_generichash_blake2b_BYTES_MAX);
 
-            crypto_generichash_blake2b_init(out state.blake2b, keyHandle, (UIntPtr)keyHandle.Length, (UIntPtr)MacSize);
+            crypto_generichash_blake2b_init(out state.blake2b, keyHandle, (UIntPtr)keyHandle.Length, (UIntPtr)macSize);
         }
 
         internal override bool TryExportKey(

@@ -82,9 +82,13 @@ namespace NSec.Cryptography
         }
 
         internal override void InitializeCore(
+            int hashSize,
             out IncrementalHash.State state)
         {
-            crypto_generichash_blake2b_init(out state.blake2b, IntPtr.Zero, UIntPtr.Zero, (UIntPtr)HashSize);
+            Debug.Assert(hashSize >= crypto_generichash_blake2b_BYTES_MIN);
+            Debug.Assert(hashSize <= crypto_generichash_blake2b_BYTES_MAX);
+
+            crypto_generichash_blake2b_init(out state.blake2b, IntPtr.Zero, UIntPtr.Zero, (UIntPtr)hashSize);
         }
 
         internal override void UpdateCore(

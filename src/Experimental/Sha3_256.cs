@@ -43,6 +43,7 @@ namespace NSec.Cryptography.Experimental
         }
 
         internal override void InitializeCore(
+            int hashSize,
             out IncrementalHash.State state)
         {
             throw new NotImplementedException();

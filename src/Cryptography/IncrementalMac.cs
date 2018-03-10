@@ -119,7 +119,7 @@ namespace NSec.Cryptography
             bool success = false;
             try
             {
-                algorithm.InitializeCore(key.Handle, out state.InnerState);
+                algorithm.InitializeCore(key.Handle, algorithm.MacSize, out state.InnerState);
                 state.Algorithm = algorithm;
                 success = true;
             }

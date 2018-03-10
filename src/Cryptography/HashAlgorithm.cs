@@ -127,6 +127,7 @@ namespace NSec.Cryptography
             Span<byte> hash);
 
         internal abstract void InitializeCore(
+            int hashSize,
             out IncrementalHash.State state);
 
         internal abstract void UpdateCore(
