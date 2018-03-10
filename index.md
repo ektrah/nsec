@@ -60,6 +60,8 @@ a C# 7.2 (or later) compiler. See [[Installation]] for additional details.
     * [[KeyDerivationAlgorithm Class]]
     * [[MacAlgorithm Class]]
     * [[SignatureAlgorithm Class]]
+* [[IncrementalHash Struct]]
+* [[IncrementalMac Struct]]
 * [[Key Class]]
     * [[KeyCreationParameters Struct]]
     * [[KeyExportPolicies Enum]]
