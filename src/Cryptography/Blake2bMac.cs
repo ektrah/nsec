@@ -81,9 +81,46 @@ namespace NSec.Cryptography
             SecureMemoryHandle.Import(seed, out keyHandle);
         }
 
+        internal override bool FinalizeAndTryVerifyCore(
+            ref IncrementalMac.State state,
+            ReadOnlySpan<byte> mac)
+        {
+            Debug.Assert(mac.Length >= crypto_generichash_blake2b_BYTES_MIN);
+            Debug.Assert(mac.Length <= crypto_generichash_blake2b_BYTES_MAX);
+
+            Span<byte> temp = stackalloc byte[mac.Length];
+
+            crypto_generichash_blake2b_final(ref state.blake2b, ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length);
+
+            int result = sodium_memcmp(in MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(mac), (UIntPtr)mac.Length);
+
+            return result == 0;
+        }
+
+        internal override void FinalizeCore(
+            ref IncrementalMac.State state,
+            Span<byte> mac)
+        {
+            Debug.Assert(mac.Length >= crypto_generichash_blake2b_BYTES_MIN);
+            Debug.Assert(mac.Length <= crypto_generichash_blake2b_BYTES_MAX);
+
+            crypto_generichash_blake2b_final(ref state.blake2b, ref MemoryMarshal.GetReference(mac), (UIntPtr)mac.Length);
+        }
+
         internal override int GetDefaultSeedSize()
         {
             return crypto_generichash_blake2b_KEYBYTES;
+        }
+
+        internal override void InitializeCore(
+            SecureMemoryHandle keyHandle,
+            out IncrementalMac.State state)
+        {
+            Debug.Assert(keyHandle != null);
+            Debug.Assert(keyHandle.Length >= crypto_generichash_blake2b_KEYBYTES_MIN);
+            Debug.Assert(keyHandle.Length <= crypto_generichash_blake2b_KEYBYTES_MAX);
+
+            crypto_generichash_blake2b_init(out state.blake2b, keyHandle, (UIntPtr)keyHandle.Length, (UIntPtr)MacSize);
         }
 
         internal override bool TryExportKey(
@@ -120,6 +157,13 @@ namespace NSec.Cryptography
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
+        }
+
+        internal override void UpdateCore(
+            ref IncrementalMac.State state,
+            ReadOnlySpan<byte> data)
+        {
+            crypto_generichash_blake2b_update(ref state.blake2b, in MemoryMarshal.GetReference(data), (ulong)data.Length);
         }
 
         private protected override void MacCore(

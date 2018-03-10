@@ -66,9 +66,42 @@ namespace NSec.Cryptography
             SecureMemoryHandle.Import(seed, out keyHandle);
         }
 
+        internal override bool FinalizeAndTryVerifyCore(
+            ref IncrementalMac.State state,
+            ReadOnlySpan<byte> mac)
+        {
+            Debug.Assert(mac.Length <= crypto_auth_hmacsha512_BYTES);
+
+            Span<byte> temp = stackalloc byte[crypto_auth_hmacsha512_BYTES];
+
+            crypto_auth_hmacsha512_final(ref state.hmacsha512, ref MemoryMarshal.GetReference(temp));
+
+            int result = sodium_memcmp(in MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(mac), (UIntPtr)mac.Length);
+
+            return result == 0;
+        }
+
+        internal override void FinalizeCore(
+            ref IncrementalMac.State state,
+            Span<byte> mac)
+        {
+            Debug.Assert(mac.Length == crypto_auth_hmacsha512_BYTES);
+
+            crypto_auth_hmacsha512_final(ref state.hmacsha512, ref MemoryMarshal.GetReference(mac));
+        }
+
         internal override int GetDefaultSeedSize()
         {
             return crypto_hash_sha512_BYTES;
+        }
+
+        internal override void InitializeCore(
+            SecureMemoryHandle keyHandle,
+            out IncrementalMac.State state)
+        {
+            Debug.Assert(keyHandle != null);
+
+            crypto_auth_hmacsha512_init(out state.hmacsha512, keyHandle, (UIntPtr)keyHandle.Length);
         }
 
         internal override bool TryExportKey(
@@ -105,6 +138,13 @@ namespace NSec.Cryptography
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
+        }
+
+        internal override void UpdateCore(
+            ref IncrementalMac.State state,
+            ReadOnlySpan<byte> data)
+        {
+            crypto_auth_hmacsha512_update(ref state.hmacsha512, in MemoryMarshal.GetReference(data), (ulong)data.Length);
         }
 
         private protected override void MacCore(
