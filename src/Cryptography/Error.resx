@@ -177,8 +177,8 @@
   <data name="Argument_FormatNotSupported" xml:space="preserve">
     <value>The key BLOB format '{0}' is not supported by the specified algorithm.</value>
   </data>
-  <data name="Argument_HashSize" xml:space="preserve">
-    <value>Hash size '{0}' is out of range. Must be between {1} and {2}.</value>
+  <data name="Argument_HashLength" xml:space="preserve">
+    <value>The length of the hash must be equal to {0}.</value>
   </data>
   <data name="Argument_InvalidPrkLength" xml:space="preserve">
     <value>The length of the pseudorandom key must be greater than or equal to {0}.</value>
@@ -189,8 +189,8 @@
   <data name="Argument_KeyWrongAlgorithm" xml:space="preserve">
     <value>The specified key is for algorithm '{0}'. Expected '{1}'.</value>
   </data>
-  <data name="Argument_MacSize" xml:space="preserve">
-    <value>MAC size '{0}' is out of range. Must be between {1} and {2}.</value>
+  <data name="Argument_MacLength" xml:space="preserve">
+    <value>The length of the MAC must be equal to {0}.</value>
   </data>
   <data name="Argument_MinMaxValue" xml:space="preserve">
     <value>'{0}' cannot be greater than {1}.</value>

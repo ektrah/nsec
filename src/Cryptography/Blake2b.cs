@@ -46,7 +46,7 @@ namespace NSec.Cryptography
             if (hashSize < 32 ||
                 hashSize > crypto_generichash_blake2b_BYTES_MAX)
             {
-                throw new ArgumentOutOfRangeException(); // TODO
+                throw Error.ArgumentOutOfRange_HashSize(nameof(hashSize), hashSize.ToString(), 32.ToString(), crypto_generichash_blake2b_BYTES_MAX.ToString());
             }
             if (s_selfTest == 0)
             {

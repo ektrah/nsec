@@ -60,7 +60,7 @@ namespace NSec.Cryptography
             if (macSize < crypto_generichash_blake2b_BYTES_MIN ||
                 macSize > crypto_generichash_blake2b_BYTES_MAX)
             {
-                throw new ArgumentOutOfRangeException(); // TODO
+                throw Error.ArgumentOutOfRange_MacSize(nameof(macSize), macSize.ToString(), crypto_generichash_blake2b_BYTES_MIN.ToString(), crypto_generichash_blake2b_BYTES_MAX.ToString());
             }
             if (s_selfTest == 0)
             {

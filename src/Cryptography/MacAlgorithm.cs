@@ -135,7 +135,7 @@ namespace NSec.Cryptography
             }
             if (mac.Length != _macSize)
             {
-                throw Error.Argument_MacSize(nameof(mac), mac.Length.ToString(), _macSize.ToString(), _macSize.ToString()); // TODO
+                throw Error.Argument_MacLength(nameof(mac), _macSize.ToString());
             }
 
             MacCore(key.Handle, data, mac);
