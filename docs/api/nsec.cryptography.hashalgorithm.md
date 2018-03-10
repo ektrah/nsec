@@ -44,38 +44,15 @@ Gets the SHA-512 hash algorithm.
 ## Properties
 
 
-### DefaultHashSize
+### HashSize
 
-Gets the default hash size, in bytes.
+Gets the hash size, in bytes.
 
-    public int DefaultHashSize { get; }
-
-#### Property Value
-
-The default hash size, in bytes.
-
-
-
-### MaxHashSize
-
-Gets the maximum hash size, in bytes.
-
-    public int MaxHashSize { get; }
+    public int HashSize { get; }
 
 #### Property Value
 
-The maximum hash size, in bytes.
-
-
-### MinHashSize
-
-Gets the minimum hash size, in bytes.
-
-    public int MinHashSize { get; }
-
-#### Property Value
-
-The minimum hash size, in bytes.
+The hash size, in bytes.
 
 
 ## Methods
@@ -98,33 +75,6 @@ data
 
 The computed hash.
 
-### Hash(ReadOnlySpan<byte>, int)
-
-Computes a hash for the specified input data and returns it as an array of
-bytes of the specified size.
-
-    public byte[] Hash(
-        ReadOnlySpan<byte> data,
-        int hashSize)
-
-#### Parameters
-
-data
-: The data to hash.
-
-hashSize
-: The size, in bytes, of the hash to compute.
-
-#### Return Value
-
-The computed hash.
-
-#### Exceptions
-
-ArgumentOutOfRangeException
-: `hashSize` is less than [[MinHashSize|HashAlgorithm Class#MinHashSize]] or
-    greater than [[MaxHashSize|HashAlgorithm Class#MaxHashSize]].
-
 
 ### Hash(ReadOnlySpan<byte>, Span<byte>)
 
@@ -145,9 +95,7 @@ hash
 #### Exceptions
 
 ArgumentException
-: `hash.Length` is less than
-    [[MinHashSize|HashAlgorithm Class#MinHashSize]] or greater than
-    [[MaxHashSize|HashAlgorithm Class#MaxHashSize]].
+: `hash.Length` is not equal to [[HashSize|HashAlgorithm Class#HashSize]].
 
 
 ### TryVerify(ReadOnlySpan<byte>, ReadOnlySpan<byte>)
