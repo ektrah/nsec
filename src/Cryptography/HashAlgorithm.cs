@@ -118,6 +118,21 @@ namespace NSec.Cryptography
             }
         }
 
+        internal abstract bool FinalizeAndTryVerifyCore(
+            ref IncrementalHash.State state,
+            ReadOnlySpan<byte> hash);
+
+        internal abstract void FinalizeCore(
+            ref IncrementalHash.State state,
+            Span<byte> hash);
+
+        internal abstract void InitializeCore(
+            out IncrementalHash.State state);
+
+        internal abstract void UpdateCore(
+            ref IncrementalHash.State state,
+            ReadOnlySpan<byte> data);
+
         private protected abstract void HashCore(
             ReadOnlySpan<byte> data,
             Span<byte> hash);

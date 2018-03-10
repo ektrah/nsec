@@ -28,6 +28,33 @@ namespace NSec.Cryptography.Experimental
         {
         }
 
+        internal override bool FinalizeAndTryVerifyCore(
+            ref IncrementalHash.State state,
+            ReadOnlySpan<byte> hash)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal override void FinalizeCore(
+            ref IncrementalHash.State state,
+            Span<byte> hash)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal override void InitializeCore(
+            out IncrementalHash.State state)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal override void UpdateCore(
+            ref IncrementalHash.State state,
+            ReadOnlySpan<byte> data)
+        {
+            throw new NotImplementedException();
+        }
+
         private protected override void HashCore(
             ReadOnlySpan<byte> data,
             Span<byte> hash)
@@ -43,7 +70,7 @@ namespace NSec.Cryptography.Experimental
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> hash)
         {
-            throw new NotImplementedException(); // TODO: Sha3_256.TryVerifyCore
+            throw new NotImplementedException();
         }
     }
 }

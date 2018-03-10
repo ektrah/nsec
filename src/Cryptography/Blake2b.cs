@@ -55,6 +55,45 @@ namespace NSec.Cryptography
             }
         }
 
+        internal override bool FinalizeAndTryVerifyCore(
+            ref IncrementalHash.State state,
+            ReadOnlySpan<byte> hash)
+        {
+            Debug.Assert(hash.Length >= crypto_generichash_blake2b_BYTES_MIN);
+            Debug.Assert(hash.Length <= crypto_generichash_blake2b_BYTES_MAX);
+
+            Span<byte> temp = stackalloc byte[hash.Length];
+
+            crypto_generichash_blake2b_final(ref state.blake2b, ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length);
+
+            int result = sodium_memcmp(in MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(hash), (UIntPtr)hash.Length);
+
+            return result == 0;
+        }
+
+        internal override void FinalizeCore(
+            ref IncrementalHash.State state,
+            Span<byte> hash)
+        {
+            Debug.Assert(hash.Length >= crypto_generichash_blake2b_BYTES_MIN);
+            Debug.Assert(hash.Length <= crypto_generichash_blake2b_BYTES_MAX);
+
+            crypto_generichash_blake2b_final(ref state.blake2b, ref MemoryMarshal.GetReference(hash), (UIntPtr)hash.Length);
+        }
+
+        internal override void InitializeCore(
+            out IncrementalHash.State state)
+        {
+            crypto_generichash_blake2b_init(out state.blake2b, IntPtr.Zero, UIntPtr.Zero, (UIntPtr)HashSize);
+        }
+
+        internal override void UpdateCore(
+            ref IncrementalHash.State state,
+            ReadOnlySpan<byte> data)
+        {
+            crypto_generichash_blake2b_update(ref state.blake2b, in MemoryMarshal.GetReference(data), (ulong)data.Length);
+        }
+
         private protected override void HashCore(
             ReadOnlySpan<byte> data,
             Span<byte> hash)

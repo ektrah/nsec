@@ -40,6 +40,43 @@ namespace NSec.Cryptography
             }
         }
 
+        internal override bool FinalizeAndTryVerifyCore(
+            ref IncrementalHash.State state,
+            ReadOnlySpan<byte> hash)
+        {
+            Debug.Assert(hash.Length <= crypto_hash_sha256_BYTES);
+
+            Span<byte> temp = stackalloc byte[crypto_hash_sha256_BYTES];
+
+            crypto_hash_sha256_final(ref state.sha256, ref MemoryMarshal.GetReference(temp));
+
+            int result = sodium_memcmp(in MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(hash), (UIntPtr)hash.Length);
+
+            return result == 0;
+        }
+
+        internal override void FinalizeCore(
+            ref IncrementalHash.State state,
+            Span<byte> hash)
+        {
+            Debug.Assert(hash.Length == crypto_hash_sha256_BYTES);
+
+            crypto_hash_sha256_final(ref state.sha256, ref MemoryMarshal.GetReference(hash));
+        }
+
+        internal override void InitializeCore(
+            out IncrementalHash.State state)
+        {
+            crypto_hash_sha256_init(out state.sha256);
+        }
+
+        internal override void UpdateCore(
+            ref IncrementalHash.State state,
+            ReadOnlySpan<byte> data)
+        {
+            crypto_hash_sha256_update(ref state.sha256, in MemoryMarshal.GetReference(data), (ulong)data.Length);
+        }
+
         private protected override void HashCore(
             ReadOnlySpan<byte> data,
             Span<byte> hash)
