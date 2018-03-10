@@ -15,9 +15,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = new Sha3_512();
 
-            Assert.Equal(32, a.MinHashSize);
-            Assert.Equal(64, a.DefaultHashSize);
-            Assert.Equal(64, a.MaxHashSize);
+            Assert.Equal(64, a.HashSize);
         }
 
         #endregion
@@ -32,28 +30,7 @@ namespace NSec.Tests.Algorithms
             var expected = s_hashOfEmpty.DecodeHex();
             var actual = a.Hash(ReadOnlySpan<byte>.Empty);
 
-            Assert.Equal(a.DefaultHashSize, actual.Length);
-            Assert.Equal(expected, actual);
-        }
-
-        #endregion
-
-        #region Hash #2
-
-        [Theory]
-        [InlineData(32)]
-        [InlineData(41)]
-        [InlineData(53)]
-        [InlineData(61)]
-        [InlineData(64)]
-        public static void HashEmptyWithSize(int hashSize)
-        {
-            var a = new Sha3_512();
-
-            var expected = s_hashOfEmpty.DecodeHex().Substring(0, hashSize);
-            var actual = a.Hash(ReadOnlySpan<byte>.Empty, hashSize);
-
-            Assert.Equal(hashSize, actual.Length);
+            Assert.Equal(a.HashSize, actual.Length);
             Assert.Equal(expected, actual);
         }
 
@@ -61,18 +38,13 @@ namespace NSec.Tests.Algorithms
 
         #region Hash #3
 
-        [Theory]
-        [InlineData(32)]
-        [InlineData(41)]
-        [InlineData(53)]
-        [InlineData(61)]
-        [InlineData(64)]
-        public static void HashEmptyWithSpan(int hashSize)
+        [Fact]
+        public static void HashEmptyWithSpan()
         {
             var a = new Sha3_512();
 
-            var expected = s_hashOfEmpty.DecodeHex().Substring(0, hashSize);
-            var actual = new byte[hashSize];
+            var expected = s_hashOfEmpty.DecodeHex();
+            var actual = new byte[expected.Length];
 
             a.Hash(ReadOnlySpan<byte>.Empty, actual);
             Assert.Equal(expected, actual);

@@ -27,23 +27,14 @@ namespace NSec.Cryptography
         private static Sha256 s_Sha256;
         private static Sha512 s_Sha512;
 
-        private readonly int _defaultHashSize;
-        private readonly int _maxHashSize;
-        private readonly int _minHashSize;
+        private readonly int _hashSize;
 
         private protected HashAlgorithm(
-            int minHashSize,
-            int defaultHashSize,
-            int maxHashSize)
+            int hashSize)
         {
-            Debug.Assert(minHashSize >= 0);
-            Debug.Assert(defaultHashSize > 0);
-            Debug.Assert(defaultHashSize >= minHashSize);
-            Debug.Assert(maxHashSize >= defaultHashSize);
+            Debug.Assert(hashSize > 0);
 
-            _minHashSize = minHashSize;
-            _defaultHashSize = defaultHashSize;
-            _maxHashSize = maxHashSize;
+            _hashSize = hashSize;
         }
 
         public static Blake2b Blake2b
@@ -88,28 +79,12 @@ namespace NSec.Cryptography
             }
         }
 
-        public int DefaultHashSize => _defaultHashSize;
-
-        public int MaxHashSize => _maxHashSize;
-
-        public int MinHashSize => _minHashSize;
+        public int HashSize => _hashSize;
 
         public byte[] Hash(
             ReadOnlySpan<byte> data)
         {
-            byte[] hash = new byte[_defaultHashSize];
-            HashCore(data, hash);
-            return hash;
-        }
-
-        public byte[] Hash(
-            ReadOnlySpan<byte> data,
-            int hashSize)
-        {
-            if (hashSize < _minHashSize || hashSize > _maxHashSize)
-                throw Error.ArgumentOutOfRange_HashSize(nameof(hashSize), hashSize.ToString(), _minHashSize.ToString(), _maxHashSize.ToString());
-
-            byte[] hash = new byte[hashSize];
+            byte[] hash = new byte[_hashSize];
             HashCore(data, hash);
             return hash;
         }
@@ -118,8 +93,10 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> data,
             Span<byte> hash)
         {
-            if (hash.Length < _minHashSize || hash.Length > _maxHashSize)
-                throw Error.Argument_HashSize(nameof(hash), hash.Length.ToString(), _minHashSize.ToString(), _maxHashSize.ToString());
+            if (hash.Length != _hashSize)
+            {
+                throw Error.Argument_HashSize(nameof(hash), hash.Length.ToString(), _hashSize.ToString(), _hashSize.ToString()); // TODO
+            }
 
             HashCore(data, hash);
         }
@@ -128,20 +105,14 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> hash)
         {
-            if (hash.Length < _minHashSize || hash.Length > _maxHashSize)
-                return false;
-
-            return TryVerifyCore(data, hash);
+            return hash.Length == _hashSize && TryVerifyCore(data, hash);
         }
 
         public void Verify(
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> hash)
         {
-            if (hash.Length < _minHashSize || hash.Length > _maxHashSize)
-                throw Error.Argument_HashSize(nameof(hash), hash.Length.ToString(), _minHashSize.ToString(), _maxHashSize.ToString());
-
-            if (!TryVerifyCore(data, hash))
+            if (!(hash.Length == _hashSize && TryVerifyCore(data, hash)))
             {
                 throw Error.Cryptographic_VerificationFailed();
             }

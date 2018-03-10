@@ -13,9 +13,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = new Blake2b();
 
-            Assert.Equal(32, a.MinHashSize);
-            Assert.Equal(32, a.DefaultHashSize);
-            Assert.Equal(64, a.MaxHashSize);
+            Assert.Equal(32, a.HashSize);
         }
 
         #endregion

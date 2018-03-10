@@ -24,9 +24,7 @@ namespace NSec.Cryptography.Experimental
     public sealed class Shake128 : HashAlgorithm
     {
         public Shake128() : base(
-            minHashSize: 0,
-            defaultHashSize: 32,
-            maxHashSize: int.MaxValue)
+            hashSize: 32)
         {
         }
 

@@ -24,9 +24,7 @@ namespace NSec.Cryptography.Experimental
     public sealed class Sha3_512 : HashAlgorithm
     {
         public Sha3_512() : base(
-            minHashSize: 32,
-            defaultHashSize: 64,
-            maxHashSize: 64)
+            hashSize: 64)
         {
         }
 

@@ -15,10 +15,10 @@ namespace NSec.Tests.Rfc
         [MemberData(nameof(Rfc7693TestVectors))]
         public static void Test(string msg, string hash)
         {
-            var a = new Blake2b();
+            var a = new Blake2b(64);
 
             var expected = hash.DecodeHex();
-            var actual = a.Hash(msg.DecodeHex(), expected.Length);
+            var actual = a.Hash(msg.DecodeHex());
 
             Assert.Equal(expected, actual);
         }

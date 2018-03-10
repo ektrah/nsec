@@ -16,10 +16,7 @@ namespace NSec.Tests.Base
         {
             var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.True(a.MinHashSize >= 0);
-            Assert.True(a.DefaultHashSize > 0);
-            Assert.True(a.DefaultHashSize >= a.MinHashSize);
-            Assert.True(a.MaxHashSize >= a.DefaultHashSize);
+            Assert.True(a.HashSize > 0);
         }
 
         #endregion
@@ -38,51 +35,7 @@ namespace NSec.Tests.Base
             var actual = a.Hash(data);
 
             Assert.NotNull(actual);
-            Assert.Equal(a.DefaultHashSize, actual.Length);
-            Assert.Equal(expected, actual);
-        }
-
-        #endregion
-
-        #region Hash #2
-
-        [Theory]
-        [MemberData(nameof(HashAlgorithms))]
-        public static void HashWithSizeTooSmall(Type algorithmType)
-        {
-            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
-
-            if (a.MinHashSize > 0)
-            {
-                Assert.Throws<ArgumentOutOfRangeException>("hashSize", () => a.Hash(ReadOnlySpan<byte>.Empty, a.MinHashSize - 1));
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(HashAlgorithms))]
-        public static void HashWithSizeTooLarge(Type algorithmType)
-        {
-            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
-
-            if (a.MaxHashSize < int.MaxValue)
-            {
-                Assert.Throws<ArgumentOutOfRangeException>("hashSize", () => a.Hash(ReadOnlySpan<byte>.Empty, a.MaxHashSize + 1));
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(HashAlgorithms))]
-        public static void HashWithSizeSuccess(Type algorithmType)
-        {
-            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
-
-            var data = Utilities.RandomBytes.Slice(0, 100);
-
-            var expected = a.Hash(data, 32);
-            var actual = a.Hash(data, 32);
-
-            Assert.NotNull(actual);
-            Assert.Equal(32, actual.Length);
+            Assert.Equal(a.HashSize, actual.Length);
             Assert.Equal(expected, actual);
         }
 
@@ -96,10 +49,7 @@ namespace NSec.Tests.Base
         {
             var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
 
-            if (a.MinHashSize > 0)
-            {
-                Assert.Throws<ArgumentException>("hash", () => a.Hash(ReadOnlySpan<byte>.Empty, new byte[a.MinHashSize - 1]));
-            }
+            Assert.Throws<ArgumentException>("hash", () => a.Hash(ReadOnlySpan<byte>.Empty, new byte[a.HashSize - 1]));
         }
 
         [Theory]
@@ -108,10 +58,7 @@ namespace NSec.Tests.Base
         {
             var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
 
-            if (a.MaxHashSize < int.MaxValue)
-            {
-                Assert.Throws<ArgumentException>("hash", () => a.Hash(ReadOnlySpan<byte>.Empty, new byte[a.MaxHashSize + 1]));
-            }
+            Assert.Throws<ArgumentException>("hash", () => a.Hash(ReadOnlySpan<byte>.Empty, new byte[a.HashSize + 1]));
         }
 
         [Theory]
@@ -122,8 +69,8 @@ namespace NSec.Tests.Base
 
             var data = Utilities.RandomBytes.Slice(0, 100);
 
-            var expected = new byte[a.DefaultHashSize];
-            var actual = new byte[a.DefaultHashSize];
+            var expected = new byte[a.HashSize];
+            var actual = new byte[a.HashSize];
 
             a.Hash(data, expected);
             a.Hash(data, actual);
@@ -138,8 +85,8 @@ namespace NSec.Tests.Base
 
             var data = Utilities.RandomBytes.Slice(0, 100).ToArray();
 
-            var expected = new byte[a.DefaultHashSize];
-            var actual = data.AsSpan(0, a.DefaultHashSize);
+            var expected = new byte[a.HashSize];
+            var actual = data.AsSpan(0, a.HashSize);
 
             a.Hash(data, expected);
             a.Hash(data, actual);

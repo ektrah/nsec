@@ -28,10 +28,26 @@ namespace NSec.Cryptography
         private static int s_selfTest;
 
         public Blake2b() : base(
-            minHashSize: 32,
-            defaultHashSize: crypto_generichash_blake2b_BYTES,
-            maxHashSize: crypto_generichash_blake2b_BYTES_MAX)
+            hashSize: crypto_generichash_blake2b_BYTES)
         {
+            Debug.Assert(HashSize >= 32);
+            Debug.Assert(HashSize <= crypto_generichash_blake2b_BYTES_MAX);
+
+            if (s_selfTest == 0)
+            {
+                SelfTest();
+                Interlocked.Exchange(ref s_selfTest, 1);
+            }
+        }
+
+        public Blake2b(int hashSize) : base(
+            hashSize: hashSize)
+        {
+            if (hashSize < 32 ||
+                hashSize > crypto_generichash_blake2b_BYTES_MAX)
+            {
+                throw new ArgumentOutOfRangeException(); // TODO
+            }
             if (s_selfTest == 0)
             {
                 SelfTest();

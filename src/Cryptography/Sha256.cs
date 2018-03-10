@@ -31,9 +31,7 @@ namespace NSec.Cryptography
         private static int s_selfTest;
 
         public Sha256() : base(
-            minHashSize: crypto_hash_sha256_BYTES,
-            defaultHashSize: crypto_hash_sha256_BYTES,
-            maxHashSize: crypto_hash_sha256_BYTES)
+            hashSize: crypto_hash_sha256_BYTES)
         {
             if (s_selfTest == 0)
             {
