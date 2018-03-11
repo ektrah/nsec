@@ -37,6 +37,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{99A04338
 		build\Package.props = build\Package.props
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{F9D92917-A968-4F64-8F28-98B2CADE6417}"
+	ProjectSection(SolutionItems) = preProject
+		docs\index.md = docs\index.md
+		docs\install.md = docs\install.md
+		docs\README.md = docs\README.md
+	EndProjectSection
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D24568A9-54F1-48E0-88FF-2E067F9BDA95}"
 	ProjectSection(SolutionItems) = preProject
 		src\.editorconfig = src\.editorconfig
@@ -73,6 +80,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{99A04338-7321-4B8B-AA29-496C18328F90} = {DF40D4F3-D18D-45F3-87DD-2A8378354B57}
+		{F9D92917-A968-4F64-8F28-98B2CADE6417} = {DF40D4F3-D18D-45F3-87DD-2A8378354B57}
 		{D24568A9-54F1-48E0-88FF-2E067F9BDA95} = {DF40D4F3-D18D-45F3-87DD-2A8378354B57}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
