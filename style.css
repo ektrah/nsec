@@ -30,20 +30,23 @@ code, pre {
     font: 1em Consolas, "Liberation Mono", Menlo, Courier, monospace;
 }
 
-code, pre, th {
+code, pre, table {
     background: #FDFDFD;
+    border: 0 solid #F0F0F0;
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
 pre {
-    border-left: .5em solid #F0F0F0;
+    border-width: 0 0 0 .5em;
     padding: 1em;
     white-space: pre-wrap;
 }
 
 code {
+    border-width: 1px;
     display: inline-block;
     padding: .1em .3em;
-    border: 1px solid #F0F0F0;
 }
 
 blockquote, dd, ol, ul {
@@ -55,15 +58,8 @@ cite, dt {
 }
 
 table {
-    border-collapse: collapse;
-    border-spacing: 0;
+    border-width: .5em 0;
     margin: 1em auto;
-}
-
-th {
-    border-top: 1px solid #F0F0F0;
-    border-bottom: 1px solid #F0F0F0;
-    font-weight: 500;
 }
 
 th, td {
@@ -72,7 +68,6 @@ th, td {
 
 .admonition {
     background: #FBFDFF;
-    border: 0 solid #0071BC;
     border-left: .5em solid #0071BC;
     padding: .5em 1em;
 }
