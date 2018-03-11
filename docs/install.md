@@ -1,9 +1,9 @@
 # Installation
 
-NSec is [available as a NuGet package from
-nuget.org](https://www.nuget.org/packages/NSec.Cryptography/). It can be added
-to a project in a number of ways, depending on the project type and available
-tools:
+NSec is available as [a NuGet package from
+nuget.org](https://www.nuget.org/packages/NSec.Cryptography/18.2.0-preview1). It
+can be added to a project in a number of ways, depending on the project type and
+available tools:
 
 
 #### dotnet CLI
@@ -21,7 +21,7 @@ tools:
 
 !!! Note
     This is a pre-release version of NSec.
-    There may be some (minor) breaking changes until the release.
+    Expect some (minor) breaking changes until the release.
 
 
 ## Supported Languages
@@ -55,15 +55,14 @@ Running NSec is supported on the following platforms and .NET Core versions:
 |               | 16.04    | x64           | 2.1.0 / 2.0.5 / 1.1.6 |
 |               | 17.10    | x64           | 2.1.0 / 2.0.5         |
 
-Additional operating systems and versions should work as well but are not
-tested.
+Additional operating systems and versions should work as well but are untested.
 
 Using NSec on Windows requires the [Visual C++ 2015
 Redistributable](https://www.microsoft.com/en-us/download/details.aspx?id=53587).
-This dependency is automatically installed by the .NET Core installer but may
+This dependency is automatically installed by the .NET Core installer but might
 not be present, for example, when deploying a self-contained application.
 
 The implementation of AES-GCM in NSec is hardware-accelerated and requires a
 processor with the Intel SSSE3, AES-NI, and CLMUL extensions. The availability
-of these extensions can be checked at runtime with the static `IsSupported`
+of these extensions can be checked at runtime using the static `IsSupported`
 property of the `NSec.Cryptography.Aes256Gcm` class.
