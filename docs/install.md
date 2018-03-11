@@ -66,3 +66,16 @@ The implementation of AES-GCM in NSec is hardware-accelerated and requires a
 processor with the Intel SSSE3, AES-NI, and CLMUL extensions. The availability
 of these extensions can be checked at runtime using the static `IsSupported`
 property of the `NSec.Cryptography.Aes256Gcm` class.
+
+
+### .NET Framework
+
+Running NSec on recent versions of .NET Framework might work as well but is
+untested. At least the following conditions must be met: First, the project
+needs to use [*PackageReference* package
+references](https://blog.nuget.org/20170316/NuGet-now-fully-integrated-into-MSBuild.html#what-about-other-project-types-that-are-not-net-core);
+*Packages.config* projects don't work. Second, the project needs to have the
+[Platform
+Target](https://docs.microsoft.com/en-us/visualstudio/ide/reference/build-page-project-designer-csharp)
+set to **x64** or **x86**; other platform targets (including the default, *Any
+CPU*) don't work.
