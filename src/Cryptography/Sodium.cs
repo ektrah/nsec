@@ -6,7 +6,7 @@ namespace NSec.Cryptography
     internal static class Sodium
     {
         private static readonly Lazy<bool> s_initialized = new Lazy<bool>(new Func<bool>(InitializeCore));
-        private static readonly MisuseHandler s_misuseHandler = new MisuseHandler(InternalError);
+        private static readonly Action s_misuseHandler = new Action(InternalError);
 
         public static void Initialize()
         {
