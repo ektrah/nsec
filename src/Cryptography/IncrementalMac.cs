@@ -152,15 +152,23 @@ namespace NSec.Cryptography
             state.Algorithm.UpdateCore(ref state.InnerState, data);
         }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool Equals(
             object obj)
         {
             throw new NotSupportedException();
         }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override int GetHashCode()
         {
             throw new NotSupportedException();
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override string ToString()
+        {
+            return GetType().ToString();
         }
 
         [StructLayout(LayoutKind.Explicit)]
