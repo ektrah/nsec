@@ -1,15 +1,16 @@
 using System;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
 {
     [StructLayout(LayoutKind.Sequential)]
-    public struct IncrementalHash
+    public readonly struct IncrementalHash
     {
-        private State _innerState;
-        private HashAlgorithm _algorithm;
+        private readonly State _state;
+        private readonly HashAlgorithm _algorithm;
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static new bool Equals(
@@ -18,6 +19,8 @@ namespace NSec.Cryptography
         {
             return object.Equals(objA, objB);
         }
+
+        public HashAlgorithm Algorithm => _algorithm;
 
         public static byte[] Finalize(
             ref IncrementalHash state)
@@ -30,12 +33,12 @@ namespace NSec.Cryptography
             try
             {
                 byte[] hash = new byte[state._algorithm.HashSize];
-                state._algorithm.FinalizeCore(ref state._innerState, hash);
+                state._algorithm.FinalizeCore(ref Unsafe.AsRef(in state._state), hash);
                 return hash;
             }
             finally
             {
-                state._algorithm = null;
+                Unsafe.AsRef(in state._algorithm) = null;
             }
         }
 
@@ -54,11 +57,11 @@ namespace NSec.Cryptography
 
             try
             {
-                state._algorithm.FinalizeCore(ref state._innerState, hash);
+                state._algorithm.FinalizeCore(ref Unsafe.AsRef(in state._state), hash);
             }
             finally
             {
-                state._algorithm = null;
+                Unsafe.AsRef(in state._algorithm) = null;
             }
         }
 
@@ -73,11 +76,11 @@ namespace NSec.Cryptography
 
             try
             {
-                return hash.Length == state._algorithm.HashSize && state._algorithm.FinalizeAndTryVerifyCore(ref state._innerState, hash);
+                return hash.Length == state._algorithm.HashSize && state._algorithm.FinalizeAndTryVerifyCore(ref Unsafe.AsRef(in state._state), hash);
             }
             finally
             {
-                state._algorithm = null;
+                Unsafe.AsRef(in state._algorithm) = null;
             }
         }
 
@@ -92,14 +95,14 @@ namespace NSec.Cryptography
 
             try
             {
-                if (!(hash.Length == state._algorithm.HashSize && state._algorithm.FinalizeAndTryVerifyCore(ref state._innerState, hash)))
+                if (!(hash.Length == state._algorithm.HashSize && state._algorithm.FinalizeAndTryVerifyCore(ref Unsafe.AsRef(in state._state), hash)))
                 {
                     throw new CryptographicException();
                 }
             }
             finally
             {
-                state._algorithm = null;
+                Unsafe.AsRef(in state._algorithm) = null;
             }
         }
 
@@ -115,8 +118,9 @@ namespace NSec.Cryptography
             bool success = false;
             try
             {
-                algorithm.InitializeCore(algorithm.HashSize, out state._innerState);
-                state._algorithm = algorithm;
+                state = default;
+                algorithm.InitializeCore(algorithm.HashSize, out Unsafe.AsRef(in state._state));
+                Unsafe.AsRef(in state._algorithm) = algorithm;
                 success = true;
             }
             finally
@@ -145,7 +149,7 @@ namespace NSec.Cryptography
                 throw new InvalidOperationException();
             }
 
-            state._algorithm.UpdateCore(ref state._innerState, data);
+            state._algorithm.UpdateCore(ref Unsafe.AsRef(in state._state), data);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
