@@ -68,7 +68,7 @@ bytes.
 #### Parameters
 
 data
-: The input data to compute the hash for.
+: The data to hash.
 
 #### Return Value
 
@@ -86,7 +86,7 @@ bytes of the specified size.
 #### Parameters
 
 data
-: The input data to compute the hash for.
+: The data to hash.
 
 hashSize
 : The size, in bytes, of the hash to compute.
@@ -113,7 +113,7 @@ Fills the specified span of bytes with a hash for the specified input data.
 #### Parameters
 
 data
-: The input data to compute the hash for.
+: The data to hash.
 
 hash
 : The span to fill with the computed hash.
