@@ -8,8 +8,8 @@ namespace NSec.Cryptography
     [StructLayout(LayoutKind.Sequential)]
     public struct IncrementalMac
     {
-        internal State InnerState;
-        internal MacAlgorithm Algorithm;
+        private State _innerState;
+        private MacAlgorithm _algorithm;
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static new bool Equals(
@@ -22,20 +22,20 @@ namespace NSec.Cryptography
         public static byte[] Finalize(
             ref IncrementalMac state)
         {
-            if (state.Algorithm == null)
+            if (state._algorithm == null)
             {
                 throw new InvalidOperationException();
             }
 
             try
             {
-                byte[] mac = new byte[state.Algorithm.MacSize];
-                state.Algorithm.FinalizeCore(ref state.InnerState, mac);
+                byte[] mac = new byte[state._algorithm.MacSize];
+                state._algorithm.FinalizeCore(ref state._innerState, mac);
                 return mac;
             }
             finally
             {
-                state.Algorithm = null;
+                state._algorithm = null;
             }
         }
 
@@ -43,22 +43,22 @@ namespace NSec.Cryptography
             ref IncrementalMac state,
             Span<byte> mac)
         {
-            if (state.Algorithm == null)
+            if (state._algorithm == null)
             {
                 throw new InvalidOperationException();
             }
-            if (mac.Length != state.Algorithm.MacSize)
+            if (mac.Length != state._algorithm.MacSize)
             {
                 throw new ArgumentException();
             }
 
             try
             {
-                state.Algorithm.FinalizeCore(ref state.InnerState, mac);
+                state._algorithm.FinalizeCore(ref state._innerState, mac);
             }
             finally
             {
-                state.Algorithm = null;
+                state._algorithm = null;
             }
         }
 
@@ -66,18 +66,18 @@ namespace NSec.Cryptography
             ref IncrementalMac state,
             ReadOnlySpan<byte> mac)
         {
-            if (state.Algorithm == null)
+            if (state._algorithm == null)
             {
                 throw new InvalidOperationException();
             }
 
             try
             {
-                return mac.Length == state.Algorithm.MacSize && state.Algorithm.FinalizeAndTryVerifyCore(ref state.InnerState, mac);
+                return mac.Length == state._algorithm.MacSize && state._algorithm.FinalizeAndTryVerifyCore(ref state._innerState, mac);
             }
             finally
             {
-                state.Algorithm = null;
+                state._algorithm = null;
             }
         }
 
@@ -85,21 +85,21 @@ namespace NSec.Cryptography
             ref IncrementalMac state,
             ReadOnlySpan<byte> mac)
         {
-            if (state.Algorithm == null)
+            if (state._algorithm == null)
             {
                 throw new InvalidOperationException();
             }
 
             try
             {
-                if (!(mac.Length == state.Algorithm.MacSize && state.Algorithm.FinalizeAndTryVerifyCore(ref state.InnerState, mac)))
+                if (!(mac.Length == state._algorithm.MacSize && state._algorithm.FinalizeAndTryVerifyCore(ref state._innerState, mac)))
                 {
                     throw new CryptographicException();
                 }
             }
             finally
             {
-                state.Algorithm = null;
+                state._algorithm = null;
             }
         }
 
@@ -119,8 +119,8 @@ namespace NSec.Cryptography
             bool success = false;
             try
             {
-                algorithm.InitializeCore(key.Handle, algorithm.MacSize, out state.InnerState);
-                state.Algorithm = algorithm;
+                algorithm.InitializeCore(key.Handle, algorithm.MacSize, out state._innerState);
+                state._algorithm = algorithm;
                 success = true;
             }
             finally
@@ -144,12 +144,12 @@ namespace NSec.Cryptography
             ref IncrementalMac state,
             ReadOnlySpan<byte> data)
         {
-            if (state.Algorithm == null)
+            if (state._algorithm == null)
             {
                 throw new InvalidOperationException();
             }
 
-            state.Algorithm.UpdateCore(ref state.InnerState, data);
+            state._algorithm.UpdateCore(ref state._innerState, data);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
