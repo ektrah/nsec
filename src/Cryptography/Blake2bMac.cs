@@ -104,7 +104,14 @@ namespace NSec.Cryptography
             Debug.Assert(mac.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(mac.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
-            crypto_generichash_blake2b_final(ref state.blake2b, ref MemoryMarshal.GetReference(mac), (UIntPtr)mac.Length);
+            Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
+            ref crypto_generichash_blake2b_state temp = ref AlignPinnedReference(ref MemoryMarshal.GetReference(buffer));
+
+            temp = state.blake2b;
+
+            crypto_generichash_blake2b_final(ref temp, ref MemoryMarshal.GetReference(mac), (UIntPtr)mac.Length);
+
+            state.blake2b = temp;
         }
 
         internal override int GetDefaultSeedSize()
@@ -123,7 +130,12 @@ namespace NSec.Cryptography
             Debug.Assert(macSize >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(macSize <= crypto_generichash_blake2b_BYTES_MAX);
 
-            crypto_generichash_blake2b_init(out state.blake2b, keyHandle, (UIntPtr)keyHandle.Length, (UIntPtr)macSize);
+            Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
+            ref crypto_generichash_blake2b_state temp = ref AlignPinnedReference(ref MemoryMarshal.GetReference(buffer));
+
+            crypto_generichash_blake2b_init(out temp, keyHandle, (UIntPtr)keyHandle.Length, (UIntPtr)macSize);
+
+            state.blake2b = temp;
         }
 
         internal override bool TryExportKey(
@@ -166,7 +178,14 @@ namespace NSec.Cryptography
             ref IncrementalMac.State state,
             ReadOnlySpan<byte> data)
         {
-            crypto_generichash_blake2b_update(ref state.blake2b, in MemoryMarshal.GetReference(data), (ulong)data.Length);
+            Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
+            ref crypto_generichash_blake2b_state temp = ref AlignPinnedReference(ref MemoryMarshal.GetReference(buffer));
+
+            temp = state.blake2b;
+
+            crypto_generichash_blake2b_update(ref temp, in MemoryMarshal.GetReference(data), (ulong)data.Length);
+
+            state.blake2b = temp;
         }
 
         private protected override void MacCore(
