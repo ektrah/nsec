@@ -110,12 +110,7 @@ namespace NSec.Cryptography
             Debug.Assert(mac.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(mac.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
-            Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
-            ref crypto_generichash_blake2b_state state = ref AlignPinnedReference(ref MemoryMarshal.GetReference(buffer));
-
-            crypto_generichash_blake2b_init(out state, keyHandle, (UIntPtr)keyHandle.Length, (UIntPtr)mac.Length);
-            crypto_generichash_blake2b_update(ref state, in MemoryMarshal.GetReference(data), (ulong)data.Length);
-            crypto_generichash_blake2b_final(ref state, ref MemoryMarshal.GetReference(mac), (UIntPtr)mac.Length);
+            crypto_generichash_blake2b(ref MemoryMarshal.GetReference(mac), (UIntPtr)mac.Length, in MemoryMarshal.GetReference(data), (ulong)data.Length, keyHandle, (UIntPtr)keyHandle.Length);
         }
 
         private protected override bool TryVerifyCore(
@@ -129,14 +124,9 @@ namespace NSec.Cryptography
             Debug.Assert(mac.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(mac.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
-            Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
-            ref crypto_generichash_blake2b_state state = ref AlignPinnedReference(ref MemoryMarshal.GetReference(buffer));
-
             Span<byte> temp = stackalloc byte[mac.Length];
 
-            crypto_generichash_blake2b_init(out state, keyHandle, (UIntPtr)keyHandle.Length, (UIntPtr)temp.Length);
-            crypto_generichash_blake2b_update(ref state, in MemoryMarshal.GetReference(data), (ulong)data.Length);
-            crypto_generichash_blake2b_final(ref state, ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length);
+            crypto_generichash_blake2b(ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length, in MemoryMarshal.GetReference(data), (ulong)data.Length, keyHandle, (UIntPtr)keyHandle.Length);
 
             int result = sodium_memcmp(in MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(mac), (UIntPtr)mac.Length);
 

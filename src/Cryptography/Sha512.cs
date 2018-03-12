@@ -50,21 +50,18 @@ namespace NSec.Cryptography
             Debug.Assert(hash.Length >= crypto_hash_sha512_BYTES / 2);
             Debug.Assert(hash.Length <= crypto_hash_sha512_BYTES);
 
-            crypto_hash_sha512_init(out crypto_hash_sha512_state state);
-            crypto_hash_sha512_update(ref state, in MemoryMarshal.GetReference(data), (ulong)data.Length);
-
             // crypto_hash_sha512_final expects an output buffer with a length
             // of exactly crypto_hash_sha512_BYTES. So we need to copy when a
             // truncated output is requested.
 
             if (hash.Length == crypto_hash_sha512_BYTES)
             {
-                crypto_hash_sha512_final(ref state, ref MemoryMarshal.GetReference(hash));
+                crypto_hash_sha512(ref MemoryMarshal.GetReference(hash), in MemoryMarshal.GetReference(data), (ulong)data.Length);
             }
             else
             {
                 Span<byte> temp = stackalloc byte[crypto_hash_sha512_BYTES];
-                crypto_hash_sha512_final(ref state, ref MemoryMarshal.GetReference(temp));
+                crypto_hash_sha512(ref MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(data), (ulong)data.Length);
                 temp.Slice(0, hash.Length).CopyTo(hash);
             }
         }
@@ -77,9 +74,7 @@ namespace NSec.Cryptography
 
             Span<byte> temp = stackalloc byte[crypto_hash_sha512_BYTES];
 
-            crypto_hash_sha512_init(out crypto_hash_sha512_state state);
-            crypto_hash_sha512_update(ref state, in MemoryMarshal.GetReference(data), (ulong)data.Length);
-            crypto_hash_sha512_final(ref state, ref MemoryMarshal.GetReference(temp));
+            crypto_hash_sha512(ref MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(data), (ulong)data.Length);
 
             int result = sodium_memcmp(in MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(hash), (UIntPtr)hash.Length);
 

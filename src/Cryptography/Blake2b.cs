@@ -44,12 +44,7 @@ namespace NSec.Cryptography
             Debug.Assert(hash.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(hash.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
-            Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
-            ref crypto_generichash_blake2b_state state = ref AlignPinnedReference(ref MemoryMarshal.GetReference(buffer));
-
-            crypto_generichash_blake2b_init(out state, IntPtr.Zero, UIntPtr.Zero, (UIntPtr)hash.Length);
-            crypto_generichash_blake2b_update(ref state, in MemoryMarshal.GetReference(data), (ulong)data.Length);
-            crypto_generichash_blake2b_final(ref state, ref MemoryMarshal.GetReference(hash), (UIntPtr)hash.Length);
+            crypto_generichash_blake2b(ref MemoryMarshal.GetReference(hash), (UIntPtr)hash.Length, in MemoryMarshal.GetReference(data), (ulong)data.Length, IntPtr.Zero, UIntPtr.Zero);
         }
 
         private protected override bool TryVerifyCore(
@@ -59,14 +54,9 @@ namespace NSec.Cryptography
             Debug.Assert(hash.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(hash.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
-            Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
-            ref crypto_generichash_blake2b_state state = ref AlignPinnedReference(ref MemoryMarshal.GetReference(buffer));
-
             Span<byte> temp = stackalloc byte[hash.Length];
 
-            crypto_generichash_blake2b_init(out state, IntPtr.Zero, UIntPtr.Zero, (UIntPtr)temp.Length);
-            crypto_generichash_blake2b_update(ref state, in MemoryMarshal.GetReference(data), (ulong)data.Length);
-            crypto_generichash_blake2b_final(ref state, ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length);
+            crypto_generichash_blake2b(ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length, in MemoryMarshal.GetReference(data), (ulong)data.Length, IntPtr.Zero, UIntPtr.Zero);
 
             int result = sodium_memcmp(in MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(hash), (UIntPtr)hash.Length);
 

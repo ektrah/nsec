@@ -46,9 +46,7 @@ namespace NSec.Cryptography
         {
             Debug.Assert(hash.Length == crypto_hash_sha256_BYTES);
 
-            crypto_hash_sha256_init(out crypto_hash_sha256_state state);
-            crypto_hash_sha256_update(ref state, in MemoryMarshal.GetReference(data), (ulong)data.Length);
-            crypto_hash_sha256_final(ref state, ref MemoryMarshal.GetReference(hash));
+            crypto_hash_sha256(ref MemoryMarshal.GetReference(hash), in MemoryMarshal.GetReference(data), (ulong)data.Length);
         }
 
         private protected override bool TryVerifyCore(
@@ -59,9 +57,7 @@ namespace NSec.Cryptography
 
             Span<byte> temp = stackalloc byte[crypto_hash_sha256_BYTES];
 
-            crypto_hash_sha256_init(out crypto_hash_sha256_state state);
-            crypto_hash_sha256_update(ref state, in MemoryMarshal.GetReference(data), (ulong)data.Length);
-            crypto_hash_sha256_final(ref state, ref MemoryMarshal.GetReference(temp));
+            crypto_hash_sha256(ref MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(data), (ulong)data.Length);
 
             int result = sodium_memcmp(in MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(hash), (UIntPtr)hash.Length);
 

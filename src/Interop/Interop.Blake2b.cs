@@ -13,6 +13,24 @@ internal static partial class Interop
         internal const int crypto_generichash_blake2b_KEYBYTES_MIN = 16;
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int crypto_generichash_blake2b(
+            ref byte @out,
+            UIntPtr outlen,
+            in byte @in,
+            ulong inlen,
+            IntPtr key,
+            UIntPtr keylen);
+
+        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int crypto_generichash_blake2b(
+            ref byte @out,
+            UIntPtr outlen,
+            in byte @in,
+            ulong inlen,
+            SecureMemoryHandle key,
+            UIntPtr keylen);
+
+        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern UIntPtr crypto_generichash_blake2b_bytes();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]

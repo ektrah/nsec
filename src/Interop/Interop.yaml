@@ -26,6 +26,8 @@ Interop.Blake2b.cs:
   - crypto_generichash_blake2b_KEYBYTES_MAX
   - crypto_generichash_blake2b_KEYBYTES_MIN
   functions:
+  - crypto_generichash_blake2b (IntPtr key)
+  - crypto_generichash_blake2b (SecureMemoryHandle key)
   - crypto_generichash_blake2b_bytes
   - crypto_generichash_blake2b_bytes_max
   - crypto_generichash_blake2b_bytes_min
@@ -150,6 +152,7 @@ Interop.Sha256.cs:
   constants:
   - crypto_hash_sha256_BYTES
   functions:
+  - crypto_hash_sha256
   - crypto_hash_sha256_bytes
   - crypto_hash_sha256_final
   - crypto_hash_sha256_init
@@ -164,6 +167,7 @@ Interop.Sha512.cs:
   constants:
   - crypto_hash_sha512_BYTES
   functions:
+  - crypto_hash_sha512
   - crypto_hash_sha512_bytes
   - crypto_hash_sha512_final
   - crypto_hash_sha512_init
