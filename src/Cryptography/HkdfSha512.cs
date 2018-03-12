@@ -181,10 +181,10 @@ namespace NSec.Cryptography
         {
             Debug.Assert(pseudorandomKey.Length == crypto_auth_hmacsha512_BYTES);
 
-            // According to the spec, the salt must set to a string of HashLen
-            // zeros if not provided. A ReadOnlySpan<byte> cannot be not
-            // provided and an empty span seems to yield the same result as a
-            // string of HashLen zeros. So we're ignoring this corner case here.
+            // According to RFC 5869, the salt must be set to a string of
+            // HashLen zeros if not provided. A ReadOnlySpan<byte> cannot be
+            // "not provided" and an empty span seems to yield the same result
+            // as a string of HashLen zeros, so the corner case is ignored here.
 
             crypto_auth_hmacsha512_init(out crypto_auth_hmacsha512_state state, in MemoryMarshal.GetReference(salt), (UIntPtr)salt.Length);
             crypto_auth_hmacsha512_update(ref state, in MemoryMarshal.GetReference(inputKeyingMaterial), (ulong)inputKeyingMaterial.Length);
