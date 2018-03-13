@@ -27,7 +27,7 @@ namespace NSec.Cryptography
         {
             if (state._algorithm == null)
             {
-                throw new InvalidOperationException();
+                throw Error.InvalidOperation_UninitializedState();
             }
 
             try
@@ -48,11 +48,11 @@ namespace NSec.Cryptography
         {
             if (state._algorithm == null)
             {
-                throw new InvalidOperationException();
+                throw Error.InvalidOperation_UninitializedState();
             }
             if (mac.Length != state._algorithm.MacSize)
             {
-                throw new ArgumentException();
+                throw Error.Argument_MacLength(nameof(mac), state._algorithm.MacSize.ToString());
             }
 
             try
@@ -71,7 +71,7 @@ namespace NSec.Cryptography
         {
             if (state._algorithm == null)
             {
-                throw new InvalidOperationException();
+                throw Error.InvalidOperation_UninitializedState();
             }
 
             try
@@ -90,14 +90,14 @@ namespace NSec.Cryptography
         {
             if (state._algorithm == null)
             {
-                throw new InvalidOperationException();
+                throw Error.InvalidOperation_UninitializedState();
             }
 
             try
             {
                 if (!(mac.Length == state._algorithm.MacSize && state._algorithm.FinalizeAndTryVerifyCore(ref Unsafe.AsRef(in state._state), mac)))
                 {
-                    throw new CryptographicException();
+                    throw Error.Cryptographic_VerificationFailed();
                 }
             }
             finally
@@ -112,11 +112,11 @@ namespace NSec.Cryptography
         {
             if (key == null)
             {
-                throw new ArgumentNullException(nameof(key));
+                throw Error.ArgumentNull_Key(nameof(key));
             }
             if (!(key.Algorithm is MacAlgorithm algorithm))
             {
-                throw new ArgumentException();
+                throw Error.Argument_MacKey(nameof(key), key.Algorithm.GetType().FullName, typeof(MacAlgorithm).FullName);
             }
 
             bool success = false;
@@ -150,7 +150,7 @@ namespace NSec.Cryptography
         {
             if (state._algorithm == null)
             {
-                throw new InvalidOperationException();
+                throw Error.InvalidOperation_UninitializedState();
             }
 
             state._algorithm.UpdateCore(ref Unsafe.AsRef(in state._state), data);
@@ -160,13 +160,13 @@ namespace NSec.Cryptography
         public override bool Equals(
             object obj)
         {
-            throw new NotSupportedException();
+            throw Error.NotSupported_Operation();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override int GetHashCode()
         {
-            throw new NotSupportedException();
+            throw Error.NotSupported_Operation();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]

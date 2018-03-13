@@ -189,6 +189,9 @@
   <data name="Argument_KeyWrongAlgorithm" xml:space="preserve">
     <value>The specified key is for algorithm '{0}'. Expected '{1}'.</value>
   </data>
+  <data name="Argument_MacKey" xml:space="preserve">
+    <value>The specified key is for algorithm '{0}'. Expected '{1}'.</value>
+  </data>
   <data name="Argument_MacLength" xml:space="preserve">
     <value>The length of the MAC must be equal to {0}.</value>
   </data>
@@ -272,6 +275,9 @@
   </data>
   <data name="InvalidOperation_ExportNotAllowed" xml:space="preserve">
     <value>The key cannot be exported.</value>
+  </data>
+  <data name="InvalidOperation_UninitializedState" xml:space="preserve">
+    <value>The state must be initialized.</value>
   </data>
   <data name="NotSupported_CreateKey" xml:space="preserve">
     <value>The specified algorithm does not use keys.</value>
