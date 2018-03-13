@@ -17,6 +17,7 @@ namespace NSec.Tests
 
         public static readonly TheoryData<Type> MacAlgorithms = new TheoryData<Type>
         {
+            typeof(Blake2bMac),
             typeof(HmacSha256),
             typeof(HmacSha512),
         };
