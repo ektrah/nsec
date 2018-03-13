@@ -67,9 +67,9 @@ namespace NSec.Cryptography
 
             Span<byte> temp = stackalloc byte[hash.Length];
 
-            crypto_generichash_blake2b_final(ref state_, ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length);
-
             state_ = state.blake2b;
+
+            crypto_generichash_blake2b_final(ref state_, ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length);
 
             int result = sodium_memcmp(in MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(hash), (UIntPtr)hash.Length);
 
