@@ -47,7 +47,11 @@ namespace NSec.Cryptography
             }
             catch (DllNotFoundException e)
             {
-                throw Error.Cryptographic_DllNotFound(e);
+                throw Error.PlatformNotSupported_Initialization(e);
+            }
+            catch (BadImageFormatException e)
+            {
+                throw Error.PlatformNotSupported_Initialization(e);
             }
         }
 

@@ -291,12 +291,6 @@ namespace NSec.Cryptography
             return new CryptographicException(ResourceManager.GetString("Cryptographic_DecryptionFailed"));
         }
 
-        internal static CryptographicException Cryptographic_DllNotFound(
-            Exception innerException)
-        {
-            return new CryptographicException(ResourceManager.GetString("Cryptographic_DllNotFound"), innerException);
-        }
-
         internal static CryptographicException Cryptographic_InitializationFailed(
             string arg0)
         {
@@ -381,6 +375,12 @@ namespace NSec.Cryptography
         internal static PlatformNotSupportedException PlatformNotSupported_Algorithm()
         {
             return new PlatformNotSupportedException(ResourceManager.GetString("PlatformNotSupported_Algorithm"));
+        }
+
+        internal static PlatformNotSupportedException PlatformNotSupported_Initialization(
+            Exception innerException)
+        {
+            return new PlatformNotSupportedException(ResourceManager.GetString("PlatformNotSupported_Initialization"), innerException);
         }
     }
 }
