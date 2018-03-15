@@ -12,6 +12,8 @@ namespace NSec.Cryptography
         private readonly State _state;
         private readonly HashAlgorithm _algorithm;
 
+        public HashAlgorithm Algorithm => _algorithm;
+
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static new bool Equals(
             object objA,
@@ -19,8 +21,6 @@ namespace NSec.Cryptography
         {
             return object.Equals(objA, objB);
         }
-
-        public HashAlgorithm Algorithm => _algorithm;
 
         public static byte[] Finalize(
             ref IncrementalHash state)
@@ -168,7 +168,7 @@ namespace NSec.Cryptography
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override string ToString()
         {
-            return GetType().ToString();
+            return typeof(IncrementalHash).ToString();
         }
 
         [StructLayout(LayoutKind.Explicit)]
