@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -118,6 +119,22 @@ namespace NSec.Cryptography
                 && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 5 * sizeof(uint))) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 5 * sizeof(uint)))
                 && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 6 * sizeof(uint))) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 6 * sizeof(uint)))
                 && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 7 * sizeof(uint))) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 7 * sizeof(uint)));
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static new bool Equals(
+            object objA,
+            object objB)
+        {
+            return object.Equals(objA, objB);
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static new bool ReferenceEquals(
+            object objA,
+            object objB)
+        {
+            return object.ReferenceEquals(objA, objB);
         }
 
         public static bool TryAdd(
@@ -256,12 +273,14 @@ namespace NSec.Cryptography
             return Equals(in this, in other);
         }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool Equals(
             object obj)
         {
             return (obj is Nonce other) && Equals(in this, in other);
         }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override int GetHashCode()
         {
             if (Unsafe.SizeOf<Nonce>() != 9 * sizeof(uint))
@@ -293,6 +312,12 @@ namespace NSec.Cryptography
                 Unsafe.CopyBlockUnaligned(ref bytes[0], ref Unsafe.AsRef(in _bytes), (uint)size);
             }
             return bytes;
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override string ToString()
+        {
+            return typeof(Nonce).ToString();
         }
 
         internal string GetDebuggerDisplay()

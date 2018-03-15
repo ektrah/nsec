@@ -308,36 +308,6 @@ other
 `true` if `other` is equal to the current nonce; otherwise, `false`.
 
 
-### Equals(object)
-
-Returns a value indicating whether the current [[Nonce|Nonce Struct]] and the
-specified object represent the same type and value.
-
-    public override bool Equals(
-        object obj)
-
-#### Parameters
-
-obj
-: The object to compare with this instance.
-
-#### Return Value
-
-`true` if `obj` is a [[Nonce|Nonce Struct]] and equal to the current nonce;
-otherwise, `false`.
-
-
-### GetHashCode()
-
-Returns the hash code for the current [[Nonce|Nonce Struct]].
-
-    public override int GetHashCode()
-
-#### Return Value
-
-A 32-bit signed integer hash code.
-
-
 ### ToArray()
 
 Copies the current [[Nonce|Nonce Struct]] to a new array of bytes.
@@ -347,17 +317,6 @@ Copies the current [[Nonce|Nonce Struct]] to a new array of bytes.
 #### Return Value
 
 A new array of bytes containing a copy of the current nonce.
-
-
-### ToString()
-
-Returns a string representation of the current [[Nonce|Nonce Struct]].
-
-    public override string ToString()
-
-#### Return Value
-
-A string representation of the current [[Nonce|Nonce Struct]].
 
 
 ## Operators
