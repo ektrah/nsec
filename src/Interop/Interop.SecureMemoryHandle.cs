@@ -28,6 +28,7 @@ internal static partial class Interop
 
                 handle = sodium_malloc((UIntPtr)length);
                 handle.length = length;
+                GC.AddMemoryPressure((length + 16 + 0x3FFF) & ~0xFFF);
             }
 
             public static void Import(
@@ -88,6 +89,7 @@ internal static partial class Interop
             protected override bool ReleaseHandle()
             {
                 sodium_free(handle);
+                GC.RemoveMemoryPressure((length + 16 + 0x3FFF) & ~0xFFF);
                 return true;
             }
         }
