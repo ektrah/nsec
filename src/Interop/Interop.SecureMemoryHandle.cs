@@ -8,7 +8,7 @@ internal static partial class Interop
     {
         internal sealed class SecureMemoryHandle : SafeHandle
         {
-            private int _length;
+            private int length;
 
             private SecureMemoryHandle() : base(
                 invalidHandleValue: IntPtr.Zero,
@@ -16,9 +16,9 @@ internal static partial class Interop
             {
             }
 
-            public override bool IsInvalid => (handle == IntPtr.Zero);
+            public override bool IsInvalid => handle == IntPtr.Zero;
 
-            public int Length => _length;
+            public int Length => length;
 
             public static void Alloc(
                 int length,
@@ -27,7 +27,7 @@ internal static partial class Interop
                 Debug.Assert(length >= 0);
 
                 handle = sodium_malloc((UIntPtr)length);
-                handle._length = length;
+                handle.length = length;
             }
 
             public static void Import(
@@ -40,7 +40,7 @@ internal static partial class Interop
 
             public unsafe Span<byte> DangerousGetSpan()
             {
-                return new Span<byte>(handle.ToPointer(), _length);
+                return new Span<byte>(handle.ToPointer(), length);
             }
 
             public int Export(
@@ -51,7 +51,7 @@ internal static partial class Interop
                 {
                     DangerousAddRef(ref addedRef);
                     DangerousGetSpan().CopyTo(span);
-                    return _length;
+                    return length;
                 }
                 finally
                 {
