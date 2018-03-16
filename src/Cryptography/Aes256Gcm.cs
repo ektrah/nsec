@@ -50,6 +50,7 @@ namespace NSec.Cryptography
 
         private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(crypto_aead_aes256gcm_KEYBYTES);
 
+        private static int s_isSupported;
         private static int s_selfTest;
 
         public Aes256Gcm() : base(
@@ -58,18 +59,35 @@ namespace NSec.Cryptography
             tagSize: crypto_aead_aes256gcm_ABYTES,
             maxPlaintextSize: int.MaxValue - crypto_aead_aes256gcm_ABYTES)
         {
-            if (!Sodium.IsAes256GcmSupported())
-            {
-                throw Error.PlatformNotSupported_Algorithm();
-            }
             if (s_selfTest == 0)
             {
                 SelfTest();
                 Interlocked.Exchange(ref s_selfTest, 1);
             }
+            if (s_isSupported == 0)
+            {
+                Interlocked.Exchange(ref s_isSupported, crypto_aead_aes256gcm_is_available() != 0 ? 1 : -1);
+            }
+            if (s_isSupported < 0)
+            {
+                throw Error.PlatformNotSupported_Algorithm();
+            }
         }
 
-        public static bool IsSupported => Sodium.IsAes256GcmSupported();
+        public static bool IsSupported
+        {
+            get
+            {
+                int isSupported = s_isSupported;
+                if (isSupported == 0)
+                {
+                    Sodium.Initialize();
+                    Interlocked.Exchange(ref s_isSupported, crypto_aead_aes256gcm_is_available() != 0 ? 1 : -1);
+                    isSupported = s_isSupported;
+                }
+                return isSupported > 0;
+            }
+        }
 
         internal override void CreateKey(
             ReadOnlySpan<byte> seed,

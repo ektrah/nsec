@@ -13,11 +13,6 @@ namespace NSec.Cryptography
             _ = s_initialized.Value;
         }
 
-        public static bool IsAes256GcmSupported()
-        {
-            return s_initialized.Value;
-        }
-
         private static bool InitializeCore()
         {
             try
