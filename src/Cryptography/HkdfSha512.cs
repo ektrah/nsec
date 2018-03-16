@@ -41,7 +41,7 @@ namespace NSec.Cryptography
 
         public HkdfSha512() : base(
             supportsSalt: true,
-            maxOutputSize: byte.MaxValue * crypto_auth_hmacsha512_BYTES)
+            maxCount: byte.MaxValue * crypto_auth_hmacsha512_BYTES)
         {
             if (!s_selfTest.Value)
             {
@@ -60,8 +60,8 @@ namespace NSec.Cryptography
                 throw Error.Argument_InvalidPrkLength(nameof(pseudorandomKey), crypto_auth_hmacsha512_BYTES.ToString());
             if (count < 0)
                 throw Error.ArgumentOutOfRange_DeriveNegativeCount(nameof(count));
-            if (count > MaxOutputSize)
-                throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), MaxOutputSize.ToString());
+            if (count > MaxCount)
+                throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), MaxCount.ToString());
 
             byte[] bytes = new byte[count];
             ExpandCore(pseudorandomKey, info, bytes);
@@ -75,8 +75,8 @@ namespace NSec.Cryptography
         {
             if (pseudorandomKey.Length < crypto_auth_hmacsha512_BYTES)
                 throw Error.Argument_InvalidPrkLength(nameof(pseudorandomKey), crypto_auth_hmacsha512_BYTES.ToString());
-            if (bytes.Length > MaxOutputSize)
-                throw Error.Argument_DeriveInvalidCount(nameof(bytes), MaxOutputSize.ToString());
+            if (bytes.Length > MaxCount)
+                throw Error.Argument_DeriveInvalidCount(nameof(bytes), MaxCount.ToString());
             if (bytes.Overlaps(pseudorandomKey))
                 throw Error.Argument_OverlapPrk(nameof(bytes));
             if (bytes.Overlaps(info))

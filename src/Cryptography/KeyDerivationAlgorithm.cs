@@ -24,20 +24,20 @@ namespace NSec.Cryptography
     //
     public abstract class KeyDerivationAlgorithm : Algorithm
     {
-        private readonly int _maxOutputSize;
+        private readonly int _maxCount;
         private readonly bool _supportsSalt;
 
         private protected KeyDerivationAlgorithm(
             bool supportsSalt,
-            int maxOutputSize)
+            int maxCount)
         {
-            Debug.Assert(maxOutputSize > 0);
+            Debug.Assert(maxCount > 0);
 
             _supportsSalt = supportsSalt;
-            _maxOutputSize = maxOutputSize;
+            _maxCount = maxCount;
         }
 
-        public int MaxOutputSize => _maxOutputSize;
+        public int MaxCount => _maxCount;
 
         public bool SupportsSalt => _supportsSalt;
 
@@ -53,8 +53,8 @@ namespace NSec.Cryptography
                 throw Error.Argument_SaltNotSupported(nameof(salt));
             if (count < 0)
                 throw Error.ArgumentOutOfRange_DeriveNegativeCount(nameof(count));
-            if (count > MaxOutputSize)
-                throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), MaxOutputSize.ToString());
+            if (count > MaxCount)
+                throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), MaxCount.ToString());
 
             byte[] bytes = new byte[count];
             DeriveBytesCore(sharedSecret.Handle, salt, info, bytes);
@@ -71,8 +71,8 @@ namespace NSec.Cryptography
                 throw Error.ArgumentNull_SharedSecret(nameof(sharedSecret));
             if (!_supportsSalt && !salt.IsEmpty)
                 throw Error.Argument_SaltNotSupported(nameof(salt));
-            if (bytes.Length > MaxOutputSize)
-                throw Error.Argument_DeriveInvalidCount(nameof(bytes), MaxOutputSize.ToString());
+            if (bytes.Length > MaxCount)
+                throw Error.Argument_DeriveInvalidCount(nameof(bytes), MaxCount.ToString());
             if (bytes.Overlaps(salt))
                 throw Error.Argument_OverlapSalt(nameof(bytes));
             if (bytes.Overlaps(info))
@@ -96,7 +96,7 @@ namespace NSec.Cryptography
                 throw Error.ArgumentNull_Algorithm(nameof(algorithm));
 
             int seedSize = algorithm.GetDefaultSeedSize();
-            if (seedSize > MaxOutputSize)
+            if (seedSize > MaxCount)
                 throw Error.NotSupported_CreateKey();
             Debug.Assert(seedSize <= 64);
 

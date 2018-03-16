@@ -17,7 +17,7 @@ namespace NSec.Tests.Base
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
 
             Assert.True(a.SupportsSalt || !a.SupportsSalt);
-            Assert.True(a.MaxOutputSize > 0);
+            Assert.True(a.MaxCount > 0);
         }
 
         #endregion
@@ -72,7 +72,7 @@ namespace NSec.Tests.Base
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
             var x = new X25519();
 
-            if (a.MaxOutputSize == int.MaxValue)
+            if (a.MaxCount == int.MaxValue)
             {
                 return;
             }
@@ -80,7 +80,7 @@ namespace NSec.Tests.Base
             using (var k = new Key(x))
             using (var s = x.Agree(k, k.PublicKey))
             {
-                Assert.Throws<ArgumentOutOfRangeException>("count", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, a.MaxOutputSize + 1));
+                Assert.Throws<ArgumentOutOfRangeException>("count", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, a.MaxCount + 1));
             }
         }
 
@@ -111,7 +111,7 @@ namespace NSec.Tests.Base
             using (var k = new Key(x))
             using (var s = x.Agree(k, k.PublicKey))
             {
-                var count = Math.Min(a.MaxOutputSize, 500173);
+                var count = Math.Min(a.MaxCount, 500173);
 
                 var b = a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, count);
 
@@ -199,7 +199,7 @@ namespace NSec.Tests.Base
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
             var x = new X25519();
 
-            if (a.MaxOutputSize == int.MaxValue)
+            if (a.MaxCount == int.MaxValue)
             {
                 return;
             }
@@ -207,7 +207,7 @@ namespace NSec.Tests.Base
             using (var k = new Key(x))
             using (var s = x.Agree(k, k.PublicKey))
             {
-                Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[a.MaxOutputSize + 1]));
+                Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[a.MaxCount + 1]));
             }
         }
 
@@ -235,7 +235,7 @@ namespace NSec.Tests.Base
             using (var k = new Key(x))
             using (var s = x.Agree(k, k.PublicKey))
             {
-                var count = Math.Min(a.MaxOutputSize, 500173);
+                var count = Math.Min(a.MaxCount, 500173);
 
                 a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[count]);
             }

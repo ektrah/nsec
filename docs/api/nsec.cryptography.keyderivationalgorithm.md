@@ -19,11 +19,11 @@ Represents a key derivation algorithm.
 ## Properties
 
 
-### MaxOutputSize
+### MaxCount
 
-Gets the maximum size, in bytes, of the key derivation output.
+Gets the maximum number of bytes that can be derived from a shared secret.
 
-    public int MaxOutputSize { get; }
+    public int MaxCount { get; }
 
 #### Property Value
 
@@ -46,7 +46,8 @@ Gets a value that indicates whether the algorithm supports the use of salt.
 
 ### DeriveBytes(SharedSecret, ReadOnlySpan<byte>, ReadOnlySpan<byte>, int)
 
-Derives the specified number of bytes from a shared secret.
+Derives the specified number of bytes from a shared secret, using the specified
+salt and context information.
 
     public byte[] DeriveBytes(
         SharedSecret sharedSecret,
@@ -57,10 +58,11 @@ Derives the specified number of bytes from a shared secret.
 #### Parameters
 
 sharedSecret
-: The shared secret to derive bytes from.
+: The [[SharedSecret|SharedSecret Class]] to derive the bytes from.
 
 salt
 : Optional salt.
+    Must be empty if the algorithm does not support the use of salt.
 
 info
 : Optional context and application specific information.
@@ -83,7 +85,7 @@ ArgumentException
 
 ArgumentOutOfRangeException
 : `count` is less than 0 or greater than
-    [[MaxOutputSize|KeyDerivationAlgorithm Class#MaxOutputSize]].
+    [[MaxCount|KeyDerivationAlgorithm Class#MaxCount]].
 
 ObjectDisposedException
 : `sharedSecret` has been disposed.
@@ -91,7 +93,8 @@ ObjectDisposedException
 
 ### DeriveBytes(SharedSecret, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
 
-Fills the specified span of bytes with bytes derived from a shared secret.
+Fills the specified span of bytes with bytes derived from a shared secret, using
+the specified salt and context information.
 
     public void DeriveBytes(
         SharedSecret sharedSecret,
@@ -102,10 +105,11 @@ Fills the specified span of bytes with bytes derived from a shared secret.
 #### Parameters
 
 sharedSecret
-: The shared secret to derive bytes from.
+: The [[SharedSecret|SharedSecret Class]] to derive the bytes from.
 
 salt
 : Optional salt.
+    Must be empty if the algorithm does not support the use of salt.
 
 info
 : Optional context and application specific information.
@@ -125,7 +129,7 @@ ArgumentException
 
 ArgumentException
 : `bytes.Length` is greater than
-    [[MaxOutputSize|KeyDerivationAlgorithm Class#MaxOutputSize]].
+    [[MaxCount|KeyDerivationAlgorithm Class#MaxCount]].
 
 ArgumentException
 : `bytes` overlaps in memory with `salt` or `info`.
@@ -136,7 +140,8 @@ ObjectDisposedException
 
 ### DeriveKey(SharedSecret, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Algorithm, in KeyCreationParameters)
 
-Derives a key for the specified algorithm from a shared secret.
+Derives a key for the specified algorithm from a shared secret, using the
+specified salt and context information.
 
     public Key DeriveKey(
         SharedSecret sharedSecret,
@@ -148,10 +153,11 @@ Derives a key for the specified algorithm from a shared secret.
 #### Parameters
 
 sharedSecret
-: The shared secret to derive a key from.
+: The [[SharedSecret|SharedSecret Class]] to derive the key from.
 
 salt
 : Optional salt.
+    Must be empty if the algorithm does not support the use of salt.
 
 info
 : Optional context and application specific information.
@@ -177,7 +183,7 @@ ArgumentException
     `salt` is not empty.
 
 NotSupportedException
-: The specified algorithm does not support key derivation.
+: The specified algorithm does not support keys derived from a shared secret.
 
 ObjectDisposedException
 : `sharedSecret` has been disposed.

@@ -26,7 +26,7 @@ namespace NSec.Cryptography.Experimental
     {
         public AnsiX963KdfSha256() : base(
             supportsSalt: false,
-            maxOutputSize: int.MaxValue)
+            maxCount: int.MaxValue)
         {
         }
 

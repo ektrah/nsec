@@ -531,7 +531,7 @@ namespace NSec.Tests.Algorithms
             var a = new HkdfSha512();
 
             Assert.True(a.PseudorandomKeySize > 0);
-            Assert.True(a.MaxOutputSize > 0);
+            Assert.True(a.MaxCount > 0);
         }
 
         [Fact]
@@ -539,7 +539,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = new HkdfSha512();
 
-            Assert.Equal(16320, a.MaxOutputSize);
+            Assert.Equal(16320, a.MaxCount);
             Assert.Equal(64, a.PseudorandomKeySize);
             Assert.True(a.SupportsSalt);
         }
@@ -698,7 +698,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = new HkdfSha512();
 
-            Assert.Throws<ArgumentOutOfRangeException>("count", () => a.Expand(s_prkForEmpty.DecodeHex(), ReadOnlySpan<byte>.Empty, a.MaxOutputSize + 1));
+            Assert.Throws<ArgumentOutOfRangeException>("count", () => a.Expand(s_prkForEmpty.DecodeHex(), ReadOnlySpan<byte>.Empty, a.MaxCount + 1));
         }
 
         [Theory]
@@ -729,11 +729,11 @@ namespace NSec.Tests.Algorithms
             var a = new HkdfSha512();
 
             var expected = s_outputForEmpty.DecodeHex();
-            var actual = a.Expand(s_prkForEmpty.DecodeHex(), ReadOnlySpan<byte>.Empty, a.MaxOutputSize);
+            var actual = a.Expand(s_prkForEmpty.DecodeHex(), ReadOnlySpan<byte>.Empty, a.MaxCount);
 
             Assert.NotNull(actual);
             Assert.Equal(expected, actual);
-            Assert.Equal(a.MaxOutputSize, actual.Length);
+            Assert.Equal(a.MaxCount, actual.Length);
         }
 
         [Fact]
@@ -764,7 +764,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = new HkdfSha512();
 
-            Assert.Throws<ArgumentException>("bytes", () => a.Expand(s_prkForEmpty.DecodeHex(), ReadOnlySpan<byte>.Empty, new byte[a.MaxOutputSize + 1]));
+            Assert.Throws<ArgumentException>("bytes", () => a.Expand(s_prkForEmpty.DecodeHex(), ReadOnlySpan<byte>.Empty, new byte[a.MaxCount + 1]));
         }
 
         [Fact]
@@ -823,7 +823,7 @@ namespace NSec.Tests.Algorithms
             var a = new HkdfSha512();
 
             var expected = s_outputForEmpty.DecodeHex();
-            var actual = new byte[a.MaxOutputSize];
+            var actual = new byte[a.MaxCount];
 
             a.Expand(s_prkForEmpty.DecodeHex(), ReadOnlySpan<byte>.Empty, actual);
 

@@ -28,7 +28,7 @@ namespace NSec.Cryptography.Experimental
     {
         public ConcatKdfHmacSha256() : base(
             supportsSalt: true,
-            maxOutputSize: int.MaxValue)
+            maxCount: int.MaxValue)
         {
         }
 
