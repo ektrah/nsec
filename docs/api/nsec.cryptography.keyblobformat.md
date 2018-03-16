@@ -8,6 +8,9 @@ Specifies a key BLOB format for use with [[Key|Key Class]] and
 
 ## Members
 
+
+#### Recommended:
+
 NSecPrivateKey
 : The NSec private key BLOB format.
 
@@ -16,6 +19,7 @@ NSecPublicKey
 
 NSecSymmetricKey
 : The NSec symmetric key BLOB format.
+
 
 PkixPrivateKey
 : The PKIX private key BLOB format.
@@ -28,6 +32,9 @@ PkixPublicKey
 
 PkixPublicKeyText
 : The PKIX public key BLOB format in textual encoding.
+
+
+#### Not Recommended:
 
 RawPrivateKey
 : The raw private key BLOB format.
