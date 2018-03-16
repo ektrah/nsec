@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Threading;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
@@ -37,15 +38,16 @@ namespace NSec.Cryptography
     //
     public sealed class HkdfSha256 : KeyDerivationAlgorithm
     {
-        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
+        private static int s_selfTest;
 
         public HkdfSha256() : base(
             supportsSalt: true,
             maxCount: byte.MaxValue * crypto_auth_hmacsha256_BYTES)
         {
-            if (!s_selfTest.Value)
+            if (s_selfTest == 0)
             {
-                throw Error.Cryptographic_InitializationFailed(9127.ToString("X"));
+                SelfTest();
+                Interlocked.Exchange(ref s_selfTest, 1);
             }
         }
 
@@ -212,10 +214,13 @@ namespace NSec.Cryptography
             }
         }
 
-        private static bool SelfTest()
+        private static void SelfTest()
         {
-            return (crypto_auth_hmacsha256_bytes() == (UIntPtr)crypto_auth_hmacsha256_BYTES)
-                && (crypto_auth_hmacsha256_statebytes() == (UIntPtr)Unsafe.SizeOf<crypto_auth_hmacsha256_state>());
+            if ((crypto_auth_hmacsha256_bytes() != (UIntPtr)crypto_auth_hmacsha256_BYTES) ||
+                (crypto_auth_hmacsha256_statebytes() != (UIntPtr)Unsafe.SizeOf<crypto_auth_hmacsha256_state>()))
+            {
+                throw Error.Cryptographic_InitializationFailed(9127.ToString("X"));
+            }
         }
     }
 }

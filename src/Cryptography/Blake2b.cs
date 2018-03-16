@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Threading;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
@@ -24,16 +25,17 @@ namespace NSec.Cryptography
     //
     public sealed class Blake2b : HashAlgorithm
     {
-        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
+        private static int s_selfTest;
 
         public Blake2b() : base(
             minHashSize: 32,
             defaultHashSize: crypto_generichash_blake2b_BYTES,
             maxHashSize: crypto_generichash_blake2b_BYTES_MAX)
         {
-            if (!s_selfTest.Value)
+            if (s_selfTest == 0)
             {
-                throw Error.Cryptographic_InitializationFailed(9461.ToString("X"));
+                SelfTest();
+                Interlocked.Exchange(ref s_selfTest, 1);
             }
         }
 
@@ -71,12 +73,15 @@ namespace NSec.Cryptography
                 : ref Unsafe.AsRef<crypto_generichash_blake2b_state>((void*)(((ulong)Unsafe.AsPointer(ref value) + 63ul) & ~63ul));
         }
 
-        private static bool SelfTest()
+        private static void SelfTest()
         {
-            return (crypto_generichash_blake2b_bytes() == (UIntPtr)crypto_generichash_blake2b_BYTES)
-                && (crypto_generichash_blake2b_bytes_max() == (UIntPtr)crypto_generichash_blake2b_BYTES_MAX)
-                && (crypto_generichash_blake2b_bytes_min() == (UIntPtr)crypto_generichash_blake2b_BYTES_MIN)
-                && (crypto_generichash_blake2b_statebytes() == (UIntPtr)Unsafe.SizeOf<crypto_generichash_blake2b_state>());
+            if ((crypto_generichash_blake2b_bytes() != (UIntPtr)crypto_generichash_blake2b_BYTES) ||
+                (crypto_generichash_blake2b_bytes_max() != (UIntPtr)crypto_generichash_blake2b_BYTES_MAX) ||
+                (crypto_generichash_blake2b_bytes_min() != (UIntPtr)crypto_generichash_blake2b_BYTES_MIN) ||
+                (crypto_generichash_blake2b_statebytes() != (UIntPtr)Unsafe.SizeOf<crypto_generichash_blake2b_state>()))
+            {
+                throw Error.Cryptographic_InitializationFailed(9461.ToString("X"));
+            }
         }
     }
 }

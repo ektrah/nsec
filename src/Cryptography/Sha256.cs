@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Threading;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
@@ -27,16 +28,17 @@ namespace NSec.Cryptography
     //
     public sealed class Sha256 : HashAlgorithm
     {
-        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
+        private static int s_selfTest;
 
         public Sha256() : base(
             minHashSize: crypto_hash_sha256_BYTES,
             defaultHashSize: crypto_hash_sha256_BYTES,
             maxHashSize: crypto_hash_sha256_BYTES)
         {
-            if (!s_selfTest.Value)
+            if (s_selfTest == 0)
             {
-                throw Error.Cryptographic_InitializationFailed(8747.ToString("X"));
+                SelfTest();
+                Interlocked.Exchange(ref s_selfTest, 1);
             }
         }
 
@@ -64,10 +66,13 @@ namespace NSec.Cryptography
             return result == 0;
         }
 
-        private static bool SelfTest()
+        private static void SelfTest()
         {
-            return (crypto_hash_sha256_bytes() == (UIntPtr)crypto_hash_sha256_BYTES)
-                && (crypto_hash_sha256_statebytes() == (UIntPtr)Unsafe.SizeOf<crypto_hash_sha256_state>());
+            if ((crypto_hash_sha256_bytes() != (UIntPtr)crypto_hash_sha256_BYTES) ||
+                (crypto_hash_sha256_statebytes() != (UIntPtr)Unsafe.SizeOf<crypto_hash_sha256_state>()))
+            {
+                throw Error.Cryptographic_InitializationFailed(8747.ToString("X"));
+            }
         }
     }
 }

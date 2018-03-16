@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Threading;
 using NSec.Cryptography.Formatting;
 using static Interop.Libsodium;
 
@@ -61,16 +62,17 @@ namespace NSec.Cryptography
 
         private static readonly PublicKeyFormatter s_rawPublicKeyFormatter = new X25519PublicKeyFormatter(new byte[] { });
 
-        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
+        private static int s_selfTest;
 
         public X25519() : base(
             privateKeySize: crypto_scalarmult_curve25519_SCALARBYTES,
             publicKeySize: crypto_scalarmult_curve25519_SCALARBYTES,
             sharedSecretSize: crypto_scalarmult_curve25519_BYTES)
         {
-            if (!s_selfTest.Value)
+            if (s_selfTest == 0)
             {
-                throw Error.Cryptographic_InitializationFailed(8599.ToString("X"));
+                SelfTest();
+                Interlocked.Exchange(ref s_selfTest, 1);
             }
         }
 
@@ -195,10 +197,13 @@ namespace NSec.Cryptography
             }
         }
 
-        private static bool SelfTest()
+        private static void SelfTest()
         {
-            return (crypto_scalarmult_curve25519_bytes() == (UIntPtr)crypto_scalarmult_curve25519_BYTES)
-                && (crypto_scalarmult_curve25519_scalarbytes() == (UIntPtr)crypto_scalarmult_curve25519_SCALARBYTES);
+            if ((crypto_scalarmult_curve25519_bytes() != (UIntPtr)crypto_scalarmult_curve25519_BYTES) ||
+                (crypto_scalarmult_curve25519_scalarbytes() != (UIntPtr)crypto_scalarmult_curve25519_SCALARBYTES))
+            {
+                throw Error.Cryptographic_InitializationFailed(8599.ToString("X"));
+            }
         }
     }
 }

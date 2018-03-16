@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Threading;
 using NSec.Cryptography.Formatting;
 using static Interop.Libsodium;
 
@@ -46,7 +47,7 @@ namespace NSec.Cryptography
 
         private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(crypto_aead_chacha20poly1305_ietf_KEYBYTES);
 
-        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
+        private static int s_selfTest;
 
         public ChaCha20Poly1305() : base(
             keySize: crypto_aead_chacha20poly1305_ietf_KEYBYTES,
@@ -54,9 +55,10 @@ namespace NSec.Cryptography
             tagSize: crypto_aead_chacha20poly1305_ietf_ABYTES,
             maxPlaintextSize: int.MaxValue - crypto_aead_chacha20poly1305_ietf_ABYTES)
         {
-            if (!s_selfTest.Value)
+            if (s_selfTest == 0)
             {
-                throw Error.Cryptographic_InitializationFailed(9293.ToString("X"));
+                SelfTest();
+                Interlocked.Exchange(ref s_selfTest, 1);
             }
         }
 
@@ -189,12 +191,15 @@ namespace NSec.Cryptography
             writer.BeginSequence();
         }
 
-        private static bool SelfTest()
+        private static void SelfTest()
         {
-            return (crypto_aead_chacha20poly1305_ietf_abytes() == (UIntPtr)crypto_aead_chacha20poly1305_ietf_ABYTES)
-                && (crypto_aead_chacha20poly1305_ietf_keybytes() == (UIntPtr)crypto_aead_chacha20poly1305_ietf_KEYBYTES)
-                && (crypto_aead_chacha20poly1305_ietf_npubbytes() == (UIntPtr)crypto_aead_chacha20poly1305_ietf_NPUBBYTES)
-                && (crypto_aead_chacha20poly1305_ietf_nsecbytes() == (UIntPtr)crypto_aead_chacha20poly1305_ietf_NSECBYTES);
+            if ((crypto_aead_chacha20poly1305_ietf_abytes() != (UIntPtr)crypto_aead_chacha20poly1305_ietf_ABYTES) ||
+                (crypto_aead_chacha20poly1305_ietf_keybytes() != (UIntPtr)crypto_aead_chacha20poly1305_ietf_KEYBYTES) ||
+                (crypto_aead_chacha20poly1305_ietf_npubbytes() != (UIntPtr)crypto_aead_chacha20poly1305_ietf_NPUBBYTES) ||
+                (crypto_aead_chacha20poly1305_ietf_nsecbytes() != (UIntPtr)crypto_aead_chacha20poly1305_ietf_NSECBYTES))
+            {
+                throw Error.Cryptographic_InitializationFailed(9293.ToString("X"));
+            }
         }
     }
 }

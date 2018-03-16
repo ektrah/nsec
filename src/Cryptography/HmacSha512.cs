@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Threading;
 using NSec.Cryptography.Formatting;
 using static Interop.Libsodium;
 
@@ -41,7 +42,7 @@ namespace NSec.Cryptography
 
         private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(crypto_hash_sha512_BYTES, int.MaxValue);
 
-        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
+        private static int s_selfTest;
 
         public HmacSha512() : base(
             minKeySize: crypto_hash_sha512_BYTES,
@@ -51,9 +52,10 @@ namespace NSec.Cryptography
             defaultMacSize: crypto_auth_hmacsha512_BYTES,
             maxMacSize: crypto_auth_hmacsha512_BYTES)
         {
-            if (!s_selfTest.Value)
+            if (s_selfTest == 0)
             {
-                throw Error.Cryptographic_InitializationFailed(8837.ToString("X"));
+                SelfTest();
+                Interlocked.Exchange(ref s_selfTest, 1);
             }
         }
 
@@ -162,11 +164,14 @@ namespace NSec.Cryptography
             return result == 0;
         }
 
-        private static bool SelfTest()
+        private static void SelfTest()
         {
-            return (crypto_auth_hmacsha512_bytes() == (UIntPtr)crypto_auth_hmacsha512_BYTES)
-                && (crypto_auth_hmacsha512_keybytes() == (UIntPtr)crypto_auth_hmacsha512_KEYBYTES)
-                && (crypto_auth_hmacsha512_statebytes() == (UIntPtr)Unsafe.SizeOf<crypto_auth_hmacsha512_state>());
+            if ((crypto_auth_hmacsha512_bytes() != (UIntPtr)crypto_auth_hmacsha512_BYTES) ||
+                (crypto_auth_hmacsha512_keybytes() != (UIntPtr)crypto_auth_hmacsha512_KEYBYTES) ||
+                (crypto_auth_hmacsha512_statebytes() != (UIntPtr)Unsafe.SizeOf<crypto_auth_hmacsha512_state>()))
+            {
+                throw Error.Cryptographic_InitializationFailed(8837.ToString("X"));
+            }
         }
     }
 }

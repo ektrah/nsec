@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Threading;
 using NSec.Cryptography.Formatting;
 using static Interop.Libsodium;
 
@@ -64,16 +65,17 @@ namespace NSec.Cryptography
 
         private static readonly PublicKeyFormatter s_rawPublicKeyFormatter = new Ed25519PublicKeyFormatter(new byte[] { });
 
-        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
+        private static int s_selfTest;
 
         public Ed25519() : base(
             privateKeySize: crypto_sign_ed25519_SEEDBYTES,
             publicKeySize: crypto_sign_ed25519_PUBLICKEYBYTES,
             signatureSize: crypto_sign_ed25519_BYTES)
         {
-            if (!s_selfTest.Value)
+            if (s_selfTest == 0)
             {
-                throw Error.Cryptographic_InitializationFailed(9203.ToString("X"));
+                SelfTest();
+                Interlocked.Exchange(ref s_selfTest, 1);
             }
         }
 
@@ -213,12 +215,15 @@ namespace NSec.Cryptography
             return error == 0;
         }
 
-        private static bool SelfTest()
+        private static void SelfTest()
         {
-            return (crypto_sign_ed25519_bytes() == (UIntPtr)crypto_sign_ed25519_BYTES)
-                && (crypto_sign_ed25519_publickeybytes() == (UIntPtr)crypto_sign_ed25519_PUBLICKEYBYTES)
-                && (crypto_sign_ed25519_secretkeybytes() == (UIntPtr)crypto_sign_ed25519_SECRETKEYBYTES)
-                && (crypto_sign_ed25519_seedbytes() == (UIntPtr)crypto_sign_ed25519_SEEDBYTES);
+            if ((crypto_sign_ed25519_bytes() != (UIntPtr)crypto_sign_ed25519_BYTES) ||
+                (crypto_sign_ed25519_publickeybytes() != (UIntPtr)crypto_sign_ed25519_PUBLICKEYBYTES) ||
+                (crypto_sign_ed25519_secretkeybytes() != (UIntPtr)crypto_sign_ed25519_SECRETKEYBYTES) ||
+                (crypto_sign_ed25519_seedbytes() != (UIntPtr)crypto_sign_ed25519_SEEDBYTES))
+            {
+                throw Error.Cryptographic_InitializationFailed(9203.ToString("X"));
+            }
         }
     }
 }

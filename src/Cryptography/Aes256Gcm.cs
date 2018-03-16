@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Threading;
 using NSec.Cryptography.Formatting;
 using static Interop.Libsodium;
 
@@ -49,7 +50,7 @@ namespace NSec.Cryptography
 
         private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(crypto_aead_aes256gcm_KEYBYTES);
 
-        private static readonly Lazy<bool> s_selfTest = new Lazy<bool>(new Func<bool>(SelfTest));
+        private static int s_selfTest;
 
         public Aes256Gcm() : base(
             keySize: crypto_aead_aes256gcm_KEYBYTES,
@@ -61,9 +62,10 @@ namespace NSec.Cryptography
             {
                 throw Error.PlatformNotSupported_Algorithm();
             }
-            if (!s_selfTest.Value)
+            if (s_selfTest == 0)
             {
-                throw Error.Cryptographic_InitializationFailed(9539.ToString("X"));
+                SelfTest();
+                Interlocked.Exchange(ref s_selfTest, 1);
             }
         }
 
@@ -202,12 +204,15 @@ namespace NSec.Cryptography
             writer.BeginSequence();
         }
 
-        private static bool SelfTest()
+        private static void SelfTest()
         {
-            return (crypto_aead_aes256gcm_abytes() == (UIntPtr)crypto_aead_aes256gcm_ABYTES)
-                && (crypto_aead_aes256gcm_keybytes() == (UIntPtr)crypto_aead_aes256gcm_KEYBYTES)
-                && (crypto_aead_aes256gcm_npubbytes() == (UIntPtr)crypto_aead_aes256gcm_NPUBBYTES)
-                && (crypto_aead_aes256gcm_nsecbytes() == (UIntPtr)crypto_aead_aes256gcm_NSECBYTES);
+            if ((crypto_aead_aes256gcm_abytes() != (UIntPtr)crypto_aead_aes256gcm_ABYTES) ||
+                (crypto_aead_aes256gcm_keybytes() != (UIntPtr)crypto_aead_aes256gcm_KEYBYTES) ||
+                (crypto_aead_aes256gcm_npubbytes() != (UIntPtr)crypto_aead_aes256gcm_NPUBBYTES) ||
+                (crypto_aead_aes256gcm_nsecbytes() != (UIntPtr)crypto_aead_aes256gcm_NSECBYTES))
+            {
+                throw Error.Cryptographic_InitializationFailed(9539.ToString("X"));
+            }
         }
     }
 }
