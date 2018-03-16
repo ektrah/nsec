@@ -1,19 +1,28 @@
 using System;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
 {
     internal static class Sodium
     {
-        private static readonly Lazy<bool> s_initialized = new Lazy<bool>(new Func<bool>(InitializeCore));
         private static readonly Action s_misuseHandler = new Action(InternalError);
 
+        private static int s_initialized;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Initialize()
         {
-            _ = s_initialized.Value;
+            if (s_initialized == 0)
+            {
+                InitializeCore();
+                Interlocked.Exchange(ref s_initialized, 1);
+            }
         }
 
-        private static bool InitializeCore()
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private static void InitializeCore()
         {
             try
             {
@@ -30,15 +39,13 @@ namespace NSec.Cryptography
 
                 // sodium_init() returns 0 on success, -1 on failure, and 1 if the
                 // library had already been initialized. sodium_init() is called only
-                // once due to the Lazy<T> wrapper, but if another library p/invokes
-                // into libsodium it might have already been initialized.
+                // once, but if another library p/invokes into libsodium it might
+                // have already been initialized.
 
                 if (sodium_init() < 0)
                 {
                     throw Error.Cryptographic_InitializationFailed(9817.ToString("X"));
                 }
-
-                return crypto_aead_aes256gcm_is_available() != 0;
             }
             catch (DllNotFoundException e)
             {
