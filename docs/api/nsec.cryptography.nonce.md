@@ -4,11 +4,17 @@ Represents a nonce for [[authenticated encryption|AeadAlgorithm Class]].
 
     public readonly struct Nonce : IEquatable<Nonce>
 
-A nonce consists of two fields: a fixed field and a counter field. The fixed
-field remains constant for all nonces that are generated for a given key. The
-counter fields of successive nonces form a monotonically increasing sequence,
-when those fields are regarded as unsigned integers in big-endian byte order.
-Both fields can be set to a length of zero if unused.
+A [[Nonce|Nonce Struct]] value consists of two fields: a fixed field and a
+counter field. The fixed field remains constant for all nonces that are
+generated for a given key. The counter fields of successive nonces form a
+monotonically increasing sequence, when those fields are regarded as unsigned
+integers in big-endian byte order.
+
+In case nonces need to be generated in a different way, the fixed field can be
+set to a new value on each encryption operation and the size of the counter
+field set to zero.
+
+See [[How to: Generate Nonces]] for more information on generating nonces.
 
 
 ## [TOC] Summary
@@ -57,11 +63,11 @@ counterFieldSize
 #### Exceptions
 
 ArgumentOutOfRangeException
-: `fixedFieldSize` is greater than [[MaxSize|Nonce Struct#MaxSize]].
+: `fixedFieldSize` or `counterFieldSize` is less than 0.
 
 ArgumentOutOfRangeException
-: `counterFieldSize` is less than 0 or greater than [[MaxSize|Nonce
-    Struct#MaxSize]] minus `fixedFieldSize`.
+: `fixedFieldSize + counterFieldSize` is greater than
+    [[MaxSize|Nonce Struct#MaxSize]].
 
 
 ### Nonce(ReadOnlySpan<byte>, int)
@@ -88,8 +94,11 @@ ArgumentException
 : `fixedField.Length` is greater than [[MaxSize|Nonce Struct#MaxSize]].
 
 ArgumentOutOfRangeException
-: `counterFieldSize` is less than 0 or greater than [[MaxSize|Nonce
-    Struct#MaxSize]] minus `fixedField.Length`.
+: `counterFieldSize` is less than 0.
+
+ArgumentOutOfRangeException
+: `fixedField.Length + counterFieldSize` is greater than
+    [[MaxSize|Nonce Struct#MaxSize]].
 
 
 ### Nonce(ReadOnlySpan<byte>, ReadOnlySpan<byte>)
@@ -112,11 +121,8 @@ counterField
 #### Exceptions
 
 ArgumentException
-: `fixedField.Length` is greater than [[MaxSize|Nonce Struct#MaxSize]].
-
-ArgumentOutOfRangeException
-: `counterField.Length` is greater than [[MaxSize|Nonce Struct#MaxSize]] minus
-    `fixedField.Length`.
+: `fixedField.Length + counterField.Length` is greater than
+    [[MaxSize|Nonce Struct#MaxSize]].
 
 
 ## Properties

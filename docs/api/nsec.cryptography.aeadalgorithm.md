@@ -21,7 +21,7 @@ Represents an authenticated encryption with associated data (AEAD) algorithm.
 
 ### KeySize
 
-Gets the key size, in bytes.
+Gets the size of keys used for encryption and decryption.
 
     public int KeySize { get; }
 
@@ -32,7 +32,7 @@ The key size, in bytes.
 
 ### MaxPlaintextSize
 
-Gets the maximum plaintext size that can be encrypted at once, in bytes.
+Gets the maximum plaintext size that can be encrypted at once.
 
     public int MaxPlaintextSize { get; }
 
@@ -43,7 +43,7 @@ The maximum plaintext size, in bytes.
 
 ### NonceSize
 
-Gets the nonce size, in bytes.
+Gets the size of nonces used for encryption and decryption.
 
     public int NonceSize { get; }
 
@@ -54,7 +54,7 @@ The nonce size, in bytes.
 
 ### TagSize
 
-Gets the authentication tag size, in bytes.
+Gets the size of authentication tags.
 
     public int TagSize { get; }
 
@@ -68,8 +68,9 @@ The authentication tag size, in bytes.
 
 ### Decrypt(Key, in Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
 
-Decrypts and authenticates the specified data using the specified key and
-returns the result as an array of bytes.
+Decrypts and authenticates the specified ciphertext using the specified key,
+nonce, and associated data, and returns the decrypted plaintext as an array of
+bytes.
 
     public byte[] Decrypt(
         Key key,
@@ -80,18 +81,20 @@ returns the result as an array of bytes.
 #### Parameters
 
 key
-: The key to use for decryption.
+: The [[Key|Key class]] to use for decryption. Decryption fails if this is not
+    the same key as used for encryption.
 
 nonce
-: The nonce to use for decryption.
-    This must be the same nonce as used for encryption.
+: The [[Nonce|Nonce Struct]] to use for decryption. Decryption fails if this is
+    not the same nonce as used for encryption.
 
 associatedData
-: Optional additional data to be authenticated.
-    This must be the same additional data as used for encryption.
+: Optional additional data to authenticate. Decryption fails if this is not the
+    same additional data as used for encryption.
 
 ciphertext
-: The encrypted data to be decrypted and authenticated.
+: The encrypted data to decrypt and authenticate. Decryption fails if the
+    integrity of the data was compromised.
 
 #### Return Value
 
@@ -110,7 +113,7 @@ ArgumentException
 : `nonce.Size` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
 
 CryptographicException
-: Authentication failed.
+: Decryption failed.
 
 ObjectDisposedException
 : `key` has been disposed.
@@ -118,8 +121,9 @@ ObjectDisposedException
 
 ### Decrypt(Key, in Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
 
-Decrypts and authenticates the specified data using the specified key and fills
-the specified span of bytes with the result.
+Decrypts and authenticates the specified ciphertext using the specified key,
+nonce, and associated data, and fills the specified span of bytes with the
+decrypted plaintext.
 
     public void Decrypt(
         Key key,
@@ -131,18 +135,20 @@ the specified span of bytes with the result.
 #### Parameters
 
 key
-: The key to use for decryption.
+: The [[Key|Key class]] to use for decryption. Decryption fails if this is not
+    the same key as used for encryption.
 
 nonce
-: The nonce to use for decryption.
-    This must be the same nonce as used for encryption.
+: The [[Nonce|Nonce Struct]] to use for decryption. Decryption fails if this is
+    not the same nonce as used for encryption.
 
 associatedData
-: Optional additional data to be authenticated.
-    This must be the same additional data as used for encryption.
+: Optional additional data to authenticate. Decryption fails if this is not the
+    same additional data as used for encryption.
 
 ciphertext
-: The encrypted data to be decrypted and authenticated.
+: The encrypted data to decrypt and authenticate. Decryption fails if the
+    integrity of the data was compromised.
 
 plaintext
 : The span to fill with the decrypted and authenticated data.
@@ -175,7 +181,7 @@ CryptographicException
     [[TagSize|AeadAlgorithm Class#TagSize]].
 
 CryptographicException
-: Authentication failed.
+: Decryption failed.
 
 ObjectDisposedException
 : `key` has been disposed.
@@ -183,8 +189,9 @@ ObjectDisposedException
 
 ### Encrypt(Key, in Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
 
-Encrypts the specified data using the specified key and returns the result,
-which includes an authentication tag, as an array of bytes.
+Encrypts the specified plaintext using the specified key, nonce, and associated
+data, and returns the ciphertext, which includes an authentication tag, as an
+array of bytes.
 
     public byte[] Encrypt(
         Key key,
@@ -195,12 +202,18 @@ which includes an authentication tag, as an array of bytes.
 #### Parameters
 
 key
-: The key to use for encryption.
+: The [[Key|Key Class]] to use for encryption.
+    This must be a cryptographically strong key as created by the
+    [[RandomGenerator|RandomGenerator Class)]] class, not a password.
 
 nonce
-: The nonce to use for encryption.
-    The nonce must not be used more than once to encrypt data with the specified
-    key.
+: The [[Nonce|Nonce Struct]] to use for encryption.
+    The same nonce must not be used more than once to encrypt data with the
+    specified key. To prevent nonce reuse when encrypting multiple plaintexts
+    with the same key, it is recommended to increment the previous nonce; a
+    randomly generated nonce is not suitable. See [[How to: Generate Nonces]]
+    for more information on generating nonces.
+
 
 !!! Note
     Using the same nonce with the same key more than once leads to catastrophic
@@ -210,7 +223,7 @@ associatedData
 : Optional additional data to be authenticated during decryption.
 
 plaintext
-: The data to be encrypted.
+: The data to encrypt.
 
 #### Return Value
 
@@ -238,8 +251,9 @@ ObjectDisposedException
 
 ### Encrypt(Key, in Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
 
-Encrypts the specified data using the specified key and fills the specified
-span of bytes with the result, which includes an authentication tag.
+Encrypts the specified plaintext using the specified key, nonce, and associated
+data, and fills the specified span of bytes with the ciphertext, which includes
+an authentication tag.
 
     public void Encrypt(
         Key key,
@@ -251,12 +265,17 @@ span of bytes with the result, which includes an authentication tag.
 #### Parameters
 
 key
-: The key to use for encryption.
+: The [[Key|Key Class]] to use for encryption.
+    This must be a cryptographically strong key as created by the
+    [[RandomGenerator|RandomGenerator Class)]] class, not a password.
 
 nonce
-: The nonce to use for encryption.
-    The nonce must not be used more than once to encrypt data with the specified
-    key.
+: The [[Nonce|Nonce Struct]] to use for encryption.
+    The same nonce must not be used more than once to encrypt data with the
+    specified key. To prevent nonce reuse when encrypting multiple plaintexts
+    with the same key, it is recommended to increment the previous nonce; a
+    randomly generated nonce is not suitable. See [[How to: Generate Nonces]]
+    for more information on generating nonces.
 
 !!! Note
     Using the same nonce with the same key more than once leads to catastrophic
@@ -266,7 +285,7 @@ associatedData
 : Optional additional data to be authenticated during decryption.
 
 plaintext
-: The data to be encrypted.
+: The data to encrypt.
 
 ciphertext
 : The span to fill with the encrypted data and the authentication tag.
@@ -304,8 +323,9 @@ ObjectDisposedException
 
 ### TryDecrypt(Key, in Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>, out byte[])
 
-Attempts to decrypt and authenticate the specified data using the specified key.
-If successful, the result is passed as an array of bytes to the caller.
+Attempts to decrypt and authenticate the specified ciphertext using the
+specified key, nonce, and associated data. If successful, the decrypted
+plaintext is passed as an array of bytes to the caller.
 
     public bool TryDecrypt(
         Key key,
@@ -317,18 +337,20 @@ If successful, the result is passed as an array of bytes to the caller.
 #### Parameters
 
 key
-: The key to use for decryption.
+: The [[Key|Key Class]] to use for decryption. Decryption fails if this is not
+    the same key as used for encryption.
 
 nonce
-: The nonce to use for decryption.
-    This must be the same nonce as used for encryption.
+: The [[Nonce|Nonce Struct]] to use for decryption. Decryption fails if this is
+    not the same nonce as used for encryption.
 
 associatedData
-: Optional additional data to be authenticated.
-    This must be the same additional data as used for encryption.
+: Optional additional data to authenticate. Decryption fails if this is not the
+    same additional data as used for encryption.
 
 ciphertext
-: The encrypted data to be decrypted and authenticated.
+: The encrypted data to decrypt and authenticate. Decryption fails if the
+    integrity of the data was compromised.
 
 plaintext
 : When this method returns, contains an array of bytes that contains the
@@ -336,7 +358,7 @@ plaintext
 
 #### Return Value
 
-`true` if authentication succeeds; otherwise, `false`.
+`true` if decryption succeeds; otherwise, `false`.
 
 #### Exceptions
 
@@ -356,8 +378,9 @@ ObjectDisposedException
 
 ### TryDecrypt(Key, in Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
 
-Attempts to decrypt and authenticate the specified data using the specified key.
-If successful, the specified span of bytes is filled with the result.
+Attempts to decrypt and authenticate the specified ciphertext using the
+specified key, nonce, and associated data. If successful, the specified span of
+bytes is filled with the decrypted plaintext.
 
     public bool TryDecrypt(
         Key key,
@@ -369,18 +392,20 @@ If successful, the specified span of bytes is filled with the result.
 #### Parameters
 
 key
-: The key to use for decryption.
+: The [[Key|Key Class]] to use for decryption. Decryption fails if this is not
+    the same key as used for encryption.
 
 nonce
-: The nonce to use for decryption.
-    This must be the same nonce as used for encryption.
+: The [[Nonce|Nonce Struct]] to use for decryption. Decryption fails if this is
+    not the same nonce as used for encryption.
 
 associatedData
-: Optional additional data to be authenticated.
-    This must be the same additional data as used for encryption.
+: Optional additional data to authenticate. Decryption fails if this is not the
+    same additional data as used for encryption.
 
 ciphertext
-: The encrypted data to be decrypted and authenticated.
+: The encrypted data to decrypt and authenticate. Decryption fails if the
+    integrity of the data was compromised.
 
 plaintext
 : The span to fill with the decrypted and authenticated data.
@@ -391,7 +416,7 @@ plaintext
 
 #### Return Value
 
-`true` if authentication succeeds; otherwise, `false`.
+`true` if decryption succeeds; otherwise, `false`.
 
 #### Exceptions
 
