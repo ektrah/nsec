@@ -21,9 +21,9 @@
         * Ed25519 Class
 * [[CryptographicException Class]]
 * [[Key Class]]
-    * [[KeyBlobFormat Enum]]
     * [[KeyCreationParameters Struct]]
     * [[KeyExportPolicies Enum]]
+    * [[KeyBlobFormat Enum]]
 * [[Nonce Struct]]
 * [[PublicKey Class]]
 * [[RandomGenerator Class]]

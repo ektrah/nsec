@@ -269,7 +269,7 @@ not guaranteed to be thread safe.
 
 * API Reference
     * [[Algorithm Class]]
-    * [[KeyBlobFormat Enum]]
     * [[KeyCreationParameters Struct]]
     * [[KeyExportPolicies Enum]]
+    * [[KeyBlobFormat Enum]]
     * [[PublicKey Class]]
