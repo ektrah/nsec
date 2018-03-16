@@ -3,7 +3,7 @@ using System.Text;
 using NSec.Cryptography;
 using Xunit;
 
-namespace Examples
+namespace NSec.Tests.Examples
 {
     public static class Teaser
     {

@@ -3,7 +3,7 @@ using System.Diagnostics;
 using NSec.Cryptography;
 using Xunit;
 
-namespace Examples.Nonces
+namespace NSec.Tests.Examples.Nonces
 {
     public enum Role
     {
