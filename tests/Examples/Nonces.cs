@@ -16,73 +16,110 @@ namespace NSec.Tests.Examples.Nonces
     public class Rfc5288
     {
         private readonly AeadAlgorithm _algorithm;
-        private readonly Key _readKey;
-        private readonly Key _writeKey;
 
-        private Nonce _readNonce;
-        private Nonce _writeNonce;
+        private readonly Key _sendKey;
+        private Nonce _sendNonce;
+
+        private readonly Key _receiveKey;
+        private Nonce _receiveNonce;
 
         public Rfc5288(
             Role role,
             AeadAlgorithm algorithm,
-            Key clientWriteKey, ReadOnlySpan<byte> clientWriteIV,
-            Key serverWriteKey, ReadOnlySpan<byte> serverWriteIV)
+            Key clientWriteKey,
+            ReadOnlySpan<byte> clientWriteIV,
+            Key serverWriteKey,
+            ReadOnlySpan<byte> serverWriteIV)
         {
             Debug.Assert(algorithm.NonceSize == 12);
             Debug.Assert(clientWriteIV.Length == 4);
             Debug.Assert(serverWriteIV.Length == 4);
 
+            _algorithm = algorithm;
+
             switch (role)
             {
             case Role.Server:
-                _algorithm = algorithm;
-                _writeKey = serverWriteKey;
-                _writeNonce = new Nonce(serverWriteIV, 8);
-                _readKey = clientWriteKey;
-                _readNonce = new Nonce(clientWriteIV, 8);
+                // if we are the server, use the serverWriteKey
+                // and serverWriteIV for sending, and the
+                // clientWriteKey and clientWriteIV for receiving
+                _sendKey = serverWriteKey;
+                _sendNonce = new Nonce(serverWriteIV, 8);
+
+                _receiveKey = clientWriteKey;
+                _receiveNonce = new Nonce(clientWriteIV, 8);
                 break;
 
             case Role.Client:
-                _algorithm = algorithm;
-                _writeKey = clientWriteKey;
-                _writeNonce = new Nonce(clientWriteIV, 8);
-                _readKey = serverWriteKey;
-                _readNonce = new Nonce(serverWriteIV, 8);
+                // if we are the client, use the clientWriteKey
+                // and clientWriteIV for sending, and the
+                // serverWriteKey and serverWriteIV for receiving
+                _sendKey = clientWriteKey;
+                _sendNonce = new Nonce(clientWriteIV, 8);
+
+                _receiveKey = serverWriteKey;
+                _receiveNonce = new Nonce(serverWriteIV, 8);
                 break;
 
             default:
-                break;
+                throw new ArgumentException();
             }
         }
 
-        public void Read(
-            ReadOnlySpan<byte> associatedData,
-            ReadOnlySpan<byte> ciphertext,
-            Span<byte> plaintext)
-        {
-            _algorithm.Decrypt(
-                _readKey,
-                _readNonce,
-                associatedData,
-                ciphertext,
-                plaintext);
-
-            _readNonce++;
-        }
-
-        public void Write(
+        public void EncryptBeforeSend(
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext)
         {
+            // encrypt the plaintext with the send nonce
             _algorithm.Encrypt(
-                _writeKey,
-                _writeNonce,
+                _sendKey,
+                _sendNonce,
                 associatedData,
                 plaintext,
                 ciphertext);
 
-            _writeNonce++;
+            // increment the counter field of the send nonce
+            if (!Nonce.TryIncrement(ref _sendNonce))
+            {
+                // negotiate new keys or abort the connection
+                // when the counter field of the send nonce
+                // reaches the maximum value
+                _sendKey.Dispose();
+                _receiveKey.Dispose();
+            }
+        }
+
+        public bool TryDecryptAfterReceive(
+            ReadOnlySpan<byte> associatedData,
+            ReadOnlySpan<byte> ciphertext,
+            Span<byte> plaintext)
+        {
+            // decrypt the ciphertext with the receive nonce
+            if (!_algorithm.TryDecrypt(
+                _receiveKey,
+                _receiveNonce,
+                associatedData,
+                ciphertext,
+                plaintext))
+            {
+                // abort the connection if decryption fails
+                _sendKey.Dispose();
+                _receiveKey.Dispose();
+                return false;
+            }
+
+            // increment the counter field of the receive nonce
+            if (!Nonce.TryIncrement(ref _receiveNonce))
+            {
+                // negotiate new keys or abort the connection
+                // when the counter field of the receive nonce
+                // reaches the maximum value
+                _sendKey.Dispose();
+                _receiveKey.Dispose();
+            }
+
+            return true;
         }
     }
 
@@ -93,44 +130,55 @@ namespace NSec.Tests.Examples.Nonces
     public class Rfc7905
     {
         private readonly AeadAlgorithm _algorithm;
-        private readonly Nonce _readIV;
-        private readonly Key _readKey;
-        private readonly Nonce _writeIV;
-        private readonly Key _writeKey;
 
-        private Nonce _readNonce;
-        private Nonce _writeNonce;
+        private readonly Key _sendKey;
+        private readonly Nonce _sendIV;
+        private Nonce _sendSequenceNumber;
+
+        private readonly Key _receiveKey;
+        private readonly Nonce _receiveIV;
+        private Nonce _receiveSequenceNumber;
 
         public Rfc7905(
             Role role,
             AeadAlgorithm algorithm,
-            Key clientWriteKey, ReadOnlySpan<byte> clientWriteIV,
-            Key serverWriteKey, ReadOnlySpan<byte> serverWriteIV)
+            Key clientWriteKey,
+            ReadOnlySpan<byte> clientWriteIV,
+            Key serverWriteKey,
+            ReadOnlySpan<byte> serverWriteIV)
         {
-            Debug.Assert(algorithm.NonceSize >= 8);
-            Debug.Assert(clientWriteIV.Length == algorithm.NonceSize);
-            Debug.Assert(serverWriteIV.Length == algorithm.NonceSize);
+            Debug.Assert(algorithm.NonceSize == 12);
+            Debug.Assert(clientWriteIV.Length == 12);
+            Debug.Assert(serverWriteIV.Length == 12);
+
+            _algorithm = algorithm;
 
             switch (role)
             {
             case Role.Server:
-                _algorithm = algorithm;
-                _writeKey = serverWriteKey;
-                _writeIV = new Nonce(serverWriteIV, 0);
-                _writeNonce = new Nonce(algorithm.NonceSize - 8, 8);
-                _readKey = clientWriteKey;
-                _readIV = new Nonce(clientWriteIV, 0);
-                _readNonce = new Nonce(algorithm.NonceSize - 8, 8);
+                // if we are the server, use the serverWriteKey
+                // and serverWriteIV for sending, and the
+                // clientWriteKey and clientWriteIV for receiving
+                _sendKey = serverWriteKey;
+                _sendIV = new Nonce(serverWriteIV, 0);
+                _sendSequenceNumber = new Nonce(4, 8);
+
+                _receiveKey = clientWriteKey;
+                _receiveIV = new Nonce(clientWriteIV, 0);
+                _receiveSequenceNumber = new Nonce(4, 8);
                 break;
 
             case Role.Client:
-                _algorithm = algorithm;
-                _writeKey = clientWriteKey;
-                _writeIV = new Nonce(clientWriteIV, 0);
-                _writeNonce = new Nonce(algorithm.NonceSize - 8, 8);
-                _readKey = serverWriteKey;
-                _readIV = new Nonce(serverWriteIV, 0);
-                _readNonce = new Nonce(algorithm.NonceSize - 8, 8);
+                // if we are the client, use the clientWriteKey
+                // and clientWriteIV for sending, and the
+                // serverWriteKey and serverWriteIV for receiving
+                _sendKey = clientWriteKey;
+                _sendIV = new Nonce(clientWriteIV, 0);
+                _sendSequenceNumber = new Nonce(4, 8);
+
+                _receiveKey = serverWriteKey;
+                _receiveIV = new Nonce(serverWriteIV, 0);
+                _receiveSequenceNumber = new Nonce(4, 8);
                 break;
 
             default:
@@ -138,34 +186,62 @@ namespace NSec.Tests.Examples.Nonces
             }
         }
 
-        public void Read(
-            ReadOnlySpan<byte> associatedData,
-            ReadOnlySpan<byte> ciphertext,
-            Span<byte> plaintext)
-        {
-            _algorithm.Decrypt(
-                _readKey,
-                _readNonce ^ _readIV,
-                associatedData,
-                ciphertext,
-                plaintext);
-
-            _readNonce++;
-        }
-
-        public void Write(
+        public void EncryptBeforeSend(
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext)
         {
+            // encrypt the plaintext with the send sequence number
+            // XORed with the send IV as the nonce
             _algorithm.Encrypt(
-                _writeKey,
-                _writeNonce ^ _writeIV,
+                _sendKey,
+                _sendSequenceNumber ^ _sendIV,
                 associatedData,
                 plaintext,
                 ciphertext);
 
-            _writeNonce++;
+            // increment the send sequence number
+            if (!Nonce.TryIncrement(ref _sendSequenceNumber))
+            {
+                // negotiate new keys or abort the connection
+                // when the send sequence number reaches the
+                // maximum value
+                _sendKey.Dispose();
+                _receiveKey.Dispose();
+            }
+        }
+
+        public bool TryDecryptAfterReceive(
+            ReadOnlySpan<byte> associatedData,
+            ReadOnlySpan<byte> ciphertext,
+            Span<byte> plaintext)
+        {
+            // decrypt the ciphertext with the receive sequence number
+            // XORed with the receive IV as the nonce
+            if (!_algorithm.TryDecrypt(
+                _receiveKey,
+                _receiveSequenceNumber ^ _receiveIV,
+                associatedData,
+                ciphertext,
+                plaintext))
+            {
+                // abort the connection if decryption fails
+                _sendKey.Dispose();
+                _receiveKey.Dispose();
+                return false;
+            }
+
+            // increment the receive sequence number
+            if (!Nonce.TryIncrement(ref _receiveSequenceNumber))
+            {
+                // negotiate new keys or abort the connection
+                // when the receive sequence number reaches the
+                // maximum value
+                _sendKey.Dispose();
+                _receiveKey.Dispose();
+            }
+
+            return true;
         }
     }
 
@@ -194,9 +270,8 @@ namespace NSec.Tests.Examples.Nonces
 
                 for (var i = 0; i < 10; i++)
                 {
-                    client.Write(associatedData, expected, ciphertext);
-                    server.Read(associatedData, ciphertext, actual);
-
+                    client.EncryptBeforeSend(associatedData, expected, ciphertext);
+                    Assert.True(server.TryDecryptAfterReceive(associatedData, ciphertext, actual));
                     Assert.Equal(expected, actual);
                 }
             }
@@ -223,9 +298,8 @@ namespace NSec.Tests.Examples.Nonces
 
                 for (var i = 0; i < 10; i++)
                 {
-                    client.Write(associatedData, expected, ciphertext);
-                    server.Read(associatedData, ciphertext, actual);
-
+                    client.EncryptBeforeSend(associatedData, expected, ciphertext);
+                    Assert.True(server.TryDecryptAfterReceive(associatedData, ciphertext, actual));
                     Assert.Equal(expected, actual);
                 }
             }

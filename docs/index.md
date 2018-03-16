@@ -1,4 +1,5 @@
 # NSec Documentation
 
-* [[API Reference]]
 * [[Installation]]
+* [[API Reference]]
+* [[Working with NSec]]
