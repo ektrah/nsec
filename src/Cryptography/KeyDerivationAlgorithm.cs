@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Threading;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
@@ -24,6 +25,9 @@ namespace NSec.Cryptography
     //
     public abstract class KeyDerivationAlgorithm : Algorithm
     {
+        private static HkdfSha256 s_HkdfSha256;
+        private static HkdfSha512 s_HkdfSha512;
+
         private readonly int _maxCount;
         private readonly bool _supportsSalt;
 
@@ -35,6 +39,34 @@ namespace NSec.Cryptography
 
             _supportsSalt = supportsSalt;
             _maxCount = maxCount;
+        }
+
+        public static HkdfSha256 HkdfSha256
+        {
+            get
+            {
+                HkdfSha256 instance = s_HkdfSha256;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_HkdfSha256, new HkdfSha256(), null);
+                    instance = s_HkdfSha256;
+                }
+                return instance;
+            }
+        }
+
+        public static HkdfSha512 HkdfSha512
+        {
+            get
+            {
+                HkdfSha512 instance = s_HkdfSha512;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_HkdfSha512, new HkdfSha512(), null);
+                    instance = s_HkdfSha512;
+                }
+                return instance;
+            }
         }
 
         public int MaxCount => _maxCount;

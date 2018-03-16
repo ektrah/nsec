@@ -17,6 +17,30 @@ Represents a cryptographic hash algorithm.
 ## [TOC] Summary
 
 
+## Static Properties
+
+
+### Blake2b
+
+Gets the unkeyed BLAKE2b algorithm.
+
+    public static Blake2b Blake2b { get; }
+
+
+### Sha256
+
+Gets the SHA-256 hash algorithm.
+
+    public static Sha256 Sha256 { get; }
+
+
+### Sha512
+
+Gets the SHA-512 hash algorithm.
+
+    public static Sha512 Sha512 { get; }
+
+
 ## Properties
 
 

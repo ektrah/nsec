@@ -17,6 +17,30 @@ Represents a message authentication code (MAC) algorithm.
 ## [TOC] Summary
 
 
+## Static Properties
+
+
+### Blake2b
+
+Gets the keyed BLAKE2b algorithm.
+
+    public static Blake2bMac Blake2b { get; }
+
+
+### HmacSha256
+
+Gets the HMAC-SHA256 algorithm.
+
+    public static HmacSha256 HmacSha256 { get; }
+
+
+### HmacSha512
+
+Gets the HMAC-SHA512 algorithm.
+
+    public static HmacSha512 HmacSha512 { get; }
+
+
 ## Properties
 
 

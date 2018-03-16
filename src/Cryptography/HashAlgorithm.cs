@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Threading;
 
 namespace NSec.Cryptography
 {
@@ -22,6 +23,10 @@ namespace NSec.Cryptography
     //
     public abstract class HashAlgorithm : Algorithm
     {
+        private static Blake2b s_Blake2b;
+        private static Sha256 s_Sha256;
+        private static Sha512 s_Sha512;
+
         private readonly int _defaultHashSize;
         private readonly int _maxHashSize;
         private readonly int _minHashSize;
@@ -39,6 +44,48 @@ namespace NSec.Cryptography
             _minHashSize = minHashSize;
             _defaultHashSize = defaultHashSize;
             _maxHashSize = maxHashSize;
+        }
+
+        public static Blake2b Blake2b
+        {
+            get
+            {
+                Blake2b instance = s_Blake2b;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_Blake2b, new Blake2b(), null);
+                    instance = s_Blake2b;
+                }
+                return instance;
+            }
+        }
+
+        public static Sha256 Sha256
+        {
+            get
+            {
+                Sha256 instance = s_Sha256;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_Sha256, new Sha256(), null);
+                    instance = s_Sha256;
+                }
+                return instance;
+            }
+        }
+
+        public static Sha512 Sha512
+        {
+            get
+            {
+                Sha512 instance = s_Sha512;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_Sha512, new Sha512(), null);
+                    instance = s_Sha512;
+                }
+                return instance;
+            }
         }
 
         public int DefaultHashSize => _defaultHashSize;

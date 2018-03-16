@@ -15,6 +15,16 @@ Represents a digital signature algorithm.
 ## [TOC] Summary
 
 
+## Static Properties
+
+
+### Ed25519
+
+Gets the Ed25519 signature algorithm.
+
+    public static Ed25519 Ed25519 { get; }
+
+
 ## Properties
 
 

@@ -16,6 +16,23 @@ Represents an authenticated encryption with associated data (AEAD) algorithm.
 ## [TOC] Summary
 
 
+## Static Properties
+
+
+### Aes256Gcm
+
+Gets the AES256-GCM AEAD algorithm.
+
+    public static Aes256Gcm Aes256Gcm { get; }
+
+
+### ChaCha20Poly1305
+
+Gets the ChaCha20-Poly1305 AEAD algorithm.
+
+    public static ChaCha20Poly1305 ChaCha20Poly1305 { get; }
+
+
 ## Properties
 
 

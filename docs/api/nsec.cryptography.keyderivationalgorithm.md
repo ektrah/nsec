@@ -16,6 +16,24 @@ Represents a key derivation algorithm.
 ## [TOC] Summary
 
 
+## Static Properties
+
+
+### HkdfSha256
+
+Gets the HKDF-SHA256 algorithm.
+
+    public static HkdfSha256 HkdfSha256 { get; }
+
+
+### HkdfSha512
+
+Gets the HKDF-SHA512 algorithm.
+
+    public static HkdfSha512 HkdfSha512 { get; }
+
+
+
 ## Properties
 
 

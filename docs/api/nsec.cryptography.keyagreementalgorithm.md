@@ -15,6 +15,16 @@ Represents a key agreement algorithm.
 ## [TOC] Summary
 
 
+## Static Properties
+
+
+### X25519
+
+Gets the X25519 key agreement algorithm.
+
+    public static X25519 X25519 { get; }
+
+
 ## Properties
 
 

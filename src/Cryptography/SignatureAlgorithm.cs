@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Threading;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
@@ -18,6 +19,8 @@ namespace NSec.Cryptography
     //
     public abstract class SignatureAlgorithm : Algorithm
     {
+        private static Ed25519 s_Ed25519;
+
         private readonly int _privateKeySize;
         private readonly int _publicKeySize;
         private readonly int _signatureSize;
@@ -34,6 +37,20 @@ namespace NSec.Cryptography
             _privateKeySize = privateKeySize;
             _publicKeySize = publicKeySize;
             _signatureSize = signatureSize;
+        }
+
+        public static Ed25519 Ed25519
+        {
+            get
+            {
+                Ed25519 instance = s_Ed25519;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_Ed25519, new Ed25519(), null);
+                    instance = s_Ed25519;
+                }
+                return instance;
+            }
         }
 
         public int PrivateKeySize => _privateKeySize;

@@ -252,7 +252,7 @@ namespace NSec.Tests.Examples.Nonces
         [Fact]
         public static void Rfc5288()
         {
-            var algorithm = new Aes256Gcm();
+            var algorithm = AeadAlgorithm.Aes256Gcm;
 
             using (var clientWriteKey = new Key(algorithm))
             using (var serverWriteKey = new Key(algorithm))
@@ -280,7 +280,7 @@ namespace NSec.Tests.Examples.Nonces
         [Fact]
         public static void Rfc7905()
         {
-            var algorithm = new ChaCha20Poly1305();
+            var algorithm = AeadAlgorithm.ChaCha20Poly1305;
 
             using (var clientWriteKey = new Key(algorithm))
             using (var serverWriteKey = new Key(algorithm))

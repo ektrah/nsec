@@ -13,7 +13,7 @@ namespace NSec.Tests.Examples
             #region Teaser
 
             // select the Ed25519 signature algorithm
-            var algorithm = new Ed25519();
+            var algorithm = SignatureAlgorithm.Ed25519;
 
             // create a new key pair
             using (var key = new Key(algorithm))

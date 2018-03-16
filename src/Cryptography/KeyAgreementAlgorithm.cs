@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Threading;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
@@ -18,6 +19,8 @@ namespace NSec.Cryptography
     //
     public abstract class KeyAgreementAlgorithm : Algorithm
     {
+        private static X25519 s_X25519;
+
         private readonly int _privateKeySize;
         private readonly int _publicKeySize;
         private readonly int _sharedSecretSize;
@@ -34,6 +37,20 @@ namespace NSec.Cryptography
             _privateKeySize = privateKeySize;
             _publicKeySize = publicKeySize;
             _sharedSecretSize = sharedSecretSize;
+        }
+
+        public static X25519 X25519
+        {
+            get
+            {
+                X25519 instance = s_X25519;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_X25519, new X25519(), null);
+                    instance = s_X25519;
+                }
+                return instance;
+            }
         }
 
         public int PrivateKeySize => _privateKeySize;

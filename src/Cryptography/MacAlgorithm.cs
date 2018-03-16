@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Threading;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
@@ -22,6 +23,10 @@ namespace NSec.Cryptography
     //
     public abstract class MacAlgorithm : Algorithm
     {
+        private static Blake2bMac s_Blake2b;
+        private static HmacSha256 s_HmacSha256;
+        private static HmacSha512 s_HmacSha512;
+
         private readonly int _defaultKeySize;
         private readonly int _defaultMacSize;
         private readonly int _maxKeySize;
@@ -54,6 +59,48 @@ namespace NSec.Cryptography
             _minMacSize = minMacSize;
             _defaultMacSize = defaultMacSize;
             _maxMacSize = maxMacSize;
+        }
+
+        public static Blake2bMac Blake2b
+        {
+            get
+            {
+                Blake2bMac instance = s_Blake2b;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_Blake2b, new Blake2bMac(), null);
+                    instance = s_Blake2b;
+                }
+                return instance;
+            }
+        }
+
+        public static HmacSha256 HmacSha256
+        {
+            get
+            {
+                HmacSha256 instance = s_HmacSha256;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_HmacSha256, new HmacSha256(), null);
+                    instance = s_HmacSha256;
+                }
+                return instance;
+            }
+        }
+
+        public static HmacSha512 HmacSha512
+        {
+            get
+            {
+                HmacSha512 instance = s_HmacSha512;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_HmacSha512, new HmacSha512(), null);
+                    instance = s_HmacSha512;
+                }
+                return instance;
+            }
         }
 
         public int DefaultKeySize => _defaultKeySize;

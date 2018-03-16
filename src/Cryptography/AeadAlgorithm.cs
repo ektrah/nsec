@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Threading;
 using NSec.Cryptography.Formatting;
 using static Interop.Libsodium;
 
@@ -31,6 +32,9 @@ namespace NSec.Cryptography
     //
     public abstract class AeadAlgorithm : Algorithm
     {
+        private static Aes256Gcm s_Aes256Gcm;
+        private static ChaCha20Poly1305 s_ChaCha20Poly1305;
+
         private readonly int _keySize;
         private readonly int _maxPlaintextSize;
         private readonly int _nonceSize;
@@ -51,6 +55,34 @@ namespace NSec.Cryptography
             _nonceSize = nonceSize;
             _tagSize = tagSize;
             _maxPlaintextSize = maxPlaintextSize;
+        }
+
+        public static Aes256Gcm Aes256Gcm
+        {
+            get
+            {
+                Aes256Gcm instance = s_Aes256Gcm;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_Aes256Gcm, new Aes256Gcm(), null);
+                    instance = s_Aes256Gcm;
+                }
+                return instance;
+            }
+        }
+
+        public static ChaCha20Poly1305 ChaCha20Poly1305
+        {
+            get
+            {
+                ChaCha20Poly1305 instance = s_ChaCha20Poly1305;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_ChaCha20Poly1305, new ChaCha20Poly1305(), null);
+                    instance = s_ChaCha20Poly1305;
+                }
+                return instance;
+            }
         }
 
         public int KeySize => _keySize;
