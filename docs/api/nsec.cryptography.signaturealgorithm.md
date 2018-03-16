@@ -20,7 +20,7 @@ Represents a digital signature algorithm.
 
 ### PrivateKeySize
 
-Gets the private size, in bytes.
+Gets the size of private keys.
 
     public int PrivateKeySize { get; }
 
@@ -31,7 +31,7 @@ The private key size, in bytes.
 
 ### PublicKeySize
 
-Gets the public key size, in bytes.
+Gets the size of public keys.
 
     public int PublicKeySize { get; }
 
@@ -42,7 +42,7 @@ The public key size, in bytes.
 
 ### SignatureSize
 
-Gets the signature size, in bytes.
+Gets the size of a signature.
 
     public int SignatureSize { get; }
 
@@ -66,14 +66,14 @@ as an array of bytes.
 #### Parameters
 
 key
-: The [[Key|Key Class]] object to use for signing.
+: The [[Key|Key Class]] to use for signing.
 
 data
-: The data to be signed.
+: The data to sign.
 
 #### Return Value
 
-The data's signature.
+The signature for the data.
 
 #### Exceptions
 
@@ -101,14 +101,13 @@ span of bytes with the signature.
 #### Parameters
 
 key
-: The [[Key|Key Class]] object to use for signing.
+: The [[Key|Key Class]] to use for signing.
 
 data
-: The data to be signed.
+: The data to sign.
 
 signature
-: The span to fill with the signature.
-    `signature` must not overlap with `data`.
+: The span to fill with the signature for the data.
 
 #### Exceptions
 
@@ -140,14 +139,16 @@ public key.
 #### Parameters
 
 publicKey
-: The [[PublicKey|PublicKey Class]] object to use for verification. This must
-    be the public key for the key previously used to sign the input data.
+: The [[PublicKey|PublicKey Class]] to use for verification. Verification fails
+    if this is not the matching public key for the private key that was used to
+    sign the data.
 
 data
-: The data to be verified.
+: The data to verify. Decryption fails if the integrity of the data was
+    compromised.
 
 signature
-: The signature to be verified.
+: The signature of the data to verify.
 
 #### Return Value
 
@@ -176,14 +177,16 @@ key.
 #### Parameters
 
 publicKey
-: The [[PublicKey|PublicKey Class]] object to use for verification. This must
-    be the public key for the key previously used to sign the input data.
+: The [[PublicKey|PublicKey Class]] to use for verification. Verification fails
+    if this is not the matching public key for the private key that was used to
+    sign the data.
 
 data
-: The data to be verified.
+: The data to verify. Decryption fails if the integrity of the data was
+    compromised.
 
 signature
-: The signature to be verified.
+: The signature of the data to verify.
 
 #### Exceptions
 

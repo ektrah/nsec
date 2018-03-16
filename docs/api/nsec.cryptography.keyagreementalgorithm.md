@@ -20,7 +20,7 @@ Represents a key agreement algorithm.
 
 ### PrivateKeySize
 
-Gets the private key size, in bytes.
+Gets the size of private keys.
 
     public int PrivateKeySize { get; }
 
@@ -31,7 +31,7 @@ The private key size, in bytes.
 
 ### PublicKeySize
 
-Gets the public key size, in bytes.
+Gets the size of public keys.
 
     public int PublicKeySize { get; }
 
@@ -42,7 +42,7 @@ The public key size, in bytes.
 
 ### SharedSecretSize
 
-Gets the size, in bytes, of the shared secret resulting from key agreement.
+Gets the size of a shared secret resulting from key agreement.
 
     public int SharedSecretSize { get; }
 
@@ -111,7 +111,7 @@ otherPartyPublicKey
 result
 : When this method returns, contains a new instance of the
     [[SharedSecret|SharedSecret Class]] class that represents the shared
-    secret, or `null` if key agreement failed.
+    secret, or `null` if key agreement fails.
 
 #### Return Value
 
