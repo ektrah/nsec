@@ -14,12 +14,12 @@ dd, dl, dt, li, ol, ul {
         margin: 0;
     }
 
-main > *, main > nav > * {
+main > * {
     margin: 1em 0 1em 1.5em;
 }
 
 main > nav {
-    margin: 0;
+    text-indent: -1.5em;
 }
 
 h1, h2, h3 {
