@@ -3,7 +3,7 @@ using System.Text;
 using NSec.Cryptography;
 using Xunit;
 
-namespace Examples
+namespace NSec.Test.Examples
 {
     public static class Incremental
     {
