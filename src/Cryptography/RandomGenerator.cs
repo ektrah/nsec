@@ -1,20 +1,33 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Threading;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
 {
     public abstract class RandomGenerator
     {
-        private static readonly Lazy<RandomGenerator.System> s_default = new Lazy<RandomGenerator.System>();
+        private static RandomGenerator s_Default;
 
         private protected RandomGenerator()
         {
             Sodium.Initialize();
         }
 
-        public static RandomGenerator Default => s_default.Value;
+        public static RandomGenerator Default
+        {
+            get
+            {
+                RandomGenerator instance = s_Default;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_Default, new RandomGenerator.System(), null);
+                    instance = s_Default;
+                }
+                return instance;
+            }
+        }
 
         public byte[] GenerateBytes(
             int count)
