@@ -2,7 +2,7 @@
 
 Contains parameters for the creation of a [[Key|Key Class]] instance.
 
-    public struct KeyCreationParameters
+    public ref struct KeyCreationParameters
 
 
 ## [TOC] Summary

@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace NSec.Cryptography
 {
     [StructLayout(LayoutKind.Auto)]
-    public struct KeyCreationParameters
+    public ref struct KeyCreationParameters
     {
         public KeyExportPolicies ExportPolicy;
     }
