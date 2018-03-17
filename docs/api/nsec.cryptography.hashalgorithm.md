@@ -53,7 +53,7 @@ Gets the SHA-512 hash algorithm.
 
 ### HashSize
 
-Gets the hash size, in bytes.
+Gets the size of a hash.
 
     public int HashSize { get; }
 
@@ -107,7 +107,7 @@ ArgumentException
 
 ### TryVerify(ReadOnlySpan<byte>, ReadOnlySpan<byte>)
 
-Attempts to verify the hash for the specified input data.
+Attempts to verify the specified input data using the specified hash.
 
     public bool TryVerify(
         ReadOnlySpan<byte> data,
@@ -116,10 +116,12 @@ Attempts to verify the hash for the specified input data.
 #### Parameters
 
 data
-: The data to be verified.
+: The data to verify.
+    Verification fails if this is not the same data as used for computing the
+    hash.
 
 hash
-: The hash to be verified.
+: The hash for the data.
 
 #### Return Value
 
@@ -128,7 +130,7 @@ hash
 
 ### Verify(ReadOnlySpan<byte>, ReadOnlySpan<byte>)
 
-Verifies the hash for the specified input data.
+Verifies the specified input data using the specified hash.
 
     public void Verify(
         ReadOnlySpan<byte> data,
@@ -137,10 +139,12 @@ Verifies the hash for the specified input data.
 #### Parameters
 
 data
-: The data to be verified.
+: The data to verify.
+    Verification fails if this is not the same data as used for computing the
+    hash.
 
 hash
-: The hash to be verified.
+: The hash for the data.
 
 #### Exceptions
 

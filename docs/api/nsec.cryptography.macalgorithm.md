@@ -53,7 +53,7 @@ Gets the HMAC-SHA512 algorithm.
 
 ### DefaultKeySize / MinKeySize / MaxKeySize
 
-Gets the default/minimum/maximum key size, in bytes.
+Gets the default/minimum/maximum size of keys.
 
     public int DefaultKeySize { get; }
     public int MinKeySize { get; }
@@ -66,7 +66,7 @@ The default/minimum/maximum key size, in bytes.
 
 ### MacSize
 
-Gets the MAC size, in bytes.
+Gets the size of a MAC.
 
     public int MacSize { get; }
 
@@ -93,7 +93,7 @@ key
 : The key to use for computing the message authentication code.
 
 data
-: The data to be authenticated.
+: The data to authenticate.
 
 #### Return Value
 
@@ -128,7 +128,7 @@ key
 : The key to use for computing the message authentication code.
 
 data
-: The data to be authenticated.
+: The data to authenticate.
 
 mac
 : The span to fill with the computed message authentication code.
@@ -151,8 +151,8 @@ ObjectDisposedException
 
 ### TryVerify(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
 
-Attempts to verify the message authentication for the specified input data using
-the specified key.
+Attempts to verify the specified input data using the specified key and message
+authentication code.
 
     public bool TryVerify(
         Key key,
@@ -163,12 +163,16 @@ the specified key.
 
 key
 : The key to use for verification.
+    Verification fails if this is not the same key as used for computing the
+    message authentication code.
 
 data
-: The data to be verified.
+: The data to verify.
+    Verification fails if this is not the same data as used for computing the
+    message authentication code.
 
 mac
-: The message authentication code to be verified.
+: The message authentication code for the data.
 
 #### Return Value
 
@@ -189,8 +193,8 @@ ObjectDisposedException
 
 ### Verify(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
 
-Verifies the message authentication code for the specified input data using the
-specified key.
+Verifies the specified input data using the specified key and message
+authentication code.
 
     public void Verify(
         Key key,
@@ -201,12 +205,16 @@ specified key.
 
 key
 : The key to use for verification.
+    Verification fails if this is not the same key as used for computing the
+    message authentication code.
 
 data
-: The data to be verified.
+: The data to verify.
+    Verification fails if this is not the same data as used for computing the
+    message authentication code.
 
 mac
-: The message authentication code to be verified.
+: The message authentication code for the data.
 
 #### Exceptions
 

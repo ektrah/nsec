@@ -5,17 +5,20 @@ be incrementally updated with segments of data.
 
     public readonly struct IncrementalMac
 
-[[IncrementalMac|IncrementalMac Struct]] follows the "init, update, final"
-model: First, the state needs to be initialized with a key. It can then be
-updated zero or more times with segments of data. At the end, it is finalized
-and yields a result that is identical to the MAC of the concatenated segments.
+This type provides an "init, update, final" interface for computing a MAC:
+First, a state needs to be initialized with a MAC key to be used. The state can
+then be updated zero or more times with segments of data. Finalizing the state
+yields a result that is identical to the MAC of the concatenated segments.
 
-[[IncrementalMac|IncrementalMac Struct]] has value-type semantics: passing an
-instance by-value to a method or assigning it to a variable, for example,
-creates a copy of the state.
+[[IncrementalMac|IncrementalMac Struct]] instances have value-type semantics:
+For example, passing an instance by-value to a method or assigning it to a
+variable creates a copy of the state.
 
 
 ## Example
+
+The following C# example shows how to compute a message authentication code from
+multiple segments of data:
 
     {{Incremental MAC}}
 
