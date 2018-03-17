@@ -249,13 +249,5 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> ciphertext,
             Span<byte> plaintext);
-
-        internal abstract bool TryReadAlgorithmIdentifier(
-            ref Asn1Reader reader,
-            out ReadOnlySpan<byte> nonce);
-
-        internal abstract void WriteAlgorithmIdentifier(
-            ref Asn1Writer writer,
-            ReadOnlySpan<byte> nonce);
     }
 }

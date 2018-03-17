@@ -46,8 +46,6 @@ namespace NSec.Cryptography
     {
         private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(crypto_aead_aes256gcm_KEYBYTES, new byte[] { 0xDE, 0x31, 0x44, 0xDE });
 
-        private static readonly Asn1Oid s_oid = new Asn1Oid(2, 16, 840, 1, 101, 3, 4, 1, 46);
-
         private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(crypto_aead_aes256gcm_KEYBYTES);
 
         private static int s_isSupported;
@@ -194,34 +192,6 @@ namespace NSec.Cryptography
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
-        }
-
-        internal override bool TryReadAlgorithmIdentifier(
-            ref Asn1Reader reader,
-            out ReadOnlySpan<byte> nonce)
-        {
-            bool success = true;
-            reader.BeginSequence();
-            success &= reader.ObjectIdentifier().SequenceEqual(s_oid.Bytes);
-            reader.BeginSequence();
-            nonce = reader.OctetString();
-            success &= (nonce.Length == crypto_aead_aes256gcm_NPUBBYTES);
-            reader.End();
-            reader.End();
-            success &= reader.Success;
-            return success;
-        }
-
-        internal override void WriteAlgorithmIdentifier(
-            ref Asn1Writer writer,
-            ReadOnlySpan<byte> nonce)
-        {
-            writer.End();
-            writer.End();
-            writer.OctetString(nonce);
-            writer.BeginSequence();
-            writer.ObjectIdentifier(s_oid.Bytes);
-            writer.BeginSequence();
         }
 
         private static void SelfTest()
