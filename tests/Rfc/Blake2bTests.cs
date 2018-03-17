@@ -15,7 +15,7 @@ namespace NSec.Tests.Rfc
         [MemberData(nameof(Rfc7693TestVectors))]
         public static void Test(string msg, string hash)
         {
-            var a = new Blake2b(64);
+            var a = HashAlgorithm.Blake2b_512;
 
             var expected = hash.DecodeHex();
             var actual = a.Hash(msg.DecodeHex());

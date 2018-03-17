@@ -110,7 +110,7 @@ namespace NSec.Tests.Base
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(new Ed25519()))
+            using (var k = new Key(SignatureAlgorithm.Ed25519))
             {
                 Assert.Throws<ArgumentException>("key", () => a.Mac(k, ReadOnlySpan<byte>.Empty));
             }
@@ -154,7 +154,7 @@ namespace NSec.Tests.Base
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(new Ed25519()))
+            using (var k = new Key(SignatureAlgorithm.Ed25519))
             {
                 Assert.Throws<ArgumentException>("key", () => a.Mac(k, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
             }
@@ -242,7 +242,7 @@ namespace NSec.Tests.Base
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(new Ed25519()))
+            using (var k = new Key(SignatureAlgorithm.Ed25519))
             {
                 Assert.Throws<ArgumentException>("key", () => a.TryVerify(k, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
             }
@@ -307,7 +307,7 @@ namespace NSec.Tests.Base
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(new Ed25519()))
+            using (var k = new Key(SignatureAlgorithm.Ed25519))
             {
                 Assert.Throws<ArgumentException>("key", () => a.Verify(k, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
             }

@@ -19,7 +19,7 @@ namespace NSec.Tests.Base
         [Fact]
         public static void InitializeWithWrongKey()
         {
-            var a = new ChaCha20Poly1305();
+            var a = AeadAlgorithm.ChaCha20Poly1305;
 
             using (var k = new Key(a))
             {
