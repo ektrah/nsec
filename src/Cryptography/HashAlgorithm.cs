@@ -23,7 +23,8 @@ namespace NSec.Cryptography
     //
     public abstract class HashAlgorithm : Algorithm
     {
-        private static Blake2b s_Blake2b;
+        private static Blake2b s_Blake2b_256;
+        private static Blake2b s_Blake2b_512;
         private static Sha256 s_Sha256;
         private static Sha512 s_Sha512;
 
@@ -37,15 +38,29 @@ namespace NSec.Cryptography
             _hashSize = hashSize;
         }
 
-        public static Blake2b Blake2b
+        public static Blake2b Blake2b_256
         {
             get
             {
-                Blake2b instance = s_Blake2b;
+                Blake2b instance = s_Blake2b_256;
                 if (instance == null)
                 {
-                    Interlocked.CompareExchange(ref s_Blake2b, new Blake2b(), null);
-                    instance = s_Blake2b;
+                    Interlocked.CompareExchange(ref s_Blake2b_256, new Blake2b(256 / 8), null);
+                    instance = s_Blake2b_256;
+                }
+                return instance;
+            }
+        }
+
+        public static Blake2b Blake2b_512
+        {
+            get
+            {
+                Blake2b instance = s_Blake2b_512;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_Blake2b_512, new Blake2b(512 / 8), null);
+                    instance = s_Blake2b_512;
                 }
                 return instance;
             }

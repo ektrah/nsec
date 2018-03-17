@@ -20,11 +20,18 @@ Represents a cryptographic hash algorithm.
 ## Static Properties
 
 
-### Blake2b
+### Blake2b_256
 
-Gets the unkeyed BLAKE2b algorithm.
+Gets the unkeyed BLAKE2b-256 algorithm.
 
-    public static Blake2b Blake2b { get; }
+    public static Blake2b Blake2b_256 { get; }
+
+
+### Blake2b_512
+
+Gets the unkeyed BLAKE2b-512 algorithm.
+
+    public static Blake2b Blake2b_512 { get; }
 
 
 ### Sha256

@@ -23,7 +23,8 @@ namespace NSec.Cryptography
     //
     public abstract class MacAlgorithm : Algorithm
     {
-        private static Blake2bMac s_Blake2b;
+        private static Blake2bMac s_Blake2b_256;
+        private static Blake2bMac s_Blake2b_512;
         private static HmacSha256 s_HmacSha256;
         private static HmacSha512 s_HmacSha512;
 
@@ -52,15 +53,29 @@ namespace NSec.Cryptography
             _macSize = macSize;
         }
 
-        public static Blake2bMac Blake2b
+        public static Blake2bMac Blake2b_256
         {
             get
             {
-                Blake2bMac instance = s_Blake2b;
+                Blake2bMac instance = s_Blake2b_256;
                 if (instance == null)
                 {
-                    Interlocked.CompareExchange(ref s_Blake2b, new Blake2bMac(), null);
-                    instance = s_Blake2b;
+                    Interlocked.CompareExchange(ref s_Blake2b_256, new Blake2bMac(256 / 8), null);
+                    instance = s_Blake2b_256;
+                }
+                return instance;
+            }
+        }
+
+        public static Blake2bMac Blake2b_512
+        {
+            get
+            {
+                Blake2bMac instance = s_Blake2b_512;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_Blake2b_512, new Blake2bMac(512 / 8), null);
+                    instance = s_Blake2b_512;
                 }
                 return instance;
             }

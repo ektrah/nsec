@@ -12,8 +12,8 @@ namespace NSec.Test.Examples
         {
             #region Incremental Hash
 
-            // select the unkeyed BLAKE2b algorithm
-            var algorithm = new Blake2b();
+            // select the BLAKE2b-256 algorithm
+            var algorithm = HashAlgorithm.Blake2b_256;
 
             // initialize the state with the algorithm
             IncrementalHash.Initialize(algorithm, out var state);
@@ -45,8 +45,8 @@ namespace NSec.Test.Examples
         {
             #region Incremental MAC
 
-            // select the keyed BLAKE2b algorithm
-            var algorithm = new Blake2bMac();
+            // select the BLAKE2b-256 algorithm
+            var algorithm = MacAlgorithm.Blake2b_256;
 
             // create a new key
             using (var key = new Key(algorithm))
