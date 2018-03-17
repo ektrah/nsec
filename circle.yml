@@ -80,6 +80,7 @@ shared:
   dotnet-restore: &dotnet-restore
     run:
       name: Restore Dependencies
+      no_output_timeout: 2m
       command: dotnet restore --disable-parallel -s 'https://api.nuget.org/v3/index.json' -s 'https://dotnet.myget.org/F/dotnet-core/api/v3/index.json'
   save-cache: &save-cache
     save_cache:
@@ -125,6 +126,7 @@ jobs:
     steps:
       - run:
           name: Install Prerequisites
+          no_output_timeout: 2m
           command: yum install -q -y curl ca-certificates libunwind libicu
       - *dotnet-install-1-1
       - *dotnet-install-2-0
@@ -148,6 +150,7 @@ jobs:
     steps:
       - run:
           name: Install Prerequisites
+          no_output_timeout: 2m
           command: |
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu52
@@ -173,6 +176,7 @@ jobs:
     steps:
       - run:
           name: Install Prerequisites
+          no_output_timeout: 2m
           command: |
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8
@@ -195,6 +199,7 @@ jobs:
     steps:
       - run:
           name: Install Prerequisites
+          no_output_timeout: 2m
           command: dnf install -q -y curl ca-certificates findutils libunwind libicu compat-openssl10
       - *dotnet-install-2-0
       - *dotnet-install-2-1
@@ -215,6 +220,7 @@ jobs:
     steps:
       - run:
           name: Install Prerequisites
+          no_output_timeout: 2m
           command: dnf install -q -y curl ca-certificates findutils libunwind libicu compat-openssl10
       - *dotnet-install-2-0
       - *dotnet-install-2-1
@@ -235,6 +241,7 @@ jobs:
     steps:
       - run:
           name: Install Prerequisites
+          no_output_timeout: 2m
           command: zypper -q install -y --no-recommends curl ca-certificates tar ncurses-utils libunwind libicu
       - *dotnet-install-2-0
       - *dotnet-install-2-1
@@ -255,6 +262,7 @@ jobs:
     steps:
       - run:
           name: Install Prerequisites
+          no_output_timeout: 2m
           command: |
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu52
@@ -280,6 +288,7 @@ jobs:
     steps:
       - run:
           name: Install Prerequisites
+          no_output_timeout: 2m
           command: |
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu55 libcurl3
@@ -305,6 +314,7 @@ jobs:
     steps:
       - run:
           name: Install Prerequisites
+          no_output_timeout: 2m
           command: |
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu57
