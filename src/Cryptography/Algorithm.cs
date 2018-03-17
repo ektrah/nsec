@@ -14,7 +14,7 @@ namespace NSec.Cryptography
         internal virtual void CreateKey(
             ReadOnlySpan<byte> seed,
             out SecureMemoryHandle keyHandle,
-            out byte[] publicKeyBytes)
+            out PublicKey publicKey)
         {
             throw Error.NotSupported_CreateKey();
         }
@@ -37,7 +37,7 @@ namespace NSec.Cryptography
 
         // Converts a libsodium public key into a key blob.
         internal virtual bool TryExportPublicKey(
-            ReadOnlySpan<byte> publicKeyBytes,
+            PublicKey publicKey,
             KeyBlobFormat format,
             Span<byte> blob,
             out int blobSize)
@@ -50,7 +50,7 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
             out SecureMemoryHandle keyHandle,
-            out byte[] publicKeyBytes)
+            out PublicKey publicKey)
         {
             throw Error.NotSupported_ImportKey();
         }
@@ -59,7 +59,7 @@ namespace NSec.Cryptography
         internal virtual bool TryImportPublicKey(
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
-            out byte[] result)
+            out PublicKey publicKey)
         {
             throw Error.NotSupported_ImportKey();
         }

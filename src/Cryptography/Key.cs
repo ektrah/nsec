@@ -28,7 +28,7 @@ namespace NSec.Cryptography
             Debug.Assert(seedSize <= 64);
 
             SecureMemoryHandle keyHandle = null;
-            byte[] publicKeyBytes = null;
+            PublicKey publicKey = null;
             bool success = false;
 
             try
@@ -37,7 +37,7 @@ namespace NSec.Cryptography
                 try
                 {
                     RandomGenerator.Default.GenerateBytes(seed);
-                    algorithm.CreateKey(seed, out keyHandle, out publicKeyBytes);
+                    algorithm.CreateKey(seed, out keyHandle, out publicKey);
                     success = true;
                 }
                 finally
@@ -58,14 +58,14 @@ namespace NSec.Cryptography
             _algorithm = algorithm;
             _exportPolicy = creationParameters.ExportPolicy;
             _handle = keyHandle;
-            _publicKey = (publicKeyBytes) != null ? new PublicKey(algorithm, publicKeyBytes) : null;
+            _publicKey = publicKey;
         }
 
         internal Key(
             Algorithm algorithm,
             in KeyCreationParameters creationParameters,
             SecureMemoryHandle keyHandle,
-            byte[] publicKeyBytes)
+            PublicKey publicKey)
         {
             Debug.Assert(algorithm != null);
             Debug.Assert(keyHandle != null);
@@ -75,7 +75,7 @@ namespace NSec.Cryptography
             _algorithm = algorithm;
             _exportPolicy = creationParameters.ExportPolicy;
             _handle = keyHandle;
-            _publicKey = (publicKeyBytes) != null ? new PublicKey(algorithm, publicKeyBytes) : null;
+            _publicKey = publicKey;
         }
 
         public Algorithm Algorithm => _algorithm;
@@ -105,12 +105,12 @@ namespace NSec.Cryptography
             }
 
             SecureMemoryHandle keyHandle = null;
-            byte[] publicKeyBytes = null;
+            PublicKey publicKey = null;
             bool success = false;
 
             try
             {
-                success = algorithm.TryImportKey(blob, format, out keyHandle, out publicKeyBytes);
+                success = algorithm.TryImportKey(blob, format, out keyHandle, out publicKey);
             }
             finally
             {
@@ -125,7 +125,7 @@ namespace NSec.Cryptography
                 throw Error.Format_InvalidBlob();
             }
 
-            return new Key(algorithm, in creationParameters, keyHandle, publicKeyBytes);
+            return new Key(algorithm, in creationParameters, keyHandle, publicKey);
         }
 
         public static bool TryImport(
@@ -141,12 +141,12 @@ namespace NSec.Cryptography
             }
 
             SecureMemoryHandle keyHandle = null;
-            byte[] publicKeyBytes = null;
+            PublicKey publicKey = null;
             bool success = false;
 
             try
             {
-                success = algorithm.TryImportKey(blob, format, out keyHandle, out publicKeyBytes);
+                success = algorithm.TryImportKey(blob, format, out keyHandle, out publicKey);
             }
             finally
             {
@@ -156,7 +156,7 @@ namespace NSec.Cryptography
                 }
             }
 
-            result = success ? new Key(algorithm, in creationParameters, keyHandle, publicKeyBytes) : null;
+            result = success ? new Key(algorithm, in creationParameters, keyHandle, publicKey) : null;
             return success;
         }
 
@@ -210,10 +210,10 @@ namespace NSec.Cryptography
                     throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
                 }
 
-                _algorithm.TryExportPublicKey(_publicKey.Bytes, format, Span<byte>.Empty, out blobSize);
+                _algorithm.TryExportPublicKey(_publicKey, format, Span<byte>.Empty, out blobSize);
                 blob = new byte[blobSize];
 
-                if (!_algorithm.TryExportPublicKey(_publicKey.Bytes, format, blob, out blobSize))
+                if (!_algorithm.TryExportPublicKey(_publicKey, format, blob, out blobSize))
                 {
                     throw Error.Cryptographic_InternalError();
                 }

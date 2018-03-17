@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using static Interop.Libsodium;
 
 namespace NSec.Cryptography.Formatting
 {
@@ -41,7 +42,7 @@ namespace NSec.Cryptography.Formatting
         }
 
         public bool TryExport(
-            ReadOnlySpan<byte> publicKeyBytes,
+            in PublicKeyBytes publicKeyBytes,
             Span<byte> blob,
             out int blobSize)
         {
@@ -53,12 +54,12 @@ namespace NSec.Cryptography.Formatting
             }
 
             _blobHeader.CopyTo(blob);
-            Serialize(publicKeyBytes, blob.Slice(_blobHeader.Length));
+            Serialize(in publicKeyBytes, blob.Slice(_blobHeader.Length));
             return true;
         }
 
         public bool TryExportText(
-            ReadOnlySpan<byte> publicKeyBytes,
+            in PublicKeyBytes publicKeyBytes,
             Span<byte> blob,
             out int blobSize)
         {
@@ -72,7 +73,7 @@ namespace NSec.Cryptography.Formatting
             Span<byte> temp = stackalloc byte[_blobSize];
 
             _blobHeader.CopyTo(temp);
-            Serialize(publicKeyBytes, temp.Slice(_blobHeader.Length));
+            Serialize(in publicKeyBytes, temp.Slice(_blobHeader.Length));
 
             Armor.EncodeToUtf8(temp, s_beginLabel, s_endLabel, blob);
             return true;
@@ -80,38 +81,39 @@ namespace NSec.Cryptography.Formatting
 
         public bool TryImport(
             ReadOnlySpan<byte> blob,
-            out byte[] result)
+            out PublicKeyBytes result)
         {
             if (blob.Length != _blobSize || !blob.StartsWith(_blobHeader))
             {
-                result = null;
+                result = default;
                 return false;
             }
 
-            result = Deserialize(blob.Slice(_blobHeader.Length));
+            Deserialize(blob.Slice(_blobHeader.Length), out result);
             return true;
         }
 
         public bool TryImportText(
             ReadOnlySpan<byte> blob,
-            out byte[] result)
+            out PublicKeyBytes result)
         {
             Span<byte> temp = stackalloc byte[_blobSize];
 
             if (!Armor.TryDecodeFromUtf8(blob, s_beginLabel, s_endLabel, temp, out int written) || written != _blobSize)
             {
-                result = null;
+                result = default;
                 return false;
             }
 
             return TryImport(temp, out result);
         }
 
-        protected abstract byte[] Deserialize(
-            ReadOnlySpan<byte> span);
+        protected abstract void Deserialize(
+            ReadOnlySpan<byte> span,
+            out PublicKeyBytes publicKeyBytes);
 
         protected abstract void Serialize(
-            ReadOnlySpan<byte> publicKeyBytes,
+            in PublicKeyBytes publicKeyBytes,
             Span<byte> span);
     }
 }

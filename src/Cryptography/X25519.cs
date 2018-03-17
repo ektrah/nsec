@@ -1,6 +1,6 @@
 using System;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using NSec.Cryptography.Formatting;
 using static Interop.Libsodium;
@@ -79,15 +79,16 @@ namespace NSec.Cryptography
         internal override void CreateKey(
             ReadOnlySpan<byte> seed,
             out SecureMemoryHandle keyHandle,
-            out byte[] publicKeyBytes)
+            out PublicKey publicKey)
         {
             Debug.Assert(seed.Length == crypto_scalarmult_curve25519_SCALARBYTES);
+            Debug.Assert(Unsafe.SizeOf<PublicKeyBytes>() == crypto_scalarmult_curve25519_SCALARBYTES);
 
-            publicKeyBytes = new byte[crypto_scalarmult_curve25519_SCALARBYTES];
+            publicKey = new PublicKey(this);
             SecureMemoryHandle.Import(seed, out keyHandle);
-            crypto_scalarmult_curve25519_base(publicKeyBytes, keyHandle);
+            crypto_scalarmult_curve25519_base(out publicKey.Bytes, keyHandle);
 
-            Debug.Assert((publicKeyBytes[crypto_scalarmult_curve25519_SCALARBYTES - 1] & 0x80) == 0);
+            Debug.Assert((Unsafe.Add(ref Unsafe.As<PublicKeyBytes, byte>(ref publicKey.Bytes), crypto_scalarmult_curve25519_SCALARBYTES - 1) & 0x80) == 0);
         }
 
         internal override int GetDefaultSeedSize()
@@ -97,19 +98,19 @@ namespace NSec.Cryptography
 
         private protected override bool TryAgreeCore(
             SecureMemoryHandle keyHandle,
-            byte[] otherPartyPublicKey,
+            in PublicKeyBytes otherPartyPublicKey,
             out SecureMemoryHandle sharedSecretHandle)
         {
             Debug.Assert(keyHandle != null);
             Debug.Assert(keyHandle.Length == crypto_scalarmult_curve25519_SCALARBYTES);
-            Debug.Assert(otherPartyPublicKey.Length == crypto_scalarmult_curve25519_SCALARBYTES);
+            Debug.Assert(Unsafe.SizeOf<PublicKeyBytes>() == crypto_scalarmult_curve25519_SCALARBYTES);
 
             SecureMemoryHandle.Alloc(crypto_scalarmult_curve25519_BYTES, out sharedSecretHandle);
 
             int error = crypto_scalarmult_curve25519(
                 sharedSecretHandle,
                 keyHandle,
-                otherPartyPublicKey);
+                in otherPartyPublicKey);
 
             return error == 0;
         }
@@ -136,7 +137,7 @@ namespace NSec.Cryptography
         }
 
         internal override bool TryExportPublicKey(
-            ReadOnlySpan<byte> publicKeyBytes,
+            PublicKey publicKey,
             KeyBlobFormat format,
             Span<byte> blob,
             out int blobSize)
@@ -144,13 +145,13 @@ namespace NSec.Cryptography
             switch (format)
             {
             case KeyBlobFormat.RawPublicKey:
-                return s_rawPublicKeyFormatter.TryExport(publicKeyBytes, blob, out blobSize);
+                return s_rawPublicKeyFormatter.TryExport(in publicKey.Bytes, blob, out blobSize);
             case KeyBlobFormat.NSecPublicKey:
-                return s_nsecPublicKeyFormatter.TryExport(publicKeyBytes, blob, out blobSize);
+                return s_nsecPublicKeyFormatter.TryExport(in publicKey.Bytes, blob, out blobSize);
             case KeyBlobFormat.PkixPublicKey:
-                return s_pkixPublicKeyFormatter.TryExport(publicKeyBytes, blob, out blobSize);
+                return s_pkixPublicKeyFormatter.TryExport(in publicKey.Bytes, blob, out blobSize);
             case KeyBlobFormat.PkixPublicKeyText:
-                return s_pkixPublicKeyFormatter.TryExportText(publicKeyBytes, blob, out blobSize);
+                return s_pkixPublicKeyFormatter.TryExportText(in publicKey.Bytes, blob, out blobSize);
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
@@ -160,18 +161,20 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
             out SecureMemoryHandle keyHandle,
-            out byte[] publicKeyBytes)
+            out PublicKey publicKey)
         {
+            publicKey = new PublicKey(this);
+
             switch (format)
             {
             case KeyBlobFormat.RawPrivateKey:
-                return s_rawPrivateKeyFormatter.TryImport(blob, out keyHandle, out publicKeyBytes);
+                return s_rawPrivateKeyFormatter.TryImport(blob, out keyHandle, out publicKey.Bytes);
             case KeyBlobFormat.NSecPrivateKey:
-                return s_nsecPrivateKeyFormatter.TryImport(blob, out keyHandle, out publicKeyBytes);
+                return s_nsecPrivateKeyFormatter.TryImport(blob, out keyHandle, out publicKey.Bytes);
             case KeyBlobFormat.PkixPrivateKey:
-                return s_pkixPrivateKeyFormatter.TryImport(blob, out keyHandle, out publicKeyBytes);
+                return s_pkixPrivateKeyFormatter.TryImport(blob, out keyHandle, out publicKey.Bytes);
             case KeyBlobFormat.PkixPrivateKeyText:
-                return s_pkixPrivateKeyFormatter.TryImportText(blob, out keyHandle, out publicKeyBytes);
+                return s_pkixPrivateKeyFormatter.TryImportText(blob, out keyHandle, out publicKey.Bytes);
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
@@ -180,18 +183,20 @@ namespace NSec.Cryptography
         internal override bool TryImportPublicKey(
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
-            out byte[] result)
+            out PublicKey publicKey)
         {
+            publicKey = new PublicKey(this);
+
             switch (format)
             {
             case KeyBlobFormat.RawPublicKey:
-                return s_rawPublicKeyFormatter.TryImport(blob, out result);
+                return s_rawPublicKeyFormatter.TryImport(blob, out publicKey.Bytes);
             case KeyBlobFormat.NSecPublicKey:
-                return s_nsecPublicKeyFormatter.TryImport(blob, out result);
+                return s_nsecPublicKeyFormatter.TryImport(blob, out publicKey.Bytes);
             case KeyBlobFormat.PkixPublicKey:
-                return s_pkixPublicKeyFormatter.TryImport(blob, out result);
+                return s_pkixPublicKeyFormatter.TryImport(blob, out publicKey.Bytes);
             case KeyBlobFormat.PkixPublicKeyText:
-                return s_pkixPublicKeyFormatter.TryImportText(blob, out result);
+                return s_pkixPublicKeyFormatter.TryImportText(blob, out publicKey.Bytes);
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }

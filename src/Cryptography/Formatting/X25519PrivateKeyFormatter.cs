@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography.Formatting
@@ -15,15 +16,15 @@ namespace NSec.Cryptography.Formatting
         protected override void Deserialize(
             ReadOnlySpan<byte> span,
             out SecureMemoryHandle keyHandle,
-            out byte[] publicKeyBytes)
+            out PublicKeyBytes publicKeyBytes)
         {
             Debug.Assert(span.Length == crypto_scalarmult_curve25519_SCALARBYTES);
+            Debug.Assert(Unsafe.SizeOf<PublicKeyBytes>() == crypto_scalarmult_curve25519_SCALARBYTES);
 
-            publicKeyBytes = new byte[crypto_scalarmult_curve25519_SCALARBYTES];
             SecureMemoryHandle.Import(span, out keyHandle);
-            crypto_scalarmult_curve25519_base(publicKeyBytes, keyHandle);
+            crypto_scalarmult_curve25519_base(out publicKeyBytes, keyHandle);
 
-            Debug.Assert((publicKeyBytes[publicKeyBytes.Length - 1] & 0x80) == 0);
+            Debug.Assert((Unsafe.Add(ref Unsafe.As<PublicKeyBytes, byte>(ref publicKeyBytes), crypto_scalarmult_curve25519_SCALARBYTES - 1) & 0x80) == 0);
         }
 
         protected override void Serialize(

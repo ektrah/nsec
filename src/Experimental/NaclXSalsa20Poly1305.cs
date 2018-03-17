@@ -29,11 +29,11 @@ namespace NSec.Cryptography.Experimental
         internal override void CreateKey(
             ReadOnlySpan<byte> seed,
             out SecureMemoryHandle keyHandle,
-            out byte[] publicKeyBytes)
+            out PublicKey publicKey)
         {
             Debug.Assert(seed.Length == crypto_secretbox_xsalsa20poly1305_KEYBYTES);
 
-            publicKeyBytes = null;
+            publicKey = null;
             SecureMemoryHandle.Import(seed, out keyHandle);
         }
 
@@ -104,12 +104,14 @@ namespace NSec.Cryptography.Experimental
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
             out SecureMemoryHandle keyHandle,
-            out byte[] publicKeyBytes)
+            out PublicKey publicKey)
         {
+            publicKey = null;
+
             switch (format)
             {
             case KeyBlobFormat.RawSymmetricKey:
-                return s_rawKeyFormatter.TryImport(blob, out keyHandle, out publicKeyBytes);
+                return s_rawKeyFormatter.TryImport(blob, out keyHandle);
             case KeyBlobFormat.NSecSymmetricKey: // TODO: NaclXSalsa20Poly1305 NSecSymmetricKey format
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());

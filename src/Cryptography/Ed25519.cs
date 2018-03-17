@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 using NSec.Cryptography.Formatting;
@@ -82,13 +83,14 @@ namespace NSec.Cryptography
         internal override void CreateKey(
             ReadOnlySpan<byte> seed,
             out SecureMemoryHandle keyHandle,
-            out byte[] publicKeyBytes)
+            out PublicKey publicKey)
         {
             Debug.Assert(seed.Length == crypto_sign_ed25519_SEEDBYTES);
+            Debug.Assert(Unsafe.SizeOf<PublicKeyBytes>() == crypto_sign_ed25519_PUBLICKEYBYTES);
 
-            publicKeyBytes = new byte[crypto_sign_ed25519_PUBLICKEYBYTES];
+            publicKey = new PublicKey(this);
             SecureMemoryHandle.Alloc(crypto_sign_ed25519_SECRETKEYBYTES, out keyHandle);
-            crypto_sign_ed25519_seed_keypair(publicKeyBytes, keyHandle, in MemoryMarshal.GetReference(seed));
+            crypto_sign_ed25519_seed_keypair(out publicKey.Bytes, keyHandle, in MemoryMarshal.GetReference(seed));
         }
 
         internal override int GetDefaultSeedSize()
@@ -137,7 +139,7 @@ namespace NSec.Cryptography
         }
 
         internal override bool TryExportPublicKey(
-            ReadOnlySpan<byte> publicKeyBytes,
+            PublicKey publicKey,
             KeyBlobFormat format,
             Span<byte> blob,
             out int blobSize)
@@ -145,13 +147,13 @@ namespace NSec.Cryptography
             switch (format)
             {
             case KeyBlobFormat.RawPublicKey:
-                return s_rawPublicKeyFormatter.TryExport(publicKeyBytes, blob, out blobSize);
+                return s_rawPublicKeyFormatter.TryExport(in publicKey.Bytes, blob, out blobSize);
             case KeyBlobFormat.NSecPublicKey:
-                return s_nsecPublicKeyFormatter.TryExport(publicKeyBytes, blob, out blobSize);
+                return s_nsecPublicKeyFormatter.TryExport(in publicKey.Bytes, blob, out blobSize);
             case KeyBlobFormat.PkixPublicKey:
-                return s_pkixPublicKeyFormatter.TryExport(publicKeyBytes, blob, out blobSize);
+                return s_pkixPublicKeyFormatter.TryExport(in publicKey.Bytes, blob, out blobSize);
             case KeyBlobFormat.PkixPublicKeyText:
-                return s_pkixPublicKeyFormatter.TryExportText(publicKeyBytes, blob, out blobSize);
+                return s_pkixPublicKeyFormatter.TryExportText(in publicKey.Bytes, blob, out blobSize);
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
@@ -161,18 +163,20 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
             out SecureMemoryHandle keyHandle,
-            out byte[] publicKeyBytes)
+            out PublicKey publicKey)
         {
+            publicKey = new PublicKey(this);
+
             switch (format)
             {
             case KeyBlobFormat.RawPrivateKey:
-                return s_rawPrivateKeyFormatter.TryImport(blob, out keyHandle, out publicKeyBytes);
+                return s_rawPrivateKeyFormatter.TryImport(blob, out keyHandle, out publicKey.Bytes);
             case KeyBlobFormat.NSecPrivateKey:
-                return s_nsecPrivateKeyFormatter.TryImport(blob, out keyHandle, out publicKeyBytes);
+                return s_nsecPrivateKeyFormatter.TryImport(blob, out keyHandle, out publicKey.Bytes);
             case KeyBlobFormat.PkixPrivateKey:
-                return s_pkixPrivateKeyFormatter.TryImport(blob, out keyHandle, out publicKeyBytes);
+                return s_pkixPrivateKeyFormatter.TryImport(blob, out keyHandle, out publicKey.Bytes);
             case KeyBlobFormat.PkixPrivateKeyText:
-                return s_pkixPrivateKeyFormatter.TryImportText(blob, out keyHandle, out publicKeyBytes);
+                return s_pkixPrivateKeyFormatter.TryImportText(blob, out keyHandle, out publicKey.Bytes);
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
@@ -181,36 +185,38 @@ namespace NSec.Cryptography
         internal override bool TryImportPublicKey(
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
-            out byte[] result)
+            out PublicKey publicKey)
         {
+            publicKey = new PublicKey(this);
+
             switch (format)
             {
             case KeyBlobFormat.RawPublicKey:
-                return s_rawPublicKeyFormatter.TryImport(blob, out result);
+                return s_rawPublicKeyFormatter.TryImport(blob, out publicKey.Bytes);
             case KeyBlobFormat.NSecPublicKey:
-                return s_nsecPublicKeyFormatter.TryImport(blob, out result);
+                return s_nsecPublicKeyFormatter.TryImport(blob, out publicKey.Bytes);
             case KeyBlobFormat.PkixPublicKey:
-                return s_pkixPublicKeyFormatter.TryImport(blob, out result);
+                return s_pkixPublicKeyFormatter.TryImport(blob, out publicKey.Bytes);
             case KeyBlobFormat.PkixPublicKeyText:
-                return s_pkixPublicKeyFormatter.TryImportText(blob, out result);
+                return s_pkixPublicKeyFormatter.TryImportText(blob, out publicKey.Bytes);
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
         }
 
         private protected override bool TryVerifyCore(
-            byte[] publicKey,
+            in PublicKeyBytes publicKeyBytes,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> signature)
         {
-            Debug.Assert(publicKey.Length == crypto_sign_ed25519_PUBLICKEYBYTES);
+            Debug.Assert(Unsafe.SizeOf<PublicKeyBytes>() == crypto_sign_ed25519_PUBLICKEYBYTES);
             Debug.Assert(signature.Length == crypto_sign_ed25519_BYTES);
 
             int error = crypto_sign_ed25519_verify_detached(
                 in MemoryMarshal.GetReference(signature),
                 in MemoryMarshal.GetReference(data),
                 (ulong)data.Length,
-                publicKey);
+                in publicKeyBytes);
 
             return error == 0;
         }

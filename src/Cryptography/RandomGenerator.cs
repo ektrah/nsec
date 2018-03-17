@@ -89,7 +89,7 @@ namespace NSec.Cryptography
             Debug.Assert(seedSize <= 64);
 
             SecureMemoryHandle keyHandle = null;
-            byte[] publicKeyBytes = null;
+            PublicKey publicKey = null;
             bool success = false;
 
             try
@@ -98,7 +98,7 @@ namespace NSec.Cryptography
                 try
                 {
                     GenerateBytesCore(seed);
-                    algorithm.CreateKey(seed, out keyHandle, out publicKeyBytes);
+                    algorithm.CreateKey(seed, out keyHandle, out publicKey);
                     success = true;
                 }
                 finally
@@ -114,7 +114,7 @@ namespace NSec.Cryptography
                 }
             }
 
-            return new Key(algorithm, in creationParameters, keyHandle, publicKeyBytes);
+            return new Key(algorithm, in creationParameters, keyHandle, publicKey);
         }
 
         public uint GenerateUInt32()

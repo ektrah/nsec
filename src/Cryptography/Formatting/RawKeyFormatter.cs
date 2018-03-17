@@ -51,18 +51,15 @@ namespace NSec.Cryptography.Formatting
 
         public bool TryImport(
             ReadOnlySpan<byte> blob,
-            out SecureMemoryHandle keyHandle,
-            out byte[] publicKeyBytes)
+            out SecureMemoryHandle keyHandle)
         {
             if (blob.Length < _minKeySize ||
                 blob.Length > _maxKeySize)
             {
                 keyHandle = null;
-                publicKeyBytes = null;
                 return false;
             }
 
-            publicKeyBytes = null;
             SecureMemoryHandle.Import(blob, out keyHandle);
             return true;
         }

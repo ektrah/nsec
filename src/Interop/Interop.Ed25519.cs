@@ -29,7 +29,7 @@ internal static partial class Interop
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int crypto_sign_ed25519_seed_keypair(
-            byte[] pk,
+            out PublicKeyBytes pk,
             SecureMemoryHandle sk,
             in byte seed);
 
@@ -46,6 +46,6 @@ internal static partial class Interop
             in byte sig,
             in byte m,
             ulong mlen,
-            byte[] pk);
+            in PublicKeyBytes pk);
     }
 }

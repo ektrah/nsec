@@ -94,12 +94,12 @@ namespace NSec.Cryptography.Formatting
         public bool TryImport(
             ReadOnlySpan<byte> blob,
             out SecureMemoryHandle keyHandle,
-            out byte[] publicKeyBytes)
+            out PublicKeyBytes publicKeyBytes)
         {
             if (blob.Length != _blobSize || !blob.StartsWith(_blobHeader))
             {
                 keyHandle = null;
-                publicKeyBytes = null;
+                publicKeyBytes = default;
                 return false;
             }
 
@@ -110,7 +110,7 @@ namespace NSec.Cryptography.Formatting
         public bool TryImportText(
             ReadOnlySpan<byte> blob,
             out SecureMemoryHandle keyHandle,
-            out byte[] publicKeyBytes)
+            out PublicKeyBytes publicKeyBytes)
         {
             Span<byte> temp = stackalloc byte[_blobSize];
             try
@@ -118,7 +118,7 @@ namespace NSec.Cryptography.Formatting
                 if (!Armor.TryDecodeFromUtf8(blob, s_beginLabel, s_endLabel, temp, out int written) || written != _blobSize)
                 {
                     keyHandle = null;
-                    publicKeyBytes = null;
+                    publicKeyBytes = default;
                     return false;
                 }
 
@@ -133,7 +133,7 @@ namespace NSec.Cryptography.Formatting
         protected abstract void Deserialize(
             ReadOnlySpan<byte> span,
             out SecureMemoryHandle keyHandle,
-            out byte[] publicKeyBytes);
+            out PublicKeyBytes publicKeyBytes);
 
         protected abstract void Serialize(
             SecureMemoryHandle keyHandle,

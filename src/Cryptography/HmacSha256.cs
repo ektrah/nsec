@@ -59,9 +59,9 @@ namespace NSec.Cryptography
         internal override void CreateKey(
             ReadOnlySpan<byte> seed,
             out SecureMemoryHandle keyHandle,
-            out byte[] publicKeyBytes)
+            out PublicKey publicKey)
         {
-            publicKeyBytes = null;
+            publicKey = default;
             SecureMemoryHandle.Import(seed, out keyHandle);
         }
 
@@ -91,14 +91,16 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
             out SecureMemoryHandle keyHandle,
-            out byte[] publicKeyBytes)
+            out PublicKey publicKey)
         {
+            publicKey = null;
+
             switch (format)
             {
             case KeyBlobFormat.RawSymmetricKey:
-                return s_rawKeyFormatter.TryImport(blob, out keyHandle, out publicKeyBytes);
+                return s_rawKeyFormatter.TryImport(blob, out keyHandle);
             case KeyBlobFormat.NSecSymmetricKey:
-                return s_nsecKeyFormatter.TryImport(blob, out keyHandle, out publicKeyBytes);
+                return s_nsecKeyFormatter.TryImport(blob, out keyHandle);
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }

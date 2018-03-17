@@ -61,8 +61,7 @@ namespace NSec.Cryptography.Formatting
 
         public bool TryImport(
             ReadOnlySpan<byte> blob,
-            out SecureMemoryHandle keyHandle,
-            out byte[] publicKeyBytes)
+            out SecureMemoryHandle keyHandle)
         {
             int start = _blobHeader.Length + sizeof(uint);
             int length = blob.Length - start;
@@ -73,11 +72,9 @@ namespace NSec.Cryptography.Formatting
                 BinaryPrimitives.ReadUInt32LittleEndian(blob.Slice(_blobHeader.Length, sizeof(uint))) != (uint)length)
             {
                 keyHandle = null;
-                publicKeyBytes = null;
                 return false;
             }
 
-            publicKeyBytes = null;
             SecureMemoryHandle.Import(blob.Slice(start, length), out keyHandle);
             return true;
         }
