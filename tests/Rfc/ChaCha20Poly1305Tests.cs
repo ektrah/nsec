@@ -34,7 +34,7 @@ namespace NSec.Tests.Rfc
             var ciphertext = testVector[4];
             var tag = testVector[5];
 
-            var a = new ChaCha20Poly1305();
+            var a = AeadAlgorithm.ChaCha20Poly1305;
 
             using (var k = Key.Import(a, key.DecodeHex(), KeyBlobFormat.RawSymmetricKey))
             {

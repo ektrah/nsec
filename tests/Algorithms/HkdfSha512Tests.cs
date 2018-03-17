@@ -528,7 +528,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void HkdfProperties()
         {
-            var a = new HkdfSha512();
+            var a = KeyDerivationAlgorithm.HkdfSha512;
 
             Assert.True(a.PseudorandomKeySize > 0);
             Assert.True(a.MaxCount > 0);
@@ -537,7 +537,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void Properties()
         {
-            var a = new HkdfSha512();
+            var a = KeyDerivationAlgorithm.HkdfSha512;
 
             Assert.Equal(16320, a.MaxCount);
             Assert.Equal(64, a.PseudorandomKeySize);
@@ -551,7 +551,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void ExtractWithNullSecret()
         {
-            var a = new HkdfSha512();
+            var a = KeyDerivationAlgorithm.HkdfSha512;
 
             Assert.Throws<ArgumentNullException>("sharedSecret", () => a.Extract(null, ReadOnlySpan<byte>.Empty));
         }
@@ -561,7 +561,7 @@ namespace NSec.Tests.Algorithms
         {
             const int HashLen = 512 / 8;
 
-            var a = new HkdfSha512();
+            var a = KeyDerivationAlgorithm.HkdfSha512;
 
             using (var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty))
             {
@@ -575,7 +575,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void ExtractSuccess()
         {
-            var a = new HkdfSha512();
+            var a = KeyDerivationAlgorithm.HkdfSha512;
 
             using (var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty))
             {
@@ -594,7 +594,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void ExtractWithSpanWithNullSecret()
         {
-            var a = new HkdfSha512();
+            var a = KeyDerivationAlgorithm.HkdfSha512;
 
             Assert.Throws<ArgumentNullException>("sharedSecret", () => a.Extract(null, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
@@ -602,7 +602,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void ExtractWithSpanTooShort()
         {
-            var a = new HkdfSha512();
+            var a = KeyDerivationAlgorithm.HkdfSha512;
 
             using (var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty))
             {
@@ -613,7 +613,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void ExtractWithSpanTooLong()
         {
-            var a = new HkdfSha512();
+            var a = KeyDerivationAlgorithm.HkdfSha512;
 
             using (var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty))
             {
@@ -626,7 +626,7 @@ namespace NSec.Tests.Algorithms
         {
             const int HashLen = 512 / 8;
 
-            var a = new HkdfSha512();
+            var a = KeyDerivationAlgorithm.HkdfSha512;
 
             using (var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty))
             {
@@ -643,7 +643,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void ExtractWithSpanWithSaltOverlapping()
         {
-            var a = new HkdfSha512();
+            var a = KeyDerivationAlgorithm.HkdfSha512;
 
             using (var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty))
             {
@@ -660,7 +660,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void ExtractWithSpanSuccess()
         {
-            var a = new HkdfSha512();
+            var a = KeyDerivationAlgorithm.HkdfSha512;
 
             using (var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty))
             {
@@ -680,7 +680,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void ExpandWithCountWithPrkTooShort()
         {
-            var a = new HkdfSha512();
+            var a = KeyDerivationAlgorithm.HkdfSha512;
 
             Assert.Throws<ArgumentException>("pseudorandomKey", () => a.Expand(new byte[a.PseudorandomKeySize - 1], ReadOnlySpan<byte>.Empty, 0));
         }
@@ -688,7 +688,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void ExpandWithNegativeCount()
         {
-            var a = new HkdfSha512();
+            var a = KeyDerivationAlgorithm.HkdfSha512;
 
             Assert.Throws<ArgumentOutOfRangeException>("count", () => a.Expand(s_prkForEmpty.DecodeHex(), ReadOnlySpan<byte>.Empty, -1));
         }
@@ -696,7 +696,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void ExpandWithCountTooLarge()
         {
-            var a = new HkdfSha512();
+            var a = KeyDerivationAlgorithm.HkdfSha512;
 
             Assert.Throws<ArgumentOutOfRangeException>("count", () => a.Expand(s_prkForEmpty.DecodeHex(), ReadOnlySpan<byte>.Empty, a.MaxCount + 1));
         }
@@ -713,7 +713,7 @@ namespace NSec.Tests.Algorithms
         [InlineData(100)]
         public static void ExpandWithCountSuccess(int count)
         {
-            var a = new HkdfSha512();
+            var a = KeyDerivationAlgorithm.HkdfSha512;
 
             var expected = s_outputForEmpty.DecodeHex().Substring(0, count);
             var actual = a.Expand(s_prkForEmpty.DecodeHex(), ReadOnlySpan<byte>.Empty, count);
@@ -726,7 +726,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void ExpandWithMaxCount()
         {
-            var a = new HkdfSha512();
+            var a = KeyDerivationAlgorithm.HkdfSha512;
 
             var expected = s_outputForEmpty.DecodeHex();
             var actual = a.Expand(s_prkForEmpty.DecodeHex(), ReadOnlySpan<byte>.Empty, a.MaxCount);
@@ -739,7 +739,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void ExpandWithCountWithLongPrk()
         {
-            var a = new HkdfSha512();
+            var a = KeyDerivationAlgorithm.HkdfSha512;
 
             var b = a.Expand((s_prkForEmpty + s_prkForEmpty).DecodeHex(), ReadOnlySpan<byte>.Empty, 256);
 
@@ -754,7 +754,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void ExpandWithSpanWithPrkTooShort()
         {
-            var a = new HkdfSha512();
+            var a = KeyDerivationAlgorithm.HkdfSha512;
 
             Assert.Throws<ArgumentException>("pseudorandomKey", () => a.Expand(new byte[a.PseudorandomKeySize - 1], ReadOnlySpan<byte>.Empty, new byte[0]));
         }
@@ -762,7 +762,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void ExpandWithSpanTooLarge()
         {
-            var a = new HkdfSha512();
+            var a = KeyDerivationAlgorithm.HkdfSha512;
 
             Assert.Throws<ArgumentException>("bytes", () => a.Expand(s_prkForEmpty.DecodeHex(), ReadOnlySpan<byte>.Empty, new byte[a.MaxCount + 1]));
         }
@@ -770,7 +770,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void ExpandWithKeyOverlapping()
         {
-            var a = new HkdfSha512();
+            var a = KeyDerivationAlgorithm.HkdfSha512;
             var b = new byte[200];
 
             Assert.Throws<ArgumentException>("bytes", () => a.Expand(b.AsSpan(10, a.PseudorandomKeySize), ReadOnlySpan<byte>.Empty, b.AsSpan(30, 100)));
@@ -780,8 +780,8 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void ExpandWithInfoOverlapping()
         {
-            var a = new HkdfSha512();
-            var x = new X25519();
+            var a = KeyDerivationAlgorithm.HkdfSha512;
+            var x = KeyAgreementAlgorithm.X25519;
 
             using (var k = new Key(x))
             using (var s = x.Agree(k, k.PublicKey))
@@ -807,7 +807,7 @@ namespace NSec.Tests.Algorithms
         [InlineData(100)]
         public static void ExpandWithSpanSuccess(int count)
         {
-            var a = new HkdfSha512();
+            var a = KeyDerivationAlgorithm.HkdfSha512;
 
             var expected = s_outputForEmpty.DecodeHex().Substring(0, count);
             var actual = new byte[count];
@@ -820,7 +820,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void ExpandWithMaxSpan()
         {
-            var a = new HkdfSha512();
+            var a = KeyDerivationAlgorithm.HkdfSha512;
 
             var expected = s_outputForEmpty.DecodeHex();
             var actual = new byte[a.MaxCount];
@@ -833,8 +833,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void ExpandWithSpanWithLongPrk()
         {
-            var a = new HkdfSha512();
-
+            var a = KeyDerivationAlgorithm.HkdfSha512;
             var b = new byte[256];
 
             a.Expand((s_prkForEmpty + s_prkForEmpty).DecodeHex(), ReadOnlySpan<byte>.Empty, b);

@@ -17,7 +17,7 @@ namespace NSec.Tests.Rfc
         [MemberData(nameof(Rfc5869TestVectors))]
         public static void TestOneStep(string ikm, string salt, string info, string expectedPrk, string expectedOkm)
         {
-            var a = new HkdfSha256();
+            var a = KeyDerivationAlgorithm.HkdfSha256;
 
             using (var s = SharedSecret.Import(ikm.DecodeHex()))
             {
@@ -30,7 +30,7 @@ namespace NSec.Tests.Rfc
         [MemberData(nameof(Rfc5869TestVectors))]
         public static void TestTwoStep(string ikm, string salt, string info, string expectedPrk, string expectedOkm)
         {
-            var a = new HkdfSha256();
+            var a = KeyDerivationAlgorithm.HkdfSha256;
 
             using (var s = SharedSecret.Import(ikm.DecodeHex()))
             {

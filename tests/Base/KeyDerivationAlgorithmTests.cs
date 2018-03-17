@@ -41,7 +41,7 @@ namespace NSec.Tests.Base
 
             if (!a.SupportsSalt)
             {
-                var x = new X25519();
+                var x = KeyAgreementAlgorithm.X25519;
 
                 using (var k = new Key(x))
                 using (var s = x.Agree(k, k.PublicKey))
@@ -56,7 +56,7 @@ namespace NSec.Tests.Base
         public static void DeriveBytesWithNegativeCount(Type algorithmType)
         {
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
-            var x = new X25519();
+            var x = KeyAgreementAlgorithm.X25519;
 
             using (var k = new Key(x))
             using (var s = x.Agree(k, k.PublicKey))
@@ -70,7 +70,7 @@ namespace NSec.Tests.Base
         public static void DeriveBytesWithCountTooLarge(Type algorithmType)
         {
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
-            var x = new X25519();
+            var x = KeyAgreementAlgorithm.X25519;
 
             if (a.MaxCount == int.MaxValue)
             {
@@ -89,7 +89,7 @@ namespace NSec.Tests.Base
         public static void DeriveBytesWithZeroCount(Type algorithmType)
         {
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
-            var x = new X25519();
+            var x = KeyAgreementAlgorithm.X25519;
 
             using (var k = new Key(x))
             using (var s = x.Agree(k, k.PublicKey))
@@ -106,7 +106,7 @@ namespace NSec.Tests.Base
         public static void DeriveBytesWithMaxCount(Type algorithmType)
         {
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
-            var x = new X25519();
+            var x = KeyAgreementAlgorithm.X25519;
 
             using (var k = new Key(x))
             using (var s = x.Agree(k, k.PublicKey))
@@ -144,7 +144,7 @@ namespace NSec.Tests.Base
                 return;
             }
 
-            var x = new X25519();
+            var x = KeyAgreementAlgorithm.X25519;
 
             using (var k = new Key(x))
             using (var s = x.Agree(k, k.PublicKey))
@@ -158,7 +158,7 @@ namespace NSec.Tests.Base
         public static void DeriveBytesWithSaltOverlapping(Type algorithmType)
         {
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
-            var x = new X25519();
+            var x = KeyAgreementAlgorithm.X25519;
 
             if (!a.SupportsSalt)
             {
@@ -180,7 +180,7 @@ namespace NSec.Tests.Base
         public static void DeriveBytesWithInfoOverlapping(Type algorithmType)
         {
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
-            var x = new X25519();
+            var x = KeyAgreementAlgorithm.X25519;
 
             using (var k = new Key(x))
             using (var s = x.Agree(k, k.PublicKey))
@@ -197,7 +197,7 @@ namespace NSec.Tests.Base
         public static void DeriveBytesWithSpanTooLarge(Type algorithmType)
         {
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
-            var x = new X25519();
+            var x = KeyAgreementAlgorithm.X25519;
 
             if (a.MaxCount == int.MaxValue)
             {
@@ -216,7 +216,7 @@ namespace NSec.Tests.Base
         public static void DeriveBytesWithEmptySpan(Type algorithmType)
         {
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
-            var x = new X25519();
+            var x = KeyAgreementAlgorithm.X25519;
 
             using (var k = new Key(x))
             using (var s = x.Agree(k, k.PublicKey))
@@ -230,7 +230,7 @@ namespace NSec.Tests.Base
         public static void DeriveBytesWithMaxSpan(Type algorithmType)
         {
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
-            var x = new X25519();
+            var x = KeyAgreementAlgorithm.X25519;
 
             using (var k = new Key(x))
             using (var s = x.Agree(k, k.PublicKey))
@@ -262,7 +262,7 @@ namespace NSec.Tests.Base
 
             if (!a.SupportsSalt)
             {
-                var x = new X25519();
+                var x = KeyAgreementAlgorithm.X25519;
 
                 using (var k = new Key(x))
                 using (var s = x.Agree(k, k.PublicKey))
@@ -277,7 +277,7 @@ namespace NSec.Tests.Base
         public static void DeriveKeyWithNullAlgorithm(Type algorithmType)
         {
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
-            var x = new X25519();
+            var x = KeyAgreementAlgorithm.X25519;
 
             using (var k = new Key(x))
             using (var s = x.Agree(k, k.PublicKey))

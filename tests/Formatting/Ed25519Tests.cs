@@ -13,7 +13,7 @@ namespace NSec.Tests.Formatting
         [Fact]
         public static void PkixPrivateKey()
         {
-            var a = new Ed25519();
+            var a = SignatureAlgorithm.Ed25519;
             var b = Utilities.RandomBytes.Slice(0, a.PrivateKeySize);
 
             using (var k = Key.Import(a, b, KeyBlobFormat.RawPrivateKey, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport }))
@@ -37,7 +37,7 @@ namespace NSec.Tests.Formatting
         [Fact]
         public static void PkixPrivateKeyText()
         {
-            var a = new Ed25519();
+            var a = SignatureAlgorithm.Ed25519;
             var b = Utilities.RandomBytes.Slice(0, a.PrivateKeySize);
 
             using (var k = Key.Import(a, b, KeyBlobFormat.RawPrivateKey, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport }))
@@ -56,7 +56,7 @@ namespace NSec.Tests.Formatting
         [Fact]
         public static void PkixPublicKey()
         {
-            var a = new Ed25519();
+            var a = SignatureAlgorithm.Ed25519;
             var b = Utilities.RandomBytes.Slice(0, a.PrivateKeySize);
 
             using (var k = Key.Import(a, b, KeyBlobFormat.RawPrivateKey))
@@ -78,7 +78,7 @@ namespace NSec.Tests.Formatting
         [Fact]
         public static void PkixPublicKeyText()
         {
-            var a = new Ed25519();
+            var a = SignatureAlgorithm.Ed25519;
             var b = Utilities.RandomBytes.Slice(0, a.PrivateKeySize);
 
             using (var k = Key.Import(a, b, KeyBlobFormat.RawPrivateKey))

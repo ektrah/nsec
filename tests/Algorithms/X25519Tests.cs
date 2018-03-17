@@ -33,7 +33,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void Properties()
         {
-            var a = new X25519();
+            var a = KeyAgreementAlgorithm.X25519;
 
             Assert.Equal(32, a.PublicKeySize);
             Assert.Equal(32, a.PrivateKeySize);
@@ -48,8 +48,8 @@ namespace NSec.Tests.Algorithms
         [MemberData(nameof(Rfc7748TestVectors))]
         public static void BitMaskedAgree(string privateKey, string publicKey, string sharedSecret)
         {
-            var a = new X25519();
-            var kdf = new HkdfSha256();
+            var a = KeyAgreementAlgorithm.X25519;
+            var kdf = KeyDerivationAlgorithm.HkdfSha256;
 
             var pk1 = publicKey.DecodeHex();
             var pk2 = publicKey.DecodeHex();
@@ -79,7 +79,7 @@ namespace NSec.Tests.Algorithms
         [MemberData(nameof(Rfc7748TestVectors))]
         public static void BitMaskedEquals(string privateKey, string publicKey, string sharedSecret)
         {
-            var a = new X25519();
+            var a = KeyAgreementAlgorithm.X25519;
 
             var pk1 = publicKey.DecodeHex();
             var pk2 = publicKey.DecodeHex();
@@ -101,7 +101,7 @@ namespace NSec.Tests.Algorithms
         [MemberData(nameof(TestVectorsAllZeros))]
         public static void TestAllZeros(string privateKey, string publicKey)
         {
-            var a = new X25519();
+            var a = KeyAgreementAlgorithm.X25519;
 
             var pk = PublicKey.Import(a, publicKey.DecodeHex(), KeyBlobFormat.RawPublicKey);
 
@@ -118,8 +118,8 @@ namespace NSec.Tests.Algorithms
         [MemberData(nameof(TestVectorsNotAllZeros))]
         public static void TestNotAllZeros(string privateKey, string publicKey, string sharedSecret)
         {
-            var a = new X25519();
-            var kdf = new HkdfSha256();
+            var a = KeyAgreementAlgorithm.X25519;
+            var kdf = KeyDerivationAlgorithm.HkdfSha256;
 
             using (var k = Key.Import(a, privateKey.DecodeHex(), KeyBlobFormat.RawPrivateKey))
             using (var sharedSecretExpected = SharedSecret.Import(sharedSecret.DecodeHex()))

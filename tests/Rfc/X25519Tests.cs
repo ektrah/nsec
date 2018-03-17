@@ -20,8 +20,8 @@ namespace NSec.Tests.Rfc
         [MemberData(nameof(Rfc7748TestVectors))]
         public static void Test(string privateKey, string publicKey, string sharedSecret)
         {
-            var a = new X25519();
-            var kdf = new HkdfSha256();
+            var a = KeyAgreementAlgorithm.X25519;
+            var kdf = KeyDerivationAlgorithm.HkdfSha256;
 
             using (var k = Key.Import(a, privateKey.DecodeHex(), KeyBlobFormat.RawPrivateKey))
             using (var sharedSecretExpected = SharedSecret.Import(sharedSecret.DecodeHex()))

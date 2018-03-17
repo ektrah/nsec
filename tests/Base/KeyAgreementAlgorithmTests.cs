@@ -40,7 +40,7 @@ namespace NSec.Tests.Base
         {
             var a = (KeyAgreementAlgorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(new Ed25519()))
+            using (var k = new Key(SignatureAlgorithm.Ed25519))
             {
                 Assert.Throws<ArgumentException>("key", () => a.Agree(k, null));
             }
@@ -68,7 +68,7 @@ namespace NSec.Tests.Base
             var a = (KeyAgreementAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k1 = new Key(a))
-            using (var k2 = new Key(new Ed25519()))
+            using (var k2 = new Key(SignatureAlgorithm.Ed25519))
             {
                 Assert.NotNull(k1);
                 Assert.Same(a, k1.Algorithm);
@@ -129,7 +129,7 @@ namespace NSec.Tests.Base
         {
             var a = (KeyAgreementAlgorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(new Ed25519()))
+            using (var k = new Key(SignatureAlgorithm.Ed25519))
             {
                 Assert.Throws<ArgumentException>("key", () => a.TryAgree(k, null, out SharedSecret s));
             }
@@ -154,7 +154,7 @@ namespace NSec.Tests.Base
             var a = (KeyAgreementAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k1 = new Key(a))
-            using (var k2 = new Key(new Ed25519()))
+            using (var k2 = new Key(SignatureAlgorithm.Ed25519))
             {
                 Assert.Throws<ArgumentException>("otherPartyPublicKey", () => a.TryAgree(k1, k2.PublicKey, out SharedSecret s));
             }

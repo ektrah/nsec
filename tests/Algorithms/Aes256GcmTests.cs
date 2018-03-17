@@ -11,7 +11,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void Properties()
         {
-            var a = new Aes256Gcm();
+            var a = AeadAlgorithm.Aes256Gcm;
 
             Assert.Equal(32, a.KeySize);
             Assert.Equal(12, a.NonceSize);

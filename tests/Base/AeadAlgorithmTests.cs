@@ -43,7 +43,7 @@ namespace NSec.Tests.Base
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(new Ed25519()))
+            using (var k = new Key(SignatureAlgorithm.Ed25519))
             {
                 Assert.Throws<ArgumentException>("key", () => a.Encrypt(k, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
             }
@@ -112,7 +112,7 @@ namespace NSec.Tests.Base
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(new Ed25519()))
+            using (var k = new Key(SignatureAlgorithm.Ed25519))
             {
                 Assert.Throws<ArgumentException>("key", () => a.Encrypt(k, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
             }
@@ -296,7 +296,7 @@ namespace NSec.Tests.Base
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(new Ed25519()))
+            using (var k = new Key(SignatureAlgorithm.Ed25519))
             {
                 Assert.Throws<ArgumentException>("key", () => a.Decrypt(k, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
             }
@@ -380,7 +380,7 @@ namespace NSec.Tests.Base
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(new Ed25519()))
+            using (var k = new Key(SignatureAlgorithm.Ed25519))
             {
                 Assert.Throws<ArgumentException>("key", () => a.Decrypt(k, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
             }
@@ -545,7 +545,7 @@ namespace NSec.Tests.Base
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(new Ed25519()))
+            using (var k = new Key(SignatureAlgorithm.Ed25519))
             {
                 Assert.Throws<ArgumentException>("key", () => a.TryDecrypt(k, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out byte[] pt));
             }
@@ -651,7 +651,7 @@ namespace NSec.Tests.Base
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(new Ed25519()))
+            using (var k = new Key(SignatureAlgorithm.Ed25519))
             {
                 Assert.Throws<ArgumentException>("key", () => a.TryDecrypt(k, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
             }

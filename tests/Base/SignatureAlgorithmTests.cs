@@ -40,7 +40,7 @@ namespace NSec.Tests.Base
         {
             var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(new X25519()))
+            using (var k = new Key(KeyAgreementAlgorithm.X25519))
             {
                 Assert.Throws<ArgumentException>("key", () => a.Sign(k, ReadOnlySpan<byte>.Empty));
             }
@@ -80,7 +80,7 @@ namespace NSec.Tests.Base
         {
             var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(new X25519()))
+            using (var k = new Key(KeyAgreementAlgorithm.X25519))
             {
                 Assert.Throws<ArgumentException>("key", () => a.Sign(k, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
             }
@@ -129,7 +129,7 @@ namespace NSec.Tests.Base
         {
             var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(new X25519()))
+            using (var k = new Key(KeyAgreementAlgorithm.X25519))
             {
                 Assert.Throws<ArgumentException>("publicKey", () => a.TryVerify(k.PublicKey, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
             }
@@ -183,7 +183,7 @@ namespace NSec.Tests.Base
         {
             var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
 
-            using (var k = new Key(new X25519()))
+            using (var k = new Key(KeyAgreementAlgorithm.X25519))
             {
                 Assert.Throws<ArgumentException>("publicKey", () => a.Verify(k.PublicKey, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
             }

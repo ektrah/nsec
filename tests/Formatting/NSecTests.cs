@@ -31,7 +31,7 @@ namespace NSec.Tests.Formatting
         [Fact]
         public static void Ed25519Private()
         {
-            var a = new Ed25519();
+            var a = SignatureAlgorithm.Ed25519;
 
             Test(a, a.PrivateKeySize, KeyBlobFormat.RawPrivateKey, a.PrivateKeySize, KeyBlobFormat.NSecPrivateKey, new byte[] { 0xDE, 0x34, 0x42, 0xDE });
         }
@@ -39,7 +39,7 @@ namespace NSec.Tests.Formatting
         [Fact]
         public static void Ed25519Public()
         {
-            var a = new Ed25519();
+            var a = SignatureAlgorithm.Ed25519;
 
             Test(a, a.PrivateKeySize, KeyBlobFormat.RawPrivateKey, a.PublicKeySize, KeyBlobFormat.NSecPublicKey, new byte[] { 0xDE, 0x35, 0x42, 0xDE });
         }
@@ -47,7 +47,7 @@ namespace NSec.Tests.Formatting
         [Fact]
         public static void X25519Private()
         {
-            var a = new X25519();
+            var a = KeyAgreementAlgorithm.X25519;
 
             Test(a, a.PrivateKeySize, KeyBlobFormat.RawPrivateKey, a.PrivateKeySize, KeyBlobFormat.NSecPrivateKey, new byte[] { 0xDE, 0x36, 0x41, 0xDE });
         }
@@ -55,7 +55,7 @@ namespace NSec.Tests.Formatting
         [Fact]
         public static void X25519Public()
         {
-            var a = new X25519();
+            var a = KeyAgreementAlgorithm.X25519;
 
             Test(a, a.PrivateKeySize, KeyBlobFormat.RawPrivateKey, a.PublicKeySize, KeyBlobFormat.NSecPublicKey, new byte[] { 0xDE, 0x37, 0x41, 0xDE });
         }

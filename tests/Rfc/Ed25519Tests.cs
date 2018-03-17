@@ -19,7 +19,7 @@ namespace NSec.Tests.Rfc
         [MemberData(nameof(Rfc8032TestVectors))]
         public static void Test(string sk, string pk, string msg, string sig)
         {
-            var a = new Ed25519();
+            var a = SignatureAlgorithm.Ed25519;
 
             var p = PublicKey.Import(a, pk.DecodeHex(), KeyBlobFormat.RawPublicKey);
 

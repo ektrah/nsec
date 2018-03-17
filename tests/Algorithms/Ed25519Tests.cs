@@ -11,7 +11,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void Properties()
         {
-            var a = new Ed25519();
+            var a = SignatureAlgorithm.Ed25519;
 
             Assert.Equal(32, a.PublicKeySize);
             Assert.Equal(32, a.PrivateKeySize);

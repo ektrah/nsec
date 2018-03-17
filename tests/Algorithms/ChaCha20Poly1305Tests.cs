@@ -11,7 +11,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void Properties()
         {
-            var a = new ChaCha20Poly1305();
+            var a = AeadAlgorithm.ChaCha20Poly1305;
 
             Assert.Equal(32, a.KeySize);
             Assert.Equal(12, a.NonceSize);
