@@ -123,7 +123,7 @@ namespace NSec.Cryptography
             Span<byte> signature);
 
         private protected abstract bool TryVerifyCore(
-            ReadOnlySpan<byte> publicKey,
+            byte[] publicKey,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> signature);
     }

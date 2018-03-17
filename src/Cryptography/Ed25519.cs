@@ -199,7 +199,7 @@ namespace NSec.Cryptography
         }
 
         private protected override bool TryVerifyCore(
-            ReadOnlySpan<byte> publicKey,
+            byte[] publicKey,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> signature)
         {
@@ -210,7 +210,7 @@ namespace NSec.Cryptography
                 in MemoryMarshal.GetReference(signature),
                 in MemoryMarshal.GetReference(data),
                 (ulong)data.Length,
-                in MemoryMarshal.GetReference(publicKey));
+                publicKey);
 
             return error == 0;
         }

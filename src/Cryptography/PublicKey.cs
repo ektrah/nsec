@@ -22,7 +22,7 @@ namespace NSec.Cryptography
 
         public Algorithm Algorithm => _algorithm;
 
-        internal ReadOnlySpan<byte> Bytes => _bytes;
+        internal byte[] Bytes => _bytes;
 
         public static PublicKey Import(
             Algorithm algorithm,

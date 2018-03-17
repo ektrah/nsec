@@ -69,7 +69,7 @@ Interop.X25519.cs:
   - crypto_scalarmult_curve25519_BYTES
   - crypto_scalarmult_curve25519_SCALARBYTES
   functions:
-  - crypto_scalarmult_curve25519 (SecureMemoryHandle q, SecureMemoryHandle n)
+  - crypto_scalarmult_curve25519 (SecureMemoryHandle q, SecureMemoryHandle n, byte[] p)
   - crypto_scalarmult_curve25519_base (byte[] q, SecureMemoryHandle n)
   - crypto_scalarmult_curve25519_bytes
   - crypto_scalarmult_curve25519_scalarbytes
@@ -89,7 +89,7 @@ Interop.Ed25519.cs:
   - crypto_sign_ed25519_seed_keypair (byte[] pk, SecureMemoryHandle sk)
   - crypto_sign_ed25519_seedbytes
   - crypto_sign_ed25519_sk_to_seed (SecureMemoryHandle sk)
-  - crypto_sign_ed25519_verify_detached
+  - crypto_sign_ed25519_verify_detached (byte[] pk)
 
 Interop.HmacSha256.cs:
   include: include/sodium/crypto_auth_hmacsha256.h

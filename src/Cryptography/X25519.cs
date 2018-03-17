@@ -97,7 +97,7 @@ namespace NSec.Cryptography
 
         private protected override bool TryAgreeCore(
             SecureMemoryHandle keyHandle,
-            ReadOnlySpan<byte> otherPartyPublicKey,
+            byte[] otherPartyPublicKey,
             out SecureMemoryHandle sharedSecretHandle)
         {
             Debug.Assert(keyHandle != null);
@@ -109,7 +109,7 @@ namespace NSec.Cryptography
             int error = crypto_scalarmult_curve25519(
                 sharedSecretHandle,
                 keyHandle,
-                in MemoryMarshal.GetReference(otherPartyPublicKey));
+                otherPartyPublicKey);
 
             return error == 0;
         }

@@ -46,6 +46,6 @@ internal static partial class Interop
             in byte sig,
             in byte m,
             ulong mlen,
-            in byte pk);
+            byte[] pk);
     }
 }
