@@ -3,7 +3,7 @@ using System.Diagnostics;
 using NSec.Cryptography;
 using Xunit;
 
-namespace NSec.Tests.Examples.Nonces
+namespace NSec.Tests.Examples
 {
     public enum Role
     {
@@ -247,7 +247,7 @@ namespace NSec.Tests.Examples.Nonces
 
     #endregion
 
-    public static class Tests
+    public static class Nonces
     {
         [Fact]
         public static void Rfc5288()

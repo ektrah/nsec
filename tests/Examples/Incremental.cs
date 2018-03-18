@@ -4,7 +4,7 @@ using NSec.Cryptography;
 using NSec.Experimental;
 using Xunit;
 
-namespace NSec.Test.Examples
+namespace NSec.Tests.Examples
 {
     public static class Incremental
     {
