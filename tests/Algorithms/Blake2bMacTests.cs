@@ -9,7 +9,7 @@ namespace NSec.Tests.Algorithms
         #region Properties
 
         [Fact]
-        public static void Properties()
+        public static void Properties256()
         {
             var a = MacAlgorithm.Blake2b_256;
 
@@ -18,6 +18,53 @@ namespace NSec.Tests.Algorithms
             Assert.Equal(64, a.MaxKeySize);
 
             Assert.Equal(32, a.MacSize);
+        }
+
+        [Fact]
+        public static void Properties512()
+        {
+            var a = MacAlgorithm.Blake2b_512;
+
+            Assert.Equal(16, a.MinKeySize);
+            Assert.Equal(32, a.DefaultKeySize);
+            Assert.Equal(64, a.MaxKeySize);
+
+            Assert.Equal(64, a.MacSize);
+        }
+
+        [Theory]
+        [InlineData(128 / 8)]
+        [InlineData(160 / 8)]
+        [InlineData(192 / 8)]
+        [InlineData(224 / 8)]
+        [InlineData(256 / 8)]
+        [InlineData(384 / 8)]
+        [InlineData(512 / 8)]
+        public static void PropertiesConstructed(int macSize)
+        {
+            var a = new Blake2bMac(macSize);
+
+            Assert.Equal(16, a.MinKeySize);
+            Assert.Equal(32, a.DefaultKeySize);
+            Assert.Equal(64, a.MaxKeySize);
+
+            Assert.Equal(macSize, a.MacSize);
+        }
+
+        #endregion
+
+        #region Ctor #2
+
+        [Fact]
+        public static void CtorWithMacSizeTooSmall()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>("macSize", () => new Blake2bMac(16 - 1));
+        }
+
+        [Fact]
+        public static void CtorWithMacSizeTooLarge()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>("macSize", () => new Blake2bMac(64 + 1));
         }
 
         #endregion
