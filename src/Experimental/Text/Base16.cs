@@ -38,7 +38,7 @@ namespace NSec.Experimental.Text
             return result;
         }
 
-        public static byte[] DecodeUtf8(
+        public static byte[] DecodeFromUtf8(
             ReadOnlySpan<byte> base16)
         {
             if (!TryGetDecodedLength(base16, out int length))
@@ -46,7 +46,7 @@ namespace NSec.Experimental.Text
                 throw Error.Format_BadBase16();
             }
             byte[] result = new byte[length];
-            if (!TryDecodeUtf8(base16, result))
+            if (!TryDecodeFromUtf8(base16, result))
             {
                 throw Error.Format_BadBase16();
             }
@@ -85,7 +85,7 @@ namespace NSec.Experimental.Text
             Debug.Assert(di == base16.Length);
         }
 
-        public static void EncodeUtf8(
+        public static void EncodeToUtf8(
             ReadOnlySpan<byte> bytes,
             Span<byte> base16)
         {
@@ -153,7 +153,7 @@ namespace NSec.Experimental.Text
             return err == 0;
         }
 
-        public static bool TryDecodeUtf8(
+        public static bool TryDecodeFromUtf8(
             ReadOnlySpan<byte> base16,
             Span<byte> bytes)
         {
