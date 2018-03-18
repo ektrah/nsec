@@ -6,7 +6,7 @@ using NSec.Cryptography;
 using NSec.Cryptography.Formatting;
 using static Interop.Libsodium;
 
-namespace NSec.Experimental
+namespace NSec.Experimental.Sodium
 {
     public sealed class NaclXSalsa20Poly1305 : NaclSecretBoxAlgorithm
     {

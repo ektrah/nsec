@@ -3,7 +3,7 @@ using System.Diagnostics;
 using NSec.Cryptography;
 using static Interop.Libsodium;
 
-namespace NSec.Experimental
+namespace NSec.Experimental.Sodium
 {
     public abstract class NaclSecretBoxAlgorithm : Algorithm
     {
