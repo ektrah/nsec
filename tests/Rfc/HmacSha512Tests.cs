@@ -31,7 +31,7 @@ namespace NSec.Tests.Rfc
         [MemberData(nameof(Rfc4868TestVectors))]
         public static void Test(string key, string msg, string mac)
         {
-            var a = new HmacSha512();
+            var a = MacAlgorithm.HmacSha512;
 
             using (var k = Key.Import(a, key.DecodeHex(), KeyBlobFormat.RawSymmetricKey))
             {

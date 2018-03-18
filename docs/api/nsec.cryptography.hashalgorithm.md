@@ -20,11 +20,18 @@ Represents a cryptographic hash algorithm.
 ## Static Properties
 
 
-### Blake2b
+### Blake2b_256
 
-Gets the unkeyed BLAKE2b algorithm.
+Gets the unkeyed BLAKE2b-256 algorithm.
 
-    public static Blake2b Blake2b { get; }
+    public static Blake2b Blake2b_256 { get; }
+
+
+### Blake2b_512
+
+Gets the unkeyed BLAKE2b-512 algorithm.
+
+    public static Blake2b Blake2b_512 { get; }
 
 
 ### Sha256
@@ -44,38 +51,15 @@ Gets the SHA-512 hash algorithm.
 ## Properties
 
 
-### DefaultHashSize
+### HashSize
 
-Gets the default hash size, in bytes.
+Gets the size of a hash.
 
-    public int DefaultHashSize { get; }
-
-#### Property Value
-
-The default hash size, in bytes.
-
-
-
-### MaxHashSize
-
-Gets the maximum hash size, in bytes.
-
-    public int MaxHashSize { get; }
+    public int HashSize { get; }
 
 #### Property Value
 
-The maximum hash size, in bytes.
-
-
-### MinHashSize
-
-Gets the minimum hash size, in bytes.
-
-    public int MinHashSize { get; }
-
-#### Property Value
-
-The minimum hash size, in bytes.
+The hash size, in bytes.
 
 
 ## Methods
@@ -98,33 +82,6 @@ data
 
 The computed hash.
 
-### Hash(ReadOnlySpan<byte>, int)
-
-Computes a hash for the specified input data and returns it as an array of
-bytes of the specified size.
-
-    public byte[] Hash(
-        ReadOnlySpan<byte> data,
-        int hashSize)
-
-#### Parameters
-
-data
-: The data to hash.
-
-hashSize
-: The size, in bytes, of the hash to compute.
-
-#### Return Value
-
-The computed hash.
-
-#### Exceptions
-
-ArgumentOutOfRangeException
-: `hashSize` is less than [[MinHashSize|HashAlgorithm Class#MinHashSize]] or
-    greater than [[MaxHashSize|HashAlgorithm Class#MaxHashSize]].
-
 
 ### Hash(ReadOnlySpan<byte>, Span<byte>)
 
@@ -145,14 +102,12 @@ hash
 #### Exceptions
 
 ArgumentException
-: `hash.Length` is less than
-    [[MinHashSize|HashAlgorithm Class#MinHashSize]] or greater than
-    [[MaxHashSize|HashAlgorithm Class#MaxHashSize]].
+: `hash.Length` is not equal to [[HashSize|HashAlgorithm Class#HashSize]].
 
 
 ### TryVerify(ReadOnlySpan<byte>, ReadOnlySpan<byte>)
 
-Attempts to verify the hash for the specified input data.
+Attempts to verify the specified input data using the specified hash.
 
     public bool TryVerify(
         ReadOnlySpan<byte> data,
@@ -161,10 +116,12 @@ Attempts to verify the hash for the specified input data.
 #### Parameters
 
 data
-: The data to be verified.
+: The data to verify.
+    Verification fails if this is not the same data as used for computing the
+    hash.
 
 hash
-: The hash to be verified.
+: The hash for the data.
 
 #### Return Value
 
@@ -173,7 +130,7 @@ hash
 
 ### Verify(ReadOnlySpan<byte>, ReadOnlySpan<byte>)
 
-Verifies the hash for the specified input data.
+Verifies the specified input data using the specified hash.
 
     public void Verify(
         ReadOnlySpan<byte> data,
@@ -182,10 +139,12 @@ Verifies the hash for the specified input data.
 #### Parameters
 
 data
-: The data to be verified.
+: The data to verify.
+    Verification fails if this is not the same data as used for computing the
+    hash.
 
 hash
-: The hash to be verified.
+: The hash for the data.
 
 #### Exceptions
 

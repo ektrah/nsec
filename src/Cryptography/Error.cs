@@ -54,13 +54,11 @@ namespace NSec.Cryptography
             return new ArgumentException(string.Format(ResourceManager.GetString("Argument_FormatNotSupported"), arg0), paramName);
         }
 
-        internal static ArgumentException Argument_HashSize(
+        internal static ArgumentException Argument_HashLength(
             string paramName,
-            string arg0,
-            string arg1,
-            string arg2)
+            string arg0)
         {
-            return new ArgumentException(string.Format(ResourceManager.GetString("Argument_HashSize"), arg0, arg1, arg2), paramName);
+            return new ArgumentException(string.Format(ResourceManager.GetString("Argument_HashLength"), arg0), paramName);
         }
 
         internal static ArgumentException Argument_InvalidPrkLength(
@@ -85,13 +83,19 @@ namespace NSec.Cryptography
             return new ArgumentException(string.Format(ResourceManager.GetString("Argument_KeyWrongAlgorithm"), arg0, arg1), paramName);
         }
 
-        internal static ArgumentException Argument_MacSize(
+        internal static ArgumentException Argument_MacKey(
             string paramName,
             string arg0,
-            string arg1,
-            string arg2)
+            string arg1)
         {
-            return new ArgumentException(string.Format(ResourceManager.GetString("Argument_MacSize"), arg0, arg1, arg2), paramName);
+            return new ArgumentException(string.Format(ResourceManager.GetString("Argument_MacKey"), arg0, arg1), paramName);
+        }
+
+        internal static ArgumentException Argument_MacLength(
+            string paramName,
+            string arg0)
+        {
+            return new ArgumentException(string.Format(ResourceManager.GetString("Argument_MacLength"), arg0), paramName);
         }
 
         internal static ArgumentException Argument_MinMaxValue(
@@ -340,6 +344,11 @@ namespace NSec.Cryptography
         internal static InvalidOperationException InvalidOperation_ExportNotAllowed()
         {
             return new InvalidOperationException(ResourceManager.GetString("InvalidOperation_ExportNotAllowed"));
+        }
+
+        internal static InvalidOperationException InvalidOperation_UninitializedState()
+        {
+            return new InvalidOperationException(ResourceManager.GetString("InvalidOperation_UninitializedState"));
         }
 
         internal static NotSupportedException NotSupported_CreateKey()

@@ -11,11 +11,9 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void Properties()
         {
-            var a = new Blake2b();
+            var a = HashAlgorithm.Blake2b_256;
 
-            Assert.Equal(32, a.MinHashSize);
-            Assert.Equal(32, a.DefaultHashSize);
-            Assert.Equal(64, a.MaxHashSize);
+            Assert.Equal(32, a.HashSize);
         }
 
         #endregion

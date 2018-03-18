@@ -13,11 +13,9 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void Properties()
         {
-            var a = new Sha256();
+            var a = HashAlgorithm.Sha256;
 
-            Assert.Equal(32, a.MinHashSize);
-            Assert.Equal(32, a.DefaultHashSize);
-            Assert.Equal(32, a.MaxHashSize);
+            Assert.Equal(32, a.HashSize);
         }
 
         #endregion
@@ -27,28 +25,12 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void HashEmpty()
         {
-            var a = new Sha256();
+            var a = HashAlgorithm.Sha256;
 
             var expected = s_hashOfEmpty.DecodeHex();
             var actual = a.Hash(ReadOnlySpan<byte>.Empty);
 
-            Assert.Equal(a.DefaultHashSize, actual.Length);
-            Assert.Equal(expected, actual);
-        }
-
-        #endregion
-
-        #region Hash #2
-
-        [Fact]
-        public static void HashEmptyWithSize()
-        {
-            var a = new Sha256();
-
-            var expected = s_hashOfEmpty.DecodeHex();
-            var actual = a.Hash(ReadOnlySpan<byte>.Empty, a.MaxHashSize);
-
-            Assert.Equal(a.MaxHashSize, actual.Length);
+            Assert.Equal(a.HashSize, actual.Length);
             Assert.Equal(expected, actual);
         }
 
@@ -59,7 +41,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void HashEmptyWithSpan()
         {
-            var a = new Sha256();
+            var a = HashAlgorithm.Sha256;
 
             var expected = s_hashOfEmpty.DecodeHex();
             var actual = new byte[expected.Length];

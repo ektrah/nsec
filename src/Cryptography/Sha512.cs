@@ -34,9 +34,7 @@ namespace NSec.Cryptography
         private static int s_selfTest;
 
         public Sha512() : base(
-            minHashSize: crypto_hash_sha512_BYTES / 2,
-            defaultHashSize: crypto_hash_sha512_BYTES,
-            maxHashSize: crypto_hash_sha512_BYTES)
+            hashSize: crypto_hash_sha512_BYTES)
         {
             if (s_selfTest == 0)
             {
@@ -45,27 +43,55 @@ namespace NSec.Cryptography
             }
         }
 
+        internal override bool FinalizeAndTryVerifyCore(
+            ref IncrementalHashState state,
+            ReadOnlySpan<byte> hash)
+        {
+            Debug.Assert(hash.Length <= crypto_hash_sha512_BYTES);
+
+            Span<byte> temp = stackalloc byte[crypto_hash_sha512_BYTES];
+
+            crypto_hash_sha512_final(ref state.sha512, ref MemoryMarshal.GetReference(temp));
+
+            int result = sodium_memcmp(in MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(hash), (UIntPtr)hash.Length);
+
+            return result == 0;
+        }
+
+        internal override void FinalizeCore(
+            ref IncrementalHashState state,
+            Span<byte> hash)
+        {
+            Debug.Assert(hash.Length == crypto_hash_sha512_BYTES);
+
+            crypto_hash_sha512_final(ref state.sha512, ref MemoryMarshal.GetReference(hash));
+        }
+
+        internal override void InitializeCore(
+            int hashSize,
+            out IncrementalHashState state)
+        {
+            Debug.Assert(hashSize == crypto_hash_sha512_BYTES);
+
+            crypto_hash_sha512_init(out state.sha512);
+        }
+
+        internal override void UpdateCore(
+            ref IncrementalHashState state,
+            ReadOnlySpan<byte> data)
+        {
+            crypto_hash_sha512_update(ref state.sha512, in MemoryMarshal.GetReference(data), (ulong)data.Length);
+        }
+
         private protected override void HashCore(
             ReadOnlySpan<byte> data,
             Span<byte> hash)
         {
-            Debug.Assert(hash.Length >= crypto_hash_sha512_BYTES / 2);
-            Debug.Assert(hash.Length <= crypto_hash_sha512_BYTES);
+            Debug.Assert(hash.Length == crypto_hash_sha512_BYTES);
 
-            // crypto_hash_sha512_final expects an output buffer with a length
-            // of exactly crypto_hash_sha512_BYTES. So we need to copy when a
-            // truncated output is requested.
-
-            if (hash.Length == crypto_hash_sha512_BYTES)
-            {
-                crypto_hash_sha512(ref MemoryMarshal.GetReference(hash), in MemoryMarshal.GetReference(data), (ulong)data.Length);
-            }
-            else
-            {
-                Span<byte> temp = stackalloc byte[crypto_hash_sha512_BYTES];
-                crypto_hash_sha512(ref MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(data), (ulong)data.Length);
-                temp.Slice(0, hash.Length).CopyTo(hash);
-            }
+            crypto_hash_sha512_init(out crypto_hash_sha512_state state);
+            crypto_hash_sha512_update(ref state, in MemoryMarshal.GetReference(data), (ulong)data.Length);
+            crypto_hash_sha512_final(ref state, ref MemoryMarshal.GetReference(hash));
         }
 
         private protected override bool TryVerifyCore(

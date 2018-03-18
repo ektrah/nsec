@@ -20,11 +20,18 @@ Represents a message authentication code (MAC) algorithm.
 ## Static Properties
 
 
-### Blake2b
+### Blake2b_256
 
-Gets the keyed BLAKE2b algorithm.
+Gets the keyed BLAKE2b-256 algorithm.
 
-    public static Blake2bMac Blake2b { get; }
+    public static Blake2bMac Blake2b_256 { get; }
+
+
+### Blake2b_512
+
+Gets the keyed BLAKE2b-512 algorithm.
+
+    public static Blake2bMac Blake2b_512 { get; }
 
 
 ### HmacSha256
@@ -44,70 +51,28 @@ Gets the HMAC-SHA512 algorithm.
 ## Properties
 
 
-### DefaultKeySize
+### DefaultKeySize / MinKeySize / MaxKeySize
 
-Gets the default key size, in bytes.
+Gets the default/minimum/maximum size of keys.
 
     public int DefaultKeySize { get; }
-
-#### Property Value
-
-The default key size, in bytes.
-
-
-### DefaultMacSize
-
-Gets the default MAC size, in bytes.
-
-    public int DefaultMacSize { get; }
-
-#### Property Value
-
-The default MAC size, in bytes.
-
-
-### MaxKeySize
-
-Gets the maximum key size, in bytes.
-
+    public int MinKeySize { get; }
     public int MaxKeySize { get; }
 
 #### Property Value
 
-The maximum key size, in bytes.
+The default/minimum/maximum key size, in bytes.
 
 
-### MaxMacSize
+### MacSize
 
-Gets the maximum MAC size, in bytes.
+Gets the size of a MAC.
 
-    public int MaxMacSize { get; }
-
-#### Property Value
-
-The maximum MAC size, in bytes.
-
-
-### MinKeySize
-
-Gets the minimum key size, in bytes.
-
-    public int MinKeySize { get; }
+    public int MacSize { get; }
 
 #### Property Value
 
-The minimum key size, in bytes.
-
-
-### MinMacSize
-
-Gets the minimum MAC size, in bytes.
-
-    public int MinMacSize { get; }
-
-#### Property Value
-
-The minimum MAC size, in bytes.
+The MAC size, in bytes.
 
 
 ## Methods
@@ -128,7 +93,7 @@ key
 : The key to use for computing the message authentication code.
 
 data
-: The data to be authenticated.
+: The data to authenticate.
 
 #### Return Value
 
@@ -142,49 +107,6 @@ ArgumentNullException
 ArgumentException
 : `key.Algorithm` is not the same object as the current
     [[MacAlgorithm|MacAlgorithm Class]] object.
-
-ObjectDisposedException
-: `key` has been disposed.
-
-
-### Mac(Key, ReadOnlySpan<byte>, int)
-
-Computes a message authentication code for the specified input data using the
-specified key and returns it as an array of bytes of the specified size.
-
-    public byte[] Mac(
-        Key key,
-        ReadOnlySpan<byte> data,
-        int macSize)
-
-#### Parameters
-
-key
-: The key to use for computing the message authentication code.
-
-data
-: The data to be authenticated.
-
-macSize
-: The size, in bytes, of the message authentication code to compute.
-
-#### Return Value
-
-The computed message authentication code.
-
-#### Exceptions
-
-ArgumentNullException
-: `key` is `null`.
-
-ArgumentException
-: `key.Algorithm` is not the same object as the current
-    [[MacAlgorithm|MacAlgorithm Class]] object.
-
-ArgumentOutOfRangeException
-: `macSize` is less than
-    [[MinMacSize|MacAlgorithm Class#MinMacSize]] or greater than
-    [[MaxMacSize|MacAlgorithm Class#MaxMacSize]].
 
 ObjectDisposedException
 : `key` has been disposed.
@@ -206,7 +128,7 @@ key
 : The key to use for computing the message authentication code.
 
 data
-: The data to be authenticated.
+: The data to authenticate.
 
 mac
 : The span to fill with the computed message authentication code.
@@ -221,9 +143,7 @@ ArgumentException
     [[MacAlgorithm|MacAlgorithm Class]] object.
 
 ArgumentException
-: `mac.Length` is less than
-    [[MinMacSize|MacAlgorithm Class#MinMacSize]] or greater than
-    [[MaxMacSize|MacAlgorithm Class#MaxMacSize]].
+: `mac.Length` is not equal to [[MacSize|MacAlgorithm Class#MacSize]].
 
 ObjectDisposedException
 : `key` has been disposed.
@@ -231,8 +151,8 @@ ObjectDisposedException
 
 ### TryVerify(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
 
-Attempts to verify the message authentication for the specified input data using
-the specified key.
+Attempts to verify the specified input data using the specified key and message
+authentication code.
 
     public bool TryVerify(
         Key key,
@@ -243,12 +163,16 @@ the specified key.
 
 key
 : The key to use for verification.
+    Verification fails if this is not the same key as used for computing the
+    message authentication code.
 
 data
-: The data to be verified.
+: The data to verify.
+    Verification fails if this is not the same data as used for computing the
+    message authentication code.
 
 mac
-: The message authentication code to be verified.
+: The message authentication code for the data.
 
 #### Return Value
 
@@ -269,8 +193,8 @@ ObjectDisposedException
 
 ### Verify(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
 
-Verifies the message authentication code for the specified input data using the
-specified key.
+Verifies the specified input data using the specified key and message
+authentication code.
 
     public void Verify(
         Key key,
@@ -281,12 +205,16 @@ specified key.
 
 key
 : The key to use for verification.
+    Verification fails if this is not the same key as used for computing the
+    message authentication code.
 
 data
-: The data to be verified.
+: The data to verify.
+    Verification fails if this is not the same data as used for computing the
+    message authentication code.
 
 mac
-: The message authentication code to be verified.
+: The message authentication code for the data.
 
 #### Exceptions
 
@@ -296,11 +224,6 @@ ArgumentNullException
 ArgumentException
 : `key.Algorithm` is not the same object as the current
     [[MacAlgorithm|MacAlgorithm Class]] object.
-
-ArgumentException
-: `mac.Length` is less than
-    [[MinMacSize|MacAlgorithm Class#MinMacSize]] or greater than
-    [[MaxMacSize|MacAlgorithm Class#MaxMacSize]].
 
 CryptographicException
 : Verification failed.

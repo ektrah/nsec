@@ -31,15 +31,53 @@ namespace NSec.Cryptography
         private static int s_selfTest;
 
         public Sha256() : base(
-            minHashSize: crypto_hash_sha256_BYTES,
-            defaultHashSize: crypto_hash_sha256_BYTES,
-            maxHashSize: crypto_hash_sha256_BYTES)
+            hashSize: crypto_hash_sha256_BYTES)
         {
             if (s_selfTest == 0)
             {
                 SelfTest();
                 Interlocked.Exchange(ref s_selfTest, 1);
             }
+        }
+
+        internal override bool FinalizeAndTryVerifyCore(
+            ref IncrementalHashState state,
+            ReadOnlySpan<byte> hash)
+        {
+            Debug.Assert(hash.Length <= crypto_hash_sha256_BYTES);
+
+            Span<byte> temp = stackalloc byte[crypto_hash_sha256_BYTES];
+
+            crypto_hash_sha256_final(ref state.sha256, ref MemoryMarshal.GetReference(temp));
+
+            int result = sodium_memcmp(in MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(hash), (UIntPtr)hash.Length);
+
+            return result == 0;
+        }
+
+        internal override void FinalizeCore(
+            ref IncrementalHashState state,
+            Span<byte> hash)
+        {
+            Debug.Assert(hash.Length == crypto_hash_sha256_BYTES);
+
+            crypto_hash_sha256_final(ref state.sha256, ref MemoryMarshal.GetReference(hash));
+        }
+
+        internal override void InitializeCore(
+            int hashSize,
+            out IncrementalHashState state)
+        {
+            Debug.Assert(hashSize == crypto_hash_sha256_BYTES);
+
+            crypto_hash_sha256_init(out state.sha256);
+        }
+
+        internal override void UpdateCore(
+            ref IncrementalHashState state,
+            ReadOnlySpan<byte> data)
+        {
+            crypto_hash_sha256_update(ref state.sha256, in MemoryMarshal.GetReference(data), (ulong)data.Length);
         }
 
         private protected override void HashCore(

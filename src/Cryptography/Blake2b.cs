@@ -28,15 +28,100 @@ namespace NSec.Cryptography
         private static int s_selfTest;
 
         public Blake2b() : base(
-            minHashSize: 32,
-            defaultHashSize: crypto_generichash_blake2b_BYTES,
-            maxHashSize: crypto_generichash_blake2b_BYTES_MAX)
+            hashSize: crypto_generichash_blake2b_BYTES)
         {
+            Debug.Assert(HashSize >= 32);
+            Debug.Assert(HashSize <= crypto_generichash_blake2b_BYTES_MAX);
+
             if (s_selfTest == 0)
             {
                 SelfTest();
                 Interlocked.Exchange(ref s_selfTest, 1);
             }
+        }
+
+        public Blake2b(int hashSize) : base(
+            hashSize: hashSize)
+        {
+            if (hashSize < 32 ||
+                hashSize > crypto_generichash_blake2b_BYTES_MAX)
+            {
+                throw Error.ArgumentOutOfRange_HashSize(nameof(hashSize), hashSize.ToString(), 32.ToString(), crypto_generichash_blake2b_BYTES_MAX.ToString());
+            }
+            if (s_selfTest == 0)
+            {
+                SelfTest();
+                Interlocked.Exchange(ref s_selfTest, 1);
+            }
+        }
+
+        internal override bool FinalizeAndTryVerifyCore(
+            ref IncrementalHashState state,
+            ReadOnlySpan<byte> hash)
+        {
+            Debug.Assert(hash.Length >= crypto_generichash_blake2b_BYTES_MIN);
+            Debug.Assert(hash.Length <= crypto_generichash_blake2b_BYTES_MAX);
+
+            Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
+            ref crypto_generichash_blake2b_state state_ = ref AlignPinnedReference(ref MemoryMarshal.GetReference(buffer));
+
+            Span<byte> temp = stackalloc byte[hash.Length];
+
+            state_ = state.blake2b;
+
+            crypto_generichash_blake2b_final(ref state_, ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length);
+
+            int result = sodium_memcmp(in MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(hash), (UIntPtr)hash.Length);
+
+            state.blake2b = state_;
+
+            return result == 0;
+        }
+
+        internal override void FinalizeCore(
+            ref IncrementalHashState state,
+            Span<byte> hash)
+        {
+            Debug.Assert(hash.Length >= crypto_generichash_blake2b_BYTES_MIN);
+            Debug.Assert(hash.Length <= crypto_generichash_blake2b_BYTES_MAX);
+
+            Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
+            ref crypto_generichash_blake2b_state state_ = ref AlignPinnedReference(ref MemoryMarshal.GetReference(buffer));
+
+            state_ = state.blake2b;
+
+            crypto_generichash_blake2b_final(ref state_, ref MemoryMarshal.GetReference(hash), (UIntPtr)hash.Length);
+
+            state.blake2b = state_;
+        }
+
+        internal override void InitializeCore(
+            int hashSize,
+            out IncrementalHashState state)
+        {
+            Debug.Assert(hashSize >= crypto_generichash_blake2b_BYTES_MIN);
+            Debug.Assert(hashSize <= crypto_generichash_blake2b_BYTES_MAX);
+
+            Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
+            ref crypto_generichash_blake2b_state aligned_ = ref AlignPinnedReference(ref MemoryMarshal.GetReference(buffer));
+
+            crypto_generichash_blake2b_init(out aligned_, IntPtr.Zero, UIntPtr.Zero, (UIntPtr)hashSize);
+
+            state.blake2b = aligned_;
+        }
+
+        internal override void UpdateCore(
+            ref IncrementalHashState state,
+            ReadOnlySpan<byte> data)
+        {
+            Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
+            ref crypto_generichash_blake2b_state state_ = ref AlignPinnedReference(ref MemoryMarshal.GetReference(buffer));
+
+            state_ = state.blake2b;
+
+            crypto_generichash_blake2b_update(ref state_, in MemoryMarshal.GetReference(data), (ulong)data.Length);
+
+            state.blake2b = state_;
         }
 
         private protected override void HashCore(
