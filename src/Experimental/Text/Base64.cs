@@ -1,11 +1,12 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using NSec.Cryptography;
 
-namespace NSec.Cryptography.Formatting
+namespace NSec.Experimental.Text
 {
     // RFC 4648
-    internal static class Base64
+    public static class Base64
     {
         public static byte[] Decode(
             string base64)

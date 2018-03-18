@@ -1,6 +1,6 @@
 using System;
 using System.Text;
-using NSec.Cryptography.Formatting;
+using NSec.Experimental.Text;
 using Xunit;
 
 namespace NSec.Tests.Formatting

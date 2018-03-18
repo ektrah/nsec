@@ -6,9 +6,9 @@ namespace NSec.Tests
     {
         public static ReadOnlySpan<byte> RandomBytes => s_randomBytes;
 
-        public static byte[] DecodeHex(this string hex) => NSec.Cryptography.Formatting.Base16.Decode(hex);
+        public static byte[] DecodeHex(this string hex) => NSec.Experimental.Text.Base16.Decode(hex);
 
-        public static string EncodeHex(this byte[] bytes) => NSec.Cryptography.Formatting.Base16.Encode(bytes);
+        public static string EncodeHex(this byte[] bytes) => NSec.Experimental.Text.Base16.Encode(bytes);
 
         public static void Fill(byte[] array, byte value) => new Span<byte>(array).Fill(value);
 
