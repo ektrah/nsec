@@ -20,8 +20,6 @@
     * [[SignatureAlgorithm Class]]
         * Ed25519 Class
 * [[CryptographicException Class]]
-* [[IncrementalHash Struct]]
-* [[IncrementalMac Struct]]
 * [[Key Class]]
     * [[KeyCreationParameters Struct]]
     * [[KeyExportPolicies Enum]]
