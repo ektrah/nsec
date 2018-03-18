@@ -47,7 +47,7 @@ namespace NSec.Cryptography
         public HmacSha512() : base(
             minKeySize: crypto_hash_sha512_BYTES,
             defaultKeySize: crypto_hash_sha512_BYTES,
-            maxKeySize: int.MaxValue,
+            maxKeySize: crypto_hash_sha512_BYTES,
             macSize: crypto_auth_hmacsha512_BYTES)
         {
             if (s_selfTest == 0)

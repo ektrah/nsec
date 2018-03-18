@@ -44,7 +44,7 @@ namespace NSec.Cryptography
         public HmacSha256() : base(
             minKeySize: crypto_hash_sha256_BYTES,
             defaultKeySize: crypto_hash_sha256_BYTES,
-            maxKeySize: int.MaxValue,
+            maxKeySize: crypto_hash_sha256_BYTES,
             macSize: crypto_auth_hmacsha256_BYTES)
         {
             if (s_selfTest == 0)
