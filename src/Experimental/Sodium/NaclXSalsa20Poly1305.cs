@@ -17,8 +17,7 @@ namespace NSec.Experimental.Sodium
         public NaclXSalsa20Poly1305() : base(
             keySize: crypto_secretbox_xsalsa20poly1305_KEYBYTES,
             nonceSize: crypto_secretbox_xsalsa20poly1305_NONCEBYTES,
-            macSize: crypto_secretbox_xsalsa20poly1305_MACBYTES,
-            maxPlaintextSize: int.MaxValue - crypto_secretbox_xsalsa20poly1305_MACBYTES)
+            macSize: crypto_secretbox_xsalsa20poly1305_MACBYTES)
         {
             if (s_selfTest == 0)
             {

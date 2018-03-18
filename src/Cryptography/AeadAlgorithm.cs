@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.Threading;
-using NSec.Cryptography.Formatting;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
@@ -21,14 +20,6 @@ namespace NSec.Cryptography
     //      | AES-128-OCB        | RFC 7253  | 16       | 1..15      | 8,12,16  | unbounded           |
     //      | AES-192-OCB        | RFC 7253  | 24       | 1..15      | 8,12,16  | unbounded           |
     //      | AES-256-OCB        | RFC 7253  | 32       | 1..15      | 8,12,16  | unbounded           |
-    //      | AES-CCM-16-64-128  | RFC 8152  | 16       | 13         | 8        | 2^16-1              |
-    //      | AES-CCM-16-64-256  | RFC 8152  | 32       | 13         | 8        | 2^16-1              |
-    //      | AES-CCM-64-64-128  | RFC 8152  | 16       | 7          | 8        | 2^64-1              |
-    //      | AES-CCM-64-64-256  | RFC 8152  | 32       | 7          | 8        | 2^64-1              |
-    //      | AES-CCM-16-128-128 | RFC 8152  | 16       | 13         | 16       | 2^16-1              |
-    //      | AES-CCM-16-128-256 | RFC 8152  | 32       | 13         | 16       | 2^16-1              |
-    //      | AES-CCM-64-128-128 | RFC 8152  | 16       | 7          | 16       | 2^64-1              |
-    //      | AES-CCM-64-128-256 | RFC 8152  | 32       | 7          | 16       | 2^64-1              |
     //
     public abstract class AeadAlgorithm : Algorithm
     {
@@ -36,25 +27,21 @@ namespace NSec.Cryptography
         private static ChaCha20Poly1305 s_ChaCha20Poly1305;
 
         private readonly int _keySize;
-        private readonly int _maxPlaintextSize;
         private readonly int _nonceSize;
         private readonly int _tagSize;
 
         private protected AeadAlgorithm(
             int keySize,
             int nonceSize,
-            int tagSize,
-            int maxPlaintextSize)
+            int tagSize)
         {
             Debug.Assert(keySize > 0);
             Debug.Assert(nonceSize >= 0 && nonceSize <= Nonce.MaxSize);
             Debug.Assert(tagSize >= 0 && tagSize <= 255);
-            Debug.Assert(maxPlaintextSize >= 65535 && maxPlaintextSize <= int.MaxValue - tagSize);
 
             _keySize = keySize;
             _nonceSize = nonceSize;
             _tagSize = tagSize;
-            _maxPlaintextSize = maxPlaintextSize;
         }
 
         public static Aes256Gcm Aes256Gcm
@@ -87,8 +74,6 @@ namespace NSec.Cryptography
 
         public int KeySize => _keySize;
 
-        public int MaxPlaintextSize => _maxPlaintextSize;
-
         public int NonceSize => _nonceSize;
 
         public int TagSize => _tagSize;
@@ -105,7 +90,7 @@ namespace NSec.Cryptography
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
-            if (ciphertext.Length < _tagSize || ciphertext.Length - _tagSize > _maxPlaintextSize)
+            if (ciphertext.Length < _tagSize)
                 throw Error.Cryptographic_DecryptionFailed();
 
             byte[] plaintext = new byte[ciphertext.Length - _tagSize];
@@ -131,7 +116,7 @@ namespace NSec.Cryptography
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
-            if (ciphertext.Length < _tagSize || ciphertext.Length - _tagSize > _maxPlaintextSize)
+            if (ciphertext.Length < _tagSize)
                 throw Error.Cryptographic_DecryptionFailed();
             if (plaintext.Length != ciphertext.Length - _tagSize)
                 throw Error.Argument_PlaintextLength(nameof(plaintext));
@@ -156,8 +141,8 @@ namespace NSec.Cryptography
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
-            if (plaintext.Length > _maxPlaintextSize)
-                throw Error.Argument_PlaintextTooLong(nameof(plaintext), _maxPlaintextSize.ToString());
+            if (plaintext.Length > int.MaxValue - _tagSize)
+                throw Error.Argument_PlaintextTooLong(nameof(plaintext), (int.MaxValue - _tagSize).ToString());
 
             byte[] ciphertext = new byte[plaintext.Length + _tagSize];
             EncryptCore(key.Handle, in nonce, associatedData, plaintext, ciphertext);
@@ -177,8 +162,8 @@ namespace NSec.Cryptography
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
-            if (plaintext.Length > _maxPlaintextSize)
-                throw Error.Argument_PlaintextTooLong(nameof(plaintext), _maxPlaintextSize.ToString());
+            if (plaintext.Length > int.MaxValue - _tagSize)
+                throw Error.Argument_PlaintextTooLong(nameof(plaintext), (int.MaxValue - _tagSize).ToString());
             if (ciphertext.Length != plaintext.Length + _tagSize)
                 throw Error.Argument_CiphertextLength(nameof(ciphertext));
             if (ciphertext.Overlaps(plaintext, out int offset) && offset != 0)
@@ -201,7 +186,7 @@ namespace NSec.Cryptography
             if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
 
-            if (ciphertext.Length < _tagSize || ciphertext.Length - _tagSize > _maxPlaintextSize)
+            if (ciphertext.Length < _tagSize)
             {
                 plaintext = null;
                 return false;
@@ -226,7 +211,7 @@ namespace NSec.Cryptography
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
-            if (ciphertext.Length < _tagSize || ciphertext.Length - _tagSize > _maxPlaintextSize)
+            if (ciphertext.Length < _tagSize)
                 return false;
             if (plaintext.Length != ciphertext.Length - _tagSize)
                 throw Error.Argument_PlaintextLength(nameof(plaintext));

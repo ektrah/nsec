@@ -54,8 +54,7 @@ namespace NSec.Cryptography
         public Aes256Gcm() : base(
             keySize: crypto_aead_aes256gcm_KEYBYTES,
             nonceSize: crypto_aead_aes256gcm_NPUBBYTES,
-            tagSize: crypto_aead_aes256gcm_ABYTES,
-            maxPlaintextSize: int.MaxValue - crypto_aead_aes256gcm_ABYTES)
+            tagSize: crypto_aead_aes256gcm_ABYTES)
         {
             if (s_selfTest == 0)
             {
