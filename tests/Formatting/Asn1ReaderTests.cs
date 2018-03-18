@@ -1,5 +1,5 @@
 using System;
-using NSec.Cryptography.Formatting;
+using NSec.Experimental.Asn1;
 using Xunit;
 
 namespace NSec.Tests.Formatting

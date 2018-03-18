@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 
-namespace NSec.Cryptography.Formatting
+namespace NSec.Experimental.Asn1
 {
     // ITU-T X.690 5.0 DER
     internal ref struct Asn1Reader

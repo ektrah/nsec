@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics;
 
-namespace NSec.Cryptography.Formatting
+namespace NSec.Experimental.Asn1
 {
     // ITU-T X.690 5.0 DER
     internal readonly struct Asn1Oid
