@@ -94,5 +94,75 @@ namespace NSec.Tests.Base
         }
 
         #endregion
+
+        #region TryVerify
+
+        [Theory]
+        [MemberData(nameof(HashAlgorithms))]
+        public static void TryVerifyWithSpanTooSmall(Type algorithmType)
+        {
+            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
+
+            Assert.False(a.TryVerify(ReadOnlySpan<byte>.Empty, new byte[a.HashSize - 1]));
+        }
+
+        [Theory]
+        [MemberData(nameof(HashAlgorithms))]
+        public static void TryVerifyWithSpanTooLarge(Type algorithmType)
+        {
+            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
+
+            Assert.False(a.TryVerify(ReadOnlySpan<byte>.Empty, new byte[a.HashSize + 1]));
+        }
+
+        [Theory]
+        [MemberData(nameof(HashAlgorithms))]
+        public static void TryVerifyWithSpanSuccess(Type algorithmType)
+        {
+            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
+
+            var d = ReadOnlySpan<byte>.Empty;
+
+            var hash = a.Hash(d);
+
+            Assert.True(a.TryVerify(d, hash));
+        }
+
+        #endregion
+
+        #region Verify
+
+        [Theory]
+        [MemberData(nameof(HashAlgorithms))]
+        public static void VerifyWithSpanTooSmall(Type algorithmType)
+        {
+            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
+
+            Assert.Throws<CryptographicException>(() => a.Verify(ReadOnlySpan<byte>.Empty, new byte[a.HashSize - 1]));
+        }
+
+        [Theory]
+        [MemberData(nameof(HashAlgorithms))]
+        public static void VerifyWithSpanTooLarge(Type algorithmType)
+        {
+            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
+
+            Assert.Throws<CryptographicException>(() => a.Verify(ReadOnlySpan<byte>.Empty, new byte[a.HashSize + 1]));
+        }
+
+        [Theory]
+        [MemberData(nameof(HashAlgorithms))]
+        public static void VerifyWithSpanSuccess(Type algorithmType)
+        {
+            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
+
+            var d = ReadOnlySpan<byte>.Empty;
+
+            var hash = a.Hash(d);
+
+            a.Verify(d, hash);
+        }
+
+        #endregion
     }
 }
