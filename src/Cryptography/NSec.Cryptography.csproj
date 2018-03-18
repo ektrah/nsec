@@ -8,10 +8,11 @@
     <Description>Provides modern cryptographic algorithm implementations for .NET Core based on libsodium.
 
 Commonly Used Types:
+NSec.Cryptography.Aes256Gcm
 NSec.Cryptography.Blake2b
 NSec.Cryptography.Chacha20Poly1305
 NSec.Cryptography.Ed25519
-NSec.Cryptography.Key
+NSec.Cryptography.HkdfSha256
 NSec.Cryptography.X25519</Description>
     <PackageTags>aead aes-gcm blake2b chacha20-poly1305 crypto cryptography curve25519 dotnet-core ed25519 encryption hash hkdf hmac libsodium security sha256 sha512 x25519</PackageTags>
   </PropertyGroup>
