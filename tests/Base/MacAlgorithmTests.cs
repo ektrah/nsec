@@ -97,7 +97,7 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void SignWithNullKey(Type algorithmType)
+        public static void MacWithNullKey(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
@@ -106,7 +106,7 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void SignWithWrongKey(Type algorithmType)
+        public static void MacWithWrongKey(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
@@ -118,7 +118,7 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void SignSuccess(Type algorithmType)
+        public static void MacSuccess(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
@@ -141,7 +141,7 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void SignWithSpanWithNullKey(Type algorithmType)
+        public static void MacWithSpanWithNullKey(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
@@ -150,7 +150,7 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void SignWithSpanWithWrongKey(Type algorithmType)
+        public static void MacWithSpanWithWrongKey(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
@@ -162,7 +162,7 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void SignWithSpanTooSmall(Type algorithmType)
+        public static void MacWithSpanTooSmall(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
@@ -174,7 +174,7 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void SignWithSpanTooLarge(Type algorithmType)
+        public static void MacWithSpanTooLarge(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
@@ -186,7 +186,7 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void SignWithSpanSuccess(Type algorithmType)
+        public static void MacWithSpanSuccess(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
@@ -205,7 +205,7 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void SignWithSpanOverlapping(Type algorithmType)
+        public static void MacWithSpanOverlapping(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
