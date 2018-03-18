@@ -67,7 +67,7 @@ namespace NSec.Cryptography
         }
 
         internal override bool FinalizeAndTryVerifyCore(
-            ref IncrementalMac.State state,
+            ref IncrementalMacState state,
             ReadOnlySpan<byte> mac)
         {
             Debug.Assert(mac.Length <= crypto_auth_hmacsha512_BYTES);
@@ -82,7 +82,7 @@ namespace NSec.Cryptography
         }
 
         internal override void FinalizeCore(
-            ref IncrementalMac.State state,
+            ref IncrementalMacState state,
             Span<byte> mac)
         {
             Debug.Assert(mac.Length == crypto_auth_hmacsha512_BYTES);
@@ -98,7 +98,7 @@ namespace NSec.Cryptography
         internal override void InitializeCore(
             SecureMemoryHandle keyHandle,
             int macSize,
-            out IncrementalMac.State state)
+            out IncrementalMacState state)
         {
             Debug.Assert(keyHandle != null);
             Debug.Assert(macSize == crypto_auth_hmacsha512_BYTES);
@@ -143,7 +143,7 @@ namespace NSec.Cryptography
         }
 
         internal override void UpdateCore(
-            ref IncrementalMac.State state,
+            ref IncrementalMacState state,
             ReadOnlySpan<byte> data)
         {
             crypto_auth_hmacsha512_update(ref state.hmacsha512, in MemoryMarshal.GetReference(data), (ulong)data.Length);

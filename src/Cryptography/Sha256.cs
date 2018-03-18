@@ -41,7 +41,7 @@ namespace NSec.Cryptography
         }
 
         internal override bool FinalizeAndTryVerifyCore(
-            ref IncrementalHash.State state,
+            ref IncrementalHashState state,
             ReadOnlySpan<byte> hash)
         {
             Debug.Assert(hash.Length <= crypto_hash_sha256_BYTES);
@@ -56,7 +56,7 @@ namespace NSec.Cryptography
         }
 
         internal override void FinalizeCore(
-            ref IncrementalHash.State state,
+            ref IncrementalHashState state,
             Span<byte> hash)
         {
             Debug.Assert(hash.Length == crypto_hash_sha256_BYTES);
@@ -66,7 +66,7 @@ namespace NSec.Cryptography
 
         internal override void InitializeCore(
             int hashSize,
-            out IncrementalHash.State state)
+            out IncrementalHashState state)
         {
             Debug.Assert(hashSize == crypto_hash_sha256_BYTES);
 
@@ -74,7 +74,7 @@ namespace NSec.Cryptography
         }
 
         internal override void UpdateCore(
-            ref IncrementalHash.State state,
+            ref IncrementalHashState state,
             ReadOnlySpan<byte> data)
         {
             crypto_hash_sha256_update(ref state.sha256, in MemoryMarshal.GetReference(data), (ulong)data.Length);

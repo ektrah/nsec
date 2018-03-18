@@ -56,7 +56,7 @@ namespace NSec.Cryptography
         }
 
         internal override bool FinalizeAndTryVerifyCore(
-            ref IncrementalHash.State state,
+            ref IncrementalHashState state,
             ReadOnlySpan<byte> hash)
         {
             Debug.Assert(hash.Length >= crypto_generichash_blake2b_BYTES_MIN);
@@ -79,7 +79,7 @@ namespace NSec.Cryptography
         }
 
         internal override void FinalizeCore(
-            ref IncrementalHash.State state,
+            ref IncrementalHashState state,
             Span<byte> hash)
         {
             Debug.Assert(hash.Length >= crypto_generichash_blake2b_BYTES_MIN);
@@ -97,7 +97,7 @@ namespace NSec.Cryptography
 
         internal override void InitializeCore(
             int hashSize,
-            out IncrementalHash.State state)
+            out IncrementalHashState state)
         {
             Debug.Assert(hashSize >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(hashSize <= crypto_generichash_blake2b_BYTES_MAX);
@@ -111,7 +111,7 @@ namespace NSec.Cryptography
         }
 
         internal override void UpdateCore(
-            ref IncrementalHash.State state,
+            ref IncrementalHashState state,
             ReadOnlySpan<byte> data)
         {
             Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];

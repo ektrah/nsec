@@ -194,20 +194,20 @@ namespace NSec.Cryptography
         }
 
         internal abstract bool FinalizeAndTryVerifyCore(
-            ref IncrementalMac.State state,
+            ref IncrementalMacState state,
             ReadOnlySpan<byte> mac);
 
         internal abstract void FinalizeCore(
-            ref IncrementalMac.State state,
+            ref IncrementalMacState state,
             Span<byte> mac);
 
         internal abstract void InitializeCore(
             SecureMemoryHandle keyHandle,
             int macSize,
-            out IncrementalMac.State state);
+            out IncrementalMacState state);
 
         internal abstract void UpdateCore(
-            ref IncrementalMac.State state,
+            ref IncrementalMacState state,
             ReadOnlySpan<byte> data);
 
         private protected abstract void MacCore(

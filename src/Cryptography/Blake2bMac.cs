@@ -82,7 +82,7 @@ namespace NSec.Cryptography
         }
 
         internal override bool FinalizeAndTryVerifyCore(
-            ref IncrementalMac.State state,
+            ref IncrementalMacState state,
             ReadOnlySpan<byte> mac)
         {
             Debug.Assert(mac.Length >= crypto_generichash_blake2b_BYTES_MIN);
@@ -105,7 +105,7 @@ namespace NSec.Cryptography
         }
 
         internal override void FinalizeCore(
-            ref IncrementalMac.State state,
+            ref IncrementalMacState state,
             Span<byte> mac)
         {
             Debug.Assert(mac.Length >= crypto_generichash_blake2b_BYTES_MIN);
@@ -129,7 +129,7 @@ namespace NSec.Cryptography
         internal override void InitializeCore(
             SecureMemoryHandle keyHandle,
             int macSize,
-            out IncrementalMac.State state)
+            out IncrementalMacState state)
         {
             Debug.Assert(keyHandle != null);
             Debug.Assert(keyHandle.Length >= crypto_generichash_blake2b_KEYBYTES_MIN);
@@ -182,7 +182,7 @@ namespace NSec.Cryptography
         }
 
         internal override void UpdateCore(
-            ref IncrementalMac.State state,
+            ref IncrementalMacState state,
             ReadOnlySpan<byte> data)
         {
             Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
