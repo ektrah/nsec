@@ -2,9 +2,10 @@ using System;
 using System.Buffers.Binary;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using NSec.Cryptography;
 using static Interop.Libsodium;
 
-namespace NSec.Cryptography.Experimental
+namespace NSec.Experimental
 {
     //
     //  ANSI X9.63 Key Derivation Function

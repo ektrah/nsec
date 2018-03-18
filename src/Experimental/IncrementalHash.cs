@@ -2,8 +2,9 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using NSec.Cryptography;
 
-namespace NSec.Cryptography
+namespace NSec.Experimental
 {
     [StructLayout(LayoutKind.Sequential)]
     public readonly struct IncrementalHash

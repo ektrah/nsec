@@ -2,10 +2,11 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
+using NSec.Cryptography;
 using NSec.Cryptography.Formatting;
 using static Interop.Libsodium;
 
-namespace NSec.Cryptography.Experimental
+namespace NSec.Experimental
 {
     public sealed class NaclXSalsa20Poly1305 : NaclSecretBoxAlgorithm
     {

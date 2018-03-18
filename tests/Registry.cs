@@ -1,6 +1,6 @@
 using System;
 using NSec.Cryptography;
-using NSec.Cryptography.Experimental;
+using NSec.Experimental;
 using Xunit;
 
 namespace NSec.Tests

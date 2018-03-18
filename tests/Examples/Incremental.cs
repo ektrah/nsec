@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using NSec.Cryptography;
+using NSec.Experimental;
 using Xunit;
 
 namespace NSec.Test.Examples
