@@ -38,7 +38,7 @@ namespace NSec.Cryptography
     //
     public sealed class HmacSha512 : MacAlgorithm
     {
-        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(crypto_hash_sha512_BYTES, int.MaxValue, new byte[] { 0xDE, 0x33, 0x47, 0xDE });
+        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(crypto_hash_sha512_BYTES, int.MaxValue, 0xDE3347DE);
 
         private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(crypto_hash_sha512_BYTES, int.MaxValue);
 

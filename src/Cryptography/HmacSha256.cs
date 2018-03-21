@@ -35,7 +35,7 @@ namespace NSec.Cryptography
     //
     public sealed class HmacSha256 : MacAlgorithm
     {
-        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(crypto_hash_sha256_BYTES, int.MaxValue, new byte[] { 0xDE, 0x33, 0x46, 0xDE });
+        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(crypto_hash_sha256_BYTES, int.MaxValue, 0xDE3346DE);
 
         private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(crypto_hash_sha256_BYTES, int.MaxValue);
 

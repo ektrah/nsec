@@ -7,16 +7,15 @@ namespace NSec.Cryptography.Formatting
 {
     internal sealed class NSecKeyFormatter
     {
-        private readonly byte[] _blobHeader;
+        private readonly uint _blobHeader;
         private readonly int _maxKeySize;
         private readonly int _minKeySize;
 
         public NSecKeyFormatter(
             int keySize,
-            byte[] blobHeader)
+            uint blobHeader)
         {
             Debug.Assert(keySize >= 0);
-            Debug.Assert(blobHeader != null);
 
             _minKeySize = keySize;
             _maxKeySize = keySize;
@@ -26,11 +25,10 @@ namespace NSec.Cryptography.Formatting
         public NSecKeyFormatter(
             int minKeySize,
             int maxKeySize,
-            byte[] blobHeader)
+            uint blobHeader)
         {
             Debug.Assert(minKeySize >= 0);
             Debug.Assert(maxKeySize >= minKeySize);
-            Debug.Assert(blobHeader != null);
 
             _minKeySize = minKeySize;
             _maxKeySize = maxKeySize;
@@ -46,16 +44,16 @@ namespace NSec.Cryptography.Formatting
             Debug.Assert(keyHandle.Length >= _minKeySize);
             Debug.Assert(keyHandle.Length <= _maxKeySize);
 
-            blobSize = _blobHeader.Length + sizeof(uint) + keyHandle.Length;
+            blobSize = sizeof(uint) + sizeof(uint) + keyHandle.Length;
 
             if (blob.Length < blobSize)
             {
                 return false;
             }
 
-            _blobHeader.CopyTo(blob);
-            BinaryPrimitives.WriteUInt32LittleEndian(blob.Slice(_blobHeader.Length), (uint)keyHandle.Length);
-            keyHandle.Export(blob.Slice(_blobHeader.Length + sizeof(uint)));
+            BinaryPrimitives.WriteUInt32BigEndian(blob, _blobHeader);
+            BinaryPrimitives.WriteInt32LittleEndian(blob.Slice(sizeof(uint)), keyHandle.Length);
+            keyHandle.Export(blob.Slice(sizeof(uint) + sizeof(uint)));
             return true;
         }
 
@@ -63,19 +61,18 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> blob,
             out SecureMemoryHandle keyHandle)
         {
-            int start = _blobHeader.Length + sizeof(uint);
-            int length = blob.Length - start;
+            int length = blob.Length - (sizeof(uint) + sizeof(uint));
 
             if (length < _minKeySize ||
                 length > _maxKeySize ||
-                !blob.Slice(0, _blobHeader.Length).SequenceEqual(_blobHeader) ||
-                BinaryPrimitives.ReadUInt32LittleEndian(blob.Slice(_blobHeader.Length, sizeof(uint))) != (uint)length)
+                BinaryPrimitives.ReadUInt32BigEndian(blob) != _blobHeader ||
+                BinaryPrimitives.ReadInt32LittleEndian(blob.Slice(sizeof(uint))) != length)
             {
                 keyHandle = null;
                 return false;
             }
 
-            SecureMemoryHandle.Import(blob.Slice(start, length), out keyHandle);
+            SecureMemoryHandle.Import(blob.Slice(sizeof(uint) + sizeof(uint), length), out keyHandle);
             return true;
         }
     }

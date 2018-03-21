@@ -44,7 +44,7 @@ namespace NSec.Cryptography
     //
     public sealed class Aes256Gcm : AeadAlgorithm
     {
-        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(crypto_aead_aes256gcm_KEYBYTES, new byte[] { 0xDE, 0x31, 0x44, 0xDE });
+        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(crypto_aead_aes256gcm_KEYBYTES, 0xDE3144DE);
 
         private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(crypto_aead_aes256gcm_KEYBYTES);
 
