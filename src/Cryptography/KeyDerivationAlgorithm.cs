@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Threading;
 using static Interop.Libsodium;
 
@@ -147,7 +146,7 @@ namespace NSec.Cryptography
                 }
                 finally
                 {
-                    sodium_memzero(ref MemoryMarshal.GetReference(seed), (UIntPtr)seed.Length);
+                    CryptographicOperations.ZeroMemory(seed);
                 }
             }
             finally

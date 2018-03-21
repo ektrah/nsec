@@ -129,7 +129,7 @@ namespace NSec.Cryptography
             }
             finally
             {
-                sodium_memzero(ref MemoryMarshal.GetReference(pseudorandomKey), (UIntPtr)pseudorandomKey.Length);
+                CryptographicOperations.ZeroMemory(pseudorandomKey);
             }
         }
 
@@ -172,7 +172,7 @@ namespace NSec.Cryptography
             }
             finally
             {
-                sodium_memzero(ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length);
+                CryptographicOperations.ZeroMemory(temp);
             }
         }
 

@@ -87,7 +87,7 @@ namespace NSec.Cryptography.Formatting
             }
             finally
             {
-                sodium_memzero(ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length);
+                CryptographicOperations.ZeroMemory(temp);
             }
         }
 
@@ -126,7 +126,7 @@ namespace NSec.Cryptography.Formatting
             }
             finally
             {
-                sodium_memzero(ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length);
+                CryptographicOperations.ZeroMemory(temp);
             }
         }
 

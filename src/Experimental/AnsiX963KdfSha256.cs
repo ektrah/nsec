@@ -69,7 +69,7 @@ namespace NSec.Experimental
             }
             finally
             {
-                sodium_memzero(ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length);
+                CryptographicOperations.ZeroMemory(temp);
             }
         }
     }

@@ -103,7 +103,7 @@ namespace NSec.Cryptography
                 }
                 finally
                 {
-                    sodium_memzero(ref MemoryMarshal.GetReference(seed), (UIntPtr)seed.Length);
+                    CryptographicOperations.ZeroMemory(seed);
                 }
             }
             finally
