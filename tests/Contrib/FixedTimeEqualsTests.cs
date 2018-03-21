@@ -8,7 +8,7 @@ using System.Reflection;
 using NSec.Cryptography;
 using Xunit;
 
-namespace NSec.Tests.Misc
+namespace NSec.Tests.Contrib
 {
     public static class FixedTimeEqualsTests
     {
