@@ -240,9 +240,6 @@
   <data name="Argument_SignatureLength" xml:space="preserve">
     <value>The signature must have a length of {0} bytes.</value>
   </data>
-  <data name="Argument_SpanBlob" xml:space="preserve">
-    <value>The span is not large enough to fit the key BLOB.</value>
-  </data>
   <data name="Cryptographic_DecryptionFailed" xml:space="preserve">
     <value>Decryption failed.</value>
   </data>

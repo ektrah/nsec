@@ -196,12 +196,6 @@ namespace NSec.Cryptography
             return new ArgumentException(string.Format(ResourceManager.GetString("Argument_SignatureLength"), arg0), paramName);
         }
 
-        internal static ArgumentException Argument_SpanBlob(
-            string paramName)
-        {
-            return new ArgumentException(ResourceManager.GetString("Argument_SpanBlob"), paramName);
-        }
-
         internal static ArgumentNullException ArgumentNull_Algorithm(
             string paramName)
         {
