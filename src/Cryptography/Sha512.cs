@@ -47,15 +47,13 @@ namespace NSec.Cryptography
             ref IncrementalHashState state,
             ReadOnlySpan<byte> hash)
         {
-            Debug.Assert(hash.Length <= crypto_hash_sha512_BYTES);
+            Debug.Assert(hash.Length == crypto_hash_sha512_BYTES);
 
             Span<byte> temp = stackalloc byte[crypto_hash_sha512_BYTES];
 
             crypto_hash_sha512_final(ref state.sha512, ref MemoryMarshal.GetReference(temp));
 
-            int result = sodium_memcmp(in MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(hash), (UIntPtr)hash.Length);
-
-            return result == 0;
+            return CryptographicOperations.FixedTimeEquals(temp, hash);
         }
 
         internal override void FinalizeCore(
@@ -98,15 +96,13 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> hash)
         {
-            Debug.Assert(hash.Length <= crypto_hash_sha512_BYTES);
+            Debug.Assert(hash.Length == crypto_hash_sha512_BYTES);
 
             Span<byte> temp = stackalloc byte[crypto_hash_sha512_BYTES];
 
             crypto_hash_sha512(ref MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(data), (ulong)data.Length);
 
-            int result = sodium_memcmp(in MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(hash), (UIntPtr)hash.Length);
-
-            return result == 0;
+            return CryptographicOperations.FixedTimeEquals(temp, hash);
         }
 
         private static void SelfTest()

@@ -97,11 +97,7 @@ namespace NSec.Cryptography
 
             crypto_generichash_blake2b_final(ref state_, ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length);
 
-            int result = sodium_memcmp(in MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(mac), (UIntPtr)mac.Length);
-
-            state.blake2b = state_;
-
-            return result == 0;
+            return CryptographicOperations.FixedTimeEquals(temp, mac);
         }
 
         internal override void FinalizeCore(
@@ -224,9 +220,7 @@ namespace NSec.Cryptography
 
             crypto_generichash_blake2b(ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length, in MemoryMarshal.GetReference(data), (ulong)data.Length, keyHandle, (UIntPtr)keyHandle.Length);
 
-            int result = sodium_memcmp(in MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(mac), (UIntPtr)mac.Length);
-
-            return result == 0;
+            return CryptographicOperations.FixedTimeEquals(temp, mac);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

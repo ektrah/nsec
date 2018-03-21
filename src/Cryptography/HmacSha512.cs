@@ -70,15 +70,13 @@ namespace NSec.Cryptography
             ref IncrementalMacState state,
             ReadOnlySpan<byte> mac)
         {
-            Debug.Assert(mac.Length <= crypto_auth_hmacsha512_BYTES);
+            Debug.Assert(mac.Length == crypto_auth_hmacsha512_BYTES);
 
             Span<byte> temp = stackalloc byte[crypto_auth_hmacsha512_BYTES];
 
             crypto_auth_hmacsha512_final(ref state.hmacsha512, ref MemoryMarshal.GetReference(temp));
 
-            int result = sodium_memcmp(in MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(mac), (UIntPtr)mac.Length);
-
-            return result == 0;
+            return CryptographicOperations.FixedTimeEquals(temp, mac);
         }
 
         internal override void FinalizeCore(
@@ -168,7 +166,7 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> mac)
         {
             Debug.Assert(keyHandle != null);
-            Debug.Assert(mac.Length <= crypto_auth_hmacsha512_BYTES);
+            Debug.Assert(mac.Length == crypto_auth_hmacsha512_BYTES);
 
             Span<byte> temp = stackalloc byte[crypto_auth_hmacsha512_BYTES];
 
@@ -176,9 +174,7 @@ namespace NSec.Cryptography
             crypto_auth_hmacsha512_update(ref state, in MemoryMarshal.GetReference(data), (ulong)data.Length);
             crypto_auth_hmacsha512_final(ref state, ref MemoryMarshal.GetReference(temp));
 
-            int result = sodium_memcmp(in MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(mac), (UIntPtr)mac.Length);
-
-            return result == 0;
+            return CryptographicOperations.FixedTimeEquals(temp, mac);
         }
 
         private static void SelfTest()

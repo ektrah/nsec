@@ -14,12 +14,6 @@ internal static partial class Interop
             UIntPtr size);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int sodium_memcmp(
-            in byte b1_,
-            in byte b2_,
-            UIntPtr len);
-
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern void sodium_memzero(
             ref byte pnt,
             UIntPtr len);
