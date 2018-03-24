@@ -38,6 +38,7 @@
     <Authors>Klaus Hartke</Authors>
     <Copyright>&#169; $([System.DateTime]::UtcNow.ToString(yyyy)) Klaus Hartke</Copyright>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes>https://nsec.rocks/releases</PackageReleaseNotes>
     <PackageLicenseUrl>https://nsec.rocks/license</PackageLicenseUrl>
     <PackageProjectUrl>https://nsec.rocks/</PackageProjectUrl>
     <PackageIconUrl>https://goo.gl/iN8fpR</PackageIconUrl>
