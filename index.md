@@ -101,4 +101,3 @@ protocols.
 ## License
 
 NSec is licensed under the [[MIT license|License]].
-This documentation is licensed under [[a Creative Commons license|License]].
