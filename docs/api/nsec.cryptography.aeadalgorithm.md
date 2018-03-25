@@ -183,10 +183,6 @@ ArgumentException
 : `plaintext` overlaps in memory with `ciphertext`.
 
 CryptographicException
-: `ciphertext.Length` is less than
-    [[TagSize|AeadAlgorithm Class#TagSize]].
-
-CryptographicException
 : Decryption failed.
 
 ObjectDisposedException
