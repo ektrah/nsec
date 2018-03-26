@@ -136,5 +136,11 @@ namespace NSec.Cryptography
 
             return unchecked((int)hashCode);
         }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override string ToString()
+        {
+            return typeof(PublicKey).ToString();
+        }
     }
 }

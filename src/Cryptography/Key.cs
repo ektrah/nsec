@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using static Interop.Libsodium;
 
@@ -220,6 +221,12 @@ namespace NSec.Cryptography
                 Debug.Assert(blobSize == blob.Length);
                 return blob;
             }
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override string ToString()
+        {
+            return typeof(Key).ToString();
         }
     }
 }
