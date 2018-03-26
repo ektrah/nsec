@@ -94,15 +94,16 @@ key
 nonce
 : The [[Nonce|Nonce Struct]] to use for encryption.
     The same nonce must not be used more than once to encrypt data with the
-    specified key. To prevent nonce reuse when encrypting multiple plaintexts
-    with the same key, it is recommended to increment the previous nonce; a
-    randomly generated nonce is not suitable. See [[How to: Generate Nonces]]
-    for more information on generating nonces.
-
+    specified key.
 
 !!! Note
-    Using the same nonce with the same key more than once leads to catastrophic
-    loss of security.
+    Using the same nonce with the same key more than once leads to
+    catastrophic loss of security.
+
+: To prevent nonce reuse when encrypting multiple plaintexts with the same key,
+    it is recommended to increment the previous nonce; a randomly generated
+    nonce is not suitable. See the [[Nonce Struct]] and [[How to: Generate
+    Nonces]] for more information on generating nonces.
 
 associatedData
 : Optional additional data to be authenticated during decryption.
@@ -157,14 +158,16 @@ key
 nonce
 : The [[Nonce|Nonce Struct]] to use for encryption.
     The same nonce must not be used more than once to encrypt data with the
-    specified key. To prevent nonce reuse when encrypting multiple plaintexts
-    with the same key, it is recommended to increment the previous nonce; a
-    randomly generated nonce is not suitable. See [[How to: Generate Nonces]]
-    for more information on generating nonces.
+    specified key.
 
 !!! Note
-    Using the same nonce with the same key more than once leads to catastrophic
-    loss of security.
+    Using the same nonce with the same key more than once leads to
+    catastrophic loss of security.
+
+: To prevent nonce reuse when encrypting multiple plaintexts with the same key,
+    it is recommended to increment the previous nonce; a randomly generated
+    nonce is not suitable. See the [[Nonce Struct]] and [[How to: Generate
+    Nonces]] for more information on generating nonces.
 
 associatedData
 : Optional additional data to be authenticated during decryption.
