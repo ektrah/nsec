@@ -21,14 +21,14 @@ Represents a key derivation algorithm.
 
 ### HkdfSha256
 
-Gets the HKDF-SHA256 algorithm.
+Gets the HKDF-SHA256 key derivation algorithm.
 
     public static HkdfSha256 HkdfSha256 { get; }
 
 
 ### HkdfSha512
 
-Gets the HKDF-SHA512 algorithm.
+Gets the HKDF-SHA512 key derivation algorithm.
 
     public static HkdfSha512 HkdfSha512 { get; }
 
