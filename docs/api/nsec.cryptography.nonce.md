@@ -11,10 +11,10 @@ monotonically increasing sequence, when those fields are regarded as unsigned
 integers in big-endian byte order.
 
 In case nonces need to be generated in a different way, the fixed field can be
-set to a new value on each encryption operation and the size of the counter
-field set to zero.
+set to a new value for each encryption operation, and the size of the counter
+field to zero.
 
-See [[How to: Generate Nonces]] for more information on generating nonces.
+See [[How to: Generate Nonces]] for additional information on generating nonces.
 
 
 ## [TOC] Summary
