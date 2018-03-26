@@ -1,10 +1,10 @@
 # Algorithm Class
 
-Represents the base class from which all algorithm implementations inherit.
+Represents the base class from which all algorithm implementations derive.
 
     public abstract class Algorithm
 
-The [[Algorithm|Algorithm Class]] class has no public members.
+The class has no public members.
 
 
 ## Inheritance Hierarchy
