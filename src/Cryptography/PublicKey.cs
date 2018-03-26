@@ -121,7 +121,7 @@ namespace NSec.Cryptography
             }
 
             ref byte x = ref Unsafe.As<PublicKeyBytes, byte>(ref _bytes);
-            uint hashCode = 0;
+            uint hashCode = unchecked((uint)_algorithm.GetHashCode());
 
             hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 0 * sizeof(uint))));
             hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 1 * sizeof(uint))));
