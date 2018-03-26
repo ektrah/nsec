@@ -1,4 +1,6 @@
 using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
@@ -8,6 +10,41 @@ namespace NSec.Cryptography
         private protected Algorithm()
         {
             Sodium.Initialize();
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static new bool Equals(
+            object objA,
+            object objB)
+        {
+            return object.Equals(objA, objB);
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static new bool ReferenceEquals(
+            object objA,
+            object objB)
+        {
+            return object.ReferenceEquals(objA, objB);
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public sealed override bool Equals(
+            object obj)
+        {
+            return this == obj;
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public sealed override int GetHashCode()
+        {
+            return RuntimeHelpers.GetHashCode(this);
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public sealed override string ToString()
+        {
+            return GetType().ToString();
         }
 
         // Creates a new libsodium secret key from a seed.

@@ -1,5 +1,7 @@
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 using static Interop.Libsodium;
@@ -27,6 +29,29 @@ namespace NSec.Cryptography
                 }
                 return instance;
             }
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static new bool Equals(
+            object objA,
+            object objB)
+        {
+            return object.Equals(objA, objB);
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static new bool ReferenceEquals(
+            object objA,
+            object objB)
+        {
+            return object.ReferenceEquals(objA, objB);
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public sealed override bool Equals(
+            object obj)
+        {
+            return this == obj;
         }
 
         public byte[] GenerateBytes(
@@ -152,6 +177,18 @@ namespace NSec.Cryptography
             }
 
             return unchecked(minValue + GenerateUInt32(maxValue - minValue));
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public sealed override int GetHashCode()
+        {
+            return RuntimeHelpers.GetHashCode(this);
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public sealed override string ToString()
+        {
+            return GetType().ToString();
         }
 
         private protected abstract void GenerateBytesCore(
