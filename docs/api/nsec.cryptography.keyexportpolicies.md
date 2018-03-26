@@ -11,11 +11,11 @@ Specifies the key export policies for a [[key|Key Class]].
 None
 : The private key cannot be exported.
 
-AllowPlaintextExport
-: The private key can be exported multiple times.
-
 AllowPlaintextArchiving
 : The private key can be exported one time for archiving purposes.
+
+AllowPlaintextExport
+: The private key can be exported multiple times.
 
 
 ## See Also
