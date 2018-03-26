@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using static Interop.Libsodium;
@@ -92,6 +93,7 @@ namespace NSec.Cryptography
                 && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 7 * sizeof(uint))) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 7 * sizeof(uint)));
         }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool Equals(
             object obj)
         {

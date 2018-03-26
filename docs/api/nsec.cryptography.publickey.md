@@ -128,25 +128,6 @@ other
 `false`.
 
 
-### Equals(object)
-
-Indicates whether the current instance of the [[PublicKey|PublicKey Class]]
-class is equal to the specified object.
-
-    public override bool Equals(
-        object obj)
-
-#### Parameters
-
-obj
-: An object to compare with this object.
-
-#### Return Value
-
-`true` if the current object is equal to the `obj` parameter; otherwise,
-`false`.
-
-
 ### Export(KeyBlobFormat)
 
 Exports the public key as a BLOB in the specified format and returns it as an
