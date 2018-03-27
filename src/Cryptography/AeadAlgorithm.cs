@@ -88,9 +88,7 @@ namespace NSec.Cryptography
                 throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (nonce.Size != _nonceSize)
-                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
-            if (ciphertext.Length < _tagSize)
+            if (nonce.Size != _nonceSize || ciphertext.Length < _tagSize)
                 throw Error.Cryptographic_DecryptionFailed();
 
             byte[] plaintext = new byte[ciphertext.Length - _tagSize];
@@ -114,9 +112,7 @@ namespace NSec.Cryptography
                 throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (nonce.Size != _nonceSize)
-                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
-            if (ciphertext.Length < _tagSize)
+            if (nonce.Size != _nonceSize || ciphertext.Length < _tagSize)
                 throw Error.Cryptographic_DecryptionFailed();
             if (plaintext.Length != ciphertext.Length - _tagSize)
                 throw Error.Argument_PlaintextLength(nameof(plaintext));
@@ -183,10 +179,8 @@ namespace NSec.Cryptography
                 throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (nonce.Size != _nonceSize)
-                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
 
-            if (ciphertext.Length < _tagSize)
+            if (nonce.Size != _nonceSize || ciphertext.Length < _tagSize)
             {
                 plaintext = null;
                 return false;
@@ -209,9 +203,7 @@ namespace NSec.Cryptography
                 throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (nonce.Size != _nonceSize)
-                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
-            if (ciphertext.Length < _tagSize)
+            if (nonce.Size != _nonceSize || ciphertext.Length < _tagSize)
                 return false;
             if (plaintext.Length != ciphertext.Length - _tagSize)
                 throw Error.Argument_PlaintextLength(nameof(plaintext));

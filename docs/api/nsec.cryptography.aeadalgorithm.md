@@ -252,9 +252,6 @@ ArgumentException
 : `key.Algorithm` is not the same object as the current
     [[AeadAlgorithm|AeadAlgorithm Class]] object.
 
-ArgumentException
-: `nonce.Size` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
-
 CryptographicException
 : Decryption failed.
 
@@ -308,9 +305,6 @@ ArgumentNullException
 ArgumentException
 : `key.Algorithm` is not the same object as the current
     [[AeadAlgorithm|AeadAlgorithm Class]] object.
-
-ArgumentException
-: `nonce.Size` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
 
 ArgumentException
 : `plaintext.Length` is not equal to `ciphertext.Length` minus
@@ -374,9 +368,6 @@ ArgumentException
 : `key.Algorithm` is not the same object as the current
     [[AeadAlgorithm|AeadAlgorithm Class]] object.
 
-ArgumentException
-: `nonce.Size` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
-
 ObjectDisposedException
 : `key` has been disposed.
 
@@ -431,9 +422,6 @@ ArgumentNullException
 ArgumentException
 : `key.Algorithm` is not the same object as the current
     [[AeadAlgorithm|AeadAlgorithm Class]] object.
-
-ArgumentException
-: `nonce.Size` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
 
 ArgumentException
 : `plaintext.Length` is not equal to `ciphertext.Length` minus

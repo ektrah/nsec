@@ -309,7 +309,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                Assert.Throws<ArgumentException>("nonce", () => a.Decrypt(k, new Nonce(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+                Assert.Throws<CryptographicException>(() => a.Decrypt(k, new Nonce(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
             }
         }
 
@@ -326,7 +326,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                Assert.Throws<ArgumentException>("nonce", () => a.Decrypt(k, new Nonce(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+                Assert.Throws<CryptographicException>(() => a.Decrypt(k, new Nonce(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
             }
         }
 
@@ -393,7 +393,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                Assert.Throws<ArgumentException>("nonce", () => a.Decrypt(k, new Nonce(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+                Assert.Throws<CryptographicException>(() => a.Decrypt(k, new Nonce(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
             }
         }
 
@@ -410,7 +410,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                Assert.Throws<ArgumentException>("nonce", () => a.Decrypt(k, new Nonce(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+                Assert.Throws<CryptographicException>(() => a.Decrypt(k, new Nonce(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
             }
         }
 
@@ -558,7 +558,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                Assert.Throws<ArgumentException>("nonce", () => a.TryDecrypt(k, new Nonce(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out byte[] pt));
+                Assert.False(a.TryDecrypt(k, new Nonce(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out byte[] pt));
             }
         }
 
@@ -575,7 +575,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                Assert.Throws<ArgumentException>("nonce", () => a.TryDecrypt(k, new Nonce(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out byte[] pt));
+                Assert.False(a.TryDecrypt(k, new Nonce(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out byte[] pt));
             }
         }
 
@@ -664,7 +664,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                Assert.Throws<ArgumentException>("nonce", () => a.TryDecrypt(k, new Nonce(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+                Assert.False(a.TryDecrypt(k, new Nonce(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
             }
         }
 
@@ -681,7 +681,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                Assert.Throws<ArgumentException>("nonce", () => a.TryDecrypt(k, new Nonce(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+                Assert.False(a.TryDecrypt(k, new Nonce(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
             }
         }
 
