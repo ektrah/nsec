@@ -12,7 +12,8 @@ namespace NSec.Cryptography
     [StructLayout(LayoutKind.Explicit)]
     public readonly struct Nonce : IEquatable<Nonce>
     {
-        private const int maxSize = 32;
+        private const int maxSize = 24;
+
         public static readonly int MaxSize = maxSize;
 
         [FieldOffset(0)]
@@ -99,7 +100,7 @@ namespace NSec.Cryptography
             in Nonce left,
             in Nonce right)
         {
-            if (Unsafe.SizeOf<Nonce>() != 9 * sizeof(uint))
+            if (Unsafe.SizeOf<Nonce>() != 6 * sizeof(uint) + 4 * sizeof(byte))
             {
                 throw Error.Cryptographic_InternalError();
             }
@@ -116,9 +117,7 @@ namespace NSec.Cryptography
                 && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 2 * sizeof(uint))) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 2 * sizeof(uint)))
                 && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 3 * sizeof(uint))) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 3 * sizeof(uint)))
                 && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 4 * sizeof(uint))) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 4 * sizeof(uint)))
-                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 5 * sizeof(uint))) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 5 * sizeof(uint)))
-                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 6 * sizeof(uint))) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 6 * sizeof(uint)))
-                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 7 * sizeof(uint))) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 7 * sizeof(uint)));
+                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 5 * sizeof(uint))) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 5 * sizeof(uint)));
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -182,7 +181,7 @@ namespace NSec.Cryptography
             ref Nonce nonce,
             in Nonce other)
         {
-            if (Unsafe.SizeOf<Nonce>() != 9 * sizeof(uint))
+            if (Unsafe.SizeOf<Nonce>() != 6 * sizeof(uint) + 4 * sizeof(byte))
             {
                 throw Error.Cryptographic_InternalError();
             }
@@ -203,8 +202,6 @@ namespace NSec.Cryptography
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref x, 3 * sizeof(uint)), Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 3 * sizeof(uint))) ^ Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 3 * sizeof(uint))));
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref x, 4 * sizeof(uint)), Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 4 * sizeof(uint))) ^ Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 4 * sizeof(uint))));
             Unsafe.WriteUnaligned(ref Unsafe.Add(ref x, 5 * sizeof(uint)), Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 5 * sizeof(uint))) ^ Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 5 * sizeof(uint))));
-            Unsafe.WriteUnaligned(ref Unsafe.Add(ref x, 6 * sizeof(uint)), Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 6 * sizeof(uint))) ^ Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 6 * sizeof(uint))));
-            Unsafe.WriteUnaligned(ref Unsafe.Add(ref x, 7 * sizeof(uint)), Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 7 * sizeof(uint))) ^ Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 7 * sizeof(uint))));
         }
 
         public static bool operator !=(
@@ -283,7 +280,7 @@ namespace NSec.Cryptography
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override int GetHashCode()
         {
-            if (Unsafe.SizeOf<Nonce>() != 9 * sizeof(uint))
+            if (Unsafe.SizeOf<Nonce>() != 6 * sizeof(uint) + 4 * sizeof(byte))
             {
                 throw Error.Cryptographic_InternalError();
             }
@@ -297,8 +294,6 @@ namespace NSec.Cryptography
             hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 3 * sizeof(uint))));
             hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 4 * sizeof(uint))));
             hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 5 * sizeof(uint))));
-            hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 6 * sizeof(uint))));
-            hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 7 * sizeof(uint))));
 
             return unchecked((int)hashCode);
         }

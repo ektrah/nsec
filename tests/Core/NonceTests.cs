@@ -23,7 +23,7 @@ namespace NSec.Tests.Core
         [Fact]
         public static void Constants()
         {
-            Assert.Equal(32, Nonce.MaxSize);
+            Assert.Equal(24, Nonce.MaxSize);
         }
 
         #endregion

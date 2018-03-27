@@ -27,7 +27,7 @@ See [[How to: Generate Nonces]] for additional information on generating nonces.
 
 Represents the largest possible size of a nonce, in bytes.
 
-    public static readonly int MaxSize = 32;
+    public static readonly int MaxSize = 24;
 
 This field is constant and read-only.
 
