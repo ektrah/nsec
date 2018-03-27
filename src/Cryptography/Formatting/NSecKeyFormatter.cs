@@ -8,30 +8,10 @@ namespace NSec.Cryptography.Formatting
     internal sealed class NSecKeyFormatter
     {
         private readonly uint _blobHeader;
-        private readonly int _maxKeySize;
-        private readonly int _minKeySize;
 
         public NSecKeyFormatter(
-            int keySize,
             uint blobHeader)
         {
-            Debug.Assert(keySize >= 0);
-
-            _minKeySize = keySize;
-            _maxKeySize = keySize;
-            _blobHeader = blobHeader;
-        }
-
-        public NSecKeyFormatter(
-            int minKeySize,
-            int maxKeySize,
-            uint blobHeader)
-        {
-            Debug.Assert(minKeySize >= 0);
-            Debug.Assert(maxKeySize >= minKeySize);
-
-            _minKeySize = minKeySize;
-            _maxKeySize = maxKeySize;
             _blobHeader = blobHeader;
         }
 
@@ -41,8 +21,6 @@ namespace NSec.Cryptography.Formatting
             out int blobSize)
         {
             Debug.Assert(keyHandle != null);
-            Debug.Assert(keyHandle.Length >= _minKeySize);
-            Debug.Assert(keyHandle.Length <= _maxKeySize);
 
             blobSize = sizeof(uint) + sizeof(uint) + keyHandle.Length;
 
@@ -58,13 +36,13 @@ namespace NSec.Cryptography.Formatting
         }
 
         public bool TryImport(
+            int keySize,
             ReadOnlySpan<byte> blob,
             out SecureMemoryHandle keyHandle)
         {
             int length = blob.Length - (sizeof(uint) + sizeof(uint));
 
-            if (length < _minKeySize ||
-                length > _maxKeySize ||
+            if (length != keySize ||
                 BinaryPrimitives.ReadUInt32BigEndian(blob) != _blobHeader ||
                 BinaryPrimitives.ReadInt32LittleEndian(blob.Slice(sizeof(uint))) != length)
             {

@@ -141,6 +141,9 @@
   <data name="ArgumentOutOfRange_HashSize" xml:space="preserve">
     <value>Hash size '{0}' is out of range. Must be between {1} and {2}.</value>
   </data>
+  <data name="ArgumentOutOfRange_KeySize" xml:space="preserve">
+    <value>Key size '{0}' is out of range. Must be between {1} and {2}.</value>
+  </data>
   <data name="ArgumentOutOfRange_MacSize" xml:space="preserve">
     <value>MAC size '{0}' is out of range. Must be between {1} and {2}.</value>
   </data>

@@ -25,28 +25,22 @@ namespace NSec.Cryptography
     //
     public sealed class Blake2b : HashAlgorithm
     {
+        public static readonly int MinHashSize = 32;
+        public static readonly int MaxHashSize = crypto_generichash_blake2b_BYTES_MAX;
+
         private static int s_selfTest;
 
-        public Blake2b() : base(
+        public Blake2b() : this(
             hashSize: crypto_generichash_blake2b_BYTES)
         {
-            Debug.Assert(HashSize >= 32);
-            Debug.Assert(HashSize <= crypto_generichash_blake2b_BYTES_MAX);
-
-            if (s_selfTest == 0)
-            {
-                SelfTest();
-                Interlocked.Exchange(ref s_selfTest, 1);
-            }
         }
 
         public Blake2b(int hashSize) : base(
             hashSize: hashSize)
         {
-            if (hashSize < 32 ||
-                hashSize > crypto_generichash_blake2b_BYTES_MAX)
+            if (hashSize < MinHashSize || hashSize > MaxHashSize)
             {
-                throw Error.ArgumentOutOfRange_HashSize(nameof(hashSize), hashSize.ToString(), 32.ToString(), crypto_generichash_blake2b_BYTES_MAX.ToString());
+                throw Error.ArgumentOutOfRange_HashSize(nameof(hashSize), hashSize.ToString(), MinHashSize.ToString(), MaxHashSize.ToString());
             }
             if (s_selfTest == 0)
             {

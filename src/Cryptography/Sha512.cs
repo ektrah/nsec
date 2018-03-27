@@ -31,11 +31,23 @@ namespace NSec.Cryptography
     //
     public sealed class Sha512 : HashAlgorithm
     {
+        public static readonly int MinHashSize = crypto_hash_sha512_BYTES;
+        public static readonly int MaxHashSize = crypto_hash_sha512_BYTES;
+
         private static int s_selfTest;
 
-        public Sha512() : base(
+        public Sha512() : this(
             hashSize: crypto_hash_sha512_BYTES)
         {
+        }
+
+        public Sha512(int hashSize) : base(
+            hashSize: hashSize)
+        {
+            if (hashSize < MinHashSize || hashSize > MaxHashSize)
+            {
+                throw Error.ArgumentOutOfRange_HashSize(nameof(hashSize), hashSize.ToString(), MinHashSize.ToString(), MaxHashSize.ToString());
+            }
             if (s_selfTest == 0)
             {
                 SelfTest();

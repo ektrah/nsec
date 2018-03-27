@@ -9,14 +9,29 @@ namespace NSec.Tests.Algorithms
         #region Properties
 
         [Fact]
+        public static void Properties()
+        {
+            Assert.Equal(16, Blake2bMac.MinKeySize);
+            Assert.Equal(64, Blake2bMac.MaxKeySize);
+            Assert.Equal(16, Blake2bMac.MinMacSize);
+            Assert.Equal(64, Blake2bMac.MaxMacSize);
+        }
+
+        [Fact]
+        public static void Properties128()
+        {
+            var a = MacAlgorithm.Blake2b_128;
+
+            Assert.Equal(32, a.KeySize);
+            Assert.Equal(16, a.MacSize);
+        }
+
+        [Fact]
         public static void Properties256()
         {
             var a = MacAlgorithm.Blake2b_256;
 
-            Assert.Equal(16, a.MinKeySize);
-            Assert.Equal(32, a.DefaultKeySize);
-            Assert.Equal(64, a.MaxKeySize);
-
+            Assert.Equal(32, a.KeySize);
             Assert.Equal(32, a.MacSize);
         }
 
@@ -25,29 +40,23 @@ namespace NSec.Tests.Algorithms
         {
             var a = MacAlgorithm.Blake2b_512;
 
-            Assert.Equal(16, a.MinKeySize);
-            Assert.Equal(32, a.DefaultKeySize);
-            Assert.Equal(64, a.MaxKeySize);
-
+            Assert.Equal(32, a.KeySize);
             Assert.Equal(64, a.MacSize);
         }
 
         [Theory]
-        [InlineData(128 / 8)]
-        [InlineData(160 / 8)]
-        [InlineData(192 / 8)]
-        [InlineData(224 / 8)]
-        [InlineData(256 / 8)]
-        [InlineData(384 / 8)]
-        [InlineData(512 / 8)]
-        public static void PropertiesConstructed(int macSize)
+        [InlineData(128 / 8, 128 / 8)]
+        [InlineData(160 / 8, 160 / 8)]
+        [InlineData(192 / 8, 192 / 8)]
+        [InlineData(224 / 8, 224 / 8)]
+        [InlineData(256 / 8, 256 / 8)]
+        [InlineData(384 / 8, 384 / 8)]
+        [InlineData(512 / 8, 512 / 8)]
+        public static void PropertiesConstructed(int keySize, int macSize)
         {
-            var a = new Blake2bMac(macSize);
+            var a = new Blake2bMac(keySize, macSize);
 
-            Assert.Equal(16, a.MinKeySize);
-            Assert.Equal(32, a.DefaultKeySize);
-            Assert.Equal(64, a.MaxKeySize);
-
+            Assert.Equal(keySize, a.KeySize);
             Assert.Equal(macSize, a.MacSize);
         }
 
@@ -56,15 +65,27 @@ namespace NSec.Tests.Algorithms
         #region Ctor #2
 
         [Fact]
+        public static void CtorWithKeySizeTooSmall()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>("keySize", () => new Blake2bMac(16 - 1, 16));
+        }
+
+        [Fact]
+        public static void CtorWithKeySizeTooLarge()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>("keySize", () => new Blake2bMac(64 + 1, 64));
+        }
+
+        [Fact]
         public static void CtorWithMacSizeTooSmall()
         {
-            Assert.Throws<ArgumentOutOfRangeException>("macSize", () => new Blake2bMac(16 - 1));
+            Assert.Throws<ArgumentOutOfRangeException>("macSize", () => new Blake2bMac(16, 16 - 1));
         }
 
         [Fact]
         public static void CtorWithMacSizeTooLarge()
         {
-            Assert.Throws<ArgumentOutOfRangeException>("macSize", () => new Blake2bMac(64 + 1));
+            Assert.Throws<ArgumentOutOfRangeException>("macSize", () => new Blake2bMac(64, 64 + 1));
         }
 
         #endregion
@@ -72,13 +93,16 @@ namespace NSec.Tests.Algorithms
         #region Export #1
 
         [Theory]
-        [InlineData(16)]
-        [InlineData(32)]
-        [InlineData(64)]
-        public static void ExportImportRaw(int keySize)
+        [InlineData(16, 16)]
+        [InlineData(32, 32)]
+        [InlineData(64, 64)]
+        public static void ExportImportRaw(int keySize, int macSize)
         {
-            var a = MacAlgorithm.Blake2b_512;
+            var a = new Blake2bMac(keySize, macSize);
             var b = Utilities.RandomBytes.Slice(0, keySize);
+
+            Assert.Equal(keySize, a.KeySize);
+            Assert.Equal(macSize, a.MacSize);
 
             using (var k = Key.Import(a, b, KeyBlobFormat.RawSymmetricKey, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
             {
@@ -92,13 +116,16 @@ namespace NSec.Tests.Algorithms
         }
 
         [Theory]
-        [InlineData(16)]
-        [InlineData(32)]
-        [InlineData(64)]
-        public static void ExportImportNSec(int keySize)
+        [InlineData(16, 16)]
+        [InlineData(32, 32)]
+        [InlineData(64, 64)]
+        public static void ExportImportNSec(int keySize, int macSize)
         {
-            var a = MacAlgorithm.Blake2b_512;
+            var a = new Blake2bMac(keySize, macSize);
             var b = Utilities.RandomBytes.Slice(0, keySize);
+
+            Assert.Equal(keySize, a.KeySize);
+            Assert.Equal(macSize, a.MacSize);
 
             using (var k1 = Key.Import(a, b, KeyBlobFormat.RawSymmetricKey, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
             {

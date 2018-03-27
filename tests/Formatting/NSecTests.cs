@@ -25,7 +25,7 @@ namespace NSec.Tests.Formatting
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Test(a, a.DefaultKeySize, KeyBlobFormat.RawSymmetricKey, a.DefaultKeySize, KeyBlobFormat.NSecSymmetricKey, blobHeader);
+            Test(a, a.KeySize, KeyBlobFormat.RawSymmetricKey, a.KeySize, KeyBlobFormat.NSecSymmetricKey, blobHeader);
         }
 
         [Fact]

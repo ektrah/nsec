@@ -29,38 +29,34 @@ namespace NSec.Cryptography
     //
     public sealed class Blake2bMac : MacAlgorithm
     {
-        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(crypto_generichash_blake2b_KEYBYTES_MIN, crypto_generichash_blake2b_KEYBYTES_MAX, 0xDE3245DE);
+        public static readonly int MinKeySize = crypto_generichash_blake2b_KEYBYTES_MIN;
+        public static readonly int MaxKeySize = crypto_generichash_blake2b_KEYBYTES_MAX;
+        public static readonly int MinMacSize = crypto_generichash_blake2b_BYTES_MIN;
+        public static readonly int MaxMacSize = crypto_generichash_blake2b_BYTES_MAX;
 
-        private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(crypto_generichash_blake2b_KEYBYTES_MIN, crypto_generichash_blake2b_KEYBYTES_MAX);
+        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(0xDE3245DE);
+
+        private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter();
 
         private static int s_selfTest;
 
-        public Blake2bMac() : base(
-            minKeySize: crypto_generichash_blake2b_KEYBYTES_MIN,
-            defaultKeySize: crypto_generichash_blake2b_KEYBYTES,
-            maxKeySize: crypto_generichash_blake2b_KEYBYTES_MAX,
+        public Blake2bMac() : this(
+            keySize: crypto_generichash_blake2b_KEYBYTES,
             macSize: crypto_generichash_blake2b_BYTES)
         {
-            Debug.Assert(MacSize >= crypto_generichash_blake2b_BYTES_MIN);
-            Debug.Assert(MacSize <= crypto_generichash_blake2b_BYTES_MAX);
-
-            if (s_selfTest == 0)
-            {
-                SelfTest();
-                Interlocked.Exchange(ref s_selfTest, 1);
-            }
         }
 
-        public Blake2bMac(int macSize) : base(
-            minKeySize: crypto_generichash_blake2b_KEYBYTES_MIN,
-            defaultKeySize: crypto_generichash_blake2b_KEYBYTES,
-            maxKeySize: crypto_generichash_blake2b_KEYBYTES_MAX,
+        public Blake2bMac(int keySize, int macSize) : base(
+            keySize: keySize,
             macSize: macSize)
         {
-            if (macSize < crypto_generichash_blake2b_BYTES_MIN ||
-                macSize > crypto_generichash_blake2b_BYTES_MAX)
+            if (keySize < MinKeySize || keySize > MaxKeySize)
             {
-                throw Error.ArgumentOutOfRange_MacSize(nameof(macSize), macSize.ToString(), crypto_generichash_blake2b_BYTES_MIN.ToString(), crypto_generichash_blake2b_BYTES_MAX.ToString());
+                throw Error.ArgumentOutOfRange_KeySize(nameof(keySize), keySize.ToString(), MinKeySize.ToString(), MaxKeySize.ToString());
+            }
+            if (macSize < MinMacSize || macSize > MaxMacSize)
+            {
+                throw Error.ArgumentOutOfRange_MacSize(nameof(macSize), macSize.ToString(), MaxMacSize.ToString(), MaxMacSize.ToString());
             }
             if (s_selfTest == 0)
             {
@@ -119,7 +115,7 @@ namespace NSec.Cryptography
 
         internal override int GetDefaultSeedSize()
         {
-            return crypto_generichash_blake2b_KEYBYTES;
+            return KeySize;
         }
 
         internal override void InitializeCore(
@@ -169,9 +165,9 @@ namespace NSec.Cryptography
             switch (format)
             {
             case KeyBlobFormat.RawSymmetricKey:
-                return s_rawKeyFormatter.TryImport(blob, out keyHandle);
+                return s_rawKeyFormatter.TryImport(KeySize, blob, out keyHandle);
             case KeyBlobFormat.NSecSymmetricKey:
-                return s_nsecKeyFormatter.TryImport(blob, out keyHandle);
+                return s_nsecKeyFormatter.TryImport(KeySize, blob, out keyHandle);
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }

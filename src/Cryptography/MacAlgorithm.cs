@@ -23,34 +23,38 @@ namespace NSec.Cryptography
     //
     public abstract class MacAlgorithm : Algorithm
     {
+        private static Blake2bMac s_Blake2b_128;
         private static Blake2bMac s_Blake2b_256;
         private static Blake2bMac s_Blake2b_512;
         private static HmacSha256 s_HmacSha256;
         private static HmacSha512 s_HmacSha512;
 
-        private readonly int _defaultKeySize;
+        private readonly int _keySize;
         private readonly int _macSize;
-        private readonly int _maxKeySize;
-        private readonly int _minKeySize;
 
         private protected MacAlgorithm(
-            int minKeySize,
-            int defaultKeySize,
-            int maxKeySize,
+            int keySize,
             int macSize)
         {
-            Debug.Assert(minKeySize >= 0);
-            Debug.Assert(defaultKeySize > 0);
-            Debug.Assert(defaultKeySize >= minKeySize);
-            Debug.Assert(maxKeySize >= defaultKeySize);
-
+            Debug.Assert(keySize > 0);
             Debug.Assert(macSize > 0);
 
-            _minKeySize = minKeySize;
-            _defaultKeySize = defaultKeySize;
-            _maxKeySize = maxKeySize;
-
+            _keySize = keySize;
             _macSize = macSize;
+        }
+
+        public static Blake2bMac Blake2b_128
+        {
+            get
+            {
+                Blake2bMac instance = s_Blake2b_128;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_Blake2b_128, new Blake2bMac(crypto_generichash_blake2b_KEYBYTES, 128 / 8), null);
+                    instance = s_Blake2b_128;
+                }
+                return instance;
+            }
         }
 
         public static Blake2bMac Blake2b_256
@@ -60,7 +64,7 @@ namespace NSec.Cryptography
                 Blake2bMac instance = s_Blake2b_256;
                 if (instance == null)
                 {
-                    Interlocked.CompareExchange(ref s_Blake2b_256, new Blake2bMac(256 / 8), null);
+                    Interlocked.CompareExchange(ref s_Blake2b_256, new Blake2bMac(crypto_generichash_blake2b_KEYBYTES, 256 / 8), null);
                     instance = s_Blake2b_256;
                 }
                 return instance;
@@ -74,7 +78,7 @@ namespace NSec.Cryptography
                 Blake2bMac instance = s_Blake2b_512;
                 if (instance == null)
                 {
-                    Interlocked.CompareExchange(ref s_Blake2b_512, new Blake2bMac(512 / 8), null);
+                    Interlocked.CompareExchange(ref s_Blake2b_512, new Blake2bMac(crypto_generichash_blake2b_KEYBYTES, 512 / 8), null);
                     instance = s_Blake2b_512;
                 }
                 return instance;
@@ -109,13 +113,9 @@ namespace NSec.Cryptography
             }
         }
 
-        public int DefaultKeySize => _defaultKeySize;
+        public int KeySize => _keySize;
 
         public int MacSize => _macSize;
-
-        public int MaxKeySize => _maxKeySize;
-
-        public int MinKeySize => _minKeySize;
 
         public byte[] Mac(
             Key key,

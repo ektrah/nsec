@@ -11,12 +11,18 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void Properties()
         {
+            Assert.Equal(32, HmacSha256.MinKeySize);
+            Assert.Equal(32, HmacSha256.MaxKeySize);
+            Assert.Equal(32, HmacSha256.MinMacSize);
+            Assert.Equal(32, HmacSha256.MaxMacSize);
+        }
+
+        [Fact]
+        public static void Properties256()
+        {
             var a = MacAlgorithm.HmacSha256;
 
-            Assert.Equal(32, a.MinKeySize);
-            Assert.Equal(32, a.DefaultKeySize);
-            Assert.Equal(32, a.MaxKeySize);
-
+            Assert.Equal(32, a.KeySize);
             Assert.Equal(32, a.MacSize);
         }
 

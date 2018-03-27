@@ -248,6 +248,15 @@ namespace NSec.Cryptography
             return new ArgumentOutOfRangeException(paramName, string.Format(ResourceManager.GetString("ArgumentOutOfRange_HashSize"), arg0, arg1, arg2));
         }
 
+        internal static ArgumentOutOfRangeException ArgumentOutOfRange_KeySize(
+            string paramName,
+            string arg0,
+            string arg1,
+            string arg2)
+        {
+            return new ArgumentOutOfRangeException(paramName, string.Format(ResourceManager.GetString("ArgumentOutOfRange_KeySize"), arg0, arg1, arg2));
+        }
+
         internal static ArgumentOutOfRangeException ArgumentOutOfRange_MacSize(
             string paramName,
             string arg0,

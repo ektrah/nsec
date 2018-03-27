@@ -41,9 +41,9 @@ namespace NSec.Cryptography
     //
     public sealed class ChaCha20Poly1305 : AeadAlgorithm
     {
-        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(crypto_aead_chacha20poly1305_ietf_KEYBYTES, 0xDE3143DE);
+        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(0xDE3143DE);
 
-        private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(crypto_aead_chacha20poly1305_ietf_KEYBYTES);
+        private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter();
 
         private static int s_selfTest;
 
@@ -158,9 +158,9 @@ namespace NSec.Cryptography
             switch (format)
             {
             case KeyBlobFormat.RawSymmetricKey:
-                return s_rawKeyFormatter.TryImport(blob, out keyHandle);
+                return s_rawKeyFormatter.TryImport(crypto_aead_chacha20poly1305_ietf_KEYBYTES, blob, out keyHandle);
             case KeyBlobFormat.NSecSymmetricKey:
-                return s_nsecKeyFormatter.TryImport(blob, out keyHandle);
+                return s_nsecKeyFormatter.TryImport(crypto_aead_chacha20poly1305_ietf_KEYBYTES, blob, out keyHandle);
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }

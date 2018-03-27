@@ -8,25 +8,23 @@ namespace NSec.Tests.Base
     {
         public static readonly TheoryData<Type> MacAlgorithms = Registry.MacAlgorithms;
 
-        public static readonly TheoryData<Type, int> MacAlgorithmsAndKeySizes = new TheoryData<Type, int>
+        public static readonly TheoryData<Type, int, int> MacAlgorithmsAndSizes = new TheoryData<Type, int, int>
         {
-            { typeof(HmacSha256),  32 }, // L
-            { typeof(HmacSha256),  48 },
-            { typeof(HmacSha256),  64 }, // B
-            { typeof(HmacSha256),  80 },
-            { typeof(HmacSha256),  96 },
+            { typeof(Blake2bMac), 16, 16 },
+            { typeof(Blake2bMac), 16, 32 },
+            { typeof(Blake2bMac), 16, 64 },
 
-            { typeof(HmacSha512),  64 }, // L
-            { typeof(HmacSha512),  96 },
-            { typeof(HmacSha512), 128 }, // B
-            { typeof(HmacSha512), 160 },
-            { typeof(HmacSha512), 192 },
+            { typeof(Blake2bMac), 32, 16 },
+            { typeof(Blake2bMac), 32, 32 },
+            { typeof(Blake2bMac), 32, 64 },
 
-            { typeof(Blake2bMac),  16 },
-            { typeof(Blake2bMac),  24 },
-            { typeof(Blake2bMac),  32 },
-            { typeof(Blake2bMac),  48 },
-            { typeof(Blake2bMac),  64 },
+            { typeof(Blake2bMac), 16, 16 },
+            { typeof(Blake2bMac), 32, 32 },
+            { typeof(Blake2bMac), 64, 64 },
+
+            { typeof(HmacSha256), 32, 32 },
+
+            { typeof(HmacSha512), 64, 64 },
         };
 
         #region Properties
@@ -37,11 +35,7 @@ namespace NSec.Tests.Base
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.True(a.MinKeySize >= 0);
-            Assert.True(a.DefaultKeySize > 0);
-            Assert.True(a.DefaultKeySize >= a.MinKeySize);
-            Assert.True(a.MaxKeySize >= a.DefaultKeySize);
-
+            Assert.True(a.KeySize > 0);
             Assert.True(a.MacSize > 0);
         }
 
@@ -50,10 +44,10 @@ namespace NSec.Tests.Base
         #region Export #1
 
         [Theory]
-        [MemberData(nameof(MacAlgorithmsAndKeySizes))]
-        public static void ExportImportRaw(Type algorithmType, int keySize)
+        [MemberData(nameof(MacAlgorithmsAndSizes))]
+        public static void ExportImportRaw(Type algorithmType, int keySize, int macSize)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType, keySize, macSize);
             var b = Utilities.RandomBytes.Slice(0, keySize);
 
             using (var k = Key.Import(a, b, KeyBlobFormat.RawSymmetricKey, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
@@ -68,10 +62,10 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(MacAlgorithmsAndKeySizes))]
-        public static void ExportImportNSec(Type algorithmType, int keySize)
+        [MemberData(nameof(MacAlgorithmsAndSizes))]
+        public static void ExportImportNSec(Type algorithmType, int keySize, int macSize)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType, keySize, macSize);
             var b = Utilities.RandomBytes.Slice(0, keySize);
 
             using (var k1 = Key.Import(a, b, KeyBlobFormat.RawSymmetricKey, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
@@ -117,10 +111,10 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void MacSuccess(Type algorithmType)
+        [MemberData(nameof(MacAlgorithmsAndSizes))]
+        public static void MacSuccess(Type algorithmType, int keySize, int macSize)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType, keySize, macSize);
 
             using (var k = new Key(a))
             {
@@ -185,10 +179,10 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void MacWithSpanSuccess(Type algorithmType)
+        [MemberData(nameof(MacAlgorithmsAndSizes))]
+        public static void MacWithSpanSuccess(Type algorithmType, int keySize, int macSize)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType, keySize, macSize);
 
             using (var k = new Key(a))
             {
@@ -273,10 +267,10 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void TryVerifyWithSpanSuccess(Type algorithmType)
+        [MemberData(nameof(MacAlgorithmsAndSizes))]
+        public static void TryVerifyWithSpanSuccess(Type algorithmType, int keySize, int macSize)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType, keySize, macSize);
 
             using (var k = new Key(a))
             {
@@ -338,10 +332,10 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void VerifyWithSpanSuccess(Type algorithmType)
+        [MemberData(nameof(MacAlgorithmsAndSizes))]
+        public static void VerifyWithSpanSuccess(Type algorithmType, int keySize, int macSize)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType, keySize, macSize);
 
             using (var k = new Key(a))
             {
@@ -358,10 +352,13 @@ namespace NSec.Tests.Base
         #region CreateKey
 
         [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void CreateKey(Type algorithmType)
+        [MemberData(nameof(MacAlgorithmsAndSizes))]
+        public static void CreateKey(Type algorithmType, int keySize, int macSize)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType, keySize, macSize);
+
+            Assert.Equal(keySize, a.KeySize);
+            Assert.Equal(macSize, a.MacSize);
 
             using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
             {

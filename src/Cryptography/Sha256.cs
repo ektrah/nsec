@@ -28,11 +28,23 @@ namespace NSec.Cryptography
     //
     public sealed class Sha256 : HashAlgorithm
     {
+        public static readonly int MinHashSize = crypto_hash_sha256_BYTES;
+        public static readonly int MaxHashSize = crypto_hash_sha256_BYTES;
+
         private static int s_selfTest;
 
-        public Sha256() : base(
+        public Sha256() : this(
             hashSize: crypto_hash_sha256_BYTES)
         {
+        }
+
+        public Sha256(int hashSize) : base(
+            hashSize: hashSize)
+        {
+            if (hashSize < MinHashSize || hashSize > MaxHashSize)
+            {
+                throw Error.ArgumentOutOfRange_HashSize(nameof(hashSize), hashSize.ToString(), MinHashSize.ToString(), MaxHashSize.ToString());
+            }
             if (s_selfTest == 0)
             {
                 SelfTest();

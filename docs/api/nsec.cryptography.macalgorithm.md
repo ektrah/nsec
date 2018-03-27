@@ -20,16 +20,23 @@ Represents a message authentication code (MAC) algorithm.
 ## Static Properties
 
 
+### Blake2b_128
+
+Gets the BLAKE2b algorithm with a 256-bit key size and a 128-bit output size.
+
+    public static Blake2bMac Blake2b_128 { get; }
+
+
 ### Blake2b_256
 
-Gets the keyed BLAKE2b-256 algorithm.
+Gets the BLAKE2b algorithm with a 256-bit key size and a 256-bit output size.
 
     public static Blake2bMac Blake2b_256 { get; }
 
 
 ### Blake2b_512
 
-Gets the keyed BLAKE2b-512 algorithm.
+Gets the BLAKE2b algorithm with a 256-bit key size and a 512-bit output size.
 
     public static Blake2bMac Blake2b_512 { get; }
 
@@ -51,17 +58,15 @@ Gets the HMAC-SHA512 algorithm.
 ## Properties
 
 
-### DefaultKeySize / MinKeySize / MaxKeySize
+### KeySize
 
-Gets the default/minimum/maximum size of keys.
+Gets the size of keys.
 
-    public int DefaultKeySize { get; }
-    public int MinKeySize { get; }
-    public int MaxKeySize { get; }
+    public int KeySize { get; }
 
 #### Property Value
 
-The default/minimum/maximum key size, in bytes.
+The key size, in bytes.
 
 
 ### MacSize

@@ -10,7 +10,7 @@ namespace NSec.Experimental.Sodium
 {
     public sealed class NaclXSalsa20Poly1305 : NaclSecretBoxAlgorithm
     {
-        private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(crypto_secretbox_xsalsa20poly1305_KEYBYTES);
+        private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter();
 
         private static int s_selfTest;
 
@@ -111,7 +111,7 @@ namespace NSec.Experimental.Sodium
             switch (format)
             {
             case KeyBlobFormat.RawSymmetricKey:
-                return s_rawKeyFormatter.TryImport(blob, out keyHandle);
+                return s_rawKeyFormatter.TryImport(crypto_secretbox_xsalsa20poly1305_KEYBYTES, blob, out keyHandle);
             case KeyBlobFormat.NSecSymmetricKey: // TODO: NaclXSalsa20Poly1305 NSecSymmetricKey format
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());

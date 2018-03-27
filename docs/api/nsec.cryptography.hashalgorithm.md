@@ -22,14 +22,14 @@ Represents a cryptographic hash algorithm.
 
 ### Blake2b_256
 
-Gets the unkeyed BLAKE2b-256 algorithm.
+Gets the BLAKE2b algorithm with a 256-bit output size.
 
     public static Blake2b Blake2b_256 { get; }
 
 
 ### Blake2b_512
 
-Gets the unkeyed BLAKE2b-512 algorithm.
+Gets the BLAKE2b algorithm with a 512-bit output size.
 
     public static Blake2b Blake2b_512 { get; }
 

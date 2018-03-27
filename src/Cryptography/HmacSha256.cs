@@ -35,18 +35,35 @@ namespace NSec.Cryptography
     //
     public sealed class HmacSha256 : MacAlgorithm
     {
-        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(crypto_hash_sha256_BYTES, int.MaxValue, 0xDE3346DE);
+        public static readonly int MinKeySize = crypto_hash_sha256_BYTES;
+        public static readonly int MaxKeySize = crypto_hash_sha256_BYTES;
+        public static readonly int MinMacSize = crypto_auth_hmacsha256_BYTES;
+        public static readonly int MaxMacSize = crypto_auth_hmacsha256_BYTES;
 
-        private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter(crypto_hash_sha256_BYTES, int.MaxValue);
+        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(0xDE3346DE);
+
+        private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter();
 
         private static int s_selfTest;
 
-        public HmacSha256() : base(
-            minKeySize: crypto_hash_sha256_BYTES,
-            defaultKeySize: crypto_hash_sha256_BYTES,
-            maxKeySize: crypto_hash_sha256_BYTES,
+        public HmacSha256() : this(
+            keySize: crypto_hash_sha256_BYTES,
             macSize: crypto_auth_hmacsha256_BYTES)
         {
+        }
+
+        public HmacSha256(int keySize, int macSize) : base(
+            keySize: keySize,
+            macSize: macSize)
+        {
+            if (keySize < MinKeySize || keySize > MaxKeySize)
+            {
+                throw Error.ArgumentOutOfRange_KeySize(nameof(keySize), keySize.ToString(), MinKeySize.ToString(), MaxKeySize.ToString());
+            }
+            if (macSize < MinMacSize || macSize > MaxMacSize)
+            {
+                throw Error.ArgumentOutOfRange_MacSize(nameof(macSize), macSize.ToString(), MaxMacSize.ToString(), MaxMacSize.ToString());
+            }
             if (s_selfTest == 0)
             {
                 SelfTest();
@@ -87,7 +104,7 @@ namespace NSec.Cryptography
 
         internal override int GetDefaultSeedSize()
         {
-            return crypto_hash_sha256_BYTES;
+            return KeySize;
         }
 
         internal override void InitializeCore(
@@ -129,9 +146,9 @@ namespace NSec.Cryptography
             switch (format)
             {
             case KeyBlobFormat.RawSymmetricKey:
-                return s_rawKeyFormatter.TryImport(blob, out keyHandle);
+                return s_rawKeyFormatter.TryImport(KeySize, blob, out keyHandle);
             case KeyBlobFormat.NSecSymmetricKey:
-                return s_nsecKeyFormatter.TryImport(blob, out keyHandle);
+                return s_nsecKeyFormatter.TryImport(KeySize, blob, out keyHandle);
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
