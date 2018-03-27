@@ -40,7 +40,7 @@ namespace NSec.Cryptography
         public static readonly int MinMacSize = crypto_auth_hmacsha256_BYTES;
         public static readonly int MaxMacSize = crypto_auth_hmacsha256_BYTES;
 
-        private const uint NSecBlobHeader = 0xDE3346DE;
+        private const uint NSecBlobHeader = 0xDE6346DE;
 
         private static int s_selfTest;
 

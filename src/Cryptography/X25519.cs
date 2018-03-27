@@ -32,9 +32,9 @@ namespace NSec.Cryptography
     //
     public sealed class X25519 : KeyAgreementAlgorithm
     {
-        private static readonly PrivateKeyFormatter s_nsecPrivateKeyFormatter = new X25519PrivateKeyFormatter(new byte[] { 0xDE, 0x36, 0x41, 0xDE, crypto_scalarmult_curve25519_SCALARBYTES, 0, 0, 0 });
+        private static readonly PrivateKeyFormatter s_nsecPrivateKeyFormatter = new X25519PrivateKeyFormatter(new byte[] { 0xDE, 0x66, 0x41, 0xDE, crypto_scalarmult_curve25519_SCALARBYTES, 0, 0, 0 });
 
-        private static readonly PublicKeyFormatter s_nsecPublicKeyFormatter = new X25519PublicKeyFormatter(new byte[] { 0xDE, 0x37, 0x41, 0xDE, crypto_scalarmult_curve25519_SCALARBYTES, 0, 0, 0 });
+        private static readonly PublicKeyFormatter s_nsecPublicKeyFormatter = new X25519PublicKeyFormatter(new byte[] { 0xDE, 0x67, 0x41, 0xDE, crypto_scalarmult_curve25519_SCALARBYTES, 0, 0, 0 });
 
         private static readonly PrivateKeyFormatter s_pkixPrivateKeyFormatter = new X25519PrivateKeyFormatter(new byte[]
         {

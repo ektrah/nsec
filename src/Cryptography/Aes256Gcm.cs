@@ -44,7 +44,7 @@ namespace NSec.Cryptography
     //
     public sealed class Aes256Gcm : AeadAlgorithm
     {
-        private const uint NSecBlobHeader = 0xDE3144DE;
+        private const uint NSecBlobHeader = 0xDE6144DE;
 
         private static int s_isSupported;
         private static int s_selfTest;

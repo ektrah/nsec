@@ -41,7 +41,7 @@ namespace NSec.Cryptography
     //
     public sealed class ChaCha20Poly1305 : AeadAlgorithm
     {
-        private const uint NSecBlobHeader = 0xDE3143DE;
+        private const uint NSecBlobHeader = 0xDE6143DE;
 
         private static int s_selfTest;
 

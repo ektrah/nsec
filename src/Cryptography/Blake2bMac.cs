@@ -34,7 +34,7 @@ namespace NSec.Cryptography
         public static readonly int MinMacSize = crypto_generichash_blake2b_BYTES_MIN;
         public static readonly int MaxMacSize = crypto_generichash_blake2b_BYTES_MAX;
 
-        private const uint NSecBlobHeader = 0xDE3245DE;
+        private const uint NSecBlobHeader = 0xDE6245DE;
 
         private static int s_selfTest;
 

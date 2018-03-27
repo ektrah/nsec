@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using NSec.Cryptography;
 using Xunit;
 
@@ -8,8 +7,8 @@ namespace NSec.Tests.Formatting
     public static class NSecTests
     {
         [Theory]
-        [InlineData(typeof(Aes256Gcm), new byte[] { 0xDE, 0x31, 0x44, 0xDE })]
-        [InlineData(typeof(ChaCha20Poly1305), new byte[] { 0xDE, 0x31, 0x43, 0xDE })]
+        [InlineData(typeof(Aes256Gcm), new byte[] { 0xDE, 0x61, 0x44, 0xDE })]
+        [InlineData(typeof(ChaCha20Poly1305), new byte[] { 0xDE, 0x61, 0x43, 0xDE })]
         public static void Aead(Type algorithmType, byte[] blobHeader)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
@@ -18,9 +17,9 @@ namespace NSec.Tests.Formatting
         }
 
         [Theory]
-        [InlineData(typeof(Blake2bMac), new byte[] { 0xDE, 0x32, 0x45, 0xDE })]
-        [InlineData(typeof(HmacSha256), new byte[] { 0xDE, 0x33, 0x46, 0xDE })]
-        [InlineData(typeof(HmacSha512), new byte[] { 0xDE, 0x33, 0x47, 0xDE })]
+        [InlineData(typeof(Blake2bMac), new byte[] { 0xDE, 0x62, 0x45, 0xDE })]
+        [InlineData(typeof(HmacSha256), new byte[] { 0xDE, 0x63, 0x46, 0xDE })]
+        [InlineData(typeof(HmacSha512), new byte[] { 0xDE, 0x63, 0x47, 0xDE })]
         public static void Mac(Type algorithmType, byte[] blobHeader)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -33,7 +32,7 @@ namespace NSec.Tests.Formatting
         {
             var a = SignatureAlgorithm.Ed25519;
 
-            Test(a, a.PrivateKeySize, KeyBlobFormat.RawPrivateKey, a.PrivateKeySize, KeyBlobFormat.NSecPrivateKey, new byte[] { 0xDE, 0x34, 0x42, 0xDE });
+            Test(a, a.PrivateKeySize, KeyBlobFormat.RawPrivateKey, a.PrivateKeySize, KeyBlobFormat.NSecPrivateKey, new byte[] { 0xDE, 0x64, 0x42, 0xDE });
         }
 
         [Fact]
@@ -41,7 +40,7 @@ namespace NSec.Tests.Formatting
         {
             var a = SignatureAlgorithm.Ed25519;
 
-            Test(a, a.PrivateKeySize, KeyBlobFormat.RawPrivateKey, a.PublicKeySize, KeyBlobFormat.NSecPublicKey, new byte[] { 0xDE, 0x35, 0x42, 0xDE });
+            Test(a, a.PrivateKeySize, KeyBlobFormat.RawPrivateKey, a.PublicKeySize, KeyBlobFormat.NSecPublicKey, new byte[] { 0xDE, 0x65, 0x42, 0xDE });
         }
 
         [Fact]
@@ -49,7 +48,7 @@ namespace NSec.Tests.Formatting
         {
             var a = KeyAgreementAlgorithm.X25519;
 
-            Test(a, a.PrivateKeySize, KeyBlobFormat.RawPrivateKey, a.PrivateKeySize, KeyBlobFormat.NSecPrivateKey, new byte[] { 0xDE, 0x36, 0x41, 0xDE });
+            Test(a, a.PrivateKeySize, KeyBlobFormat.RawPrivateKey, a.PrivateKeySize, KeyBlobFormat.NSecPrivateKey, new byte[] { 0xDE, 0x66, 0x41, 0xDE });
         }
 
         [Fact]
@@ -57,7 +56,7 @@ namespace NSec.Tests.Formatting
         {
             var a = KeyAgreementAlgorithm.X25519;
 
-            Test(a, a.PrivateKeySize, KeyBlobFormat.RawPrivateKey, a.PublicKeySize, KeyBlobFormat.NSecPublicKey, new byte[] { 0xDE, 0x37, 0x41, 0xDE });
+            Test(a, a.PrivateKeySize, KeyBlobFormat.RawPrivateKey, a.PublicKeySize, KeyBlobFormat.NSecPublicKey, new byte[] { 0xDE, 0x67, 0x41, 0xDE });
         }
 
         private static void Test(Algorithm a, int seedSize, KeyBlobFormat importFormat, int keySize, KeyBlobFormat format, byte[] blobHeader)
