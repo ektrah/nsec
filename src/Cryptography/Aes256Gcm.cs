@@ -166,7 +166,7 @@ namespace NSec.Cryptography
             case KeyBlobFormat.RawSymmetricKey:
                 return RawKeyFormatter.TryExport(keyHandle, blob, out blobSize);
             case KeyBlobFormat.NSecSymmetricKey:
-                return NSecKeyFormatter.TryExport(NSecBlobHeader, keyHandle, blob, out blobSize);
+                return NSecKeyFormatter.TryExport(NSecBlobHeader, KeySize, TagSize, keyHandle, blob, out blobSize);
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
@@ -185,7 +185,7 @@ namespace NSec.Cryptography
             case KeyBlobFormat.RawSymmetricKey:
                 return RawKeyFormatter.TryImport(KeySize, blob, out keyHandle);
             case KeyBlobFormat.NSecSymmetricKey:
-                return NSecKeyFormatter.TryImport(NSecBlobHeader, KeySize, blob, out keyHandle);
+                return NSecKeyFormatter.TryImport(NSecBlobHeader, KeySize, TagSize, blob, out keyHandle);
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }

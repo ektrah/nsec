@@ -13,7 +13,7 @@ namespace NSec.Tests.Formatting
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Test(a, a.KeySize, KeyBlobFormat.RawSymmetricKey, a.KeySize, KeyBlobFormat.NSecSymmetricKey, blobHeader);
+            Test(a, a.KeySize, KeyBlobFormat.RawSymmetricKey, a.KeySize, a.TagSize, KeyBlobFormat.NSecSymmetricKey, blobHeader);
         }
 
         [Theory]
@@ -24,7 +24,7 @@ namespace NSec.Tests.Formatting
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Test(a, a.KeySize, KeyBlobFormat.RawSymmetricKey, a.KeySize, KeyBlobFormat.NSecSymmetricKey, blobHeader);
+            Test(a, a.KeySize, KeyBlobFormat.RawSymmetricKey, a.KeySize, a.MacSize, KeyBlobFormat.NSecSymmetricKey, blobHeader);
         }
 
         [Fact]
@@ -32,7 +32,7 @@ namespace NSec.Tests.Formatting
         {
             var a = SignatureAlgorithm.Ed25519;
 
-            Test(a, a.PrivateKeySize, KeyBlobFormat.RawPrivateKey, a.PrivateKeySize, KeyBlobFormat.NSecPrivateKey, new byte[] { 0xDE, 0x64, 0x42, 0xDE });
+            Test(a, a.PrivateKeySize, KeyBlobFormat.RawPrivateKey, a.PrivateKeySize, a.SignatureSize, KeyBlobFormat.NSecPrivateKey, new byte[] { 0xDE, 0x64, 0x42, 0xDE });
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace NSec.Tests.Formatting
         {
             var a = SignatureAlgorithm.Ed25519;
 
-            Test(a, a.PrivateKeySize, KeyBlobFormat.RawPrivateKey, a.PublicKeySize, KeyBlobFormat.NSecPublicKey, new byte[] { 0xDE, 0x65, 0x42, 0xDE });
+            Test(a, a.PrivateKeySize, KeyBlobFormat.RawPrivateKey, a.PublicKeySize, a.SignatureSize, KeyBlobFormat.NSecPublicKey, new byte[] { 0xDE, 0x65, 0x42, 0xDE });
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace NSec.Tests.Formatting
         {
             var a = KeyAgreementAlgorithm.X25519;
 
-            Test(a, a.PrivateKeySize, KeyBlobFormat.RawPrivateKey, a.PrivateKeySize, KeyBlobFormat.NSecPrivateKey, new byte[] { 0xDE, 0x66, 0x41, 0xDE });
+            Test(a, a.PrivateKeySize, KeyBlobFormat.RawPrivateKey, a.PrivateKeySize, a.SharedSecretSize, KeyBlobFormat.NSecPrivateKey, new byte[] { 0xDE, 0x66, 0x41, 0xDE });
         }
 
         [Fact]
@@ -56,10 +56,10 @@ namespace NSec.Tests.Formatting
         {
             var a = KeyAgreementAlgorithm.X25519;
 
-            Test(a, a.PrivateKeySize, KeyBlobFormat.RawPrivateKey, a.PublicKeySize, KeyBlobFormat.NSecPublicKey, new byte[] { 0xDE, 0x67, 0x41, 0xDE });
+            Test(a, a.PrivateKeySize, KeyBlobFormat.RawPrivateKey, a.PublicKeySize, a.SharedSecretSize, KeyBlobFormat.NSecPublicKey, new byte[] { 0xDE, 0x67, 0x41, 0xDE });
         }
 
-        private static void Test(Algorithm a, int seedSize, KeyBlobFormat importFormat, int keySize, KeyBlobFormat format, byte[] blobHeader)
+        private static void Test(Algorithm a, int seedSize, KeyBlobFormat importFormat, int keySize, int outputSize, KeyBlobFormat format, byte[] blobHeader)
         {
             var b = Utilities.RandomBytes.Slice(0, seedSize);
 
@@ -68,9 +68,10 @@ namespace NSec.Tests.Formatting
                 var blob = k.Export(format);
 
                 Assert.NotNull(blob);
-                Assert.Equal(blobHeader.Length + sizeof(uint) + keySize, blob.Length);
+                Assert.Equal(blobHeader.Length + sizeof(short) + sizeof(short) + keySize, blob.Length);
                 Assert.Equal(blobHeader, blob.AsSpan(0, blobHeader.Length).ToArray());
-                Assert.Equal(BitConverter.GetBytes(keySize), blob.AsSpan(blobHeader.Length, sizeof(int)).ToArray());
+                Assert.Equal(keySize, BitConverter.ToInt16(blob, blobHeader.Length));
+                Assert.Equal(outputSize, BitConverter.ToInt16(blob, blobHeader.Length + sizeof(short)));
             }
         }
     }
