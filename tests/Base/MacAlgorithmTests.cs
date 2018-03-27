@@ -18,8 +18,8 @@ namespace NSec.Tests.Base
             { typeof(Blake2bMac), 32, 32 },
             { typeof(Blake2bMac), 32, 64 },
 
-            { typeof(Blake2bMac), 16, 16 },
-            { typeof(Blake2bMac), 32, 32 },
+            { typeof(Blake2bMac), 64, 16 },
+            { typeof(Blake2bMac), 64, 32 },
             { typeof(Blake2bMac), 64, 64 },
 
             { typeof(HmacSha256), 32, 32 },
