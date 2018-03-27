@@ -158,9 +158,7 @@ namespace NSec.Cryptography
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
-            if (plaintext.Length > int.MaxValue - _tagSize)
-                throw Error.Argument_PlaintextTooLong(nameof(plaintext), (int.MaxValue - _tagSize).ToString());
-            if (ciphertext.Length != plaintext.Length + _tagSize)
+            if (ciphertext.Length - _tagSize != plaintext.Length)
                 throw Error.Argument_CiphertextLength(nameof(ciphertext));
             if (ciphertext.Overlaps(plaintext, out int offset) && offset != 0)
                 throw Error.Argument_OverlapCiphertext(nameof(ciphertext));

@@ -195,10 +195,6 @@ ArgumentException
 : `nonce.Size` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
 
 ArgumentException
-: `plaintext.Length` plus [[TagSize|AeadAlgorithm Class#TagSize]] is greater
-    than `int.MaxValue`.
-
-ArgumentException
 : `ciphertext.Length` is not equal to `plaintext.Length` plus
     [[TagSize|AeadAlgorithm Class#TagSize]].
 
