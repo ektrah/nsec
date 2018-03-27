@@ -1,17 +1,12 @@
 # How to: Generate Nonces
 
-For the security of the AEAD algorithms included with NSec, it is critical that
-nonces are constructed in a way that the same nonce is never used more than once
-to encrypt data with the same key. 
+For the security of the AEAD algorithms in NSec, it is critical that nonces are
+constructed in a way that the same nonce is never used more than once to encrypt
+data with the same key. 
 
-This is a hard problem if an application cannot keep track of nonces it has
-already generated, or if an application is spread across multiple machines that
-use the same key, or if more than one party in a group wants to encrypt data
-with the same key.
-
-Security protocols generally all generate nonces in their own way, which is why
-NSec doesn't provide a general, easy-to-use solution. This "how to" shows how to
-implement two specific solutions with NSec:
+Security protocols generally need nonces generated in their own way, which is
+why NSec doesn't provide a general, easy-to-use solution. This "how to" shows
+how two specific solutions can be implemented with NSec:
 
 * [[TLS 1.2-style Nonces|How to: Generate Nonces#TLS 1.2-style Nonces]]
 * [[TLS 1.3-style Nonces|How to: Generate Nonces#TLS 1.3-style Nonces]]

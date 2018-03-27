@@ -39,26 +39,30 @@ namespace NSec.Tests.Examples
 
             switch (role)
             {
-            // if we are the server, use the serverWriteKey and
-            // serverWriteIV for sending, and the clientWriteKey and
+            // if this is the server side, use serverWriteKey and
+            // serverWriteIV for sending, and clientWriteKey and
             // clientWriteIV for receiving
             case Role.Server:
                 _sendKey = serverWriteKey;
-                _sendNonce = new Nonce(serverWriteIV, 8);
+                _sendNonce = new Nonce(fixedField: serverWriteIV,
+                                       counterFieldSize: 8);
 
                 _receiveKey = clientWriteKey;
-                _receiveNonce = new Nonce(clientWriteIV, 8);
+                _receiveNonce = new Nonce(fixedField: clientWriteIV,
+                                          counterFieldSize: 8);
                 break;
 
-            // if we are the client, use the clientWriteKey and
-            // clientWriteIV for sending, and the serverWriteKey and
+            // if this is the client side, use clientWriteKey and
+            // clientWriteIV for sending, and serverWriteKey and
             // serverWriteIV for receiving
             case Role.Client:
                 _sendKey = clientWriteKey;
-                _sendNonce = new Nonce(clientWriteIV, 8);
+                _sendNonce = new Nonce(fixedField: clientWriteIV,
+                                       counterFieldSize: 8);
 
                 _receiveKey = serverWriteKey;
-                _receiveNonce = new Nonce(serverWriteIV, 8);
+                _receiveNonce = new Nonce(fixedField: serverWriteIV,
+                                          counterFieldSize: 8);
                 break;
             }
         }
@@ -79,9 +83,8 @@ namespace NSec.Tests.Examples
             // increment the counter field of the send nonce
             if (!Nonce.TryIncrement(ref _sendNonce))
             {
-                // negotiate new keys or abort the connection when the
-                // counter field of the send nonce reaches the maximum
-                // value
+                // abort the connection when the counter field of the
+                // send nonce reaches the maximum value
                 _sendKey.Dispose();
                 _receiveKey.Dispose();
             }
@@ -109,9 +112,8 @@ namespace NSec.Tests.Examples
             // increment the counter field of the receive nonce
             if (!Nonce.TryIncrement(ref _receiveNonce))
             {
-                // negotiate new keys or abort the connection when the
-                // counter field of the receive nonce reaches the
-                // maximum value
+                // abort the connection when the counter field of the
+                // receive nonce reaches the maximum value
                 _sendKey.Dispose();
                 _receiveKey.Dispose();
             }
@@ -152,30 +154,38 @@ namespace NSec.Tests.Examples
 
             switch (role)
             {
-            // if we are the server, use the serverWriteKey and
-            // serverWriteIV for sending, and the clientWriteKey and
+            // if this is the server side, use serverWriteKey and
+            // serverWriteIV for sending, and clientWriteKey and
             // clientWriteIV for receiving
             case Role.Server:
                 _sendKey = serverWriteKey;
-                _sendIV = new Nonce(serverWriteIV, 0);
-                _sendSequenceNumber = new Nonce(4, 8);
+                _sendIV = new Nonce(fixedField: serverWriteIV,
+                                    counterFieldSize: 0);
+                _sendSequenceNumber = new Nonce(fixedFieldSize: 4,
+                                                counterFieldSize: 8);
 
                 _receiveKey = clientWriteKey;
-                _receiveIV = new Nonce(clientWriteIV, 0);
-                _receiveSequenceNumber = new Nonce(4, 8);
+                _receiveIV = new Nonce(fixedField: clientWriteIV,
+                                       counterFieldSize: 0);
+                _receiveSequenceNumber = new Nonce(fixedFieldSize: 4,
+                                                   counterFieldSize: 8);
                 break;
 
-            // if we are the client, use the clientWriteKey and
-            // clientWriteIV for sending, and the serverWriteKey and
+            // if this is the client side, use clientWriteKey and
+            // clientWriteIV for sending, and serverWriteKey and
             // serverWriteIV for receiving
             case Role.Client:
                 _sendKey = clientWriteKey;
-                _sendIV = new Nonce(clientWriteIV, 0);
-                _sendSequenceNumber = new Nonce(4, 8);
+                _sendIV = new Nonce(fixedField: clientWriteIV,
+                                    counterFieldSize: 0);
+                _sendSequenceNumber = new Nonce(fixedFieldSize: 4,
+                                                counterFieldSize: 8);
 
                 _receiveKey = serverWriteKey;
-                _receiveIV = new Nonce(serverWriteIV, 0);
-                _receiveSequenceNumber = new Nonce(4, 8);
+                _receiveIV = new Nonce(fixedField: serverWriteIV,
+                                       counterFieldSize: 0);
+                _receiveSequenceNumber = new Nonce(fixedFieldSize: 4,
+                                                   counterFieldSize: 8);
                 break;
             }
         }
@@ -185,8 +195,8 @@ namespace NSec.Tests.Examples
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext)
         {
-            // encrypt the plaintext with the send sequence number
-            // XORed with the send IV as the nonce
+            // encrypt the plaintext with the send sequence number XORed
+            // with the send IV as the nonce
             _algorithm.Encrypt(
                 _sendKey,
                 _sendSequenceNumber ^ _sendIV,
@@ -197,8 +207,8 @@ namespace NSec.Tests.Examples
             // increment the send sequence number
             if (!Nonce.TryIncrement(ref _sendSequenceNumber))
             {
-                // negotiate new keys or abort the connection when the
-                // send sequence number reaches the maximum value
+                // abort the connection when the send sequence number
+                // reaches the maximum value
                 _sendKey.Dispose();
                 _receiveKey.Dispose();
             }
@@ -209,8 +219,8 @@ namespace NSec.Tests.Examples
             ReadOnlySpan<byte> ciphertext,
             Span<byte> plaintext)
         {
-            // decrypt the ciphertext with the receive sequence
-            // number XORed with the receive IV as the nonce
+            // decrypt the ciphertext with the receive sequence number
+            // XORed with the receive IV as the nonce
             if (!_algorithm.TryDecrypt(
                 _receiveKey,
                 _receiveSequenceNumber ^ _receiveIV,
@@ -227,8 +237,8 @@ namespace NSec.Tests.Examples
             // increment the receive sequence number
             if (!Nonce.TryIncrement(ref _receiveSequenceNumber))
             {
-                // negotiate new keys or abort the connection when the
-                // receive sequence number reaches the maximum value
+                // abort the connection when the receive sequence number
+                // reaches the maximum value
                 _sendKey.Dispose();
                 _receiveKey.Dispose();
             }
