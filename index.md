@@ -79,7 +79,7 @@ The development of NSec takes place in its
 [GitHub repository](https://github.com/ektrah/nsec).
 The easiest way to contribute is by
 [submitting a pull request](https://github.com/ektrah/nsec/pulls).
-Please ask before making a significant pull request (e.g., implementing
+Please ask before making a significant pull request (e.g., implementing and new
 features or refactoring code.)
 If you've found a problem with NSec, please
 [open an issue](https://github.com/ektrah/nsec/issues).
