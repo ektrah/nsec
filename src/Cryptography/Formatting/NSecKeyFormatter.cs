@@ -1,56 +1,45 @@
 using System;
 using System.Buffers.Binary;
-using System.Diagnostics;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography.Formatting
 {
-    internal sealed class NSecKeyFormatter
+    internal static class NSecKeyFormatter
     {
-        private readonly uint _blobHeader;
-
-        public NSecKeyFormatter(
-            uint blobHeader)
-        {
-            _blobHeader = blobHeader;
-        }
-
-        public bool TryExport(
+        public static bool TryExport(
+            uint blobHeader,
             SecureMemoryHandle keyHandle,
             Span<byte> blob,
             out int blobSize)
         {
-            Debug.Assert(keyHandle != null);
-
-            blobSize = sizeof(uint) + sizeof(uint) + keyHandle.Length;
+            blobSize = sizeof(uint) + sizeof(int) + keyHandle.Length;
 
             if (blob.Length < blobSize)
             {
                 return false;
             }
 
-            BinaryPrimitives.WriteUInt32BigEndian(blob, _blobHeader);
+            BinaryPrimitives.WriteUInt32BigEndian(blob, blobHeader);
             BinaryPrimitives.WriteInt32LittleEndian(blob.Slice(sizeof(uint)), keyHandle.Length);
-            keyHandle.Export(blob.Slice(sizeof(uint) + sizeof(uint)));
+            keyHandle.Export(blob.Slice(sizeof(uint) + sizeof(int)));
             return true;
         }
 
-        public bool TryImport(
+        public static bool TryImport(
+            uint blobHeader,
             int keySize,
             ReadOnlySpan<byte> blob,
             out SecureMemoryHandle keyHandle)
         {
-            int length = blob.Length - (sizeof(uint) + sizeof(uint));
-
-            if (length != keySize ||
-                BinaryPrimitives.ReadUInt32BigEndian(blob) != _blobHeader ||
-                BinaryPrimitives.ReadInt32LittleEndian(blob.Slice(sizeof(uint))) != length)
+            if (blob.Length != sizeof(uint) + sizeof(int) + keySize ||
+                BinaryPrimitives.ReadUInt32BigEndian(blob) != blobHeader ||
+                BinaryPrimitives.ReadInt32LittleEndian(blob.Slice(sizeof(uint))) != keySize)
             {
                 keyHandle = null;
                 return false;
             }
 
-            SecureMemoryHandle.Import(blob.Slice(sizeof(uint) + sizeof(uint), length), out keyHandle);
+            SecureMemoryHandle.Import(blob.Slice(sizeof(uint) + sizeof(int)), out keyHandle);
             return true;
         }
     }

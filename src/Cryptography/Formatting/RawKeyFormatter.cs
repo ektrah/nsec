@@ -1,22 +1,15 @@
 using System;
-using System.Diagnostics;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography.Formatting
 {
-    internal sealed class RawKeyFormatter
+    internal static class RawKeyFormatter
     {
-        public RawKeyFormatter()
-        {
-        }
-
-        public bool TryExport(
+        public static bool TryExport(
             SecureMemoryHandle keyHandle,
             Span<byte> blob,
             out int blobSize)
         {
-            Debug.Assert(keyHandle != null);
-
             blobSize = keyHandle.Length;
 
             if (blob.Length < blobSize)
@@ -28,12 +21,12 @@ namespace NSec.Cryptography.Formatting
             return true;
         }
 
-        public bool TryImport(
+        public static bool TryImport(
             int keySize,
             ReadOnlySpan<byte> blob,
             out SecureMemoryHandle keyHandle)
         {
-            if (blob.Length < keySize || blob.Length > keySize)
+            if (blob.Length != keySize)
             {
                 keyHandle = null;
                 return false;

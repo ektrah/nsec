@@ -43,9 +43,7 @@ namespace NSec.Cryptography
         public static readonly int MinMacSize = crypto_auth_hmacsha512_BYTES;
         public static readonly int MaxMacSize = crypto_auth_hmacsha512_BYTES;
 
-        private static readonly NSecKeyFormatter s_nsecKeyFormatter = new NSecKeyFormatter(0xDE3347DE);
-
-        private static readonly RawKeyFormatter s_rawKeyFormatter = new RawKeyFormatter();
+        private const uint NSecBlobHeader = 0xDE3347DE;
 
         private static int s_selfTest;
 
@@ -130,9 +128,9 @@ namespace NSec.Cryptography
             switch (format)
             {
             case KeyBlobFormat.RawSymmetricKey:
-                return s_rawKeyFormatter.TryExport(keyHandle, blob, out blobSize);
+                return RawKeyFormatter.TryExport(keyHandle, blob, out blobSize);
             case KeyBlobFormat.NSecSymmetricKey:
-                return s_nsecKeyFormatter.TryExport(keyHandle, blob, out blobSize);
+                return NSecKeyFormatter.TryExport(NSecBlobHeader, keyHandle, blob, out blobSize);
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
@@ -149,9 +147,9 @@ namespace NSec.Cryptography
             switch (format)
             {
             case KeyBlobFormat.RawSymmetricKey:
-                return s_rawKeyFormatter.TryImport(KeySize, blob, out keyHandle);
+                return RawKeyFormatter.TryImport(KeySize, blob, out keyHandle);
             case KeyBlobFormat.NSecSymmetricKey:
-                return s_nsecKeyFormatter.TryImport(KeySize, blob, out keyHandle);
+                return NSecKeyFormatter.TryImport(NSecBlobHeader, KeySize, blob, out keyHandle);
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
