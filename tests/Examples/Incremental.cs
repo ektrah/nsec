@@ -19,24 +19,24 @@ namespace NSec.Tests.Examples
             // initialize the state with the algorithm
             IncrementalHash.Initialize(algorithm, out var state);
 
-            // append some data to the state
-            var items = new[]
+            // incrementally update the state with some data
+            var lines = new[]
             {
-                "It is a period of civil war. ",
-                "Rebel spaceships, striking ",
-                "from a hidden base, have won ",
-                "their first victory against ",
-                "the evil Galactic Empire."
+                "It is a period of civil war.\n",
+                "Rebel spaceships, striking\n",
+                "from a hidden base, have won\n",
+                "their first victory against\n",
+                "the evil Galactic Empire.\n"
             };
-            foreach (var item in items)
+            foreach (var line in lines)
             {
-                IncrementalHash.Update(ref state, Encoding.UTF8.GetBytes(item));
+                IncrementalHash.Update(ref state, Encoding.UTF8.GetBytes(line));
             }
 
             // finalize the computation and get the result
             var hash = IncrementalHash.Finalize(ref state);
 
-            Assert.Equal(algorithm.Hash(Encoding.UTF8.GetBytes(string.Concat(items))), hash);
+            Assert.Equal(algorithm.Hash(Encoding.UTF8.GetBytes(string.Concat(lines))), hash);
 
             #endregion
         }
@@ -55,26 +55,26 @@ namespace NSec.Tests.Examples
                 // initialize the state with the key
                 IncrementalMac.Initialize(key, out var state);
 
-                // append some data to the state
-                var items = new[]
+                // incrementally update the state with some data
+                var lines = new[]
                 {
-                    "It is a dark time for the ",
-                    "Rebellion. Although the Death ",
-                    "Star has been destroyed, ",
-                    "Imperial troops have driven the ",
-                    "Rebel forces from their hidden ",
-                    "base and pursued them across ",
-                    "the galaxy."
+                    "It is a dark time for the\n",
+                    "Rebellion. Although the Death\n",
+                    "Star has been destroyed,\n",
+                    "Imperial troops have driven the\n",
+                    "Rebel forces from their hidden\n",
+                    "base and pursued them across\n",
+                    "the galaxy.\n"
                 };
-                foreach (var item in items)
+                foreach (var line in lines)
                 {
-                    IncrementalMac.Update(ref state, Encoding.UTF8.GetBytes(item));
+                    IncrementalMac.Update(ref state, Encoding.UTF8.GetBytes(line));
                 }
 
                 // finalize the computation and get the result
                 var mac = IncrementalMac.Finalize(ref state);
 
-                Assert.Equal(algorithm.Mac(key, Encoding.UTF8.GetBytes(string.Concat(items))), mac);
+                Assert.Equal(algorithm.Mac(key, Encoding.UTF8.GetBytes(string.Concat(lines))), mac);
             }
 
             #endregion
