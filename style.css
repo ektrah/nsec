@@ -89,7 +89,7 @@ header, footer {
     }
 
 footer {
-    margin: 3em 0;
+    padding: 1em 0;
 }
 
     footer, footer a, footer a:visited {
@@ -119,7 +119,7 @@ nav > ul {
 }
 
     .icons .icon {
-        margin: 0 0 0 .4em;
+        margin: 0 0 0 .5em;
     }
 
 .github-icon {
@@ -165,7 +165,7 @@ nav > ul {
     }
 
     header {
-        padding-top: 4px;
+        padding-top: 1px;
     }
 
         header:before {
