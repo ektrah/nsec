@@ -28,6 +28,8 @@ namespace NSec.Tests.Core
                 Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
                 Assert.NotNull(k.PublicKey);
                 Assert.Same(a, k.PublicKey.Algorithm);
+                Assert.True(k.PublicKey.Size > 0);
+                Assert.True(k.Size > 0);
             }
         }
 
@@ -42,6 +44,7 @@ namespace NSec.Tests.Core
                 Assert.Same(a, k.Algorithm);
                 Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
                 Assert.Null(k.PublicKey);
+                Assert.True(k.Size > 0);
             }
         }
 
@@ -57,6 +60,8 @@ namespace NSec.Tests.Core
             Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
             Assert.NotNull(k.PublicKey);
             Assert.Same(a, k.PublicKey.Algorithm);
+            Assert.True(k.PublicKey.Size > 0);
+            Assert.True(k.Size > 0);
         }
 
         [Theory]
@@ -70,6 +75,7 @@ namespace NSec.Tests.Core
             Assert.Same(a, k.Algorithm);
             Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
             Assert.Null(k.PublicKey);
+            Assert.True(k.Size > 0);
         }
 
         #endregion

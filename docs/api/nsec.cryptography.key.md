@@ -69,6 +69,7 @@ Gets the export policy for the key.
 A bitwise combination of [[KeyExportPolicies|KeyExportPolicies Enum]] values
 that specifies the export policy for the key.
 
+
 ### PublicKey
 
 Gets the public key if the current instance of the [[Key|Key Class]] class
@@ -80,6 +81,17 @@ represents a key pair.
 
 An instance of the [[PublicKey|PublicKey Class]] class if the current instance
 of the [[Key|Key Class]] class represents a key pair; otherwise, `null`.
+
+
+### Size
+
+Gets the size of the key.
+
+    public int Size { get; }
+
+#### Property Value
+
+The key size, in bytes.
 
 
 ## Static Methods

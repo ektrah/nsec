@@ -103,7 +103,7 @@ namespace NSec.Cryptography
             crypto_auth_hmacsha512_final(ref state.hmacsha512, ref MemoryMarshal.GetReference(mac));
         }
 
-        internal override int GetDefaultSeedSize()
+        internal override int GetSeedSize()
         {
             return KeySize;
         }

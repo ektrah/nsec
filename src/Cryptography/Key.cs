@@ -24,7 +24,7 @@ namespace NSec.Cryptography
                 throw Error.ArgumentNull_Algorithm(nameof(algorithm));
             }
 
-            int seedSize = algorithm.GetDefaultSeedSize();
+            int seedSize = algorithm.GetSeedSize();
             Debug.Assert(seedSize <= 64);
 
             SecureMemoryHandle keyHandle = null;
@@ -83,6 +83,8 @@ namespace NSec.Cryptography
         public KeyExportPolicies ExportPolicy => _exportPolicy;
 
         public PublicKey PublicKey => _publicKey;
+
+        public int Size => _algorithm.GetKeySize();
 
         internal SecureMemoryHandle Handle => _handle;
 

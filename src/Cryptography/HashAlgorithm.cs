@@ -141,6 +141,21 @@ namespace NSec.Cryptography
             ref IncrementalHashState state,
             Span<byte> hash);
 
+        internal sealed override int GetKeySize()
+        {
+            throw Error.Cryptographic_InternalError();
+        }
+
+        internal sealed override int GetPublicKeySize()
+        {
+            throw Error.Cryptographic_InternalError();
+        }
+
+        internal sealed override int GetSeedSize()
+        {
+            throw Error.NotSupported_CreateKey();
+        }
+
         internal abstract void InitializeCore(
             int hashSize,
             out IncrementalHashState state);

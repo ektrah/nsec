@@ -56,7 +56,7 @@ namespace NSec.Experimental.Sodium
                 keyHandle);
         }
 
-        internal override int GetDefaultSeedSize()
+        internal override int GetSeedSize()
         {
             return crypto_secretbox_xsalsa20poly1305_KEYBYTES;
         }

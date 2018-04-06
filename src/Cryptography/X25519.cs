@@ -91,7 +91,7 @@ namespace NSec.Cryptography
             Debug.Assert((Unsafe.Add(ref Unsafe.As<PublicKeyBytes, byte>(ref publicKey.Bytes), crypto_scalarmult_curve25519_SCALARBYTES - 1) & 0x80) == 0);
         }
 
-        internal override int GetDefaultSeedSize()
+        internal override int GetSeedSize()
         {
             return crypto_scalarmult_curve25519_SCALARBYTES;
         }

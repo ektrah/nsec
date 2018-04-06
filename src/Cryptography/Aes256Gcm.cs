@@ -121,7 +121,7 @@ namespace NSec.Cryptography
             Debug.Assert((ulong)ciphertext.Length == ciphertextLength);
         }
 
-        internal override int GetDefaultSeedSize()
+        internal override int GetSeedSize()
         {
             return crypto_aead_aes256gcm_KEYBYTES;
         }

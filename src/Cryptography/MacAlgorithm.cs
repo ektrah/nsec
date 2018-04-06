@@ -201,6 +201,18 @@ namespace NSec.Cryptography
             ref IncrementalMacState state,
             Span<byte> mac);
 
+        internal sealed override int GetKeySize()
+        {
+            return _keySize;
+        }
+
+        internal sealed override int GetPublicKeySize()
+        {
+            throw Error.Cryptographic_InternalError();
+        }
+
+        internal abstract override int GetSeedSize();
+
         internal abstract void InitializeCore(
             SecureMemoryHandle keyHandle,
             int macSize,

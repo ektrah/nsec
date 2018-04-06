@@ -117,6 +117,18 @@ namespace NSec.Cryptography
             }
         }
 
+        internal sealed override int GetKeySize()
+        {
+            return _privateKeySize;
+        }
+
+        internal sealed override int GetPublicKeySize()
+        {
+            return _publicKeySize;
+        }
+
+        internal abstract override int GetSeedSize();
+
         private protected abstract void SignCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,

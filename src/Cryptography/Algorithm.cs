@@ -56,8 +56,20 @@ namespace NSec.Cryptography
             throw Error.NotSupported_CreateKey();
         }
 
-        // Gets the default seed size for creating a libsodium key.
-        internal virtual int GetDefaultSeedSize()
+        // Gets the secret key size.
+        internal virtual int GetKeySize()
+        {
+            throw Error.NotSupported_CreateKey();
+        }
+
+        // Gets the public key size.
+        internal virtual int GetPublicKeySize()
+        {
+            throw Error.NotSupported_CreateKey();
+        }
+
+        // Gets the seed size for creating a libsodium key.
+        internal virtual int GetSeedSize()
         {
             throw Error.NotSupported_CreateKey();
         }

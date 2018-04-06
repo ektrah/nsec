@@ -126,7 +126,7 @@ namespace NSec.Cryptography
             if (algorithm == null)
                 throw Error.ArgumentNull_Algorithm(nameof(algorithm));
 
-            int seedSize = algorithm.GetDefaultSeedSize();
+            int seedSize = algorithm.GetSeedSize();
             if (seedSize > MaxCount)
                 throw Error.NotSupported_CreateKey();
             Debug.Assert(seedSize <= 64);
@@ -158,6 +158,21 @@ namespace NSec.Cryptography
             }
 
             return new Key(algorithm, in creationParameters, keyHandle, publicKey);
+        }
+
+        internal sealed override int GetKeySize()
+        {
+            throw Error.Cryptographic_InternalError();
+        }
+
+        internal sealed override int GetPublicKeySize()
+        {
+            throw Error.Cryptographic_InternalError();
+        }
+
+        internal sealed override int GetSeedSize()
+        {
+            throw Error.NotSupported_CreateKey();
         }
 
         private protected abstract void DeriveBytesCore(

@@ -110,7 +110,7 @@ namespace NSec.Cryptography
                 throw Error.ArgumentNull_Algorithm(nameof(algorithm));
             }
 
-            int seedSize = algorithm.GetDefaultSeedSize();
+            int seedSize = algorithm.GetSeedSize();
             Debug.Assert(seedSize <= 64);
 
             SecureMemoryHandle keyHandle = null;

@@ -94,7 +94,7 @@ namespace NSec.Cryptography
             Debug.Assert((ulong)ciphertext.Length == ciphertextLength);
         }
 
-        internal override int GetDefaultSeedSize()
+        internal override int GetSeedSize()
         {
             return crypto_aead_chacha20poly1305_ietf_KEYBYTES;
         }

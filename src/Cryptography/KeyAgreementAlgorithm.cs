@@ -128,6 +128,18 @@ namespace NSec.Cryptography
             return success;
         }
 
+        internal sealed override int GetKeySize()
+        {
+            return _privateKeySize;
+        }
+
+        internal sealed override int GetPublicKeySize()
+        {
+            return _publicKeySize;
+        }
+
+        internal abstract override int GetSeedSize();
+
         private protected abstract bool TryAgreeCore(
             SecureMemoryHandle keyHandle,
             in PublicKeyBytes otherPartyPublicKey,

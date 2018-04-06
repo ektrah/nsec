@@ -22,6 +22,17 @@ Gets the algorithm for the public key.
 An instance of the [[Algorithm|Algorithm Class]] class.
 
 
+### Size
+
+Gets the size of the public key.
+
+    public int Size { get; }
+
+#### Property Value
+
+The public key size, in bytes.
+
+
 ## Static Methods
 
 

@@ -23,6 +23,8 @@ namespace NSec.Cryptography
 
         public Algorithm Algorithm => _algorithm;
 
+        public int Size => _algorithm.GetPublicKeySize();
+
         internal ref PublicKeyBytes Bytes => ref _bytes;
 
         public static PublicKey Import(

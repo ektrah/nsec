@@ -93,7 +93,7 @@ namespace NSec.Cryptography
             crypto_sign_ed25519_seed_keypair(out publicKey.Bytes, keyHandle, in MemoryMarshal.GetReference(seed));
         }
 
-        internal override int GetDefaultSeedSize()
+        internal override int GetSeedSize()
         {
             return crypto_sign_ed25519_SEEDBYTES;
         }

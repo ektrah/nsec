@@ -174,6 +174,18 @@ namespace NSec.Experimental.Sodium
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext);
 
+        internal sealed override int GetKeySize()
+        {
+            return _keySize;
+        }
+
+        internal sealed override int GetPublicKeySize()
+        {
+            throw Error.Cryptographic_InternalError();
+        }
+
+        internal abstract override int GetSeedSize();
+
         internal abstract bool TryDecryptCore(
             SecureMemoryHandle keyHandle,
             in Nonce nonce,

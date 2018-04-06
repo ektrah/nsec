@@ -230,6 +230,12 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
             {
+                Assert.Same(a, k.Algorithm);
+                Assert.NotNull(k.PublicKey);
+                Assert.Same(a, k.PublicKey.Algorithm);
+                Assert.Equal(a.PublicKeySize, k.PublicKey.Size);
+                Assert.Equal(a.PrivateKeySize, k.Size);
+
                 var actual = k.Export(KeyBlobFormat.RawPrivateKey);
 
                 var unexpected = new byte[actual.Length];

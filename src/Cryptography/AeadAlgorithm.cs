@@ -211,6 +211,18 @@ namespace NSec.Cryptography
             return TryDecryptCore(key.Handle, in nonce, associatedData, ciphertext, plaintext);
         }
 
+        internal sealed override int GetKeySize()
+        {
+            return _keySize;
+        }
+
+        internal sealed override int GetPublicKeySize()
+        {
+            throw Error.Cryptographic_InternalError();
+        }
+
+        internal abstract override int GetSeedSize();
+
         private protected abstract void EncryptCore(
             SecureMemoryHandle keyHandle,
             in Nonce nonce,

@@ -111,7 +111,7 @@ namespace NSec.Cryptography
             state.blake2b = state_;
         }
 
-        internal override int GetDefaultSeedSize()
+        internal override int GetSeedSize()
         {
             return KeySize;
         }
