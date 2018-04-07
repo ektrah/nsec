@@ -1,6 +1,7 @@
 using System;
 using NSec.Cryptography;
 using NSec.Experimental;
+using NSec.Experimental.Sodium;
 using Xunit;
 
 namespace NSec.Tests
@@ -13,6 +14,7 @@ namespace NSec.Tests
         {
             typeof(Aes256Gcm),
             typeof(ChaCha20Poly1305),
+            typeof(XChaCha20Poly1305),
         };
 
         public static readonly TheoryData<Type> MacAlgorithms = new TheoryData<Type>
@@ -65,6 +67,7 @@ namespace NSec.Tests
             typeof(ChaCha20Poly1305),
             typeof(HmacSha256),
             typeof(HmacSha512),
+            typeof(XChaCha20Poly1305),
         };
 
         public static readonly TheoryData<Type> KeylessAlgorithms = new TheoryData<Type>
@@ -119,6 +122,8 @@ namespace NSec.Tests
             { typeof(HmacSha256), KeyBlobFormat.NSecSymmetricKey },
             { typeof(HmacSha512), KeyBlobFormat.RawSymmetricKey },
             { typeof(HmacSha512), KeyBlobFormat.NSecSymmetricKey },
+            { typeof(XChaCha20Poly1305), KeyBlobFormat.RawSymmetricKey },
+            { typeof(XChaCha20Poly1305), KeyBlobFormat.NSecSymmetricKey },
         };
 
         #endregion

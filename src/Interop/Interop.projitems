@@ -22,6 +22,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Interop.Utils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop.Version.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop.X25519.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interop.XChaCha20Poly1305.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Interop.yaml" />
