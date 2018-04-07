@@ -198,7 +198,7 @@ namespace NSec.Cryptography
                 (crypto_aead_aes256gcm_npubbytes() != (UIntPtr)crypto_aead_aes256gcm_NPUBBYTES) ||
                 (crypto_aead_aes256gcm_nsecbytes() != (UIntPtr)crypto_aead_aes256gcm_NSECBYTES))
             {
-                throw Error.Cryptographic_InitializationFailed(9539.ToString("X"));
+                throw Error.Cryptographic_InitializationFailed();
             }
         }
     }

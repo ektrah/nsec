@@ -235,7 +235,7 @@ namespace NSec.Cryptography
                 (crypto_generichash_blake2b_keybytes_min() != (UIntPtr)crypto_generichash_blake2b_KEYBYTES_MIN) ||
                 (crypto_generichash_blake2b_statebytes() != (UIntPtr)Unsafe.SizeOf<crypto_generichash_blake2b_state>()))
             {
-                throw Error.Cryptographic_InitializationFailed(9391.ToString("X"));
+                throw Error.Cryptographic_InitializationFailed();
             }
         }
     }

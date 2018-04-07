@@ -247,7 +247,7 @@
     <value>Decryption failed.</value>
   </data>
   <data name="Cryptographic_InitializationFailed" xml:space="preserve">
-    <value>An error occurred while initializing cryptographic primitives. (Error Code: 0x{0})</value>
+    <value>An error occurred while initializing cryptographic primitives.</value>
   </data>
   <data name="Cryptographic_InternalError" xml:space="preserve">
     <value>An internal error occurred.</value>

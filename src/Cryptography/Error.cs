@@ -298,10 +298,9 @@ namespace NSec.Cryptography
             return new CryptographicException(ResourceManager.GetString("Cryptographic_DecryptionFailed"));
         }
 
-        internal static CryptographicException Cryptographic_InitializationFailed(
-            string arg0)
+        internal static CryptographicException Cryptographic_InitializationFailed()
         {
-            return new CryptographicException(string.Format(ResourceManager.GetString("Cryptographic_InitializationFailed"), arg0));
+            return new CryptographicException(ResourceManager.GetString("Cryptographic_InitializationFailed"));
         }
 
         internal static CryptographicException Cryptographic_InternalError()

@@ -171,7 +171,7 @@ namespace NSec.Cryptography
                 (crypto_aead_chacha20poly1305_ietf_npubbytes() != (UIntPtr)crypto_aead_chacha20poly1305_ietf_NPUBBYTES) ||
                 (crypto_aead_chacha20poly1305_ietf_nsecbytes() != (UIntPtr)crypto_aead_chacha20poly1305_ietf_NSECBYTES))
             {
-                throw Error.Cryptographic_InitializationFailed(9293.ToString("X"));
+                throw Error.Cryptographic_InitializationFailed();
             }
         }
     }

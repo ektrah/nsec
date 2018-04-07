@@ -207,7 +207,7 @@ namespace NSec.Cryptography
             if ((crypto_scalarmult_curve25519_bytes() != (UIntPtr)crypto_scalarmult_curve25519_BYTES) ||
                 (crypto_scalarmult_curve25519_scalarbytes() != (UIntPtr)crypto_scalarmult_curve25519_SCALARBYTES))
             {
-                throw Error.Cryptographic_InitializationFailed(8599.ToString("X"));
+                throw Error.Cryptographic_InitializationFailed();
             }
         }
     }

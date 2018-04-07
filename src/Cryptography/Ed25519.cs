@@ -228,7 +228,7 @@ namespace NSec.Cryptography
                 (crypto_sign_ed25519_secretkeybytes() != (UIntPtr)crypto_sign_ed25519_SECRETKEYBYTES) ||
                 (crypto_sign_ed25519_seedbytes() != (UIntPtr)crypto_sign_ed25519_SEEDBYTES))
             {
-                throw Error.Cryptographic_InitializationFailed(9203.ToString("X"));
+                throw Error.Cryptographic_InitializationFailed();
             }
         }
     }

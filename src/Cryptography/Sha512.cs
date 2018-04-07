@@ -122,7 +122,7 @@ namespace NSec.Cryptography
             if ((crypto_hash_sha512_bytes() != (UIntPtr)crypto_hash_sha512_BYTES) ||
                 (crypto_hash_sha512_statebytes() != (UIntPtr)Unsafe.SizeOf<crypto_hash_sha512_state>()))
             {
-                throw Error.Cryptographic_InitializationFailed(8681.ToString("X"));
+                throw Error.Cryptographic_InitializationFailed();
             }
         }
     }
