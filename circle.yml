@@ -81,7 +81,7 @@ shared:
     run:
       name: Restore Dependencies
       no_output_timeout: 2m
-      command: dotnet restore --disable-parallel -s 'https://api.nuget.org/v3/index.json' -s 'https://dotnet.myget.org/F/dotnet-core/api/v3/index.json'
+      command: dotnet restore --disable-parallel
   save-cache: &save-cache
     save_cache:
       key: 'linux-nuget-packages-{{ checksum "/tmp/restore.json" }}'
