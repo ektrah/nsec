@@ -77,7 +77,7 @@ namespace NSec.Cryptography
 
             try
             {
-                success = TryAgreeCore(key.Handle, otherPartyPublicKey.Bytes, out sharedSecretHandle);
+                success = TryAgreeCore(key.Handle, in otherPartyPublicKey.GetPinnableReference(), out sharedSecretHandle);
             }
             finally
             {
@@ -114,7 +114,7 @@ namespace NSec.Cryptography
 
             try
             {
-                success = TryAgreeCore(key.Handle, otherPartyPublicKey.Bytes, out sharedSecretHandle);
+                success = TryAgreeCore(key.Handle, in otherPartyPublicKey.GetPinnableReference(), out sharedSecretHandle);
             }
             finally
             {

@@ -25,8 +25,6 @@ namespace NSec.Cryptography
 
         public int Size => _algorithm.GetPublicKeySize();
 
-        internal ref PublicKeyBytes Bytes => ref _bytes;
-
         public static PublicKey Import(
             Algorithm algorithm,
             ReadOnlySpan<byte> blob,
@@ -143,6 +141,11 @@ namespace NSec.Cryptography
         public override string ToString()
         {
             return typeof(PublicKey).ToString();
+        }
+
+        internal ref PublicKeyBytes GetPinnableReference()
+        {
+            return ref _bytes;
         }
     }
 }
