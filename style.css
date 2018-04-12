@@ -40,7 +40,6 @@ code, pre, table {
 pre {
     border-width: 0 0 0 .5em;
     padding: 1em;
-    white-space: pre-wrap;
 }
 
 code {
@@ -176,6 +175,11 @@ nav > ul {
             height: 10em;
             margin: 2em;
         }
+
+    pre {
+        overflow-wrap: normal;
+        overflow-x: auto;
+    }
 
     pre[data-lang]:before {
         content: attr(data-lang);
