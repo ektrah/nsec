@@ -4,9 +4,9 @@ For the security of the AEAD algorithms in NSec, it is critical that nonces are
 constructed in a way that the same nonce is never used more than once to encrypt
 data with the same key. 
 
-Security protocols generally need nonces generated in their own way, which is
+Security protocols generally need nonces generated in a specific way, which is
 why NSec doesn't provide a general, easy-to-use solution. This "how to" shows
-how two specific solutions can be implemented with NSec:
+how to implement two exemplary solutions with NSec:
 
 * [[TLS 1.2-style Nonces|How to: Generate Nonces#TLS 1.2-style Nonces]]
 * [[TLS 1.3-style Nonces|How to: Generate Nonces#TLS 1.3-style Nonces]]
@@ -27,13 +27,12 @@ direction.
 
 The 12-byte nonce required by AES-GCM is formed as follows:
 
-1. The 64-bit record sequence number for the direction is serialized as an
-   8-byte, big-endian value.
+1. The 64-bit record sequence number is serialized as an 8-byte, big-endian
+   value.
 
-2. The serialized sequence number is appended to the 4-byte IV for the
-   direction.
+2. The serialized sequence number is appended to the 4-byte IV.
 
-The following C# example shows how to implement this with NSec:
+The following C# example shows this can be implemented with NSec:
 
     {{Nonces: RFC 5288}}
 
@@ -52,12 +51,12 @@ one for each direction.
 
 The 12-byte nonce required by ChaCha20-Poly1305 is formed as follows:
 
-1. The 64-bit record sequence number for the direction is serialized as an
-   8-byte, big-endian value and padded on the left with four 0x00 bytes.
+1. The 64-bit record sequence number is serialized as an 8-byte, big-endian
+   value and padded on the left with four 0x00 bytes.
 
-2. The padded sequence number is XORed with the 12-byte IV for the direction.
+2. The padded sequence number is XORed with the 12-byte IV.
 
-The following C# example shows how to implement this with NSec:
+The following C# example shows this can be implemented with NSec:
 
     {{Nonces: RFC 7905}}
 
