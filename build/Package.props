@@ -41,7 +41,7 @@
     <PackageReleaseNotes>https://nsec.rocks/releases</PackageReleaseNotes>
     <PackageLicenseUrl>https://nsec.rocks/license</PackageLicenseUrl>
     <PackageProjectUrl>https://nsec.rocks/</PackageProjectUrl>
-    <PackageIconUrl>https://goo.gl/iN8fpR</PackageIconUrl>
+    <PackageIconUrl>https://nsec.rocks/nsec.png</PackageIconUrl>
     <MinClientVersion>4.0</MinClientVersion>
   </PropertyGroup>
 
