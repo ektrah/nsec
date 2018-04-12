@@ -256,8 +256,8 @@ namespace NSec.Tests.Examples
         {
             var algorithm = AeadAlgorithm.Aes256Gcm;
 
-            using (var clientWriteKey = new Key(algorithm))
-            using (var serverWriteKey = new Key(algorithm))
+            using (var clientWriteKey = Key.Create(algorithm))
+            using (var serverWriteKey = Key.Create(algorithm))
             {
                 var clientWriteIV = new byte[] { 0x38, 0x71, 0xd4, 0x13 };
                 var serverWriteIV = new byte[] { 0x59, 0xf2, 0xcd, 0x8a };
@@ -284,8 +284,8 @@ namespace NSec.Tests.Examples
         {
             var algorithm = AeadAlgorithm.ChaCha20Poly1305;
 
-            using (var clientWriteKey = new Key(algorithm))
-            using (var serverWriteKey = new Key(algorithm))
+            using (var clientWriteKey = Key.Create(algorithm))
+            using (var serverWriteKey = Key.Create(algorithm))
             {
                 var clientWriteIV = new byte[] { 0xb0, 0x34, 0xd7, 0x53, 0x89, 0x60, 0x09, 0xf9, 0x2d, 0xe9, 0xe6, 0x02 };
                 var serverWriteIV = new byte[] { 0x12, 0xb3, 0x0a, 0x46, 0x36, 0x7d, 0x6d, 0x5d, 0xb1, 0xce, 0xb8, 0x57 };

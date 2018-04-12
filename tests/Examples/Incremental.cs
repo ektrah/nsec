@@ -50,7 +50,7 @@ namespace NSec.Tests.Examples
             var algorithm = MacAlgorithm.Blake2b_256;
 
             // create a new key
-            using (var key = new Key(algorithm))
+            using (var key = Key.Create(algorithm))
             {
                 // initialize the state with the key
                 IncrementalMac.Initialize(key, out var state);

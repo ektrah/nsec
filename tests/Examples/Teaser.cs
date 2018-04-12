@@ -16,7 +16,7 @@ namespace NSec.Tests.Examples
             var algorithm = SignatureAlgorithm.Ed25519;
 
             // create a new key pair
-            using (var key = new Key(algorithm))
+            using (var key = Key.Create(algorithm))
             {
                 // generate some data to be signed
                 var data = Encoding.UTF8.GetBytes("Use the Force, Luke!");
@@ -25,7 +25,10 @@ namespace NSec.Tests.Examples
                 var signature = algorithm.Sign(key, data);
 
                 // verify data and signature with the public key
-                algorithm.Verify(key.PublicKey, data, signature);
+                if (algorithm.TryVerify(key.PublicKey, data, signature))
+                {
+                    /*{*//*}*/
+                }
             }
 
             #endregion
