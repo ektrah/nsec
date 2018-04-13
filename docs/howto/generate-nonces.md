@@ -32,7 +32,7 @@ The 12-byte nonce required by AES-GCM is formed as follows:
 
 2. The serialized sequence number is appended to the 4-byte IV.
 
-The following C# example shows this can be implemented with NSec:
+The following C# example shows how to implement this with NSec:
 
     {{Nonces: RFC 5288}}
 
@@ -56,7 +56,7 @@ The 12-byte nonce required by ChaCha20-Poly1305 is formed as follows:
 
 2. The padded sequence number is XORed with the 12-byte IV.
 
-The following C# example shows this can be implemented with NSec:
+The following C# example shows how to implement this with NSec:
 
     {{Nonces: RFC 7905}}
 
