@@ -30,11 +30,26 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <LatestRelease>18.4.0-preview2</LatestRelease>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <LatestReleaseMajorMinor>$([System.Text.RegularExpressions.Regex]::Replace($(LatestRelease), '^(\d+\.\d+)\.(\d+).*$', '$1'))</LatestReleaseMajorMinor>
+    <LatestReleasePatch>$([System.Text.RegularExpressions.Regex]::Replace($(LatestRelease), '^(\d+\.\d+)\.(\d+).*$', '$2'))</LatestReleasePatch>
+    <CurrentReleaseMajorMinor>$([System.DateTime]::UtcNow.ToString(y.M))</CurrentReleaseMajorMinor>
+    <CurrentReleasePatch>0</CurrentReleasePatch>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(CurrentReleaseMajorMinor)' == '$(LatestReleaseMajorMinor)'">
+    <CurrentReleasePatch Condition="$(LatestRelease.Contains('-'))">$(LatestReleasePatch)</CurrentReleasePatch>
+    <CurrentReleasePatch Condition="!$(LatestRelease.Contains('-'))">$([MSBuild]::Add($(LatestReleasePatch), 1))</CurrentReleasePatch>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <IsPackable Condition="'$(IsGitPullRequest)' == 'true'">false</IsPackable>
     <IsPackable Condition="'$(IsGitBranch)' == 'true'">false</IsPackable>
-    <Version Condition="'$(Version)' == '' and '$(GitTag)' != ''">$(GitTag)</Version>
-    <Version Condition="'$(Version)' == '' and '$(IsGitBranch)' == 'true'">$([System.DateTime]::UtcNow.ToString(y.M.0'-alpha-'ddHHmm))-$(GitBranch)</Version>
-    <Version Condition="'$(Version)' == ''">$([System.DateTime]::UtcNow.ToString(y.M.0'-alpha-'ddHHmm))</Version>
+    <Version Condition="'$(Version)' == ''">$(GitTag)</Version>
+    <Version Condition="'$(Version)' == ''">$(CurrentReleaseMajorMinor).$(CurrentReleasePatch)-alpha-$([System.DateTime]::UtcNow.ToString(ddHHmm))</Version>
     <Authors>Klaus Hartke</Authors>
     <Copyright>&#169; $([System.DateTime]::UtcNow.ToString(yyyy)) Klaus Hartke</Copyright>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
