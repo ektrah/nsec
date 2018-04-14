@@ -81,7 +81,7 @@ shared:
     run:
       name: Restore Dependencies
       no_output_timeout: 2m
-      command: dotnet restore --disable-parallel
+      command: dotnet restore --disable-parallel -s 'https://api.nuget.org/v3/index.json' -s 'https://dotnet.myget.org/F/dotnet-core/api/v3/index.json'
   save-cache: &save-cache
     save_cache:
       key: 'linux-nuget-packages-{{ checksum "/tmp/restore.json" }}'
@@ -136,8 +136,8 @@ jobs:
       - *restore-cache
       - *dotnet-restore
       - *save-cache
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
+#     - *dotnet-test-debug-2-1
+#     - *dotnet-test-release-2-1
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
       - *dotnet-test-debug-1-1
@@ -162,8 +162,8 @@ jobs:
       - *restore-cache
       - *dotnet-restore
       - *save-cache
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
+#     - *dotnet-test-debug-2-1
+#     - *dotnet-test-release-2-1
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
       - *dotnet-test-debug-1-1
@@ -187,8 +187,8 @@ jobs:
       - *restore-cache
       - *dotnet-restore
       - *save-cache
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
+#     - *dotnet-test-debug-2-1
+#     - *dotnet-test-release-2-1
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
@@ -208,8 +208,8 @@ jobs:
       - *restore-cache
       - *dotnet-restore
       - *save-cache
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
+#     - *dotnet-test-debug-2-1
+#     - *dotnet-test-release-2-1
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
@@ -229,8 +229,8 @@ jobs:
       - *restore-cache
       - *dotnet-restore
       - *save-cache
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
+#     - *dotnet-test-debug-2-1
+#     - *dotnet-test-release-2-1
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
@@ -250,8 +250,8 @@ jobs:
       - *restore-cache
       - *dotnet-restore
       - *save-cache
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
+#     - *dotnet-test-debug-2-1
+#     - *dotnet-test-release-2-1
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
@@ -274,8 +274,8 @@ jobs:
       - *restore-cache
       - *dotnet-restore
       - *save-cache
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
+#     - *dotnet-test-debug-2-1
+#     - *dotnet-test-release-2-1
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
       - *dotnet-test-debug-1-1
@@ -300,8 +300,8 @@ jobs:
       - *restore-cache
       - *dotnet-restore
       - *save-cache
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
+#     - *dotnet-test-debug-2-1
+#     - *dotnet-test-release-2-1
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
       - *dotnet-test-debug-1-1
@@ -325,8 +325,8 @@ jobs:
       - *restore-cache
       - *dotnet-restore
       - *save-cache
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
+#     - *dotnet-test-debug-2-1
+#     - *dotnet-test-release-2-1
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
@@ -343,8 +343,8 @@ jobs:
       - *restore-cache-macos
       - *dotnet-restore
       - *save-cache-macos
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
+#     - *dotnet-test-debug-2-1
+#     - *dotnet-test-release-2-1
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
       - *dotnet-test-debug-1-1
