@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Threading;
 using static Interop.Libsodium;
 
@@ -60,7 +59,7 @@ namespace NSec.Cryptography
 
             Span<byte> temp = stackalloc byte[crypto_hash_sha256_BYTES];
 
-            crypto_hash_sha256_final(ref state.sha256, ref MemoryMarshal.GetReference(temp));
+            crypto_hash_sha256_final(ref state.sha256, ref temp.GetPinnableReference());
 
             return CryptographicOperations.FixedTimeEquals(temp, hash);
         }
@@ -71,7 +70,7 @@ namespace NSec.Cryptography
         {
             Debug.Assert(hash.Length == crypto_hash_sha256_BYTES);
 
-            crypto_hash_sha256_final(ref state.sha256, ref MemoryMarshal.GetReference(hash));
+            crypto_hash_sha256_final(ref state.sha256, ref hash.GetPinnableReference());
         }
 
         internal override void InitializeCore(
@@ -87,7 +86,7 @@ namespace NSec.Cryptography
             ref IncrementalHashState state,
             ReadOnlySpan<byte> data)
         {
-            crypto_hash_sha256_update(ref state.sha256, in MemoryMarshal.GetReference(data), (ulong)data.Length);
+            crypto_hash_sha256_update(ref state.sha256, in data.GetPinnableReference(), (ulong)data.Length);
         }
 
         private protected override void HashCore(
@@ -96,7 +95,7 @@ namespace NSec.Cryptography
         {
             Debug.Assert(hash.Length == crypto_hash_sha256_BYTES);
 
-            crypto_hash_sha256(ref MemoryMarshal.GetReference(hash), in MemoryMarshal.GetReference(data), (ulong)data.Length);
+            crypto_hash_sha256(ref hash.GetPinnableReference(), in data.GetPinnableReference(), (ulong)data.Length);
         }
 
         private protected override bool TryVerifyCore(
@@ -107,7 +106,7 @@ namespace NSec.Cryptography
 
             Span<byte> temp = stackalloc byte[crypto_hash_sha256_BYTES];
 
-            crypto_hash_sha256(ref MemoryMarshal.GetReference(temp), in MemoryMarshal.GetReference(data), (ulong)data.Length);
+            crypto_hash_sha256(ref temp.GetPinnableReference(), in data.GetPinnableReference(), (ulong)data.Length);
 
             return CryptographicOperations.FixedTimeEquals(temp, hash);
         }

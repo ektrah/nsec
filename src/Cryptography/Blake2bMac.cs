@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Threading;
 using NSec.Cryptography.Formatting;
 using static Interop.Libsodium;
@@ -83,13 +82,13 @@ namespace NSec.Cryptography
             Debug.Assert(mac.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
             Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
-            ref crypto_generichash_blake2b_state state_ = ref AlignPinnedReference(ref MemoryMarshal.GetReference(buffer));
+            ref crypto_generichash_blake2b_state state_ = ref AlignPinnedReference(ref buffer.GetPinnableReference());
 
             Span<byte> temp = stackalloc byte[mac.Length];
 
             state_ = state.blake2b;
 
-            crypto_generichash_blake2b_final(ref state_, ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length);
+            crypto_generichash_blake2b_final(ref state_, ref temp.GetPinnableReference(), (UIntPtr)temp.Length);
 
             return CryptographicOperations.FixedTimeEquals(temp, mac);
         }
@@ -102,11 +101,11 @@ namespace NSec.Cryptography
             Debug.Assert(mac.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
             Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
-            ref crypto_generichash_blake2b_state state_ = ref AlignPinnedReference(ref MemoryMarshal.GetReference(buffer));
+            ref crypto_generichash_blake2b_state state_ = ref AlignPinnedReference(ref buffer.GetPinnableReference());
 
             state_ = state.blake2b;
 
-            crypto_generichash_blake2b_final(ref state_, ref MemoryMarshal.GetReference(mac), (UIntPtr)mac.Length);
+            crypto_generichash_blake2b_final(ref state_, ref mac.GetPinnableReference(), (UIntPtr)mac.Length);
 
             state.blake2b = state_;
         }
@@ -128,7 +127,7 @@ namespace NSec.Cryptography
             Debug.Assert(macSize <= crypto_generichash_blake2b_BYTES_MAX);
 
             Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
-            ref crypto_generichash_blake2b_state state_ = ref AlignPinnedReference(ref MemoryMarshal.GetReference(buffer));
+            ref crypto_generichash_blake2b_state state_ = ref AlignPinnedReference(ref buffer.GetPinnableReference());
 
             crypto_generichash_blake2b_init(out state_, keyHandle, (UIntPtr)keyHandle.Length, (UIntPtr)macSize);
 
@@ -176,11 +175,11 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> data)
         {
             Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
-            ref crypto_generichash_blake2b_state state_ = ref AlignPinnedReference(ref MemoryMarshal.GetReference(buffer));
+            ref crypto_generichash_blake2b_state state_ = ref AlignPinnedReference(ref buffer.GetPinnableReference());
 
             state_ = state.blake2b;
 
-            crypto_generichash_blake2b_update(ref state_, in MemoryMarshal.GetReference(data), (ulong)data.Length);
+            crypto_generichash_blake2b_update(ref state_, in data.GetPinnableReference(), (ulong)data.Length);
 
             state.blake2b = state_;
         }
@@ -196,7 +195,7 @@ namespace NSec.Cryptography
             Debug.Assert(mac.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(mac.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
-            crypto_generichash_blake2b(ref MemoryMarshal.GetReference(mac), (UIntPtr)mac.Length, in MemoryMarshal.GetReference(data), (ulong)data.Length, keyHandle, (UIntPtr)keyHandle.Length);
+            crypto_generichash_blake2b(ref mac.GetPinnableReference(), (UIntPtr)mac.Length, in data.GetPinnableReference(), (ulong)data.Length, keyHandle, (UIntPtr)keyHandle.Length);
         }
 
         private protected override bool TryVerifyCore(
@@ -212,7 +211,7 @@ namespace NSec.Cryptography
 
             Span<byte> temp = stackalloc byte[mac.Length];
 
-            crypto_generichash_blake2b(ref MemoryMarshal.GetReference(temp), (UIntPtr)temp.Length, in MemoryMarshal.GetReference(data), (ulong)data.Length, keyHandle, (UIntPtr)keyHandle.Length);
+            crypto_generichash_blake2b(ref temp.GetPinnableReference(), (UIntPtr)temp.Length, in data.GetPinnableReference(), (ulong)data.Length, keyHandle, (UIntPtr)keyHandle.Length);
 
             return CryptographicOperations.FixedTimeEquals(temp, mac);
         }

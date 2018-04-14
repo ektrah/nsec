@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography.Formatting
@@ -21,7 +20,7 @@ namespace NSec.Cryptography.Formatting
             Debug.Assert(span.Length == crypto_sign_ed25519_PUBLICKEYBYTES);
             Debug.Assert(Unsafe.SizeOf<PublicKeyBytes>() == crypto_sign_ed25519_PUBLICKEYBYTES);
 
-            Unsafe.CopyBlockUnaligned(ref Unsafe.As<PublicKeyBytes, byte>(ref publicKeyBytes), ref MemoryMarshal.GetReference(span), crypto_sign_ed25519_PUBLICKEYBYTES);
+            Unsafe.CopyBlockUnaligned(ref Unsafe.As<PublicKeyBytes, byte>(ref publicKeyBytes), ref Unsafe.AsRef(in span.GetPinnableReference()), crypto_sign_ed25519_PUBLICKEYBYTES);
         }
 
         protected override void Serialize(
@@ -31,7 +30,7 @@ namespace NSec.Cryptography.Formatting
             Debug.Assert(Unsafe.SizeOf<PublicKeyBytes>() == crypto_sign_ed25519_PUBLICKEYBYTES);
             Debug.Assert(span.Length == crypto_sign_ed25519_PUBLICKEYBYTES);
 
-            Unsafe.CopyBlockUnaligned(ref MemoryMarshal.GetReference(span), ref Unsafe.As<PublicKeyBytes, byte>(ref Unsafe.AsRef(in publicKeyBytes)), crypto_sign_ed25519_PUBLICKEYBYTES);
+            Unsafe.CopyBlockUnaligned(ref span.GetPinnableReference(), ref Unsafe.As<PublicKeyBytes, byte>(ref Unsafe.AsRef(in publicKeyBytes)), crypto_sign_ed25519_PUBLICKEYBYTES);
         }
     }
 }

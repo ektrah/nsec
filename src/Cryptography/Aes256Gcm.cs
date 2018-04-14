@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Threading;
 using NSec.Cryptography.Formatting;
 using static Interop.Libsodium;
@@ -108,11 +107,11 @@ namespace NSec.Cryptography
             Debug.Assert(ciphertext.Length == plaintext.Length + crypto_aead_aes256gcm_ABYTES);
 
             crypto_aead_aes256gcm_encrypt(
-                ref MemoryMarshal.GetReference(ciphertext),
+                ref ciphertext.GetPinnableReference(),
                 out ulong ciphertextLength,
-                in MemoryMarshal.GetReference(plaintext),
+                in plaintext.GetPinnableReference(),
                 (ulong)plaintext.Length,
-                in MemoryMarshal.GetReference(associatedData),
+                in associatedData.GetPinnableReference(),
                 (ulong)associatedData.Length,
                 IntPtr.Zero,
                 in nonce,
@@ -139,12 +138,12 @@ namespace NSec.Cryptography
             Debug.Assert(plaintext.Length == ciphertext.Length - crypto_aead_aes256gcm_ABYTES);
 
             int error = crypto_aead_aes256gcm_decrypt(
-                ref MemoryMarshal.GetReference(plaintext),
+                ref plaintext.GetPinnableReference(),
                 out ulong plaintextLength,
                 IntPtr.Zero,
-                in MemoryMarshal.GetReference(ciphertext),
+                in ciphertext.GetPinnableReference(),
                 (ulong)ciphertext.Length,
-                in MemoryMarshal.GetReference(associatedData),
+                in associatedData.GetPinnableReference(),
                 (ulong)associatedData.Length,
                 in nonce,
                 keyHandle);

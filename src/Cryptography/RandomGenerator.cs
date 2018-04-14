@@ -2,7 +2,6 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Threading;
 using static Interop.Libsodium;
 
@@ -201,7 +200,7 @@ namespace NSec.Cryptography
             private protected override void GenerateBytesCore(
                 Span<byte> bytes)
             {
-                randombytes_buf(ref MemoryMarshal.GetReference(bytes), (UIntPtr)bytes.Length);
+                randombytes_buf(ref bytes.GetPinnableReference(), (UIntPtr)bytes.Length);
             }
 
             private protected override uint GenerateUInt32Core()

@@ -66,7 +66,7 @@ namespace NSec.Cryptography
             _fixedFieldSize = (byte)fixedField.Length;
             _counterFieldSize = (byte)counterFieldSize;
 
-            Unsafe.CopyBlockUnaligned(ref _bytes, ref Unsafe.AsRef(in MemoryMarshal.GetReference(fixedField)), (uint)fixedField.Length);
+            Unsafe.CopyBlockUnaligned(ref _bytes, ref Unsafe.AsRef(in fixedField.GetPinnableReference()), (uint)fixedField.Length);
         }
 
         public Nonce(
@@ -86,8 +86,8 @@ namespace NSec.Cryptography
             _fixedFieldSize = (byte)fixedField.Length;
             _counterFieldSize = (byte)counterField.Length;
 
-            Unsafe.CopyBlockUnaligned(ref _bytes, ref Unsafe.AsRef(in MemoryMarshal.GetReference(fixedField)), (uint)fixedField.Length);
-            Unsafe.CopyBlockUnaligned(ref Unsafe.Add(ref _bytes, fixedField.Length), ref Unsafe.AsRef(in MemoryMarshal.GetReference(counterField)), (uint)counterField.Length);
+            Unsafe.CopyBlockUnaligned(ref _bytes, ref Unsafe.AsRef(in fixedField.GetPinnableReference()), (uint)fixedField.Length);
+            Unsafe.CopyBlockUnaligned(ref Unsafe.Add(ref _bytes, fixedField.Length), ref Unsafe.AsRef(in counterField.GetPinnableReference()), (uint)counterField.Length);
         }
 
         public int CounterFieldSize => _counterFieldSize;
@@ -260,7 +260,7 @@ namespace NSec.Cryptography
             }
             if (size > 0)
             {
-                Unsafe.CopyBlockUnaligned(ref MemoryMarshal.GetReference(destination), ref Unsafe.AsRef(in _bytes), (uint)size);
+                Unsafe.CopyBlockUnaligned(ref destination.GetPinnableReference(), ref Unsafe.AsRef(in _bytes), (uint)size);
             }
         }
 

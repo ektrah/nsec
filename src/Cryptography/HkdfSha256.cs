@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Threading;
 using static Interop.Libsodium;
 
@@ -153,11 +152,11 @@ namespace NSec.Cryptography
                 {
                     counter++;
 
-                    crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, in MemoryMarshal.GetReference(pseudorandomKey), (UIntPtr)pseudorandomKey.Length);
-                    crypto_auth_hmacsha256_update(ref state, in MemoryMarshal.GetReference(temp), (ulong)tempLength);
-                    crypto_auth_hmacsha256_update(ref state, in MemoryMarshal.GetReference(info), (ulong)info.Length);
+                    crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, in pseudorandomKey.GetPinnableReference(), (UIntPtr)pseudorandomKey.Length);
+                    crypto_auth_hmacsha256_update(ref state, in temp.GetPinnableReference(), (ulong)tempLength);
+                    crypto_auth_hmacsha256_update(ref state, in info.GetPinnableReference(), (ulong)info.Length);
                     crypto_auth_hmacsha256_update(ref state, in counter, sizeof(byte));
-                    crypto_auth_hmacsha256_final(ref state, ref MemoryMarshal.GetReference(temp));
+                    crypto_auth_hmacsha256_final(ref state, ref temp.GetPinnableReference());
 
                     tempLength = crypto_auth_hmacsha256_BYTES;
 
@@ -188,9 +187,9 @@ namespace NSec.Cryptography
             // "not provided" and an empty span seems to yield the same result
             // as a string of HashLen zeros, so the corner case is ignored here.
 
-            crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, in MemoryMarshal.GetReference(salt), (UIntPtr)salt.Length);
-            crypto_auth_hmacsha256_update(ref state, in MemoryMarshal.GetReference(inputKeyingMaterial), (ulong)inputKeyingMaterial.Length);
-            crypto_auth_hmacsha256_final(ref state, ref MemoryMarshal.GetReference(pseudorandomKey));
+            crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, in salt.GetPinnableReference(), (UIntPtr)salt.Length);
+            crypto_auth_hmacsha256_update(ref state, in inputKeyingMaterial.GetPinnableReference(), (ulong)inputKeyingMaterial.Length);
+            crypto_auth_hmacsha256_final(ref state, ref pseudorandomKey.GetPinnableReference());
         }
 
         private static void ExtractCore(

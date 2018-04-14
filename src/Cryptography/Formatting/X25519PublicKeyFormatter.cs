@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography.Formatting
@@ -21,7 +20,7 @@ namespace NSec.Cryptography.Formatting
             Debug.Assert(span.Length == crypto_scalarmult_curve25519_SCALARBYTES);
             Debug.Assert(Unsafe.SizeOf<PublicKeyBytes>() == crypto_scalarmult_curve25519_SCALARBYTES);
 
-            Unsafe.CopyBlockUnaligned(ref Unsafe.As<PublicKeyBytes, byte>(ref publicKeyBytes), ref MemoryMarshal.GetReference(span), crypto_scalarmult_curve25519_SCALARBYTES);
+            Unsafe.CopyBlockUnaligned(ref Unsafe.As<PublicKeyBytes, byte>(ref publicKeyBytes), ref Unsafe.AsRef(in span.GetPinnableReference()), crypto_scalarmult_curve25519_SCALARBYTES);
             Unsafe.Add(ref Unsafe.As<PublicKeyBytes, byte>(ref publicKeyBytes), crypto_scalarmult_curve25519_SCALARBYTES - 1) &= 0x7F;
         }
 
@@ -32,7 +31,7 @@ namespace NSec.Cryptography.Formatting
             Debug.Assert(Unsafe.SizeOf<PublicKeyBytes>() == crypto_scalarmult_curve25519_SCALARBYTES);
             Debug.Assert(span.Length == crypto_scalarmult_curve25519_SCALARBYTES);
 
-            Unsafe.CopyBlockUnaligned(ref MemoryMarshal.GetReference(span), ref Unsafe.As<PublicKeyBytes, byte>(ref Unsafe.AsRef(in publicKeyBytes)), crypto_scalarmult_curve25519_SCALARBYTES);
+            Unsafe.CopyBlockUnaligned(ref span.GetPinnableReference(), ref Unsafe.As<PublicKeyBytes, byte>(ref Unsafe.AsRef(in publicKeyBytes)), crypto_scalarmult_curve25519_SCALARBYTES);
         }
     }
 }

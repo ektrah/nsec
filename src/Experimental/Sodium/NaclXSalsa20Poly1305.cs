@@ -49,8 +49,8 @@ namespace NSec.Experimental.Sodium
             Debug.Assert(ciphertext.Length == crypto_secretbox_xsalsa20poly1305_MACBYTES + plaintext.Length);
 
             crypto_secretbox_easy(
-                ref MemoryMarshal.GetReference(ciphertext),
-                in MemoryMarshal.GetReference(plaintext),
+                ref ciphertext.GetPinnableReference(),
+                in plaintext.GetPinnableReference(),
                 (ulong)plaintext.Length,
                 in nonce,
                 keyHandle);
@@ -73,8 +73,8 @@ namespace NSec.Experimental.Sodium
             Debug.Assert(plaintext.Length == ciphertext.Length - crypto_secretbox_xsalsa20poly1305_MACBYTES);
 
             int error = crypto_secretbox_open_easy(
-                ref MemoryMarshal.GetReference(plaintext),
-                in MemoryMarshal.GetReference(ciphertext),
+                ref plaintext.GetPinnableReference(),
+                in ciphertext.GetPinnableReference(),
                 (ulong)ciphertext.Length,
                 in nonce,
                 keyHandle);

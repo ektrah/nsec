@@ -1,7 +1,6 @@
 using System;
 using System.Buffers.Binary;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using NSec.Cryptography;
 using static Interop.Libsodium;
 
@@ -56,9 +55,9 @@ namespace NSec.Experimental
 
                     crypto_hash_sha256_init(out crypto_hash_sha256_state state);
                     crypto_hash_sha256_update(ref state, in counterBigEndian, sizeof(uint));
-                    crypto_hash_sha256_update(ref state, in MemoryMarshal.GetReference(inputKeyingMaterial), (ulong)inputKeyingMaterial.Length);
-                    crypto_hash_sha256_update(ref state, in MemoryMarshal.GetReference(info), (ulong)info.Length);
-                    crypto_hash_sha256_final(ref state, ref MemoryMarshal.GetReference(temp));
+                    crypto_hash_sha256_update(ref state, in inputKeyingMaterial.GetPinnableReference(), (ulong)inputKeyingMaterial.Length);
+                    crypto_hash_sha256_update(ref state, in info.GetPinnableReference(), (ulong)info.Length);
+                    crypto_hash_sha256_final(ref state, ref temp.GetPinnableReference());
 
                     if (chunkSize > crypto_hash_sha256_BYTES)
                     {
