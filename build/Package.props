@@ -4,31 +4,6 @@
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(APPVEYOR)' == 'true'">
-    <GitBranch Condition="'$(APPVEYOR_REPO_BRANCH)' != ''">$([System.Text.RegularExpressions.Regex]::Replace($(APPVEYOR_REPO_BRANCH), "[^0-9A-Za-z]", "-"))</GitBranch>
-    <GitTag Condition="'$(APPVEYOR_REPO_TAG)' == 'true'">$(APPVEYOR_REPO_TAG_NAME)</GitTag>
-    <IsGitPullRequest Condition="'$(APPVEYOR_PULL_REQUEST_NUMBER)' != ''">true</IsGitPullRequest>
-    <IsGitBranch Condition="'$(GitBranch)' != '' and '$(GitBranch)' != 'master'">true</IsGitBranch>
-    <IsStableRelease Condition="'$(GitTag)' != '' and !$(GitTag.Contains('-'))">true</IsStableRelease>
-    <IsPreviewRelease Condition="'$(GitTag)' != '' and $(GitTag.Contains('-'))">true</IsPreviewRelease>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(CIRCLECI)' == 'true'">
-    <GitBranch Condition="'$(CIRCLE_BRANCH)' != ''">$([System.Text.RegularExpressions.Regex]::Replace($(CIRCLE_BRANCH), "[^0-9A-Za-z]", "-"))</GitBranch>
-    <GitTag Condition="'$(CIRCLE_TAG)' != ''">$(CIRCLE_TAG)</GitTag>
-    <IsGitPullRequest Condition="'$(CIRCLE_PR_NUMBER)' != ''">true</IsGitPullRequest>
-    <IsGitBranch Condition="'$(GitBranch)' != '' and '$(GitBranch)' != 'master'">true</IsGitBranch>
-    <IsStableRelease Condition="'$(GitTag)' != '' and !$(GitTag.Contains('-'))">true</IsStableRelease>
-    <IsPreviewRelease Condition="'$(GitTag)' != '' and $(GitTag.Contains('-'))">true</IsPreviewRelease>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <IsGitPullRequest Condition="'$(IsGitPullRequest)' == ''">false</IsGitPullRequest>
-    <IsGitBranch Condition="'$(IsGitBranch)' == ''">false</IsGitBranch>
-    <IsStableRelease Condition="'$(IsStableRelease)' == ''">false</IsStableRelease>
-    <IsPreviewRelease Condition="'$(IsPreviewRelease)' == ''">false</IsPreviewRelease>
-  </PropertyGroup>
-
   <PropertyGroup>
     <LatestRelease>18.4.0-preview2</LatestRelease>
   </PropertyGroup>
@@ -45,9 +20,21 @@
     <CurrentReleasePatch Condition="!$(LatestRelease.Contains('-'))">$([MSBuild]::Add($(LatestReleasePatch), 1))</CurrentReleasePatch>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(APPVEYOR)' == 'true'">
+    <GitBranch>$([System.Text.RegularExpressions.Regex]::Replace($(APPVEYOR_REPO_BRANCH), '[^0-9A-Za-z]', '-'))</GitBranch>
+    <GitPullRequest>$(APPVEYOR_PULL_REQUEST_NUMBER)</GitPullRequest>
+    <GitTag>$(APPVEYOR_REPO_TAG_NAME)</GitTag>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(CIRCLECI)' == 'true'">
+    <GitBranch>$([System.Text.RegularExpressions.Regex]::Replace($(CIRCLE_BRANCH), '[^0-9A-Za-z]', '-'))</GitBranch>
+    <GitPullRequest>$(CIRCLE_PR_NUMBER)</GitPullRequest>
+    <GitTag>$(CIRCLE_TAG)</GitTag>
+  </PropertyGroup>
+
   <PropertyGroup>
-    <IsPackable Condition="'$(IsGitPullRequest)' == 'true'">false</IsPackable>
-    <IsPackable Condition="'$(IsGitBranch)' == 'true'">false</IsPackable>
+    <IsPackable Condition="'$(GitBranch)' != '' and '$(GitBranch)' != 'master'">false</IsPackable>
+    <IsPackable Condition="'$(GitPullRequest)' != ''">false</IsPackable>
     <Version Condition="'$(Version)' == ''">$(GitTag)</Version>
     <Version Condition="'$(Version)' == ''">$(CurrentReleaseMajorMinor).$(CurrentReleasePatch)-alpha-$([System.DateTime]::UtcNow.ToString(ddHHmm))</Version>
     <Authors>Klaus Hartke</Authors>
