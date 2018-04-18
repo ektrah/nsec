@@ -37,28 +37,25 @@ to **latest** or **7.2** (or later).
 
 ## Supported Platforms
 
-
-### .NET Core
-
 NSec runs on the following platforms and .NET Core versions:
 
 | OS            | Version  | Architectures | .NET Core Runtimes    |
 |:------------- |:-------- |:------------- |:--------------------- |
-| Windows 10    | 1709     | x64 / x86     | 2.1.0 / 2.0.6 / 1.1.7 |
+| Windows 10    | 1709     | x64 / x86     | 2.1  /  2.0  /  1.1   |
 |               |          |               |                       |
-| macOS         | 10.12    | x64           | 2.1.0 / 2.0.6 / 1.1.7 |
+| macOS         | 10.12    | x64           | 2.1  /  2.0  /  1.1   |
 |               |          |               |                       |
-| CentOS        | 7.4      | x64           | 2.1.0 / 2.0.6 / 1.1.7 |
-| Debian        | 8.10     | x64           | 2.1.0 / 2.0.6 / 1.1.7 |
-|               | 9.3      | x64           | 2.1.0 / 2.0.6         |
-| Fedora        | 26       | x64           | 2.1.0 / 2.0.6         |
-|               | 27       | x64           | 2.1.0 / 2.0.6         |
-| OpenSUSE      | 42.3     | x64           | 2.1.0 / 2.0.6         |
-| Ubuntu        | 14.04    | x64           | 2.1.0 / 2.0.6 / 1.1.7 |
-|               | 16.04    | x64           | 2.1.0 / 2.0.6 / 1.1.7 |
-|               | 17.10    | x64           | 2.1.0 / 2.0.6         |
+| CentOS        | 7.4      | x64           | 2.1  /  2.0  /  1.1   |
+| Debian        | 8.10     | x64           | 2.1  /  2.0  /  1.1   |
+|               | 9.3      | x64           | 2.1  /  2.0           |
+| Fedora        | 26       | x64           | 2.1  /  2.0           |
+|               | 27       | x64           | 2.1  /  2.0           |
+| OpenSUSE      | 42.3     | x64           | 2.1  /  2.0           |
+| Ubuntu        | 14.04    | x64           | 2.1  /  2.0  /  1.1   |
+|               | 16.04    | x64           | 2.1  /  2.0  /  1.1   |
+|               | 17.10    | x64           | 2.1  /  2.0           |
 
-Additional operating systems and versions supported by .NET Core should work as
+Other operating systems and versions supported by .NET Core should work as
 well but are untested.
 
 Using NSec on Windows requires the [Visual C++ 2015
