@@ -54,7 +54,6 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                Assert.NotNull(k);
                 Assert.Same(a, k.Algorithm);
 
                 Assert.Throws<ArgumentNullException>("otherPartyPublicKey", () => a.Agree(k, null));
@@ -70,8 +69,8 @@ namespace NSec.Tests.Base
             using (var k1 = new Key(a))
             using (var k2 = new Key(SignatureAlgorithm.Ed25519))
             {
-                Assert.NotNull(k1);
                 Assert.Same(a, k1.Algorithm);
+                Assert.NotSame(a, k2.Algorithm);
 
                 Assert.Throws<ArgumentException>("otherPartyPublicKey", () => a.Agree(k1, k2.PublicKey));
             }
