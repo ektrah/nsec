@@ -36,6 +36,20 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyAgreementAlgorithms))]
+        public static void AgreeWithDisposedKey(Type algorithmType)
+        {
+            var a = (KeyAgreementAlgorithm)Activator.CreateInstance(algorithmType);
+
+            using (var k2 = new Key(a))
+            {
+                var k1 = new Key(a);
+                k1.Dispose();
+                Assert.Throws<ObjectDisposedException>(() => a.Agree(k1, k2.PublicKey));
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(KeyAgreementAlgorithms))]
         public static void AgreeWithWrongKey(Type algorithmType)
         {
             var a = (KeyAgreementAlgorithm)Activator.CreateInstance(algorithmType);
@@ -120,6 +134,20 @@ namespace NSec.Tests.Base
             var a = (KeyAgreementAlgorithm)Activator.CreateInstance(algorithmType);
 
             Assert.Throws<ArgumentNullException>("key", () => a.TryAgree(null, null, out SharedSecret s));
+        }
+
+        [Theory]
+        [MemberData(nameof(KeyAgreementAlgorithms))]
+        public static void TryAgreeWithDisposedKey(Type algorithmType)
+        {
+            var a = (KeyAgreementAlgorithm)Activator.CreateInstance(algorithmType);
+
+            using (var k2 = new Key(a))
+            {
+                var k = new Key(a);
+                k.Dispose();
+                Assert.Throws<ObjectDisposedException>(() => a.TryAgree(k, k2.PublicKey, out SharedSecret s));
+            }
         }
 
         [Theory]

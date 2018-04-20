@@ -36,6 +36,17 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(SignatureAlgorithms))]
+        public static void SignWithDisposedKey(Type algorithmType)
+        {
+            var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
+
+            var k = new Key(a);
+            k.Dispose();
+            Assert.Throws<ObjectDisposedException>(() => a.Sign(k, ReadOnlySpan<byte>.Empty));
+        }
+
+        [Theory]
+        [MemberData(nameof(SignatureAlgorithms))]
         public static void SignWithWrongKey(Type algorithmType)
         {
             var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
@@ -72,6 +83,17 @@ namespace NSec.Tests.Base
             var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
 
             Assert.Throws<ArgumentNullException>("key", () => a.Sign(null, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+        }
+
+        [Theory]
+        [MemberData(nameof(SignatureAlgorithms))]
+        public static void SignWithSpanWithDisposedKey(Type algorithmType)
+        {
+            var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
+
+            var k = new Key(a);
+            k.Dispose();
+            Assert.Throws<ObjectDisposedException>(() => a.Sign(k, ReadOnlySpan<byte>.Empty, new byte[a.SignatureSize]));
         }
 
         [Theory]

@@ -38,6 +38,17 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
+        public static void EncryptWithDisposedKey(Type algorithmType)
+        {
+            var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
+
+            var k = new Key(a);
+            k.Dispose();
+            Assert.Throws<ObjectDisposedException>(() => a.Encrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+        }
+
+        [Theory]
+        [MemberData(nameof(AeadAlgorithms))]
         public static void EncryptWithWrongKey(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
@@ -103,6 +114,17 @@ namespace NSec.Tests.Base
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
             Assert.Throws<ArgumentNullException>("key", () => a.Encrypt(null, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+        }
+
+        [Theory]
+        [MemberData(nameof(AeadAlgorithms))]
+        public static void EncryptWithSpanWithDisposedKey(Type algorithmType)
+        {
+            var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
+
+            var k = new Key(a);
+            k.Dispose();
+            Assert.Throws<ObjectDisposedException>(() => a.Encrypt(k, new Nonce(a.NonceSize, 0), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[a.TagSize]));
         }
 
         [Theory]
@@ -291,6 +313,17 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
+        public static void DecryptWithDisposedKey(Type algorithmType)
+        {
+            var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
+
+            var k = new Key(a);
+            k.Dispose();
+            Assert.Throws<ObjectDisposedException>(() => a.Decrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize]));
+        }
+
+        [Theory]
+        [MemberData(nameof(AeadAlgorithms))]
         public static void DecryptWithWrongKey(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
@@ -371,6 +404,17 @@ namespace NSec.Tests.Base
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
             Assert.Throws<ArgumentNullException>("key", () => a.Decrypt(null, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+        }
+
+        [Theory]
+        [MemberData(nameof(AeadAlgorithms))]
+        public static void DecryptWithSpanWithDisposedKey(Type algorithmType)
+        {
+            var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
+
+            var k = new Key(a);
+            k.Dispose();
+            Assert.Throws<ObjectDisposedException>(() => a.Decrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize], Span<byte>.Empty));
         }
 
         [Theory]
@@ -540,6 +584,17 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
+        public static void TryDecryptWithDisposedKey(Type algorithmType)
+        {
+            var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
+
+            var k = new Key(a);
+            k.Dispose();
+            Assert.Throws<ObjectDisposedException>(() => a.TryDecrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize], out byte[] pt));
+        }
+
+        [Theory]
+        [MemberData(nameof(AeadAlgorithms))]
         public static void TryDecryptWithWrongKey(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
@@ -642,6 +697,17 @@ namespace NSec.Tests.Base
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
             Assert.Throws<ArgumentNullException>("key", () => a.TryDecrypt(null, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+        }
+
+        [Theory]
+        [MemberData(nameof(AeadAlgorithms))]
+        public static void TryDecryptWithSpanWithDisposedKey(Type algorithmType)
+        {
+            var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
+
+            var k = new Key(a);
+            k.Dispose();
+            Assert.Throws<ObjectDisposedException>(() => a.TryDecrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize], Span<byte>.Empty));
         }
 
         [Theory]

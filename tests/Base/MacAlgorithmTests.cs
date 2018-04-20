@@ -100,6 +100,17 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
+        public static void MacWithDisposedKey(Type algorithmType)
+        {
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
+
+            var k = new Key(a);
+            k.Dispose();
+            Assert.Throws<ObjectDisposedException>(() => a.Mac(k, ReadOnlySpan<byte>.Empty));
+        }
+
+        [Theory]
+        [MemberData(nameof(MacAlgorithms))]
         public static void MacWithWrongKey(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -140,6 +151,17 @@ namespace NSec.Tests.Base
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             Assert.Throws<ArgumentNullException>("key", () => a.Mac(null, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+        }
+
+        [Theory]
+        [MemberData(nameof(MacAlgorithms))]
+        public static void MacWithSpanWithDisposedKey(Type algorithmType)
+        {
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
+
+            var k = new Key(a);
+            k.Dispose();
+            Assert.Throws<ObjectDisposedException>(() => a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize]));
         }
 
         [Theory]
@@ -232,6 +254,17 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
+        public static void TryVerifyWithDisposedKey(Type algorithmType)
+        {
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
+
+            var k = new Key(a);
+            k.Dispose();
+            Assert.Throws<ObjectDisposedException>(() => a.TryVerify(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize]));
+        }
+
+        [Theory]
+        [MemberData(nameof(MacAlgorithms))]
         public static void TryVerifyWithWrongKey(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
@@ -293,6 +326,17 @@ namespace NSec.Tests.Base
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             Assert.Throws<ArgumentNullException>("key", () => a.Verify(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+        }
+
+        [Theory]
+        [MemberData(nameof(MacAlgorithms))]
+        public static void VerifyWithDisposedKey(Type algorithmType)
+        {
+            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
+
+            var k = new Key(a);
+            k.Dispose();
+            Assert.Throws<ObjectDisposedException>(() => a.Verify(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize]));
         }
 
         [Theory]
