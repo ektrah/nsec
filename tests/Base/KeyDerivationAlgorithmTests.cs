@@ -35,6 +35,17 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
+        public static void DeriveBytesWithDisposedSecret(Type algorithmType)
+        {
+            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
+
+            var s = SharedSecret.Import(Utilities.RandomBytes.Slice(0, 32));
+            s.Dispose();
+            Assert.Throws<ObjectDisposedException>(() => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, 0));
+        }
+
+        [Theory]
+        [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveBytesWithUnusedSalt(Type algorithmType)
         {
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
@@ -131,6 +142,17 @@ namespace NSec.Tests.Base
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
 
             Assert.Throws<ArgumentNullException>("sharedSecret", () => a.DeriveBytes(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+        }
+
+        [Theory]
+        [MemberData(nameof(KeyDerivationAlgorithms))]
+        public static void DeriveBytesWithDisposedSecretAndSpan(Type algorithmType)
+        {
+            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
+
+            var s = SharedSecret.Import(Utilities.RandomBytes.Slice(0, 32));
+            s.Dispose();
+            Assert.Throws<ObjectDisposedException>(() => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
@@ -252,6 +274,17 @@ namespace NSec.Tests.Base
             var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
 
             Assert.Throws<ArgumentNullException>("sharedSecret", () => a.DeriveKey(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, null));
+        }
+
+        [Theory]
+        [MemberData(nameof(KeyDerivationAlgorithms))]
+        public static void DeriveKeyWithDisposedSecret(Type algorithmType)
+        {
+            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
+
+            var s = SharedSecret.Import(Utilities.RandomBytes.Slice(0, 32));
+            s.Dispose();
+            Assert.Throws<ObjectDisposedException>(() => a.DeriveKey(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, AeadAlgorithm.ChaCha20Poly1305));
         }
 
         [Theory]
