@@ -26,17 +26,23 @@ The size, in bytes, of the shared secret.
 ## Static Methods
 
 
-### Import(ReadOnlySpan<byte>)
+### Import(ReadOnlySpan<byte>, in SharedSecretCreationParameters)
 
 Imports the specified shared secret.
 
     public static SharedSecret Import(
-        ReadOnlySpan<byte> sharedSecret)
+        ReadOnlySpan<byte> sharedSecret,
+        in SharedSecretCreationParameters creationParameters = default)
 
 #### Parameters
 
 sharedSecret
 : The shared secret to import.
+
+creationParameters
+: A [[SharedSecretCreationParameters|SharedSecretCreationParameters Struct]]
+    value that specifies advanced parameters for the creation of the
+    [[SharedSecret|SharedSecret Class]] instance.
 
 #### Return Value
 
@@ -71,3 +77,4 @@ not guaranteed to be thread safe.
 * API Reference
     * [[KeyAgreementAlgorithm Class]]
     * [[KeyDerivationAlgorithm Class]]
+    * [[SharedSecretCreationParameters Struct]]

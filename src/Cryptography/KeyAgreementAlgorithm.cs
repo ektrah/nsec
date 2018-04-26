@@ -61,7 +61,8 @@ namespace NSec.Cryptography
 
         public SharedSecret Agree(
             Key key,
-            PublicKey otherPartyPublicKey)
+            PublicKey otherPartyPublicKey,
+            in SharedSecretCreationParameters creationParameters = default)
         {
             if (key == null)
                 throw Error.ArgumentNull_Key(nameof(key));
@@ -98,7 +99,8 @@ namespace NSec.Cryptography
         public bool TryAgree(
             Key key,
             PublicKey otherPartyPublicKey,
-            out SharedSecret result)
+            out SharedSecret result,
+            in SharedSecretCreationParameters creationParameters = default)
         {
             if (key == null)
                 throw Error.ArgumentNull_Key(nameof(key));

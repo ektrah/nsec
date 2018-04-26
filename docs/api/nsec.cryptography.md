@@ -28,3 +28,4 @@
 * [[PublicKey Class]]
 * [[RandomGenerator Class]]
 * [[SharedSecret Class]]
+    * [[SharedSecretCreationParameters Struct]]

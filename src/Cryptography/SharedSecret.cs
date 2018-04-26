@@ -24,7 +24,8 @@ namespace NSec.Cryptography
         internal SecureMemoryHandle Handle => _handle;
 
         public static SharedSecret Import(
-            ReadOnlySpan<byte> sharedSecret)
+            ReadOnlySpan<byte> sharedSecret,
+            in SharedSecretCreationParameters creationParameters = default)
         {
             if (sharedSecret.Length > 128)
             {

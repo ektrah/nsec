@@ -64,13 +64,14 @@ The shared secret size, in bytes.
 ## Methods
 
 
-### Agree(Key, PublicKey)
+### Agree(Key, PublicKey, in SharedSecretCreationParameters)
 
 Creates a shared secret from a private and a public key.
 
     public SharedSecret Agree(
         Key key,
-        PublicKey otherPartyPublicKey)
+        PublicKey otherPartyPublicKey,
+        in SharedSecretCreationParameters creationParameters = default)
 
 #### Parameters
 
@@ -79,6 +80,11 @@ key
 
 otherPartyPublicKey
 : The public key of the other party to use to create the shared secret.
+
+creationParameters
+: A [[SharedSecretCreationParameters|SharedSecretCreationParameters Struct]]
+    value that specifies advanced parameters for the creation of the
+    [[SharedSecret|SharedSecret Class]] instance.
 
 #### Return Value
 
@@ -101,14 +107,15 @@ ObjectDisposedException
 : `key` has been disposed.
 
 
-### TryAgree(Key, PublicKey, out SharedSecret)
+### TryAgree(Key, PublicKey, out SharedSecret, in SharedSecretCreationParameters)
 
 Attempts to create a shared secret from a private and a public key.
 
     public bool TryAgree(
         Key key,
         PublicKey otherPartyPublicKey,
-        out SharedSecret result)
+        out SharedSecret result,
+        in SharedSecretCreationParameters creationParameters = default)
 
 #### Parameters
 
@@ -122,6 +129,11 @@ result
 : When this method returns, contains a new instance of the
     [[SharedSecret|SharedSecret Class]] class that represents the shared
     secret, or `null` if key agreement fails.
+
+creationParameters
+: A [[SharedSecretCreationParameters|SharedSecretCreationParameters Struct]]
+    value that specifies advanced parameters for the creation of the
+    [[SharedSecret|SharedSecret Class]] instance.
 
 #### Return Value
 
@@ -157,3 +169,4 @@ All methods yield the same result for the same arguments.
     * [[Key Class]]
     * [[PublicKey Class]]
     * [[SharedSecret Class]]
+    * [[SharedSecretCreationParameters Struct]]
