@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using static Interop.Libsodium;
 
@@ -56,6 +57,12 @@ namespace NSec.Cryptography
         public void Dispose()
         {
             _handle.Dispose();
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override string ToString()
+        {
+            return typeof(SharedSecret).ToString();
         }
     }
 }
