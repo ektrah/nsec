@@ -1,3 +1,4 @@
+using System;
 using System.Buffers;
 using System.Runtime.CompilerServices;
 
@@ -19,6 +20,10 @@ namespace NSec.Cryptography.Buffers
             if (minBufferSize == -1)
             {
                 minBufferSize = unchecked(1 + (4095 / Unsafe.SizeOf<T>()));
+            }
+            else if (unchecked((uint)minBufferSize > (uint)(int.MaxValue / Unsafe.SizeOf<T>())))
+            {
+                throw new ArgumentOutOfRangeException(nameof(minBufferSize));
             }
 
             return new SecureMemoryManager<T>(minBufferSize);
