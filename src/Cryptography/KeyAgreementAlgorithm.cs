@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Diagnostics;
 using System.Threading;
 using static Interop.Libsodium;
@@ -73,18 +74,19 @@ namespace NSec.Cryptography
             if (otherPartyPublicKey.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(otherPartyPublicKey), key.Algorithm.GetType().FullName, GetType().FullName);
 
-            SecureMemoryHandle sharedSecretHandle = null;
+            ReadOnlyMemory<byte> memory = default;
+            IMemoryOwner<byte> owner = default;
             bool success = false;
 
             try
             {
-                success = TryAgreeCore(key.Handle, in otherPartyPublicKey.GetPinnableReference(), out sharedSecretHandle);
+                success = TryAgreeCore(key.Span, in otherPartyPublicKey.GetPinnableReference(), creationParameters.GetMemoryPool(), out memory, out owner);
             }
             finally
             {
-                if (!success && sharedSecretHandle != null)
+                if (!success && owner != null)
                 {
-                    sharedSecretHandle.Dispose();
+                    owner.Dispose();
                 }
             }
 
@@ -93,7 +95,7 @@ namespace NSec.Cryptography
                 throw Error.Cryptographic_KeyAgreementFailed();
             }
 
-            return new SharedSecret(sharedSecretHandle);
+            return new SharedSecret(memory, owner);
         }
 
         public bool TryAgree(
@@ -111,22 +113,23 @@ namespace NSec.Cryptography
             if (otherPartyPublicKey.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(otherPartyPublicKey), key.Algorithm.GetType().FullName, GetType().FullName);
 
-            SecureMemoryHandle sharedSecretHandle = null;
+            ReadOnlyMemory<byte> memory = default;
+            IMemoryOwner<byte> owner = default;
             bool success = false;
 
             try
             {
-                success = TryAgreeCore(key.Handle, in otherPartyPublicKey.GetPinnableReference(), out sharedSecretHandle);
+                success = TryAgreeCore(key.Span, in otherPartyPublicKey.GetPinnableReference(), creationParameters.GetMemoryPool(), out memory, out owner);
             }
             finally
             {
-                if (!success && sharedSecretHandle != null)
+                if (!success && owner != null)
                 {
-                    sharedSecretHandle.Dispose();
+                    owner.Dispose();
                 }
             }
 
-            result = success ? new SharedSecret(sharedSecretHandle) : null;
+            result = success ? new SharedSecret(memory, owner) : null;
             return success;
         }
 
@@ -143,8 +146,10 @@ namespace NSec.Cryptography
         internal abstract override int GetSeedSize();
 
         private protected abstract bool TryAgreeCore(
-            SecureMemoryHandle keyHandle,
+            ReadOnlySpan<byte> key,
             in PublicKeyBytes otherPartyPublicKey,
-            out SecureMemoryHandle sharedSecretHandle);
+            MemoryPool<byte> memoryPool,
+            out ReadOnlyMemory<byte> memory,
+            out IMemoryOwner<byte> owner);
     }
 }

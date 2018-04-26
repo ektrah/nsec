@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -78,15 +79,19 @@ namespace NSec.Cryptography
 
         internal override void CreateKey(
             ReadOnlySpan<byte> seed,
-            out SecureMemoryHandle keyHandle,
+            MemoryPool<byte> memoryPool,
+            out ReadOnlyMemory<byte> memory,
+            out IMemoryOwner<byte> owner,
             out PublicKey publicKey)
         {
             Debug.Assert(seed.Length == crypto_scalarmult_curve25519_SCALARBYTES);
             Debug.Assert(Unsafe.SizeOf<PublicKeyBytes>() == crypto_scalarmult_curve25519_SCALARBYTES);
 
             publicKey = new PublicKey(this);
-            SecureMemoryHandle.Import(seed, out keyHandle);
-            crypto_scalarmult_curve25519_base(out publicKey.GetPinnableReference(), keyHandle);
+            owner = memoryPool.Rent(crypto_scalarmult_curve25519_SCALARBYTES);
+            memory = owner.Memory.Slice(0, crypto_scalarmult_curve25519_SCALARBYTES);
+            seed.CopyTo(owner.Memory.Span);
+            crypto_scalarmult_curve25519_base(out publicKey.GetPinnableReference(), in owner.Memory.Span.GetPinnableReference());
 
             Debug.Assert((Unsafe.Add(ref Unsafe.As<PublicKeyBytes, byte>(ref publicKey.GetPinnableReference()), crypto_scalarmult_curve25519_SCALARBYTES - 1) & 0x80) == 0);
         }
@@ -97,26 +102,28 @@ namespace NSec.Cryptography
         }
 
         private protected override bool TryAgreeCore(
-            SecureMemoryHandle keyHandle,
+            ReadOnlySpan<byte> key,
             in PublicKeyBytes otherPartyPublicKey,
-            out SecureMemoryHandle sharedSecretHandle)
+            MemoryPool<byte> memoryPool,
+            out ReadOnlyMemory<byte> memory,
+            out IMemoryOwner<byte> owner)
         {
-            Debug.Assert(keyHandle != null);
-            Debug.Assert(keyHandle.Length == crypto_scalarmult_curve25519_SCALARBYTES);
+            Debug.Assert(key.Length == crypto_scalarmult_curve25519_SCALARBYTES);
             Debug.Assert(Unsafe.SizeOf<PublicKeyBytes>() == crypto_scalarmult_curve25519_SCALARBYTES);
 
-            SecureMemoryHandle.Alloc(crypto_scalarmult_curve25519_BYTES, out sharedSecretHandle);
+            owner = memoryPool.Rent(crypto_scalarmult_curve25519_BYTES);
+            memory = owner.Memory.Slice(0, crypto_scalarmult_curve25519_BYTES);
 
             int error = crypto_scalarmult_curve25519(
-                sharedSecretHandle,
-                keyHandle,
+                out owner.Memory.Span.GetPinnableReference(),
+                in key.GetPinnableReference(),
                 in otherPartyPublicKey);
 
             return error == 0;
         }
 
         internal override bool TryExportKey(
-            SecureMemoryHandle keyHandle,
+            ReadOnlySpan<byte> key,
             KeyBlobFormat format,
             Span<byte> blob,
             out int blobSize)
@@ -124,13 +131,13 @@ namespace NSec.Cryptography
             switch (format)
             {
             case KeyBlobFormat.RawPrivateKey:
-                return s_rawPrivateKeyFormatter.TryExport(keyHandle, blob, out blobSize);
+                return s_rawPrivateKeyFormatter.TryExport(key, blob, out blobSize);
             case KeyBlobFormat.NSecPrivateKey:
-                return s_nsecPrivateKeyFormatter.TryExport(keyHandle, blob, out blobSize);
+                return s_nsecPrivateKeyFormatter.TryExport(key, blob, out blobSize);
             case KeyBlobFormat.PkixPrivateKey:
-                return s_pkixPrivateKeyFormatter.TryExport(keyHandle, blob, out blobSize);
+                return s_pkixPrivateKeyFormatter.TryExport(key, blob, out blobSize);
             case KeyBlobFormat.PkixPrivateKeyText:
-                return s_pkixPrivateKeyFormatter.TryExportText(keyHandle, blob, out blobSize);
+                return s_pkixPrivateKeyFormatter.TryExportText(key, blob, out blobSize);
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
@@ -160,7 +167,9 @@ namespace NSec.Cryptography
         internal override bool TryImportKey(
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
-            out SecureMemoryHandle keyHandle,
+            MemoryPool<byte> memoryPool,
+            out ReadOnlyMemory<byte> memory,
+            out IMemoryOwner<byte> owner,
             out PublicKey publicKey)
         {
             publicKey = new PublicKey(this);
@@ -168,13 +177,13 @@ namespace NSec.Cryptography
             switch (format)
             {
             case KeyBlobFormat.RawPrivateKey:
-                return s_rawPrivateKeyFormatter.TryImport(blob, out keyHandle, out publicKey.GetPinnableReference());
+                return s_rawPrivateKeyFormatter.TryImport(blob, memoryPool, out memory, out owner, out publicKey.GetPinnableReference());
             case KeyBlobFormat.NSecPrivateKey:
-                return s_nsecPrivateKeyFormatter.TryImport(blob, out keyHandle, out publicKey.GetPinnableReference());
+                return s_nsecPrivateKeyFormatter.TryImport(blob, memoryPool, out memory, out owner, out publicKey.GetPinnableReference());
             case KeyBlobFormat.PkixPrivateKey:
-                return s_pkixPrivateKeyFormatter.TryImport(blob, out keyHandle, out publicKey.GetPinnableReference());
+                return s_pkixPrivateKeyFormatter.TryImport(blob, memoryPool, out memory, out owner, out publicKey.GetPinnableReference());
             case KeyBlobFormat.PkixPrivateKeyText:
-                return s_pkixPrivateKeyFormatter.TryImportText(blob, out keyHandle, out publicKey.GetPinnableReference());
+                return s_pkixPrivateKeyFormatter.TryImportText(blob, memoryPool, out memory, out owner, out publicKey.GetPinnableReference());
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }

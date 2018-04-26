@@ -16,7 +16,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Interop.Nacl.XSalsa20Poly1305.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop.PublicKeyBytes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop.Random.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Interop.SecureMemoryHandle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop.Sha256.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop.Sha512.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop.Utils.cs" />

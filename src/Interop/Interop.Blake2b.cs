@@ -18,7 +18,7 @@ internal static partial class Interop
             UIntPtr outlen,
             in byte @in,
             ulong inlen,
-            IntPtr key,
+            in byte key,
             UIntPtr keylen);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
@@ -27,7 +27,7 @@ internal static partial class Interop
             UIntPtr outlen,
             in byte @in,
             ulong inlen,
-            SecureMemoryHandle key,
+            IntPtr key,
             UIntPtr keylen);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
@@ -48,14 +48,14 @@ internal static partial class Interop
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int crypto_generichash_blake2b_init(
             out crypto_generichash_blake2b_state state,
-            IntPtr key,
+            in byte key,
             UIntPtr keylen,
             UIntPtr outlen);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int crypto_generichash_blake2b_init(
             out crypto_generichash_blake2b_state state,
-            SecureMemoryHandle key,
+            IntPtr key,
             UIntPtr keylen,
             UIntPtr outlen);
 

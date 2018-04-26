@@ -291,9 +291,6 @@
   <data name="NotSupported_Operation" xml:space="preserve">
     <value>This operation is not supported.</value>
   </data>
-  <data name="ObjectDisposed_Key" xml:space="preserve">
-    <value>The key has been disposed.</value>
-  </data>
   <data name="Overflow_NonceCounter" xml:space="preserve">
     <value>Increasing the counter of the nonce results in an overflow.</value>
   </data>

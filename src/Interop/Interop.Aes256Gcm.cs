@@ -23,7 +23,7 @@ internal static partial class Interop
             in byte ad,
             ulong adlen,
             in NSec.Cryptography.Nonce npub,
-            SecureMemoryHandle k);
+            in byte k);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int crypto_aead_aes256gcm_encrypt(
@@ -35,7 +35,7 @@ internal static partial class Interop
             ulong adlen,
             IntPtr nsec,
             in NSec.Cryptography.Nonce npub,
-            SecureMemoryHandle k);
+            in byte k);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int crypto_aead_aes256gcm_is_available();

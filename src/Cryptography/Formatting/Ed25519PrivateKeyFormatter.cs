@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using static Interop.Libsodium;
@@ -15,25 +16,27 @@ namespace NSec.Cryptography.Formatting
 
         protected override void Deserialize(
             ReadOnlySpan<byte> span,
-            out SecureMemoryHandle keyHandle,
+            MemoryPool<byte> memoryPool,
+            out ReadOnlyMemory<byte> memory,
+            out IMemoryOwner<byte> owner,
             out PublicKeyBytes publicKeyBytes)
         {
             Debug.Assert(span.Length == crypto_sign_ed25519_SEEDBYTES);
             Debug.Assert(Unsafe.SizeOf<PublicKeyBytes>() == crypto_sign_ed25519_PUBLICKEYBYTES);
 
-            SecureMemoryHandle.Alloc(crypto_sign_ed25519_SECRETKEYBYTES, out keyHandle);
-            crypto_sign_ed25519_seed_keypair(out publicKeyBytes, keyHandle, in span.GetPinnableReference());
+            owner = memoryPool.Rent(crypto_sign_ed25519_SECRETKEYBYTES);
+            memory = owner.Memory.Slice(0, crypto_sign_ed25519_SECRETKEYBYTES);
+            crypto_sign_ed25519_seed_keypair(out publicKeyBytes, out owner.Memory.Span.GetPinnableReference(), in span.GetPinnableReference());
         }
 
         protected override void Serialize(
-            SecureMemoryHandle keyHandle,
+            ReadOnlySpan<byte> privateKeyBytes,
             Span<byte> span)
         {
-            Debug.Assert(keyHandle != null);
-            Debug.Assert(keyHandle.Length == crypto_sign_ed25519_SECRETKEYBYTES);
+            Debug.Assert(privateKeyBytes.Length == crypto_sign_ed25519_SECRETKEYBYTES);
             Debug.Assert(span.Length == crypto_sign_ed25519_SEEDBYTES);
 
-            crypto_sign_ed25519_sk_to_seed(ref span.GetPinnableReference(), keyHandle);
+            crypto_sign_ed25519_sk_to_seed(ref span.GetPinnableReference(), in privateKeyBytes.GetPinnableReference());
         }
     }
 }

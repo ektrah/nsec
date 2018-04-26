@@ -373,11 +373,6 @@ namespace NSec.Cryptography
             return new NotSupportedException(ResourceManager.GetString("NotSupported_Operation"));
         }
 
-        internal static ObjectDisposedException ObjectDisposed_Key()
-        {
-            return new ObjectDisposedException(ResourceManager.GetString("ObjectDisposed_Key"));
-        }
-
         internal static OverflowException Overflow_NonceCounter()
         {
             return new OverflowException(ResourceManager.GetString("Overflow_NonceCounter"));

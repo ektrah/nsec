@@ -10,14 +10,14 @@ internal static partial class Interop
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int crypto_scalarmult_curve25519(
-            SecureMemoryHandle q,
-            SecureMemoryHandle n,
+            out byte q,
+            in byte n,
             in PublicKeyBytes p);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int crypto_scalarmult_curve25519_base(
             out PublicKeyBytes q,
-            SecureMemoryHandle n);
+            in byte n);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern UIntPtr crypto_scalarmult_curve25519_bytes();

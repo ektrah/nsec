@@ -1,38 +1,43 @@
 using System;
-using static Interop.Libsodium;
+using System.Buffers;
 
 namespace NSec.Cryptography.Formatting
 {
     internal static class RawKeyFormatter
     {
         public static bool TryExport(
-            SecureMemoryHandle keyHandle,
+            ReadOnlySpan<byte> key,
             Span<byte> blob,
             out int blobSize)
         {
-            blobSize = keyHandle.Length;
+            blobSize = key.Length;
 
             if (blob.Length < blobSize)
             {
                 return false;
             }
 
-            keyHandle.Export(blob);
+            key.CopyTo(blob);
             return true;
         }
 
         public static bool TryImport(
             int keySize,
             ReadOnlySpan<byte> blob,
-            out SecureMemoryHandle keyHandle)
+            MemoryPool<byte> memoryPool,
+            out ReadOnlyMemory<byte> memory,
+            out IMemoryOwner<byte> owner)
         {
             if (blob.Length != keySize)
             {
-                keyHandle = null;
+                memory = default;
+                owner = default;
                 return false;
             }
 
-            SecureMemoryHandle.Import(blob, out keyHandle);
+            owner = memoryPool.Rent(keySize);
+            memory = owner.Memory.Slice(0, keySize);
+            blob.CopyTo(owner.Memory.Span);
             return true;
         }
     }

@@ -131,7 +131,7 @@ namespace NSec.Cryptography
             }
 
             byte[] mac = new byte[_macSize];
-            MacCore(key.Handle, data, mac);
+            MacCore(key.Span, data, mac);
             return mac;
         }
 
@@ -153,7 +153,7 @@ namespace NSec.Cryptography
                 throw Error.Argument_MacLength(nameof(mac), _macSize.ToString());
             }
 
-            MacCore(key.Handle, data, mac);
+            MacCore(key.Span, data, mac);
         }
 
         public bool TryVerify(
@@ -170,7 +170,7 @@ namespace NSec.Cryptography
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             }
 
-            return mac.Length == _macSize && TryVerifyCore(key.Handle, data, mac);
+            return mac.Length == _macSize && TryVerifyCore(key.Span, data, mac);
         }
 
         public void Verify(
@@ -187,7 +187,7 @@ namespace NSec.Cryptography
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             }
 
-            if (!(mac.Length == _macSize && TryVerifyCore(key.Handle, data, mac)))
+            if (!(mac.Length == _macSize && TryVerifyCore(key.Span, data, mac)))
             {
                 throw Error.Cryptographic_VerificationFailed();
             }
@@ -214,7 +214,7 @@ namespace NSec.Cryptography
         internal abstract override int GetSeedSize();
 
         internal abstract void InitializeCore(
-            SecureMemoryHandle keyHandle,
+            ReadOnlySpan<byte> key,
             int macSize,
             out IncrementalMacState state);
 
@@ -223,12 +223,12 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> data);
 
         private protected abstract void MacCore(
-            SecureMemoryHandle keyHandle,
+            ReadOnlySpan<byte> key,
             ReadOnlySpan<byte> data,
             Span<byte> mac);
 
         private protected abstract bool TryVerifyCore(
-            SecureMemoryHandle keyHandle,
+            ReadOnlySpan<byte> key,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> mac);
     }

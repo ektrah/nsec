@@ -94,7 +94,7 @@ namespace NSec.Cryptography
                 throw Error.ArgumentNull_SharedSecret(nameof(sharedSecret));
 
             byte[] pseudorandomKey = new byte[crypto_auth_hmacsha256_BYTES];
-            ExtractCore(sharedSecret.Handle, salt, pseudorandomKey);
+            ExtractCore(sharedSecret.Span, salt, pseudorandomKey);
             return pseudorandomKey;
         }
 
@@ -108,7 +108,7 @@ namespace NSec.Cryptography
             if (pseudorandomKey.Length != crypto_auth_hmacsha256_BYTES)
                 throw Error.Argument_InvalidPrkLengthExact(nameof(pseudorandomKey), crypto_auth_hmacsha256_BYTES.ToString());
 
-            ExtractCore(sharedSecret.Handle, salt, pseudorandomKey);
+            ExtractCore(sharedSecret.Span, salt, pseudorandomKey);
         }
 
         private protected override void DeriveBytesCore(
@@ -190,27 +190,6 @@ namespace NSec.Cryptography
             crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, in salt.GetPinnableReference(), (UIntPtr)salt.Length);
             crypto_auth_hmacsha256_update(ref state, in inputKeyingMaterial.GetPinnableReference(), (ulong)inputKeyingMaterial.Length);
             crypto_auth_hmacsha256_final(ref state, ref pseudorandomKey.GetPinnableReference());
-        }
-
-        private static void ExtractCore(
-            SecureMemoryHandle inputKeyingMaterial,
-            ReadOnlySpan<byte> salt,
-            Span<byte> pseudorandomKey)
-        {
-            bool addedRef = false;
-            try
-            {
-                inputKeyingMaterial.DangerousAddRef(ref addedRef);
-
-                ExtractCore(inputKeyingMaterial.DangerousGetSpan(), salt, pseudorandomKey);
-            }
-            finally
-            {
-                if (addedRef)
-                {
-                    inputKeyingMaterial.DangerousRelease();
-                }
-            }
         }
 
         private static void SelfTest()

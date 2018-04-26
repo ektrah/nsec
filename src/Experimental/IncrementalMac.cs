@@ -123,7 +123,7 @@ namespace NSec.Experimental
             try
             {
                 state = default;
-                algorithm.InitializeCore(key.Handle, algorithm.MacSize, out Unsafe.AsRef(in state._state));
+                algorithm.InitializeCore(key.Span, algorithm.MacSize, out Unsafe.AsRef(in state._state));
                 Unsafe.AsRef(in state._algorithm) = algorithm;
                 success = true;
             }

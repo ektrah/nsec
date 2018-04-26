@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -28,23 +29,26 @@ namespace NSec.Experimental.Sodium
 
         internal override void CreateKey(
             ReadOnlySpan<byte> seed,
-            out SecureMemoryHandle keyHandle,
+            MemoryPool<byte> memoryPool,
+            out ReadOnlyMemory<byte> memory,
+            out IMemoryOwner<byte> owner,
             out PublicKey publicKey)
         {
             Debug.Assert(seed.Length == crypto_secretbox_xsalsa20poly1305_KEYBYTES);
 
             publicKey = null;
-            SecureMemoryHandle.Import(seed, out keyHandle);
+            owner = memoryPool.Rent(seed.Length);
+            memory = owner.Memory.Slice(0, seed.Length);
+            seed.CopyTo(owner.Memory.Span);
         }
 
         internal override void EncryptCore(
-            SecureMemoryHandle keyHandle,
+            ReadOnlySpan<byte> key,
             in Nonce nonce,
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext)
         {
-            Debug.Assert(keyHandle != null);
-            Debug.Assert(keyHandle.Length == crypto_secretbox_xsalsa20poly1305_KEYBYTES);
+            Debug.Assert(key.Length == crypto_secretbox_xsalsa20poly1305_KEYBYTES);
             Debug.Assert(nonce.Size == crypto_secretbox_xsalsa20poly1305_NONCEBYTES);
             Debug.Assert(ciphertext.Length == crypto_secretbox_xsalsa20poly1305_MACBYTES + plaintext.Length);
 
@@ -53,7 +57,7 @@ namespace NSec.Experimental.Sodium
                 in plaintext.GetPinnableReference(),
                 (ulong)plaintext.Length,
                 in nonce,
-                keyHandle);
+                in key.GetPinnableReference());
         }
 
         internal override int GetSeedSize()
@@ -62,13 +66,12 @@ namespace NSec.Experimental.Sodium
         }
 
         internal override bool TryDecryptCore(
-            SecureMemoryHandle keyHandle,
+            ReadOnlySpan<byte> key,
             in Nonce nonce,
             ReadOnlySpan<byte> ciphertext,
             Span<byte> plaintext)
         {
-            Debug.Assert(keyHandle != null);
-            Debug.Assert(keyHandle.Length == crypto_secretbox_xsalsa20poly1305_KEYBYTES);
+            Debug.Assert(key.Length == crypto_secretbox_xsalsa20poly1305_KEYBYTES);
             Debug.Assert(nonce.Size == crypto_secretbox_xsalsa20poly1305_NONCEBYTES);
             Debug.Assert(plaintext.Length == ciphertext.Length - crypto_secretbox_xsalsa20poly1305_MACBYTES);
 
@@ -77,7 +80,7 @@ namespace NSec.Experimental.Sodium
                 in ciphertext.GetPinnableReference(),
                 (ulong)ciphertext.Length,
                 in nonce,
-                keyHandle);
+                in key.GetPinnableReference());
 
             // TODO: clear plaintext if decryption fails
 
@@ -85,7 +88,7 @@ namespace NSec.Experimental.Sodium
         }
 
         internal override bool TryExportKey(
-            SecureMemoryHandle keyHandle,
+            ReadOnlySpan<byte> key,
             KeyBlobFormat format,
             Span<byte> blob,
             out int blobSize)
@@ -93,9 +96,9 @@ namespace NSec.Experimental.Sodium
             switch (format)
             {
             case KeyBlobFormat.RawSymmetricKey:
-                return RawKeyFormatter.TryExport(keyHandle, blob, out blobSize);
+                return RawKeyFormatter.TryExport(key, blob, out blobSize);
             case KeyBlobFormat.NSecSymmetricKey:
-                return NSecKeyFormatter.TryExport(NSecBlobHeader, KeySize, MacSize, keyHandle, blob, out blobSize);
+                return NSecKeyFormatter.TryExport(NSecBlobHeader, KeySize, MacSize, key, blob, out blobSize);
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }
@@ -104,7 +107,9 @@ namespace NSec.Experimental.Sodium
         internal override bool TryImportKey(
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
-            out SecureMemoryHandle keyHandle,
+            MemoryPool<byte> memoryPool,
+            out ReadOnlyMemory<byte> memory,
+            out IMemoryOwner<byte> owner,
             out PublicKey publicKey)
         {
             publicKey = null;
@@ -112,9 +117,9 @@ namespace NSec.Experimental.Sodium
             switch (format)
             {
             case KeyBlobFormat.RawSymmetricKey:
-                return RawKeyFormatter.TryImport(KeySize, blob, out keyHandle);
+                return RawKeyFormatter.TryImport(KeySize, blob, memoryPool, out memory, out owner);
             case KeyBlobFormat.NSecSymmetricKey:
-                return NSecKeyFormatter.TryImport(NSecBlobHeader, KeySize, MacSize, blob, out keyHandle);
+                return NSecKeyFormatter.TryImport(NSecBlobHeader, KeySize, MacSize, blob, memoryPool, out memory, out owner);
             default:
                 throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
             }

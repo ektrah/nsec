@@ -23,12 +23,6 @@ internal static partial class Interop
             UIntPtr keylen);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int crypto_auth_hmacsha256_init(
-            out crypto_auth_hmacsha256_state state,
-            SecureMemoryHandle key,
-            UIntPtr keylen);
-
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern UIntPtr crypto_auth_hmacsha256_keybytes();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
