@@ -11,6 +11,8 @@ namespace NSec.Cryptography
 
         private static int s_initialized;
 
+        public static bool IsInitialized => s_initialized != 0;
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Initialize()
         {

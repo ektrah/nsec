@@ -1,5 +1,6 @@
 using System;
 using System.Buffers;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using static Interop.Libsodium;
@@ -13,8 +14,10 @@ namespace NSec.Cryptography.Buffers
 
         private IntPtr _ptr;
 
-        public SecureMemoryManager(int length)
+        internal SecureMemoryManager(int length)
         {
+            Debug.Assert(Sodium.IsInitialized);
+
             IntPtr ptr = sodium_malloc((UIntPtr)checked(length * Unsafe.SizeOf<T>()));
 
             if (ptr == IntPtr.Zero)
