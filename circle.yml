@@ -62,7 +62,9 @@ shared:
   generate-restore-graph: &generate-restore-graph
     run:
       name: Generate Dependency Graph
-      command: dotnet msbuild -t:GenerateRestoreGraphFile
+      command: |
+        dotnet msbuild -t:GenerateRestoreGraphFile
+        cat /tmp/restore.json
       working_directory: tests
       environment:
         RestoreGraphOutputPath: /tmp/restore.json
