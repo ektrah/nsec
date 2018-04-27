@@ -84,28 +84,6 @@ namespace NSec.Experimental
             }
         }
 
-        public static void FinalizeAndVerify(
-            ref IncrementalMac state,
-            ReadOnlySpan<byte> mac)
-        {
-            if (state._algorithm == null)
-            {
-                throw Error.InvalidOperation_UninitializedState();
-            }
-
-            try
-            {
-                if (!(mac.Length == state._algorithm.MacSize && state._algorithm.FinalizeAndTryVerifyCore(ref Unsafe.AsRef(in state._state), mac)))
-                {
-                    throw Error.Cryptographic_VerificationFailed();
-                }
-            }
-            finally
-            {
-                Unsafe.AsRef(in state._algorithm) = null;
-            }
-        }
-
         public static void Initialize(
             Key key,
             out IncrementalMac state)

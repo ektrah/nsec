@@ -77,53 +77,6 @@ namespace NSec.Cryptography
 
         public int TagSize => _tagSize;
 
-        public byte[] Decrypt(
-            Key key,
-            in Nonce nonce,
-            ReadOnlySpan<byte> associatedData,
-            ReadOnlySpan<byte> ciphertext)
-        {
-            if (key == null)
-                throw Error.ArgumentNull_Key(nameof(key));
-            if (key.Algorithm != this)
-                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (nonce.Size != _nonceSize || ciphertext.Length < _tagSize)
-                throw Error.Cryptographic_DecryptionFailed();
-
-            byte[] plaintext = new byte[ciphertext.Length - _tagSize];
-
-            if (!TryDecryptCore(key.Span, in nonce, associatedData, ciphertext, plaintext))
-            {
-                throw Error.Cryptographic_DecryptionFailed();
-            }
-
-            return plaintext;
-        }
-
-        public void Decrypt(
-            Key key,
-            in Nonce nonce,
-            ReadOnlySpan<byte> associatedData,
-            ReadOnlySpan<byte> ciphertext,
-            Span<byte> plaintext)
-        {
-            if (key == null)
-                throw Error.ArgumentNull_Key(nameof(key));
-            if (key.Algorithm != this)
-                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (nonce.Size != _nonceSize || ciphertext.Length < _tagSize)
-                throw Error.Cryptographic_DecryptionFailed();
-            if (plaintext.Length != ciphertext.Length - _tagSize)
-                throw Error.Argument_PlaintextLength(nameof(plaintext));
-            if (plaintext.Overlaps(ciphertext, out int offset) && offset != 0)
-                throw Error.Argument_OverlapPlaintext(nameof(plaintext));
-
-            if (!TryDecryptCore(key.Span, in nonce, associatedData, ciphertext, plaintext))
-            {
-                throw Error.Cryptographic_DecryptionFailed();
-            }
-        }
-
         public byte[] Encrypt(
             Key key,
             in Nonce nonce,

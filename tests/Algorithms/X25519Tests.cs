@@ -95,7 +95,7 @@ namespace NSec.Tests.Algorithms
 
         #endregion
 
-        #region Agree/TryAgree
+        #region Agree
 
         [Theory]
         [MemberData(nameof(TestVectorsAllZeros))]
@@ -107,10 +107,7 @@ namespace NSec.Tests.Algorithms
 
             using (var k = Key.Import(a, privateKey.DecodeHex(), KeyBlobFormat.RawPrivateKey))
             {
-                Assert.False(a.TryAgree(k, pk, out SharedSecret s));
-                Assert.Null(s);
-
-                Assert.Throws<CryptographicException>(() => a.Agree(k, pk));
+                Assert.Null(a.Agree(k, pk));
             }
         }
 

@@ -123,16 +123,6 @@ namespace NSec.Cryptography
             return hash.Length == _hashSize && TryVerifyCore(data, hash);
         }
 
-        public void Verify(
-            ReadOnlySpan<byte> data,
-            ReadOnlySpan<byte> hash)
-        {
-            if (!(hash.Length == _hashSize && TryVerifyCore(data, hash)))
-            {
-                throw Error.Cryptographic_VerificationFailed();
-            }
-        }
-
         internal abstract bool FinalizeAndTryVerifyCore(
             ref IncrementalHashState state,
             ReadOnlySpan<byte> hash);

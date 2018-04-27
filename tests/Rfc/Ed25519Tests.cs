@@ -32,8 +32,6 @@ namespace NSec.Tests.Rfc
                 Assert.Equal(expected, actual);
 
                 Assert.True(a.TryVerify(p, m, expected));
-
-                a.Verify(p, m, expected);
             }
         }
     }

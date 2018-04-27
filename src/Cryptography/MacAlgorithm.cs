@@ -173,26 +173,6 @@ namespace NSec.Cryptography
             return mac.Length == _macSize && TryVerifyCore(key.Span, data, mac);
         }
 
-        public void Verify(
-            Key key,
-            ReadOnlySpan<byte> data,
-            ReadOnlySpan<byte> mac)
-        {
-            if (key == null)
-            {
-                throw Error.ArgumentNull_Key(nameof(key));
-            }
-            if (key.Algorithm != this)
-            {
-                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            }
-
-            if (!(mac.Length == _macSize && TryVerifyCore(key.Span, data, mac)))
-            {
-                throw Error.Cryptographic_VerificationFailed();
-            }
-        }
-
         internal abstract bool FinalizeAndTryVerifyCore(
             ref IncrementalMacState state,
             ReadOnlySpan<byte> mac);

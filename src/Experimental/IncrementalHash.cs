@@ -84,28 +84,6 @@ namespace NSec.Experimental
             }
         }
 
-        public static void FinalizeAndVerify(
-            ref IncrementalHash state,
-            ReadOnlySpan<byte> hash)
-        {
-            if (state._algorithm == null)
-            {
-                throw Error.InvalidOperation_UninitializedState();
-            }
-
-            try
-            {
-                if (!(hash.Length == state._algorithm.HashSize && state._algorithm.FinalizeAndTryVerifyCore(ref Unsafe.AsRef(in state._state), hash)))
-                {
-                    throw Error.Cryptographic_VerificationFailed();
-                }
-            }
-            finally
-            {
-                Unsafe.AsRef(in state._algorithm) = null;
-            }
-        }
-
         public static void Initialize(
             HashAlgorithm algorithm,
             out IncrementalHash state)

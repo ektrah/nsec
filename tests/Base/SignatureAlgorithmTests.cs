@@ -188,60 +188,6 @@ namespace NSec.Tests.Base
 
         #endregion
 
-        #region Verify
-
-        [Theory]
-        [MemberData(nameof(SignatureAlgorithms))]
-        public static void VerifyWithNullKey(Type algorithmType)
-        {
-            var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
-
-            Assert.Throws<ArgumentNullException>("publicKey", () => a.Verify(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
-        }
-
-        [Theory]
-        [MemberData(nameof(SignatureAlgorithms))]
-        public static void VerifyWithWrongKey(Type algorithmType)
-        {
-            var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
-
-            using (var k = new Key(KeyAgreementAlgorithm.X25519))
-            {
-                Assert.Throws<ArgumentException>("publicKey", () => a.Verify(k.PublicKey, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(SignatureAlgorithms))]
-        public static void VerifyWithWrongSize(Type algorithmType)
-        {
-            var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
-
-            using (var k = new Key(a))
-            {
-                Assert.Throws<CryptographicException>(() => a.Verify(k.PublicKey, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(SignatureAlgorithms))]
-        public static void VerifySuccess(Type algorithmType)
-        {
-            var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
-
-            using (var k = new Key(a))
-            {
-                var s = a.Sign(k, ReadOnlySpan<byte>.Empty);
-
-                Assert.NotNull(s);
-                Assert.Equal(a.SignatureSize, s.Length);
-
-                a.Verify(k.PublicKey, ReadOnlySpan<byte>.Empty, s);
-            }
-        }
-
-        #endregion
-
         #region CreateKey
 
         [Theory]

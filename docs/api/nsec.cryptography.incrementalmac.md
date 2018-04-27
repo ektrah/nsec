@@ -172,32 +172,6 @@ InvalidOperationException
 : `state` has not been initialized yet or has already been finalized.
 
 
-### FinalizeAndVerify(ref IncrementalMac, ReadOnlySpan<byte>)
-
-Completes the MAC computation and verifies the specified message authentication
-code.
-
-    public static void FinalizeAndVerify(
-        ref IncrementalMac state,
-        ReadOnlySpan<byte> mac)
-
-#### Parameters
-
-state
-: The state to be finalized.
-
-mac
-: The message authentication code to be verified.
-
-#### Exceptions
-
-InvalidOperationException
-: `state` has not yet been initialized or has already been finalized.
-
-CryptographicException
-: Verification failed.
-
-
 ## Thread Safety
 
 Any public static members of this type are thread safe. Any instance members are

@@ -164,31 +164,6 @@ InvalidOperationException
 : `state` has not been initialized yet or has already been finalized.
 
 
-### FinalizeAndVerify(ref IncrementalHash, ReadOnlySpan<byte>)
-
-Completes the hash computation and verifies the specified hash.
-
-    public static void FinalizeAndVerify(
-        ref IncrementalHash state,
-        ReadOnlySpan<byte> hash)
-
-#### Parameters
-
-state
-: The state to be finalized.
-
-hash
-: The hash to be verified.
-
-#### Exceptions
-
-InvalidOperationException
-: `state` has not yet been initialized or has already been finalized.
-
-CryptographicException
-: Verification failed.
-
-
 ## Thread Safety
 
 Any public static members of this type are thread safe. Any instance members are

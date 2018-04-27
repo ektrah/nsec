@@ -30,55 +30,6 @@ namespace NSec.Experimental.Sodium
 
         public int NonceSize => _nonceSize;
 
-        public byte[] Decrypt(
-            Key key,
-            in Nonce nonce,
-            ReadOnlySpan<byte> ciphertext)
-        {
-            if (key == null)
-                throw Error.ArgumentNull_Key(nameof(key));
-            if (key.Algorithm != this)
-                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (nonce.Size != _nonceSize)
-                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
-            if (ciphertext.Length < _macSize)
-                throw Error.Cryptographic_DecryptionFailed();
-
-            byte[] plaintext = new byte[ciphertext.Length - _macSize];
-
-            if (!TryDecryptCore(key.Span, nonce, ciphertext, plaintext))
-            {
-                throw Error.Cryptographic_DecryptionFailed();
-            }
-
-            return plaintext;
-        }
-
-        public void Decrypt(
-            Key key,
-            in Nonce nonce,
-            ReadOnlySpan<byte> ciphertext,
-            Span<byte> plaintext)
-        {
-            if (key == null)
-                throw Error.ArgumentNull_Key(nameof(key));
-            if (key.Algorithm != this)
-                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (nonce.Size != _nonceSize)
-                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
-            if (ciphertext.Length < _macSize)
-                throw Error.Cryptographic_DecryptionFailed();
-            if (plaintext.Length != ciphertext.Length - _macSize)
-                throw Error.Argument_PlaintextLength(nameof(plaintext));
-            if (plaintext.Overlaps(ciphertext))
-                throw Error.Argument_OverlapPlaintext(nameof(plaintext));
-
-            if (!TryDecryptCore(key.Span, nonce, ciphertext, plaintext))
-            {
-                throw Error.Cryptographic_DecryptionFailed();
-            }
-        }
-
         public byte[] Encrypt(
             Key key,
             in Nonce nonce,

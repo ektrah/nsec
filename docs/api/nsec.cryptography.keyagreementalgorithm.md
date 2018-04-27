@@ -89,7 +89,8 @@ creationParameters
 #### Return Value
 
 A new instance of the [[SharedSecret|SharedSecret Class]] class that represents
-the shared secret created from `key` and `otherPartyPublicKey`.
+the shared secret created from `key` and `otherPartyPublicKey`, or `null` if key
+agreement fails.
 
 #### Exceptions
 
@@ -102,51 +103,6 @@ ArgumentException
 
 CryptographicException
 : Key agreement failed.
-
-ObjectDisposedException
-: `key` has been disposed.
-
-
-### TryAgree(Key, PublicKey, out SharedSecret, in SharedSecretCreationParameters)
-
-Attempts to create a shared secret from a private and a public key.
-
-    public bool TryAgree(
-        Key key,
-        PublicKey otherPartyPublicKey,
-        out SharedSecret result,
-        in SharedSecretCreationParameters creationParameters = default)
-
-#### Parameters
-
-key
-: The private key to use to create the shared secret.
-
-otherPartyPublicKey
-: The public key of the other party to use to create the shared secret.
-
-result
-: When this method returns, contains a new instance of the
-    [[SharedSecret|SharedSecret Class]] class that represents the shared
-    secret, or `null` if key agreement fails.
-
-creationParameters
-: A [[SharedSecretCreationParameters|SharedSecretCreationParameters Struct]]
-    value that specifies advanced parameters for the creation of the
-    [[SharedSecret|SharedSecret Class]] instance.
-
-#### Return Value
-
-`true` if key agreement succeeds; otherwise, `false`.
-
-#### Exceptions
-
-ArgumentNullException
-: `key` or `otherPartyPublicKey` is `null`.
-
-ArgumentException
-: `key.Algorithm` or `otherPartyPublicKey.Algorithm` is not the same object as
-    the current [[KeyAgreementAlgorithm|KeyAgreementAlgorithm Class]] object.
 
 ObjectDisposedException
 : `key` has been disposed.

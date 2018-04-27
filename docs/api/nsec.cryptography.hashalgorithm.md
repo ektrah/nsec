@@ -128,30 +128,6 @@ hash
 `true` if verification succeeds; otherwise, `false`.
 
 
-### Verify(ReadOnlySpan<byte>, ReadOnlySpan<byte>)
-
-Verifies the specified input data using the specified hash.
-
-    public void Verify(
-        ReadOnlySpan<byte> data,
-        ReadOnlySpan<byte> hash)
-
-#### Parameters
-
-data
-: The data to verify.
-    Verification fails if this is not the same data as used for computing the
-    hash.
-
-hash
-: The hash for the data.
-
-#### Exceptions
-
-CryptographicException
-: Verification failed.
-
-
 ## Thread Safety
 
 All members of this type are thread safe.

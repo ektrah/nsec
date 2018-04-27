@@ -174,43 +174,6 @@ ArgumentException
     [[SignatureAlgorithm|SignatureAlgorithm Class]] object.
 
 
-### Verify(PublicKey, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
-
-Verifies the signature of the specified input data using the specified public
-key.
-
-    public void Verify(
-        PublicKey publicKey,
-        ReadOnlySpan<byte> data,
-        ReadOnlySpan<byte> signature)
-
-#### Parameters
-
-publicKey
-: The [[PublicKey|PublicKey Class]] to use for verification. Verification fails
-    if this is not the matching public key for the private key that was used to
-    sign the data.
-
-data
-: The data to verify. Decryption fails if the integrity of the data was
-    compromised.
-
-signature
-: The signature of the data to verify.
-
-#### Exceptions
-
-ArgumentNullException
-: `publicKey` is `null`.
-
-ArgumentException
-: `publicKey.Algorithm` is not the same object as the current
-    [[SignatureAlgorithm|SignatureAlgorithm Class]] object.
-
-CryptographicException
-: Verification failed.
-
-
 ## Thread Safety
 
 All members of this type are thread safe.

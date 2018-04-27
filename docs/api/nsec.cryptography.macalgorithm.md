@@ -195,48 +195,6 @@ ArgumentException
 ObjectDisposedException
 : `key` has been disposed.
 
-
-### Verify(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
-
-Verifies the specified input data using the specified key and message
-authentication code.
-
-    public void Verify(
-        Key key,
-        ReadOnlySpan<byte> data,
-        ReadOnlySpan<byte> mac)
-
-#### Parameters
-
-key
-: The key to use for verification.
-    Verification fails if this is not the same key as used for computing the
-    message authentication code.
-
-data
-: The data to verify.
-    Verification fails if this is not the same data as used for computing the
-    message authentication code.
-
-mac
-: The message authentication code for the data.
-
-#### Exceptions
-
-ArgumentNullException
-: `key` is `null`.
-
-ArgumentException
-: `key.Algorithm` is not the same object as the current
-    [[MacAlgorithm|MacAlgorithm Class]] object.
-
-CryptographicException
-: Verification failed.
-
-ObjectDisposedException
-: `key` has been disposed.
-
-
 ## Thread Safety
 
 All members of this type are thread safe.

@@ -293,11 +293,6 @@ namespace NSec.Cryptography
             return new ArgumentOutOfRangeException(paramName, string.Format(ResourceManager.GetString("ArgumentOutOfRange_NonceFixedCounterSize"), arg0));
         }
 
-        internal static CryptographicException Cryptographic_DecryptionFailed()
-        {
-            return new CryptographicException(ResourceManager.GetString("Cryptographic_DecryptionFailed"));
-        }
-
         internal static CryptographicException Cryptographic_InitializationFailed()
         {
             return new CryptographicException(ResourceManager.GetString("Cryptographic_InitializationFailed"));
@@ -306,16 +301,6 @@ namespace NSec.Cryptography
         internal static CryptographicException Cryptographic_InternalError()
         {
             return new CryptographicException(ResourceManager.GetString("Cryptographic_InternalError"));
-        }
-
-        internal static CryptographicException Cryptographic_KeyAgreementFailed()
-        {
-            return new CryptographicException(ResourceManager.GetString("Cryptographic_KeyAgreementFailed"));
-        }
-
-        internal static CryptographicException Cryptographic_VerificationFailed()
-        {
-            return new CryptographicException(ResourceManager.GetString("Cryptographic_VerificationFailed"));
         }
 
         internal static FormatException Format_BadBase16()

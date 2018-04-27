@@ -234,45 +234,5 @@ namespace NSec.Tests.Base
         }
 
         #endregion
-
-        #region FinalizeAndVerify
-
-        [Fact]
-        public static void FinalizeAndVerifyInvalid()
-        {
-            var state = default(IncrementalMac);
-
-            Assert.Throws<InvalidOperationException>(() => IncrementalMac.FinalizeAndVerify(ref state, ReadOnlySpan<byte>.Empty));
-        }
-
-        [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void FinalizeAndVerifyFail(Type algorithmType)
-        {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
-            using (var k = new Key(a))
-            {
-                IncrementalMac.Initialize(k, out var state);
-
-                Assert.Throws<CryptographicException>(() => IncrementalMac.FinalizeAndVerify(ref state, new byte[a.MacSize]));
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(MacAlgorithms))]
-        public static void FinalizeAndVerifySuccess(Type algorithmType)
-        {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
-            using (var k = new Key(a))
-            {
-                IncrementalMac.Initialize(k, out var state);
-
-                IncrementalMac.FinalizeAndVerify(ref state, a.Mac(k, ReadOnlySpan<byte>.Empty));
-            }
-        }
-
-        #endregion
     }
 }

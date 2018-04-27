@@ -191,39 +191,5 @@ namespace NSec.Tests.Base
         }
 
         #endregion
-
-        #region FinalizeAndVerify
-
-        [Fact]
-        public static void FinalizeAndVerifyInvalid()
-        {
-            var state = default(IncrementalHash);
-
-            Assert.Throws<InvalidOperationException>(() => IncrementalHash.FinalizeAndVerify(ref state, ReadOnlySpan<byte>.Empty));
-        }
-
-        [Theory]
-        [MemberData(nameof(HashAlgorithms))]
-        public static void FinalizeAndVerifyFail(Type algorithmType)
-        {
-            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
-
-            IncrementalHash.Initialize(a, out var state);
-
-            Assert.Throws<CryptographicException>(() => IncrementalHash.FinalizeAndVerify(ref state, new byte[a.HashSize]));
-        }
-
-        [Theory]
-        [MemberData(nameof(HashAlgorithms))]
-        public static void FinalizeAndVerifySuccess(Type algorithmType)
-        {
-            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
-
-            IncrementalHash.Initialize(a, out var state);
-
-            IncrementalHash.FinalizeAndVerify(ref state, a.Hash(ReadOnlySpan<byte>.Empty));
-        }
-
-        #endregion
     }
 }

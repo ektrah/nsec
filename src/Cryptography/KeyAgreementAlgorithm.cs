@@ -90,47 +90,7 @@ namespace NSec.Cryptography
                 }
             }
 
-            if (!success)
-            {
-                throw Error.Cryptographic_KeyAgreementFailed();
-            }
-
-            return new SharedSecret(memory, owner);
-        }
-
-        public bool TryAgree(
-            Key key,
-            PublicKey otherPartyPublicKey,
-            out SharedSecret result,
-            in SharedSecretCreationParameters creationParameters = default)
-        {
-            if (key == null)
-                throw Error.ArgumentNull_Key(nameof(key));
-            if (key.Algorithm != this)
-                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
-            if (otherPartyPublicKey == null)
-                throw Error.ArgumentNull_Key(nameof(otherPartyPublicKey));
-            if (otherPartyPublicKey.Algorithm != this)
-                throw Error.Argument_KeyWrongAlgorithm(nameof(otherPartyPublicKey), key.Algorithm.GetType().FullName, GetType().FullName);
-
-            ReadOnlyMemory<byte> memory = default;
-            IMemoryOwner<byte> owner = default;
-            bool success = false;
-
-            try
-            {
-                success = TryAgreeCore(key.Span, in otherPartyPublicKey.GetPinnableReference(), creationParameters.GetMemoryPool(), out memory, out owner);
-            }
-            finally
-            {
-                if (!success && owner != null)
-                {
-                    owner.Dispose();
-                }
-            }
-
-            result = success ? new SharedSecret(memory, owner) : null;
-            return success;
+            return success ? new SharedSecret(memory, owner) : null;
         }
 
         internal sealed override int GetKeySize()

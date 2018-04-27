@@ -101,22 +101,6 @@ namespace NSec.Cryptography
             return signature.Length == _signatureSize && TryVerifyCore(in publicKey.GetPinnableReference(), data, signature);
         }
 
-        public void Verify(
-            PublicKey publicKey,
-            ReadOnlySpan<byte> data,
-            ReadOnlySpan<byte> signature)
-        {
-            if (publicKey == null)
-                throw Error.ArgumentNull_Key(nameof(publicKey));
-            if (publicKey.Algorithm != this)
-                throw Error.Argument_KeyWrongAlgorithm(nameof(publicKey), publicKey.Algorithm.GetType().FullName, GetType().FullName);
-
-            if (!(signature.Length == _signatureSize && TryVerifyCore(in publicKey.GetPinnableReference(), data, signature)))
-            {
-                throw Error.Cryptographic_VerificationFailed();
-            }
-        }
-
         internal sealed override int GetKeySize()
         {
             return _privateKeySize;
