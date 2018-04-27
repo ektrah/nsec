@@ -6,7 +6,7 @@
 
   <PropertyGroup>
     <Description>Experimental code</Description>
-    <IsPackable Condition="'$(IsStableRelease)' == 'true'">false</IsPackable>
+    <IsPackable Condition="!$(Version.Contains('-'))">false</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
