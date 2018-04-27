@@ -147,7 +147,7 @@ ArgumentException
 
 ### FinalizeAndVerify(ref IncrementalMac, ReadOnlySpan<byte>)
 
-Completes the MAC computation and attempts to verify the the specified message
+Completes the MAC computation and verifies the the specified message
 authentication code.
 
     public static bool FinalizeAndVerify(

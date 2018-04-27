@@ -138,8 +138,7 @@ ObjectDisposedException
 
 ### Verify(PublicKey, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
 
-Attempts to verify the signature of the specified input data using the specified
-public key.
+Verifies specified input data using the specified public key and signature.
 
     public bool Verify(
         PublicKey publicKey,
@@ -149,13 +148,13 @@ public key.
 #### Parameters
 
 publicKey
-: The [[PublicKey|PublicKey Class]] to use for verification. Verification fails
-    if this is not the matching public key for the private key that was used to
-    sign the data.
+: The [[PublicKey|PublicKey Class]] to use for verification.
+    Verification fails if this is not the public key for the private key used
+    when signing the data.
 
 data
-: The data to verify. Decryption fails if the integrity of the data was
-    compromised.
+: The data to verify.
+    Verification fails if the integrity of the data was compromised.
 
 signature
 : The signature of the data to verify.

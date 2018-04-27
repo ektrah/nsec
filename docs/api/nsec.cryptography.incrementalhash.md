@@ -140,7 +140,7 @@ ArgumentException
 
 ### FinalizeAndVerify(ref IncrementalHash, ReadOnlySpan<byte>)
 
-Completes the hash computation and attempts to verify the the specified hash.
+Completes the hash computation and verifies the the specified hash.
 
     public static bool FinalizeAndVerify(
         ref IncrementalHash state,

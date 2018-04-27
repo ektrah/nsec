@@ -156,7 +156,7 @@ ObjectDisposedException
 
 ### Verify(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
 
-Attempts to verify the specified input data using the specified key and message
+Verifies the specified input data using the specified key and message
 authentication code.
 
     public bool Verify(
@@ -168,13 +168,12 @@ authentication code.
 
 key
 : The key to use for verification.
-    Verification fails if this is not the same key as used for computing the
-    message authentication code.
+    Verification fails if this is not the key used when computing the message
+    authentication code.
 
 data
 : The data to verify.
-    Verification fails if this is not the same data as used for computing the
-    message authentication code.
+    Verification fails if the integrity of the data was compromised.
 
 mac
 : The message authentication code for the data.

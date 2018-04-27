@@ -208,9 +208,9 @@ ObjectDisposedException
 
 ### Decrypt(Key, in Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>, out byte[])
 
-Attempts to decrypt and authenticate the specified ciphertext using the
-specified key, nonce, and associated data. If successful, the decrypted
-plaintext is passed as an array of bytes to the caller.
+Decrypts and authenticates the specified ciphertext using the specified key,
+nonce, and associated data. If successful, returns the decrypted plaintext as an
+array of bytes.
 
     public bool Decrypt(
         Key key,
@@ -222,20 +222,20 @@ plaintext is passed as an array of bytes to the caller.
 #### Parameters
 
 key
-: The [[Key|Key Class]] to use for decryption. Decryption fails if this is not
-    the same key as used for encryption.
+: The [[Key|Key Class]] to use for decryption.
+    Authentication fails if this is not the key used for encryption.
 
 nonce
-: The [[Nonce|Nonce Struct]] to use for decryption. Decryption fails if this is
-    not the same nonce as used for encryption.
+: The [[Nonce|Nonce Struct]] to use for decryption.
+    Authentication fails if this is not the nonce used for encryption.
 
 associatedData
-: Optional additional data to authenticate. Decryption fails if this is not the
-    same additional data as used for encryption.
+: Optional additional data to authenticate.
+    Authentication fails if this is not the additional data used for encryption.
 
 ciphertext
-: The encrypted data to decrypt and authenticate. Decryption fails if the
-    integrity of the data was compromised.
+: The encrypted data to authenticate and decrypt.
+    Authentication fails if the integrity of the data was compromised.
 
 plaintext
 : When this method returns, contains an array of bytes that contains the
@@ -243,7 +243,7 @@ plaintext
 
 #### Return Value
 
-`true` if decryption succeeds; otherwise, `false`.
+`true` if decryption and authentication succeed; otherwise, `false`.
 
 #### Exceptions
 
@@ -260,9 +260,9 @@ ObjectDisposedException
 
 ### Decrypt(Key, in Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
 
-Attempts to decrypt and authenticate the specified ciphertext using the
-specified key, nonce, and associated data. If successful, the specified span of
-bytes is filled with the decrypted plaintext.
+Decrypts and authenticates the specified ciphertext using the specified key,
+nonce, and associated data. If successful, fills the specified span of bytes
+with the decrypted plaintext.
 
     public bool Decrypt(
         Key key,
@@ -274,20 +274,20 @@ bytes is filled with the decrypted plaintext.
 #### Parameters
 
 key
-: The [[Key|Key Class]] to use for decryption. Decryption fails if this is not
-    the same key as used for encryption.
+: The [[Key|Key Class]] to use for decryption.
+    Authentication fails if this is not the key used for encryption.
 
 nonce
-: The [[Nonce|Nonce Struct]] to use for decryption. Decryption fails if this is
-    not the same nonce as used for encryption.
+: The [[Nonce|Nonce Struct]] to use for decryption.
+    Authentication fails if this is not the nonce used for encryption.
 
 associatedData
-: Optional additional data to authenticate. Decryption fails if this is not the
-    same additional data as used for encryption.
+: Optional additional data to authenticate.
+    Authentication fails if this is not the additional data used for encryption.
 
 ciphertext
-: The encrypted data to decrypt and authenticate. Decryption fails if the
-    integrity of the data was compromised.
+: The encrypted data to authenticate and decrypt.
+    Authentication fails if the integrity of the data was compromised.
 
 plaintext
 : The span to fill with the decrypted and authenticated data.
@@ -299,7 +299,7 @@ plaintext
 
 #### Return Value
 
-`true` if decryption succeeds; otherwise, `false`.
+`true` if decryption and authentication succeed; otherwise, `false`.
 
 #### Exceptions
 

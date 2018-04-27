@@ -80,6 +80,7 @@ key
 
 otherPartyPublicKey
 : The public key of the other party to use to create the shared secret.
+    Key agreement fails if this is an invalid public key.
 
 creationParameters
 : A [[SharedSecretCreationParameters|SharedSecretCreationParameters Struct]]

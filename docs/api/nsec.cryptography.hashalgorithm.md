@@ -107,7 +107,7 @@ ArgumentException
 
 ### Verify(ReadOnlySpan<byte>, ReadOnlySpan<byte>)
 
-Attempts to verify the specified input data using the specified hash.
+Verifies the specified input data using the specified hash.
 
     public bool Verify(
         ReadOnlySpan<byte> data,
@@ -117,8 +117,7 @@ Attempts to verify the specified input data using the specified hash.
 
 data
 : The data to verify.
-    Verification fails if this is not the same data as used for computing the
-    hash.
+    Verification fails if the integrity of the data was compromised.
 
 hash
 : The hash for the data.
