@@ -8,6 +8,7 @@ install:
   - dotnet --info
   - dotnet restore --disable-parallel -s "https://api.nuget.org/v3/index.json" -s "https://dotnet.myget.org/F/dotnet-core/api/v3/index.json"
 build: off
+skip_tags: true
 test_script:
   - dotnet test tests -c Debug -f netcoreapp2.0
   - dotnet test tests -c Release -f netcoreapp2.0
