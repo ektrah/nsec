@@ -116,7 +116,7 @@ namespace NSec.Cryptography
             if ((crypto_hash_sha256_bytes() != (UIntPtr)crypto_hash_sha256_BYTES) ||
                 (crypto_hash_sha256_statebytes() != (UIntPtr)Unsafe.SizeOf<crypto_hash_sha256_state>()))
             {
-                throw Error.Cryptographic_InitializationFailed();
+                throw Error.InvalidOperation_InitializationFailed();
             }
         }
     }

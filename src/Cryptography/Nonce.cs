@@ -102,7 +102,7 @@ namespace NSec.Cryptography
         {
             if (Unsafe.SizeOf<Nonce>() != 6 * sizeof(uint) + 4 * sizeof(byte))
             {
-                throw Error.Cryptographic_InternalError();
+                throw Error.InvalidOperation_InternalError();
             }
             if (right.Size != left.Size)
             {
@@ -183,7 +183,7 @@ namespace NSec.Cryptography
         {
             if (Unsafe.SizeOf<Nonce>() != 6 * sizeof(uint) + 4 * sizeof(byte))
             {
-                throw Error.Cryptographic_InternalError();
+                throw Error.InvalidOperation_InternalError();
             }
             if (other.Size != nonce.Size)
             {
@@ -282,7 +282,7 @@ namespace NSec.Cryptography
         {
             if (Unsafe.SizeOf<Nonce>() != 6 * sizeof(uint) + 4 * sizeof(byte))
             {
-                throw Error.Cryptographic_InternalError();
+                throw Error.InvalidOperation_InternalError();
             }
 
             ref byte x = ref Unsafe.AsRef(in _bytes);

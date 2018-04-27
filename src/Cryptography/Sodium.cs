@@ -31,12 +31,12 @@ namespace NSec.Cryptography
                 if (sodium_library_version_major() != SODIUM_LIBRARY_VERSION_MAJOR ||
                     sodium_library_version_minor() != SODIUM_LIBRARY_VERSION_MINOR)
                 {
-                    throw Error.Cryptographic_InitializationFailed();
+                    throw Error.InvalidOperation_InitializationFailed();
                 }
 
                 if (sodium_set_misuse_handler(s_misuseHandler) != 0)
                 {
-                    throw Error.Cryptographic_InitializationFailed();
+                    throw Error.InvalidOperation_InitializationFailed();
                 }
 
                 // sodium_init() returns 0 on success, -1 on failure, and 1 if the
@@ -44,7 +44,7 @@ namespace NSec.Cryptography
 
                 if (sodium_init() < 0)
                 {
-                    throw Error.Cryptographic_InitializationFailed();
+                    throw Error.InvalidOperation_InitializationFailed();
                 }
             }
             catch (DllNotFoundException e)
@@ -59,7 +59,7 @@ namespace NSec.Cryptography
 
         private static void InternalError()
         {
-            throw Error.Cryptographic_InternalError();
+            throw Error.InvalidOperation_InternalError();
         }
     }
 }

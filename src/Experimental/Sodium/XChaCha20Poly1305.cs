@@ -144,7 +144,7 @@ namespace NSec.Experimental.Sodium
                 (crypto_aead_xchacha20poly1305_ietf_npubbytes() != (UIntPtr)crypto_aead_xchacha20poly1305_ietf_NPUBBYTES) ||
                 (crypto_aead_xchacha20poly1305_ietf_nsecbytes() != (UIntPtr)crypto_aead_xchacha20poly1305_ietf_NSECBYTES))
             {
-                throw Error.Cryptographic_InitializationFailed();
+                throw Error.InvalidOperation_InitializationFailed();
             }
         }
     }

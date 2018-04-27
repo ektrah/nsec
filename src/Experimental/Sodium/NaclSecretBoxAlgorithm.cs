@@ -131,7 +131,7 @@ namespace NSec.Experimental.Sodium
 
         internal sealed override int GetPublicKeySize()
         {
-            throw Error.Cryptographic_InternalError();
+            throw Error.InvalidOperation_InternalError();
         }
 
         internal abstract override int GetSeedSize();

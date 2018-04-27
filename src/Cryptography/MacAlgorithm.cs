@@ -188,7 +188,7 @@ namespace NSec.Cryptography
 
         internal sealed override int GetPublicKeySize()
         {
-            throw Error.Cryptographic_InternalError();
+            throw Error.InvalidOperation_InternalError();
         }
 
         internal abstract override int GetSeedSize();

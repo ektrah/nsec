@@ -204,7 +204,7 @@ namespace NSec.Cryptography
                 (crypto_auth_hmacsha512_keybytes() != (UIntPtr)crypto_auth_hmacsha512_KEYBYTES) ||
                 (crypto_auth_hmacsha512_statebytes() != (UIntPtr)Unsafe.SizeOf<crypto_auth_hmacsha512_state>()))
             {
-                throw Error.Cryptographic_InitializationFailed();
+                throw Error.InvalidOperation_InitializationFailed();
             }
         }
     }

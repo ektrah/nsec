@@ -132,7 +132,7 @@ namespace NSec.Experimental.Sodium
                 (crypto_secretbox_noncebytes() != (UIntPtr)crypto_secretbox_xsalsa20poly1305_NONCEBYTES) ||
                 (Marshal.PtrToStringAnsi(crypto_secretbox_primitive()) != crypto_secretbox_PRIMITIVE))
             {
-                throw Error.Cryptographic_InitializationFailed();
+                throw Error.InvalidOperation_InitializationFailed();
             }
         }
     }

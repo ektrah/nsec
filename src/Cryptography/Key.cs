@@ -215,7 +215,7 @@ namespace NSec.Cryptography
 
                 if (!_algorithm.TryExportKey(_memory.Span, format, blob, out blobSize))
                 {
-                    throw Error.Cryptographic_InternalError();
+                    throw Error.InvalidOperation_InternalError();
                 }
 
                 Debug.Assert(blobSize == blob.Length);
@@ -233,7 +233,7 @@ namespace NSec.Cryptography
 
                 if (!_algorithm.TryExportPublicKey(_publicKey, format, blob, out blobSize))
                 {
-                    throw Error.Cryptographic_InternalError();
+                    throw Error.InvalidOperation_InternalError();
                 }
 
                 Debug.Assert(blobSize == blob.Length);

@@ -293,16 +293,6 @@ namespace NSec.Cryptography
             return new ArgumentOutOfRangeException(paramName, string.Format(ResourceManager.GetString("ArgumentOutOfRange_NonceFixedCounterSize"), arg0));
         }
 
-        internal static CryptographicException Cryptographic_InitializationFailed()
-        {
-            return new CryptographicException(ResourceManager.GetString("Cryptographic_InitializationFailed"));
-        }
-
-        internal static CryptographicException Cryptographic_InternalError()
-        {
-            return new CryptographicException(ResourceManager.GetString("Cryptographic_InternalError"));
-        }
-
         internal static FormatException Format_BadBase16()
         {
             return new FormatException(ResourceManager.GetString("Format_BadBase16"));
@@ -331,6 +321,16 @@ namespace NSec.Cryptography
         internal static InvalidOperationException InvalidOperation_ExportNotAllowed()
         {
             return new InvalidOperationException(ResourceManager.GetString("InvalidOperation_ExportNotAllowed"));
+        }
+
+        internal static InvalidOperationException InvalidOperation_InitializationFailed()
+        {
+            return new InvalidOperationException(ResourceManager.GetString("InvalidOperation_InitializationFailed"));
+        }
+
+        internal static InvalidOperationException InvalidOperation_InternalError()
+        {
+            return new InvalidOperationException(ResourceManager.GetString("InvalidOperation_InternalError"));
         }
 
         internal static InvalidOperationException InvalidOperation_UninitializedState()

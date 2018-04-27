@@ -19,7 +19,6 @@
         * HmacSha512 Class
     * [[SignatureAlgorithm Class]]
         * Ed25519 Class
-* [[CryptographicException Class]]
 * [[Key Class]]
     * [[KeyCreationParameters Struct]]
     * [[KeyExportPolicies Enum]]

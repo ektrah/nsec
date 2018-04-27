@@ -69,7 +69,7 @@ namespace NSec.Cryptography
         {
             if (Unsafe.SizeOf<PublicKeyBytes>() != 8 * sizeof(uint))
             {
-                throw Error.Cryptographic_InternalError();
+                throw Error.InvalidOperation_InternalError();
             }
             if (this == other)
             {
@@ -108,7 +108,7 @@ namespace NSec.Cryptography
 
             if (!_algorithm.TryExportPublicKey(this, format, blob, out blobSize))
             {
-                throw Error.Cryptographic_InternalError();
+                throw Error.InvalidOperation_InternalError();
             }
 
             Debug.Assert(blobSize == blob.Length);
@@ -119,7 +119,7 @@ namespace NSec.Cryptography
         {
             if (Unsafe.SizeOf<PublicKeyBytes>() != 8 * sizeof(uint))
             {
-                throw Error.Cryptographic_InternalError();
+                throw Error.InvalidOperation_InternalError();
             }
 
             ref byte x = ref Unsafe.As<PublicKeyBytes, byte>(ref _bytes);
