@@ -102,9 +102,6 @@ ArgumentException
 : `key.Algorithm` or `otherPartyPublicKey.Algorithm` is not the same object as
     the current [[KeyAgreementAlgorithm|KeyAgreementAlgorithm Class]] object.
 
-CryptographicException
-: Key agreement failed.
-
 ObjectDisposedException
 : `key` has been disposed.
 
