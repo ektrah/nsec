@@ -129,7 +129,7 @@ namespace NSec.Cryptography
             return crypto_aead_aes256gcm_KEYBYTES;
         }
 
-        private protected override bool TryDecryptCore(
+        private protected override bool DecryptCore(
             ReadOnlySpan<byte> key,
             in Nonce nonce,
             ReadOnlySpan<byte> associatedData,

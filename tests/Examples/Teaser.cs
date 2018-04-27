@@ -25,7 +25,7 @@ namespace NSec.Tests.Examples
                 var signature = algorithm.Sign(key, data);
 
                 // verify data and signature with the public key
-                if (algorithm.TryVerify(key.PublicKey, data, signature))
+                if (algorithm.Verify(key.PublicKey, data, signature))
                 {
                     /*{*//*}*/
                 }

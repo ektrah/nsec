@@ -88,7 +88,7 @@ namespace NSec.Cryptography
             SignCore(key.Span, data, signature);
         }
 
-        public bool TryVerify(
+        public bool Verify(
             PublicKey publicKey,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> signature)
@@ -98,7 +98,7 @@ namespace NSec.Cryptography
             if (publicKey.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(publicKey), publicKey.Algorithm.GetType().FullName, GetType().FullName);
 
-            return signature.Length == _signatureSize && TryVerifyCore(in publicKey.GetPinnableReference(), data, signature);
+            return signature.Length == _signatureSize && VerifyCore(in publicKey.GetPinnableReference(), data, signature);
         }
 
         internal sealed override int GetKeySize()
@@ -118,7 +118,7 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> data,
             Span<byte> signature);
 
-        private protected abstract bool TryVerifyCore(
+        private protected abstract bool VerifyCore(
             in PublicKeyBytes publicKeyBytes,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> signature);

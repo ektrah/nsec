@@ -206,13 +206,13 @@ ObjectDisposedException
 : `key` has been disposed.
 
 
-### TryDecrypt(Key, in Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>, out byte[])
+### Decrypt(Key, in Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>, out byte[])
 
 Attempts to decrypt and authenticate the specified ciphertext using the
 specified key, nonce, and associated data. If successful, the decrypted
 plaintext is passed as an array of bytes to the caller.
 
-    public bool TryDecrypt(
+    public bool Decrypt(
         Key key,
         in Nonce nonce,
         ReadOnlySpan<byte> associatedData,
@@ -258,13 +258,13 @@ ObjectDisposedException
 : `key` has been disposed.
 
 
-### TryDecrypt(Key, in Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
+### Decrypt(Key, in Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
 
 Attempts to decrypt and authenticate the specified ciphertext using the
 specified key, nonce, and associated data. If successful, the specified span of
 bytes is filled with the decrypted plaintext.
 
-    public bool TryDecrypt(
+    public bool Decrypt(
         Key key,
         in Nonce nonce,
         ReadOnlySpan<byte> associatedData,

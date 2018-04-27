@@ -156,7 +156,7 @@ namespace NSec.Cryptography
             MacCore(key.Span, data, mac);
         }
 
-        public bool TryVerify(
+        public bool Verify(
             Key key,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> mac)
@@ -170,10 +170,10 @@ namespace NSec.Cryptography
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             }
 
-            return mac.Length == _macSize && TryVerifyCore(key.Span, data, mac);
+            return mac.Length == _macSize && VerifyCore(key.Span, data, mac);
         }
 
-        internal abstract bool FinalizeAndTryVerifyCore(
+        internal abstract bool FinalizeAndVerifyCore(
             ref IncrementalMacState state,
             ReadOnlySpan<byte> mac);
 
@@ -207,7 +207,7 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> data,
             Span<byte> mac);
 
-        private protected abstract bool TryVerifyCore(
+        private protected abstract bool VerifyCore(
             ReadOnlySpan<byte> key,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> mac);

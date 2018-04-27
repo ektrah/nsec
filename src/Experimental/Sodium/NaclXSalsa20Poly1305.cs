@@ -65,7 +65,7 @@ namespace NSec.Experimental.Sodium
             return crypto_secretbox_xsalsa20poly1305_KEYBYTES;
         }
 
-        internal override bool TryDecryptCore(
+        internal override bool DecryptCore(
             ReadOnlySpan<byte> key,
             in Nonce nonce,
             ReadOnlySpan<byte> ciphertext,

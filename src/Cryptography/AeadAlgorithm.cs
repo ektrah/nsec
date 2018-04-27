@@ -118,7 +118,7 @@ namespace NSec.Cryptography
             EncryptCore(key.Span, in nonce, associatedData, plaintext, ciphertext);
         }
 
-        public bool TryDecrypt(
+        public bool Decrypt(
             Key key,
             in Nonce nonce,
             ReadOnlySpan<byte> associatedData,
@@ -137,12 +137,12 @@ namespace NSec.Cryptography
             }
 
             byte[] result = new byte[ciphertext.Length - _tagSize];
-            bool success = TryDecryptCore(key.Span, in nonce, associatedData, ciphertext, result);
+            bool success = DecryptCore(key.Span, in nonce, associatedData, ciphertext, result);
             plaintext = success ? result : null;
             return success;
         }
 
-        public bool TryDecrypt(
+        public bool Decrypt(
             Key key,
             in Nonce nonce,
             ReadOnlySpan<byte> associatedData,
@@ -160,7 +160,7 @@ namespace NSec.Cryptography
             if (plaintext.Overlaps(ciphertext, out int offset) && offset != 0)
                 throw Error.Argument_OverlapPlaintext(nameof(plaintext));
 
-            return TryDecryptCore(key.Span, in nonce, associatedData, ciphertext, plaintext);
+            return DecryptCore(key.Span, in nonce, associatedData, ciphertext, plaintext);
         }
 
         internal sealed override int GetKeySize()
@@ -182,7 +182,7 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext);
 
-        private protected abstract bool TryDecryptCore(
+        private protected abstract bool DecryptCore(
             ReadOnlySpan<byte> key,
             in Nonce nonce,
             ReadOnlySpan<byte> associatedData,

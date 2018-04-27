@@ -167,19 +167,19 @@ namespace NSec.Tests.Base
 
         #endregion
 
-        #region FinalizeAndTryVerify
+        #region FinalizeAndVerify
 
         [Fact]
-        public static void FinalizeAndTryVerifyInvalid()
+        public static void FinalizeAndVerifyInvalid()
         {
             var state = default(IncrementalMac);
 
-            Assert.Throws<InvalidOperationException>(() => IncrementalMac.FinalizeAndTryVerify(ref state, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<InvalidOperationException>(() => IncrementalMac.FinalizeAndVerify(ref state, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void FinalizeAndTryVerifyFail(Type algorithmType)
+        public static void FinalizeAndVerifyFail(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
@@ -187,13 +187,13 @@ namespace NSec.Tests.Base
             {
                 IncrementalMac.Initialize(k, out var state);
 
-                Assert.False(IncrementalMac.FinalizeAndTryVerify(ref state, new byte[a.MacSize]));
+                Assert.False(IncrementalMac.FinalizeAndVerify(ref state, new byte[a.MacSize]));
             }
         }
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void FinalizeAndTryVerifySuccess(Type algorithmType)
+        public static void FinalizeAndVerifySuccess(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
@@ -201,7 +201,7 @@ namespace NSec.Tests.Base
             {
                 IncrementalMac.Initialize(k, out var state);
 
-                Assert.True(IncrementalMac.FinalizeAndTryVerify(ref state, a.Mac(k, ReadOnlySpan<byte>.Empty)));
+                Assert.True(IncrementalMac.FinalizeAndVerify(ref state, a.Mac(k, ReadOnlySpan<byte>.Empty)));
             }
         }
 

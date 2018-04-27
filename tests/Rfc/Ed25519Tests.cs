@@ -31,7 +31,7 @@ namespace NSec.Tests.Rfc
                 var actual = a.Sign(k, m);
                 Assert.Equal(expected, actual);
 
-                Assert.True(a.TryVerify(p, m, expected));
+                Assert.True(a.Verify(p, m, expected));
             }
         }
     }

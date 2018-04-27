@@ -95,29 +95,29 @@ namespace NSec.Tests.Base
 
         #endregion
 
-        #region TryVerify
+        #region Verify
 
         [Theory]
         [MemberData(nameof(HashAlgorithms))]
-        public static void TryVerifyWithSpanTooSmall(Type algorithmType)
+        public static void VerifyWithSpanTooSmall(Type algorithmType)
         {
             var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.False(a.TryVerify(ReadOnlySpan<byte>.Empty, new byte[a.HashSize - 1]));
+            Assert.False(a.Verify(ReadOnlySpan<byte>.Empty, new byte[a.HashSize - 1]));
         }
 
         [Theory]
         [MemberData(nameof(HashAlgorithms))]
-        public static void TryVerifyWithSpanTooLarge(Type algorithmType)
+        public static void VerifyWithSpanTooLarge(Type algorithmType)
         {
             var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.False(a.TryVerify(ReadOnlySpan<byte>.Empty, new byte[a.HashSize + 1]));
+            Assert.False(a.Verify(ReadOnlySpan<byte>.Empty, new byte[a.HashSize + 1]));
         }
 
         [Theory]
         [MemberData(nameof(HashAlgorithms))]
-        public static void TryVerifyWithSpanSuccess(Type algorithmType)
+        public static void VerifyWithSpanSuccess(Type algorithmType)
         {
             var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
 
@@ -125,7 +125,7 @@ namespace NSec.Tests.Base
 
             var hash = a.Hash(d);
 
-            Assert.True(a.TryVerify(d, hash));
+            Assert.True(a.Verify(d, hash));
         }
 
         #endregion

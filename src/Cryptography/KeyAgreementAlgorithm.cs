@@ -80,7 +80,7 @@ namespace NSec.Cryptography
 
             try
             {
-                success = TryAgreeCore(key.Span, in otherPartyPublicKey.GetPinnableReference(), creationParameters.GetMemoryPool(), out memory, out owner);
+                success = AgreeCore(key.Span, in otherPartyPublicKey.GetPinnableReference(), creationParameters.GetMemoryPool(), out memory, out owner);
             }
             finally
             {
@@ -105,7 +105,7 @@ namespace NSec.Cryptography
 
         internal abstract override int GetSeedSize();
 
-        private protected abstract bool TryAgreeCore(
+        private protected abstract bool AgreeCore(
             ReadOnlySpan<byte> key,
             in PublicKeyBytes otherPartyPublicKey,
             MemoryPool<byte> memoryPool,

@@ -82,7 +82,7 @@ namespace NSec.Cryptography
             seed.CopyTo(owner.Memory.Span);
         }
 
-        internal override bool FinalizeAndTryVerifyCore(
+        internal override bool FinalizeAndVerifyCore(
             ref IncrementalMacState state,
             ReadOnlySpan<byte> mac)
         {
@@ -178,7 +178,7 @@ namespace NSec.Cryptography
             crypto_auth_hmacsha256_final(ref state, ref mac.GetPinnableReference());
         }
 
-        private protected override bool TryVerifyCore(
+        private protected override bool VerifyCore(
             ReadOnlySpan<byte> key,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> mac)

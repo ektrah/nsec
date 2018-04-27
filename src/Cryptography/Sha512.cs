@@ -54,7 +54,7 @@ namespace NSec.Cryptography
             }
         }
 
-        internal override bool FinalizeAndTryVerifyCore(
+        internal override bool FinalizeAndVerifyCore(
             ref IncrementalHashState state,
             ReadOnlySpan<byte> hash)
         {
@@ -103,7 +103,7 @@ namespace NSec.Cryptography
             crypto_hash_sha512_final(ref state, ref hash.GetPinnableReference());
         }
 
-        private protected override bool TryVerifyCore(
+        private protected override bool VerifyCore(
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> hash)
         {

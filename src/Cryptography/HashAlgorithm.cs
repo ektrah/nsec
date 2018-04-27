@@ -116,14 +116,14 @@ namespace NSec.Cryptography
             HashCore(data, hash);
         }
 
-        public bool TryVerify(
+        public bool Verify(
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> hash)
         {
-            return hash.Length == _hashSize && TryVerifyCore(data, hash);
+            return hash.Length == _hashSize && VerifyCore(data, hash);
         }
 
-        internal abstract bool FinalizeAndTryVerifyCore(
+        internal abstract bool FinalizeAndVerifyCore(
             ref IncrementalHashState state,
             ReadOnlySpan<byte> hash);
 
@@ -158,7 +158,7 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> data,
             Span<byte> hash);
 
-        private protected abstract bool TryVerifyCore(
+        private protected abstract bool VerifyCore(
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> hash);
     }

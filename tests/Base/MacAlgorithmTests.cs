@@ -241,67 +241,67 @@ namespace NSec.Tests.Base
 
         #endregion
 
-        #region TryVerify
+        #region Verify
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void TryVerifyWithNullKey(Type algorithmType)
+        public static void VerifyWithNullKey(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.Throws<ArgumentNullException>("key", () => a.TryVerify(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Verify(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void TryVerifyWithDisposedKey(Type algorithmType)
+        public static void VerifyWithDisposedKey(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             var k = new Key(a);
             k.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => a.TryVerify(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize]));
+            Assert.Throws<ObjectDisposedException>(() => a.Verify(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize]));
         }
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void TryVerifyWithWrongKey(Type algorithmType)
+        public static void VerifyWithWrongKey(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(SignatureAlgorithm.Ed25519))
             {
-                Assert.Throws<ArgumentException>("key", () => a.TryVerify(k, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+                Assert.Throws<ArgumentException>("key", () => a.Verify(k, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
             }
         }
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void TryVerifyWithSpanTooSmall(Type algorithmType)
+        public static void VerifyWithSpanTooSmall(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
-                Assert.False(a.TryVerify(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize - 1]));
+                Assert.False(a.Verify(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize - 1]));
             }
         }
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void TryVerifyWithSpanTooLarge(Type algorithmType)
+        public static void VerifyWithSpanTooLarge(Type algorithmType)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
-                Assert.False(a.TryVerify(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize + 1]));
+                Assert.False(a.Verify(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize + 1]));
             }
         }
 
         [Theory]
         [MemberData(nameof(MacAlgorithmsAndSizes))]
-        public static void TryVerifyWithSpanSuccess(Type algorithmType, int keySize, int macSize)
+        public static void VerifyWithSpanSuccess(Type algorithmType, int keySize, int macSize)
         {
             var a = (MacAlgorithm)Activator.CreateInstance(algorithmType, keySize, macSize);
 
@@ -311,7 +311,7 @@ namespace NSec.Tests.Base
 
                 var mac = a.Mac(k, d);
 
-                Assert.True(a.TryVerify(k, d, mac));
+                Assert.True(a.Verify(k, d, mac));
             }
         }
 

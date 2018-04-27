@@ -79,7 +79,7 @@ namespace NSec.Cryptography
             seed.CopyTo(owner.Memory.Span);
         }
 
-        internal override bool FinalizeAndTryVerifyCore(
+        internal override bool FinalizeAndVerifyCore(
             ref IncrementalMacState state,
             ReadOnlySpan<byte> mac)
         {
@@ -213,7 +213,7 @@ namespace NSec.Cryptography
                 (UIntPtr)key.Length);
         }
 
-        private protected override bool TryVerifyCore(
+        private protected override bool VerifyCore(
             ReadOnlySpan<byte> key,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> mac)

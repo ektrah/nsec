@@ -71,7 +71,7 @@ namespace NSec.Experimental.Sodium
             return crypto_aead_xchacha20poly1305_ietf_KEYBYTES;
         }
 
-        private protected override bool TryDecryptCore(
+        private protected override bool DecryptCore(
             ReadOnlySpan<byte> key,
             in Nonce nonce,
             ReadOnlySpan<byte> associatedData,

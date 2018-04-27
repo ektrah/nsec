@@ -300,55 +300,55 @@ namespace NSec.Tests.Base
 
         #endregion
 
-        #region TryDecrypt #1
+        #region Decrypt #1
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void TryDecryptWithNullKey(Type algorithmType)
+        public static void DecryptWithNullKey(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.Throws<ArgumentNullException>("key", () => a.TryDecrypt(null, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out byte[] pt));
+            Assert.Throws<ArgumentNullException>("key", () => a.Decrypt(null, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out byte[] pt));
         }
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void TryDecryptWithDisposedKey(Type algorithmType)
+        public static void DecryptWithDisposedKey(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
             var k = new Key(a);
             k.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => a.TryDecrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize], out byte[] pt));
+            Assert.Throws<ObjectDisposedException>(() => a.Decrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize], out byte[] pt));
         }
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void TryDecryptWithWrongKey(Type algorithmType)
+        public static void DecryptWithWrongKey(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(SignatureAlgorithm.Ed25519))
             {
-                Assert.Throws<ArgumentException>("key", () => a.TryDecrypt(k, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out byte[] pt));
+                Assert.Throws<ArgumentException>("key", () => a.Decrypt(k, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out byte[] pt));
             }
         }
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void TryDecryptWithNonceTooSmall(Type algorithmType)
+        public static void DecryptWithNonceTooSmall(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
-                Assert.False(a.TryDecrypt(k, new Nonce(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out byte[] pt));
+                Assert.False(a.Decrypt(k, new Nonce(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out byte[] pt));
             }
         }
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void TryDecryptWithNonceTooLarge(Type algorithmType)
+        public static void DecryptWithNonceTooLarge(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
@@ -359,26 +359,26 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                Assert.False(a.TryDecrypt(k, new Nonce(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out byte[] pt));
+                Assert.False(a.Decrypt(k, new Nonce(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out byte[] pt));
             }
         }
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void TryDecryptWithCiphertextTooSmall(Type algorithmType)
+        public static void DecryptWithCiphertextTooSmall(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
-                Assert.False(a.TryDecrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize - 1], out byte[] pt));
+                Assert.False(a.Decrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize - 1], out byte[] pt));
                 Assert.Null(pt);
             }
         }
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void TryDecryptFailClearsPlaintext(Type algorithmType)
+        public static void DecryptFailClearsPlaintext(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
@@ -392,14 +392,14 @@ namespace NSec.Tests.Base
 
                 var ct = new byte[pt.Length + a.TagSize];
 
-                Assert.False(a.TryDecrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ct, pt));
+                Assert.False(a.Decrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ct, pt));
                 Assert.Equal(new byte[pt.Length], pt);
             }
         }
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void TryDecryptEmptySuccess(Type algorithmType)
+        public static void DecryptEmptySuccess(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
@@ -409,7 +409,7 @@ namespace NSec.Tests.Base
                 Assert.NotNull(ct);
                 Assert.Equal(a.TagSize, ct.Length);
 
-                Assert.True(a.TryDecrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ct, out byte[] pt));
+                Assert.True(a.Decrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ct, out byte[] pt));
                 Assert.NotNull(pt);
                 Assert.Empty(pt);
             }
@@ -417,55 +417,55 @@ namespace NSec.Tests.Base
 
         #endregion
 
-        #region TryDecrypt #2
+        #region Decrypt #2
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void TryDecryptWithSpanWithNullKey(Type algorithmType)
+        public static void DecryptWithSpanWithNullKey(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
-            Assert.Throws<ArgumentNullException>("key", () => a.TryDecrypt(null, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Decrypt(null, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void TryDecryptWithSpanWithDisposedKey(Type algorithmType)
+        public static void DecryptWithSpanWithDisposedKey(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
             var k = new Key(a);
             k.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => a.TryDecrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize], Span<byte>.Empty));
+            Assert.Throws<ObjectDisposedException>(() => a.Decrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize], Span<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void TryDecryptWithSpanWithWrongKey(Type algorithmType)
+        public static void DecryptWithSpanWithWrongKey(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(SignatureAlgorithm.Ed25519))
             {
-                Assert.Throws<ArgumentException>("key", () => a.TryDecrypt(k, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+                Assert.Throws<ArgumentException>("key", () => a.Decrypt(k, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
             }
         }
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void TryDecryptWithSpanWithNonceTooSmall(Type algorithmType)
+        public static void DecryptWithSpanWithNonceTooSmall(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
-                Assert.False(a.TryDecrypt(k, new Nonce(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+                Assert.False(a.Decrypt(k, new Nonce(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
             }
         }
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void TryDecryptWithSpanWithNonceTooLarge(Type algorithmType)
+        public static void DecryptWithSpanWithNonceTooLarge(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
@@ -476,25 +476,25 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                Assert.False(a.TryDecrypt(k, new Nonce(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+                Assert.False(a.Decrypt(k, new Nonce(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
             }
         }
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void TryDecryptWithSpanWithCiphertextTooSmall(Type algorithmType)
+        public static void DecryptWithSpanWithCiphertextTooSmall(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
             using (var k = new Key(a))
             {
-                Assert.False(a.TryDecrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize - 1], Span<byte>.Empty));
+                Assert.False(a.Decrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize - 1], Span<byte>.Empty));
             }
         }
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void TryDecryptWithSpanTooLarge(Type algorithmType)
+        public static void DecryptWithSpanTooLarge(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
@@ -504,13 +504,13 @@ namespace NSec.Tests.Base
                 Assert.NotNull(ct);
                 Assert.Equal(a.TagSize, ct.Length);
 
-                Assert.Throws<ArgumentException>("plaintext", () => a.TryDecrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ct, new byte[1]));
+                Assert.Throws<ArgumentException>("plaintext", () => a.Decrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ct, new byte[1]));
             }
         }
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void TryDecryptWithAdOverlapping(Type algorithmType)
+        public static void DecryptWithAdOverlapping(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
@@ -524,14 +524,14 @@ namespace NSec.Tests.Base
 
                 var ciphertext = a.Encrypt(k, n, actual.AsSpan(10, 100), expected);
 
-                Assert.True(a.TryDecrypt(k, n, actual.AsSpan(10, 100), ciphertext, actual));
+                Assert.True(a.Decrypt(k, n, actual.AsSpan(10, 100), ciphertext, actual));
                 Assert.Equal(expected, actual);
             }
         }
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void TryDecryptWithCiphertextOverlapping(Type algorithmType)
+        public static void DecryptWithCiphertextOverlapping(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
@@ -542,14 +542,14 @@ namespace NSec.Tests.Base
 
                 var b = Utilities.RandomBytes.Slice(200, 200).ToArray();
 
-                Assert.Throws<ArgumentException>("plaintext", () => a.TryDecrypt(k, n, ad, b.AsSpan(10, 100 + a.TagSize), b.AsSpan(60, 100)));
-                Assert.Throws<ArgumentException>("plaintext", () => a.TryDecrypt(k, n, ad, b.AsSpan(60, 100 + a.TagSize), b.AsSpan(10, 100)));
+                Assert.Throws<ArgumentException>("plaintext", () => a.Decrypt(k, n, ad, b.AsSpan(10, 100 + a.TagSize), b.AsSpan(60, 100)));
+                Assert.Throws<ArgumentException>("plaintext", () => a.Decrypt(k, n, ad, b.AsSpan(60, 100 + a.TagSize), b.AsSpan(10, 100)));
             }
         }
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void TryDecryptWithSpanOutOfPlace(Type algorithmType)
+        public static void DecryptWithSpanOutOfPlace(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
@@ -563,14 +563,14 @@ namespace NSec.Tests.Base
 
                 var ciphertext = a.Encrypt(k, n, ad, expected);
 
-                Assert.True(a.TryDecrypt(k, n, ad, ciphertext, actual));
+                Assert.True(a.Decrypt(k, n, ad, ciphertext, actual));
                 Assert.Equal(expected, actual);
             }
         }
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void TryDecryptWithSpanInPlace(Type algorithmType)
+        public static void DecryptWithSpanInPlace(Type algorithmType)
         {
             var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
 
@@ -585,8 +585,8 @@ namespace NSec.Tests.Base
                 a.Encrypt(k, n, ad, Utilities.RandomBytes.Slice(0, L), actual);
                 a.Encrypt(k, n, ad, Utilities.RandomBytes.Slice(0, L), expected);
 
-                Assert.True(a.TryDecrypt(k, n, ad, actual, expected.AsSpan(0, L)));
-                Assert.True(a.TryDecrypt(k, n, ad, actual, actual.AsSpan(0, L)));
+                Assert.True(a.Decrypt(k, n, ad, actual, expected.AsSpan(0, L)));
+                Assert.True(a.Decrypt(k, n, ad, actual, actual.AsSpan(0, L)));
                 Assert.Equal(expected, actual);
             }
         }

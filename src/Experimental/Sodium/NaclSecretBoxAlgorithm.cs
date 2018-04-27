@@ -71,7 +71,7 @@ namespace NSec.Experimental.Sodium
             EncryptCore(key.Span, nonce, plaintext, ciphertext);
         }
 
-        public bool TryDecrypt(
+        public bool Decrypt(
             Key key,
             in Nonce nonce,
             ReadOnlySpan<byte> ciphertext,
@@ -91,12 +91,12 @@ namespace NSec.Experimental.Sodium
             }
 
             byte[] result = new byte[ciphertext.Length - _macSize];
-            bool success = TryDecryptCore(key.Span, nonce, ciphertext, result);
+            bool success = DecryptCore(key.Span, nonce, ciphertext, result);
             plaintext = success ? result : null;
             return success;
         }
 
-        public bool TryDecrypt(
+        public bool Decrypt(
             Key key,
             in Nonce nonce,
             ReadOnlySpan<byte> ciphertext,
@@ -115,7 +115,7 @@ namespace NSec.Experimental.Sodium
             if (plaintext.Overlaps(ciphertext))
                 throw Error.Argument_OverlapPlaintext(nameof(plaintext));
 
-            return TryDecryptCore(key.Span, nonce, ciphertext, plaintext);
+            return DecryptCore(key.Span, nonce, ciphertext, plaintext);
         }
 
         internal abstract void EncryptCore(
@@ -136,7 +136,7 @@ namespace NSec.Experimental.Sodium
 
         internal abstract override int GetSeedSize();
 
-        internal abstract bool TryDecryptCore(
+        internal abstract bool DecryptCore(
             ReadOnlySpan<byte> key,
             in Nonce nonce,
             ReadOnlySpan<byte> ciphertext,

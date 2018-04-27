@@ -102,7 +102,7 @@ namespace NSec.Cryptography
             return crypto_aead_chacha20poly1305_ietf_KEYBYTES;
         }
 
-        private protected override bool TryDecryptCore(
+        private protected override bool DecryptCore(
             ReadOnlySpan<byte> key,
             in Nonce nonce,
             ReadOnlySpan<byte> associatedData,

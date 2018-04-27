@@ -208,7 +208,7 @@ namespace NSec.Cryptography
             }
         }
 
-        private protected override bool TryVerifyCore(
+        private protected override bool VerifyCore(
             in PublicKeyBytes publicKeyBytes,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> signature)

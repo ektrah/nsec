@@ -158,36 +158,36 @@ namespace NSec.Tests.Base
 
         #endregion
 
-        #region FinalizeAndTryVerify
+        #region FinalizeAndVerify
 
         [Fact]
-        public static void FinalizeAndTryVerifyInvalid()
+        public static void FinalizeAndVerifyInvalid()
         {
             var state = default(IncrementalHash);
 
-            Assert.Throws<InvalidOperationException>(() => IncrementalHash.FinalizeAndTryVerify(ref state, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<InvalidOperationException>(() => IncrementalHash.FinalizeAndVerify(ref state, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(HashAlgorithms))]
-        public static void FinalizeAndTryVerifyFail(Type algorithmType)
+        public static void FinalizeAndVerifyFail(Type algorithmType)
         {
             var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
 
             IncrementalHash.Initialize(a, out var state);
 
-            Assert.False(IncrementalHash.FinalizeAndTryVerify(ref state, new byte[a.HashSize]));
+            Assert.False(IncrementalHash.FinalizeAndVerify(ref state, new byte[a.HashSize]));
         }
 
         [Theory]
         [MemberData(nameof(HashAlgorithms))]
-        public static void FinalizeAndTryVerifySuccess(Type algorithmType)
+        public static void FinalizeAndVerifySuccess(Type algorithmType)
         {
             var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
 
             IncrementalHash.Initialize(a, out var state);
 
-            Assert.True(IncrementalHash.FinalizeAndTryVerify(ref state, a.Hash(ReadOnlySpan<byte>.Empty)));
+            Assert.True(IncrementalHash.FinalizeAndVerify(ref state, a.Hash(ReadOnlySpan<byte>.Empty)));
         }
 
         #endregion

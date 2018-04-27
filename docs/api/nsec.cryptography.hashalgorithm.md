@@ -105,11 +105,11 @@ ArgumentException
 : `hash.Length` is not equal to [[HashSize|HashAlgorithm Class#HashSize]].
 
 
-### TryVerify(ReadOnlySpan<byte>, ReadOnlySpan<byte>)
+### Verify(ReadOnlySpan<byte>, ReadOnlySpan<byte>)
 
 Attempts to verify the specified input data using the specified hash.
 
-    public bool TryVerify(
+    public bool Verify(
         ReadOnlySpan<byte> data,
         ReadOnlySpan<byte> hash)
 

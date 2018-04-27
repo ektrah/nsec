@@ -65,7 +65,7 @@ namespace NSec.Experimental
             }
         }
 
-        public static bool FinalizeAndTryVerify(
+        public static bool FinalizeAndVerify(
             ref IncrementalMac state,
             ReadOnlySpan<byte> mac)
         {
@@ -76,7 +76,7 @@ namespace NSec.Experimental
 
             try
             {
-                return mac.Length == state._algorithm.MacSize && state._algorithm.FinalizeAndTryVerifyCore(ref Unsafe.AsRef(in state._state), mac);
+                return mac.Length == state._algorithm.MacSize && state._algorithm.FinalizeAndVerifyCore(ref Unsafe.AsRef(in state._state), mac);
             }
             finally
             {

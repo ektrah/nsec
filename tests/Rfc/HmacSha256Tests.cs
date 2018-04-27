@@ -41,7 +41,7 @@ namespace NSec.Tests.Rfc
                 var actual = a.Mac(k, m);
                 Assert.Equal(expected, actual);
 
-                Assert.True(a.TryVerify(k, m, expected));
+                Assert.True(a.Verify(k, m, expected));
             }
         }
     }

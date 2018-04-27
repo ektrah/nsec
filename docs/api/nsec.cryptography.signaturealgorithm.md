@@ -136,12 +136,12 @@ ObjectDisposedException
 : `key` has been disposed.
 
 
-### TryVerify(PublicKey, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
+### Verify(PublicKey, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
 
 Attempts to verify the signature of the specified input data using the specified
 public key.
 
-    public bool TryVerify(
+    public bool Verify(
         PublicKey publicKey,
         ReadOnlySpan<byte> data,
         ReadOnlySpan<byte> signature)

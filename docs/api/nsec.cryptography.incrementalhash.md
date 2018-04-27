@@ -138,11 +138,11 @@ ArgumentException
 : `hash.Length` is not equal to [[HashSize|HashAlgorithm Class#HashSize]].
 
 
-### FinalizeAndTryVerify(ref IncrementalHash, ReadOnlySpan<byte>)
+### FinalizeAndVerify(ref IncrementalHash, ReadOnlySpan<byte>)
 
 Completes the hash computation and attempts to verify the the specified hash.
 
-    public static bool FinalizeAndTryVerify(
+    public static bool FinalizeAndVerify(
         ref IncrementalHash state,
         ReadOnlySpan<byte> hash)
 

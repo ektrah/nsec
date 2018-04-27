@@ -154,12 +154,12 @@ ObjectDisposedException
 : `key` has been disposed.
 
 
-### TryVerify(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
+### Verify(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
 
 Attempts to verify the specified input data using the specified key and message
 authentication code.
 
-    public bool TryVerify(
+    public bool Verify(
         Key key,
         ReadOnlySpan<byte> data,
         ReadOnlySpan<byte> mac)

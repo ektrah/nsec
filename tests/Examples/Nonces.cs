@@ -90,13 +90,13 @@ namespace NSec.Tests.Examples
             }
         }
 
-        public bool TryDecryptAfterReceive(
+        public bool DecryptAfterReceive(
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> ciphertext,
             Span<byte> plaintext)
         {
             // decrypt the ciphertext with the receive nonce
-            if (!_algorithm.TryDecrypt(
+            if (!_algorithm.Decrypt(
                 _receiveKey,
                 _receiveNonce,
                 associatedData,
@@ -214,14 +214,14 @@ namespace NSec.Tests.Examples
             }
         }
 
-        public bool TryDecryptAfterReceive(
+        public bool DecryptAfterReceive(
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> ciphertext,
             Span<byte> plaintext)
         {
             // decrypt the ciphertext with the receive sequence number
             // XORed with the receive IV as the nonce
-            if (!_algorithm.TryDecrypt(
+            if (!_algorithm.Decrypt(
                 _receiveKey,
                 _receiveSequenceNumber ^ _receiveIV,
                 associatedData,
@@ -273,7 +273,7 @@ namespace NSec.Tests.Examples
                 for (var i = 0; i < 10; i++)
                 {
                     client.EncryptBeforeSend(associatedData, expected, ciphertext);
-                    Assert.True(server.TryDecryptAfterReceive(associatedData, ciphertext, actual));
+                    Assert.True(server.DecryptAfterReceive(associatedData, ciphertext, actual));
                     Assert.Equal(expected, actual);
                 }
             }
@@ -301,7 +301,7 @@ namespace NSec.Tests.Examples
                 for (var i = 0; i < 10; i++)
                 {
                     client.EncryptBeforeSend(associatedData, expected, ciphertext);
-                    Assert.True(server.TryDecryptAfterReceive(associatedData, ciphertext, actual));
+                    Assert.True(server.DecryptAfterReceive(associatedData, ciphertext, actual));
                     Assert.Equal(expected, actual);
                 }
             }

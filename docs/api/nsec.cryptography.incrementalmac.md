@@ -145,12 +145,12 @@ ArgumentException
 : `mac.Length` is not equal to [[MacSize|MacAlgorithm Class#MacSize]].
 
 
-### FinalizeAndTryVerify(ref IncrementalMac, ReadOnlySpan<byte>)
+### FinalizeAndVerify(ref IncrementalMac, ReadOnlySpan<byte>)
 
 Completes the MAC computation and attempts to verify the the specified message
 authentication code.
 
-    public static bool FinalizeAndTryVerify(
+    public static bool FinalizeAndVerify(
         ref IncrementalMac state,
         ReadOnlySpan<byte> mac)
 

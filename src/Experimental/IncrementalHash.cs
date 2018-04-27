@@ -65,7 +65,7 @@ namespace NSec.Experimental
             }
         }
 
-        public static bool FinalizeAndTryVerify(
+        public static bool FinalizeAndVerify(
             ref IncrementalHash state,
             ReadOnlySpan<byte> hash)
         {
@@ -76,7 +76,7 @@ namespace NSec.Experimental
 
             try
             {
-                return hash.Length == state._algorithm.HashSize && state._algorithm.FinalizeAndTryVerifyCore(ref Unsafe.AsRef(in state._state), hash);
+                return hash.Length == state._algorithm.HashSize && state._algorithm.FinalizeAndVerifyCore(ref Unsafe.AsRef(in state._state), hash);
             }
             finally
             {
