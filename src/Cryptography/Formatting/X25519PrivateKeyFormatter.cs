@@ -27,8 +27,12 @@ namespace NSec.Cryptography.Formatting
             owner = memoryPool.Rent(crypto_scalarmult_curve25519_SCALARBYTES);
             memory = owner.Memory.Slice(0, crypto_scalarmult_curve25519_SCALARBYTES);
             span.CopyTo(owner.Memory.Span);
-            crypto_scalarmult_curve25519_base(out publicKeyBytes, in owner.Memory.Span.GetPinnableReference());
 
+            int error = crypto_scalarmult_curve25519_base(
+                out publicKeyBytes,
+                in owner.Memory.Span.GetPinnableReference());
+
+            Debug.Assert(error == 0);
             Debug.Assert((Unsafe.Add(ref Unsafe.As<PublicKeyBytes, byte>(ref publicKeyBytes), crypto_scalarmult_curve25519_SCALARBYTES - 1) & 0x80) == 0);
         }
 

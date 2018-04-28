@@ -26,7 +26,13 @@ namespace NSec.Cryptography.Formatting
 
             owner = memoryPool.Rent(crypto_sign_ed25519_SECRETKEYBYTES);
             memory = owner.Memory.Slice(0, crypto_sign_ed25519_SECRETKEYBYTES);
-            crypto_sign_ed25519_seed_keypair(out publicKeyBytes, out owner.Memory.Span.GetPinnableReference(), in span.GetPinnableReference());
+
+            int error = crypto_sign_ed25519_seed_keypair(
+                out publicKeyBytes,
+                out owner.Memory.Span.GetPinnableReference(),
+                in span.GetPinnableReference());
+
+            Debug.Assert(error == 0);
         }
 
         protected override void Serialize(
@@ -36,7 +42,11 @@ namespace NSec.Cryptography.Formatting
             Debug.Assert(privateKeyBytes.Length == crypto_sign_ed25519_SECRETKEYBYTES);
             Debug.Assert(span.Length == crypto_sign_ed25519_SEEDBYTES);
 
-            crypto_sign_ed25519_sk_to_seed(ref span.GetPinnableReference(), in privateKeyBytes.GetPinnableReference());
+            int error = crypto_sign_ed25519_sk_to_seed(
+                ref span.GetPinnableReference(),
+                in privateKeyBytes.GetPinnableReference());
+
+            Debug.Assert(error == 0);
         }
     }
 }

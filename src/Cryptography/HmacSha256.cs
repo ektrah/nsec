@@ -87,7 +87,11 @@ namespace NSec.Cryptography
 
             Span<byte> temp = stackalloc byte[crypto_auth_hmacsha256_BYTES];
 
-            crypto_auth_hmacsha256_final(ref state.hmacsha256, ref temp.GetPinnableReference());
+            int error = crypto_auth_hmacsha256_final(
+                ref state.hmacsha256,
+                ref temp.GetPinnableReference());
+
+            Debug.Assert(error == 0);
 
             return CryptographicOperations.FixedTimeEquals(temp, mac);
         }
@@ -98,7 +102,11 @@ namespace NSec.Cryptography
         {
             Debug.Assert(mac.Length == crypto_auth_hmacsha256_BYTES);
 
-            crypto_auth_hmacsha256_final(ref state.hmacsha256, ref mac.GetPinnableReference());
+            int error = crypto_auth_hmacsha256_final(
+                ref state.hmacsha256,
+                ref mac.GetPinnableReference());
+
+            Debug.Assert(error == 0);
         }
 
         internal override int GetSeedSize()
@@ -114,7 +122,12 @@ namespace NSec.Cryptography
             Debug.Assert(key.Length == crypto_hash_sha256_BYTES);
             Debug.Assert(macSize == crypto_auth_hmacsha256_BYTES);
 
-            crypto_auth_hmacsha256_init(out state.hmacsha256, in key.GetPinnableReference(), (UIntPtr)key.Length);
+            int error = crypto_auth_hmacsha256_init(
+                out state.hmacsha256,
+                in key.GetPinnableReference(),
+                (UIntPtr)key.Length);
+
+            Debug.Assert(error == 0);
         }
 
         internal override bool TryExportKey(
@@ -159,7 +172,12 @@ namespace NSec.Cryptography
             ref IncrementalMacState state,
             ReadOnlySpan<byte> data)
         {
-            crypto_auth_hmacsha256_update(ref state.hmacsha256, in data.GetPinnableReference(), (ulong)data.Length);
+            int error = crypto_auth_hmacsha256_update(
+                ref state.hmacsha256,
+                in data.GetPinnableReference(),
+                (ulong)data.Length);
+
+            Debug.Assert(error == 0);
         }
 
         private protected override void MacCore(

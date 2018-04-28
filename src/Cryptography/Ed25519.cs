@@ -93,7 +93,13 @@ namespace NSec.Cryptography
             publicKey = new PublicKey(this);
             owner = memoryPool.Rent(crypto_sign_ed25519_SECRETKEYBYTES);
             memory = owner.Memory.Slice(0, crypto_sign_ed25519_SECRETKEYBYTES);
-            crypto_sign_ed25519_seed_keypair(out publicKey.GetPinnableReference(), out owner.Memory.Span.GetPinnableReference(), in seed.GetPinnableReference());
+
+            int error = crypto_sign_ed25519_seed_keypair(
+                out publicKey.GetPinnableReference(),
+                out owner.Memory.Span.GetPinnableReference(),
+                in seed.GetPinnableReference());
+
+            Debug.Assert(error == 0);
         }
 
         internal override int GetSeedSize()
@@ -109,13 +115,14 @@ namespace NSec.Cryptography
             Debug.Assert(key.Length == crypto_sign_ed25519_SECRETKEYBYTES);
             Debug.Assert(signature.Length == crypto_sign_ed25519_BYTES);
 
-            crypto_sign_ed25519_detached(
+            int error = crypto_sign_ed25519_detached(
                 ref signature.GetPinnableReference(),
                 out ulong signatureLength,
                 in data.GetPinnableReference(),
                 (ulong)data.Length,
                 in key.GetPinnableReference());
 
+            Debug.Assert(error == 0);
             Debug.Assert((ulong)signature.Length == signatureLength);
         }
 

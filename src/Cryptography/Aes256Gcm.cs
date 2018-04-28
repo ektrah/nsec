@@ -107,7 +107,7 @@ namespace NSec.Cryptography
             Debug.Assert(nonce.Size == crypto_aead_aes256gcm_NPUBBYTES);
             Debug.Assert(ciphertext.Length == plaintext.Length + crypto_aead_aes256gcm_ABYTES);
 
-            crypto_aead_aes256gcm_encrypt(
+            int error = crypto_aead_aes256gcm_encrypt(
                 ref ciphertext.GetPinnableReference(),
                 out ulong ciphertextLength,
                 in plaintext.GetPinnableReference(),
@@ -118,6 +118,7 @@ namespace NSec.Cryptography
                 in nonce,
                 in key.GetPinnableReference());
 
+            Debug.Assert(error == 0);
             Debug.Assert((ulong)ciphertext.Length == ciphertextLength);
         }
 

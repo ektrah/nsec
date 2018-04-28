@@ -52,12 +52,14 @@ namespace NSec.Experimental.Sodium
             Debug.Assert(nonce.Size == crypto_secretbox_xsalsa20poly1305_NONCEBYTES);
             Debug.Assert(ciphertext.Length == crypto_secretbox_xsalsa20poly1305_MACBYTES + plaintext.Length);
 
-            crypto_secretbox_easy(
+            int error = crypto_secretbox_easy(
                 ref ciphertext.GetPinnableReference(),
                 in plaintext.GetPinnableReference(),
                 (ulong)plaintext.Length,
                 in nonce,
                 in key.GetPinnableReference());
+
+            Debug.Assert(error == 0);
         }
 
         internal override int GetSeedSize()

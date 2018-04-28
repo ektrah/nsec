@@ -93,7 +93,12 @@ namespace NSec.Cryptography
 
             state_ = state.blake2b;
 
-            crypto_generichash_blake2b_final(ref state_, ref temp.GetPinnableReference(), (UIntPtr)temp.Length);
+            int error = crypto_generichash_blake2b_final(
+                ref state_,
+                ref temp.GetPinnableReference(),
+                (UIntPtr)temp.Length);
+
+            Debug.Assert(error == 0);
 
             return CryptographicOperations.FixedTimeEquals(temp, mac);
         }
@@ -110,7 +115,12 @@ namespace NSec.Cryptography
 
             state_ = state.blake2b;
 
-            crypto_generichash_blake2b_final(ref state_, ref mac.GetPinnableReference(), (UIntPtr)mac.Length);
+            int error = crypto_generichash_blake2b_final(
+                ref state_,
+                ref mac.GetPinnableReference(),
+                (UIntPtr)mac.Length);
+
+            Debug.Assert(error == 0);
 
             state.blake2b = state_;
         }
@@ -133,11 +143,13 @@ namespace NSec.Cryptography
             Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
             ref crypto_generichash_blake2b_state state_ = ref AlignPinnedReference(ref buffer.GetPinnableReference());
 
-            crypto_generichash_blake2b_init(
-                out state_,
-                in key.GetPinnableReference(),
-                (UIntPtr)key.Length,
-                (UIntPtr)macSize);
+            int error = crypto_generichash_blake2b_init(
+                 out state_,
+                 in key.GetPinnableReference(),
+                 (UIntPtr)key.Length,
+                 (UIntPtr)macSize);
+
+            Debug.Assert(error == 0);
 
             state.blake2b = state_;
         }
@@ -189,7 +201,12 @@ namespace NSec.Cryptography
 
             state_ = state.blake2b;
 
-            crypto_generichash_blake2b_update(ref state_, in data.GetPinnableReference(), (ulong)data.Length);
+            int error = crypto_generichash_blake2b_update(
+                ref state_,
+                in data.GetPinnableReference(),
+                (ulong)data.Length);
+
+            Debug.Assert(error == 0);
 
             state.blake2b = state_;
         }
@@ -204,13 +221,15 @@ namespace NSec.Cryptography
             Debug.Assert(mac.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(mac.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
-            crypto_generichash_blake2b(
+            int error = crypto_generichash_blake2b(
                 ref mac.GetPinnableReference(),
                 (UIntPtr)mac.Length,
                 in data.GetPinnableReference(),
                 (ulong)data.Length,
                 in key.GetPinnableReference(),
                 (UIntPtr)key.Length);
+
+            Debug.Assert(error == 0);
         }
 
         private protected override bool VerifyCore(
@@ -225,13 +244,15 @@ namespace NSec.Cryptography
 
             Span<byte> temp = stackalloc byte[mac.Length];
 
-            crypto_generichash_blake2b(
+            int error = crypto_generichash_blake2b(
                 ref temp.GetPinnableReference(),
                 (UIntPtr)temp.Length,
                 in data.GetPinnableReference(),
                 (ulong)data.Length,
                 in key.GetPinnableReference(),
                 (UIntPtr)key.Length);
+
+            Debug.Assert(error == 0);
 
             return CryptographicOperations.FixedTimeEquals(temp, mac);
         }
