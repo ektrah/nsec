@@ -10,17 +10,22 @@ namespace NSec.Cryptography
     //
     //  Candidates
     //
-    //      | Algorithm      | Reference | Salt Size | Info Size | Output Size   |
-    //      | -------------- | --------- | --------- | --------- | ------------- |
-    //      | ANSI X9.63 KDF | [1]       | 0         | any       | 0..L*(2^32-1) |
-    //      | ConcatKDF Hash | [2]       | 0         | any       | 0..L*(2^32-1) |
-    //      | ConcatKDF HMAC | [2]       | any       | any       | 0..L*(2^32-1) |
-    //      | HKDF           | RFC 5869  | any       | any       | 0..L*255      |
+    //      | Algorithm       | Reference | Salt Size | Info Size | Output Size   |
+    //      | --------------- | --------- | --------- | --------- | ------------- |
+    //      | HKDF            | RFC 5869  | any       | any       | 0..L*(2^8-1)  |
+    //      | ANSI X9.63 KDF  | [1]       | 0         | any       | 0..L*(2^32-1) |
+    //      | ConcatKDF  Hash | [2][3]    | 0         | any       | 0..L*(2^32-1) |
+    //      | ConcatKDF  HMAC | [2][3]    | any       | any       | 0..L*(2^32-1) |
+    //      | SP 800-56C Hash | [4]       | 0         | any       | 0..L*(2^32-1) |
+    //      | SP 800-56C HMAC | [4]       | any       | any       | 0..L*(2^32-1) |
+    //      | SP 800-56C KMAC | [4]       | 2^2037–1  | any       | 0..L*(2^32-1) |
     //
-    //      L is the hash length of the hash function used.
+    //      where L is the length (in bytes) of the output of the auxiliary function
     //
     //      [1] SEC 1: Elliptic Curve Cryptography, Section 3.6.1
-    //      [2] NIST Special Publication 800-56A, Revision 2, Section 5.8
+    //      [2] NIST Special Publication 800-56A, Revision 3, Section 5.8
+    //      [3] NIST Special Publication 800-56B, Revision 1, Section 5.5
+    //      [4] NIST Special Publication 800-56C, Revision 1
     //
     public abstract class KeyDerivationAlgorithm : Algorithm
     {
