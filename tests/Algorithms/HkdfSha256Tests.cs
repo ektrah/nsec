@@ -500,7 +500,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = KeyDerivationAlgorithm.HkdfSha256;
 
-            Assert.Throws<ArgumentException>("pseudorandomKey", () => a.Expand(new byte[a.PseudorandomKeySize - 1], ReadOnlySpan<byte>.Empty, new byte[0]));
+            Assert.Throws<ArgumentException>("pseudorandomKey", () => a.Expand(new byte[a.PseudorandomKeySize - 1], ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Fact]

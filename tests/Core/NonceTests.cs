@@ -38,7 +38,7 @@ namespace NSec.Tests.Core
             Assert.Equal(0, actual.Size);
             Assert.Equal(0, actual.FixedFieldSize);
             Assert.Equal(0, actual.CounterFieldSize);
-            Assert.Equal(new byte[0], actual.ToArray());
+            Assert.Equal(Array.Empty<byte>(), actual.ToArray());
             Assert.Equal("[][]", actual.GetDebuggerDisplay());
             actual.CopyTo(Span<byte>.Empty);
         }

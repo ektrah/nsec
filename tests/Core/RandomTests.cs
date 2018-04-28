@@ -47,7 +47,7 @@ namespace NSec.Tests.Core
         [Fact]
         public static void GenerateBytesWithEmptySpan()
         {
-            RandomGenerator.Default.GenerateBytes(new byte[0]);
+            RandomGenerator.Default.GenerateBytes(Span<byte>.Empty);
         }
 
         [Theory]

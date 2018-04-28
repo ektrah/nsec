@@ -113,7 +113,7 @@ namespace NSec.Tests.Formatting
         [Fact]
         public static void SequenceStackUnderflow()
         {
-            var writer = new Asn1Writer(new byte[0]);
+            var writer = new Asn1Writer(Span<byte>.Empty);
             try { writer.BeginSequence(); Assert.True(false); } catch (IndexOutOfRangeException) { } // cannot use Assert.Throws
         }
 
