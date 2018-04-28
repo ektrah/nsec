@@ -68,6 +68,7 @@ a C# 7.2 (or later) compiler. See [[Installation]] for more details.
 * [[PublicKey Class]]
 * [[RandomGenerator Class]]
 * [[SharedSecret Class]]
+    * [[SharedSecretCreationParameters Struct]]
 
 
 ## Contributing
