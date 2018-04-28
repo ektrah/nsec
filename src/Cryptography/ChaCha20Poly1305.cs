@@ -19,9 +19,6 @@ namespace NSec.Cryptography
     //
     //      RFC 5116 - An Interface and Algorithms for Authenticated Encryption
     //
-    //      RFC 8103 - Using ChaCha20-Poly1305 Authenticated Encryption in the
-    //          Cryptographic Message Syntax (CMS)
-    //
     //  Parameters:
     //
     //      Key Size - 32 bytes.

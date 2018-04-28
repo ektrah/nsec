@@ -23,9 +23,6 @@ namespace NSec.Cryptography
     //
     //      RFC 5116 - An Interface and Algorithms for Authenticated Encryption
     //
-    //      RFC 5084 - Using AES-CCM and AES-GCM Authenticated Encryption in the
-    //          Cryptographic Message Syntax (CMS)
-    //
     //  Parameters:
     //
     //      Key Size - 32 bytes.

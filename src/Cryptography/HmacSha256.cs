@@ -20,9 +20,6 @@ namespace NSec.Cryptography
     //      RFC 6234 - US Secure Hash Algorithms (SHA and SHA-based HMAC and
     //          HKDF)
     //
-    //      RFC 4231 - Identifiers and Test Vectors for HMAC-SHA-224,
-    //          HMAC-SHA-256, HMAC-SHA-384, and HMAC-SHA-512
-    //
     //  Parameters:
     //
     //      Key Size - The key for HMAC-SHA-256 can be of any length. A length
