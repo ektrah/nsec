@@ -6,12 +6,12 @@ namespace NSec.Tests.Algorithms
 {
     public static class HkdfSha512Tests
     {
-        private static readonly string s_prkForEmpty =
+        private const string s_prkForEmpty =
             "b936cee86c9f87aa5d3c6f2e84cb5a4239a5fe50480a6ec66b70ab5b1f4ac673" +
             "0c6c515421b327ec1d69402e53dfb49ad7381eb067b338fd7b0cb22247225d47";
 
         // unverified
-        private static readonly string s_outputForEmpty =
+        private const string s_outputForEmpty =
             "9d73c98e791e80ebe5b4cb45693aa32fdd44b5fa3edab3ec82f9d0f4d66905e2" +
             "215ad0d4ac20fe570da59a5d189fdde60e55f283703cd19bc95ebb16fc1c868e" +
             "8a3872492cc6c20921d2971de32674df0806cd9bb9bb1c293d055c998b7f7c9a" +

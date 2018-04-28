@@ -6,11 +6,11 @@ namespace NSec.Tests.Algorithms
 {
     public static class HkdfSha256Tests
     {
-        private static readonly string s_prkForEmpty =
+        private const string s_prkForEmpty =
             "b613679a0814d9ec772f95d778c35fc5ff1697c493715653c6c712144292c5ad";
 
         // unverified
-        private static readonly string s_outputForEmpty =
+        private const string s_outputForEmpty =
             "eb70f01dede9afafa449eee1b1286504e1f62388b3f7dd4f956697b0e828fe18" +
             "1e59c2ec0fe6e7e7ac2613b6ab65342a83379969da234240cded3777914db907" +
             "5568c74fdb8fc92331d5c59e1e2dd77a8c2c63aba7cf2d3457f8ee8620462f8a" +

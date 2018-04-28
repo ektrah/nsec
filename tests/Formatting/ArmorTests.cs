@@ -7,8 +7,9 @@ namespace NSec.Tests.Formatting
 {
     public static class ArmorTests
     {
-        private static readonly string s_beginLabel = "-----BEGIN-----";
-        private static readonly string s_endLabel = "-----END-----";
+        private const string s_beginLabel = "-----BEGIN-----";
+        private const string s_endLabel = "-----END-----";
+
         private static readonly byte[] s_utf8BeginLabel = Encoding.UTF8.GetBytes(s_beginLabel);
         private static readonly byte[] s_utf8EndLabel = Encoding.UTF8.GetBytes(s_endLabel);
 
