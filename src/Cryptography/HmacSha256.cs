@@ -53,11 +53,11 @@ namespace NSec.Cryptography
         {
             if (keySize < MinKeySize || keySize > MaxKeySize)
             {
-                throw Error.ArgumentOutOfRange_KeySize(nameof(keySize), keySize.ToString(), MinKeySize.ToString(), MaxKeySize.ToString());
+                throw Error.ArgumentOutOfRange_KeySize(nameof(keySize), keySize, MinKeySize, MaxKeySize);
             }
             if (macSize < MinMacSize || macSize > MaxMacSize)
             {
-                throw Error.ArgumentOutOfRange_MacSize(nameof(macSize), macSize.ToString(), MaxMacSize.ToString(), MaxMacSize.ToString());
+                throw Error.ArgumentOutOfRange_MacSize(nameof(macSize), macSize, MaxMacSize, MaxMacSize);
             }
             if (s_selfTest == 0)
             {

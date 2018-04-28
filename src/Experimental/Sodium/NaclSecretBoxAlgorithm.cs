@@ -40,9 +40,9 @@ namespace NSec.Experimental.Sodium
             if (key.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (nonce.Size != _nonceSize)
-                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
+                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
             if (plaintext.Length > int.MaxValue - _macSize)
-                throw Error.Argument_PlaintextTooLong(nameof(plaintext), (int.MaxValue - _macSize).ToString());
+                throw Error.Argument_PlaintextTooLong(nameof(plaintext), int.MaxValue - _macSize);
 
             byte[] ciphertext = new byte[_macSize + plaintext.Length];
             EncryptCore(key.Span, nonce, plaintext, ciphertext);
@@ -60,9 +60,9 @@ namespace NSec.Experimental.Sodium
             if (key.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (nonce.Size != _nonceSize)
-                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
+                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
             if (plaintext.Length > int.MaxValue - _macSize)
-                throw Error.Argument_PlaintextTooLong(nameof(plaintext), (int.MaxValue - _macSize).ToString());
+                throw Error.Argument_PlaintextTooLong(nameof(plaintext), int.MaxValue - _macSize);
             if (ciphertext.Length != _macSize + plaintext.Length)
                 throw Error.Argument_CiphertextLength(nameof(ciphertext));
             if (ciphertext.Overlaps(plaintext))
@@ -82,7 +82,7 @@ namespace NSec.Experimental.Sodium
             if (key.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (nonce.Size != _nonceSize)
-                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
+                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
 
             if (ciphertext.Length < _macSize)
             {
@@ -107,7 +107,7 @@ namespace NSec.Experimental.Sodium
             if (key.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (nonce.Size != _nonceSize)
-                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
+                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
             if (ciphertext.Length < _macSize)
                 return false;
             if (plaintext.Length != ciphertext.Length - _macSize)

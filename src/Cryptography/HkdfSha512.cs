@@ -58,11 +58,11 @@ namespace NSec.Cryptography
             int count)
         {
             if (pseudorandomKey.Length < crypto_auth_hmacsha512_BYTES)
-                throw Error.Argument_InvalidPrkLength(nameof(pseudorandomKey), crypto_auth_hmacsha512_BYTES.ToString());
+                throw Error.Argument_InvalidPrkLength(nameof(pseudorandomKey), crypto_auth_hmacsha512_BYTES);
             if (count < 0)
                 throw Error.ArgumentOutOfRange_DeriveNegativeCount(nameof(count));
             if (count > MaxCount)
-                throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), MaxCount.ToString());
+                throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), MaxCount);
 
             byte[] bytes = new byte[count];
             ExpandCore(pseudorandomKey, info, bytes);
@@ -75,9 +75,9 @@ namespace NSec.Cryptography
             Span<byte> bytes)
         {
             if (pseudorandomKey.Length < crypto_auth_hmacsha512_BYTES)
-                throw Error.Argument_InvalidPrkLength(nameof(pseudorandomKey), crypto_auth_hmacsha512_BYTES.ToString());
+                throw Error.Argument_InvalidPrkLength(nameof(pseudorandomKey), crypto_auth_hmacsha512_BYTES);
             if (bytes.Length > MaxCount)
-                throw Error.Argument_DeriveInvalidCount(nameof(bytes), MaxCount.ToString());
+                throw Error.Argument_DeriveInvalidCount(nameof(bytes), MaxCount);
             if (bytes.Overlaps(pseudorandomKey))
                 throw Error.Argument_OverlapPrk(nameof(bytes));
             if (bytes.Overlaps(info))
@@ -106,7 +106,7 @@ namespace NSec.Cryptography
             if (sharedSecret == null)
                 throw Error.ArgumentNull_SharedSecret(nameof(sharedSecret));
             if (pseudorandomKey.Length != crypto_auth_hmacsha512_BYTES)
-                throw Error.Argument_InvalidPrkLengthExact(nameof(pseudorandomKey), crypto_auth_hmacsha512_BYTES.ToString());
+                throw Error.Argument_InvalidPrkLengthExact(nameof(pseudorandomKey), crypto_auth_hmacsha512_BYTES);
 
             ExtractCore(sharedSecret.Span, salt, pseudorandomKey);
         }

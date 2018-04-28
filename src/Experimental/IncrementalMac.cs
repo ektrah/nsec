@@ -52,7 +52,7 @@ namespace NSec.Experimental
             }
             if (mac.Length != state._algorithm.MacSize)
             {
-                throw Error.Argument_MacLength(nameof(mac), state._algorithm.MacSize.ToString());
+                throw Error.Argument_MacLength(nameof(mac), state._algorithm.MacSize);
             }
 
             try

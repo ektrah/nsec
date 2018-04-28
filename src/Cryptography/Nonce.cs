@@ -39,11 +39,11 @@ namespace NSec.Cryptography
         {
             if (fixedFieldSize < 0 || fixedFieldSize > maxSize)
             {
-                throw Error.ArgumentOutOfRange_NonceFixedCounterSize(nameof(fixedFieldSize), maxSize.ToString());
+                throw Error.ArgumentOutOfRange_NonceFixedCounterSize(nameof(fixedFieldSize), maxSize);
             }
             if (counterFieldSize < 0 || counterFieldSize > maxSize - fixedFieldSize)
             {
-                throw Error.ArgumentOutOfRange_NonceCounterSize(nameof(counterFieldSize), maxSize.ToString());
+                throw Error.ArgumentOutOfRange_NonceCounterSize(nameof(counterFieldSize), maxSize);
             }
 
             _fixedFieldSize = (byte)fixedFieldSize;
@@ -57,11 +57,11 @@ namespace NSec.Cryptography
         {
             if (fixedField.Length > maxSize)
             {
-                throw Error.Argument_NonceFixedSize(nameof(fixedField), maxSize.ToString());
+                throw Error.Argument_NonceFixedSize(nameof(fixedField), maxSize);
             }
             if (counterFieldSize < 0 || counterFieldSize > maxSize - fixedField.Length)
             {
-                throw Error.ArgumentOutOfRange_NonceFixedCounterSize(nameof(counterFieldSize), maxSize.ToString());
+                throw Error.ArgumentOutOfRange_NonceFixedCounterSize(nameof(counterFieldSize), maxSize);
             }
 
             _fixedFieldSize = (byte)fixedField.Length;
@@ -77,11 +77,11 @@ namespace NSec.Cryptography
         {
             if (fixedField.Length > maxSize)
             {
-                throw Error.Argument_NonceFixedSize(nameof(fixedField), maxSize.ToString());
+                throw Error.Argument_NonceFixedSize(nameof(fixedField), maxSize);
             }
             if (counterField.Length > maxSize - fixedField.Length)
             {
-                throw Error.Argument_NonceFixedCounterSize(nameof(counterField), maxSize.ToString());
+                throw Error.Argument_NonceFixedCounterSize(nameof(counterField), maxSize);
             }
 
             _fixedFieldSize = (byte)fixedField.Length;

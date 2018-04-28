@@ -43,7 +43,7 @@ namespace NSec.Cryptography
         {
             if (hashSize < MinHashSize || hashSize > MaxHashSize)
             {
-                throw Error.ArgumentOutOfRange_HashSize(nameof(hashSize), hashSize.ToString(), MinHashSize.ToString(), MaxHashSize.ToString());
+                throw Error.ArgumentOutOfRange_HashSize(nameof(hashSize), hashSize, MinHashSize, MaxHashSize);
             }
             if (s_selfTest == 0)
             {

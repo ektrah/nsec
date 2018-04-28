@@ -88,9 +88,9 @@ namespace NSec.Cryptography
             if (key.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (nonce.Size != _nonceSize)
-                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
+                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
             if (plaintext.Length > int.MaxValue - _tagSize)
-                throw Error.Argument_PlaintextTooLong(nameof(plaintext), (int.MaxValue - _tagSize).ToString());
+                throw Error.Argument_PlaintextTooLong(nameof(plaintext), int.MaxValue - _tagSize);
 
             byte[] ciphertext = new byte[plaintext.Length + _tagSize];
             EncryptCore(key.Span, in nonce, associatedData, plaintext, ciphertext);
@@ -109,7 +109,7 @@ namespace NSec.Cryptography
             if (key.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (nonce.Size != _nonceSize)
-                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize.ToString());
+                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
             if (ciphertext.Length - _tagSize != plaintext.Length)
                 throw Error.Argument_CiphertextLength(nameof(ciphertext));
             if (ciphertext.Overlaps(plaintext, out int offset) && offset != 0)

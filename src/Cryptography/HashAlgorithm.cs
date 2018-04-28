@@ -110,7 +110,7 @@ namespace NSec.Cryptography
         {
             if (hash.Length != _hashSize)
             {
-                throw Error.Argument_HashLength(nameof(hash), _hashSize.ToString());
+                throw Error.Argument_HashLength(nameof(hash), _hashSize);
             }
 
             HashCore(data, hash);

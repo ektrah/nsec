@@ -52,7 +52,7 @@ namespace NSec.Experimental
             }
             if (hash.Length != state._algorithm.HashSize)
             {
-                throw Error.Argument_HashLength(nameof(hash), state._algorithm.HashSize.ToString());
+                throw Error.Argument_HashLength(nameof(hash), state._algorithm.HashSize);
             }
 
             try

@@ -42,7 +42,7 @@ namespace NSec.Cryptography
         {
             if (sharedSecret.Length > 128)
             {
-                throw Error.Argument_SharedSecretLength(nameof(sharedSecret), 128.ToString());
+                throw Error.Argument_SharedSecretLength(nameof(sharedSecret), 128);
             }
 
             Sodium.Initialize();

@@ -90,7 +90,7 @@ namespace NSec.Cryptography
             if (count < 0)
                 throw Error.ArgumentOutOfRange_DeriveNegativeCount(nameof(count));
             if (count > MaxCount)
-                throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), MaxCount.ToString());
+                throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), MaxCount);
 
             byte[] bytes = new byte[count];
             DeriveBytesCore(sharedSecret.Span, salt, info, bytes);
@@ -108,7 +108,7 @@ namespace NSec.Cryptography
             if (!_supportsSalt && !salt.IsEmpty)
                 throw Error.Argument_SaltNotSupported(nameof(salt));
             if (bytes.Length > MaxCount)
-                throw Error.Argument_DeriveInvalidCount(nameof(bytes), MaxCount.ToString());
+                throw Error.Argument_DeriveInvalidCount(nameof(bytes), MaxCount);
             if (bytes.Overlaps(salt))
                 throw Error.Argument_OverlapSalt(nameof(bytes));
             if (bytes.Overlaps(info))

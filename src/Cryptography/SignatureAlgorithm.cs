@@ -83,7 +83,7 @@ namespace NSec.Cryptography
             if (key.Algorithm != this)
                 throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
             if (signature.Length != _signatureSize)
-                throw Error.Argument_SignatureLength(nameof(signature), _signatureSize.ToString());
+                throw Error.Argument_SignatureLength(nameof(signature), _signatureSize);
 
             SignCore(key.Span, data, signature);
         }
