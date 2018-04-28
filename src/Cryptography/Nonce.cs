@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -323,12 +324,12 @@ namespace NSec.Cryptography
             StringBuilder sb = new StringBuilder(size * 2 + 4).Append('[');
             for (int i = 0; i < init; i++)
             {
-                sb.Append(Unsafe.Add(ref bytes, i).ToString("X2"));
+                sb.Append(Unsafe.Add(ref bytes, i).ToString("X2", CultureInfo.InvariantCulture));
             }
             sb.Append(']').Append('[');
             for (int i = init; i < size; i++)
             {
-                sb.Append(Unsafe.Add(ref bytes, i).ToString("X2"));
+                sb.Append(Unsafe.Add(ref bytes, i).ToString("X2", CultureInfo.InvariantCulture));
             }
             return sb.Append(']').ToString();
         }
