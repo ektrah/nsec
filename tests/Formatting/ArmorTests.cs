@@ -95,7 +95,7 @@ namespace NSec.Tests.Formatting
                                 i == '+' || i == '/' ||
                                 pos == 3 && i == '=');
 
-                var base64 = "AAA".Insert(pos, ((char)i).ToString());
+                var base64 = "AAA".Insert(pos, new string((char)i, 1));
                 var utf8 = Encoding.UTF8.GetBytes(s_beginLabel + base64 + s_endLabel);
                 var actual = Armor.TryDecodeFromUtf8(utf8, s_utf8BeginLabel, s_utf8EndLabel, new byte[20], out var written);
                 Assert.Equal(expected, actual);
