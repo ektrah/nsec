@@ -102,7 +102,7 @@ nonce
 
 : To prevent nonce reuse when encrypting multiple plaintexts with the same key,
     it is recommended to increment the previous nonce; a randomly generated
-    nonce is not suitable. See the [[Nonce Struct]] and [[How to: Generate
+    nonce is not suitable. See [[Nonce Struct]] and [[How to: Generate
     Nonces]] for more information on generating nonces.
 
 associatedData
@@ -166,7 +166,7 @@ nonce
 
 : To prevent nonce reuse when encrypting multiple plaintexts with the same key,
     it is recommended to increment the previous nonce; a randomly generated
-    nonce is not suitable. See the [[Nonce Struct]] and [[How to: Generate
+    nonce is not suitable. See [[Nonce Struct]] and [[How to: Generate
     Nonces]] for more information on generating nonces.
 
 associatedData
