@@ -10,7 +10,7 @@ workflows:
       - debian8.10:
           requires:
             - macos-xcode9.2
-      - debian9.3:
+      - debian9.4:
           requires:
             - macos-xcode9.2
       - fedora26:
@@ -177,9 +177,9 @@ jobs:
       - *dotnet-test-debug-1-1
       - *dotnet-test-release-1-1
 
-  debian9.3:
+  debian9.4:
     docker:
-      - image: debian:9.3
+      - image: debian:9.4
     environment: *environment
     steps:
       - run:
