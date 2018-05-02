@@ -19,6 +19,9 @@ workflows:
       - fedora27:
           requires:
             - macos-xcode9.2
+      - fedora28:
+          requires:
+            - macos-xcode9.2
       - opensuse42.3:
           requires:
             - macos-xcode9.2
@@ -28,6 +31,9 @@ workflows:
       - ubuntu16.04:
           requires:
       - ubuntu17.10:
+          requires:
+            - macos-xcode9.2
+      - ubuntu18.04:
           requires:
             - macos-xcode9.2
       - macos-xcode9.2:
@@ -236,6 +242,27 @@ jobs:
       - *dotnet-test-debug-2-0
       - *dotnet-test-release-2-0
 
+  fedora28:
+    docker:
+      - image: fedora:28
+    environment: *environment
+    steps:
+      - run:
+          name: Install Prerequisites
+          no_output_timeout: 2m
+          command: dnf install -q -y curl ca-certificates findutils ncurses libunwind libicu compat-openssl10
+      - *dotnet-install-2-0
+      - *dotnet-install-2-1
+      - checkout
+      - *generate-restore-graph
+      - *restore-cache
+      - *dotnet-restore
+      - *save-cache
+      - *dotnet-test-debug-2-1
+      - *dotnet-test-release-2-1
+      - *dotnet-test-debug-2-0
+      - *dotnet-test-release-2-0
+
   opensuse42.3:
     docker:
       - image: opensuse:42.3
@@ -320,6 +347,29 @@ jobs:
           command: |
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu57
+      - *dotnet-install-2-0
+      - *dotnet-install-2-1
+      - checkout
+      - *generate-restore-graph
+      - *restore-cache
+      - *dotnet-restore
+      - *save-cache
+      - *dotnet-test-debug-2-1
+      - *dotnet-test-release-2-1
+      - *dotnet-test-debug-2-0
+      - *dotnet-test-release-2-0
+
+  ubuntu18.04:
+    docker:
+      - image: ubuntu:18.04
+    environment: *environment
+    steps:
+      - run:
+          name: Install Prerequisites
+          no_output_timeout: 2m
+          command: |
+            apt-get -qq update
+            apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu60 libssl1.0.0
       - *dotnet-install-2-0
       - *dotnet-install-2-1
       - checkout
