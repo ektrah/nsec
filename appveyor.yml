@@ -6,7 +6,7 @@ environment:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
 install:
   - dotnet --info
-  - dotnet restore --disable-parallel -s "https://api.nuget.org/v3/index.json" -s "https://dotnet.myget.org/F/dotnet-core/api/v3/index.json"
+  - dotnet restore --disable-parallel
 build: off
 skip_tags: true
 test_script:
