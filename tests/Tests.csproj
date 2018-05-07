@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.0;netcoreapp1.1</TargetFrameworks>
-    <TargetFrameworks Condition="'$(CIRCLECI)' == 'true'">netcoreapp2.1;netcoreapp2.0;netcoreapp1.1</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;netcoreapp2.0;netcoreapp1.1</TargetFrameworks>
+    <TargetFrameworks Condition="'$(APPVEYOR)' == 'true'">netcoreapp2.0;netcoreapp1.1</TargetFrameworks>
     <AssemblyName>NSec.Tests.97bf2648-69d2-4a17-888f-2a13e5c5cb28</AssemblyName>
     <RootNamespace>NSec.Tests</RootNamespace>
     <IsPackable>false</IsPackable>
