@@ -17,15 +17,15 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version Condition="'$(Version)' == ''">$([System.DateTime]::UtcNow.ToString(y.M.0))-preview3</Version>
+    <BuildNumberMajor>$([MSBuild]::Add($([MSBuild]::Multiply(100, $([MSBuild]::Add($([MSBuild]::Multiply(12, $([MSBuild]::Subtract($([System.DateTime]::UtcNow.Year), 1996)))), $([MSBuild]::Subtract($([System.DateTime]::UtcNow.Month), 4)))))), $([System.DateTime]::UtcNow.Day)).ToString('00000'))</BuildNumberMajor>
+    <BuildNumberMinor>$([MSBuild]::Divide($([MSBuild]::Add($([MSBuild]::Multiply(60, $([System.DateTime]::UtcNow.Hour))), $([System.DateTime]::UtcNow.Minute))), 15).ToString('00'))</BuildNumberMinor>
+    <IsPackable Condition="'$(GitBranch)' != '' and '$(GitBranch)' != 'master'">false</IsPackable>
+    <IsPackable Condition="'$(GitPullRequest)' != ''">false</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup>
-    <BuildNumberMajor>$([MSBuild]::Add($([MSBuild]::Multiply(100, $([MSBuild]::Add($([MSBuild]::Multiply(12, $([MSBuild]::Subtract($([System.DateTime]::UtcNow.Year), 1996)))), $([MSBuild]::Subtract($([System.DateTime]::UtcNow.Month), 4)))))), $([System.DateTime]::UtcNow.Day)).ToString('00000'))</BuildNumberMajor>
-    <BuildNumberMinor>$([MSBuild]::Divide($([MSBuild]::Add($([MSBuild]::Multiply(60, $([System.DateTime]::UtcNow.Hour))), $([System.DateTime]::UtcNow.Minute))), 15).ToString('00'))</BuildNumberMinor>
-    <Version Condition="$(Version.Contains('-preview'))">$(Version)-$(BuildNumberMajor)-$(BuildNumberMinor)</Version>
-    <IsPackable Condition="'$(GitBranch)' != '' and '$(GitBranch)' != 'master'">false</IsPackable>
-    <IsPackable Condition="'$(GitPullRequest)' != ''">false</IsPackable>
+    <Version Condition="'$(Version)' == ''">18.5.0-preview3</Version>
+    <Version Condition="'$(Version)' == ''">$([System.DateTime]::UtcNow.ToString(y.M.0))-preview3-$(BuildNumberMajor)-$(BuildNumberMinor)</Version>
   </PropertyGroup>
 
   <PropertyGroup>
