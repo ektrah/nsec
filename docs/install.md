@@ -1,27 +1,26 @@
 # Installation
 
 NSec is available as [a NuGet package from
-nuget.org](https://www.nuget.org/packages/NSec.Cryptography/18.4.0-preview2). It
+nuget.org](https://www.nuget.org/packages/NSec.Cryptography/18.5.0-preview3). It
 can be added to a project in a number of ways, depending on the project type and
 tools used:
 
 
 #### dotnet CLI
 
-    $ dotnet add package NSec.Cryptography --version 18.4.0-preview2
+    $ dotnet add package NSec.Cryptography --version 18.5.0-preview3
 
 
 #### Visual Studio
 
-    PM> Install-Package NSec.Cryptography -Version 18.4.0-preview2
+    PM> Install-Package NSec.Cryptography -Version 18.5.0-preview3
 
 #### .csproj
 
-    <PackageReference Include="NSec.Cryptography" Version="18.4.0-preview2"/>
+    <PackageReference Include="NSec.Cryptography" Version="18.5.0-preview3"/>
 
 !!! Note
     This is a pre-release version of NSec.
-    Expect some (minor) breaking changes until the release.
 
 
 ## Supported Languages
@@ -41,7 +40,7 @@ NSec runs on the following platforms and .NET Core versions:
 
 | OS            | Version  | Architectures | .NET Core Runtimes    |
 |:------------- |:-------- |:------------- |:--------------------- |
-| Windows 10    | 1709     | x64 / x86     | 2.1  /  2.0  /  1.1   |
+| Windows 10    | 1803     | x64 / x86     | 2.1  /  2.0  /  1.1   |
 |               |          |               |                       |
 | macOS         | 10.12    | x64           | 2.1  /  2.0  /  1.1   |
 |               |          |               |                       |
