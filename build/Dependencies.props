@@ -6,8 +6,8 @@
 
   <PropertyGroup>
     <LibsodiumVersion>[1.0.16]</LibsodiumVersion>
-    <SystemMemoryVersion>4.5.0-rc1</SystemMemoryVersion>
-    <SystemRuntimeCompilerServicesUnsafeVersion>4.5.0-rc1</SystemRuntimeCompilerServicesUnsafeVersion>
+    <SystemMemoryVersion>4.5.0</SystemMemoryVersion>
+    <SystemRuntimeCompilerServicesUnsafeVersion>4.5.0</SystemRuntimeCompilerServicesUnsafeVersion>
   </PropertyGroup>
 
 </Project>
