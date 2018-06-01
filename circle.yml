@@ -62,7 +62,7 @@ shared:
       name: Install .NET Core 2.1 SDK
       command: |
         if [ ! -f ~/dotnet-install.sh ]; then curl -fsLo ~/dotnet-install.sh 'https://dot.net/v1/dotnet-install.sh'; fi
-        bash ~/dotnet-install.sh --channel 2.1 --version latest --install-dir ~/.dotnet --no-path
+        bash ~/dotnet-install.sh --channel release/2.1.3xx --version latest --install-dir ~/.dotnet --no-path
         ~/.dotnet/dotnet --info
         echo 'export PATH=~/.dotnet:$PATH' >> $BASH_ENV
   generate-restore-graph: &generate-restore-graph
