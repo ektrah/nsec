@@ -25,6 +25,13 @@ Gets the AES256-GCM AEAD algorithm.
 
     public static Aes256Gcm Aes256Gcm { get; }
 
+#### Remarks
+
+The implementation of AES-GCM in NSec is hardware-accelerated and requires an
+x64 processor with the AES-NI extension. The availability of this extension can
+be checked at runtime with the static `IsSupported` property of the
+`NSec.Cryptography.Aes256Gcm` class.
+
 
 ### ChaCha20Poly1305
 

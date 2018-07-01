@@ -60,10 +60,10 @@ Redistributable](https://www.microsoft.com/en-us/download/details.aspx?id=53587)
 This dependency is automatically installed by the .NET Core installer but may
 not be present, for example, when deploying a self-contained application.
 
-The implementation of AES-GCM in NSec is hardware-accelerated and requires a
-processor with the Intel SSSE3, AES-NI, and CLMUL extensions. The availability
-of these extensions can be checked at runtime using the static `IsSupported`
-property of the `NSec.Cryptography.Aes256Gcm` class.
+The implementation of AES-GCM in NSec is hardware-accelerated and requires an
+x64 processor with the AES-NI extension. The availability of this extension can
+be checked at runtime with the static `IsSupported` property of the
+`NSec.Cryptography.Aes256Gcm` class.
 
 
 ### .NET Framework
