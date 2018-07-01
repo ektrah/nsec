@@ -15,7 +15,7 @@ namespace NSec.Cryptography
     //
     //  References:
     //
-    //      RFC 7539 - ChaCha20 and Poly1305 for IETF Protocols
+    //      RFC 8439 - ChaCha20 and Poly1305 for IETF Protocols
     //
     //      RFC 5116 - An Interface and Algorithms for Authenticated Encryption
     //

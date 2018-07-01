@@ -11,7 +11,7 @@ namespace NSec.Cryptography
     //
     //      | Algorithm          | Reference | Key Size | Nonce Size | Tag Size | Max. Plaintext Size |
     //      | ------------------ | --------- | -------- | ---------- | -------- | ------------------- |
-    //      | ChaCha20-Poly1305  | RFC 7539  | 32       | 12         | 16       | 2^38-64             |
+    //      | ChaCha20-Poly1305  | RFC 8439  | 32       | 12         | 16       | 2^38-64             |
     //      | AES-128-CCM        | RFC 5116  | 16       | 12         | 16       | 2^24-1              |
     //      | AES-256-CCM        | RFC 5116  | 32       | 12         | 16       | 2^24-1              |
     //      | AES-128-GCM        | RFC 5116  | 16       | 12         | 16       | 2^36-31             |
