@@ -8,7 +8,7 @@ using static Interop.Libsodium;
 namespace NSec.Cryptography.Buffers
 {
     internal sealed class SecureMemoryManager<T> : MemoryManager<T>
-        where T : /*unmanaged*/ struct
+        where T : unmanaged
     {
         private readonly int _length;
 

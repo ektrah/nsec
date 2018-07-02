@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 namespace NSec.Cryptography.Buffers
 {
     internal sealed class SecureMemoryPool<T> : MemoryPool<T>
-        where T : /*unmanaged*/ struct
+        where T : unmanaged
     {
         public static new readonly SecureMemoryPool<T> Shared = new SecureMemoryPool<T>();
 
