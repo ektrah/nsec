@@ -6,16 +6,14 @@ namespace NSec.Tests.Base
 {
     public static class SignatureAlgorithmTests
     {
-        public static readonly TheoryData<Type> SignatureAlgorithms = Registry.SignatureAlgorithms;
+        public static readonly TheoryData<SignatureAlgorithm> SignatureAlgorithms = Registry.SignatureAlgorithms;
 
         #region Properties
 
         [Theory]
         [MemberData(nameof(SignatureAlgorithms))]
-        public static void Properties(Type algorithmType)
+        public static void Properties(SignatureAlgorithm a)
         {
-            var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
-
             Assert.True(a.PublicKeySize > 0);
             Assert.True(a.PrivateKeySize > 0);
             Assert.True(a.SignatureSize > 0);
@@ -27,19 +25,15 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(SignatureAlgorithms))]
-        public static void SignWithNullKey(Type algorithmType)
+        public static void SignWithNullKey(SignatureAlgorithm a)
         {
-            var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
-
             Assert.Throws<ArgumentNullException>("key", () => a.Sign(null, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(SignatureAlgorithms))]
-        public static void SignWithDisposedKey(Type algorithmType)
+        public static void SignWithDisposedKey(SignatureAlgorithm a)
         {
-            var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
-
             var k = new Key(a);
             k.Dispose();
             Assert.Throws<ObjectDisposedException>(() => a.Sign(k, ReadOnlySpan<byte>.Empty));
@@ -47,10 +41,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(SignatureAlgorithms))]
-        public static void SignWithWrongKey(Type algorithmType)
+        public static void SignWithWrongKey(SignatureAlgorithm a)
         {
-            var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(KeyAgreementAlgorithm.X25519))
             {
                 Assert.Throws<ArgumentException>("key", () => a.Sign(k, ReadOnlySpan<byte>.Empty));
@@ -59,10 +51,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(SignatureAlgorithms))]
-        public static void SignSuccess(Type algorithmType)
+        public static void SignSuccess(SignatureAlgorithm a)
         {
-            var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a))
             {
                 var b = a.Sign(k, ReadOnlySpan<byte>.Empty);
@@ -78,19 +68,15 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(SignatureAlgorithms))]
-        public static void SignWithSpanWithNullKey(Type algorithmType)
+        public static void SignWithSpanWithNullKey(SignatureAlgorithm a)
         {
-            var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
-
             Assert.Throws<ArgumentNullException>("key", () => a.Sign(null, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(SignatureAlgorithms))]
-        public static void SignWithSpanWithDisposedKey(Type algorithmType)
+        public static void SignWithSpanWithDisposedKey(SignatureAlgorithm a)
         {
-            var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
-
             var k = new Key(a);
             k.Dispose();
             Assert.Throws<ObjectDisposedException>(() => a.Sign(k, ReadOnlySpan<byte>.Empty, new byte[a.SignatureSize]));
@@ -98,10 +84,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(SignatureAlgorithms))]
-        public static void SignWithSpanWithWrongKey(Type algorithmType)
+        public static void SignWithSpanWithWrongKey(SignatureAlgorithm a)
         {
-            var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(KeyAgreementAlgorithm.X25519))
             {
                 Assert.Throws<ArgumentException>("key", () => a.Sign(k, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
@@ -110,10 +94,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(SignatureAlgorithms))]
-        public static void SignWithSpanWrongSize(Type algorithmType)
+        public static void SignWithSpanWrongSize(SignatureAlgorithm a)
         {
-            var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a))
             {
                 Assert.Throws<ArgumentException>("signature", () => a.Sign(k, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
@@ -122,10 +104,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(SignatureAlgorithms))]
-        public static void SignWithSpanSuccess(Type algorithmType)
+        public static void SignWithSpanSuccess(SignatureAlgorithm a)
         {
-            var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a))
             {
                 a.Sign(k, ReadOnlySpan<byte>.Empty, new byte[a.SignatureSize]);
@@ -138,19 +118,15 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(SignatureAlgorithms))]
-        public static void VerifyWithNullKey(Type algorithmType)
+        public static void VerifyWithNullKey(SignatureAlgorithm a)
         {
-            var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
-
             Assert.Throws<ArgumentNullException>("publicKey", () => a.Verify(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(SignatureAlgorithms))]
-        public static void VerifyWithWrongKey(Type algorithmType)
+        public static void VerifyWithWrongKey(SignatureAlgorithm a)
         {
-            var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(KeyAgreementAlgorithm.X25519))
             {
                 Assert.Throws<ArgumentException>("publicKey", () => a.Verify(k.PublicKey, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
@@ -159,10 +135,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(SignatureAlgorithms))]
-        public static void VerifyWithWrongSize(Type algorithmType)
+        public static void VerifyWithWrongSize(SignatureAlgorithm a)
         {
-            var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a))
             {
                 Assert.False(a.Verify(k.PublicKey, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
@@ -171,10 +145,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(SignatureAlgorithms))]
-        public static void VerifySuccess(Type algorithmType)
+        public static void VerifySuccess(SignatureAlgorithm a)
         {
-            var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a))
             {
                 var s = a.Sign(k, ReadOnlySpan<byte>.Empty);
@@ -192,10 +164,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(SignatureAlgorithms))]
-        public static void CreateKey(Type algorithmType)
+        public static void CreateKey(SignatureAlgorithm a)
         {
-            var a = (SignatureAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
             {
                 Assert.Same(a, k.Algorithm);

@@ -6,35 +6,14 @@ namespace NSec.Tests.Base
 {
     public static class MacAlgorithmTests
     {
-        public static readonly TheoryData<Type> MacAlgorithms = Registry.MacAlgorithms;
-
-        public static readonly TheoryData<Type, int, int> MacAlgorithmsAndSizes = new TheoryData<Type, int, int>
-        {
-            { typeof(Blake2bMac), 16, 16 },
-            { typeof(Blake2bMac), 16, 32 },
-            { typeof(Blake2bMac), 16, 64 },
-
-            { typeof(Blake2bMac), 32, 16 },
-            { typeof(Blake2bMac), 32, 32 },
-            { typeof(Blake2bMac), 32, 64 },
-
-            { typeof(Blake2bMac), 64, 16 },
-            { typeof(Blake2bMac), 64, 32 },
-            { typeof(Blake2bMac), 64, 64 },
-
-            { typeof(HmacSha256), 32, 32 },
-
-            { typeof(HmacSha512), 64, 64 },
-        };
+        public static readonly TheoryData<MacAlgorithm> MacAlgorithms = Registry.MacAlgorithms;
 
         #region Properties
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void Properties(Type algorithmType)
+        public static void Properties(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
             Assert.True(a.KeySize > 0);
             Assert.True(a.MacSize > 0);
         }
@@ -44,11 +23,10 @@ namespace NSec.Tests.Base
         #region Export #1
 
         [Theory]
-        [MemberData(nameof(MacAlgorithmsAndSizes))]
-        public static void ExportImportRaw(Type algorithmType, int keySize, int macSize)
+        [MemberData(nameof(MacAlgorithms))]
+        public static void ExportImportRaw(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType, keySize, macSize);
-            var b = Utilities.RandomBytes.Slice(0, keySize);
+            var b = Utilities.RandomBytes.Slice(0, a.KeySize);
 
             using (var k = Key.Import(a, b, KeyBlobFormat.RawSymmetricKey, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
             {
@@ -62,11 +40,10 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(MacAlgorithmsAndSizes))]
-        public static void ExportImportNSec(Type algorithmType, int keySize, int macSize)
+        [MemberData(nameof(MacAlgorithms))]
+        public static void ExportImportNSec(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType, keySize, macSize);
-            var b = Utilities.RandomBytes.Slice(0, keySize);
+            var b = Utilities.RandomBytes.Slice(0, a.KeySize);
 
             using (var k1 = Key.Import(a, b, KeyBlobFormat.RawSymmetricKey, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
             {
@@ -91,19 +68,15 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void MacWithNullKey(Type algorithmType)
+        public static void MacWithNullKey(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
             Assert.Throws<ArgumentNullException>("key", () => a.Mac(null, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void MacWithDisposedKey(Type algorithmType)
+        public static void MacWithDisposedKey(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
             var k = new Key(a);
             k.Dispose();
             Assert.Throws<ObjectDisposedException>(() => a.Mac(k, ReadOnlySpan<byte>.Empty));
@@ -111,10 +84,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void MacWithWrongKey(Type algorithmType)
+        public static void MacWithWrongKey(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(SignatureAlgorithm.Ed25519))
             {
                 Assert.Throws<ArgumentException>("key", () => a.Mac(k, ReadOnlySpan<byte>.Empty));
@@ -122,11 +93,9 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(MacAlgorithmsAndSizes))]
-        public static void MacSuccess(Type algorithmType, int keySize, int macSize)
+        [MemberData(nameof(MacAlgorithms))]
+        public static void MacSuccess(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType, keySize, macSize);
-
             using (var k = new Key(a))
             {
                 var data = Utilities.RandomBytes.Slice(0, 100);
@@ -146,19 +115,15 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void MacWithSpanWithNullKey(Type algorithmType)
+        public static void MacWithSpanWithNullKey(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
             Assert.Throws<ArgumentNullException>("key", () => a.Mac(null, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void MacWithSpanWithDisposedKey(Type algorithmType)
+        public static void MacWithSpanWithDisposedKey(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
             var k = new Key(a);
             k.Dispose();
             Assert.Throws<ObjectDisposedException>(() => a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize]));
@@ -166,10 +131,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void MacWithSpanWithWrongKey(Type algorithmType)
+        public static void MacWithSpanWithWrongKey(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(SignatureAlgorithm.Ed25519))
             {
                 Assert.Throws<ArgumentException>("key", () => a.Mac(k, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
@@ -178,10 +141,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void MacWithSpanTooSmall(Type algorithmType)
+        public static void MacWithSpanTooSmall(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a))
             {
                 Assert.Throws<ArgumentException>("mac", () => a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize - 1]));
@@ -190,10 +151,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void MacWithSpanTooLarge(Type algorithmType)
+        public static void MacWithSpanTooLarge(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a))
             {
                 Assert.Throws<ArgumentException>("mac", () => a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize + 1]));
@@ -201,11 +160,9 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(MacAlgorithmsAndSizes))]
-        public static void MacWithSpanSuccess(Type algorithmType, int keySize, int macSize)
+        [MemberData(nameof(MacAlgorithms))]
+        public static void MacWithSpanSuccess(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType, keySize, macSize);
-
             using (var k = new Key(a))
             {
                 var data = Utilities.RandomBytes.Slice(0, 100);
@@ -221,10 +178,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void MacWithSpanOverlapping(Type algorithmType)
+        public static void MacWithSpanOverlapping(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a))
             {
                 var data = Utilities.RandomBytes.Slice(0, 100).ToArray();
@@ -245,19 +200,15 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void VerifyWithNullKey(Type algorithmType)
+        public static void VerifyWithNullKey(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
             Assert.Throws<ArgumentNullException>("key", () => a.Verify(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void VerifyWithDisposedKey(Type algorithmType)
+        public static void VerifyWithDisposedKey(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
             var k = new Key(a);
             k.Dispose();
             Assert.Throws<ObjectDisposedException>(() => a.Verify(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize]));
@@ -265,10 +216,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void VerifyWithWrongKey(Type algorithmType)
+        public static void VerifyWithWrongKey(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(SignatureAlgorithm.Ed25519))
             {
                 Assert.Throws<ArgumentException>("key", () => a.Verify(k, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
@@ -277,10 +226,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void VerifyWithSpanTooSmall(Type algorithmType)
+        public static void VerifyWithSpanTooSmall(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a))
             {
                 Assert.False(a.Verify(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize - 1]));
@@ -289,10 +236,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void VerifyWithSpanTooLarge(Type algorithmType)
+        public static void VerifyWithSpanTooLarge(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a))
             {
                 Assert.False(a.Verify(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize + 1]));
@@ -300,11 +245,9 @@ namespace NSec.Tests.Base
         }
 
         [Theory]
-        [MemberData(nameof(MacAlgorithmsAndSizes))]
-        public static void VerifyWithSpanSuccess(Type algorithmType, int keySize, int macSize)
+        [MemberData(nameof(MacAlgorithms))]
+        public static void VerifyWithSpanSuccess(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType, keySize, macSize);
-
             using (var k = new Key(a))
             {
                 var d = ReadOnlySpan<byte>.Empty;
@@ -320,14 +263,9 @@ namespace NSec.Tests.Base
         #region CreateKey
 
         [Theory]
-        [MemberData(nameof(MacAlgorithmsAndSizes))]
-        public static void CreateKey(Type algorithmType, int keySize, int macSize)
+        [MemberData(nameof(MacAlgorithms))]
+        public static void CreateKey(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType, keySize, macSize);
-
-            Assert.Equal(keySize, a.KeySize);
-            Assert.Equal(macSize, a.MacSize);
-
             using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
             {
                 Assert.Same(a, k.Algorithm);

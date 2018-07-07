@@ -6,16 +6,14 @@ namespace NSec.Tests.Base
 {
     public static class KeyDerivationAlgorithmTests
     {
-        public static readonly TheoryData<Type> KeyDerivationAlgorithms = Registry.KeyDerivationAlgorithms;
+        public static readonly TheoryData<KeyDerivationAlgorithm> KeyDerivationAlgorithms = Registry.KeyDerivationAlgorithms;
 
         #region Properties
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void Properties(Type algorithmType)
+        public static void Properties(KeyDerivationAlgorithm a)
         {
-            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
-
             Assert.True(a.SupportsSalt || !a.SupportsSalt);
             Assert.True(a.MaxCount > 0);
         }
@@ -26,19 +24,15 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveBytesWithNullSecret(Type algorithmType)
+        public static void DeriveBytesWithNullSecret(KeyDerivationAlgorithm a)
         {
-            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
-
             Assert.Throws<ArgumentNullException>("sharedSecret", () => a.DeriveBytes(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, 0));
         }
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveBytesWithDisposedSecret(Type algorithmType)
+        public static void DeriveBytesWithDisposedSecret(KeyDerivationAlgorithm a)
         {
-            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
-
             var s = SharedSecret.Import(Utilities.RandomBytes.Slice(0, 32));
             s.Dispose();
             Assert.Throws<ObjectDisposedException>(() => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, 0));
@@ -46,10 +40,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveBytesWithUnusedSalt(Type algorithmType)
+        public static void DeriveBytesWithUnusedSalt(KeyDerivationAlgorithm a)
         {
-            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
-
             if (!a.SupportsSalt)
             {
                 var x = KeyAgreementAlgorithm.X25519;
@@ -64,9 +56,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveBytesWithNegativeCount(Type algorithmType)
+        public static void DeriveBytesWithNegativeCount(KeyDerivationAlgorithm a)
         {
-            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
             var x = KeyAgreementAlgorithm.X25519;
 
             using (var k = new Key(x))
@@ -78,9 +69,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveBytesWithCountTooLarge(Type algorithmType)
+        public static void DeriveBytesWithCountTooLarge(KeyDerivationAlgorithm a)
         {
-            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
             var x = KeyAgreementAlgorithm.X25519;
 
             if (a.MaxCount == int.MaxValue)
@@ -97,9 +87,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveBytesWithZeroCount(Type algorithmType)
+        public static void DeriveBytesWithZeroCount(KeyDerivationAlgorithm a)
         {
-            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
             var x = KeyAgreementAlgorithm.X25519;
 
             using (var k = new Key(x))
@@ -114,9 +103,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveBytesWithMaxCount(Type algorithmType)
+        public static void DeriveBytesWithMaxCount(KeyDerivationAlgorithm a)
         {
-            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
             var x = KeyAgreementAlgorithm.X25519;
 
             using (var k = new Key(x))
@@ -137,19 +125,15 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveBytesWithNullSecretAndSpan(Type algorithmType)
+        public static void DeriveBytesWithNullSecretAndSpan(KeyDerivationAlgorithm a)
         {
-            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
-
             Assert.Throws<ArgumentNullException>("sharedSecret", () => a.DeriveBytes(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveBytesWithDisposedSecretAndSpan(Type algorithmType)
+        public static void DeriveBytesWithDisposedSecretAndSpan(KeyDerivationAlgorithm a)
         {
-            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
-
             var s = SharedSecret.Import(Utilities.RandomBytes.Slice(0, 32));
             s.Dispose();
             Assert.Throws<ObjectDisposedException>(() => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
@@ -157,10 +141,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveBytesWithSpanWithUnusedSalt(Type algorithmType)
+        public static void DeriveBytesWithSpanWithUnusedSalt(KeyDerivationAlgorithm a)
         {
-            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
-
             if (a.SupportsSalt)
             {
                 return;
@@ -177,9 +159,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveBytesWithSaltOverlapping(Type algorithmType)
+        public static void DeriveBytesWithSaltOverlapping(KeyDerivationAlgorithm a)
         {
-            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
             var x = KeyAgreementAlgorithm.X25519;
 
             if (!a.SupportsSalt)
@@ -199,9 +180,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveBytesWithInfoOverlapping(Type algorithmType)
+        public static void DeriveBytesWithInfoOverlapping(KeyDerivationAlgorithm a)
         {
-            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
             var x = KeyAgreementAlgorithm.X25519;
 
             using (var k = new Key(x))
@@ -216,9 +196,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveBytesWithSpanTooLarge(Type algorithmType)
+        public static void DeriveBytesWithSpanTooLarge(KeyDerivationAlgorithm a)
         {
-            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
             var x = KeyAgreementAlgorithm.X25519;
 
             if (a.MaxCount == int.MaxValue)
@@ -235,9 +214,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveBytesWithEmptySpan(Type algorithmType)
+        public static void DeriveBytesWithEmptySpan(KeyDerivationAlgorithm a)
         {
-            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
             var x = KeyAgreementAlgorithm.X25519;
 
             using (var k = new Key(x))
@@ -249,9 +227,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveBytesWithMaxSpan(Type algorithmType)
+        public static void DeriveBytesWithMaxSpan(KeyDerivationAlgorithm a)
         {
-            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
             var x = KeyAgreementAlgorithm.X25519;
 
             using (var k = new Key(x))
@@ -269,19 +246,15 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveKeyWithNullSecret(Type algorithmType)
+        public static void DeriveKeyWithNullSecret(KeyDerivationAlgorithm a)
         {
-            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
-
             Assert.Throws<ArgumentNullException>("sharedSecret", () => a.DeriveKey(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, null));
         }
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveKeyWithDisposedSecret(Type algorithmType)
+        public static void DeriveKeyWithDisposedSecret(KeyDerivationAlgorithm a)
         {
-            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
-
             var s = SharedSecret.Import(Utilities.RandomBytes.Slice(0, 32));
             s.Dispose();
             Assert.Throws<ObjectDisposedException>(() => a.DeriveKey(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, AeadAlgorithm.ChaCha20Poly1305));
@@ -289,10 +262,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveKeyWithUnusedSalt(Type algorithmType)
+        public static void DeriveKeyWithUnusedSalt(KeyDerivationAlgorithm a)
         {
-            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
-
             if (!a.SupportsSalt)
             {
                 var x = KeyAgreementAlgorithm.X25519;
@@ -307,9 +278,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveKeyWithNullAlgorithm(Type algorithmType)
+        public static void DeriveKeyWithNullAlgorithm(KeyDerivationAlgorithm a)
         {
-            var a = (KeyDerivationAlgorithm)Activator.CreateInstance(algorithmType);
             var x = KeyAgreementAlgorithm.X25519;
 
             using (var k = new Key(x))

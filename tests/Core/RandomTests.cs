@@ -6,9 +6,9 @@ namespace NSec.Tests.Core
 {
     public static class RandomTests
     {
-        public static readonly TheoryData<Type> AsymmetricKeyAlgorithms = Registry.AsymmetricAlgorithms;
-        public static readonly TheoryData<Type> SymmetricKeyAlgorithms = Registry.SymmetricAlgorithms;
-        public static readonly TheoryData<Type> KeylessAlgorithms = Registry.KeylessAlgorithms;
+        public static readonly TheoryData<Algorithm> AsymmetricKeyAlgorithms = Registry.AsymmetricAlgorithms;
+        public static readonly TheoryData<Algorithm> SymmetricKeyAlgorithms = Registry.SymmetricAlgorithms;
+        public static readonly TheoryData<Algorithm> KeylessAlgorithms = Registry.KeylessAlgorithms;
 
         #region GenerateBytes #1
 
@@ -213,10 +213,8 @@ namespace NSec.Tests.Core
         [Theory]
         [MemberData(nameof(SymmetricKeyAlgorithms))]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
-        public static void GenerateKeyWithAlgorithm(Type algorithmType)
+        public static void GenerateKeyWithAlgorithm(Algorithm a)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             using (var key = RandomGenerator.Default.GenerateKey(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }))
             {
                 Assert.NotNull(key);
@@ -227,10 +225,8 @@ namespace NSec.Tests.Core
 
         [Theory]
         [MemberData(nameof(KeylessAlgorithms))]
-        public static void GenerateKeyWithAlgorithmThatDoesNotUseKeys(Type algorithmType)
+        public static void GenerateKeyWithAlgorithmThatDoesNotUseKeys(Algorithm a)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             Assert.Throws<NotSupportedException>(() => RandomGenerator.Default.GenerateKey(a));
         }
 

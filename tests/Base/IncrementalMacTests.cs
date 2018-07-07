@@ -7,7 +7,7 @@ namespace NSec.Tests.Base
 {
     public static class IncrementalMacTests
     {
-        public static readonly TheoryData<Type> MacAlgorithms = Registry.MacAlgorithms;
+        public static readonly TheoryData<MacAlgorithm> MacAlgorithms = Registry.MacAlgorithms;
 
         #region Initialize
 
@@ -30,10 +30,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void InitializeWithDisposedKey(Type algorithmType)
+        public static void InitializeWithDisposedKey(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
             var k = new Key(a);
             k.Dispose();
             Assert.Throws<ObjectDisposedException>(() => IncrementalMac.Initialize(k, out _));
@@ -65,10 +63,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void FinalizeSuccess(Type algorithmType)
+        public static void FinalizeSuccess(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a))
             {
                 var state = default(IncrementalMac);
@@ -107,10 +103,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void FinalizeWithSpanTooSmall(Type algorithmType)
+        public static void FinalizeWithSpanTooSmall(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a))
             {
                 IncrementalMac.Initialize(k, out var state);
@@ -121,10 +115,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void FinalizeWithSpanTooLarge(Type algorithmType)
+        public static void FinalizeWithSpanTooLarge(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a))
             {
                 IncrementalMac.Initialize(k, out var state);
@@ -135,10 +127,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void FinalizeWithSpanSuccess(Type algorithmType)
+        public static void FinalizeWithSpanSuccess(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a))
             {
                 var state = default(IncrementalMac);
@@ -179,10 +169,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void FinalizeAndVerifyFail(Type algorithmType)
+        public static void FinalizeAndVerifyFail(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a))
             {
                 IncrementalMac.Initialize(k, out var state);
@@ -193,10 +181,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void FinalizeAndVerifySuccess(Type algorithmType)
+        public static void FinalizeAndVerifySuccess(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a))
             {
                 IncrementalMac.Initialize(k, out var state);
@@ -207,10 +193,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
-        public static void FinalizeWithSpanSuccessNoUpdate(Type algorithmType)
+        public static void FinalizeWithSpanSuccessNoUpdate(MacAlgorithm a)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a))
             {
                 var state = default(IncrementalMac);

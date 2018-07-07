@@ -7,7 +7,7 @@ namespace NSec.Tests.Base
 {
     public static class IncrementalHashTests
     {
-        public static readonly TheoryData<Type> HashAlgorithms = Registry.HashAlgorithms;
+        public static readonly TheoryData<HashAlgorithm> HashAlgorithms = Registry.HashAlgorithms;
 
         #region Initialize
 
@@ -43,10 +43,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(HashAlgorithms))]
-        public static void FinalizeSuccess(Type algorithmType)
+        public static void FinalizeSuccess(HashAlgorithm a)
         {
-            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
-
             var state = default(IncrementalHash);
 
             Assert.Null(state.Algorithm);
@@ -82,10 +80,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(HashAlgorithms))]
-        public static void FinalizeWithSpanTooSmall(Type algorithmType)
+        public static void FinalizeWithSpanTooSmall(HashAlgorithm a)
         {
-            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
-
             IncrementalHash.Initialize(a, out var state);
 
             Assert.Throws<ArgumentException>("hash", () => IncrementalHash.Finalize(ref state, new byte[a.HashSize - 1]));
@@ -93,10 +89,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(HashAlgorithms))]
-        public static void FinalizeWithSpanTooLarge(Type algorithmType)
+        public static void FinalizeWithSpanTooLarge(HashAlgorithm a)
         {
-            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
-
             IncrementalHash.Initialize(a, out var state);
 
             Assert.Throws<ArgumentException>("hash", () => IncrementalHash.Finalize(ref state, new byte[a.HashSize + 1]));
@@ -104,10 +98,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(HashAlgorithms))]
-        public static void FinalizeWithSpanSuccess(Type algorithmType)
+        public static void FinalizeWithSpanSuccess(HashAlgorithm a)
         {
-            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
-
             var state = default(IncrementalHash);
 
             Assert.Null(state.Algorithm);
@@ -133,10 +125,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(HashAlgorithms))]
-        public static void FinalizeWithSpanSuccessNoUpdate(Type algorithmType)
+        public static void FinalizeWithSpanSuccessNoUpdate(HashAlgorithm a)
         {
-            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
-
             var state = default(IncrementalHash);
 
             Assert.Null(state.Algorithm);
@@ -170,10 +160,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(HashAlgorithms))]
-        public static void FinalizeAndVerifyFail(Type algorithmType)
+        public static void FinalizeAndVerifyFail(HashAlgorithm a)
         {
-            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
-
             IncrementalHash.Initialize(a, out var state);
 
             Assert.False(IncrementalHash.FinalizeAndVerify(ref state, new byte[a.HashSize]));
@@ -181,10 +169,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(HashAlgorithms))]
-        public static void FinalizeAndVerifySuccess(Type algorithmType)
+        public static void FinalizeAndVerifySuccess(HashAlgorithm a)
         {
-            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
-
             IncrementalHash.Initialize(a, out var state);
 
             Assert.True(IncrementalHash.FinalizeAndVerify(ref state, a.Hash(ReadOnlySpan<byte>.Empty)));

@@ -6,22 +6,20 @@ namespace NSec.Tests.Core
 {
     public static class KeyTests
     {
-        public static readonly TheoryData<Type> AsymmetricKeyAlgorithms = Registry.AsymmetricAlgorithms;
-        public static readonly TheoryData<Type> SymmetricKeyAlgorithms = Registry.SymmetricAlgorithms;
-        public static readonly TheoryData<Type> KeylessAlgorithms = Registry.KeylessAlgorithms;
+        public static readonly TheoryData<Algorithm> AsymmetricKeyAlgorithms = Registry.AsymmetricAlgorithms;
+        public static readonly TheoryData<Algorithm> SymmetricKeyAlgorithms = Registry.SymmetricAlgorithms;
+        public static readonly TheoryData<Algorithm> KeylessAlgorithms = Registry.KeylessAlgorithms;
 
-        public static readonly TheoryData<Type, KeyBlobFormat> PublicKeyBlobFormats = Registry.PublicKeyBlobFormats;
-        public static readonly TheoryData<Type, KeyBlobFormat> PrivateKeyBlobFormats = Registry.PrivateKeyBlobFormats;
-        public static readonly TheoryData<Type, KeyBlobFormat> SymmetricKeyBlobFormats = Registry.SymmetricKeyBlobFormats;
+        public static readonly TheoryData<Algorithm, KeyBlobFormat> PublicKeyBlobFormats = Registry.PublicKeyBlobFormats;
+        public static readonly TheoryData<Algorithm, KeyBlobFormat> PrivateKeyBlobFormats = Registry.PrivateKeyBlobFormats;
+        public static readonly TheoryData<Algorithm, KeyBlobFormat> SymmetricKeyBlobFormats = Registry.SymmetricKeyBlobFormats;
 
         #region Properties
 
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
-        public static void PropertiesAsymmetric(Type algorithmType)
+        public static void PropertiesAsymmetric(Algorithm a)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }))
             {
                 Assert.Same(a, k.Algorithm);
@@ -35,10 +33,8 @@ namespace NSec.Tests.Core
 
         [Theory]
         [MemberData(nameof(SymmetricKeyAlgorithms))]
-        public static void PropertiesSymmetric(Type algorithmType)
+        public static void PropertiesSymmetric(Algorithm a)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }))
             {
                 Assert.Same(a, k.Algorithm);
@@ -50,10 +46,8 @@ namespace NSec.Tests.Core
 
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
-        public static void PropertiesAsymmetricAfterDispose(Type algorithmType)
+        public static void PropertiesAsymmetricAfterDispose(Algorithm a)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None });
             k.Dispose();
             Assert.Same(a, k.Algorithm);
@@ -66,10 +60,8 @@ namespace NSec.Tests.Core
 
         [Theory]
         [MemberData(nameof(SymmetricKeyAlgorithms))]
-        public static void PropertiesSymmetricAfterDispose(Type algorithmType)
+        public static void PropertiesSymmetricAfterDispose(Algorithm a)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None });
             k.Dispose();
             Assert.Same(a, k.Algorithm);
@@ -90,10 +82,8 @@ namespace NSec.Tests.Core
 
         [Theory]
         [MemberData(nameof(KeylessAlgorithms))]
-        public static void CtorWithAlgorithmThatDoesNotUseKeys(Type algorithmType)
+        public static void CtorWithAlgorithmThatDoesNotUseKeys(Algorithm a)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             Assert.Throws<NotSupportedException>(() => new Key(a));
         }
 
@@ -109,10 +99,8 @@ namespace NSec.Tests.Core
 
         [Theory]
         [MemberData(nameof(KeylessAlgorithms))]
-        public static void CreateWithAlgorithmThatDoesNotUseKeys(Type algorithmType)
+        public static void CreateWithAlgorithmThatDoesNotUseKeys(Algorithm a)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             Assert.Throws<NotSupportedException>(() => Key.Create(a));
         }
 
@@ -129,38 +117,30 @@ namespace NSec.Tests.Core
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
         [MemberData(nameof(SymmetricKeyAlgorithms))]
-        public static void ImportWithFormatMin(Type algorithmType)
+        public static void ImportWithFormatMin(Algorithm a)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             Assert.Throws<ArgumentException>("format", () => Key.Import(a, ReadOnlySpan<byte>.Empty, (KeyBlobFormat)int.MinValue));
         }
 
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
         [MemberData(nameof(SymmetricKeyAlgorithms))]
-        public static void ImportWithFormatMax(Type algorithmType)
+        public static void ImportWithFormatMax(Algorithm a)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             Assert.Throws<ArgumentException>("format", () => Key.Import(a, ReadOnlySpan<byte>.Empty, (KeyBlobFormat)int.MaxValue));
         }
 
         [Theory]
         [MemberData(nameof(PrivateKeyBlobFormats))]
-        public static void ImportPrivateKeyEmpty(Type algorithmType, KeyBlobFormat format)
+        public static void ImportPrivateKeyEmpty(Algorithm a, KeyBlobFormat format)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             Assert.Throws<FormatException>(() => Key.Import(a, ReadOnlySpan<byte>.Empty, format));
         }
 
         [Theory]
         [MemberData(nameof(SymmetricKeyBlobFormats))]
-        public static void ImportSymmetricKeyEmpty(Type algorithmType, KeyBlobFormat format)
+        public static void ImportSymmetricKeyEmpty(Algorithm a, KeyBlobFormat format)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             Assert.Throws<FormatException>(() => Key.Import(a, ReadOnlySpan<byte>.Empty, format));
         }
 
@@ -177,38 +157,30 @@ namespace NSec.Tests.Core
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
         [MemberData(nameof(SymmetricKeyAlgorithms))]
-        public static void TryImportWithFormatMin(Type algorithmType)
+        public static void TryImportWithFormatMin(Algorithm a)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             Assert.Throws<ArgumentException>("format", () => Key.TryImport(a, ReadOnlySpan<byte>.Empty, (KeyBlobFormat)int.MinValue, out var k, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }));
         }
 
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
         [MemberData(nameof(SymmetricKeyAlgorithms))]
-        public static void TryImportWithFormatMax(Type algorithmType)
+        public static void TryImportWithFormatMax(Algorithm a)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             Assert.Throws<ArgumentException>("format", () => Key.TryImport(a, ReadOnlySpan<byte>.Empty, (KeyBlobFormat)int.MaxValue, out var k, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }));
         }
 
         [Theory]
         [MemberData(nameof(PrivateKeyBlobFormats))]
-        public static void TryImportPrivateKeyEmpty(Type algorithmType, KeyBlobFormat format)
+        public static void TryImportPrivateKeyEmpty(Algorithm a, KeyBlobFormat format)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             Assert.False(Key.TryImport(a, ReadOnlySpan<byte>.Empty, format, out var k, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }));
         }
 
         [Theory]
         [MemberData(nameof(SymmetricKeyBlobFormats))]
-        public static void TryImportSymmetricKeyEmpty(Type algorithmType, KeyBlobFormat format)
+        public static void TryImportSymmetricKeyEmpty(Algorithm a, KeyBlobFormat format)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             Assert.False(Key.TryImport(a, ReadOnlySpan<byte>.Empty, format, out var k, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }));
         }
 
@@ -219,10 +191,8 @@ namespace NSec.Tests.Core
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
         [MemberData(nameof(SymmetricKeyAlgorithms))]
-        public static void ExportWithFormatMin(Type algorithmType)
+        public static void ExportWithFormatMin(Algorithm a)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport }))
             {
                 Assert.Equal(KeyExportPolicies.AllowPlaintextExport, k.ExportPolicy);
@@ -234,10 +204,8 @@ namespace NSec.Tests.Core
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
         [MemberData(nameof(SymmetricKeyAlgorithms))]
-        public static void ExportWithFormatMax(Type algorithmType)
+        public static void ExportWithFormatMax(Algorithm a)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }))
             {
                 Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
@@ -248,10 +216,8 @@ namespace NSec.Tests.Core
 
         [Theory]
         [MemberData(nameof(PublicKeyBlobFormats))]
-        public static void ExportPublicKey(Type algorithmType, KeyBlobFormat format)
+        public static void ExportPublicKey(Algorithm a, KeyBlobFormat format)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }))
             {
                 Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
@@ -264,10 +230,8 @@ namespace NSec.Tests.Core
 
         [Theory]
         [MemberData(nameof(PrivateKeyBlobFormats))]
-        public static void ExportPrivateKeyNotAllowed(Type algorithmType, KeyBlobFormat format)
+        public static void ExportPrivateKeyNotAllowed(Algorithm a, KeyBlobFormat format)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }))
             {
                 Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
@@ -280,10 +244,8 @@ namespace NSec.Tests.Core
 
         [Theory]
         [MemberData(nameof(SymmetricKeyBlobFormats))]
-        public static void ExportSymmetricKeyNotAllowed(Type algorithmType, KeyBlobFormat format)
+        public static void ExportSymmetricKeyNotAllowed(Algorithm a, KeyBlobFormat format)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }))
             {
                 Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
@@ -296,10 +258,8 @@ namespace NSec.Tests.Core
 
         [Theory]
         [MemberData(nameof(PrivateKeyBlobFormats))]
-        public static void ExportPrivateKeyExportAllowed(Type algorithmType, KeyBlobFormat format)
+        public static void ExportPrivateKeyExportAllowed(Algorithm a, KeyBlobFormat format)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport }))
             {
                 Assert.Equal(KeyExportPolicies.AllowPlaintextExport, k.ExportPolicy);
@@ -312,10 +272,8 @@ namespace NSec.Tests.Core
 
         [Theory]
         [MemberData(nameof(SymmetricKeyBlobFormats))]
-        public static void ExportSymmetricKeyExportAllowed(Type algorithmType, KeyBlobFormat format)
+        public static void ExportSymmetricKeyExportAllowed(Algorithm a, KeyBlobFormat format)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport }))
             {
                 Assert.Equal(KeyExportPolicies.AllowPlaintextExport, k.ExportPolicy);
@@ -328,10 +286,8 @@ namespace NSec.Tests.Core
 
         [Theory]
         [MemberData(nameof(PrivateKeyBlobFormats))]
-        public static void ExportPrivateKeyArchivingAllowed(Type algorithmType, KeyBlobFormat format)
+        public static void ExportPrivateKeyArchivingAllowed(Algorithm a, KeyBlobFormat format)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
             {
                 Assert.Equal(KeyExportPolicies.AllowPlaintextArchiving, k.ExportPolicy);
@@ -344,10 +300,8 @@ namespace NSec.Tests.Core
 
         [Theory]
         [MemberData(nameof(SymmetricKeyBlobFormats))]
-        public static void ExportSymmetricKeyArchivingAllowed(Type algorithmType, KeyBlobFormat format)
+        public static void ExportSymmetricKeyArchivingAllowed(Algorithm a, KeyBlobFormat format)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
             {
                 Assert.Equal(KeyExportPolicies.AllowPlaintextArchiving, k.ExportPolicy);
@@ -360,10 +314,8 @@ namespace NSec.Tests.Core
 
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
-        public static void ExportPublicKeyAfterDispose(Type algorithmType)
+        public static void ExportPublicKeyAfterDispose(Algorithm a)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None });
             k.Dispose();
 
@@ -374,10 +326,8 @@ namespace NSec.Tests.Core
 
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
-        public static void ExportPrivateKeyExportAllowedAfterDispose(Type algorithmType)
+        public static void ExportPrivateKeyExportAllowedAfterDispose(Algorithm a)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport });
             k.Dispose();
 
@@ -388,10 +338,8 @@ namespace NSec.Tests.Core
 
         [Theory]
         [MemberData(nameof(SymmetricKeyAlgorithms))]
-        public static void ExportSymmetricKeyExportAllowedAfterDispose(Type algorithmType)
+        public static void ExportSymmetricKeyExportAllowedAfterDispose(Algorithm a)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport });
             k.Dispose();
 
@@ -407,10 +355,8 @@ namespace NSec.Tests.Core
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
         [MemberData(nameof(SymmetricKeyAlgorithms))]
-        public static void DisposeMoreThanOnce(Type algorithmType)
+        public static void DisposeMoreThanOnce(Algorithm a)
         {
-            var a = (Algorithm)Activator.CreateInstance(algorithmType);
-
             var k = new Key(a);
             k.Dispose();
             k.Dispose();

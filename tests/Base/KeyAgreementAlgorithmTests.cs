@@ -6,16 +6,14 @@ namespace NSec.Tests.Base
 {
     public static class KeyAgreementAlgorithmTests
     {
-        public static readonly TheoryData<Type> KeyAgreementAlgorithms = Registry.KeyAgreementAlgorithms;
+        public static readonly TheoryData<KeyAgreementAlgorithm> KeyAgreementAlgorithms = Registry.KeyAgreementAlgorithms;
 
         #region Properties
 
         [Theory]
         [MemberData(nameof(KeyAgreementAlgorithms))]
-        public static void Properties(Type algorithmType)
+        public static void Properties(KeyAgreementAlgorithm a)
         {
-            var a = (KeyAgreementAlgorithm)Activator.CreateInstance(algorithmType);
-
             Assert.True(a.PublicKeySize > 0);
             Assert.True(a.PrivateKeySize > 0);
             Assert.True(a.SharedSecretSize > 0);
@@ -27,19 +25,15 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyAgreementAlgorithms))]
-        public static void AgreeWithNullKey(Type algorithmType)
+        public static void AgreeWithNullKey(KeyAgreementAlgorithm a)
         {
-            var a = (KeyAgreementAlgorithm)Activator.CreateInstance(algorithmType);
-
             Assert.Throws<ArgumentNullException>("key", () => a.Agree(null, null));
         }
 
         [Theory]
         [MemberData(nameof(KeyAgreementAlgorithms))]
-        public static void AgreeWithDisposedKey(Type algorithmType)
+        public static void AgreeWithDisposedKey(KeyAgreementAlgorithm a)
         {
-            var a = (KeyAgreementAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k2 = new Key(a))
             {
                 var k1 = new Key(a);
@@ -50,10 +44,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyAgreementAlgorithms))]
-        public static void AgreeWithWrongKey(Type algorithmType)
+        public static void AgreeWithWrongKey(KeyAgreementAlgorithm a)
         {
-            var a = (KeyAgreementAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(SignatureAlgorithm.Ed25519))
             {
                 Assert.Throws<ArgumentException>("key", () => a.Agree(k, null));
@@ -62,10 +54,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyAgreementAlgorithms))]
-        public static void AgreeWithNullPublicKey(Type algorithmType)
+        public static void AgreeWithNullPublicKey(KeyAgreementAlgorithm a)
         {
-            var a = (KeyAgreementAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a))
             {
                 Assert.Same(a, k.Algorithm);
@@ -76,10 +66,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyAgreementAlgorithms))]
-        public static void AgreeWithWrongPublicKey(Type algorithmType)
+        public static void AgreeWithWrongPublicKey(KeyAgreementAlgorithm a)
         {
-            var a = (KeyAgreementAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k1 = new Key(a))
             using (var k2 = new Key(SignatureAlgorithm.Ed25519))
             {
@@ -92,10 +80,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyAgreementAlgorithms))]
-        public static void AgreeSuccess(Type algorithmType)
+        public static void AgreeSuccess(KeyAgreementAlgorithm a)
         {
-            var a = (KeyAgreementAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k1 = new Key(a))
             using (var k2 = new Key(a))
             using (var s1 = a.Agree(k1, k2.PublicKey))
@@ -111,10 +97,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyAgreementAlgorithms))]
-        public static void AgreeSelf(Type algorithmType)
+        public static void AgreeSelf(KeyAgreementAlgorithm a)
         {
-            var a = (KeyAgreementAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a))
             using (var s = a.Agree(k, k.PublicKey))
             {
@@ -129,10 +113,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyAgreementAlgorithms))]
-        public static void CreateKey(Type algorithmType)
+        public static void CreateKey(KeyAgreementAlgorithm a)
         {
-            var a = (KeyAgreementAlgorithm)Activator.CreateInstance(algorithmType);
-
             using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
             {
                 Assert.Same(a, k.Algorithm);

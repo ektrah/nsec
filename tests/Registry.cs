@@ -10,120 +10,136 @@ namespace NSec.Tests
     {
         #region Algorithms By Base Class
 
-        public static readonly TheoryData<Type> AeadAlgorithms = new TheoryData<Type>
+        public static readonly TheoryData<AeadAlgorithm> AeadAlgorithms = new TheoryData<AeadAlgorithm>
         {
-            typeof(Aes256Gcm),
-            typeof(ChaCha20Poly1305),
-            typeof(XChaCha20Poly1305),
+            AeadAlgorithm.Aes256Gcm,
+            AeadAlgorithm.ChaCha20Poly1305,
+            new XChaCha20Poly1305(),
         };
 
-        public static readonly TheoryData<Type> MacAlgorithms = new TheoryData<Type>
+        public static readonly TheoryData<MacAlgorithm> MacAlgorithms = new TheoryData<MacAlgorithm>
         {
-            typeof(Blake2bMac),
-            typeof(HmacSha256),
-            typeof(HmacSha512),
+            new Blake2bMac(16, 16),
+            new Blake2bMac(16, 32),
+            new Blake2bMac(16, 64),
+            MacAlgorithm.Blake2b_128,
+            MacAlgorithm.Blake2b_256,
+            MacAlgorithm.Blake2b_512,
+            new Blake2bMac(64, 16),
+            new Blake2bMac(64, 32),
+            new Blake2bMac(64, 64),
+            MacAlgorithm.HmacSha256,
+            MacAlgorithm.HmacSha512,
         };
 
-        public static readonly TheoryData<Type> HashAlgorithms = new TheoryData<Type>
+        public static readonly TheoryData<HashAlgorithm> HashAlgorithms = new TheoryData<HashAlgorithm>
         {
-            typeof(Blake2b),
-            typeof(Sha256),
-            typeof(Sha512),
+            HashAlgorithm.Blake2b_256,
+            HashAlgorithm.Blake2b_512,
+            HashAlgorithm.Sha256,
+            HashAlgorithm.Sha512,
         };
 
-        public static readonly TheoryData<Type> KeyAgreementAlgorithms = new TheoryData<Type>
+        public static readonly TheoryData<KeyAgreementAlgorithm> KeyAgreementAlgorithms = new TheoryData<KeyAgreementAlgorithm>
         {
-            typeof(X25519),
+            KeyAgreementAlgorithm.X25519,
         };
 
-        public static readonly TheoryData<Type> KeyDerivationAlgorithms = new TheoryData<Type>
+        public static readonly TheoryData<KeyDerivationAlgorithm> KeyDerivationAlgorithms = new TheoryData<KeyDerivationAlgorithm>
         {
-            typeof(AnsiX963KdfSha256),
-            typeof(ConcatKdfHmacSha256),
-            typeof(ConcatKdfSha256),
-            typeof(HkdfSha256),
-            typeof(HkdfSha512),
+            new AnsiX963KdfSha256(),
+            new ConcatKdfHmacSha256(),
+            new ConcatKdfSha256(),
+            KeyDerivationAlgorithm.HkdfSha256,
+            KeyDerivationAlgorithm.HkdfSha512,
         };
 
-        public static readonly TheoryData<Type> SignatureAlgorithms = new TheoryData<Type>
+        public static readonly TheoryData<SignatureAlgorithm> SignatureAlgorithms = new TheoryData<SignatureAlgorithm>
         {
-            typeof(Ed25519),
+            SignatureAlgorithm.Ed25519,
         };
 
         #endregion
 
         #region Algorithms By Key Type
 
-        public static readonly TheoryData<Type> AsymmetricAlgorithms = new TheoryData<Type>
+        public static readonly TheoryData<Algorithm> AsymmetricAlgorithms = new TheoryData<Algorithm>
         {
-            typeof(X25519),
-            typeof(Ed25519),
+            KeyAgreementAlgorithm.X25519,
+            SignatureAlgorithm.Ed25519,
         };
 
-        public static readonly TheoryData<Type> SymmetricAlgorithms = new TheoryData<Type>
+        public static readonly TheoryData<Algorithm> SymmetricAlgorithms = new TheoryData<Algorithm>
         {
-            typeof(Aes256Gcm),
-            typeof(Blake2bMac),
-            typeof(ChaCha20Poly1305),
-            typeof(HmacSha256),
-            typeof(HmacSha512),
-            typeof(XChaCha20Poly1305),
+            AeadAlgorithm.Aes256Gcm,
+            AeadAlgorithm.ChaCha20Poly1305,
+            new XChaCha20Poly1305(),
+            MacAlgorithm.Blake2b_128,
+            MacAlgorithm.Blake2b_256,
+            MacAlgorithm.Blake2b_512,
+            MacAlgorithm.HmacSha256,
+            MacAlgorithm.HmacSha512,
         };
 
-        public static readonly TheoryData<Type> KeylessAlgorithms = new TheoryData<Type>
+        public static readonly TheoryData<Algorithm> KeylessAlgorithms = new TheoryData<Algorithm>
         {
-            typeof(Blake2b),
-            typeof(AnsiX963KdfSha256),
-            typeof(ConcatKdfHmacSha256),
-            typeof(ConcatKdfSha256),
-            typeof(HkdfSha256),
-            typeof(HkdfSha512),
-            typeof(Sha256),
-            typeof(Sha512),
+            HashAlgorithm.Blake2b_256,
+            HashAlgorithm.Blake2b_512,
+            HashAlgorithm.Sha256,
+            HashAlgorithm.Sha512,
+            new AnsiX963KdfSha256(),
+            new ConcatKdfHmacSha256(),
+            new ConcatKdfSha256(),
+            KeyDerivationAlgorithm.HkdfSha256,
+            KeyDerivationAlgorithm.HkdfSha512,
         };
 
         #endregion
 
         #region Key Blob Formats
 
-        public static readonly TheoryData<Type, KeyBlobFormat> PublicKeyBlobFormats = new TheoryData<Type, KeyBlobFormat>
+        public static readonly TheoryData<Algorithm, KeyBlobFormat> PublicKeyBlobFormats = new TheoryData<Algorithm, KeyBlobFormat>
         {
-            { typeof(X25519), KeyBlobFormat.RawPublicKey },
-            { typeof(X25519), KeyBlobFormat.NSecPublicKey },
-            { typeof(X25519), KeyBlobFormat.PkixPublicKey },
-            { typeof(X25519), KeyBlobFormat.PkixPublicKeyText },
-            { typeof(Ed25519), KeyBlobFormat.RawPublicKey },
-            { typeof(Ed25519), KeyBlobFormat.NSecPublicKey },
-            { typeof(Ed25519), KeyBlobFormat.PkixPublicKey },
-            { typeof(Ed25519), KeyBlobFormat.PkixPublicKeyText },
+            { KeyAgreementAlgorithm.X25519, KeyBlobFormat.RawPublicKey },
+            { KeyAgreementAlgorithm.X25519, KeyBlobFormat.NSecPublicKey },
+            { KeyAgreementAlgorithm.X25519, KeyBlobFormat.PkixPublicKey },
+            { KeyAgreementAlgorithm.X25519, KeyBlobFormat.PkixPublicKeyText },
+            { SignatureAlgorithm.Ed25519, KeyBlobFormat.RawPublicKey },
+            { SignatureAlgorithm.Ed25519, KeyBlobFormat.NSecPublicKey },
+            { SignatureAlgorithm.Ed25519, KeyBlobFormat.PkixPublicKey },
+            { SignatureAlgorithm.Ed25519, KeyBlobFormat.PkixPublicKeyText },
         };
 
-        public static readonly TheoryData<Type, KeyBlobFormat> PrivateKeyBlobFormats = new TheoryData<Type, KeyBlobFormat>
+        public static readonly TheoryData<Algorithm, KeyBlobFormat> PrivateKeyBlobFormats = new TheoryData<Algorithm, KeyBlobFormat>
         {
-            { typeof(X25519), KeyBlobFormat.RawPrivateKey },
-            { typeof(X25519), KeyBlobFormat.NSecPrivateKey },
-            { typeof(X25519), KeyBlobFormat.PkixPrivateKey },
-            { typeof(X25519), KeyBlobFormat.PkixPrivateKeyText },
-            { typeof(Ed25519), KeyBlobFormat.RawPrivateKey },
-            { typeof(Ed25519), KeyBlobFormat.NSecPrivateKey },
-            { typeof(Ed25519), KeyBlobFormat.PkixPrivateKey },
-            { typeof(Ed25519), KeyBlobFormat.PkixPrivateKeyText },
+            { KeyAgreementAlgorithm.X25519, KeyBlobFormat.RawPrivateKey },
+            { KeyAgreementAlgorithm.X25519, KeyBlobFormat.NSecPrivateKey },
+            { KeyAgreementAlgorithm.X25519, KeyBlobFormat.PkixPrivateKey },
+            { KeyAgreementAlgorithm.X25519, KeyBlobFormat.PkixPrivateKeyText },
+            { SignatureAlgorithm.Ed25519, KeyBlobFormat.RawPrivateKey },
+            { SignatureAlgorithm.Ed25519, KeyBlobFormat.NSecPrivateKey },
+            { SignatureAlgorithm.Ed25519, KeyBlobFormat.PkixPrivateKey },
+            { SignatureAlgorithm.Ed25519, KeyBlobFormat.PkixPrivateKeyText },
         };
 
-        public static readonly TheoryData<Type, KeyBlobFormat> SymmetricKeyBlobFormats = new TheoryData<Type, KeyBlobFormat>
+        public static readonly TheoryData<Algorithm, KeyBlobFormat> SymmetricKeyBlobFormats = new TheoryData<Algorithm, KeyBlobFormat>
         {
-            { typeof(Aes256Gcm), KeyBlobFormat.RawSymmetricKey },
-            { typeof(Aes256Gcm), KeyBlobFormat.NSecSymmetricKey },
-            { typeof(Blake2bMac), KeyBlobFormat.RawSymmetricKey },
-            { typeof(Blake2bMac), KeyBlobFormat.NSecSymmetricKey },
-            { typeof(ChaCha20Poly1305), KeyBlobFormat.RawSymmetricKey },
-            { typeof(ChaCha20Poly1305), KeyBlobFormat.NSecSymmetricKey },
-            { typeof(HmacSha256), KeyBlobFormat.RawSymmetricKey },
-            { typeof(HmacSha256), KeyBlobFormat.NSecSymmetricKey },
-            { typeof(HmacSha512), KeyBlobFormat.RawSymmetricKey },
-            { typeof(HmacSha512), KeyBlobFormat.NSecSymmetricKey },
-            { typeof(XChaCha20Poly1305), KeyBlobFormat.RawSymmetricKey },
-            { typeof(XChaCha20Poly1305), KeyBlobFormat.NSecSymmetricKey },
+            { AeadAlgorithm.Aes256Gcm, KeyBlobFormat.RawSymmetricKey },
+            { AeadAlgorithm.Aes256Gcm, KeyBlobFormat.NSecSymmetricKey },
+            { MacAlgorithm.Blake2b_128, KeyBlobFormat.RawSymmetricKey },
+            { MacAlgorithm.Blake2b_128, KeyBlobFormat.NSecSymmetricKey },
+            { MacAlgorithm.Blake2b_256, KeyBlobFormat.RawSymmetricKey },
+            { MacAlgorithm.Blake2b_256, KeyBlobFormat.NSecSymmetricKey },
+            { MacAlgorithm.Blake2b_512, KeyBlobFormat.RawSymmetricKey },
+            { MacAlgorithm.Blake2b_512, KeyBlobFormat.NSecSymmetricKey },
+            { AeadAlgorithm.ChaCha20Poly1305, KeyBlobFormat.RawSymmetricKey },
+            { AeadAlgorithm.ChaCha20Poly1305, KeyBlobFormat.NSecSymmetricKey },
+            { MacAlgorithm.HmacSha256, KeyBlobFormat.RawSymmetricKey },
+            { MacAlgorithm.HmacSha256, KeyBlobFormat.NSecSymmetricKey },
+            { MacAlgorithm.HmacSha512, KeyBlobFormat.RawSymmetricKey },
+            { MacAlgorithm.HmacSha512, KeyBlobFormat.NSecSymmetricKey },
+            { new XChaCha20Poly1305(), KeyBlobFormat.RawSymmetricKey },
+            { new XChaCha20Poly1305(), KeyBlobFormat.NSecSymmetricKey },
         };
 
         #endregion

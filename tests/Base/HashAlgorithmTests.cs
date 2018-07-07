@@ -6,16 +6,14 @@ namespace NSec.Tests.Base
 {
     public static class HashAlgorithmTests
     {
-        public static readonly TheoryData<Type> HashAlgorithms = Registry.HashAlgorithms;
+        public static readonly TheoryData<HashAlgorithm> HashAlgorithms = Registry.HashAlgorithms;
 
         #region Properties
 
         [Theory]
         [MemberData(nameof(HashAlgorithms))]
-        public static void Properties(Type algorithmType)
+        public static void Properties(HashAlgorithm a)
         {
-            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
-
             Assert.True(a.HashSize > 0);
         }
 
@@ -25,10 +23,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(HashAlgorithms))]
-        public static void HashSuccess(Type algorithmType)
+        public static void HashSuccess(HashAlgorithm a)
         {
-            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
-
             var data = Utilities.RandomBytes.Slice(0, 100);
 
             var expected = a.Hash(data);
@@ -45,28 +41,22 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(HashAlgorithms))]
-        public static void HashWithSpanTooSmall(Type algorithmType)
+        public static void HashWithSpanTooSmall(HashAlgorithm a)
         {
-            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
-
             Assert.Throws<ArgumentException>("hash", () => a.Hash(ReadOnlySpan<byte>.Empty, new byte[a.HashSize - 1]));
         }
 
         [Theory]
         [MemberData(nameof(HashAlgorithms))]
-        public static void HashWithSpanTooLarge(Type algorithmType)
+        public static void HashWithSpanTooLarge(HashAlgorithm a)
         {
-            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
-
             Assert.Throws<ArgumentException>("hash", () => a.Hash(ReadOnlySpan<byte>.Empty, new byte[a.HashSize + 1]));
         }
 
         [Theory]
         [MemberData(nameof(HashAlgorithms))]
-        public static void HashWithSpanSuccess(Type algorithmType)
+        public static void HashWithSpanSuccess(HashAlgorithm a)
         {
-            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
-
             var data = Utilities.RandomBytes.Slice(0, 100);
 
             var expected = new byte[a.HashSize];
@@ -79,10 +69,8 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(HashAlgorithms))]
-        public static void HashWithSpanOverlapping(Type algorithmType)
+        public static void HashWithSpanOverlapping(HashAlgorithm a)
         {
-            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
-
             var data = Utilities.RandomBytes.Slice(0, 100).ToArray();
 
             var expected = new byte[a.HashSize];
@@ -99,28 +87,22 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(HashAlgorithms))]
-        public static void VerifyWithSpanTooSmall(Type algorithmType)
+        public static void VerifyWithSpanTooSmall(HashAlgorithm a)
         {
-            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
-
             Assert.False(a.Verify(ReadOnlySpan<byte>.Empty, new byte[a.HashSize - 1]));
         }
 
         [Theory]
         [MemberData(nameof(HashAlgorithms))]
-        public static void VerifyWithSpanTooLarge(Type algorithmType)
+        public static void VerifyWithSpanTooLarge(HashAlgorithm a)
         {
-            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
-
             Assert.False(a.Verify(ReadOnlySpan<byte>.Empty, new byte[a.HashSize + 1]));
         }
 
         [Theory]
         [MemberData(nameof(HashAlgorithms))]
-        public static void VerifyWithSpanSuccess(Type algorithmType)
+        public static void VerifyWithSpanSuccess(HashAlgorithm a)
         {
-            var a = (HashAlgorithm)Activator.CreateInstance(algorithmType);
-
             var d = ReadOnlySpan<byte>.Empty;
 
             var hash = a.Hash(d);
