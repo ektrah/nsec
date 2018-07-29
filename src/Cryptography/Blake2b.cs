@@ -95,11 +95,10 @@ namespace NSec.Cryptography
         }
 
         internal override void InitializeCore(
-            int hashSize,
             out IncrementalHashState state)
         {
-            Debug.Assert(hashSize >= crypto_generichash_blake2b_BYTES_MIN);
-            Debug.Assert(hashSize <= crypto_generichash_blake2b_BYTES_MAX);
+            Debug.Assert(HashSize >= crypto_generichash_blake2b_BYTES_MIN);
+            Debug.Assert(HashSize <= crypto_generichash_blake2b_BYTES_MAX);
 
             Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
             ref crypto_generichash_blake2b_state aligned_ = ref AlignPinnedReference(ref buffer.GetPinnableReference());
@@ -108,7 +107,7 @@ namespace NSec.Cryptography
                 out aligned_,
                 IntPtr.Zero,
                 UIntPtr.Zero,
-                (UIntPtr)hashSize);
+                (UIntPtr)HashSize);
 
             Debug.Assert(error == 0);
 

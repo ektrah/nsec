@@ -97,7 +97,7 @@ namespace NSec.Experimental
             try
             {
                 state = default;
-                algorithm.InitializeCore(algorithm.HashSize, out Unsafe.AsRef(in state._state));
+                algorithm.InitializeCore(out Unsafe.AsRef(in state._state));
                 Unsafe.AsRef(in state._algorithm) = algorithm;
                 success = true;
             }

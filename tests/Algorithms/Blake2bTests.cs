@@ -13,22 +13,10 @@ namespace NSec.Tests.Algorithms
         {
             Assert.Equal(32, Blake2b.MinHashSize);
             Assert.Equal(64, Blake2b.MaxHashSize);
-        }
 
-        [Fact]
-        public static void Properties256()
-        {
-            var a = HashAlgorithm.Blake2b_256;
+            Assert.Equal(32, HashAlgorithm.Blake2b_256.HashSize);
 
-            Assert.Equal(32, a.HashSize);
-        }
-
-        [Fact]
-        public static void Properties512()
-        {
-            var a = HashAlgorithm.Blake2b_512;
-
-            Assert.Equal(64, a.HashSize);
+            Assert.Equal(64, HashAlgorithm.Blake2b_512.HashSize);
         }
 
         [Theory]

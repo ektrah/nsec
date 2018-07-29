@@ -132,13 +132,12 @@ namespace NSec.Cryptography
 
         internal override void InitializeCore(
             ReadOnlySpan<byte> key,
-            int macSize,
             out IncrementalMacState state)
         {
             Debug.Assert(key.Length >= crypto_generichash_blake2b_KEYBYTES_MIN);
             Debug.Assert(key.Length <= crypto_generichash_blake2b_KEYBYTES_MAX);
-            Debug.Assert(macSize >= crypto_generichash_blake2b_BYTES_MIN);
-            Debug.Assert(macSize <= crypto_generichash_blake2b_BYTES_MAX);
+            Debug.Assert(MacSize >= crypto_generichash_blake2b_BYTES_MIN);
+            Debug.Assert(MacSize <= crypto_generichash_blake2b_BYTES_MAX);
 
             Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
             ref crypto_generichash_blake2b_state state_ = ref AlignPinnedReference(ref buffer.GetPinnableReference());
@@ -147,7 +146,7 @@ namespace NSec.Cryptography
                  out state_,
                  in key.GetPinnableReference(),
                  (UIntPtr)key.Length,
-                 (UIntPtr)macSize);
+                 (UIntPtr)MacSize);
 
             Debug.Assert(error == 0);
 

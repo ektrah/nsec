@@ -22,37 +22,51 @@ Represents a message authentication code (MAC) algorithm.
 
 ### Blake2b_128
 
-Gets the BLAKE2b algorithm with a 256-bit key size and a 128-bit output size.
+Gets the BLAKE2b algorithm with a 256-bit key and a 128-bit output.
 
     public static Blake2bMac Blake2b_128 { get; }
 
 
 ### Blake2b_256
 
-Gets the BLAKE2b algorithm with a 256-bit key size and a 256-bit output size.
+Gets the BLAKE2b algorithm with a 256-bit key and a 256-bit output.
 
     public static Blake2bMac Blake2b_256 { get; }
 
 
 ### Blake2b_512
 
-Gets the BLAKE2b algorithm with a 256-bit key size and a 512-bit output size.
+Gets the BLAKE2b algorithm with a 256-bit key and a 512-bit output.
 
     public static Blake2bMac Blake2b_512 { get; }
 
 
 ### HmacSha256
 
-Gets the HMAC-SHA256 algorithm.
+Gets the HMAC-SHA256 algorithm with a 256-bit key and a 256-bit output.
 
     public static HmacSha256 HmacSha256 { get; }
 
 
+### HmacSha256_128
+
+Gets the HMAC-SHA256 algorithm with a 256-bit key and a truncated, 128-bit output.
+
+    public static HmacSha256 HmacSha256_128 { get; }
+
+
 ### HmacSha512
 
-Gets the HMAC-SHA512 algorithm.
+Gets the HMAC-SHA512 algorithm with a 512-bit key and a 512-bit output.
 
     public static HmacSha512 HmacSha512 { get; }
+
+
+### HmacSha512_256
+
+Gets the HMAC-SHA512 algorithm with a 512-bit key and a truncated, 256-bit output.
+
+    public static HmacSha512 HmacSha512_256 { get; }
 
 
 ## Properties

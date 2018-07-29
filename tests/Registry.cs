@@ -29,7 +29,9 @@ namespace NSec.Tests
             new Blake2bMac(64, 32),
             new Blake2bMac(64, 64),
             MacAlgorithm.HmacSha256,
+            MacAlgorithm.HmacSha256_128,
             MacAlgorithm.HmacSha512,
+            MacAlgorithm.HmacSha512_256,
         };
 
         public static readonly TheoryData<HashAlgorithm> HashAlgorithms = new TheoryData<HashAlgorithm>
@@ -38,6 +40,7 @@ namespace NSec.Tests
             HashAlgorithm.Blake2b_512,
             HashAlgorithm.Sha256,
             HashAlgorithm.Sha512,
+            HashAlgorithm.Sha512_256,
         };
 
         public static readonly TheoryData<KeyAgreementAlgorithm> KeyAgreementAlgorithms = new TheoryData<KeyAgreementAlgorithm>
@@ -78,7 +81,9 @@ namespace NSec.Tests
             MacAlgorithm.Blake2b_256,
             MacAlgorithm.Blake2b_512,
             MacAlgorithm.HmacSha256,
+            MacAlgorithm.HmacSha256_128,
             MacAlgorithm.HmacSha512,
+            MacAlgorithm.HmacSha512_256,
         };
 
         public static readonly TheoryData<Algorithm> KeylessAlgorithms = new TheoryData<Algorithm>
@@ -87,6 +92,7 @@ namespace NSec.Tests
             HashAlgorithm.Blake2b_512,
             HashAlgorithm.Sha256,
             HashAlgorithm.Sha512,
+            HashAlgorithm.Sha512_256,
             new AnsiX963KdfSha256(),
             new ConcatKdfHmacSha256(),
             new ConcatKdfSha256(),

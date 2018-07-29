@@ -22,30 +22,37 @@ Represents a cryptographic hash algorithm.
 
 ### Blake2b_256
 
-Gets the BLAKE2b algorithm with a 256-bit output size.
+Gets the BLAKE2b algorithm with a 256-bit output.
 
     public static Blake2b Blake2b_256 { get; }
 
 
 ### Blake2b_512
 
-Gets the BLAKE2b algorithm with a 512-bit output size.
+Gets the BLAKE2b algorithm with a 512-bit output.
 
     public static Blake2b Blake2b_512 { get; }
 
 
 ### Sha256
 
-Gets the SHA-256 hash algorithm.
+Gets the SHA-256 hash algorithm with a 256-bit output.
 
     public static Sha256 Sha256 { get; }
 
 
 ### Sha512
 
-Gets the SHA-512 hash algorithm.
+Gets the SHA-512 hash algorithm with a 512-bit output.
 
     public static Sha512 Sha512 { get; }
+
+
+### Sha512_256
+
+Gets the SHA-512 hash algorithm with a truncated, 256-bit output.
+
+    public static Sha512 Sha512_256 { get; }
 
 
 ## Properties

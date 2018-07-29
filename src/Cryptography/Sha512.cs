@@ -28,7 +28,7 @@ namespace NSec.Cryptography
     //
     public sealed class Sha512 : HashAlgorithm
     {
-        public static readonly int MinHashSize = crypto_hash_sha512_BYTES;
+        public static readonly int MinHashSize = 32;
         public static readonly int MaxHashSize = crypto_hash_sha512_BYTES;
 
         private static int s_selfTest;
@@ -56,7 +56,7 @@ namespace NSec.Cryptography
             ref IncrementalHashState state,
             ReadOnlySpan<byte> hash)
         {
-            Debug.Assert(hash.Length == crypto_hash_sha512_BYTES);
+            Debug.Assert(hash.Length <= crypto_hash_sha512_BYTES);
 
             Span<byte> temp = stackalloc byte[crypto_hash_sha512_BYTES];
 
@@ -66,28 +66,29 @@ namespace NSec.Cryptography
 
             Debug.Assert(error == 0);
 
-            return CryptographicOperations.FixedTimeEquals(temp, hash);
+            return CryptographicOperations.FixedTimeEquals(temp.Slice(0, hash.Length), hash);
         }
 
         internal override void FinalizeCore(
             ref IncrementalHashState state,
             Span<byte> hash)
         {
-            Debug.Assert(hash.Length == crypto_hash_sha512_BYTES);
+            Debug.Assert(hash.Length <= crypto_hash_sha512_BYTES);
+
+            Span<byte> temp = stackalloc byte[crypto_hash_sha512_BYTES];
 
             int error = crypto_hash_sha512_final(
                 ref state.sha512,
-                ref hash.GetPinnableReference());
+                ref temp.GetPinnableReference());
 
             Debug.Assert(error == 0);
+
+            temp.Slice(0, hash.Length).CopyTo(hash);
         }
 
         internal override void InitializeCore(
-            int hashSize,
             out IncrementalHashState state)
         {
-            Debug.Assert(hashSize == crypto_hash_sha512_BYTES);
-
             int error = crypto_hash_sha512_init(
                 out state.sha512);
 
@@ -110,21 +111,7 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> data,
             Span<byte> hash)
         {
-            Debug.Assert(hash.Length == crypto_hash_sha512_BYTES);
-
-            int error = crypto_hash_sha512(
-                ref hash.GetPinnableReference(),
-                in data.GetPinnableReference(),
-                (ulong)data.Length);
-
-            Debug.Assert(error == 0);
-        }
-
-        private protected override bool VerifyCore(
-            ReadOnlySpan<byte> data,
-            ReadOnlySpan<byte> hash)
-        {
-            Debug.Assert(hash.Length == crypto_hash_sha512_BYTES);
+            Debug.Assert(hash.Length <= crypto_hash_sha512_BYTES);
 
             Span<byte> temp = stackalloc byte[crypto_hash_sha512_BYTES];
 
@@ -135,7 +122,25 @@ namespace NSec.Cryptography
 
             Debug.Assert(error == 0);
 
-            return CryptographicOperations.FixedTimeEquals(temp, hash);
+            temp.Slice(0, hash.Length).CopyTo(hash);
+        }
+
+        private protected override bool VerifyCore(
+            ReadOnlySpan<byte> data,
+            ReadOnlySpan<byte> hash)
+        {
+            Debug.Assert(hash.Length <= crypto_hash_sha512_BYTES);
+
+            Span<byte> temp = stackalloc byte[crypto_hash_sha512_BYTES];
+
+            int error = crypto_hash_sha512(
+                ref temp.GetPinnableReference(),
+                in data.GetPinnableReference(),
+                (ulong)data.Length);
+
+            Debug.Assert(error == 0);
+
+            return CryptographicOperations.FixedTimeEquals(temp.Slice(0, hash.Length), hash);
         }
 
         private static void SelfTest()

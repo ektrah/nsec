@@ -27,7 +27,9 @@ namespace NSec.Cryptography
         private static Blake2bMac s_Blake2b_256;
         private static Blake2bMac s_Blake2b_512;
         private static HmacSha256 s_HmacSha256;
+        private static HmacSha256 s_HmacSha256_128;
         private static HmacSha512 s_HmacSha512;
+        private static HmacSha512 s_HmacSha512_256;
 
         private readonly int _keySize;
         private readonly int _macSize;
@@ -92,8 +94,22 @@ namespace NSec.Cryptography
                 HmacSha256 instance = s_HmacSha256;
                 if (instance == null)
                 {
-                    Interlocked.CompareExchange(ref s_HmacSha256, new HmacSha256(), null);
+                    Interlocked.CompareExchange(ref s_HmacSha256, new HmacSha256(crypto_hash_sha256_BYTES, 256 / 8), null);
                     instance = s_HmacSha256;
+                }
+                return instance;
+            }
+        }
+
+        public static HmacSha256 HmacSha256_128
+        {
+            get
+            {
+                HmacSha256 instance = s_HmacSha256_128;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_HmacSha256_128, new HmacSha256(crypto_hash_sha256_BYTES, 128 / 8), null);
+                    instance = s_HmacSha256_128;
                 }
                 return instance;
             }
@@ -106,8 +122,22 @@ namespace NSec.Cryptography
                 HmacSha512 instance = s_HmacSha512;
                 if (instance == null)
                 {
-                    Interlocked.CompareExchange(ref s_HmacSha512, new HmacSha512(), null);
+                    Interlocked.CompareExchange(ref s_HmacSha512, new HmacSha512(crypto_hash_sha512_BYTES, 512 / 8), null);
                     instance = s_HmacSha512;
+                }
+                return instance;
+            }
+        }
+
+        public static HmacSha512 HmacSha512_256
+        {
+            get
+            {
+                HmacSha512 instance = s_HmacSha512_256;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_HmacSha512_256, new HmacSha512(crypto_hash_sha512_BYTES, 256 / 8), null);
+                    instance = s_HmacSha512_256;
                 }
                 return instance;
             }
@@ -195,7 +225,6 @@ namespace NSec.Cryptography
 
         internal abstract void InitializeCore(
             ReadOnlySpan<byte> key,
-            int macSize,
             out IncrementalMacState state);
 
         internal abstract void UpdateCore(

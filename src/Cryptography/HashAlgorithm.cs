@@ -27,6 +27,7 @@ namespace NSec.Cryptography
         private static Blake2b s_Blake2b_512;
         private static Sha256 s_Sha256;
         private static Sha512 s_Sha512;
+        private static Sha512 s_Sha512_256;
 
         private readonly int _hashSize;
 
@@ -73,7 +74,7 @@ namespace NSec.Cryptography
                 Sha256 instance = s_Sha256;
                 if (instance == null)
                 {
-                    Interlocked.CompareExchange(ref s_Sha256, new Sha256(), null);
+                    Interlocked.CompareExchange(ref s_Sha256, new Sha256(256 / 8), null);
                     instance = s_Sha256;
                 }
                 return instance;
@@ -87,8 +88,22 @@ namespace NSec.Cryptography
                 Sha512 instance = s_Sha512;
                 if (instance == null)
                 {
-                    Interlocked.CompareExchange(ref s_Sha512, new Sha512(), null);
+                    Interlocked.CompareExchange(ref s_Sha512, new Sha512(512 / 8), null);
                     instance = s_Sha512;
+                }
+                return instance;
+            }
+        }
+
+        public static Sha512 Sha512_256
+        {
+            get
+            {
+                Sha512 instance = s_Sha512_256;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_Sha512_256, new Sha512(256 / 8), null);
+                    instance = s_Sha512_256;
                 }
                 return instance;
             }
@@ -147,7 +162,6 @@ namespace NSec.Cryptography
         }
 
         internal abstract void InitializeCore(
-            int hashSize,
             out IncrementalHashState state);
 
         internal abstract void UpdateCore(
