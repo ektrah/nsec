@@ -19,9 +19,8 @@ namespace NSec.Cryptography
     //
     //      RFC 5958 - Asymmetric Key Packages
     //
-    //      draft-ietf-curdle-pkix-10- Algorithm Identifiers for Ed25519,
-    //          Ed448, X25519 and X448 for use in the Internet X.509 Public Key
-    //          Infrastructure
+    //      RFC 8410 - Algorithm Identifiers for Ed25519, Ed448, X25519, and
+    //          X448 for Use in the Internet X.509 Public Key Infrastructure
     //
     //  Parameters:
     //
