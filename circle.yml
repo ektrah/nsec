@@ -50,13 +50,13 @@ shared:
       name: Install .NET Core 1.1 Runtime
       command: |
         if [ ! -f ~/dotnet-install.sh ]; then curl -fsLo ~/dotnet-install.sh 'https://dot.net/v1/dotnet-install.sh'; fi
-        bash ~/dotnet-install.sh --channel 1.1 --version latest --install-dir ~/.dotnet --no-path --shared-runtime
+        bash ~/dotnet-install.sh --channel 1.1 --version latest --install-dir ~/.dotnet --no-path --runtime dotnet
   dotnet-install-2-0: &dotnet-install-2-0
     run:
       name: Install .NET Core 2.0 Runtime
       command: |
         if [ ! -f ~/dotnet-install.sh ]; then curl -fsLo ~/dotnet-install.sh 'https://dot.net/v1/dotnet-install.sh'; fi
-        bash ~/dotnet-install.sh --channel 2.0 --version latest --install-dir ~/.dotnet --no-path --shared-runtime
+        bash ~/dotnet-install.sh --channel 2.0 --version latest --install-dir ~/.dotnet --no-path --runtime dotnet
   dotnet-install-2-1: &dotnet-install-2-1
     run:
       name: Install .NET Core 2.1 SDK
