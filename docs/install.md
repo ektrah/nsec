@@ -21,13 +21,16 @@ tools used:
 
 ## Supported Languages
 
-NSec requires **C# 7.2** or later.
+NSec requires **C# 7.2** or **F# 4.5** (or later).
 
 A C# 7.2 compiler is included in the .NET Core SDK beginning with version 2.1
 and Visual Studio beginning with version 15.5.
 Projects need to opt into C# 7.2 by setting the [Language
 Version](https://docs.microsoft.com/en-us/visualstudio/ide/reference/advanced-build-settings-dialog-box-csharp)
 to **latest** or **7.2** (or later).
+
+An F# 4.5 compiler is included in the .NET Core SDK beginning with version
+2.1.400 and Visual Studio beginning with version 15.8.
 
 
 ## Supported Platforms
