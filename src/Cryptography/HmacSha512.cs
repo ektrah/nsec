@@ -119,7 +119,10 @@ namespace NSec.Cryptography
                 Debug.Assert(error == 0);
             }
 
-            new ReadOnlySpan<byte>(temp, mac.Length).CopyTo(mac);
+            fixed (byte* @out = mac)
+            {
+                Unsafe.CopyBlockUnaligned(@out, temp, (uint)mac.Length);
+            }
         }
 
         internal override int GetSeedSize()
@@ -229,7 +232,10 @@ namespace NSec.Cryptography
                     temp);
             }
 
-            new ReadOnlySpan<byte>(temp, mac.Length).CopyTo(mac);
+            fixed (byte* @out = mac)
+            {
+                Unsafe.CopyBlockUnaligned(@out, temp, (uint)mac.Length);
+            }
         }
 
         private protected unsafe override bool VerifyCore(

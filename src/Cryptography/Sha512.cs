@@ -89,7 +89,10 @@ namespace NSec.Cryptography
                 Debug.Assert(error == 0);
             }
 
-            new ReadOnlySpan<byte>(temp, hash.Length).CopyTo(hash);
+            fixed (byte* @out = hash)
+            {
+                Unsafe.CopyBlockUnaligned(@out, temp, (uint)hash.Length);
+            }
         }
 
         internal unsafe override void InitializeCore(
@@ -138,7 +141,10 @@ namespace NSec.Cryptography
                 Debug.Assert(error == 0);
             }
 
-            new ReadOnlySpan<byte>(temp, hash.Length).CopyTo(hash);
+            fixed (byte* @out = hash)
+            {
+                Unsafe.CopyBlockUnaligned(@out, temp, (uint)hash.Length);
+            }
         }
 
         private protected unsafe override bool VerifyCore(

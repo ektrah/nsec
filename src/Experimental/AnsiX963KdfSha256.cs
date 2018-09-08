@@ -1,6 +1,7 @@
 using System;
 using System.Buffers.Binary;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using NSec.Cryptography;
 using static Interop.Libsodium;
 
@@ -44,6 +45,7 @@ namespace NSec.Experimental
             {
                 fixed (byte* key = ikm)
                 fixed (byte* @in = info)
+                fixed (byte* @out = bytes)
                 {
                     int offset = 0;
                     uint counter = 0;
@@ -67,14 +69,14 @@ namespace NSec.Experimental
                             chunkSize = crypto_hash_sha256_BYTES;
                         }
 
-                        new ReadOnlySpan<byte>(temp, chunkSize).CopyTo(bytes.Slice(offset));
+                        Unsafe.CopyBlockUnaligned(@out + offset, temp, (uint)chunkSize);
                         offset += chunkSize;
                     }
                 }
             }
             finally
             {
-                CryptographicOperations.ZeroMemory(new Span<byte>(temp, crypto_hash_sha256_BYTES));
+                Unsafe.InitBlockUnaligned(temp, 0, crypto_hash_sha256_BYTES);
             }
         }
     }

@@ -146,6 +146,7 @@ namespace NSec.Cryptography
             {
                 fixed (byte* key = pseudorandomKey)
                 fixed (byte* @in = info)
+                fixed (byte* @out = bytes)
                 {
                     int tempLength = 0;
                     int offset = 0;
@@ -170,14 +171,14 @@ namespace NSec.Cryptography
                             chunkSize = crypto_auth_hmacsha256_BYTES;
                         }
 
-                        new ReadOnlySpan<byte>(temp, chunkSize).CopyTo(bytes.Slice(offset));
+                        Unsafe.CopyBlockUnaligned(@out + offset, temp, (uint)chunkSize);
                         offset += chunkSize;
                     }
                 }
             }
             finally
             {
-                CryptographicOperations.ZeroMemory(new Span<byte>(temp, crypto_auth_hmacsha256_BYTES));
+                Unsafe.InitBlockUnaligned(temp, 0, crypto_auth_hmacsha256_BYTES);
             }
         }
 
