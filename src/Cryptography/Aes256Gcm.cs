@@ -96,7 +96,7 @@ namespace NSec.Cryptography
             seed.CopyTo(owner.Memory.Span);
         }
 
-        private protected override void EncryptCore(
+        private protected unsafe override void EncryptCore(
             ReadOnlySpan<byte> key,
             in Nonce nonce,
             ReadOnlySpan<byte> associatedData,
@@ -107,19 +107,26 @@ namespace NSec.Cryptography
             Debug.Assert(nonce.Size == crypto_aead_aes256gcm_NPUBBYTES);
             Debug.Assert(ciphertext.Length == plaintext.Length + crypto_aead_aes256gcm_ABYTES);
 
-            int error = crypto_aead_aes256gcm_encrypt(
-                ref ciphertext.GetPinnableReference(),
-                out ulong ciphertextLength,
-                in plaintext.GetPinnableReference(),
-                (ulong)plaintext.Length,
-                in associatedData.GetPinnableReference(),
-                (ulong)associatedData.Length,
-                IntPtr.Zero,
-                in nonce,
-                in key.GetPinnableReference());
+            fixed (byte* c = ciphertext)
+            fixed (byte* m = plaintext)
+            fixed (byte* ad = associatedData)
+            fixed (Nonce* n = &nonce)
+            fixed (byte* k = key)
+            {
+                int error = crypto_aead_aes256gcm_encrypt(
+                    c,
+                    out ulong clen_p,
+                    m,
+                    (ulong)plaintext.Length,
+                    ad,
+                    (ulong)associatedData.Length,
+                    null,
+                    n,
+                    k);
 
-            Debug.Assert(error == 0);
-            Debug.Assert((ulong)ciphertext.Length == ciphertextLength);
+                Debug.Assert(error == 0);
+                Debug.Assert((ulong)ciphertext.Length == clen_p);
+            }
         }
 
         internal override int GetSeedSize()
@@ -127,7 +134,7 @@ namespace NSec.Cryptography
             return crypto_aead_aes256gcm_KEYBYTES;
         }
 
-        private protected override bool DecryptCore(
+        private protected unsafe override bool DecryptCore(
             ReadOnlySpan<byte> key,
             in Nonce nonce,
             ReadOnlySpan<byte> associatedData,
@@ -138,21 +145,28 @@ namespace NSec.Cryptography
             Debug.Assert(nonce.Size == crypto_aead_aes256gcm_NPUBBYTES);
             Debug.Assert(plaintext.Length == ciphertext.Length - crypto_aead_aes256gcm_ABYTES);
 
-            int error = crypto_aead_aes256gcm_decrypt(
-                ref plaintext.GetPinnableReference(),
-                out ulong plaintextLength,
-                IntPtr.Zero,
-                in ciphertext.GetPinnableReference(),
-                (ulong)ciphertext.Length,
-                in associatedData.GetPinnableReference(),
-                (ulong)associatedData.Length,
-                in nonce,
-                in key.GetPinnableReference());
+            fixed (byte* m = plaintext)
+            fixed (byte* c = ciphertext)
+            fixed (byte* ad = associatedData)
+            fixed (Nonce* n = &nonce)
+            fixed (byte* k = key)
+            {
+                int error = crypto_aead_aes256gcm_decrypt(
+                    m,
+                    out ulong mlen_p,
+                    null,
+                    c,
+                    (ulong)ciphertext.Length,
+                    ad,
+                    (ulong)associatedData.Length,
+                    n,
+                    k);
 
-            // libsodium clears the plaintext if decryption fails.
+                // libsodium clears plaintext if decryption fails
 
-            Debug.Assert(error != 0 || (ulong)plaintext.Length == plaintextLength);
-            return error == 0;
+                Debug.Assert(error != 0 || (ulong)plaintext.Length == mlen_p);
+                return error == 0;
+            }
         }
 
         internal override bool TryExportKey(

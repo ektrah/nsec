@@ -13,21 +13,12 @@ internal static partial class Interop
         internal const int crypto_generichash_blake2b_KEYBYTES_MIN = 16;
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int crypto_generichash_blake2b(
-            ref byte @out,
+        internal static unsafe extern int crypto_generichash_blake2b(
+            byte* @out,
             UIntPtr outlen,
-            in byte @in,
+            byte* @in,
             ulong inlen,
-            in byte key,
-            UIntPtr keylen);
-
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int crypto_generichash_blake2b(
-            ref byte @out,
-            UIntPtr outlen,
-            in byte @in,
-            ulong inlen,
-            IntPtr key,
+            byte* key,
             UIntPtr keylen);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
@@ -40,22 +31,15 @@ internal static partial class Interop
         internal static extern UIntPtr crypto_generichash_blake2b_bytes_min();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int crypto_generichash_blake2b_final(
-            ref crypto_generichash_blake2b_state state,
-            ref byte @out,
+        internal static unsafe extern int crypto_generichash_blake2b_final(
+            crypto_generichash_blake2b_state* state,
+            byte* @out,
             UIntPtr outlen);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int crypto_generichash_blake2b_init(
-            out crypto_generichash_blake2b_state state,
-            in byte key,
-            UIntPtr keylen,
-            UIntPtr outlen);
-
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int crypto_generichash_blake2b_init(
-            out crypto_generichash_blake2b_state state,
-            IntPtr key,
+        internal static unsafe extern int crypto_generichash_blake2b_init(
+            crypto_generichash_blake2b_state* state,
+            byte* key,
             UIntPtr keylen,
             UIntPtr outlen);
 
@@ -72,9 +56,9 @@ internal static partial class Interop
         internal static extern UIntPtr crypto_generichash_blake2b_statebytes();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int crypto_generichash_blake2b_update(
-            ref crypto_generichash_blake2b_state state,
-            in byte @in,
+        internal static unsafe extern int crypto_generichash_blake2b_update(
+            crypto_generichash_blake2b_state* state,
+            byte* @in,
             ulong inlen);
 
         [StructLayout(LayoutKind.Explicit, Size = 384)]

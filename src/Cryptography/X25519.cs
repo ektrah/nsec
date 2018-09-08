@@ -76,7 +76,7 @@ namespace NSec.Cryptography
             }
         }
 
-        internal override void CreateKey(
+        internal override unsafe void CreateKey(
             ReadOnlySpan<byte> seed,
             MemoryPool<byte> memoryPool,
             out ReadOnlyMemory<byte> memory,
@@ -91,12 +91,14 @@ namespace NSec.Cryptography
             memory = owner.Memory.Slice(0, crypto_scalarmult_curve25519_SCALARBYTES);
             seed.CopyTo(owner.Memory.Span);
 
-            int error = crypto_scalarmult_curve25519_base(
-                out publicKey.GetPinnableReference(),
-                in owner.Memory.Span.GetPinnableReference());
+            fixed (PublicKeyBytes* q = publicKey)
+            fixed (byte* n = owner.Memory.Span)
+            {
+                int error = crypto_scalarmult_curve25519_base(q, n);
 
-            Debug.Assert(error == 0);
-            Debug.Assert((Unsafe.Add(ref Unsafe.As<PublicKeyBytes, byte>(ref publicKey.GetPinnableReference()), crypto_scalarmult_curve25519_SCALARBYTES - 1) & 0x80) == 0);
+                Debug.Assert(error == 0);
+                Debug.Assert((((byte*)q)[crypto_scalarmult_curve25519_SCALARBYTES - 1] & 0x80) == 0);
+            }
         }
 
         internal override int GetSeedSize()
@@ -104,7 +106,7 @@ namespace NSec.Cryptography
             return crypto_scalarmult_curve25519_SCALARBYTES;
         }
 
-        private protected override bool AgreeCore(
+        private protected unsafe override bool AgreeCore(
             ReadOnlySpan<byte> key,
             in PublicKeyBytes otherPartyPublicKey,
             MemoryPool<byte> memoryPool,
@@ -117,12 +119,14 @@ namespace NSec.Cryptography
             owner = memoryPool.Rent(crypto_scalarmult_curve25519_BYTES);
             memory = owner.Memory.Slice(0, crypto_scalarmult_curve25519_BYTES);
 
-            int error = crypto_scalarmult_curve25519(
-                out owner.Memory.Span.GetPinnableReference(),
-                in key.GetPinnableReference(),
-                in otherPartyPublicKey);
+            fixed (byte* q = owner.Memory.Span)
+            fixed (byte* n = key)
+            fixed (PublicKeyBytes* p = &otherPartyPublicKey)
+            {
+                int error = crypto_scalarmult_curve25519(q, n, p);
 
-            return error == 0;
+                return error == 0;
+            }
         }
 
         internal override bool TryExportKey(

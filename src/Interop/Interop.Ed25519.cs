@@ -14,12 +14,12 @@ internal static partial class Interop
         internal static extern UIntPtr crypto_sign_ed25519_bytes();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int crypto_sign_ed25519_detached(
-            ref byte sig,
+        internal static unsafe extern int crypto_sign_ed25519_detached(
+            byte* sig,
             out ulong siglen_p,
-            in byte m,
+            byte* m,
             ulong mlen,
-            in byte sk);
+            byte* sk);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern UIntPtr crypto_sign_ed25519_publickeybytes();
@@ -28,24 +28,24 @@ internal static partial class Interop
         internal static extern UIntPtr crypto_sign_ed25519_secretkeybytes();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int crypto_sign_ed25519_seed_keypair(
-            out PublicKeyBytes pk,
-            out byte sk,
-            in byte seed);
+        internal static unsafe extern int crypto_sign_ed25519_seed_keypair(
+            PublicKeyBytes* pk,
+            byte* sk,
+            byte* seed);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern UIntPtr crypto_sign_ed25519_seedbytes();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int crypto_sign_ed25519_sk_to_seed(
-            ref byte seed,
-            in byte sk);
+        internal static unsafe extern int crypto_sign_ed25519_sk_to_seed(
+            byte* seed,
+            byte* sk);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int crypto_sign_ed25519_verify_detached(
-            in byte sig,
-            in byte m,
+        internal static unsafe extern int crypto_sign_ed25519_verify_detached(
+            byte* sig,
+            byte* m,
             ulong mlen,
-            in PublicKeyBytes pk);
+            PublicKeyBytes* pk);
     }
 }

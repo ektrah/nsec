@@ -79,50 +79,51 @@ namespace NSec.Cryptography
             seed.CopyTo(owner.Memory.Span);
         }
 
-        internal override bool FinalizeAndVerifyCore(
+        internal unsafe override bool FinalizeAndVerifyCore(
             ref IncrementalMacState state,
             ReadOnlySpan<byte> mac)
         {
             Debug.Assert(mac.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(mac.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
-            Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
-            ref crypto_generichash_blake2b_state state_ = ref AlignPinnedReference(ref buffer.GetPinnableReference());
+            byte* buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
+            crypto_generichash_blake2b_state* state_ = Align64(buffer);
+            *state_ = state.blake2b;
 
-            Span<byte> temp = stackalloc byte[mac.Length];
-
-            state_ = state.blake2b;
+            byte* temp = stackalloc byte[mac.Length];
 
             int error = crypto_generichash_blake2b_final(
-                ref state_,
-                ref temp.GetPinnableReference(),
-                (UIntPtr)temp.Length);
+                state_,
+                temp,
+                (UIntPtr)mac.Length);
 
             Debug.Assert(error == 0);
 
-            return CryptographicOperations.FixedTimeEquals(temp, mac);
+            return CryptographicOperations.FixedTimeEquals(new ReadOnlySpan<byte>(temp, mac.Length), mac);
         }
 
-        internal override void FinalizeCore(
+        internal unsafe override void FinalizeCore(
             ref IncrementalMacState state,
             Span<byte> mac)
         {
             Debug.Assert(mac.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(mac.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
-            Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
-            ref crypto_generichash_blake2b_state state_ = ref AlignPinnedReference(ref buffer.GetPinnableReference());
+            byte* buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
+            crypto_generichash_blake2b_state* state_ = Align64(buffer);
+            *state_ = state.blake2b;
 
-            state_ = state.blake2b;
+            fixed (byte* @out = mac)
+            {
+                int error = crypto_generichash_blake2b_final(
+                    state_,
+                    @out,
+                    (UIntPtr)mac.Length);
 
-            int error = crypto_generichash_blake2b_final(
-                ref state_,
-                ref mac.GetPinnableReference(),
-                (UIntPtr)mac.Length);
+                Debug.Assert(error == 0);
+            }
 
-            Debug.Assert(error == 0);
-
-            state.blake2b = state_;
+            state.blake2b = *state_;
         }
 
         internal override int GetSeedSize()
@@ -130,7 +131,7 @@ namespace NSec.Cryptography
             return KeySize;
         }
 
-        internal override void InitializeCore(
+        internal unsafe override void InitializeCore(
             ReadOnlySpan<byte> key,
             out IncrementalMacState state)
         {
@@ -139,18 +140,21 @@ namespace NSec.Cryptography
             Debug.Assert(MacSize >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(MacSize <= crypto_generichash_blake2b_BYTES_MAX);
 
-            Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
-            ref crypto_generichash_blake2b_state state_ = ref AlignPinnedReference(ref buffer.GetPinnableReference());
+            byte* buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
+            crypto_generichash_blake2b_state* state_ = Align64(buffer);
 
-            int error = crypto_generichash_blake2b_init(
-                 out state_,
-                 in key.GetPinnableReference(),
-                 (UIntPtr)key.Length,
-                 (UIntPtr)MacSize);
+            fixed (byte* k = key)
+            {
+                int error = crypto_generichash_blake2b_init(
+                    state_,
+                    k,
+                    (UIntPtr)key.Length,
+                    (UIntPtr)MacSize);
 
-            Debug.Assert(error == 0);
+                Debug.Assert(error == 0);
+            }
 
-            state.blake2b = state_;
+            state.blake2b = *state_;
         }
 
         internal override bool TryExportKey(
@@ -191,26 +195,28 @@ namespace NSec.Cryptography
             }
         }
 
-        internal override void UpdateCore(
+        internal unsafe override void UpdateCore(
             ref IncrementalMacState state,
             ReadOnlySpan<byte> data)
         {
-            Span<byte> buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
-            ref crypto_generichash_blake2b_state state_ = ref AlignPinnedReference(ref buffer.GetPinnableReference());
+            byte* buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
+            crypto_generichash_blake2b_state* state_ = Align64(buffer);
+            *state_ = state.blake2b;
 
-            state_ = state.blake2b;
+            fixed (byte* @in = data)
+            {
+                int error = crypto_generichash_blake2b_update(
+                    state_,
+                    @in,
+                    (ulong)data.Length);
 
-            int error = crypto_generichash_blake2b_update(
-                ref state_,
-                in data.GetPinnableReference(),
-                (ulong)data.Length);
+                Debug.Assert(error == 0);
+            }
 
-            Debug.Assert(error == 0);
-
-            state.blake2b = state_;
+            state.blake2b = *state_;
         }
 
-        private protected override void MacCore(
+        private protected unsafe override void MacCore(
             ReadOnlySpan<byte> key,
             ReadOnlySpan<byte> data,
             Span<byte> mac)
@@ -220,18 +226,23 @@ namespace NSec.Cryptography
             Debug.Assert(mac.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(mac.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
-            int error = crypto_generichash_blake2b(
-                ref mac.GetPinnableReference(),
-                (UIntPtr)mac.Length,
-                in data.GetPinnableReference(),
-                (ulong)data.Length,
-                in key.GetPinnableReference(),
-                (UIntPtr)key.Length);
+            fixed (byte* @out = mac)
+            fixed (byte* @in = data)
+            fixed (byte* k = key)
+            {
+                int error = crypto_generichash_blake2b(
+                    @out,
+                    (UIntPtr)mac.Length,
+                    @in,
+                    (ulong)data.Length,
+                    k,
+                    (UIntPtr)key.Length);
 
-            Debug.Assert(error == 0);
+                Debug.Assert(error == 0);
+            }
         }
 
-        private protected override bool VerifyCore(
+        private protected unsafe override bool VerifyCore(
             ReadOnlySpan<byte> key,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> mac)
@@ -241,27 +252,31 @@ namespace NSec.Cryptography
             Debug.Assert(mac.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(mac.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
-            Span<byte> temp = stackalloc byte[mac.Length];
+            byte* temp = stackalloc byte[mac.Length];
 
-            int error = crypto_generichash_blake2b(
-                ref temp.GetPinnableReference(),
-                (UIntPtr)temp.Length,
-                in data.GetPinnableReference(),
-                (ulong)data.Length,
-                in key.GetPinnableReference(),
-                (UIntPtr)key.Length);
+            fixed (byte* @in = data)
+            fixed (byte* k = key)
+            {
+                int error = crypto_generichash_blake2b(
+                    temp,
+                    (UIntPtr)mac.Length,
+                    @in,
+                    (ulong)data.Length,
+                    k,
+                    (UIntPtr)key.Length);
 
-            Debug.Assert(error == 0);
+                Debug.Assert(error == 0);
+            }
 
-            return CryptographicOperations.FixedTimeEquals(temp, mac);
+            return CryptographicOperations.FixedTimeEquals(new ReadOnlySpan<byte>(temp, mac.Length), mac);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static unsafe ref crypto_generichash_blake2b_state AlignPinnedReference(ref byte value)
+        private static unsafe crypto_generichash_blake2b_state* Align64(byte* value)
         {
-            return ref sizeof(byte*) == sizeof(uint)
-                ? ref Unsafe.AsRef<crypto_generichash_blake2b_state>((void*)(((uint)Unsafe.AsPointer(ref value) + 63u) & ~63u))
-                : ref Unsafe.AsRef<crypto_generichash_blake2b_state>((void*)(((ulong)Unsafe.AsPointer(ref value) + 63ul) & ~63ul));
+            return sizeof(byte*) == sizeof(uint)
+                ? (crypto_generichash_blake2b_state*)(((uint)value + 63u) & ~63u)
+                : (crypto_generichash_blake2b_state*)(((ulong)value + 63ul) & ~63ul);
         }
 
         private static void SelfTest()

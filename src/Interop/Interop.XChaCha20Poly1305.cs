@@ -14,28 +14,28 @@ internal static partial class Interop
         internal static extern UIntPtr crypto_aead_xchacha20poly1305_ietf_abytes();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int crypto_aead_xchacha20poly1305_ietf_decrypt(
-            ref byte m,
+        internal static unsafe extern int crypto_aead_xchacha20poly1305_ietf_decrypt(
+            byte* m,
             out ulong mlen_p,
-            IntPtr nsec,
-            in byte c,
+            byte* nsec,
+            byte* c,
             ulong clen,
-            in byte ad,
+            byte* ad,
             ulong adlen,
-            in NSec.Cryptography.Nonce npub,
-            in byte k);
+            NSec.Cryptography.Nonce* npub,
+            byte* k);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int crypto_aead_xchacha20poly1305_ietf_encrypt(
-            ref byte c,
+        internal static unsafe extern int crypto_aead_xchacha20poly1305_ietf_encrypt(
+            byte* c,
             out ulong clen_p,
-            in byte m,
+            byte* m,
             ulong mlen,
-            in byte ad,
+            byte* ad,
             ulong adlen,
-            IntPtr nsec,
-            in NSec.Cryptography.Nonce npub,
-            in byte k);
+            byte* nsec,
+            NSec.Cryptography.Nonce* npub,
+            byte* k);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern UIntPtr crypto_aead_xchacha20poly1305_ietf_keybytes();

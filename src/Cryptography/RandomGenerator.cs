@@ -199,10 +199,13 @@ namespace NSec.Cryptography
 
         internal sealed class System : RandomGenerator
         {
-            private protected override void GenerateBytesCore(
+            private protected unsafe override void GenerateBytesCore(
                 Span<byte> bytes)
             {
-                randombytes_buf(ref bytes.GetPinnableReference(), (UIntPtr)bytes.Length);
+                fixed (byte* buf = bytes)
+                {
+                    randombytes_buf(buf, (UIntPtr)bytes.Length);
+                }
             }
 
             private protected override uint GenerateUInt32Core()

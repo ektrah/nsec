@@ -11,12 +11,12 @@ internal static partial class Interop
         internal const int crypto_secretbox_xsalsa20poly1305_NONCEBYTES = 24;
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int crypto_secretbox_easy(
-            ref byte c,
-            in byte m,
+        internal static unsafe extern int crypto_secretbox_easy(
+            byte* c,
+            byte* m,
             ulong mlen,
-            in NSec.Cryptography.Nonce n,
-            in byte k);
+            NSec.Cryptography.Nonce* n,
+            byte* k);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern UIntPtr crypto_secretbox_keybytes();
@@ -28,12 +28,12 @@ internal static partial class Interop
         internal static extern UIntPtr crypto_secretbox_noncebytes();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int crypto_secretbox_open_easy(
-            ref byte m,
-            in byte c,
+        internal static unsafe extern int crypto_secretbox_open_easy(
+            byte* m,
+            byte* c,
             ulong clen,
-            in NSec.Cryptography.Nonce n,
-            in byte k);
+            NSec.Cryptography.Nonce* n,
+            byte* k);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern IntPtr crypto_secretbox_primitive();

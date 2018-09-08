@@ -14,7 +14,7 @@ namespace NSec.Cryptography.Formatting
         {
         }
 
-        protected override void Deserialize(
+        protected override unsafe void Deserialize(
             ReadOnlySpan<byte> span,
             MemoryPool<byte> memoryPool,
             out ReadOnlyMemory<byte> memory,
@@ -28,12 +28,14 @@ namespace NSec.Cryptography.Formatting
             memory = owner.Memory.Slice(0, crypto_scalarmult_curve25519_SCALARBYTES);
             span.CopyTo(owner.Memory.Span);
 
-            int error = crypto_scalarmult_curve25519_base(
-                out publicKeyBytes,
-                in owner.Memory.Span.GetPinnableReference());
+            fixed (PublicKeyBytes* q = &publicKeyBytes)
+            fixed (byte* n = owner.Memory.Span)
+            {
+                int error = crypto_scalarmult_curve25519_base(q, n);
 
-            Debug.Assert(error == 0);
-            Debug.Assert((Unsafe.Add(ref Unsafe.As<PublicKeyBytes, byte>(ref publicKeyBytes), crypto_scalarmult_curve25519_SCALARBYTES - 1) & 0x80) == 0);
+                Debug.Assert(error == 0);
+                Debug.Assert((((byte*)q)[crypto_scalarmult_curve25519_SCALARBYTES - 1] & 0x80) == 0);
+            }
         }
 
         protected override void Serialize(

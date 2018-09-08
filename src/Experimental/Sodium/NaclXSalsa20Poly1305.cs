@@ -42,7 +42,7 @@ namespace NSec.Experimental.Sodium
             seed.CopyTo(owner.Memory.Span);
         }
 
-        internal override void EncryptCore(
+        internal unsafe override void EncryptCore(
             ReadOnlySpan<byte> key,
             in Nonce nonce,
             ReadOnlySpan<byte> plaintext,
@@ -52,14 +52,20 @@ namespace NSec.Experimental.Sodium
             Debug.Assert(nonce.Size == crypto_secretbox_xsalsa20poly1305_NONCEBYTES);
             Debug.Assert(ciphertext.Length == crypto_secretbox_xsalsa20poly1305_MACBYTES + plaintext.Length);
 
-            int error = crypto_secretbox_easy(
-                ref ciphertext.GetPinnableReference(),
-                in plaintext.GetPinnableReference(),
-                (ulong)plaintext.Length,
-                in nonce,
-                in key.GetPinnableReference());
+            fixed (byte* c = ciphertext)
+            fixed (byte* m = plaintext)
+            fixed (Nonce* n = &nonce)
+            fixed (byte* k = key)
+            {
+                int error = crypto_secretbox_easy(
+                    c,
+                    m,
+                    (ulong)plaintext.Length,
+                    n,
+                    k);
 
-            Debug.Assert(error == 0);
+                Debug.Assert(error == 0);
+            }
         }
 
         internal override int GetSeedSize()
@@ -67,7 +73,7 @@ namespace NSec.Experimental.Sodium
             return crypto_secretbox_xsalsa20poly1305_KEYBYTES;
         }
 
-        internal override bool DecryptCore(
+        internal unsafe override bool DecryptCore(
             ReadOnlySpan<byte> key,
             in Nonce nonce,
             ReadOnlySpan<byte> ciphertext,
@@ -77,16 +83,22 @@ namespace NSec.Experimental.Sodium
             Debug.Assert(nonce.Size == crypto_secretbox_xsalsa20poly1305_NONCEBYTES);
             Debug.Assert(plaintext.Length == ciphertext.Length - crypto_secretbox_xsalsa20poly1305_MACBYTES);
 
-            int error = crypto_secretbox_open_easy(
-                ref plaintext.GetPinnableReference(),
-                in ciphertext.GetPinnableReference(),
-                (ulong)ciphertext.Length,
-                in nonce,
-                in key.GetPinnableReference());
+            fixed (byte* m = plaintext)
+            fixed (byte* c = ciphertext)
+            fixed (Nonce* n = &nonce)
+            fixed (byte* k = key)
+            {
+                int error = crypto_secretbox_open_easy(
+                    m,
+                    c,
+                    (ulong)ciphertext.Length,
+                    n,
+                    k);
 
-            // TODO: clear plaintext if decryption fails
+                // TODO: clear plaintext if decryption fails
 
-            return error == 0;
+                return error == 0;
+            }
         }
 
         internal override bool TryExportKey(

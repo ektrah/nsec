@@ -132,7 +132,7 @@ namespace NSec.Cryptography
             }
         }
 
-        private static void ExpandCore(
+        private static unsafe void ExpandCore(
             ReadOnlySpan<byte> pseudorandomKey,
             ReadOnlySpan<byte> info,
             Span<byte> bytes)
@@ -140,42 +140,48 @@ namespace NSec.Cryptography
             Debug.Assert(pseudorandomKey.Length >= crypto_auth_hmacsha512_BYTES);
             Debug.Assert(bytes.Length <= byte.MaxValue * crypto_auth_hmacsha512_BYTES);
 
-            Span<byte> temp = stackalloc byte[crypto_auth_hmacsha512_BYTES];
+            byte* temp = stackalloc byte[crypto_auth_hmacsha512_BYTES];
+
             try
             {
-                int tempLength = 0;
-                int offset = 0;
-                byte counter = 0;
-                int chunkSize;
-
-                while ((chunkSize = bytes.Length - offset) > 0)
+                fixed (byte* key = pseudorandomKey)
+                fixed (byte* @in = info)
                 {
-                    counter++;
+                    int tempLength = 0;
+                    int offset = 0;
+                    byte counter = 0;
+                    int chunkSize;
 
-                    crypto_auth_hmacsha512_init(out crypto_auth_hmacsha512_state state, in pseudorandomKey.GetPinnableReference(), (UIntPtr)pseudorandomKey.Length);
-                    crypto_auth_hmacsha512_update(ref state, in temp.GetPinnableReference(), (ulong)tempLength);
-                    crypto_auth_hmacsha512_update(ref state, in info.GetPinnableReference(), (ulong)info.Length);
-                    crypto_auth_hmacsha512_update(ref state, in counter, sizeof(byte));
-                    crypto_auth_hmacsha512_final(ref state, ref temp.GetPinnableReference());
-
-                    tempLength = crypto_auth_hmacsha512_BYTES;
-
-                    if (chunkSize > crypto_auth_hmacsha512_BYTES)
+                    while ((chunkSize = bytes.Length - offset) > 0)
                     {
-                        chunkSize = crypto_auth_hmacsha512_BYTES;
-                    }
+                        counter++;
 
-                    temp.Slice(0, chunkSize).CopyTo(bytes.Slice(offset));
-                    offset += chunkSize;
+                        crypto_auth_hmacsha512_state state;
+                        crypto_auth_hmacsha512_init(&state, key, (UIntPtr)pseudorandomKey.Length);
+                        crypto_auth_hmacsha512_update(&state, temp, (ulong)tempLength);
+                        crypto_auth_hmacsha512_update(&state, @in, (ulong)info.Length);
+                        crypto_auth_hmacsha512_update(&state, &counter, sizeof(byte));
+                        crypto_auth_hmacsha512_final(&state, temp);
+
+                        tempLength = crypto_auth_hmacsha512_BYTES;
+
+                        if (chunkSize > crypto_auth_hmacsha512_BYTES)
+                        {
+                            chunkSize = crypto_auth_hmacsha512_BYTES;
+                        }
+
+                        new ReadOnlySpan<byte>(temp, chunkSize).CopyTo(bytes.Slice(offset));
+                        offset += chunkSize;
+                    }
                 }
             }
             finally
             {
-                CryptographicOperations.ZeroMemory(temp);
+                CryptographicOperations.ZeroMemory(new Span<byte>(temp, crypto_auth_hmacsha512_BYTES));
             }
         }
 
-        private static void ExtractCore(
+        private static unsafe void ExtractCore(
             ReadOnlySpan<byte> inputKeyingMaterial,
             ReadOnlySpan<byte> salt,
             Span<byte> pseudorandomKey)
@@ -187,9 +193,15 @@ namespace NSec.Cryptography
             // "not provided" and an empty span seems to yield the same result
             // as a string of HashLen zeros, so the corner case is ignored here.
 
-            crypto_auth_hmacsha512_init(out crypto_auth_hmacsha512_state state, in salt.GetPinnableReference(), (UIntPtr)salt.Length);
-            crypto_auth_hmacsha512_update(ref state, in inputKeyingMaterial.GetPinnableReference(), (ulong)inputKeyingMaterial.Length);
-            crypto_auth_hmacsha512_final(ref state, ref pseudorandomKey.GetPinnableReference());
+            fixed (byte* key = salt)
+            fixed (byte* @in = inputKeyingMaterial)
+            fixed (byte* @out = pseudorandomKey)
+            {
+                crypto_auth_hmacsha512_state state;
+                crypto_auth_hmacsha512_init(&state, key, (UIntPtr)salt.Length);
+                crypto_auth_hmacsha512_update(&state, @in, (ulong)inputKeyingMaterial.Length);
+                crypto_auth_hmacsha512_final(&state, @out);
+            }
         }
 
         private static void SelfTest()

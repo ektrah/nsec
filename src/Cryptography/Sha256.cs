@@ -49,87 +49,109 @@ namespace NSec.Cryptography
             }
         }
 
-        internal override bool FinalizeAndVerifyCore(
+        internal unsafe override bool FinalizeAndVerifyCore(
             ref IncrementalHashState state,
             ReadOnlySpan<byte> hash)
         {
             Debug.Assert(hash.Length == crypto_hash_sha256_BYTES);
 
-            Span<byte> temp = stackalloc byte[crypto_hash_sha256_BYTES];
+            byte* temp = stackalloc byte[crypto_hash_sha256_BYTES];
 
-            int error = crypto_hash_sha256_final(
-                ref state.sha256,
-                ref temp.GetPinnableReference());
+            fixed (crypto_hash_sha256_state* state_ = &state.sha256)
+            {
+                int error = crypto_hash_sha256_final(
+                    state_,
+                    temp);
 
-            Debug.Assert(error == 0);
+                Debug.Assert(error == 0);
+            }
 
-            return CryptographicOperations.FixedTimeEquals(temp, hash);
+            return CryptographicOperations.FixedTimeEquals(new ReadOnlySpan<byte>(temp, hash.Length), hash);
         }
 
-        internal override void FinalizeCore(
+        internal unsafe override void FinalizeCore(
             ref IncrementalHashState state,
             Span<byte> hash)
         {
             Debug.Assert(hash.Length == crypto_hash_sha256_BYTES);
 
-            int error = crypto_hash_sha256_final(
-                ref state.sha256,
-                ref hash.GetPinnableReference());
+            fixed (crypto_hash_sha256_state* state_ = &state.sha256)
+            fixed (byte* @out = hash)
+            {
+                int error = crypto_hash_sha256_final(
+                    state_,
+                    @out);
 
-            Debug.Assert(error == 0);
+                Debug.Assert(error == 0);
+            }
         }
 
-        internal override void InitializeCore(
+        internal unsafe override void InitializeCore(
             out IncrementalHashState state)
         {
-            int error = crypto_hash_sha256_init(
-                out state.sha256);
+            fixed (crypto_hash_sha256_state* state_ = &state.sha256)
+            {
+                int error = crypto_hash_sha256_init(
+                    state_);
 
-            Debug.Assert(error == 0);
+                Debug.Assert(error == 0);
+            }
         }
 
-        internal override void UpdateCore(
+        internal unsafe override void UpdateCore(
             ref IncrementalHashState state,
             ReadOnlySpan<byte> data)
         {
-            int error = crypto_hash_sha256_update(
-                ref state.sha256,
-                in data.GetPinnableReference(),
-                (ulong)data.Length);
+            fixed (crypto_hash_sha256_state* state_ = &state.sha256)
+            fixed (byte* @in = data)
+            {
+                int error = crypto_hash_sha256_update(
+                    state_,
+                    @in,
+                    (ulong)data.Length);
 
-            Debug.Assert(error == 0);
+                Debug.Assert(error == 0);
+            }
         }
 
-        private protected override void HashCore(
+        private protected unsafe override void HashCore(
             ReadOnlySpan<byte> data,
             Span<byte> hash)
         {
             Debug.Assert(hash.Length == crypto_hash_sha256_BYTES);
 
-            int error = crypto_hash_sha256(
-                ref hash.GetPinnableReference(),
-                in data.GetPinnableReference(),
-                (ulong)data.Length);
+            fixed (byte* @out = hash)
+            fixed (byte* @in = data)
+            {
+                int error = crypto_hash_sha256(
+                    @out,
+                    @in,
+                    (ulong)data.Length);
 
-            Debug.Assert(error == 0);
+                Debug.Assert(error == 0);
+            }
         }
 
-        private protected override bool VerifyCore(
+        private protected unsafe override bool VerifyCore(
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> hash)
         {
             Debug.Assert(hash.Length == crypto_hash_sha256_BYTES);
 
-            Span<byte> temp = stackalloc byte[crypto_hash_sha256_BYTES];
+            byte* temp = stackalloc byte[crypto_hash_sha256_BYTES];
 
-            int error = crypto_hash_sha256(
-                ref temp.GetPinnableReference(),
-                in data.GetPinnableReference(),
-                (ulong)data.Length);
+            fixed (byte* @out = hash)
+            fixed (byte* @in = data)
+            {
+                int error = crypto_hash_sha256(
+                    temp,
+                    @in,
+                    (ulong)data.Length);
 
-            Debug.Assert(error == 0);
+                Debug.Assert(error == 0);
+            }
 
-            return CryptographicOperations.FixedTimeEquals(temp, hash);
+            return CryptographicOperations.FixedTimeEquals(new ReadOnlySpan<byte>(temp, hash.Length), hash);
         }
 
         private static void SelfTest()

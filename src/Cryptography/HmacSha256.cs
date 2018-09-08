@@ -79,38 +79,44 @@ namespace NSec.Cryptography
             seed.CopyTo(owner.Memory.Span);
         }
 
-        internal override bool FinalizeAndVerifyCore(
+        internal unsafe override bool FinalizeAndVerifyCore(
             ref IncrementalMacState state,
             ReadOnlySpan<byte> mac)
         {
             Debug.Assert(mac.Length <= crypto_auth_hmacsha256_BYTES);
 
-            Span<byte> temp = stackalloc byte[crypto_auth_hmacsha256_BYTES];
+            byte* temp = stackalloc byte[crypto_auth_hmacsha256_BYTES];
 
-            int error = crypto_auth_hmacsha256_final(
-                ref state.hmacsha256,
-                ref temp.GetPinnableReference());
+            fixed (crypto_auth_hmacsha256_state* state_ = &state.hmacsha256)
+            {
+                int error = crypto_auth_hmacsha256_final(
+                    state_,
+                    temp);
 
-            Debug.Assert(error == 0);
+                Debug.Assert(error == 0);
+            }
 
-            return CryptographicOperations.FixedTimeEquals(temp.Slice(0, mac.Length), mac);
+            return CryptographicOperations.FixedTimeEquals(new ReadOnlySpan<byte>(temp, mac.Length), mac);
         }
 
-        internal override void FinalizeCore(
+        internal unsafe override void FinalizeCore(
             ref IncrementalMacState state,
             Span<byte> mac)
         {
             Debug.Assert(mac.Length <= crypto_auth_hmacsha256_BYTES);
 
-            Span<byte> temp = stackalloc byte[crypto_auth_hmacsha256_BYTES];
+            byte* temp = stackalloc byte[crypto_auth_hmacsha256_BYTES];
 
-            int error = crypto_auth_hmacsha256_final(
-                ref state.hmacsha256,
-                ref temp.GetPinnableReference());
+            fixed (crypto_auth_hmacsha256_state* state_ = &state.hmacsha256)
+            {
+                int error = crypto_auth_hmacsha256_final(
+                    state_,
+                    temp);
 
-            Debug.Assert(error == 0);
+                Debug.Assert(error == 0);
+            }
 
-            temp.Slice(0, mac.Length).CopyTo(mac);
+            new ReadOnlySpan<byte>(temp, mac.Length).CopyTo(mac);
         }
 
         internal override int GetSeedSize()
@@ -118,18 +124,22 @@ namespace NSec.Cryptography
             return KeySize;
         }
 
-        internal override void InitializeCore(
+        internal unsafe override void InitializeCore(
             ReadOnlySpan<byte> key,
             out IncrementalMacState state)
         {
             Debug.Assert(key.Length == crypto_hash_sha256_BYTES);
 
-            int error = crypto_auth_hmacsha256_init(
-                out state.hmacsha256,
-                in key.GetPinnableReference(),
-                (UIntPtr)key.Length);
+            fixed (crypto_auth_hmacsha256_state* state_ = &state.hmacsha256)
+            fixed (byte* k = key)
+            {
+                int error = crypto_auth_hmacsha256_init(
+                    state_,
+                    k,
+                    (UIntPtr)key.Length);
 
-            Debug.Assert(error == 0);
+                Debug.Assert(error == 0);
+            }
         }
 
         internal override bool TryExportKey(
@@ -170,19 +180,23 @@ namespace NSec.Cryptography
             }
         }
 
-        internal override void UpdateCore(
+        internal unsafe override void UpdateCore(
             ref IncrementalMacState state,
             ReadOnlySpan<byte> data)
         {
-            int error = crypto_auth_hmacsha256_update(
-                ref state.hmacsha256,
-                in data.GetPinnableReference(),
-                (ulong)data.Length);
+            fixed (crypto_auth_hmacsha256_state* state_ = &state.hmacsha256)
+            fixed (byte* @in = data)
+            {
+                int error = crypto_auth_hmacsha256_update(
+                    state_,
+                    @in,
+                    (ulong)data.Length);
 
-            Debug.Assert(error == 0);
+                Debug.Assert(error == 0);
+            }
         }
 
-        private protected override void MacCore(
+        private protected unsafe override void MacCore(
             ReadOnlySpan<byte> key,
             ReadOnlySpan<byte> data,
             Span<byte> mac)
@@ -190,16 +204,32 @@ namespace NSec.Cryptography
             Debug.Assert(key.Length == crypto_hash_sha256_BYTES);
             Debug.Assert(mac.Length <= crypto_auth_hmacsha256_BYTES);
 
-            Span<byte> temp = stackalloc byte[crypto_auth_hmacsha512_BYTES];
+            byte* temp = stackalloc byte[crypto_auth_hmacsha512_BYTES];
 
-            crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, in key.GetPinnableReference(), (UIntPtr)key.Length);
-            crypto_auth_hmacsha256_update(ref state, in data.GetPinnableReference(), (ulong)data.Length);
-            crypto_auth_hmacsha256_final(ref state, ref temp.GetPinnableReference());
+            fixed (byte* @in = data)
+            fixed (byte* k = key)
+            {
+                crypto_auth_hmacsha256_state state;
 
-            temp.Slice(0, mac.Length).CopyTo(mac);
+                crypto_auth_hmacsha256_init(
+                    &state,
+                    k,
+                    (UIntPtr)key.Length);
+
+                crypto_auth_hmacsha256_update(
+                    &state,
+                    @in,
+                    (ulong)data.Length);
+
+                crypto_auth_hmacsha256_final(
+                    &state,
+                    temp);
+            }
+
+            new ReadOnlySpan<byte>(temp, mac.Length).CopyTo(mac);
         }
 
-        private protected override bool VerifyCore(
+        private protected unsafe override bool VerifyCore(
             ReadOnlySpan<byte> key,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> mac)
@@ -207,13 +237,29 @@ namespace NSec.Cryptography
             Debug.Assert(key.Length == crypto_hash_sha256_BYTES);
             Debug.Assert(mac.Length <= crypto_auth_hmacsha256_BYTES);
 
-            Span<byte> temp = stackalloc byte[crypto_auth_hmacsha256_BYTES];
+            byte* temp = stackalloc byte[crypto_auth_hmacsha256_BYTES];
 
-            crypto_auth_hmacsha256_init(out crypto_auth_hmacsha256_state state, in key.GetPinnableReference(), (UIntPtr)key.Length);
-            crypto_auth_hmacsha256_update(ref state, in data.GetPinnableReference(), (ulong)data.Length);
-            crypto_auth_hmacsha256_final(ref state, ref temp.GetPinnableReference());
+            fixed (byte* @in = data)
+            fixed (byte* k = key)
+            {
+                crypto_auth_hmacsha256_state state;
 
-            return CryptographicOperations.FixedTimeEquals(temp.Slice(0, mac.Length), mac);
+                crypto_auth_hmacsha256_init(
+                    &state,
+                    k,
+                    (UIntPtr)key.Length);
+
+                crypto_auth_hmacsha256_update(
+                    &state,
+                    @in,
+                    (ulong)data.Length);
+
+                crypto_auth_hmacsha256_final(
+                    &state,
+                    temp);
+            }
+
+            return CryptographicOperations.FixedTimeEquals(new ReadOnlySpan<byte>(temp, mac.Length), mac);
         }
 
         private static void SelfTest()

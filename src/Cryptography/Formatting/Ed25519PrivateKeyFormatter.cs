@@ -14,7 +14,7 @@ namespace NSec.Cryptography.Formatting
         {
         }
 
-        protected override void Deserialize(
+        protected unsafe override void Deserialize(
             ReadOnlySpan<byte> span,
             MemoryPool<byte> memoryPool,
             out ReadOnlyMemory<byte> memory,
@@ -27,26 +27,30 @@ namespace NSec.Cryptography.Formatting
             owner = memoryPool.Rent(crypto_sign_ed25519_SECRETKEYBYTES);
             memory = owner.Memory.Slice(0, crypto_sign_ed25519_SECRETKEYBYTES);
 
-            int error = crypto_sign_ed25519_seed_keypair(
-                out publicKeyBytes,
-                out owner.Memory.Span.GetPinnableReference(),
-                in span.GetPinnableReference());
+            fixed (PublicKeyBytes* pk = &publicKeyBytes)
+            fixed (byte* sk = owner.Memory.Span)
+            fixed (byte* seed_ = span)
+            {
+                int error = crypto_sign_ed25519_seed_keypair(pk, sk, seed_);
 
-            Debug.Assert(error == 0);
+                Debug.Assert(error == 0);
+            }
         }
 
-        protected override void Serialize(
+        protected unsafe override void Serialize(
             ReadOnlySpan<byte> privateKeyBytes,
             Span<byte> span)
         {
             Debug.Assert(privateKeyBytes.Length == crypto_sign_ed25519_SECRETKEYBYTES);
             Debug.Assert(span.Length == crypto_sign_ed25519_SEEDBYTES);
 
-            int error = crypto_sign_ed25519_sk_to_seed(
-                ref span.GetPinnableReference(),
-                in privateKeyBytes.GetPinnableReference());
+            fixed (byte* seed_ = span)
+            fixed (byte* sk = privateKeyBytes)
+            {
+                int error = crypto_sign_ed25519_sk_to_seed(seed_, sk);
 
-            Debug.Assert(error == 0);
+                Debug.Assert(error == 0);
+            }
         }
     }
 }

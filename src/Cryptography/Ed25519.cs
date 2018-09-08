@@ -79,7 +79,7 @@ namespace NSec.Cryptography
             }
         }
 
-        internal override void CreateKey(
+        internal override unsafe void CreateKey(
             ReadOnlySpan<byte> seed,
             MemoryPool<byte> memoryPool,
             out ReadOnlyMemory<byte> memory,
@@ -93,12 +93,14 @@ namespace NSec.Cryptography
             owner = memoryPool.Rent(crypto_sign_ed25519_SECRETKEYBYTES);
             memory = owner.Memory.Slice(0, crypto_sign_ed25519_SECRETKEYBYTES);
 
-            int error = crypto_sign_ed25519_seed_keypair(
-                out publicKey.GetPinnableReference(),
-                out owner.Memory.Span.GetPinnableReference(),
-                in seed.GetPinnableReference());
+            fixed (PublicKeyBytes* pk = publicKey)
+            fixed (byte* sk = owner.Memory.Span)
+            fixed (byte* seed_ = seed)
+            {
+                int error = crypto_sign_ed25519_seed_keypair(pk, sk, seed_);
 
-            Debug.Assert(error == 0);
+                Debug.Assert(error == 0);
+            }
         }
 
         internal override int GetSeedSize()
@@ -106,7 +108,7 @@ namespace NSec.Cryptography
             return crypto_sign_ed25519_SEEDBYTES;
         }
 
-        private protected override void SignCore(
+        private protected unsafe override void SignCore(
             ReadOnlySpan<byte> key,
             ReadOnlySpan<byte> data,
             Span<byte> signature)
@@ -114,15 +116,20 @@ namespace NSec.Cryptography
             Debug.Assert(key.Length == crypto_sign_ed25519_SECRETKEYBYTES);
             Debug.Assert(signature.Length == crypto_sign_ed25519_BYTES);
 
-            int error = crypto_sign_ed25519_detached(
-                ref signature.GetPinnableReference(),
-                out ulong signatureLength,
-                in data.GetPinnableReference(),
-                (ulong)data.Length,
-                in key.GetPinnableReference());
+            fixed (byte* sig = signature)
+            fixed (byte* m = data)
+            fixed (byte* sk = key)
+            {
+                int error = crypto_sign_ed25519_detached(
+                    sig,
+                    out ulong signatureLength,
+                    m,
+                    (ulong)data.Length,
+                    sk);
 
-            Debug.Assert(error == 0);
-            Debug.Assert((ulong)signature.Length == signatureLength);
+                Debug.Assert(error == 0);
+                Debug.Assert((ulong)signature.Length == signatureLength);
+            }
         }
 
         internal override bool TryExportKey(
@@ -214,7 +221,7 @@ namespace NSec.Cryptography
             }
         }
 
-        private protected override bool VerifyCore(
+        private protected unsafe override bool VerifyCore(
             in PublicKeyBytes publicKeyBytes,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> signature)
@@ -222,13 +229,18 @@ namespace NSec.Cryptography
             Debug.Assert(Unsafe.SizeOf<PublicKeyBytes>() == crypto_sign_ed25519_PUBLICKEYBYTES);
             Debug.Assert(signature.Length == crypto_sign_ed25519_BYTES);
 
-            int error = crypto_sign_ed25519_verify_detached(
-                in signature.GetPinnableReference(),
-                in data.GetPinnableReference(),
-                (ulong)data.Length,
-                in publicKeyBytes);
+            fixed (byte* sig = signature)
+            fixed (byte* m = data)
+            fixed (PublicKeyBytes* pk = &publicKeyBytes)
+            {
+                int error = crypto_sign_ed25519_verify_detached(
+                    sig,
+                    m,
+                    (ulong)data.Length,
+                    pk);
 
-            return error == 0;
+                return error == 0;
+            }
         }
 
         private static void SelfTest()
