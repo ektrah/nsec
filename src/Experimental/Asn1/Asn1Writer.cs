@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
+using NSec.Cryptography;
 
 namespace NSec.Experimental.Asn1
 {
@@ -42,7 +43,7 @@ namespace NSec.Experimental.Asn1
         {
             if (_depth == 0)
             {
-                throw new IndexOutOfRangeException();
+                throw Error.InvalidOperation_InternalError(); // underflow
             }
 
             _depth--;
@@ -71,7 +72,7 @@ namespace NSec.Experimental.Asn1
         {
             if (_depth == MaxDepth)
             {
-                throw new IndexOutOfRangeException();
+                throw Error.InvalidOperation_InternalError(); // overflow
             }
 
             Unsafe.Add(ref _stack0, _depth) = _pos;
@@ -133,7 +134,7 @@ namespace NSec.Experimental.Asn1
         {
             if (_pos == 0)
             {
-                throw new IndexOutOfRangeException(); // not enough space
+                throw Error.InvalidOperation_InternalError(); // not enough space
             }
 
             _pos--;
@@ -145,7 +146,7 @@ namespace NSec.Experimental.Asn1
         {
             if (bytes.Length > _pos)
             {
-                throw new IndexOutOfRangeException(); // not enough space
+                throw Error.InvalidOperation_InternalError(); // not enough space
             }
 
             _pos -= bytes.Length;

@@ -107,14 +107,14 @@ namespace NSec.Tests.Formatting
             writer.End();
             writer.End();
             writer.End();
-            try { writer.End(); Assert.True(false); } catch (IndexOutOfRangeException) { } // cannot use Assert.Throws
+            try { writer.End(); Assert.True(false); } catch (InvalidOperationException) { } // cannot use Assert.Throws
         }
 
         [Fact]
         public static void SequenceStackUnderflow()
         {
             var writer = new Asn1Writer(Span<byte>.Empty);
-            try { writer.BeginSequence(); Assert.True(false); } catch (IndexOutOfRangeException) { } // cannot use Assert.Throws
+            try { writer.BeginSequence(); Assert.True(false); } catch (InvalidOperationException) { } // cannot use Assert.Throws
         }
 
         [Theory]
@@ -232,7 +232,7 @@ namespace NSec.Tests.Formatting
             Utilities.RandomBytes.Slice(0, value.Length).CopyTo(value);
 
             var writer = new Asn1Writer(new byte[capacity]);
-            try { writer.OctetString(value); Assert.True(false); } catch (IndexOutOfRangeException) { } // cannot use Assert.Throws
+            try { writer.OctetString(value); Assert.True(false); } catch (InvalidOperationException) { } // cannot use Assert.Throws
         }
     }
 }

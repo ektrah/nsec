@@ -212,7 +212,7 @@ namespace NSec.Tests.Formatting
             Assert.True(reader.Success);
             reader.BeginSequence();
             Assert.True(reader.Success);
-            try { reader.BeginSequence(); Assert.True(false); } catch (IndexOutOfRangeException) { } // cannot use Assert.Throws
+            try { reader.BeginSequence(); Assert.True(false); } catch (InvalidOperationException) { } // cannot use Assert.Throws
         }
 
         [Fact]
@@ -220,7 +220,7 @@ namespace NSec.Tests.Formatting
         {
             var value = Array.Empty<byte>();
             var reader = new Asn1Reader(value);
-            try { reader.End(); Assert.True(false); } catch (IndexOutOfRangeException) { } // cannot use Assert.Throws
+            try { reader.End(); Assert.True(false); } catch (InvalidOperationException) { } // cannot use Assert.Throws
         }
 
         [Fact]

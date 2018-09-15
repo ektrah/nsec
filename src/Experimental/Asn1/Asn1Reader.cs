@@ -1,5 +1,7 @@
 using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using NSec.Cryptography;
 
 namespace NSec.Experimental.Asn1
 {
@@ -55,7 +57,7 @@ namespace NSec.Experimental.Asn1
                 _depth++;
                 if (_depth == MaxDepth)
                 {
-                    throw new IndexOutOfRangeException();
+                    throw Error.InvalidOperation_InternalError(); // overflow
                 }
                 Unsafe.Add(ref _stack0, _depth) = span;
             }
@@ -105,7 +107,7 @@ namespace NSec.Experimental.Asn1
             {
                 if (_depth == 0)
                 {
-                    throw new IndexOutOfRangeException();
+                    throw Error.InvalidOperation_InternalError(); // underflow
                 }
                 _depth--;
             }
@@ -259,21 +261,15 @@ namespace NSec.Experimental.Asn1
 
             public Span Slice(int start)
             {
-                if (unchecked((uint)start > (uint)_length))
-                {
-                    throw new ArgumentOutOfRangeException(nameof(start));
-                }
+                Debug.Assert(start >= 0 && start <= _length);
 
                 return new Span(_start + start, _length - start);
             }
 
             public Span Slice(int start, int length)
             {
-                if (unchecked((uint)start > (uint)_length) ||
-                    unchecked((uint)length > (uint)(_length - start)))
-                {
-                    throw new ArgumentOutOfRangeException(nameof(start));
-                }
+                Debug.Assert(start >= 0 && start <= _length);
+                Debug.Assert(length >= 0 && length <= _length - start);
 
                 return new Span(_start + start, length);
             }
