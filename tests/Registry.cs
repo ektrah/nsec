@@ -1,6 +1,7 @@
 using System;
 using NSec.Cryptography;
 using NSec.Experimental;
+using NSec.Experimental.PasswordBased;
 using NSec.Experimental.Sodium;
 using Xunit;
 
@@ -57,6 +58,12 @@ namespace NSec.Tests
             KeyDerivationAlgorithm.HkdfSha512,
         };
 
+        public static readonly TheoryData<PasswordBasedKeyDerivationAlgorithm> PasswordHashAlgorithms = new TheoryData<PasswordBasedKeyDerivationAlgorithm>
+        {
+            new Argon2i(1, 1 << 15, 4),
+            new Scrypt(1 << 14, 8, 1),
+        };
+
         public static readonly TheoryData<SignatureAlgorithm> SignatureAlgorithms = new TheoryData<SignatureAlgorithm>
         {
             SignatureAlgorithm.Ed25519,
@@ -98,6 +105,8 @@ namespace NSec.Tests
             new ConcatKdfSha256(),
             KeyDerivationAlgorithm.HkdfSha256,
             KeyDerivationAlgorithm.HkdfSha512,
+            new Argon2i(),
+            new Scrypt(),
         };
 
         #endregion

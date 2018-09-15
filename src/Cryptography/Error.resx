@@ -123,6 +123,9 @@
   <data name="ArgumentNull_Key" xml:space="preserve">
     <value>Key cannot be null.</value>
   </data>
+  <data name="ArgumentNull_Password" xml:space="preserve">
+    <value>Password cannot be null.</value>
+  </data>
   <data name="ArgumentNull_SharedSecret" xml:space="preserve">
     <value>Shared secret cannot be null.</value>
   </data>
@@ -233,6 +236,9 @@
   </data>
   <data name="Argument_PlaintextTooLong" xml:space="preserve">
     <value>The length of the plaintext must be less than or equal to {0}.</value>
+  </data>
+  <data name="Argument_SaltLength" xml:space="preserve">
+    <value>The length of the salt must be equal to {0}.</value>
   </data>
   <data name="Argument_SaltNotSupported" xml:space="preserve">
     <value>A salt is not supported by this algorithm and must be an empty span.</value>

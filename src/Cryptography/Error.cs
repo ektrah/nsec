@@ -176,6 +176,13 @@ namespace NSec.Cryptography
             return new ArgumentException(string.Format(ResourceManager.GetString(nameof(Argument_PlaintextTooLong)), arg0), paramName);
         }
 
+        internal static ArgumentException Argument_SaltLength(
+            string paramName,
+            object arg0)
+        {
+            return new ArgumentException(string.Format(ResourceManager.GetString(nameof(Argument_SaltLength)), arg0), paramName);
+        }
+
         internal static ArgumentException Argument_SaltNotSupported(
             string paramName)
         {
@@ -206,6 +213,12 @@ namespace NSec.Cryptography
             string paramName)
         {
             return new ArgumentNullException(paramName, ResourceManager.GetString("ArgumentNull_Key"));
+        }
+
+        internal static ArgumentNullException ArgumentNull_Password(
+            string paramName)
+        {
+            return new ArgumentNullException(paramName, ResourceManager.GetString("ArgumentNull_Password"));
         }
 
         internal static ArgumentNullException ArgumentNull_SharedSecret(
