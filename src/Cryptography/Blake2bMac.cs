@@ -99,7 +99,10 @@ namespace NSec.Cryptography
 
             Debug.Assert(error == 0);
 
-            return CryptographicOperations.FixedTimeEquals(new ReadOnlySpan<byte>(temp, mac.Length), mac);
+            fixed (byte* @out = mac)
+            {
+                return CryptographicOperations.FixedTimeEquals(temp, @out, mac.Length);
+            }
         }
 
         internal unsafe override void FinalizeCore(
@@ -268,7 +271,10 @@ namespace NSec.Cryptography
                 Debug.Assert(error == 0);
             }
 
-            return CryptographicOperations.FixedTimeEquals(new ReadOnlySpan<byte>(temp, mac.Length), mac);
+            fixed (byte* @out = mac)
+            {
+                return CryptographicOperations.FixedTimeEquals(temp, @out, mac.Length);
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

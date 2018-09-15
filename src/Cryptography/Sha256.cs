@@ -66,7 +66,10 @@ namespace NSec.Cryptography
                 Debug.Assert(error == 0);
             }
 
-            return CryptographicOperations.FixedTimeEquals(new ReadOnlySpan<byte>(temp, hash.Length), hash);
+            fixed (byte* @out = hash)
+            {
+                return CryptographicOperations.FixedTimeEquals(temp, @out, hash.Length);
+            }
         }
 
         internal unsafe override void FinalizeCore(
@@ -150,7 +153,10 @@ namespace NSec.Cryptography
                 Debug.Assert(error == 0);
             }
 
-            return CryptographicOperations.FixedTimeEquals(new ReadOnlySpan<byte>(temp, hash.Length), hash);
+            fixed (byte* @out = hash)
+            {
+                return CryptographicOperations.FixedTimeEquals(temp, @out, hash.Length);
+            }
         }
 
         private static void SelfTest()

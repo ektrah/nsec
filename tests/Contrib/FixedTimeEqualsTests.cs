@@ -3,8 +3,8 @@
 // See the NOTICE file in the project root for more information.
 
 using System;
-using System.Buffers;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using NSec.Cryptography;
 using Xunit;
 
@@ -19,22 +19,16 @@ namespace NSec.Tests.Contrib
         [InlineData(256 / 8)]
         [InlineData(512 / 8)]
         [InlineData(96)]
-        [InlineData(1024)]
-        public static void EqualReturnsTrue(int byteLength)
+        [InlineData(128)]
+        public static unsafe void EqualReturnsTrue(int byteLength)
         {
-            byte[] rented = ArrayPool<byte>.Shared.Rent(byteLength);
-            Span<byte> testSpan = new Span<byte>(rented, 0, byteLength);
-            RandomGenerator.Default.GenerateBytes(testSpan);
+            byte* left = stackalloc byte[byteLength];
+            RandomGenerator.Default.GenerateBytes(new Span<byte>(left, byteLength));
 
-            byte[] rented2 = ArrayPool<byte>.Shared.Rent(byteLength);
-            Span<byte> testSpan2 = new Span<byte>(rented2, 0, byteLength);
+            byte* right = stackalloc byte[byteLength];
+            Unsafe.CopyBlockUnaligned(right, left, (uint)byteLength);
 
-            testSpan.CopyTo(testSpan2);
-
-            bool isEqual = CryptographicOperations.FixedTimeEquals(testSpan, testSpan2);
-
-            ArrayPool<byte>.Shared.Return(rented);
-            ArrayPool<byte>.Shared.Return(rented2);
+            bool isEqual = CryptographicOperations.FixedTimeEquals(left, right, byteLength);
 
             Assert.True(isEqual);
         }
@@ -45,53 +39,20 @@ namespace NSec.Tests.Contrib
         [InlineData(256 / 8)]
         [InlineData(512 / 8)]
         [InlineData(96)]
-        [InlineData(1024)]
-        public static void UnequalReturnsFalse(int byteLength)
+        [InlineData(128)]
+        public static unsafe void UnequalReturnsFalse(int byteLength)
         {
-            byte[] rented = ArrayPool<byte>.Shared.Rent(byteLength);
-            Span<byte> testSpan = new Span<byte>(rented, 0, byteLength);
-            RandomGenerator.Default.GenerateBytes(testSpan);
+            byte* left = stackalloc byte[byteLength];
+            RandomGenerator.Default.GenerateBytes(new Span<byte>(left, byteLength));
 
-            byte[] rented2 = ArrayPool<byte>.Shared.Rent(byteLength);
-            Span<byte> testSpan2 = new Span<byte>(rented2, 0, byteLength);
+            byte* right = stackalloc byte[byteLength];
+            Unsafe.CopyBlockUnaligned(right, left, (uint)byteLength);
 
-            testSpan.CopyTo(testSpan2);
-            testSpan[testSpan[0] % testSpan.Length] ^= 0xFF;
+            left[left[0] % byteLength] ^= 0xFF;
 
-            bool isEqual = CryptographicOperations.FixedTimeEquals(testSpan, testSpan2);
-
-            ArrayPool<byte>.Shared.Return(rented);
-            ArrayPool<byte>.Shared.Return(rented2);
+            bool isEqual = CryptographicOperations.FixedTimeEquals(left, right, byteLength);
 
             Assert.False(isEqual);
-        }
-
-        [Theory]
-        [InlineData(1)]
-        [InlineData(128 / 8)]
-        [InlineData(256 / 8)]
-        [InlineData(512 / 8)]
-        [InlineData(96)]
-        [InlineData(1024)]
-        public static void DifferentLengthsReturnFalse(int byteLength)
-        {
-            byte[] rented = ArrayPool<byte>.Shared.Rent(byteLength);
-            Span<byte> testSpan = new Span<byte>(rented, 0, byteLength);
-            RandomGenerator.Default.GenerateBytes(testSpan);
-
-            byte[] rented2 = ArrayPool<byte>.Shared.Rent(byteLength);
-            Span<byte> testSpan2 = new Span<byte>(rented2, 0, byteLength);
-
-            testSpan.CopyTo(testSpan2);
-
-            bool isEqualA = CryptographicOperations.FixedTimeEquals(testSpan, testSpan2.Slice(0, byteLength - 1));
-            bool isEqualB = CryptographicOperations.FixedTimeEquals(testSpan.Slice(0, byteLength - 1), testSpan2);
-
-            ArrayPool<byte>.Shared.Return(rented);
-            ArrayPool<byte>.Shared.Return(rented2);
-
-            Assert.False(isEqualA, "value, value missing last byte");
-            Assert.False(isEqualB, "value missing last byte, value");
         }
 
         [Fact]
