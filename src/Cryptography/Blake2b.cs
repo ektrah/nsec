@@ -192,9 +192,12 @@ namespace NSec.Cryptography
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static unsafe crypto_generichash_blake2b_state* Align64(byte* value)
         {
-            return sizeof(byte*) == sizeof(uint)
-                ? (crypto_generichash_blake2b_state*)(((uint)value + 63u) & ~63u)
-                : (crypto_generichash_blake2b_state*)(((ulong)value + 63ul) & ~63ul);
+            unchecked
+            {
+                return sizeof(byte*) == sizeof(uint)
+                    ? (crypto_generichash_blake2b_state*)(((uint)value + 63u) & ~63u)
+                    : (crypto_generichash_blake2b_state*)(((ulong)value + 63ul) & ~63ul);
+            }
         }
 
         private static void SelfTest()
