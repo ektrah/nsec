@@ -289,6 +289,22 @@ namespace NSec.Tests.Base
             }
         }
 
+        [Theory]
+        [MemberData(nameof(KeyDerivationAlgorithms))]
+        public static void DeriveKeySuccess(KeyDerivationAlgorithm a)
+        {
+            var x = KeyAgreementAlgorithm.X25519;
+            var y = AeadAlgorithm.ChaCha20Poly1305;
+
+            using (var k = new Key(x))
+            using (var s = x.Agree(k, k.PublicKey))
+            using (var i = a.DeriveKey(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, y))
+            {
+                Assert.NotNull(k);
+                Assert.Same(y, i.Algorithm);
+            }
+        }
+
         #endregion
     }
 }
