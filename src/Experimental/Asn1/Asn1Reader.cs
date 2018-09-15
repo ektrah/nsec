@@ -27,7 +27,7 @@ namespace NSec.Experimental.Asn1
         public Asn1Reader(
             ReadOnlySpan<byte> buffer)
         {
-            _stack0 = new Span(0, buffer.Length);
+            _stack0 = new Span(buffer);
             _stack1 = default;
             _stack2 = default;
             _stack3 = default;
@@ -244,7 +244,12 @@ namespace NSec.Experimental.Asn1
             private readonly int _start;
             private readonly int _length;
 
-            public Span(int start, int length)
+            public Span(ReadOnlySpan<byte> buffer)
+                : this(0, buffer.Length)
+            {
+            }
+
+            private Span(int start, int length)
             {
                 _start = start;
                 _length = length;
@@ -253,6 +258,8 @@ namespace NSec.Experimental.Asn1
             public bool IsEmpty => _length == 0;
 
             public int Length => _length;
+
+            public int Start => _start;
 
             public ReadOnlySpan<byte> ApplyTo(ReadOnlySpan<byte> buffer)
             {
