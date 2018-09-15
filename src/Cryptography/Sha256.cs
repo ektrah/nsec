@@ -140,7 +140,6 @@ namespace NSec.Cryptography
 
             byte* temp = stackalloc byte[crypto_hash_sha256_BYTES];
 
-            fixed (byte* @out = hash)
             fixed (byte* @in = data)
             {
                 int error = crypto_hash_sha256(
