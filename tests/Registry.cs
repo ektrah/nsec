@@ -62,6 +62,7 @@ namespace NSec.Tests
         {
             new Argon2i(1, 1 << 15, 4),
             new Scrypt(1 << 14, 8, 1),
+            new Pbkdf2HmacSha256(10),
         };
 
         public static readonly TheoryData<SignatureAlgorithm> SignatureAlgorithms = new TheoryData<SignatureAlgorithm>
@@ -107,6 +108,7 @@ namespace NSec.Tests
             KeyDerivationAlgorithm.HkdfSha512,
             new Argon2i(),
             new Scrypt(),
+            new Pbkdf2HmacSha256(10),
         };
 
         #endregion
