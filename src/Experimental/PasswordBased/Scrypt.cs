@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using static Interop.Libsodium;
@@ -52,13 +51,31 @@ namespace NSec.Experimental.PasswordBased
         {
         }
 
-        internal /*public*/ Scrypt(ulong n, uint r, uint p) : base(
+        internal /*public*/ unsafe Scrypt(long n, int r, int p) : base(
             saltSize: crypto_pwhash_scryptsalsa208sha256_SALTBYTES,
             maxCount: int.MaxValue)
         {
-            _n = n;
-            _r = r;
-            _p = p;
+            if (n <= 1 || n > uint.MaxValue || (n & (n - 1)) != 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(n));
+            }
+            if (r <= 0 || p <= 0 || (long)r * p >= 1 << 30)
+            {
+                throw new ArgumentOutOfRangeException(nameof(r));
+            }
+            if ((sizeof(byte*) == sizeof(uint) ? n > (int)(uint.MaxValue / 128) / r : n > (long)(ulong.MaxValue / 128) / r))
+            {
+                throw new ArgumentOutOfRangeException(nameof(n));
+            }
+            if ((sizeof(byte*) == sizeof(uint) ? r > (int)(uint.MaxValue / 128) / p : r > (long)(ulong.MaxValue / 128) / p) ||
+                (sizeof(byte*) == sizeof(uint) ? r > (int)(uint.MaxValue / 256) : false))
+            {
+                throw new ArgumentOutOfRangeException(nameof(r));
+            }
+
+            _n = (ulong)n;
+            _r = (uint)r;
+            _p = (uint)p;
 
             if (s_selfTest == 0)
             {
@@ -67,29 +84,28 @@ namespace NSec.Experimental.PasswordBased
             }
         }
 
-        internal /*public*/ ulong N => _n;
+        internal /*public*/ long N => (long)_n;
 
-        internal /*public*/ uint R => _r;
+        internal /*public*/ int R => (int)_r;
 
-        internal /*public*/ uint P => _p;
+        internal /*public*/ int P => (int)_p;
 
         internal override unsafe bool TryDeriveBytesCore(
             ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,
             Span<byte> bytes)
         {
-            Debug.Assert(salt.Length == crypto_pwhash_scryptsalsa208sha256_SALTBYTES);
-            Debug.Assert(_r == 8);
+            const int MinCount = crypto_pwhash_scryptsalsa208sha256_BYTES_MIN;
+            bool min = bytes.Length < MinCount;
+            byte* temp = stackalloc byte[MinCount];
 
-            int error;
-
-            if (bytes.Length >= crypto_pwhash_scryptsalsa208sha256_BYTES_MIN)
+            try
             {
                 fixed (byte* @in = password)
                 fixed (byte* salt_ = salt)
                 fixed (byte* @out = bytes)
                 {
-                    error = crypto_pwhash_scryptsalsa208sha256_ll(
+                    int error = crypto_pwhash_scryptsalsa208sha256_ll(
                         @in,
                         (UIntPtr)password.Length,
                         salt_,
@@ -97,49 +113,31 @@ namespace NSec.Experimental.PasswordBased
                         _n,
                         _r,
                         _p,
-                        @out,
-                        (UIntPtr)bytes.Length);
-                }
-            }
-            else
-            {
-                byte* temp = stackalloc byte[crypto_pwhash_scryptsalsa208sha256_BYTES_MIN];
+                        min ? temp : @out,
+                        (UIntPtr)(min ? MinCount : bytes.Length));
 
-                try
-                {
-                    fixed (byte* @in = password)
-                    fixed (byte* salt_ = salt)
-                    {
-                        error = crypto_pwhash_scryptsalsa208sha256_ll(
-                            @in,
-                            (UIntPtr)password.Length,
-                            salt_,
-                            (UIntPtr)salt.Length,
-                            _n,
-                            _r,
-                            _p,
-                            temp,
-                            (UIntPtr)crypto_pwhash_scryptsalsa208sha256_BYTES_MIN);
-                    }
-
-                    fixed (byte* @out = bytes)
+                    if (min)
                     {
                         Unsafe.CopyBlockUnaligned(@out, temp, (uint)bytes.Length);
                     }
-                }
-                finally
-                {
-                    Unsafe.InitBlockUnaligned(temp, 0, crypto_pwhash_scryptsalsa208sha256_BYTES_MIN);
+
+                    return error == 0;
                 }
             }
-
-            return error == 0;
+            finally
+            {
+                Unsafe.InitBlockUnaligned(temp, 0, MinCount);
+            }
         }
 
-        private static bool SelfTest()
+        private static unsafe bool SelfTest()
         {
-            return (crypto_pwhash_scryptsalsa208sha256_saltbytes() == (UIntPtr)crypto_pwhash_scryptsalsa208sha256_SALTBYTES)
-                && (crypto_pwhash_scryptsalsa208sha256_bytes_min() == (UIntPtr)crypto_pwhash_scryptsalsa208sha256_BYTES_MIN);
+            return (crypto_pwhash_scryptsalsa208sha256_bytes_min() == (UIntPtr)crypto_pwhash_scryptsalsa208sha256_BYTES_MIN)
+                && (crypto_pwhash_scryptsalsa208sha256_memlimit_min() == (UIntPtr)(sizeof(byte*) == sizeof(uint) ? uint.MaxValue : 0x1000000000))
+                && (crypto_pwhash_scryptsalsa208sha256_memlimit_min() == (UIntPtr)crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_MIN)
+                && (crypto_pwhash_scryptsalsa208sha256_opslimit_max() == (UIntPtr)uint.MaxValue)
+                && (crypto_pwhash_scryptsalsa208sha256_opslimit_min() == (UIntPtr)crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MIN)
+                && (crypto_pwhash_scryptsalsa208sha256_saltbytes() == (UIntPtr)crypto_pwhash_scryptsalsa208sha256_SALTBYTES);
         }
     }
 }

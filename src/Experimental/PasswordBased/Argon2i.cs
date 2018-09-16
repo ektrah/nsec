@@ -51,21 +51,33 @@ namespace NSec.Experimental.PasswordBased
     {
         private static int s_selfTest;
 
-        private readonly uint _p;
-        private readonly uint _m;
-        private readonly uint _t;
+        private readonly UIntPtr _memLimit;
+        private readonly ulong _opsLimit;
 
         public Argon2i() : this(1, 1 << 17, 6)
         {
         }
 
-        internal /*public*/ Argon2i(uint p, uint m, uint t) : base(
+        internal /*public*/ unsafe Argon2i(int p, long m, int t) : base(
             saltSize: crypto_pwhash_argon2i_SALTBYTES,
             maxCount: int.MaxValue)
         {
-            _p = p;
-            _m = m;
-            _t = t;
+            if (p != 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(p));
+            }
+            if (m < crypto_pwhash_argon2i_MEMLIMIT_MIN / 1024 ||
+                m > (sizeof(byte*) == sizeof(uint) ? 0x200000 : uint.MaxValue))
+            {
+                throw new ArgumentOutOfRangeException(nameof(m));
+            }
+            if (t < crypto_pwhash_argon2i_OPSLIMIT_MIN)
+            {
+                throw new ArgumentOutOfRangeException(nameof(t));
+            }
+
+            _memLimit = (UIntPtr)(m * 1024);
+            _opsLimit = (ulong)t;
 
             if (s_selfTest == 0)
             {
@@ -74,11 +86,11 @@ namespace NSec.Experimental.PasswordBased
             }
         }
 
-        internal /*public*/ uint P => _p;
+        internal /*public*/ int P => 1;
 
-        internal /*public*/ uint M => _m;
+        internal /*public*/ long M => (long)_memLimit / 1024;
 
-        internal /*public*/ uint T => _t;
+        internal /*public*/ int T => (int)_opsLimit;
 
         internal override unsafe bool TryDeriveBytesCore(
             ReadOnlySpan<byte> password,
@@ -86,66 +98,50 @@ namespace NSec.Experimental.PasswordBased
             Span<byte> bytes)
         {
             Debug.Assert(salt.Length == crypto_pwhash_argon2i_SALTBYTES);
-            Debug.Assert(_p == 1);
 
-            int error;
+            const int MinCount = crypto_pwhash_argon2i_BYTES_MIN;
+            bool min = bytes.Length < MinCount;
+            byte* temp = stackalloc byte[MinCount];
 
-            if (bytes.Length >= crypto_pwhash_argon2i_BYTES_MIN)
+            try
             {
                 fixed (byte* @in = password)
                 fixed (byte* salt_ = salt)
                 fixed (byte* @out = bytes)
                 {
-                    error = crypto_pwhash_argon2i(
-                        @out,
-                        (ulong)bytes.Length,
+                    int error = crypto_pwhash_argon2i(
+                        min ? temp : @out,
+                        (ulong)(min ? MinCount : bytes.Length),
                         (sbyte*)@in,
                         (ulong)password.Length,
                         salt_,
-                        _t,
-                        (UIntPtr)((ulong)_m * 1024),
+                        _opsLimit,
+                        _memLimit,
                         crypto_pwhash_argon2i_ALG_ARGON2I13);
-                }
-            }
-            else
-            {
-                byte* temp = stackalloc byte[crypto_pwhash_argon2i_BYTES_MIN];
 
-                try
-                {
-                    fixed (byte* @in = password)
-                    fixed (byte* salt_ = salt)
-                    {
-                        error = crypto_pwhash_argon2i(
-                           temp,
-                           crypto_pwhash_argon2i_BYTES_MIN,
-                           (sbyte*)@in,
-                           (ulong)password.Length,
-                           salt_,
-                           _t,
-                           (UIntPtr)((ulong)_m * 1024),
-                           crypto_pwhash_argon2i_ALG_ARGON2I13);
-                    }
-
-                    fixed (byte* @out = bytes)
+                    if (min)
                     {
                         Unsafe.CopyBlockUnaligned(@out, temp, (uint)bytes.Length);
                     }
-                }
-                finally
-                {
-                    Unsafe.InitBlockUnaligned(temp, 0, crypto_pwhash_argon2i_BYTES_MIN);
+
+                    return error == 0;
                 }
             }
-
-            return error == 0;
+            finally
+            {
+                Unsafe.InitBlockUnaligned(temp, 0, MinCount);
+            }
         }
 
-        private static bool SelfTest()
+        private static unsafe bool SelfTest()
         {
             return (crypto_pwhash_argon2i_alg_argon2i13() == crypto_pwhash_argon2i_ALG_ARGON2I13)
-                && (crypto_pwhash_argon2i_saltbytes() == (UIntPtr)crypto_pwhash_argon2i_SALTBYTES)
-                && (crypto_pwhash_argon2i_bytes_min() == (UIntPtr)crypto_pwhash_argon2i_BYTES_MIN);
+                && (crypto_pwhash_argon2i_bytes_min() == (UIntPtr)crypto_pwhash_argon2i_BYTES_MIN)
+                && (crypto_pwhash_argon2i_memlimit_min() == (UIntPtr)(sizeof(byte*) == sizeof(uint) ? 0x200000 : uint.MaxValue))
+                && (crypto_pwhash_argon2i_memlimit_min() == (UIntPtr)crypto_pwhash_argon2i_MEMLIMIT_MIN)
+                && (crypto_pwhash_argon2i_opslimit_max() == (UIntPtr)uint.MaxValue)
+                && (crypto_pwhash_argon2i_opslimit_min() == (UIntPtr)crypto_pwhash_argon2i_OPSLIMIT_MIN)
+                && (crypto_pwhash_argon2i_saltbytes() == (UIntPtr)crypto_pwhash_argon2i_SALTBYTES);
         }
     }
 }
