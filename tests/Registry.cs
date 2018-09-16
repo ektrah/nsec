@@ -60,8 +60,8 @@ namespace NSec.Tests
 
         public static readonly TheoryData<PasswordBasedKeyDerivationAlgorithm> PasswordHashAlgorithms = new TheoryData<PasswordBasedKeyDerivationAlgorithm>
         {
-            new Argon2i(1, 1 << 15, 4),
-            new Scrypt(1 << 14, 8, 1),
+            new Argon2i(1, 1 << 12, 3),
+            new Scrypt(1 << 11, 5, 1),
             new Pbkdf2HmacSha256(10),
         };
 
@@ -106,8 +106,8 @@ namespace NSec.Tests
             new ConcatKdfSha256(),
             KeyDerivationAlgorithm.HkdfSha256,
             KeyDerivationAlgorithm.HkdfSha512,
-            new Argon2i(),
-            new Scrypt(),
+            new Argon2i(1, 1 << 12, 3),
+            new Scrypt(1 << 11, 5, 1),
             new Pbkdf2HmacSha256(10),
         };
 
