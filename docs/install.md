@@ -37,21 +37,21 @@ An F# 4.5 compiler is included in the .NET Core SDK beginning with version
 
 NSec runs on the following platforms and .NET Core versions:
 
-| OS            | Version  | Architectures | .NET Core Runtimes    |
-|:------------- |:-------- |:------------- |:--------------------- |
-| Windows 10    | 1803     | x64 / x86     | 2.1  /  2.0  /  1.1   |
-|               |          |               |                       |
-| macOS         | 10.12    | x64           | 2.1  /  2.0  /  1.1   |
-|               |          |               |                       |
-| CentOS        | 7.4      | x64           | 2.1  /  2.0  /  1.1   |
-| Debian        | 8.10     | x64           | 2.1  /  2.0  /  1.1   |
-|               | 9.4      | x64           | 2.1  /  2.0           |
-| Fedora        | 27       | x64           | 2.1  /  2.0           |
-|               | 28       | x64           | 2.1  /  2.0           |
-| OpenSUSE      | 42.3     | x64           | 2.1  /  2.0           |
-| Ubuntu        | 14.04    | x64           | 2.1  /  2.0  /  1.1   |
-|               | 16.04    | x64           | 2.1  /  2.0  /  1.1   |
-|               | 18.04    | x64           | 2.1  /  2.0           |
+| OS            | Version  | Architectures | .NET Core Runtimes |
+|:------------- |:-------- |:------------- |:-------------------|
+| Windows 10    | 1803     | x64 / x86     | 2.1  /  1.1        |
+|               |          |               |                    |
+| macOS         | 10.12    | x64           | 2.1  /  1.1        |
+|               |          |               |                    |
+| CentOS        | 7.4      | x64           | 2.1  /  1.1        |
+| Debian        | 8.10     | x64           | 2.1  /  1.1        |
+|               | 9.4      | x64           | 2.1                |
+| Fedora        | 27       | x64           | 2.1                |
+|               | 28       | x64           | 2.1                |
+| OpenSUSE      | 42.3     | x64           | 2.1                |
+| Ubuntu        | 14.04    | x64           | 2.1  /  1.1        |
+|               | 16.04    | x64           | 2.1  /  1.1        |
+|               | 18.04    | x64           | 2.1                |
 
 Other operating systems and versions supported by .NET Core should work as
 well but are untested.
