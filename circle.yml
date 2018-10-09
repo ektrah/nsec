@@ -4,13 +4,13 @@ workflows:
   version: 2
   test:
     jobs:
-      - centos7.4:
+      - centos7:
           requires:
             - macos-xcode9.2
-      - debian8.10:
+      - debian8:
           requires:
             - macos-xcode9.2
-      - debian9.4:
+      - debian9:
           requires:
             - macos-xcode9.2
       - fedora27:
@@ -30,7 +30,7 @@ workflows:
       - ubuntu18.04:
           requires:
             - macos-xcode9.2
-      - macos-xcode9.2:
+      - macos:
           requires:
             - ubuntu16.04
 
@@ -107,9 +107,9 @@ shared:
 
 jobs:
 
-  centos7.4:
+  centos7:
     docker:
-      - image: centos:7.4.1708
+      - image: centos:7.5.1804
     environment: *environment
     steps:
       - run:
@@ -128,9 +128,9 @@ jobs:
       - *dotnet-test-debug-1-1
       - *dotnet-test-release-1-1
 
-  debian8.10:
+  debian8:
     docker:
-      - image: debian:8.10
+      - image: debian:8.11
     environment: *environment
     steps:
       - run:
@@ -151,9 +151,9 @@ jobs:
       - *dotnet-test-debug-1-1
       - *dotnet-test-release-1-1
 
-  debian9.4:
+  debian9:
     docker:
-      - image: debian:9.4
+      - image: debian:9.5
     environment: *environment
     steps:
       - run:
@@ -291,7 +291,7 @@ jobs:
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
 
-  macos-xcode9.2:
+  macos:
     macos:
       xcode: "9.2.0"
     environment: *environment
