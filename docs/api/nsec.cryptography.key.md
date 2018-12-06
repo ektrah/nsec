@@ -1,6 +1,6 @@
 # Key Class
 
-Represents a symmetric key or asymmetric key pair.
+Represents a symmetric key or an asymmetric private key.
 
     public sealed class Key : IDisposable
 
@@ -73,14 +73,14 @@ that specifies the export policy for the key.
 ### PublicKey
 
 Gets the public key if the current instance of the [[Key|Key Class]] class
-represents a key pair.
+represents a private key.
 
     public PublicKey PublicKey { get; }
 
 #### Property Value
 
 An instance of the [[PublicKey|PublicKey Class]] class if the current instance
-of the [[Key|Key Class]] class represents a key pair; otherwise, `null`.
+of the [[Key|Key Class]] class represents a private key; otherwise, `null`.
 
 
 ### Size
