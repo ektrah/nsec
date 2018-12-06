@@ -47,10 +47,16 @@ shared:
         bash ~/dotnet-install.sh --channel 1.1 --version latest --install-dir ~/.dotnet --no-path --runtime dotnet
   dotnet-install-2-1: &dotnet-install-2-1
     run:
-      name: Install .NET Core 2.1 SDK
+      name: Install .NET Core 2.1 Runtime
       command: |
         if [ ! -f ~/dotnet-install.sh ]; then curl -fsLo ~/dotnet-install.sh 'https://dot.net/v1/dotnet-install.sh'; fi
-        bash ~/dotnet-install.sh --channel 2.1 --version latest --install-dir ~/.dotnet --no-path
+        bash ~/dotnet-install.sh --channel 2.1 --version latest --install-dir ~/.dotnet --no-path --runtime dotnet
+  dotnet-install-2-2: &dotnet-install-2-2
+    run:
+      name: Install .NET Core 2.2 SDK
+      command: |
+        if [ ! -f ~/dotnet-install.sh ]; then curl -fsLo ~/dotnet-install.sh 'https://dot.net/v1/dotnet-install.sh'; fi
+        bash ~/dotnet-install.sh --channel 2.2 --version latest --install-dir ~/.dotnet --no-path
         ~/.dotnet/dotnet --info
         echo 'export PATH=~/.dotnet:$PATH' >> $BASH_ENV
   generate-restore-graph: &generate-restore-graph
@@ -104,6 +110,14 @@ shared:
     run:
       name: Run unit tests (Release) (.NET Core 2.1)
       command: dotnet test tests -c Release -f netcoreapp2.1
+  dotnet-test-debug-2-2: &dotnet-test-debug-2-2
+    run:
+      name: Run unit tests (Debug) (.NET Core 2.2)
+      command: dotnet test tests -c Debug -f netcoreapp2.2
+  dotnet-test-release-2-2: &dotnet-test-release-2-2
+    run:
+      name: Run unit tests (Release) (.NET Core 2.2)
+      command: dotnet test tests -c Release -f netcoreapp2.2
 
 jobs:
 
@@ -118,11 +132,14 @@ jobs:
           command: yum install -q -y curl ca-certificates libunwind libicu
       - *dotnet-install-1-1
       - *dotnet-install-2-1
+      - *dotnet-install-2-2
       - checkout
       - *generate-restore-graph
       - *restore-cache
       - *dotnet-restore
       - *save-cache
+      - *dotnet-test-debug-2-2
+      - *dotnet-test-release-2-2
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
       - *dotnet-test-debug-1-1
@@ -141,11 +158,14 @@ jobs:
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu52
       - *dotnet-install-1-1
       - *dotnet-install-2-1
+      - *dotnet-install-2-2
       - checkout
       - *generate-restore-graph
       - *restore-cache
       - *dotnet-restore
       - *save-cache
+      - *dotnet-test-debug-2-2
+      - *dotnet-test-release-2-2
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
       - *dotnet-test-debug-1-1
@@ -163,11 +183,14 @@ jobs:
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8
       - *dotnet-install-2-1
+      - *dotnet-install-2-2
       - checkout
       - *generate-restore-graph
       - *restore-cache
       - *dotnet-restore
       - *save-cache
+      - *dotnet-test-debug-2-2
+      - *dotnet-test-release-2-2
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
 
@@ -181,11 +204,14 @@ jobs:
           no_output_timeout: 2m
           command: dnf install -q -y curl ca-certificates findutils libunwind libicu compat-openssl10
       - *dotnet-install-2-1
+      - *dotnet-install-2-2
       - checkout
       - *generate-restore-graph
       - *restore-cache
       - *dotnet-restore
       - *save-cache
+      - *dotnet-test-debug-2-2
+      - *dotnet-test-release-2-2
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
 
@@ -199,11 +225,14 @@ jobs:
           no_output_timeout: 2m
           command: dnf install -q -y curl ca-certificates findutils ncurses libunwind libicu compat-openssl10
       - *dotnet-install-2-1
+      - *dotnet-install-2-2
       - checkout
       - *generate-restore-graph
       - *restore-cache
       - *dotnet-restore
       - *save-cache
+      - *dotnet-test-debug-2-2
+      - *dotnet-test-release-2-2
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
 
@@ -217,11 +246,14 @@ jobs:
           no_output_timeout: 2m
           command: zypper -q install -y --no-recommends curl ca-certificates tar ncurses-utils libunwind libicu
       - *dotnet-install-2-1
+      - *dotnet-install-2-2
       - checkout
       - *generate-restore-graph
       - *restore-cache
       - *dotnet-restore
       - *save-cache
+      - *dotnet-test-debug-2-2
+      - *dotnet-test-release-2-2
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
 
@@ -238,11 +270,14 @@ jobs:
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu52
       - *dotnet-install-1-1
       - *dotnet-install-2-1
+      - *dotnet-install-2-2
       - checkout
       - *generate-restore-graph
       - *restore-cache
       - *dotnet-restore
       - *save-cache
+      - *dotnet-test-debug-2-2
+      - *dotnet-test-release-2-2
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
       - *dotnet-test-debug-1-1
@@ -261,11 +296,14 @@ jobs:
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu55 libcurl3
       - *dotnet-install-1-1
       - *dotnet-install-2-1
+      - *dotnet-install-2-2
       - checkout
       - *generate-restore-graph
       - *restore-cache
       - *dotnet-restore
       - *save-cache
+      - *dotnet-test-debug-2-2
+      - *dotnet-test-release-2-2
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
       - *dotnet-test-debug-1-1
@@ -283,11 +321,14 @@ jobs:
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu60 libssl1.0.0
       - *dotnet-install-2-1
+      - *dotnet-install-2-2
       - checkout
       - *generate-restore-graph
       - *restore-cache
       - *dotnet-restore
       - *save-cache
+      - *dotnet-test-debug-2-2
+      - *dotnet-test-release-2-2
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
 
@@ -298,11 +339,14 @@ jobs:
     steps:
       - *dotnet-install-1-1
       - *dotnet-install-2-1
+      - *dotnet-install-2-2
       - checkout
       - *generate-restore-graph
       - *restore-cache-macos
       - *dotnet-restore
       - *save-cache-macos
+      - *dotnet-test-debug-2-2
+      - *dotnet-test-release-2-2
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
       - *dotnet-test-debug-1-1
