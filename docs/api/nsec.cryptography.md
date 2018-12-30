@@ -19,6 +19,8 @@
         * HmacSha512 Class
     * [[SignatureAlgorithm Class]]
         * Ed25519 Class
+* [[IncrementalHash Struct]]
+* [[IncrementalMac Struct]]
 * [[Key Class]]
     * [[KeyCreationParameters Struct]]
     * [[KeyExportPolicies Enum]]

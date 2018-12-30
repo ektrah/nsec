@@ -222,4 +222,5 @@ All methods yield the same result for the same arguments.
 
 * API Reference
     * [[Algorithm Class]]
+    * [[IncrementalMac Struct]]
     * [[Key Class]]
