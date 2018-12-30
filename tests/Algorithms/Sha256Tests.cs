@@ -13,8 +13,12 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void Properties()
         {
+            var a = new Sha256();
+
             Assert.Equal(32, Sha256.MinHashSize);
             Assert.Equal(32, Sha256.MaxHashSize);
+
+            Assert.Equal(32, a.HashSize);
 
             Assert.Equal(32, HashAlgorithm.Sha256.HashSize);
         }

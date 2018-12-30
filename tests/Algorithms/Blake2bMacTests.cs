@@ -11,10 +11,15 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void Properties()
         {
+            var a = new Blake2bMac();
+
             Assert.Equal(16, Blake2bMac.MinKeySize);
             Assert.Equal(64, Blake2bMac.MaxKeySize);
             Assert.Equal(16, Blake2bMac.MinMacSize);
             Assert.Equal(64, Blake2bMac.MaxMacSize);
+
+            Assert.Equal(32, a.KeySize);
+            Assert.Equal(32, a.MacSize);
 
             Assert.Equal(32, MacAlgorithm.Blake2b_128.KeySize);
             Assert.Equal(16, MacAlgorithm.Blake2b_128.MacSize);
