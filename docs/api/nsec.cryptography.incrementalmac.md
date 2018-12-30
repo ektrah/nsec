@@ -11,8 +11,8 @@ then be updated zero or more times with segments of data. Finalizing the state
 yields a result that is identical to the MAC of the concatenated segments.
 
 [[IncrementalMac|IncrementalMac Struct]] instances have value-type semantics:
-For example, passing an instance by-value to a method or assigning it to a
-variable creates a copy of the state.
+Passing an instance to a method or assigning it to a variable creates a copy of
+the state.
 
 
 ## Example
