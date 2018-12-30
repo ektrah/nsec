@@ -8,6 +8,35 @@ using static Interop.Libsodium;
 
 namespace NSec.Experimental.Sodium
 {
+    //
+    //  XChaCha20-Poly1305
+    //
+    //      Authenticated Encryption with Associated Data (AEAD) algorithm
+    //      based the XChaCha20 stream cipher and the Poly1305 authenticator
+    //
+    //  References:
+    //
+    //      draft-arciszewski-xchacha-03 - XChaCha: eXtended-nonce ChaCha and
+    //          AEAD_XChaCha20_Poly1305
+    //
+    //      RFC 5116 - An Interface and Algorithms for Authenticated Encryption
+    //
+    //  Parameters:
+    //
+    //      Key Size - 32 bytes.
+    //
+    //      Nonce Size - 24 bytes.
+    //
+    //      Tag Size - 16 bytes.
+    //
+    //      Plaintext Size - Between 0 and 2^38-64 bytes. (A Span<byte> can only
+    //          hold up to 2^31-1 bytes.)
+    //
+    //      Associated Data Size - Between 0 and 2^64-1 bytes.
+    //
+    //      Ciphertext Size - The ciphertext always has the size of the
+    //          plaintext plus the tag size.
+    //
     public sealed class XChaCha20Poly1305 : AeadAlgorithm
     {
         private const uint NSecBlobHeader = 0xDE6148DE;
