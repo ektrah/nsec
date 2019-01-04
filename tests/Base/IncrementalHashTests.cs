@@ -164,6 +164,8 @@ namespace NSec.Tests.Base
             IncrementalHash.Initialize(a, out var state);
 
             Assert.False(IncrementalHash.FinalizeAndVerify(ref state, new byte[a.HashSize]));
+
+            Assert.Null(state.Algorithm);
         }
 
         [Theory]
@@ -173,6 +175,8 @@ namespace NSec.Tests.Base
             IncrementalHash.Initialize(a, out var state);
 
             Assert.True(IncrementalHash.FinalizeAndVerify(ref state, a.Hash(ReadOnlySpan<byte>.Empty)));
+
+            Assert.Null(state.Algorithm);
         }
 
         #endregion

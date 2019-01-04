@@ -175,6 +175,8 @@ namespace NSec.Tests.Base
                 IncrementalMac.Initialize(k, out var state);
 
                 Assert.False(IncrementalMac.FinalizeAndVerify(ref state, new byte[a.MacSize]));
+
+                Assert.Null(state.Algorithm);
             }
         }
 
@@ -187,6 +189,8 @@ namespace NSec.Tests.Base
                 IncrementalMac.Initialize(k, out var state);
 
                 Assert.True(IncrementalMac.FinalizeAndVerify(ref state, a.Mac(k, ReadOnlySpan<byte>.Empty)));
+
+                Assert.Null(state.Algorithm);
             }
         }
 
