@@ -97,21 +97,9 @@ namespace NSec.Cryptography
                 throw Error.Argument_MacKey(nameof(key), key.Algorithm.GetType().FullName, typeof(MacAlgorithm).FullName);
             }
 
-            bool success = false;
-            try
-            {
-                state = default;
-                algorithm.InitializeCore(key.Span, out Unsafe.AsRef(in state._state));
-                Unsafe.AsRef(in state._algorithm) = algorithm;
-                success = true;
-            }
-            finally
-            {
-                if (!success)
-                {
-                    state = default;
-                }
-            }
+            state = default;
+            algorithm.InitializeCore(key.Span, out Unsafe.AsRef(in state._state));
+            Unsafe.AsRef(in state._algorithm) = algorithm;
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]

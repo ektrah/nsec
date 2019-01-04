@@ -93,21 +93,9 @@ namespace NSec.Cryptography
                 throw Error.ArgumentNull_Algorithm(nameof(algorithm));
             }
 
-            bool success = false;
-            try
-            {
-                state = default;
-                algorithm.InitializeCore(out Unsafe.AsRef(in state._state));
-                Unsafe.AsRef(in state._algorithm) = algorithm;
-                success = true;
-            }
-            finally
-            {
-                if (!success)
-                {
-                    state = default;
-                }
-            }
+            state = default;
+            algorithm.InitializeCore(out Unsafe.AsRef(in state._state));
+            Unsafe.AsRef(in state._algorithm) = algorithm;
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
