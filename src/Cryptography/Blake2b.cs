@@ -68,6 +68,8 @@ namespace NSec.Cryptography
 
             Debug.Assert(error == 0);
 
+            state.blake2b = *state_;
+
             fixed (byte* @out = hash)
             {
                 return CryptographicOperations.FixedTimeEquals(temp, @out, hash.Length);
@@ -94,6 +96,8 @@ namespace NSec.Cryptography
 
                 Debug.Assert(error == 0);
             }
+
+            state.blake2b = *state_;
         }
 
         internal unsafe override void InitializeCore(
