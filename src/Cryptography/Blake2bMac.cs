@@ -86,20 +86,17 @@ namespace NSec.Cryptography
             Debug.Assert(mac.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(mac.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
-            byte* buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
-            crypto_generichash_blake2b_state* state_ = Align64(buffer);
-            *state_ = state.blake2b;
-
             byte* temp = stackalloc byte[mac.Length];
 
-            int error = crypto_generichash_blake2b_final(
-                state_,
-                temp,
-                (UIntPtr)mac.Length);
+            fixed (crypto_generichash_blake2b_state* state_ = &state.blake2b)
+            {
+                int error = crypto_generichash_blake2b_final(
+                    state_,
+                    temp,
+                    (UIntPtr)mac.Length);
 
-            Debug.Assert(error == 0);
-
-            state.blake2b = *state_;
+                Debug.Assert(error == 0);
+            }
 
             fixed (byte* @out = mac)
             {
@@ -114,10 +111,7 @@ namespace NSec.Cryptography
             Debug.Assert(mac.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(mac.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
-            byte* buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
-            crypto_generichash_blake2b_state* state_ = Align64(buffer);
-            *state_ = state.blake2b;
-
+            fixed (crypto_generichash_blake2b_state* state_ = &state.blake2b)
             fixed (byte* @out = mac)
             {
                 int error = crypto_generichash_blake2b_final(
@@ -127,8 +121,6 @@ namespace NSec.Cryptography
 
                 Debug.Assert(error == 0);
             }
-
-            state.blake2b = *state_;
         }
 
         internal override int GetSeedSize()
@@ -145,9 +137,7 @@ namespace NSec.Cryptography
             Debug.Assert(MacSize >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(MacSize <= crypto_generichash_blake2b_BYTES_MAX);
 
-            byte* buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
-            crypto_generichash_blake2b_state* state_ = Align64(buffer);
-
+            fixed (crypto_generichash_blake2b_state* state_ = &state.blake2b)
             fixed (byte* k = key)
             {
                 int error = crypto_generichash_blake2b_init(
@@ -158,8 +148,6 @@ namespace NSec.Cryptography
 
                 Debug.Assert(error == 0);
             }
-
-            state.blake2b = *state_;
         }
 
         internal override bool TryExportKey(
@@ -204,10 +192,7 @@ namespace NSec.Cryptography
             ref IncrementalMacState state,
             ReadOnlySpan<byte> data)
         {
-            byte* buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
-            crypto_generichash_blake2b_state* state_ = Align64(buffer);
-            *state_ = state.blake2b;
-
+            fixed (crypto_generichash_blake2b_state* state_ = &state.blake2b)
             fixed (byte* @in = data)
             {
                 int error = crypto_generichash_blake2b_update(
@@ -217,8 +202,6 @@ namespace NSec.Cryptography
 
                 Debug.Assert(error == 0);
             }
-
-            state.blake2b = *state_;
         }
 
         private protected unsafe override void MacCore(
@@ -276,17 +259,6 @@ namespace NSec.Cryptography
             fixed (byte* @out = mac)
             {
                 return CryptographicOperations.FixedTimeEquals(temp, @out, mac.Length);
-            }
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static unsafe crypto_generichash_blake2b_state* Align64(byte* value)
-        {
-            unchecked
-            {
-                return sizeof(byte*) == sizeof(uint)
-                    ? (crypto_generichash_blake2b_state*)(((uint)value + 63u) & ~63u)
-                    : (crypto_generichash_blake2b_state*)(((ulong)value + 63ul) & ~63ul);
             }
         }
 

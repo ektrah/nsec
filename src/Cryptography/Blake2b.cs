@@ -55,20 +55,17 @@ namespace NSec.Cryptography
             Debug.Assert(hash.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(hash.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
-            byte* buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
-            crypto_generichash_blake2b_state* state_ = Align64(buffer);
-            *state_ = state.blake2b;
-
             byte* temp = stackalloc byte[hash.Length];
 
-            int error = crypto_generichash_blake2b_final(
-                state_,
-                temp,
-                (UIntPtr)hash.Length);
+            fixed (crypto_generichash_blake2b_state* state_ = &state.blake2b)
+            {
+                int error = crypto_generichash_blake2b_final(
+                    state_,
+                    temp,
+                    (UIntPtr)hash.Length);
 
-            Debug.Assert(error == 0);
-
-            state.blake2b = *state_;
+                Debug.Assert(error == 0);
+            }
 
             fixed (byte* @out = hash)
             {
@@ -83,10 +80,7 @@ namespace NSec.Cryptography
             Debug.Assert(hash.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(hash.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
-            byte* buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
-            crypto_generichash_blake2b_state* state_ = Align64(buffer);
-            *state_ = state.blake2b;
-
+            fixed (crypto_generichash_blake2b_state* state_ = &state.blake2b)
             fixed (byte* @out = hash)
             {
                 int error = crypto_generichash_blake2b_final(
@@ -96,8 +90,6 @@ namespace NSec.Cryptography
 
                 Debug.Assert(error == 0);
             }
-
-            state.blake2b = *state_;
         }
 
         internal unsafe override void InitializeCore(
@@ -106,28 +98,23 @@ namespace NSec.Cryptography
             Debug.Assert(HashSize >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(HashSize <= crypto_generichash_blake2b_BYTES_MAX);
 
-            byte* buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
-            crypto_generichash_blake2b_state* state_ = Align64(buffer);
+            fixed (crypto_generichash_blake2b_state* state_ = &state.blake2b)
+            {
+                int error = crypto_generichash_blake2b_init(
+                    state_,
+                    null,
+                    UIntPtr.Zero,
+                    (UIntPtr)HashSize);
 
-            int error = crypto_generichash_blake2b_init(
-                state_,
-                null,
-                UIntPtr.Zero,
-                (UIntPtr)HashSize);
-
-            Debug.Assert(error == 0);
-
-            state.blake2b = *state_;
+                Debug.Assert(error == 0);
+            }
         }
 
         internal unsafe override void UpdateCore(
             ref IncrementalHashState state,
             ReadOnlySpan<byte> data)
         {
-            byte* buffer = stackalloc byte[63 + Unsafe.SizeOf<crypto_generichash_blake2b_state>()];
-            crypto_generichash_blake2b_state* state_ = Align64(buffer);
-            *state_ = state.blake2b;
-
+            fixed (crypto_generichash_blake2b_state* state_ = &state.blake2b)
             fixed (byte* @in = data)
             {
                 int error = crypto_generichash_blake2b_update(
@@ -137,8 +124,6 @@ namespace NSec.Cryptography
 
                 Debug.Assert(error == 0);
             }
-
-            state.blake2b = *state_;
         }
 
         private protected unsafe override void HashCore(
@@ -188,17 +173,6 @@ namespace NSec.Cryptography
             fixed (byte* @out = hash)
             {
                 return CryptographicOperations.FixedTimeEquals(temp, @out, hash.Length);
-            }
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static unsafe crypto_generichash_blake2b_state* Align64(byte* value)
-        {
-            unchecked
-            {
-                return sizeof(byte*) == sizeof(uint)
-                    ? (crypto_generichash_blake2b_state*)(((uint)value + 63u) & ~63u)
-                    : (crypto_generichash_blake2b_state*)(((ulong)value + 63ul) & ~63ul);
             }
         }
 
