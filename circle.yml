@@ -7,9 +7,6 @@ workflows:
       - centos7:
           requires:
             - macos
-      - debian8:
-          requires:
-            - macos
       - debian9:
           requires:
             - macos
@@ -130,32 +127,6 @@ jobs:
           name: Install Prerequisites
           no_output_timeout: 2m
           command: yum install -q -y curl ca-certificates libunwind libicu
-      - *dotnet-install-1-1
-      - *dotnet-install-2-1
-      - *dotnet-install-2-2
-      - checkout
-      - *generate-restore-graph
-      - *restore-cache
-      - *dotnet-restore
-      - *save-cache
-      - *dotnet-test-debug-2-2
-      - *dotnet-test-release-2-2
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
-      - *dotnet-test-debug-1-1
-      - *dotnet-test-release-1-1
-
-  debian8:
-    docker:
-      - image: debian:8.11
-    environment: *environment
-    steps:
-      - run:
-          name: Install Prerequisites
-          no_output_timeout: 2m
-          command: |
-            apt-get -qq update
-            apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu52
       - *dotnet-install-1-1
       - *dotnet-install-2-1
       - *dotnet-install-2-2
