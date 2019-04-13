@@ -13,10 +13,10 @@ workflows:
       - debian9:
           requires:
             - macos
-      - fedora27:
+      - fedora28:
           requires:
             - macos
-      - fedora28:
+      - fedora29:
           requires:
             - macos
       - opensuse42.3:
@@ -173,7 +173,7 @@ jobs:
 
   debian9:
     docker:
-      - image: debian:9.6
+      - image: debian:9.8
     environment: *environment
     steps:
       - run:
@@ -182,27 +182,6 @@ jobs:
           command: |
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8
-      - *dotnet-install-2-1
-      - *dotnet-install-2-2
-      - checkout
-      - *generate-restore-graph
-      - *restore-cache
-      - *dotnet-restore
-      - *save-cache
-      - *dotnet-test-debug-2-2
-      - *dotnet-test-release-2-2
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
-
-  fedora27:
-    docker:
-      - image: fedora:27
-    environment: *environment
-    steps:
-      - run:
-          name: Install Prerequisites
-          no_output_timeout: 2m
-          command: dnf install -q -y curl ca-certificates findutils libunwind libicu compat-openssl10
       - *dotnet-install-2-1
       - *dotnet-install-2-2
       - checkout
@@ -235,6 +214,24 @@ jobs:
       - *dotnet-test-release-2-2
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
+
+  fedora29:
+    docker:
+      - image: fedora:29
+    environment: *environment
+    steps:
+      - run:
+          name: Install Prerequisites
+          no_output_timeout: 2m
+          command: dnf install -q -y curl ca-certificates findutils ncurses libunwind libicu compat-openssl10
+      - *dotnet-install-2-2
+      - checkout
+      - *generate-restore-graph
+      - *restore-cache
+      - *dotnet-restore
+      - *save-cache
+      - *dotnet-test-debug-2-2
+      - *dotnet-test-release-2-2
 
   opensuse42.3:
     docker:
