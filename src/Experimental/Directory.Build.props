@@ -1,4 +1,5 @@
 ﻿<Project>
   <Import Project="$(MSBuildThisFileDirectory)..\..\build\Dependencies.props" />
+  <Import Project="$(MSBuildThisFileDirectory)..\..\build\StrongName.props" />
   <Import Project="$(MSBuildThisFileDirectory)..\..\build\Package.props" />
 </Project>
