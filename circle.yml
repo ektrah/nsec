@@ -36,12 +36,6 @@ shared:
     DOTNET_CLI_TELEMETRY_OPTOUT: 1
     DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
     TERM: dumb
-  dotnet-install-1-1: &dotnet-install-1-1
-    run:
-      name: Install .NET Core 1.1 Runtime
-      command: |
-        if [ ! -f ~/dotnet-install.sh ]; then curl -fsLo ~/dotnet-install.sh 'https://dot.net/v1/dotnet-install.sh'; fi
-        bash ~/dotnet-install.sh --channel 1.1 --version latest --install-dir ~/.dotnet --no-path --runtime dotnet
   dotnet-install-2-1: &dotnet-install-2-1
     run:
       name: Install .NET Core 2.1 Runtime
@@ -91,14 +85,6 @@ shared:
       key: 'macos-nuget-packages-{{ checksum "/tmp/restore.json" }}'
       paths:
         - ~/.nuget/packages
-  dotnet-test-debug-1-1: &dotnet-test-debug-1-1
-    run:
-      name: Run unit tests (Debug) (.NET Core 1.1)
-      command: dotnet test tests -c Debug -f netcoreapp1.1
-  dotnet-test-release-1-1: &dotnet-test-release-1-1
-    run:
-      name: Run unit tests (Release) (.NET Core 1.1)
-      command: dotnet test tests -c Release -f netcoreapp1.1
   dotnet-test-debug-2-1: &dotnet-test-debug-2-1
     run:
       name: Run unit tests (Debug) (.NET Core 2.1)
@@ -127,7 +113,6 @@ jobs:
           name: Install Prerequisites
           no_output_timeout: 2m
           command: yum install -q -y curl ca-certificates libunwind libicu
-      - *dotnet-install-1-1
       - *dotnet-install-2-1
       - *dotnet-install-2-2
       - checkout
@@ -139,8 +124,6 @@ jobs:
       - *dotnet-test-release-2-2
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
-      - *dotnet-test-debug-1-1
-      - *dotnet-test-release-1-1
 
   debian9:
     docker:
@@ -236,7 +219,6 @@ jobs:
           command: |
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu52
-      - *dotnet-install-1-1
       - *dotnet-install-2-1
       - *dotnet-install-2-2
       - checkout
@@ -248,8 +230,6 @@ jobs:
       - *dotnet-test-release-2-2
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
-      - *dotnet-test-debug-1-1
-      - *dotnet-test-release-1-1
 
   ubuntu16.04:
     docker:
@@ -262,7 +242,6 @@ jobs:
           command: |
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu55 libcurl3
-      - *dotnet-install-1-1
       - *dotnet-install-2-1
       - *dotnet-install-2-2
       - checkout
@@ -274,8 +253,6 @@ jobs:
       - *dotnet-test-release-2-2
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
-      - *dotnet-test-debug-1-1
-      - *dotnet-test-release-1-1
 
   ubuntu18.04:
     docker:
@@ -305,7 +282,6 @@ jobs:
       xcode: "9.2.0"
     environment: *environment
     steps:
-      - *dotnet-install-1-1
       - *dotnet-install-2-1
       - *dotnet-install-2-2
       - checkout
@@ -317,5 +293,3 @@ jobs:
       - *dotnet-test-release-2-2
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
-      - *dotnet-test-debug-1-1
-      - *dotnet-test-release-1-1

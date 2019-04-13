@@ -14,8 +14,6 @@ test_script:
   - dotnet test tests -c Release -f netcoreapp2.2
   - dotnet test tests -c Debug -f netcoreapp2.1
   - dotnet test tests -c Release -f netcoreapp2.1
-  - dotnet test tests -c Debug -f netcoreapp1.1
-  - dotnet test tests -c Release -f netcoreapp1.1
 after_test:
   - dotnet pack -c Release
 artifacts:
