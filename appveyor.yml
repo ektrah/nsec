@@ -10,6 +10,8 @@ install:
 build: off
 skip_tags: true
 test_script:
+  - dotnet test tests -c Debug -f netcoreapp2.2
+  - dotnet test tests -c Release -f netcoreapp2.2
   - dotnet test tests -c Debug -f netcoreapp2.1
   - dotnet test tests -c Release -f netcoreapp2.1
   - dotnet test tests -c Debug -f netcoreapp1.1
