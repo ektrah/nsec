@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSec.Cryptography", "src\Cryptography\NSec.Cryptography.csproj", "{839872CC-6AF4-456B-A55B-F82EE7B4822E}"
 EndProject
@@ -33,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{99A04338
 		build\Dependencies.props = build\Dependencies.props
 		build\InternalsVisibleTo.targets = build\InternalsVisibleTo.targets
 		build\Package.props = build\Package.props
+		build\StrongName.props = build\StrongName.props
+		build\StrongNameKey.snk = build\StrongNameKey.snk
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{F9D92917-A968-4F64-8F28-98B2CADE6417}"
