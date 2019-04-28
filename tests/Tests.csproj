@@ -4,20 +4,22 @@
     <TargetFrameworks>netcoreapp2.2;netcoreapp2.1</TargetFrameworks>
     <AssemblyName>NSec.Tests</AssemblyName>
     <RootNamespace>NSec.Tests</RootNamespace>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <LangVersion>7.3</LangVersion>
-    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <NoWarn>$(NoWarn);xUnit1026</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <LangVersion>7.3</LangVersion>
-    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <NoWarn>$(NoWarn);xUnit1026</NoWarn>
   </PropertyGroup>
 
@@ -33,10 +35,6 @@
   <ItemGroup>
     <ProjectReference Include="..\src\Cryptography\NSec.Cryptography.csproj" />
     <ProjectReference Include="..\src\Experimental\NSec.Experimental.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
 
 </Project>

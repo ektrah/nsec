@@ -29,7 +29,7 @@
       <Output TaskParameter="HashResult" PropertyName="_InternalsVisibleToHash" />
     </Hash>
 
-    <WriteLinesToFile Lines="$(_InternalsVisibleToHash)" File="$(GeneratedInternalsVisibleToCacheFile)" Overwrite="True" WriteOnlyWhenDifferent="True" />
+    <WriteLinesToFile Lines="$(_InternalsVisibleToHash)" File="$(GeneratedInternalsVisibleToCacheFile)" Overwrite="true" WriteOnlyWhenDifferent="true" />
 
     <ItemGroup>
       <FileWrites Include="$(GeneratedInternalsVisibleToCacheFile)" />

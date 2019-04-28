@@ -11,7 +11,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Interop", "src\Interop\Inte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "tests\Tests.csproj", "{97BF2648-69D2-4A17-888F-2A13E5C5CB28}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NSec", "NSec", "{DF40D4F3-D18D-45F3-87DD-2A8378354B57}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{DF40D4F3-D18D-45F3-87DD-2A8378354B57}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
@@ -30,7 +30,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NSec", "NSec", "{DF40D4F3-D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{99A04338-7321-4B8B-AA29-496C18328F90}"
 	ProjectSection(SolutionItems) = preProject
-		build\Dependencies.props = build\Dependencies.props
 		build\InternalsVisibleTo.targets = build\InternalsVisibleTo.targets
 		build\Package.props = build\Package.props
 		build\StrongName.props = build\StrongName.props
