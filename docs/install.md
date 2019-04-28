@@ -36,7 +36,7 @@ NSec runs on the following platforms and .NET Core versions:
 
 | OS            | Version  | Architectures | .NET Core Runtimes |
 |:------------- |:-------- |:------------- |:-------------------|
-| Windows 10    | 1803     | x64 / x86     | 2.2 / 2.1          |
+| Windows 10    | 1809     | x64 / x86     | 2.2 / 2.1          |
 |               |          |               |                    |
 | macOS         | 10.12    | x64           | 2.2 / 2.1          |
 |               |          |               |                    |
