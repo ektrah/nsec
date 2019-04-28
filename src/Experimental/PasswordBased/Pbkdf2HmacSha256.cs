@@ -1,5 +1,6 @@
 using System;
 using System.Buffers.Binary;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using static Interop.Libsodium;
 
@@ -50,8 +51,10 @@ namespace NSec.Experimental.PasswordBased
             ReadOnlySpan<byte> salt,
             Span<byte> bytes)
         {
-            byte* t = stackalloc byte[crypto_auth_hmacsha256_BYTES];
-            byte* u = stackalloc byte[crypto_auth_hmacsha256_BYTES];
+            Debug.Assert(crypto_auth_hmacsha256_BYTES % sizeof(uint) == 0);
+
+            uint* t = stackalloc uint[crypto_auth_hmacsha256_BYTES / sizeof(uint)];
+            uint* u = stackalloc uint[crypto_auth_hmacsha256_BYTES / sizeof(uint)];
 
             try
             {
@@ -73,17 +76,17 @@ namespace NSec.Experimental.PasswordBased
                         crypto_auth_hmacsha256_init(&state, key, (UIntPtr)password.Length);
                         crypto_auth_hmacsha256_update(&state, @in, (ulong)salt.Length);
                         crypto_auth_hmacsha256_update(&state, &counterBigEndian, sizeof(uint));
-                        crypto_auth_hmacsha256_final(&state, u);
+                        crypto_auth_hmacsha256_final(&state, (byte*)u);
 
                         for (int j = 1; j < _c; j++)
                         {
                             crypto_auth_hmacsha256_init(&state, key, (UIntPtr)password.Length);
                             crypto_auth_hmacsha256_update(&state, u, crypto_auth_hmacsha256_BYTES);
-                            crypto_auth_hmacsha256_final(&state, u);
+                            crypto_auth_hmacsha256_final(&state, (byte*)u);
 
                             for (int k = 0; k < crypto_auth_hmacsha256_BYTES / sizeof(uint); k++)
                             {
-                                ((uint*)t)[k] ^= ((uint*)u)[k];
+                                t[k] ^= u[k];
                             }
                         }
 
