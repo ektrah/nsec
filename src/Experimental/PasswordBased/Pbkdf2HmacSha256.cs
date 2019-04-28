@@ -75,13 +75,13 @@ namespace NSec.Experimental.PasswordBased
                         crypto_auth_hmacsha256_state state;
                         crypto_auth_hmacsha256_init(&state, key, (UIntPtr)password.Length);
                         crypto_auth_hmacsha256_update(&state, @in, (ulong)salt.Length);
-                        crypto_auth_hmacsha256_update(&state, &counterBigEndian, sizeof(uint));
+                        crypto_auth_hmacsha256_update(&state, (byte*)&counterBigEndian, sizeof(uint));
                         crypto_auth_hmacsha256_final(&state, (byte*)u);
 
                         for (int j = 1; j < _c; j++)
                         {
                             crypto_auth_hmacsha256_init(&state, key, (UIntPtr)password.Length);
-                            crypto_auth_hmacsha256_update(&state, u, crypto_auth_hmacsha256_BYTES);
+                            crypto_auth_hmacsha256_update(&state, (byte*)u, crypto_auth_hmacsha256_BYTES);
                             crypto_auth_hmacsha256_final(&state, (byte*)u);
 
                             for (int k = 0; k < crypto_auth_hmacsha256_BYTES / sizeof(uint); k++)

@@ -134,7 +134,6 @@ Interop.HmacSha256.cs:
   - crypto_auth_hmacsha256_keybytes
   - crypto_auth_hmacsha256_statebytes
   - crypto_auth_hmacsha256_update
-  - crypto_auth_hmacsha256_update (uint* in)
   structs:
   - crypto_auth_hmacsha256_state
 
@@ -203,7 +202,6 @@ Interop.Sha256.cs:
   - crypto_hash_sha256_init
   - crypto_hash_sha256_statebytes
   - crypto_hash_sha256_update
-  - crypto_hash_sha256_update (uint* in)
   structs:
   - crypto_hash_sha256_state
 

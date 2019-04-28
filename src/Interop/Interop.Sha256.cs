@@ -34,12 +34,6 @@ internal static partial class Interop
             byte* @in,
             ulong inlen);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_hash_sha256_update(
-            crypto_hash_sha256_state* state,
-            uint* @in,
-            ulong inlen);
-
         [StructLayout(LayoutKind.Explicit, Size = 104)]
         internal struct crypto_hash_sha256_state
         {

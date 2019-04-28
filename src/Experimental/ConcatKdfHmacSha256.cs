@@ -60,7 +60,7 @@ namespace NSec.Experimental
 
                         crypto_auth_hmacsha256_state state;
                         crypto_auth_hmacsha256_init(&state, key, (UIntPtr)salt.Length);
-                        crypto_auth_hmacsha256_update(&state, &counterBigEndian, sizeof(uint));
+                        crypto_auth_hmacsha256_update(&state, (byte*)&counterBigEndian, sizeof(uint));
                         crypto_auth_hmacsha256_update(&state, ikm, (ulong)inputKeyingMaterial.Length);
                         crypto_auth_hmacsha256_update(&state, @in, (ulong)info.Length);
                         crypto_auth_hmacsha256_final(&state, temp);
