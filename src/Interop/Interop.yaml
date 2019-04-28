@@ -167,7 +167,7 @@ Interop.Nacl.XSalsa20Poly1305.cs:
   - crypto_secretbox_macbytes
   - crypto_secretbox_noncebytes
   - crypto_secretbox_open_easy (NSec.Cryptography.Nonce* n)
-  - crypto_secretbox_primitive
+  - crypto_secretbox_primitive (IntPtr)
 
 Interop.Random.cs:
   include: include/sodium/randombytes.h
@@ -223,7 +223,7 @@ Interop.Utils.cs:
   include: include/sodium/utils.h
   functions:
   - sodium_free (IntPtr ptr)
-  - sodium_malloc
+  - sodium_malloc (IntPtr)
 
 Interop.Version.cs:
   include: include/sodium/version.h
