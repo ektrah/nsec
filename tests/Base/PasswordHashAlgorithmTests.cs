@@ -81,7 +81,14 @@ namespace NSec.Tests.Base
         [MemberData(nameof(PasswordHashAlgorithms))]
         public static void DeriveBytesWithSpanWithNullPassword(PasswordBasedKeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("password", () => a.DeriveBytes(null, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("password", () => a.DeriveBytes((string)null, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+        }
+
+        [Theory]
+        [MemberData(nameof(PasswordHashAlgorithms))]
+        public static void DeriveBytesWithSpanWithNullPasswordSpan(PasswordBasedKeyDerivationAlgorithm a)
+        {
+            Assert.Throws<ArgumentNullException>("password", () => a.DeriveBytes(ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
@@ -127,7 +134,14 @@ namespace NSec.Tests.Base
         [MemberData(nameof(PasswordHashAlgorithms))]
         public static void DeriveKeyWithNullPassword(PasswordBasedKeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("password", () => a.DeriveKey(null, ReadOnlySpan<byte>.Empty, null));
+            Assert.Throws<ArgumentNullException>("password", () => a.DeriveKey((string)null, ReadOnlySpan<byte>.Empty, null));
+        }
+
+        [Theory]
+        [MemberData(nameof(PasswordHashAlgorithms))]
+        public static void DeriveKeyWithNullPasswordSpan(PasswordBasedKeyDerivationAlgorithm a)
+        {
+            Assert.Throws<ArgumentNullException>("password", () => a.DeriveKey(ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, null));
         }
 
         [Theory]

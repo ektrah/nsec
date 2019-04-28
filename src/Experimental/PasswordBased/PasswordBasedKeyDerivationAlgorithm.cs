@@ -95,6 +95,15 @@ namespace NSec.Experimental.PasswordBased
             ReadOnlySpan<byte> salt,
             Span<byte> bytes)
         {
+
+            DeriveBytes(MemoryMarshal.AsBytes(password.AsSpan()), salt, bytes);
+        }
+
+        public void DeriveBytes(
+            ReadOnlySpan<byte> password,
+            ReadOnlySpan<byte> salt,
+            Span<byte> bytes)
+        {
             if (password == null)
                 throw Error.ArgumentNull_Password(nameof(password));
             if (salt.Length != SaltSize)
@@ -104,14 +113,14 @@ namespace NSec.Experimental.PasswordBased
             if (bytes.IsEmpty)
                 return;
 
-            if (!TryDeriveBytesCore(MemoryMarshal.AsBytes(password.AsSpan()), salt, bytes))
+            if (!TryDeriveBytesCore(password, salt, bytes))
             {
                 throw null; // TODO
             }
         }
 
         public Key DeriveKey(
-            string password,
+            ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,
             Algorithm algorithm,
             in KeyCreationParameters creationParameters = default)
@@ -138,7 +147,7 @@ namespace NSec.Experimental.PasswordBased
                 Span<byte> seed = stackalloc byte[seedSize];
                 try
                 {
-                    if (!TryDeriveBytesCore(MemoryMarshal.AsBytes(password.AsSpan()), salt, seed))
+                    if (!TryDeriveBytesCore(password, salt, seed))
                     {
                         throw null; // TODO
                     }
@@ -159,6 +168,15 @@ namespace NSec.Experimental.PasswordBased
             }
 
             return new Key(algorithm, in creationParameters, memory, owner, publicKey);
+        }
+
+        public Key DeriveKey(
+            string password,
+            ReadOnlySpan<byte> salt,
+            Algorithm algorithm,
+            in KeyCreationParameters creationParameters = default)
+        {
+            return DeriveKey(MemoryMarshal.AsBytes(password.AsSpan()), salt, algorithm, creationParameters);
         }
 
         internal sealed override int GetKeySize()
