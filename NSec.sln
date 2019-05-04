@@ -30,8 +30,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{DF40D4F3
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{99A04338-7321-4B8B-AA29-496C18328F90}"
 	ProjectSection(SolutionItems) = preProject
+		build\CI.props = build\CI.props
 		build\InternalsVisibleTo.targets = build\InternalsVisibleTo.targets
-		build\Package.props = build\Package.props
 		build\StrongName.props = build\StrongName.props
 		build\StrongNameKey.snk = build\StrongNameKey.snk
 	EndProjectSection
@@ -46,6 +46,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D24568A9-54F1-48E0-88FF-2E067F9BDA95}"
 	ProjectSection(SolutionItems) = preProject
 		src\.editorconfig = src\.editorconfig
+		src\Package.props = src\Package.props
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{F058E702-CA96-47D4-AA3C-0CC93FD07B53}"

@@ -4,23 +4,11 @@
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(APPVEYOR)' == 'true'">
-    <GitTag>$(APPVEYOR_REPO_TAG_NAME)</GitTag>
-    <GitBranch>$(APPVEYOR_REPO_BRANCH)</GitBranch>
-    <GitPullRequest>$(APPVEYOR_PULL_REQUEST_NUMBER)</GitPullRequest>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(CIRCLECI)' == 'true'">
-    <GitTag>$(CIRCLE_TAG)</GitTag>
-    <GitBranch>$(CIRCLE_BRANCH)</GitBranch>
-    <GitPullRequest>$(CIRCLE_PR_NUMBER)</GitPullRequest>
-  </PropertyGroup>
+  <Import Project="$(MSBuildThisFileDirectory)..\build\CI.props" />
 
   <PropertyGroup>
     <BuildNumberMajor>$([MSBuild]::Add($([MSBuild]::Multiply(100, $([MSBuild]::Add($([MSBuild]::Multiply(12, $([MSBuild]::Subtract($([System.DateTime]::UtcNow.Year), 1996)))), $([MSBuild]::Subtract($([System.DateTime]::UtcNow.Month), 4)))))), $([System.DateTime]::UtcNow.Day)).ToString('00000'))</BuildNumberMajor>
     <BuildNumberMinor>$([MSBuild]::Divide($([MSBuild]::Add($([MSBuild]::Multiply(60, $([System.DateTime]::UtcNow.Hour))), $([System.DateTime]::UtcNow.Minute))), 15).ToString('00'))</BuildNumberMinor>
-    <IsPackable Condition="'$(GitBranch)' != '' and '$(GitBranch)' != 'master'">false</IsPackable>
-    <IsPackable Condition="'$(GitPullRequest)' != ''">false</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup>
