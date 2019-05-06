@@ -19,6 +19,9 @@ workflows:
       - opensuse42.3:
           requires:
             - macos
+      - opensuse15:
+          requires:
+            - macos
       - ubuntu16.04:
           requires:
       - ubuntu18.04:
@@ -186,13 +189,34 @@ jobs:
 
   opensuse42.3:
     docker:
-      - image: opensuse:42.3
+      - image: opensuse/leap:42.3
     environment: *environment
     steps:
       - run:
           name: Install Prerequisites
           no_output_timeout: 2m
-          command: zypper -q install -y --no-recommends curl ca-certificates tar ncurses-utils libunwind libicu
+          command: zypper -q install -y --no-recommends curl ca-certificates gzip tar ncurses-utils libunwind libicu
+      - *dotnet-install-2-1
+      - *dotnet-install-2-2
+      - checkout
+      - *generate-restore-graph
+      - *restore-cache
+      - *dotnet-restore
+      - *save-cache
+      - *dotnet-test-debug-2-2
+      - *dotnet-test-release-2-2
+      - *dotnet-test-debug-2-1
+      - *dotnet-test-release-2-1
+
+  opensuse15:
+    docker:
+      - image: opensuse/leap:15.1
+    environment: *environment
+    steps:
+      - run:
+          name: Install Prerequisites
+          no_output_timeout: 2m
+          command: zypper -q install -y --no-recommends curl ca-certificates gzip tar ncurses-utils libunwind libicu
       - *dotnet-install-2-1
       - *dotnet-install-2-2
       - checkout
