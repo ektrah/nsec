@@ -19,9 +19,6 @@ workflows:
       - opensuse42.3:
           requires:
             - macos
-      - ubuntu14.04:
-          requires:
-            - macos
       - ubuntu16.04:
           requires:
       - ubuntu18.04:
@@ -196,29 +193,6 @@ jobs:
           name: Install Prerequisites
           no_output_timeout: 2m
           command: zypper -q install -y --no-recommends curl ca-certificates tar ncurses-utils libunwind libicu
-      - *dotnet-install-2-1
-      - *dotnet-install-2-2
-      - checkout
-      - *generate-restore-graph
-      - *restore-cache
-      - *dotnet-restore
-      - *save-cache
-      - *dotnet-test-debug-2-2
-      - *dotnet-test-release-2-2
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
-
-  ubuntu14.04:
-    docker:
-      - image: ubuntu:14.04
-    environment: *environment
-    steps:
-      - run:
-          name: Install Prerequisites
-          no_output_timeout: 2m
-          command: |
-            apt-get -qq update
-            apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libunwind8 libicu52
       - *dotnet-install-2-1
       - *dotnet-install-2-2
       - checkout
