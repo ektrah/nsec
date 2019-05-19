@@ -43,7 +43,7 @@ and verify the signature:
 
 ## Installation
 
-    $ dotnet add package NSec.Cryptography --version 19.4.0-preview2
+    $ dotnet add package NSec.Cryptography --version 19.5.0
 
 NSec runs on .NET Core 2.2 and 2.1 on Windows, Linux and Mac, and requires
 a C# 7.2 or F# 4.5 compiler (or later). See [[Installation]] for more details.
