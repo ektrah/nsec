@@ -12,7 +12,6 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version Condition="'$(Version)' == '' and '$([System.DateTime]::UtcNow.ToString(y.M.0))' == '19.5.0'">19.6.0-preview1-$(BuildNumberMajor)-$(BuildNumberMinor)</Version>
     <Version Condition="'$(Version)' == ''">$([System.DateTime]::UtcNow.ToString(y.M.0))-preview1-$(BuildNumberMajor)-$(BuildNumberMinor)</Version>
   </PropertyGroup>
 
