@@ -16,7 +16,7 @@ namespace NSec.Experimental.Sodium
     //
     //  References:
     //
-    //      draft-arciszewski-xchacha-03 - XChaCha: eXtended-nonce ChaCha and
+    //      draft-irtf-cfrg-xchacha-00 - XChaCha: eXtended-nonce ChaCha and
     //          AEAD_XChaCha20_Poly1305
     //
     //      RFC 5116 - An Interface and Algorithms for Authenticated Encryption
