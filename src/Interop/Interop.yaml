@@ -58,6 +58,18 @@ Interop.Blake2b.cs:
   structs:
   - crypto_generichash_blake2b_state
 
+Interop.ChaCha20:
+  include: include/sodium/crypto_stream_chacha20.h
+  constants:
+    - crypto_stream_chacha20_ietf_KEYBYTES
+    - crypto_stream_chacha20_ietf_NONCEBYTES
+  functions:
+    - crypto_stream_chacha20_ietf (NSec.Cryptography.Nonce* n)
+    - crypto_stream_chacha20_ietf_xor (NSec.Cryptography.Nonce* n)
+    - crypto_stream_chacha20_ietf_xor_ic (NSec.Cryptography.Nonce* n)
+    - crypto_stream_chacha20_ietf_keybytes
+    - crypto_stream_chacha20_ietf_noncebytes
+
 Interop.ChaCha20Poly1305.cs:
   include: include/sodium/crypto_aead_chacha20poly1305.h
   constants:

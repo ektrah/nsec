@@ -35,6 +35,11 @@ namespace NSec.Tests
             MacAlgorithm.HmacSha512_256,
         };
 
+        public static readonly TheoryData<StreamCipherAlgorithm> StreamCipherAlgorithms = new TheoryData<StreamCipherAlgorithm>
+        {
+            StreamCipherAlgorithm.ChaCha20
+        };
+
         public static readonly TheoryData<HashAlgorithm> HashAlgorithms = new TheoryData<HashAlgorithm>
         {
             HashAlgorithm.Blake2b_256,
@@ -92,6 +97,7 @@ namespace NSec.Tests
             MacAlgorithm.HmacSha256_128,
             MacAlgorithm.HmacSha512,
             MacAlgorithm.HmacSha512_256,
+            StreamCipherAlgorithm.ChaCha20,
         };
 
         public static readonly TheoryData<Algorithm> KeylessAlgorithms = new TheoryData<Algorithm>
@@ -151,6 +157,8 @@ namespace NSec.Tests
             { MacAlgorithm.Blake2b_512, KeyBlobFormat.NSecSymmetricKey },
             { AeadAlgorithm.ChaCha20Poly1305, KeyBlobFormat.RawSymmetricKey },
             { AeadAlgorithm.ChaCha20Poly1305, KeyBlobFormat.NSecSymmetricKey },
+            { StreamCipherAlgorithm.ChaCha20, KeyBlobFormat.RawSymmetricKey },
+            { StreamCipherAlgorithm.ChaCha20, KeyBlobFormat.NSecSymmetricKey },
             { MacAlgorithm.HmacSha256, KeyBlobFormat.RawSymmetricKey },
             { MacAlgorithm.HmacSha256, KeyBlobFormat.NSecSymmetricKey },
             { MacAlgorithm.HmacSha512, KeyBlobFormat.RawSymmetricKey },
