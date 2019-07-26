@@ -71,7 +71,6 @@ namespace NSec.Cryptography
             }
         }
 
-
         public int KeySize => _keySize;
 
         public int NonceSize => _nonceSize;
