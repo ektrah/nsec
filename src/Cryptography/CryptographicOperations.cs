@@ -12,14 +12,17 @@ namespace NSec.Cryptography
             // non-short-circuiting as written. NoInlining because the
             // NoOptimization would get lost if the method got inlined.
 
-            int accum = 0;
-
-            for (int i = 0; i < length; i++)
+            unchecked
             {
-                accum |= left[i] - right[i];
-            }
+                int accum = 0;
 
-            return accum == 0;
+                for (int i = 0; i < length; i++)
+                {
+                    accum |= left[i] - right[i];
+                }
+
+                return accum == 0;
+            }
         }
 
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
