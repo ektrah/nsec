@@ -268,7 +268,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AeadAlgorithms))]
         public static void DecryptWithNullKey(AeadAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Decrypt(null, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out byte[] pt));
+            Assert.Throws<ArgumentNullException>("key", () => a.Decrypt(null, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out var pt));
         }
 
         [Theory]
@@ -277,7 +277,7 @@ namespace NSec.Tests.Base
         {
             var k = new Key(a);
             k.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => a.Decrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize], out byte[] pt));
+            Assert.Throws<ObjectDisposedException>(() => a.Decrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize], out var pt));
         }
 
         [Theory]
@@ -286,7 +286,7 @@ namespace NSec.Tests.Base
         {
             using (var k = new Key(SignatureAlgorithm.Ed25519))
             {
-                Assert.Throws<ArgumentException>("key", () => a.Decrypt(k, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out byte[] pt));
+                Assert.Throws<ArgumentException>("key", () => a.Decrypt(k, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out var pt));
             }
         }
 
@@ -296,7 +296,7 @@ namespace NSec.Tests.Base
         {
             using (var k = new Key(a))
             {
-                Assert.False(a.Decrypt(k, new Nonce(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out byte[] pt));
+                Assert.False(a.Decrypt(k, new Nonce(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out var pt));
             }
         }
 
@@ -311,7 +311,7 @@ namespace NSec.Tests.Base
 
             using (var k = new Key(a))
             {
-                Assert.False(a.Decrypt(k, new Nonce(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out byte[] pt));
+                Assert.False(a.Decrypt(k, new Nonce(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out var pt));
             }
         }
 
@@ -321,7 +321,7 @@ namespace NSec.Tests.Base
         {
             using (var k = new Key(a))
             {
-                Assert.False(a.Decrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize - 1], out byte[] pt));
+                Assert.False(a.Decrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize - 1], out var pt));
                 Assert.Null(pt);
             }
         }
@@ -355,7 +355,7 @@ namespace NSec.Tests.Base
                 Assert.NotNull(ct);
                 Assert.Equal(a.TagSize, ct.Length);
 
-                Assert.True(a.Decrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ct, out byte[] pt));
+                Assert.True(a.Decrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ct, out var pt));
                 Assert.NotNull(pt);
                 Assert.Empty(pt);
             }

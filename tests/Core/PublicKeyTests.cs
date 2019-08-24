@@ -45,28 +45,28 @@ namespace NSec.Tests.Core
         [Fact]
         public static void TryImportWithNullAlgorithm()
         {
-            Assert.Throws<ArgumentNullException>("algorithm", () => PublicKey.TryImport(null, ReadOnlySpan<byte>.Empty, 0, out PublicKey pk));
+            Assert.Throws<ArgumentNullException>("algorithm", () => PublicKey.TryImport(null, ReadOnlySpan<byte>.Empty, 0, out var pk));
         }
 
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
         public static void TryImportWithFormatMin(Algorithm a)
         {
-            Assert.Throws<ArgumentException>("format", () => PublicKey.TryImport(a, ReadOnlySpan<byte>.Empty, (KeyBlobFormat)int.MinValue, out PublicKey pk));
+            Assert.Throws<ArgumentException>("format", () => PublicKey.TryImport(a, ReadOnlySpan<byte>.Empty, (KeyBlobFormat)int.MinValue, out var pk));
         }
 
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
         public static void TryImportWithFormatMax(Algorithm a)
         {
-            Assert.Throws<ArgumentException>("format", () => PublicKey.TryImport(a, ReadOnlySpan<byte>.Empty, (KeyBlobFormat)int.MaxValue, out PublicKey pk));
+            Assert.Throws<ArgumentException>("format", () => PublicKey.TryImport(a, ReadOnlySpan<byte>.Empty, (KeyBlobFormat)int.MaxValue, out var pk));
         }
 
         [Theory]
         [MemberData(nameof(PublicKeyBlobFormats))]
         public static void TryImportEmpty(Algorithm a, KeyBlobFormat format)
         {
-            Assert.False(PublicKey.TryImport(a, ReadOnlySpan<byte>.Empty, format, out PublicKey pk));
+            Assert.False(PublicKey.TryImport(a, ReadOnlySpan<byte>.Empty, format, out var pk));
             Assert.Null(pk);
         }
 
