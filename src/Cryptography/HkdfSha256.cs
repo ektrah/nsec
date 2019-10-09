@@ -191,8 +191,7 @@ namespace NSec.Cryptography
 
             // According to RFC 5869, the salt must be set to a string of
             // HashLen zeros if not provided. A ReadOnlySpan<byte> cannot be
-            // "not provided" and an empty span seems to yield the same result
-            // as a string of HashLen zeros, so the corner case is ignored here.
+            // "not provided", so this is not implemented.
 
             fixed (byte* key = salt)
             fixed (byte* @in = inputKeyingMaterial)
