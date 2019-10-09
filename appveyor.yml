@@ -1,6 +1,6 @@
 version: '{build}'
 image:
-  - Visual Studio 2017
+  - Visual Studio 2019
 environment:
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
@@ -10,6 +10,8 @@ install:
 build: off
 skip_tags: true
 test_script:
+  - dotnet test tests -c Debug -f netcoreapp3.0
+  - dotnet test tests -c Release -f netcoreapp3.0
   - dotnet test tests -c Debug -f netcoreapp2.2
   - dotnet test tests -c Release -f netcoreapp2.2
   - dotnet test tests -c Debug -f netcoreapp2.1
@@ -18,9 +20,3 @@ after_test:
   - dotnet pack -c Release
 artifacts:
   - path: '**\*.nupkg'
-deploy:
-- provider: NuGet
-  server: https://www.myget.org/F/nsec/api/v2
-  api_key:
-    secure: TjONMhmq3TB/PqRQwd5PCT0TAwhJFB2XL3krFHV61JYOQIl75PvXMosF0XJndkya
-  skip_symbols: true
