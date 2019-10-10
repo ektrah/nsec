@@ -1,4 +1,3 @@
-
 using System;
 using NSec.Cryptography;
 using NSec.Experimental;
@@ -43,7 +42,7 @@ namespace NSec.Tests.Base
             k.Dispose();
             Assert.Throws<ObjectDisposedException>(() => a.GeneratePseudoRandomStream(k, new Nonce(0, a.NonceSize), 1));
             Assert.Throws<ObjectDisposedException>(() => a.XOr(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty));
-            Assert.Throws<ObjectDisposedException>(() => a.XOrIC(k,new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, 1));
+            Assert.Throws<ObjectDisposedException>(() => a.XOrIC(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, 1));
         }
 
         [Theory]
@@ -182,8 +181,8 @@ namespace NSec.Tests.Base
                 var n = new Nonce(Utilities.RandomBytes.Slice(0, a.NonceSize), 0);
                 var b = Utilities.RandomBytes.Slice(200, 200).ToArray();
 
-                Assert.Throws<ArgumentException>("outputText",() => a.XOr(k, n, b.AsSpan(10, 100), b.AsSpan(60, 100)));
-                Assert.Throws<ArgumentException>("outputText",() => a.XOr(k, n, b.AsSpan(60, 100), b.AsSpan(10, 100)));
+                Assert.Throws<ArgumentException>("output", () => a.XOr(k, n, b.AsSpan(10, 100), b.AsSpan(60, 100)));
+                Assert.Throws<ArgumentException>("output", () => a.XOr(k, n, b.AsSpan(60, 100), b.AsSpan(10, 100)));
             }
         }
 

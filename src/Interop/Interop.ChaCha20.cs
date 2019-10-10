@@ -1,6 +1,5 @@
-
-using System.Runtime.InteropServices;
 using System;
+using System.Runtime.InteropServices;
 
 internal static partial class Interop
 {
@@ -17,6 +16,12 @@ internal static partial class Interop
             byte* k);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern UIntPtr crypto_stream_chacha20_ietf_keybytes();
+
+        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern UIntPtr crypto_stream_chacha20_ietf_noncebytes();
+
+        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static unsafe extern int crypto_stream_chacha20_ietf_xor(
             byte* c,
             byte* m,
@@ -30,14 +35,7 @@ internal static partial class Interop
             byte* m,
             ulong mlen,
             NSec.Cryptography.Nonce* n,
-            UIntPtr ic,
-            byte* k
-        );
-
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern UIntPtr crypto_stream_chacha20_ietf_keybytes();
-
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern UIntPtr crypto_stream_chacha20_ietf_noncebytes();
+            uint ic,
+            byte* k);
     }
 }

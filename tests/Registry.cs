@@ -158,7 +158,6 @@ namespace NSec.Tests
             { AeadAlgorithm.ChaCha20Poly1305, KeyBlobFormat.RawSymmetricKey },
             { AeadAlgorithm.ChaCha20Poly1305, KeyBlobFormat.NSecSymmetricKey },
             { StreamCipherAlgorithm.ChaCha20, KeyBlobFormat.RawSymmetricKey },
-            { StreamCipherAlgorithm.ChaCha20, KeyBlobFormat.NSecSymmetricKey },
             { MacAlgorithm.HmacSha256, KeyBlobFormat.RawSymmetricKey },
             { MacAlgorithm.HmacSha256, KeyBlobFormat.NSecSymmetricKey },
             { MacAlgorithm.HmacSha512, KeyBlobFormat.RawSymmetricKey },
