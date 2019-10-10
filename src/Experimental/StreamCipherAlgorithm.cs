@@ -1,8 +1,9 @@
 using System;
 using System.Diagnostics;
 using System.Threading;
+using NSec.Cryptography;
 
-namespace NSec.Cryptography
+namespace NSec.Experimental
 {
 
     // stream cipher encryption/decryption algorithm without any authentication.

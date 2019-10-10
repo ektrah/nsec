@@ -2,11 +2,11 @@ using System;
 using System.Diagnostics;
 using System.Buffers;
 using System.Threading;
-
+using NSec.Cryptography;
 using NSec.Cryptography.Formatting;
 using static Interop.Libsodium;
 
-namespace NSec.Cryptography
+namespace NSec.Experimental
 {
     public class ChaCha20: StreamCipherAlgorithm
     {
