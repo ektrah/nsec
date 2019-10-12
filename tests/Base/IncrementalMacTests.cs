@@ -13,7 +13,7 @@ namespace NSec.Tests.Base
         [Fact]
         public static void InitializeWithNullKey()
         {
-            Assert.Throws<ArgumentNullException>("key", () => IncrementalMac.Initialize(null, out _));
+            Assert.Throws<ArgumentNullException>("key", () => IncrementalMac.Initialize(null!, out _));
         }
 
         [Fact]

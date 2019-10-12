@@ -29,7 +29,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AeadAlgorithms))]
         public static void EncryptWithNullKey(AeadAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Encrypt(null, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Encrypt(null!, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
@@ -97,7 +97,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AeadAlgorithms))]
         public static void EncryptWithSpanWithNullKey(AeadAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Encrypt(null, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Encrypt(null!, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
@@ -268,7 +268,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AeadAlgorithms))]
         public static void DecryptWithNullKey(AeadAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Decrypt(null, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out var pt));
+            Assert.Throws<ArgumentNullException>("key", () => a.Decrypt(null!, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out var pt));
         }
 
         [Theory]
@@ -369,7 +369,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AeadAlgorithms))]
         public static void DecryptWithSpanWithNullKey(AeadAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Decrypt(null, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Decrypt(null!, default(Nonce), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]

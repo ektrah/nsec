@@ -77,7 +77,7 @@ namespace NSec.Tests.Core
         [Fact]
         public static void CtorWithNullAlgorithm()
         {
-            Assert.Throws<ArgumentNullException>("algorithm", () => new Key(null));
+            Assert.Throws<ArgumentNullException>("algorithm", () => new Key(null!));
         }
 
         [Theory]
@@ -94,7 +94,7 @@ namespace NSec.Tests.Core
         [Fact]
         public static void CreateWithNullAlgorithm()
         {
-            Assert.Throws<ArgumentNullException>("algorithm", () => Key.Create(null));
+            Assert.Throws<ArgumentNullException>("algorithm", () => Key.Create(null!));
         }
 
         [Theory]
@@ -111,7 +111,7 @@ namespace NSec.Tests.Core
         [Fact]
         public static void ImportWithNullAlgorithm()
         {
-            Assert.Throws<ArgumentNullException>("algorithm", () => Key.Import(null, ReadOnlySpan<byte>.Empty, 0));
+            Assert.Throws<ArgumentNullException>("algorithm", () => Key.Import(null!, ReadOnlySpan<byte>.Empty, 0));
         }
 
         [Theory]
@@ -151,7 +151,7 @@ namespace NSec.Tests.Core
         [Fact]
         public static void TryImportWithNullAlgorithm()
         {
-            Assert.Throws<ArgumentNullException>("algorithm", () => Key.TryImport(null, ReadOnlySpan<byte>.Empty, 0, out var k, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }));
+            Assert.Throws<ArgumentNullException>("algorithm", () => Key.TryImport(null!, ReadOnlySpan<byte>.Empty, 0, out var k, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }));
         }
 
         [Theory]

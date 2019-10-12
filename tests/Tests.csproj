@@ -5,6 +5,7 @@
     <AssemblyName>NSec.Tests</AssemblyName>
     <RootNamespace>NSec.Tests</RootNamespace>
     <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>

@@ -14,7 +14,7 @@ namespace NSec.Tests.Core
         [Fact]
         public static void ImportWithNullAlgorithm()
         {
-            Assert.Throws<ArgumentNullException>("algorithm", () => PublicKey.Import(null, ReadOnlySpan<byte>.Empty, 0));
+            Assert.Throws<ArgumentNullException>("algorithm", () => PublicKey.Import(null!, ReadOnlySpan<byte>.Empty, 0));
         }
 
         [Theory]
@@ -45,7 +45,7 @@ namespace NSec.Tests.Core
         [Fact]
         public static void TryImportWithNullAlgorithm()
         {
-            Assert.Throws<ArgumentNullException>("algorithm", () => PublicKey.TryImport(null, ReadOnlySpan<byte>.Empty, 0, out var pk));
+            Assert.Throws<ArgumentNullException>("algorithm", () => PublicKey.TryImport(null!, ReadOnlySpan<byte>.Empty, 0, out var pk));
         }
 
         [Theory]

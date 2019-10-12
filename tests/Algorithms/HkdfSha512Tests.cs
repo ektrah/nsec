@@ -553,7 +553,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = KeyDerivationAlgorithm.HkdfSha512;
 
-            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.Extract(null, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.Extract(null!, ReadOnlySpan<byte>.Empty));
         }
 
         [Fact]
@@ -596,7 +596,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = KeyDerivationAlgorithm.HkdfSha512;
 
-            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.Extract(null, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.Extract(null!, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Fact]

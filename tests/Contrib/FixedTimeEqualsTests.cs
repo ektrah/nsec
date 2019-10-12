@@ -59,13 +59,13 @@ namespace NSec.Tests.Contrib
         public static void HasCorrectMethodImpl()
         {
             Type t = typeof(CryptographicOperations);
-            MethodInfo mi = t.GetMethod(nameof(CryptographicOperations.FixedTimeEquals));
+            MethodInfo? mi = t.GetMethod(nameof(CryptographicOperations.FixedTimeEquals));
 
             // This method cannot be optimized, or it loses its fixed time guarantees.
             // It cannot be inlined, or it loses its no-optimization guarantee.
             Assert.Equal(
                 MethodImplAttributes.NoInlining | MethodImplAttributes.NoOptimization,
-                mi.MethodImplementationFlags);
+                mi?.MethodImplementationFlags);
         }
     }
 }

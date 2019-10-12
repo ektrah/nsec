@@ -27,7 +27,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(SignatureAlgorithms))]
         public static void SignWithNullKey(SignatureAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Sign(null, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Sign(null!, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
@@ -70,7 +70,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(SignatureAlgorithms))]
         public static void SignWithSpanWithNullKey(SignatureAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Sign(null, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Sign(null!, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
@@ -120,7 +120,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(SignatureAlgorithms))]
         public static void VerifyWithNullKey(SignatureAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("publicKey", () => a.Verify(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("publicKey", () => a.Verify(null!, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]

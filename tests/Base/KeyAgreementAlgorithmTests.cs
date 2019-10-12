@@ -27,7 +27,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyAgreementAlgorithms))]
         public static void AgreeWithNullKey(KeyAgreementAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Agree(null, null));
+            Assert.Throws<ArgumentNullException>("key", () => a.Agree(null!, null!));
         }
 
         [Theory]
@@ -48,7 +48,7 @@ namespace NSec.Tests.Base
         {
             using (var k = new Key(SignatureAlgorithm.Ed25519))
             {
-                Assert.Throws<ArgumentException>("key", () => a.Agree(k, null));
+                Assert.Throws<ArgumentException>("key", () => a.Agree(k, null!));
             }
         }
 
@@ -60,7 +60,7 @@ namespace NSec.Tests.Base
             {
                 Assert.Same(a, k.Algorithm);
 
-                Assert.Throws<ArgumentNullException>("otherPartyPublicKey", () => a.Agree(k, null));
+                Assert.Throws<ArgumentNullException>("otherPartyPublicKey", () => a.Agree(k, null!));
             }
         }
 

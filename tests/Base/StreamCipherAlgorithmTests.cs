@@ -29,9 +29,9 @@ namespace NSec.Tests.Base
         [MemberData(nameof(StreamCipherAlgorithms))]
         public static void OperationWithNullKey(StreamCipherAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.GeneratePseudoRandomStream(null, default(Nonce), 1));
-            Assert.Throws<ArgumentNullException>("key", () => a.XOr(null, default(Nonce), ReadOnlySpan<byte>.Empty));
-            Assert.Throws<ArgumentNullException>("key", () => a.XOrIC(null, default(Nonce), ReadOnlySpan<byte>.Empty, 1));
+            Assert.Throws<ArgumentNullException>("key", () => a.GeneratePseudoRandomStream(null!, default(Nonce), 1));
+            Assert.Throws<ArgumentNullException>("key", () => a.XOr(null!, default(Nonce), ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.XOrIC(null!, default(Nonce), ReadOnlySpan<byte>.Empty, 1));
         }
 
         [Theory]
@@ -94,9 +94,9 @@ namespace NSec.Tests.Base
         [MemberData(nameof(StreamCipherAlgorithms))]
         public static void OperationWithSpanWithNullKey(StreamCipherAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.GeneratePseudoRandomStream(null, default(Nonce), Span<byte>.Empty));
-            Assert.Throws<ArgumentNullException>("key", () => a.XOr(null, default(Nonce), ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
-            Assert.Throws<ArgumentNullException>("key", () => a.XOrIC(null, default(Nonce), ReadOnlySpan<byte>.Empty, Span<byte>.Empty, 1));
+            Assert.Throws<ArgumentNullException>("key", () => a.GeneratePseudoRandomStream(null!, default(Nonce), Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.XOr(null!, default(Nonce), ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.XOrIC(null!, default(Nonce), ReadOnlySpan<byte>.Empty, Span<byte>.Empty, 1));
         }
 
         [Theory]
