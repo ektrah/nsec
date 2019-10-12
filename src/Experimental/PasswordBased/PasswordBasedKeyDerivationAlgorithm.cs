@@ -21,8 +21,8 @@ namespace NSec.Experimental.PasswordBased
     //
     public abstract class PasswordBasedKeyDerivationAlgorithm : Algorithm
     {
-        private static Argon2i s_Argon2i;
-        private static Scrypt s_Scrypt;
+        private static Argon2i? s_Argon2i;
+        private static Scrypt? s_Scrypt;
 
         private readonly int _maxCount;
         private readonly int _saltSize;
@@ -42,7 +42,7 @@ namespace NSec.Experimental.PasswordBased
         {
             get
             {
-                Argon2i instance = s_Argon2i;
+                Argon2i? instance = s_Argon2i;
                 if (instance == null)
                 {
                     Interlocked.CompareExchange(ref s_Argon2i, new Argon2i(), null);
@@ -56,7 +56,7 @@ namespace NSec.Experimental.PasswordBased
         {
             get
             {
-                Scrypt instance = s_Scrypt;
+                Scrypt? instance = s_Scrypt;
                 if (instance == null)
                 {
                     Interlocked.CompareExchange(ref s_Scrypt, new Scrypt(), null);
@@ -87,7 +87,7 @@ namespace NSec.Experimental.PasswordBased
             byte[] bytes = new byte[count];
             if (!TryDeriveBytesCore(MemoryMarshal.AsBytes(password.AsSpan()), salt, bytes))
             {
-                throw null; // TODO
+                throw new NotImplementedException(); // TODO
             }
             return bytes;
         }
@@ -108,7 +108,7 @@ namespace NSec.Experimental.PasswordBased
 
             if (!TryDeriveBytesCore(MemoryMarshal.AsBytes(password.AsSpan()), salt, bytes))
             {
-                throw null; // TODO
+                throw new NotImplementedException(); // TODO
             }
         }
 
@@ -131,8 +131,8 @@ namespace NSec.Experimental.PasswordBased
             Debug.Assert(seedSize <= 64);
 
             ReadOnlyMemory<byte> memory = default;
-            IMemoryOwner<byte> owner = default;
-            PublicKey publicKey = default;
+            IMemoryOwner<byte>? owner = default;
+            PublicKey? publicKey = default;
             bool success = false;
 
             try
@@ -142,7 +142,7 @@ namespace NSec.Experimental.PasswordBased
                 {
                     if (!TryDeriveBytesCore(MemoryMarshal.AsBytes(password.AsSpan()), salt, seed))
                     {
-                        throw null; // TODO
+                        throw new NotImplementedException(); // TODO
                     }
                     algorithm.CreateKey(seed, creationParameters.GetMemoryPool(), out memory, out owner, out publicKey);
                     success = true;

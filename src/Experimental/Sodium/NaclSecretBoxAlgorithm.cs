@@ -75,7 +75,7 @@ namespace NSec.Experimental.Sodium
             Key key,
             in Nonce nonce,
             ReadOnlySpan<byte> ciphertext,
-            out byte[] plaintext)
+            out byte[]? plaintext)
         {
             if (key == null)
                 throw Error.ArgumentNull_Key(nameof(key));

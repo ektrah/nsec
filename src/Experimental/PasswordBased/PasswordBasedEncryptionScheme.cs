@@ -77,7 +77,7 @@ namespace NSec.Experimental.PasswordBased
             ReadOnlySpan<byte> salt,
             in Nonce nonce,
             ReadOnlySpan<byte> ciphertext,
-            out byte[] plaintext)
+            out byte[]? plaintext)
         {
             using (Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _encryptionAlgorithm))
             {

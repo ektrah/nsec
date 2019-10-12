@@ -32,7 +32,7 @@ namespace NSec.Experimental.Sodium
             MemoryPool<byte> memoryPool,
             out ReadOnlyMemory<byte> memory,
             out IMemoryOwner<byte> owner,
-            out PublicKey publicKey)
+            out PublicKey? publicKey)
         {
             Debug.Assert(seed.Length == crypto_secretbox_xsalsa20poly1305_KEYBYTES);
 
@@ -123,8 +123,8 @@ namespace NSec.Experimental.Sodium
             KeyBlobFormat format,
             MemoryPool<byte> memoryPool,
             out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte> owner,
-            out PublicKey publicKey)
+            out IMemoryOwner<byte>? owner,
+            out PublicKey? publicKey)
         {
             publicKey = null;
 

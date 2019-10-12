@@ -28,7 +28,7 @@ namespace NSec.Experimental
             MemoryPool<byte> memoryPool,
             out ReadOnlyMemory<byte> memory,
             out IMemoryOwner<byte> owner,
-            out PublicKey publicKey)
+            out PublicKey? publicKey)
         {
             Debug.Assert(seed.Length == crypto_stream_chacha20_ietf_KEYBYTES);
 
@@ -139,8 +139,8 @@ namespace NSec.Experimental
             KeyBlobFormat format,
             MemoryPool<byte> memoryPool,
             out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte> owner,
-            out PublicKey publicKey)
+            out IMemoryOwner<byte>? owner,
+            out PublicKey? publicKey)
         {
             publicKey = null;
 
