@@ -81,7 +81,7 @@ namespace NSec.Cryptography
             MemoryPool<byte> memoryPool,
             out ReadOnlyMemory<byte> memory,
             out IMemoryOwner<byte> owner,
-            out PublicKey publicKey)
+            out PublicKey? publicKey)
         {
             Debug.Assert(seed.Length == crypto_scalarmult_curve25519_SCALARBYTES);
             Debug.Assert(Unsafe.SizeOf<PublicKeyBytes>() == crypto_scalarmult_curve25519_SCALARBYTES);
@@ -176,8 +176,8 @@ namespace NSec.Cryptography
             KeyBlobFormat format,
             MemoryPool<byte> memoryPool,
             out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte> owner,
-            out PublicKey publicKey)
+            out IMemoryOwner<byte>? owner,
+            out PublicKey? publicKey)
         {
             publicKey = new PublicKey(this);
 

@@ -26,7 +26,7 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> blob,
             MemoryPool<byte> memoryPool,
             out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte> owner)
+            out IMemoryOwner<byte>? owner)
         {
             if (blob.Length != keySize)
             {

@@ -68,7 +68,7 @@ namespace NSec.Cryptography
             MemoryPool<byte> memoryPool,
             out ReadOnlyMemory<byte> memory,
             out IMemoryOwner<byte> owner,
-            out PublicKey publicKey)
+            out PublicKey? publicKey)
         {
             Debug.Assert(seed.Length >= crypto_generichash_blake2b_KEYBYTES_MIN);
             Debug.Assert(seed.Length <= crypto_generichash_blake2b_KEYBYTES_MAX);
@@ -172,8 +172,8 @@ namespace NSec.Cryptography
             KeyBlobFormat format,
             MemoryPool<byte> memoryPool,
             out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte> owner,
-            out PublicKey publicKey)
+            out IMemoryOwner<byte>? owner,
+            out PublicKey? publicKey)
         {
             publicKey = null;
 

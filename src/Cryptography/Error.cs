@@ -6,7 +6,7 @@ namespace NSec.Cryptography
 {
     internal static class Error
     {
-        private static ResourceManager s_resourceManager;
+        private static ResourceManager? s_resourceManager;
 
         private static ResourceManager ResourceManager => s_resourceManager ?? (s_resourceManager = new ResourceManager(typeof(Error).FullName, typeof(Error).GetTypeInfo().Assembly));
 

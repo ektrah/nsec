@@ -48,7 +48,7 @@ namespace NSec.Cryptography
             Sodium.Initialize();
 
             ReadOnlyMemory<byte> memory = default;
-            IMemoryOwner<byte> owner = default;
+            IMemoryOwner<byte>? owner = default;
             bool success = false;
 
             try

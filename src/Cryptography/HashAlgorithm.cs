@@ -23,11 +23,11 @@ namespace NSec.Cryptography
     //
     public abstract class HashAlgorithm : Algorithm
     {
-        private static Blake2b s_Blake2b_256;
-        private static Blake2b s_Blake2b_512;
-        private static Sha256 s_Sha256;
-        private static Sha512 s_Sha512;
-        private static Sha512 s_Sha512_256;
+        private static Blake2b? s_Blake2b_256;
+        private static Blake2b? s_Blake2b_512;
+        private static Sha256? s_Sha256;
+        private static Sha512? s_Sha512;
+        private static Sha512? s_Sha512_256;
 
         private readonly int _hashSize;
 
@@ -43,7 +43,7 @@ namespace NSec.Cryptography
         {
             get
             {
-                Blake2b instance = s_Blake2b_256;
+                Blake2b? instance = s_Blake2b_256;
                 if (instance == null)
                 {
                     Interlocked.CompareExchange(ref s_Blake2b_256, new Blake2b(256 / 8), null);
@@ -57,7 +57,7 @@ namespace NSec.Cryptography
         {
             get
             {
-                Blake2b instance = s_Blake2b_512;
+                Blake2b? instance = s_Blake2b_512;
                 if (instance == null)
                 {
                     Interlocked.CompareExchange(ref s_Blake2b_512, new Blake2b(512 / 8), null);
@@ -71,7 +71,7 @@ namespace NSec.Cryptography
         {
             get
             {
-                Sha256 instance = s_Sha256;
+                Sha256? instance = s_Sha256;
                 if (instance == null)
                 {
                     Interlocked.CompareExchange(ref s_Sha256, new Sha256(256 / 8), null);
@@ -85,7 +85,7 @@ namespace NSec.Cryptography
         {
             get
             {
-                Sha512 instance = s_Sha512;
+                Sha512? instance = s_Sha512;
                 if (instance == null)
                 {
                     Interlocked.CompareExchange(ref s_Sha512, new Sha512(512 / 8), null);
@@ -99,7 +99,7 @@ namespace NSec.Cryptography
         {
             get
             {
-                Sha512 instance = s_Sha512_256;
+                Sha512? instance = s_Sha512_256;
                 if (instance == null)
                 {
                     Interlocked.CompareExchange(ref s_Sha512_256, new Sha512(256 / 8), null);

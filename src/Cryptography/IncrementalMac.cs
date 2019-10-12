@@ -10,9 +10,9 @@ namespace NSec.Cryptography
     public readonly struct IncrementalMac
     {
         private readonly IncrementalMacState _state;
-        private readonly MacAlgorithm _algorithm;
+        private readonly MacAlgorithm? _algorithm;
 
-        public MacAlgorithm Algorithm => _algorithm;
+        public MacAlgorithm? Algorithm => _algorithm;
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static new bool Equals(
@@ -38,7 +38,7 @@ namespace NSec.Cryptography
             }
             finally
             {
-                Unsafe.AsRef(in state._algorithm) = null;
+                Unsafe.AsRef<MacAlgorithm?>(in state._algorithm) = null;
             }
         }
 
@@ -61,7 +61,7 @@ namespace NSec.Cryptography
             }
             finally
             {
-                Unsafe.AsRef(in state._algorithm) = null;
+                Unsafe.AsRef<MacAlgorithm?>(in state._algorithm) = null;
             }
         }
 
@@ -80,7 +80,7 @@ namespace NSec.Cryptography
             }
             finally
             {
-                Unsafe.AsRef(in state._algorithm) = null;
+                Unsafe.AsRef<MacAlgorithm?>(in state._algorithm) = null;
             }
         }
 

@@ -23,13 +23,13 @@ namespace NSec.Cryptography
     //
     public abstract class MacAlgorithm : Algorithm
     {
-        private static Blake2bMac s_Blake2b_128;
-        private static Blake2bMac s_Blake2b_256;
-        private static Blake2bMac s_Blake2b_512;
-        private static HmacSha256 s_HmacSha256;
-        private static HmacSha256 s_HmacSha256_128;
-        private static HmacSha512 s_HmacSha512;
-        private static HmacSha512 s_HmacSha512_256;
+        private static Blake2bMac? s_Blake2b_128;
+        private static Blake2bMac? s_Blake2b_256;
+        private static Blake2bMac? s_Blake2b_512;
+        private static HmacSha256? s_HmacSha256;
+        private static HmacSha256? s_HmacSha256_128;
+        private static HmacSha512? s_HmacSha512;
+        private static HmacSha512? s_HmacSha512_256;
 
         private readonly int _keySize;
         private readonly int _macSize;
@@ -49,7 +49,7 @@ namespace NSec.Cryptography
         {
             get
             {
-                Blake2bMac instance = s_Blake2b_128;
+                Blake2bMac? instance = s_Blake2b_128;
                 if (instance == null)
                 {
                     Interlocked.CompareExchange(ref s_Blake2b_128, new Blake2bMac(crypto_generichash_blake2b_KEYBYTES, 128 / 8), null);
@@ -63,7 +63,7 @@ namespace NSec.Cryptography
         {
             get
             {
-                Blake2bMac instance = s_Blake2b_256;
+                Blake2bMac? instance = s_Blake2b_256;
                 if (instance == null)
                 {
                     Interlocked.CompareExchange(ref s_Blake2b_256, new Blake2bMac(crypto_generichash_blake2b_KEYBYTES, 256 / 8), null);
@@ -77,7 +77,7 @@ namespace NSec.Cryptography
         {
             get
             {
-                Blake2bMac instance = s_Blake2b_512;
+                Blake2bMac? instance = s_Blake2b_512;
                 if (instance == null)
                 {
                     Interlocked.CompareExchange(ref s_Blake2b_512, new Blake2bMac(crypto_generichash_blake2b_KEYBYTES, 512 / 8), null);
@@ -91,7 +91,7 @@ namespace NSec.Cryptography
         {
             get
             {
-                HmacSha256 instance = s_HmacSha256;
+                HmacSha256? instance = s_HmacSha256;
                 if (instance == null)
                 {
                     Interlocked.CompareExchange(ref s_HmacSha256, new HmacSha256(crypto_hash_sha256_BYTES, 256 / 8), null);
@@ -105,7 +105,7 @@ namespace NSec.Cryptography
         {
             get
             {
-                HmacSha256 instance = s_HmacSha256_128;
+                HmacSha256? instance = s_HmacSha256_128;
                 if (instance == null)
                 {
                     Interlocked.CompareExchange(ref s_HmacSha256_128, new HmacSha256(crypto_hash_sha256_BYTES, 128 / 8), null);
@@ -119,7 +119,7 @@ namespace NSec.Cryptography
         {
             get
             {
-                HmacSha512 instance = s_HmacSha512;
+                HmacSha512? instance = s_HmacSha512;
                 if (instance == null)
                 {
                     Interlocked.CompareExchange(ref s_HmacSha512, new HmacSha512(crypto_hash_sha512_BYTES, 512 / 8), null);
@@ -133,7 +133,7 @@ namespace NSec.Cryptography
         {
             get
             {
-                HmacSha512 instance = s_HmacSha512_256;
+                HmacSha512? instance = s_HmacSha512_256;
                 if (instance == null)
                 {
                     Interlocked.CompareExchange(ref s_HmacSha512_256, new HmacSha512(crypto_hash_sha512_BYTES, 256 / 8), null);

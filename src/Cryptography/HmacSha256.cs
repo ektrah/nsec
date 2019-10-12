@@ -71,7 +71,7 @@ namespace NSec.Cryptography
             MemoryPool<byte> memoryPool,
             out ReadOnlyMemory<byte> memory,
             out IMemoryOwner<byte> owner,
-            out PublicKey publicKey)
+            out PublicKey? publicKey)
         {
             publicKey = null;
             owner = memoryPool.Rent(seed.Length);
@@ -170,8 +170,8 @@ namespace NSec.Cryptography
             KeyBlobFormat format,
             MemoryPool<byte> memoryPool,
             out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte> owner,
-            out PublicKey publicKey)
+            out IMemoryOwner<byte>? owner,
+            out PublicKey? publicKey)
         {
             publicKey = null;
 

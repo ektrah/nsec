@@ -22,8 +22,8 @@ namespace NSec.Cryptography
     //
     public abstract class AeadAlgorithm : Algorithm
     {
-        private static Aes256Gcm s_Aes256Gcm;
-        private static ChaCha20Poly1305 s_ChaCha20Poly1305;
+        private static Aes256Gcm? s_Aes256Gcm;
+        private static ChaCha20Poly1305? s_ChaCha20Poly1305;
 
         private readonly int _keySize;
         private readonly int _nonceSize;
@@ -47,7 +47,7 @@ namespace NSec.Cryptography
         {
             get
             {
-                Aes256Gcm instance = s_Aes256Gcm;
+                Aes256Gcm? instance = s_Aes256Gcm;
                 if (instance == null)
                 {
                     Interlocked.CompareExchange(ref s_Aes256Gcm, new Aes256Gcm(), null);
@@ -61,7 +61,7 @@ namespace NSec.Cryptography
         {
             get
             {
-                ChaCha20Poly1305 instance = s_ChaCha20Poly1305;
+                ChaCha20Poly1305? instance = s_ChaCha20Poly1305;
                 if (instance == null)
                 {
                     Interlocked.CompareExchange(ref s_ChaCha20Poly1305, new ChaCha20Poly1305(), null);
@@ -123,7 +123,7 @@ namespace NSec.Cryptography
             in Nonce nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> ciphertext,
-            out byte[] plaintext)
+            out byte[]? plaintext)
         {
             if (key == null)
                 throw Error.ArgumentNull_Key(nameof(key));

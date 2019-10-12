@@ -33,7 +33,6 @@ namespace NSec.Cryptography.Formatting
             byte[] blobHeader)
         {
             Debug.Assert(keySize > 0);
-            Debug.Assert(blobHeader != null);
 
             _keySize = keySize;
             _blobHeader = blobHeader;

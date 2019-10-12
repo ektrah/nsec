@@ -38,7 +38,7 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> blob,
             MemoryPool<byte> memoryPool,
             out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte> owner)
+            out IMemoryOwner<byte>? owner)
         {
             if (blob.Length != sizeof(uint) + sizeof(short) + sizeof(short) + keySize ||
                 BinaryPrimitives.ReadUInt32BigEndian(blob) != blobHeader ||
