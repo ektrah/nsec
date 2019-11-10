@@ -115,6 +115,25 @@ namespace NSec.Cryptography
             return blob;
         }
 
+        public void Export(
+            KeyBlobFormat format,
+            Span<byte> blob)
+        {
+            if (!_algorithm.TryExportPublicKey(this, format, blob, out int blobSize))
+            {
+                throw Error.InvalidOperation_InternalError();
+            }
+
+            Debug.Assert(blobSize == blob.Length);
+        }
+
+        public int GetExportBlobSize(
+            KeyBlobFormat format)
+        {
+            _algorithm.TryExportPublicKey(this, format, Span<byte>.Empty, out int blobSize);
+            return blobSize;
+        }
+
         public override int GetHashCode()
         {
             if (Unsafe.SizeOf<PublicKeyBytes>() != 8 * sizeof(uint))

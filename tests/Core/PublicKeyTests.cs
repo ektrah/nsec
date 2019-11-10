@@ -145,6 +145,34 @@ namespace NSec.Tests.Core
             }
         }
 
+        [Theory]
+        [MemberData(nameof(PublicKeyBlobFormats))]
+        public static void GetExportBlobSize(Algorithm a, KeyBlobFormat format)
+        {
+            using (var k = new Key(a))
+            {
+                var b = k.Export(format);
+                var blobSize = k.PublicKey.GetExportBlobSize(format);
+                Assert.Equal(b.Length, blobSize);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(PublicKeyBlobFormats))]
+        public static void ExportPublicKeyToSpan(Algorithm a, KeyBlobFormat format)
+        {
+            using (var k = new Key(a))
+            {
+                Span<byte> b = stackalloc byte[k.PublicKey.GetExportBlobSize(format)];
+                k.PublicKey.Export(format, b);
+
+                var pk = PublicKey.Import(a, b, format);
+                Assert.NotNull(pk);
+                Assert.Equal(k.PublicKey, pk);
+                Assert.Same(a, pk.Algorithm);
+            }
+        }
+
         #endregion
     }
 }
