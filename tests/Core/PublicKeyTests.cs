@@ -111,8 +111,12 @@ namespace NSec.Tests.Core
         {
             using (var k = new Key(a))
             {
-                Assert.False(k.PublicKey.Equals((PublicKey)null));
-                Assert.False(k.PublicKey.Equals((object)null));
+                Assert.False(k.PublicKey.Equals((PublicKey?)null));
+            }
+
+            using (var k = new Key(a))
+            {
+                Assert.False(k.PublicKey.Equals((object?)null));
             }
         }
 

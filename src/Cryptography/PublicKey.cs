@@ -63,7 +63,7 @@ namespace NSec.Cryptography
         }
 
         public bool Equals(
-            PublicKey other)
+            PublicKey? other)
         {
             if (Unsafe.SizeOf<PublicKeyBytes>() != 8 * sizeof(uint))
             {
@@ -93,9 +93,9 @@ namespace NSec.Cryptography
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool Equals(
-            object obj)
+            object? obj)
         {
-            return obj is PublicKey other && Equals(other);
+            return Equals(obj as PublicKey);
         }
 
         public byte[] Export(
