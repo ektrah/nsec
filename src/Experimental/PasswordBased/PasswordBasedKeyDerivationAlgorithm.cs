@@ -14,9 +14,9 @@ namespace NSec.Experimental.PasswordBased
     //
     //      | Algorithm | Reference                 |
     //      | --------- | ------------------------- |
-    //      | Argon2d   | draft-irtf-cfrg-argon2-08 |
-    //      | Argon2i   | draft-irtf-cfrg-argon2-08 |
-    //      | Argon2id  | draft-irtf-cfrg-argon2-08 |
+    //      | Argon2d   | draft-irtf-cfrg-argon2-09 |
+    //      | Argon2i   | draft-irtf-cfrg-argon2-09 |
+    //      | Argon2id  | draft-irtf-cfrg-argon2-09 |
     //      | scrypt    | RFC 7914                  |
     //
     public abstract class PasswordBasedKeyDerivationAlgorithm : Algorithm
