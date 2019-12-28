@@ -784,7 +784,7 @@ namespace NSec.Tests.Algorithms
             var x = KeyAgreementAlgorithm.X25519;
 
             using (var k = new Key(x))
-            using (var s = x.Agree(k, k.PublicKey))
+            using (var s = x.Agree(k, k.PublicKey)!)
             {
                 var b = new byte[200];
 

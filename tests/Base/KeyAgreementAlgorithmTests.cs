@@ -84,8 +84,8 @@ namespace NSec.Tests.Base
         {
             using (var k1 = new Key(a))
             using (var k2 = new Key(a))
-            using (var s1 = a.Agree(k1, k2.PublicKey))
-            using (var s2 = a.Agree(k2, k1.PublicKey))
+            using (var s1 = a.Agree(k1, k2.PublicKey) ?? throw new Xunit.Sdk.NotNullException())
+            using (var s2 = a.Agree(k2, k1.PublicKey) ?? throw new Xunit.Sdk.NotNullException())
             {
                 Assert.NotNull(s1);
                 Assert.Equal(a.SharedSecretSize, s1.Size);
@@ -100,7 +100,7 @@ namespace NSec.Tests.Base
         public static void AgreeSelf(KeyAgreementAlgorithm a)
         {
             using (var k = new Key(a))
-            using (var s = a.Agree(k, k.PublicKey))
+            using (var s = a.Agree(k, k.PublicKey) ?? throw new Xunit.Sdk.NotNullException())
             {
                 Assert.NotNull(s);
                 Assert.Equal(a.SharedSecretSize, s.Size);

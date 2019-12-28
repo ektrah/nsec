@@ -60,7 +60,7 @@ namespace NSec.Cryptography
 
         public int SharedSecretSize => _sharedSecretSize;
 
-        public SharedSecret Agree(
+        public SharedSecret? Agree(
             Key key,
             PublicKey otherPartyPublicKey,
             in SharedSecretCreationParameters creationParameters = default)
