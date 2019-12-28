@@ -69,11 +69,11 @@ namespace NSec.Cryptography
             {
                 throw Error.InvalidOperation_InternalError();
             }
-            if (this == other)
+            if (other == this)
             {
                 return true;
             }
-            if (_algorithm != other._algorithm)
+            if (other == null || other._algorithm != _algorithm)
             {
                 return false;
             }

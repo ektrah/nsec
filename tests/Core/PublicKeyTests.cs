@@ -105,6 +105,17 @@ namespace NSec.Tests.Core
             }
         }
 
+        [Theory]
+        [MemberData(nameof(AsymmetricKeyAlgorithms))]
+        public static void EqualNull(Algorithm a)
+        {
+            using (var k = new Key(a))
+            {
+                Assert.False(k.PublicKey.Equals((PublicKey)null));
+                Assert.False(k.PublicKey.Equals((object)null));
+            }
+        }
+
         #endregion
 
         #region Export
