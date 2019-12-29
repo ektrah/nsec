@@ -81,7 +81,9 @@ namespace NSec.Cryptography
 
         public KeyExportPolicies ExportPolicy => _exportPolicy;
 
-        public PublicKey PublicKey => _publicKey;
+        public bool HasPublicKey => _publicKey != null;
+
+        public PublicKey PublicKey => _publicKey ?? throw Error.InvalidOperation_NoPublicKey();
 
         public int Size => _algorithm.GetKeySize();
 

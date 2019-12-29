@@ -70,6 +70,19 @@ A bitwise combination of [[KeyExportPolicies|KeyExportPolicies Enum]] values
 that specifies the export policy for the key.
 
 
+### HasPublicKey
+
+Specifies whether the the current instance of the [[Key|Key Class]] class
+represents a private key.
+
+    public bool HasPublicKey { get; }
+
+#### Property Value
+
+`true` if the current instance is a represents a private key; otherwise,
+`false`.
+
+
 ### PublicKey
 
 Gets the public key if the current instance of the [[Key|Key Class]] class
@@ -80,7 +93,17 @@ represents a private key.
 #### Property Value
 
 An instance of the [[PublicKey|PublicKey Class]] class if the current instance
-of the [[Key|Key Class]] class represents a private key; otherwise, `null`.
+represents a private key.
+
+#### Exceptions
+
+InvalidOperationException
+: The current instance does not represent a private key.
+
+#### Remarks
+
+This property throws an InvalidOperationException if the [[HasPublicKey|Key
+Class#HasPublicKey]] property returns `false`.
 
 
 ### Size

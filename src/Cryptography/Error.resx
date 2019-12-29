@@ -273,6 +273,9 @@
   <data name="InvalidOperation_InternalError" xml:space="preserve">
     <value>An internal error occurred.</value>
   </data>
+  <data name="InvalidOperation_NoPublicKey" xml:space="preserve">
+    <value>The key does not have a public key.</value>
+  </data>
   <data name="InvalidOperation_UninitializedState" xml:space="preserve">
     <value>The state must be initialized.</value>
   </data>

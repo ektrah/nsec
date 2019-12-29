@@ -169,6 +169,7 @@ namespace NSec.Tests.Base
             using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
             {
                 Assert.Same(a, k.Algorithm);
+                Assert.True(k.HasPublicKey);
                 Assert.NotNull(k.PublicKey);
                 Assert.Same(a, k.PublicKey.Algorithm);
                 Assert.Equal(a.PublicKeySize, k.PublicKey.Size);

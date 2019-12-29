@@ -346,6 +346,11 @@ namespace NSec.Cryptography
             return new InvalidOperationException(ResourceManager.GetString(nameof(InvalidOperation_InternalError)));
         }
 
+        internal static InvalidOperationException InvalidOperation_NoPublicKey()
+        {
+            return new InvalidOperationException(ResourceManager.GetString(nameof(InvalidOperation_NoPublicKey)));
+        }
+
         internal static InvalidOperationException InvalidOperation_UninitializedState()
         {
             return new InvalidOperationException(ResourceManager.GetString(nameof(InvalidOperation_UninitializedState)));
