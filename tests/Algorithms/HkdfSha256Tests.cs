@@ -297,7 +297,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = KeyDerivationAlgorithm.HkdfSha256;
 
-            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.Extract(null, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.Extract(null!, ReadOnlySpan<byte>.Empty));
         }
 
         [Fact]
@@ -340,7 +340,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = KeyDerivationAlgorithm.HkdfSha256;
 
-            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.Extract(null, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.Extract(null!, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Fact]
@@ -528,7 +528,7 @@ namespace NSec.Tests.Algorithms
             var x = KeyAgreementAlgorithm.X25519;
 
             using (var k = new Key(x))
-            using (var s = x.Agree(k, k.PublicKey))
+            using (var s = x.Agree(k, k.PublicKey)!)
             {
                 var b = new byte[200];
 

@@ -64,6 +64,9 @@ namespace NSec.Tests.Examples
                 _receiveNonce = new Nonce(fixedField: serverWriteIV,
                                           counterFieldSize: 8);
                 break;
+
+            default:
+                throw new ArgumentOutOfRangeException(nameof(role));
             }
         }
 
@@ -187,6 +190,9 @@ namespace NSec.Tests.Examples
                 _receiveSequenceNumber = new Nonce(fixedFieldSize: 4,
                                                    counterFieldSize: 8);
                 break;
+
+            default:
+                throw new ArgumentOutOfRangeException(nameof(role));
             }
         }
 

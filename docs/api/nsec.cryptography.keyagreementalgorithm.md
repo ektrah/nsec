@@ -68,7 +68,7 @@ The shared secret size, in bytes.
 
 Creates a shared secret from a private and a public key.
 
-    public SharedSecret Agree(
+    public SharedSecret? Agree(
         Key key,
         PublicKey otherPartyPublicKey,
         in SharedSecretCreationParameters creationParameters = default)

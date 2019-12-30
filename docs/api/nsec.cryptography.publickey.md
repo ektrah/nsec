@@ -120,13 +120,13 @@ NotSupportedException
 ## Methods
 
 
-### Equals(PublicKey)
+### Equals(PublicKey?)
 
 Indicates whether the current instance of the [[PublicKey|PublicKey Class]]
 class is equal to another instance of the same type.
 
     public bool Equals(
-        PublicKey other)
+        PublicKey? other)
 
 #### Parameters
 

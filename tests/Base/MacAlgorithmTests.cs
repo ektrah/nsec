@@ -70,7 +70,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(MacAlgorithms))]
         public static void MacWithNullKey(MacAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Mac(null, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Mac(null!, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
@@ -117,7 +117,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(MacAlgorithms))]
         public static void MacWithSpanWithNullKey(MacAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Mac(null, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Mac(null!, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
@@ -202,7 +202,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(MacAlgorithms))]
         public static void VerifyWithNullKey(MacAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Verify(null, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Verify(null!, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
@@ -269,7 +269,8 @@ namespace NSec.Tests.Base
             using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
             {
                 Assert.Same(a, k.Algorithm);
-                Assert.Null(k.PublicKey);
+                Assert.False(k.HasPublicKey);
+                Assert.Throws<InvalidOperationException>(() => k.PublicKey);
                 Assert.Equal(a.KeySize, k.Size);
 
                 var actual = k.Export(KeyBlobFormat.RawSymmetricKey);

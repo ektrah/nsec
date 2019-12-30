@@ -25,7 +25,7 @@ namespace NSec.Tests.Rfc
 
             using (var k = Key.Import(a, privateKey.DecodeHex(), KeyBlobFormat.RawPrivateKey))
             using (var sharedSecretExpected = SharedSecret.Import(sharedSecret.DecodeHex()))
-            using (var sharedSecretActual = a.Agree(k, PublicKey.Import(a, publicKey.DecodeHex(), KeyBlobFormat.RawPublicKey)))
+            using (var sharedSecretActual = a.Agree(k, PublicKey.Import(a, publicKey.DecodeHex(), KeyBlobFormat.RawPublicKey)) ?? throw new Xunit.Sdk.NotNullException())
             {
                 var expected = kdf.Extract(sharedSecretExpected, ReadOnlySpan<byte>.Empty);
                 var actual = kdf.Extract(sharedSecretActual, ReadOnlySpan<byte>.Empty);

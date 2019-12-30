@@ -24,6 +24,7 @@ namespace NSec.Tests.Core
             {
                 Assert.Same(a, k.Algorithm);
                 Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
+                Assert.True(k.HasPublicKey);
                 Assert.NotNull(k.PublicKey);
                 Assert.Same(a, k.PublicKey.Algorithm);
                 Assert.True(k.PublicKey.Size > 0);
@@ -39,7 +40,8 @@ namespace NSec.Tests.Core
             {
                 Assert.Same(a, k.Algorithm);
                 Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
-                Assert.Null(k.PublicKey);
+                Assert.False(k.HasPublicKey);
+                Assert.Throws<InvalidOperationException>(() => k.PublicKey);
                 Assert.True(k.Size > 0);
             }
         }
@@ -66,7 +68,8 @@ namespace NSec.Tests.Core
             k.Dispose();
             Assert.Same(a, k.Algorithm);
             Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
-            Assert.Null(k.PublicKey);
+            Assert.False(k.HasPublicKey);
+            Assert.Throws<InvalidOperationException>(() => k.PublicKey);
             Assert.True(k.Size > 0);
         }
 
@@ -77,7 +80,7 @@ namespace NSec.Tests.Core
         [Fact]
         public static void CtorWithNullAlgorithm()
         {
-            Assert.Throws<ArgumentNullException>("algorithm", () => new Key(null));
+            Assert.Throws<ArgumentNullException>("algorithm", () => new Key(null!));
         }
 
         [Theory]
@@ -94,7 +97,7 @@ namespace NSec.Tests.Core
         [Fact]
         public static void CreateWithNullAlgorithm()
         {
-            Assert.Throws<ArgumentNullException>("algorithm", () => Key.Create(null));
+            Assert.Throws<ArgumentNullException>("algorithm", () => Key.Create(null!));
         }
 
         [Theory]
@@ -111,7 +114,7 @@ namespace NSec.Tests.Core
         [Fact]
         public static void ImportWithNullAlgorithm()
         {
-            Assert.Throws<ArgumentNullException>("algorithm", () => Key.Import(null, ReadOnlySpan<byte>.Empty, 0));
+            Assert.Throws<ArgumentNullException>("algorithm", () => Key.Import(null!, ReadOnlySpan<byte>.Empty, 0));
         }
 
         [Theory]
@@ -151,7 +154,7 @@ namespace NSec.Tests.Core
         [Fact]
         public static void TryImportWithNullAlgorithm()
         {
-            Assert.Throws<ArgumentNullException>("algorithm", () => Key.TryImport(null, ReadOnlySpan<byte>.Empty, 0, out var k, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }));
+            Assert.Throws<ArgumentNullException>("algorithm", () => Key.TryImport(null!, ReadOnlySpan<byte>.Empty, 0, out var k, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }));
         }
 
         [Theory]

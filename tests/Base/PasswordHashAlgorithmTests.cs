@@ -29,7 +29,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(PasswordHashAlgorithms))]
         public static void DeriveBytesWithNullPassword(PasswordBasedKeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("password", () => a.DeriveBytes(null, ReadOnlySpan<byte>.Empty, 0));
+            Assert.Throws<ArgumentNullException>("password", () => a.DeriveBytes(null!, ReadOnlySpan<byte>.Empty, 0));
         }
 
         [Theory]
@@ -81,7 +81,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(PasswordHashAlgorithms))]
         public static void DeriveBytesWithSpanWithNullPassword(PasswordBasedKeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("password", () => a.DeriveBytes(null, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("password", () => a.DeriveBytes(null!, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
@@ -127,28 +127,28 @@ namespace NSec.Tests.Base
         [MemberData(nameof(PasswordHashAlgorithms))]
         public static void DeriveKeyWithNullPassword(PasswordBasedKeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("password", () => a.DeriveKey(null, ReadOnlySpan<byte>.Empty, null));
+            Assert.Throws<ArgumentNullException>("password", () => a.DeriveKey(null!, ReadOnlySpan<byte>.Empty, null!));
         }
 
         [Theory]
         [MemberData(nameof(PasswordHashAlgorithms))]
         public static void DeriveKeyWithSaltTooShort(PasswordBasedKeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(s_password, Utilities.RandomBytes.Slice(0, a.SaltSize - 1), null));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(s_password, Utilities.RandomBytes.Slice(0, a.SaltSize - 1), null!));
         }
 
         [Theory]
         [MemberData(nameof(PasswordHashAlgorithms))]
         public static void DeriveKeyWithSaltTooLarge(PasswordBasedKeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(s_password, Utilities.RandomBytes.Slice(0, a.SaltSize + 1), null));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(s_password, Utilities.RandomBytes.Slice(0, a.SaltSize + 1), null!));
         }
 
         [Theory]
         [MemberData(nameof(PasswordHashAlgorithms))]
         public static void DeriveKeyWithNullAlgorithm(PasswordBasedKeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("algorithm", () => a.DeriveKey(s_password, Utilities.RandomBytes.Slice(0, a.SaltSize), null));
+            Assert.Throws<ArgumentNullException>("algorithm", () => a.DeriveKey(s_password, Utilities.RandomBytes.Slice(0, a.SaltSize), null!));
         }
 
         [Theory]

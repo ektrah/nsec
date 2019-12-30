@@ -10,9 +10,9 @@ namespace NSec.Cryptography
     public readonly struct IncrementalHash
     {
         private readonly IncrementalHashState _state;
-        private readonly HashAlgorithm _algorithm;
+        private readonly HashAlgorithm? _algorithm;
 
-        public HashAlgorithm Algorithm => _algorithm;
+        public HashAlgorithm? Algorithm => _algorithm;
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static new bool Equals(
@@ -38,7 +38,7 @@ namespace NSec.Cryptography
             }
             finally
             {
-                Unsafe.AsRef(in state._algorithm) = null;
+                Unsafe.AsRef<HashAlgorithm?>(in state._algorithm) = null;
             }
         }
 
@@ -61,7 +61,7 @@ namespace NSec.Cryptography
             }
             finally
             {
-                Unsafe.AsRef(in state._algorithm) = null;
+                Unsafe.AsRef<HashAlgorithm?>(in state._algorithm) = null;
             }
         }
 
@@ -80,7 +80,7 @@ namespace NSec.Cryptography
             }
             finally
             {
-                Unsafe.AsRef(in state._algorithm) = null;
+                Unsafe.AsRef<HashAlgorithm?>(in state._algorithm) = null;
             }
         }
 

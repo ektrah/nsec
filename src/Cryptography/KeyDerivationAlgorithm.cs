@@ -29,8 +29,8 @@ namespace NSec.Cryptography
     //
     public abstract class KeyDerivationAlgorithm : Algorithm
     {
-        private static HkdfSha256 s_HkdfSha256;
-        private static HkdfSha512 s_HkdfSha512;
+        private static HkdfSha256? s_HkdfSha256;
+        private static HkdfSha512? s_HkdfSha512;
 
         private readonly int _maxCount;
         private readonly bool _supportsSalt;
@@ -49,7 +49,7 @@ namespace NSec.Cryptography
         {
             get
             {
-                HkdfSha256 instance = s_HkdfSha256;
+                HkdfSha256? instance = s_HkdfSha256;
                 if (instance == null)
                 {
                     Interlocked.CompareExchange(ref s_HkdfSha256, new HkdfSha256(), null);
@@ -63,7 +63,7 @@ namespace NSec.Cryptography
         {
             get
             {
-                HkdfSha512 instance = s_HkdfSha512;
+                HkdfSha512? instance = s_HkdfSha512;
                 if (instance == null)
                 {
                     Interlocked.CompareExchange(ref s_HkdfSha512, new HkdfSha512(), null);
@@ -137,8 +137,8 @@ namespace NSec.Cryptography
             Debug.Assert(seedSize <= 64);
 
             ReadOnlyMemory<byte> memory = default;
-            IMemoryOwner<byte> owner = default;
-            PublicKey publicKey = default;
+            IMemoryOwner<byte>? owner = default;
+            PublicKey? publicKey = default;
             bool success = false;
 
             try

@@ -207,7 +207,7 @@ namespace NSec.Tests.Core
         [Fact]
         public static void GenerateKeyWithNullAlgorithm()
         {
-            Assert.Throws<ArgumentNullException>("algorithm", () => RandomGenerator.Default.GenerateKey(null));
+            Assert.Throws<ArgumentNullException>("algorithm", () => RandomGenerator.Default.GenerateKey(null!));
         }
 
         [Theory]

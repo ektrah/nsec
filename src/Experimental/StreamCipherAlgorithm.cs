@@ -10,7 +10,7 @@ namespace NSec.Experimental
     // be used only as a building block for a more high level protocol.
     public abstract class StreamCipherAlgorithm : Algorithm
     {
-        private static ChaCha20 s_ChaCha20;
+        private static ChaCha20? s_ChaCha20;
 
         private readonly int _keySize;
         private readonly int _nonceSize;
@@ -30,7 +30,7 @@ namespace NSec.Experimental
         {
             get
             {
-                ChaCha20 instance = s_ChaCha20;
+                ChaCha20? instance = s_ChaCha20;
                 if (instance == null)
                 {
                     Interlocked.CompareExchange(ref s_ChaCha20, new ChaCha20(), null);

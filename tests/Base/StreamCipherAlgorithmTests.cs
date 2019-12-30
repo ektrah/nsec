@@ -29,9 +29,9 @@ namespace NSec.Tests.Base
         [MemberData(nameof(StreamCipherAlgorithms))]
         public static void OperationWithNullKey(StreamCipherAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.GeneratePseudoRandomStream(null, default(Nonce), 1));
-            Assert.Throws<ArgumentNullException>("key", () => a.XOr(null, default(Nonce), ReadOnlySpan<byte>.Empty));
-            Assert.Throws<ArgumentNullException>("key", () => a.XOrIC(null, default(Nonce), ReadOnlySpan<byte>.Empty, 1));
+            Assert.Throws<ArgumentNullException>("key", () => a.GeneratePseudoRandomStream(null!, default(Nonce), 1));
+            Assert.Throws<ArgumentNullException>("key", () => a.XOr(null!, default(Nonce), ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.XOrIC(null!, default(Nonce), ReadOnlySpan<byte>.Empty, 1));
         }
 
         [Theory]
@@ -94,9 +94,9 @@ namespace NSec.Tests.Base
         [MemberData(nameof(StreamCipherAlgorithms))]
         public static void OperationWithSpanWithNullKey(StreamCipherAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.GeneratePseudoRandomStream(null, default(Nonce), Span<byte>.Empty));
-            Assert.Throws<ArgumentNullException>("key", () => a.XOr(null, default(Nonce), ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
-            Assert.Throws<ArgumentNullException>("key", () => a.XOrIC(null, default(Nonce), ReadOnlySpan<byte>.Empty, Span<byte>.Empty, 1));
+            Assert.Throws<ArgumentNullException>("key", () => a.GeneratePseudoRandomStream(null!, default(Nonce), Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.XOr(null!, default(Nonce), ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.XOrIC(null!, default(Nonce), ReadOnlySpan<byte>.Empty, Span<byte>.Empty, 1));
         }
 
         [Theory]
@@ -244,7 +244,8 @@ namespace NSec.Tests.Base
             using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
             {
                 Assert.Same(a, k.Algorithm);
-                Assert.Null(k.PublicKey);
+                Assert.False(k.HasPublicKey);
+                Assert.Throws<InvalidOperationException>(() => k.PublicKey);
                 Assert.Equal(a.KeySize, k.Size);
 
                 var actual = k.Export(KeyBlobFormat.RawSymmetricKey);

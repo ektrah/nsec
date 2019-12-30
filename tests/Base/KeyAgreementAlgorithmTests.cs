@@ -27,7 +27,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyAgreementAlgorithms))]
         public static void AgreeWithNullKey(KeyAgreementAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Agree(null, null));
+            Assert.Throws<ArgumentNullException>("key", () => a.Agree(null!, null!));
         }
 
         [Theory]
@@ -48,7 +48,7 @@ namespace NSec.Tests.Base
         {
             using (var k = new Key(SignatureAlgorithm.Ed25519))
             {
-                Assert.Throws<ArgumentException>("key", () => a.Agree(k, null));
+                Assert.Throws<ArgumentException>("key", () => a.Agree(k, null!));
             }
         }
 
@@ -60,7 +60,7 @@ namespace NSec.Tests.Base
             {
                 Assert.Same(a, k.Algorithm);
 
-                Assert.Throws<ArgumentNullException>("otherPartyPublicKey", () => a.Agree(k, null));
+                Assert.Throws<ArgumentNullException>("otherPartyPublicKey", () => a.Agree(k, null!));
             }
         }
 
@@ -84,8 +84,8 @@ namespace NSec.Tests.Base
         {
             using (var k1 = new Key(a))
             using (var k2 = new Key(a))
-            using (var s1 = a.Agree(k1, k2.PublicKey))
-            using (var s2 = a.Agree(k2, k1.PublicKey))
+            using (var s1 = a.Agree(k1, k2.PublicKey) ?? throw new Xunit.Sdk.NotNullException())
+            using (var s2 = a.Agree(k2, k1.PublicKey) ?? throw new Xunit.Sdk.NotNullException())
             {
                 Assert.NotNull(s1);
                 Assert.Equal(a.SharedSecretSize, s1.Size);
@@ -100,7 +100,7 @@ namespace NSec.Tests.Base
         public static void AgreeSelf(KeyAgreementAlgorithm a)
         {
             using (var k = new Key(a))
-            using (var s = a.Agree(k, k.PublicKey))
+            using (var s = a.Agree(k, k.PublicKey) ?? throw new Xunit.Sdk.NotNullException())
             {
                 Assert.NotNull(s);
                 Assert.Equal(a.SharedSecretSize, s.Size);
@@ -118,6 +118,7 @@ namespace NSec.Tests.Base
             using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
             {
                 Assert.Same(a, k.Algorithm);
+                Assert.True(k.HasPublicKey);
                 Assert.NotNull(k.PublicKey);
                 Assert.Same(a, k.PublicKey.Algorithm);
                 Assert.Equal(a.PublicKeySize, k.PublicKey.Size);

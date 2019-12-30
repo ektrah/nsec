@@ -16,8 +16,6 @@ namespace NSec.Cryptography
         internal PublicKey(
             Algorithm algorithm)
         {
-            Debug.Assert(algorithm != null);
-
             _algorithm = algorithm;
         }
 
@@ -47,7 +45,7 @@ namespace NSec.Cryptography
             Algorithm algorithm,
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
-            out PublicKey result)
+            out PublicKey? result)
         {
             if (algorithm == null)
             {
@@ -65,7 +63,7 @@ namespace NSec.Cryptography
         }
 
         public bool Equals(
-            PublicKey other)
+            PublicKey? other)
         {
             if (Unsafe.SizeOf<PublicKeyBytes>() != 8 * sizeof(uint))
             {
@@ -95,7 +93,7 @@ namespace NSec.Cryptography
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool Equals(
-            object obj)
+            object? obj)
         {
             return Equals(obj as PublicKey);
         }

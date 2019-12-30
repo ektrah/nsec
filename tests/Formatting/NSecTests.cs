@@ -11,7 +11,7 @@ namespace NSec.Tests.Formatting
         [InlineData(typeof(ChaCha20Poly1305), new byte[] { 0xDE, 0x61, 0x43, 0xDE })]
         public static void Aead(Type algorithmType, byte[] blobHeader)
         {
-            var a = (AeadAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (AeadAlgorithm)(Activator.CreateInstance(algorithmType) ?? throw new NullReferenceException());
 
             Test(a, a.KeySize, KeyBlobFormat.RawSymmetricKey, a.KeySize, a.TagSize, KeyBlobFormat.NSecSymmetricKey, blobHeader);
         }
@@ -22,7 +22,7 @@ namespace NSec.Tests.Formatting
         [InlineData(typeof(HmacSha512), new byte[] { 0xDE, 0x63, 0x47, 0xDE })]
         public static void Mac(Type algorithmType, byte[] blobHeader)
         {
-            var a = (MacAlgorithm)Activator.CreateInstance(algorithmType);
+            var a = (MacAlgorithm)(Activator.CreateInstance(algorithmType) ?? throw new NullReferenceException());
 
             Test(a, a.KeySize, KeyBlobFormat.RawSymmetricKey, a.KeySize, a.MacSize, KeyBlobFormat.NSecSymmetricKey, blobHeader);
         }

@@ -137,19 +137,19 @@ namespace NSec.Tests.Formatting
         [Fact]
         public static void DecodeNull()
         {
-            Assert.Throws<ArgumentNullException>("base32", () => Base32.Decode((string)null));
+            Assert.Throws<ArgumentNullException>("base32", () => Base32.Decode((string)null!));
         }
 
         [Fact]
         public static void TryDecodeNull()
         {
-            Assert.Throws<ArgumentNullException>("base32", () => Base32.TryDecode((string)null, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("base32", () => Base32.TryDecode((string)null!, Span<byte>.Empty));
         }
 
         [Fact]
         public static void TryGetDecodedLengthNull()
         {
-            Assert.Throws<ArgumentNullException>("base32", () => Base32.TryGetDecodedLength((string)null, out var decodedLength));
+            Assert.Throws<ArgumentNullException>("base32", () => Base32.TryGetDecodedLength((string)null!, out var decodedLength));
         }
     }
 }

@@ -59,8 +59,8 @@ namespace NSec.Tests.Algorithms
 
             using (var k = Key.Import(a, privateKey.DecodeHex(), KeyBlobFormat.RawPrivateKey))
             using (var sharedSecretExpected = SharedSecret.Import(sharedSecret.DecodeHex()))
-            using (var sharedSecretActual1 = a.Agree(k, PublicKey.Import(a, pk1, KeyBlobFormat.RawPublicKey)))
-            using (var sharedSecretActual2 = a.Agree(k, PublicKey.Import(a, pk2, KeyBlobFormat.RawPublicKey)))
+            using (var sharedSecretActual1 = a.Agree(k, PublicKey.Import(a, pk1, KeyBlobFormat.RawPublicKey)) ?? throw new Xunit.Sdk.NotNullException())
+            using (var sharedSecretActual2 = a.Agree(k, PublicKey.Import(a, pk2, KeyBlobFormat.RawPublicKey)) ?? throw new Xunit.Sdk.NotNullException())
             {
                 var expected = kdf.Extract(sharedSecretExpected, ReadOnlySpan<byte>.Empty);
                 var actual1 = kdf.Extract(sharedSecretActual1, ReadOnlySpan<byte>.Empty);
@@ -120,7 +120,7 @@ namespace NSec.Tests.Algorithms
 
             using (var k = Key.Import(a, privateKey.DecodeHex(), KeyBlobFormat.RawPrivateKey))
             using (var sharedSecretExpected = SharedSecret.Import(sharedSecret.DecodeHex()))
-            using (var sharedSecretActual = a.Agree(k, PublicKey.Import(a, publicKey.DecodeHex(), KeyBlobFormat.RawPublicKey)))
+            using (var sharedSecretActual = a.Agree(k, PublicKey.Import(a, publicKey.DecodeHex(), KeyBlobFormat.RawPublicKey)) ?? throw new Xunit.Sdk.NotNullException())
             {
                 var expected = kdf.Extract(sharedSecretExpected, ReadOnlySpan<byte>.Empty);
                 var actual = kdf.Extract(sharedSecretActual, ReadOnlySpan<byte>.Empty);

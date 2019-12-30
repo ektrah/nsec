@@ -66,14 +66,14 @@ namespace NSec.Tests.Contrib
         public static void HasCorrectMethodImpl()
         {
             Type t = typeof(CryptographicOperations);
-            MethodInfo mi = t.GetMethod(nameof(CryptographicOperations.ZeroMemory));
+            MethodInfo? mi = t.GetMethod(nameof(CryptographicOperations.ZeroMemory));
 
             // This method cannot be optimized, or the optimizer can decide that a call to Clear
             // is unnecessary.
             // It cannot be inlined, or it loses its no-optimization guarantee.
             Assert.Equal(
                 MethodImplAttributes.NoInlining | MethodImplAttributes.NoOptimization,
-                mi.MethodImplementationFlags);
+                mi?.MethodImplementationFlags);
         }
     }
 }

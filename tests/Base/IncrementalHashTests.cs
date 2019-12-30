@@ -13,7 +13,7 @@ namespace NSec.Tests.Base
         [Fact]
         public static void InitializeWithNullAlgorithm()
         {
-            Assert.Throws<ArgumentNullException>("algorithm", () => IncrementalHash.Initialize(null, out _));
+            Assert.Throws<ArgumentNullException>("algorithm", () => IncrementalHash.Initialize(null!, out _));
         }
 
         #endregion

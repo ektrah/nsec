@@ -140,7 +140,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = MacAlgorithm.Blake2b_512;
 
-            Assert.Throws<ArgumentNullException>("key", () => a.Mac(null, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Mac(null!, ReadOnlySpan<byte>.Empty));
         }
 
         [Fact]
@@ -177,7 +177,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = MacAlgorithm.Blake2b_512;
 
-            Assert.Throws<ArgumentNullException>("key", () => a.Mac(null, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Mac(null!, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Fact]
