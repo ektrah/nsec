@@ -18,6 +18,12 @@ namespace NSec.Tests.Algorithms
             Assert.Equal(16, a.TagSize);
         }
 
+        [Fact]
+        public static void IsSupported()
+        {
+            Assert.InRange(Aes256Gcm.IsSupported, false, true);
+        }
+
         #endregion
     }
 }
