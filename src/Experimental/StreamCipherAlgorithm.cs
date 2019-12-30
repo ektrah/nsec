@@ -93,8 +93,8 @@ namespace NSec.Experimental
             byte[] output = new byte[input.Length];
             XOrCore(key.Span, in nonce, input, output);
             return output;
-
         }
+
         public void XOr(
             Key key,
             in Nonce nonce,
