@@ -8,7 +8,7 @@ namespace NSec.Cryptography
     [StructLayout(LayoutKind.Auto)]
     public ref struct SharedSecretCreationParameters
     {
-        internal MemoryPool<byte> GetMemoryPool()
+        internal readonly MemoryPool<byte> GetMemoryPool()
         {
             return SecureMemoryPool<byte>.Shared;
         }

@@ -37,7 +37,7 @@ namespace NSec.Experimental.Asn1
             _pos = buffer.Length;
         }
 
-        public ReadOnlySpan<byte> Bytes => _buffer.Slice(_pos);
+        public readonly ReadOnlySpan<byte> Bytes => _buffer.Slice(_pos);
 
         public void BeginSequence()
         {

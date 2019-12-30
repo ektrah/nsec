@@ -10,7 +10,7 @@ namespace NSec.Cryptography
     {
         public KeyExportPolicies ExportPolicy;
 
-        internal MemoryPool<byte> GetMemoryPool()
+        internal readonly MemoryPool<byte> GetMemoryPool()
         {
             return SecureMemoryPool<byte>.Shared;
         }

@@ -40,9 +40,9 @@ namespace NSec.Experimental.Asn1
             _failed = false;
         }
 
-        public bool Success => !_failed;
+        public readonly bool Success => !_failed;
 
-        public bool SuccessComplete => !_failed && _depth == 0 && _stack0.IsEmpty;
+        public readonly bool SuccessComplete => !_failed && _depth == 0 && _stack0.IsEmpty;
 
         public void BeginSequence()
         {
@@ -182,7 +182,7 @@ namespace NSec.Experimental.Asn1
             _stack0 = default;
         }
 
-        private bool IsInvalidInteger(
+        private readonly bool IsInvalidInteger(
             ReadOnlySpan<byte> bytes,
             int maxSize)
         {
