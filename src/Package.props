@@ -22,6 +22,7 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>https://nsec.rocks/releases</PackageReleaseNotes>
     <PackageProjectUrl>https://nsec.rocks/</PackageProjectUrl>
+    <PackageIcon>nsec.png</PackageIcon>
     <PackageIconUrl>https://nsec.rocks/nsec.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/ektrah/nsec.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -29,8 +30,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)..\LICENSE" PackagePath="" Visible="false" />
-    <Content Include="$(MSBuildThisFileDirectory)..\NOTICE" PackagePath="" Visible="false" />
+    <None Include="$(MSBuildThisFileDirectory)..\LICENSE" Pack="true" PackagePath="" Visible="false" />
+    <None Include="$(MSBuildThisFileDirectory)..\NOTICE" Pack="true" PackagePath="" Visible="false" />
+    <None Include="$(MSBuildThisFileDirectory)..\nsec.png" Pack="true" PackagePath="" Visible="false" />
   </ItemGroup>
 
 </Project>
