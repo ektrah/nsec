@@ -16,8 +16,8 @@ namespace NSec.Cryptography
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static new bool Equals(
-            object objA,
-            object objB)
+            object? objA,
+            object? objB)
         {
             return object.Equals(objA, objB);
         }
@@ -104,8 +104,8 @@ namespace NSec.Cryptography
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static new bool ReferenceEquals(
-            object objA,
-            object objB)
+            object? objA,
+            object? objB)
         {
             return object.ReferenceEquals(objA, objB);
         }
@@ -124,7 +124,7 @@ namespace NSec.Cryptography
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool Equals(
-            object obj)
+            object? obj)
         {
             throw Error.NotSupported_Operation();
         }
@@ -136,7 +136,7 @@ namespace NSec.Cryptography
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override string ToString()
+        public override string? ToString()
         {
             return typeof(IncrementalMac).ToString();
         }
