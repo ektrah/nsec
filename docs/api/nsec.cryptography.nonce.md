@@ -130,7 +130,7 @@ ArgumentException
 
 ### CounterFieldSize
 
-Gets the size of the counter field, in bytes.
+Gets the size of the counter field.
 
     public int CounterFieldSize { get; }
 
@@ -141,7 +141,7 @@ The size of the counter field, in bytes.
 
 ### FixedFieldSize
 
-Gets the size of the fixed field, in bytes.
+Gets the size of the fixed field.
 
     public int FixedFieldSize { get; }
 
@@ -152,7 +152,7 @@ The size of the fixed field, in bytes.
 
 ### Size
 
-Gets the total size of the nonce, in bytes.
+Gets the total size of the nonce.
 
     public int Size { get; }
 

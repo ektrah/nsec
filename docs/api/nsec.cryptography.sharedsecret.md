@@ -14,7 +14,7 @@ input for [[key derivation|KeyDerivationAlgorithm Class]].
 
 ### Size
 
-Gets the size, in bytes, of the shared secret.
+Gets the size of the shared secret.
 
     public int Size { get; }
 
