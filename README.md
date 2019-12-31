@@ -7,10 +7,10 @@
 [![NuGet](https://img.shields.io/nuget/v/NSec.Cryptography.svg)](https://www.nuget.org/packages/NSec.Cryptography)
 
 [NSec](https://nsec.rocks/) is a new cryptographic library for
-[.NET Core](https://dot.net/core) based on
+[.NET Core](https://docs.microsoft.com/en-us/dotnet/core/) based on
 [libsodium](https://libsodium.org/) &#x2764;.
 It provides modern cryptographic primitives in a modern API based on
-[the new `Span<T>` and `ReadOnlySpan<T>` types](https://msdn.microsoft.com/en-us/magazine/mt814808).
+[the new `Span<T>` and `ReadOnlySpan<T>` types](https://docs.microsoft.com/en-us/archive/msdn-magazine/2017/connect/csharp-all-about-span-exploring-a-new-net-mainstay).
 NSec aims to be easy to use, secure by default, fast, and agile.
 
 For more information about NSec, please refer to the following resources:

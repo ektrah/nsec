@@ -91,7 +91,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ## License Notice for .NET Core Libraries
 
 NSec contains code derived from the
-[.NET Core Libraries](https://github.com/dotnet/corefx/),
+[.NET Core Libraries](https://github.com/dotnet/runtime),
 which are available under the MIT license.
 
 Copyright &copy; .NET Foundation and Contributors

@@ -1,13 +1,13 @@
 # NSec
 
 NSec is a modern and easy-to-use cryptographic library for
-[.NET Core](https://dot.net/core) based on
+[.NET Core](https://docs.microsoft.com/en-us/dotnet/core/) based on
 [libsodium](https://libsodium.org/).
 
 * **Modern** -- libsodium provides a small set of high-quality, modern
 cryptographic primitives, including X25519, Ed25519 and ChaCha20-Poly1305. NSec
 wraps these primitives in a modern .NET API based on [the new `Span<T>` and
-`ReadOnlySpan<T>` types](https://msdn.microsoft.com/en-us/magazine/mt814808).
+`ReadOnlySpan<T>` types](https://docs.microsoft.com/en-us/archive/msdn-magazine/2017/connect/csharp-all-about-span-exploring-a-new-net-mainstay).
 
 * **Easy-to-use** -- NSec wants you to fall into the "pit of success." It
 provides a strongly typed data model that represents keys and shared secrets

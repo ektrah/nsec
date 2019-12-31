@@ -57,7 +57,7 @@ Other operating systems and versions supported by .NET Core should work as well
 but are not tested.
 
 Using NSec on Windows requires the
-[Visual C++ 2015 Redistributable](https://www.microsoft.com/en-us/download/details.aspx?id=53587).
+[Microsoft Visual C++ Redistributable for Visual Studio 2015, 2017 and 2019](https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads).
 This dependency is automatically installed by the .NET Core installer but might
 not be present, for example, when deploying a self-contained application.
 
@@ -72,9 +72,9 @@ be determined at runtime using the static `IsSupported` property of the
 Running NSec on recent versions of .NET Framework might work as well but is not
 tested. It seems that at least the following conditions need to be met:
 First, the project needs to use
-[*<PackageReference>* package references](https://blog.nuget.org/20170316/NuGet-now-fully-integrated-into-MSBuild.html#what-about-other-project-types-that-are-not-net-core);
+[*<PackageReference>* package references](https://devblogs.microsoft.com/nuget/NuGet-now-fully-integrated-into-MSBuild/);
 projects using *Packages.config* don't work.
 Second, the project needs to have the
-[Platform Target](https://docs.microsoft.com/en-us/visualstudio/ide/reference/build-page-project-designer-csharp?view=vs-2017#configuration-and-platform)
+[Platform Target](https://docs.microsoft.com/en-us/visualstudio/ide/reference/build-page-project-designer-csharp?view=vs-2019#configuration-and-platform)
 set to **x64** or **x86**; other platform targets -- including *Any CPU* --
 don't work.
