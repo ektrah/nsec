@@ -38,7 +38,7 @@ Gets the algorithm that was used to initialize the state.
 #### Property Value
 
 An instance of the [[MacAlgorithm|MacAlgorithm Class]] class, or `null` if the
-current instance has not been initialized yet or has been finalized.
+current instance has not been initialized yet or if it has been finalized.
 
 
 ## Static Methods
@@ -147,8 +147,8 @@ ArgumentException
 
 ### FinalizeAndVerify(ref IncrementalMac, ReadOnlySpan<byte>)
 
-Completes the MAC computation and verifies the specified message
-authentication code.
+Completes the MAC computation and verifies that the result equals the specified
+message authentication code.
 
     public static bool FinalizeAndVerify(
         ref IncrementalMac state,

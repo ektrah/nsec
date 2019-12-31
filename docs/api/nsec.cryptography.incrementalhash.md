@@ -38,7 +38,7 @@ Gets the algorithm that was used to initialize the state.
 #### Property Value
 
 An instance of the [[HashAlgorithm|HashAlgorithm Class]] class, or `null` if the
-current instance has not been initialized yet or has been finalized.
+current instance has not been initialized yet or if it has been finalized.
 
 
 ## Static Methods
@@ -140,7 +140,8 @@ ArgumentException
 
 ### FinalizeAndVerify(ref IncrementalHash, ReadOnlySpan<byte>)
 
-Completes the hash computation and verifies the specified hash.
+Completes the hash computation and verifies that the result equals the specified
+hash.
 
     public static bool FinalizeAndVerify(
         ref IncrementalHash state,
