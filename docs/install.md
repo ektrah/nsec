@@ -23,12 +23,6 @@ and tools used:
 
 NSec requires **C# 7.2** or **F# 4.5** (or later).
 
-A C# 7.2 compiler is included with the .NET Core SDK beginning with version 2.1
-and Visual Studio beginning with version 15.5.
-
-An F# 4.5 compiler is included with the .NET Core SDK beginning with version
-2.1.400 and Visual Studio beginning with version 15.8.
-
 
 ## Supported Platforms
 
