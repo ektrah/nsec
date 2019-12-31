@@ -122,7 +122,8 @@ NSec contains code derived from libraries in the
 [.NET Core Lab](https://github.com/dotnet/corefxlab/),
 which are available under the MIT license.
 
-Copyright &copy; Microsoft Corporation
+Copyright &copy; .NET Foundation and Contributors
+All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
