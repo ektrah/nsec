@@ -60,7 +60,7 @@ NSec contains code derived from the sample code in
 [RFC 6234](https://tools.ietf.org/html/rfc6234),
 which is available under a Simplified BSD License.
 
-Copyright &copy; 2011 IETF Trust and the persons identified as authors of the code.
+Copyright &copy; 2011 IETF Trust and the persons identified as authors of the code.  
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -94,7 +94,7 @@ NSec contains code derived from the
 [.NET Core Libraries](https://github.com/dotnet/runtime),
 which are available under the MIT license.
 
-Copyright &copy; .NET Foundation and Contributors
+Copyright &copy; .NET Foundation and Contributors  
 All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -122,7 +122,7 @@ NSec contains code derived from libraries in the
 [.NET Core Lab](https://github.com/dotnet/corefxlab/),
 which are available under the MIT license.
 
-Copyright &copy; .NET Foundation and Contributors
+Copyright &copy; .NET Foundation and Contributors  
 All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
