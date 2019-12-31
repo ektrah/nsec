@@ -19,11 +19,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{DF40D4F3
 		404.md = 404.md
 		appveyor.yml = appveyor.yml
 		circle.yml = circle.yml
+		favicon.ico = favicon.ico
 		firebase.json = firebase.json
 		index.md = index.md
 		LICENSE = LICENSE
 		NOTICE = NOTICE
 		notice.md = notice.md
+		nsec.png = nsec.png
+		nsec.svg = nsec.svg
 		README.md = README.md
 		style.css = style.css
 	EndProjectSection
