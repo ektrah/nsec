@@ -25,6 +25,11 @@ Gets the AES256-GCM AEAD algorithm.
 
     public static Aes256Gcm Aes256Gcm { get; }
 
+#### Exceptions
+
+PlatformNotSupportedException
+: The platform does not support hardware-accelerated AES.
+
 #### Remarks
 
 The implementation of AES-GCM in NSec is hardware-accelerated and requires an
