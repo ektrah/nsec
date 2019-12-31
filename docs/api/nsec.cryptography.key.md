@@ -72,7 +72,7 @@ that specifies the export policy for the key.
 
 ### HasPublicKey
 
-Specifies whether the the current instance of the [[Key|Key Class]] class
+Specifies whether the current instance of the [[Key|Key Class]] class
 represents a private key.
 
     public bool HasPublicKey { get; }

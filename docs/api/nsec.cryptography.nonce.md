@@ -442,7 +442,7 @@ right
 
 #### Return Value
 
-The result of the the XOr operation.
+The result of the XOr operation.
 
 #### Exceptions
 
