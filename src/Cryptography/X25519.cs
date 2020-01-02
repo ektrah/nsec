@@ -83,8 +83,12 @@ namespace NSec.Cryptography
             out IMemoryOwner<byte> owner,
             out PublicKey? publicKey)
         {
+            if (Unsafe.SizeOf<PublicKeyBytes>() != crypto_scalarmult_curve25519_SCALARBYTES)
+            {
+                throw Error.InvalidOperation_InternalError();
+            }
+
             Debug.Assert(seed.Length == crypto_scalarmult_curve25519_SCALARBYTES);
-            Debug.Assert(Unsafe.SizeOf<PublicKeyBytes>() == crypto_scalarmult_curve25519_SCALARBYTES);
 
             publicKey = new PublicKey(this);
             owner = memoryPool.Rent(crypto_scalarmult_curve25519_SCALARBYTES);
@@ -113,8 +117,12 @@ namespace NSec.Cryptography
             out ReadOnlyMemory<byte> memory,
             out IMemoryOwner<byte> owner)
         {
+            if (Unsafe.SizeOf<PublicKeyBytes>() != crypto_scalarmult_curve25519_SCALARBYTES)
+            {
+                throw Error.InvalidOperation_InternalError();
+            }
+
             Debug.Assert(key.Length == crypto_scalarmult_curve25519_SCALARBYTES);
-            Debug.Assert(Unsafe.SizeOf<PublicKeyBytes>() == crypto_scalarmult_curve25519_SCALARBYTES);
 
             owner = memoryPool.Rent(crypto_scalarmult_curve25519_BYTES);
             memory = owner.Memory.Slice(0, crypto_scalarmult_curve25519_BYTES);

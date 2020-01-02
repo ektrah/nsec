@@ -86,8 +86,12 @@ namespace NSec.Cryptography
             out IMemoryOwner<byte> owner,
             out PublicKey? publicKey)
         {
+            if (Unsafe.SizeOf<PublicKeyBytes>() != crypto_sign_ed25519_PUBLICKEYBYTES)
+            {
+                throw Error.InvalidOperation_InternalError();
+            }
+
             Debug.Assert(seed.Length == crypto_sign_ed25519_SEEDBYTES);
-            Debug.Assert(Unsafe.SizeOf<PublicKeyBytes>() == crypto_sign_ed25519_PUBLICKEYBYTES);
 
             publicKey = new PublicKey(this);
             owner = memoryPool.Rent(crypto_sign_ed25519_SECRETKEYBYTES);
@@ -226,7 +230,11 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> signature)
         {
-            Debug.Assert(Unsafe.SizeOf<PublicKeyBytes>() == crypto_sign_ed25519_PUBLICKEYBYTES);
+            if (Unsafe.SizeOf<PublicKeyBytes>() != crypto_sign_ed25519_PUBLICKEYBYTES)
+            {
+                throw Error.InvalidOperation_InternalError();
+            }
+
             Debug.Assert(signature.Length == crypto_sign_ed25519_BYTES);
 
             fixed (byte* sig = signature)

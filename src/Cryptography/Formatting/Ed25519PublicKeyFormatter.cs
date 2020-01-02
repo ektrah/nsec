@@ -17,8 +17,12 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> span,
             out PublicKeyBytes publicKeyBytes)
         {
+            if (Unsafe.SizeOf<PublicKeyBytes>() != crypto_sign_ed25519_PUBLICKEYBYTES)
+            {
+                throw Error.InvalidOperation_InternalError();
+            }
+
             Debug.Assert(span.Length == crypto_sign_ed25519_PUBLICKEYBYTES);
-            Debug.Assert(Unsafe.SizeOf<PublicKeyBytes>() == crypto_sign_ed25519_PUBLICKEYBYTES);
 
             Unsafe.CopyBlockUnaligned(ref Unsafe.As<PublicKeyBytes, byte>(ref publicKeyBytes), ref Unsafe.AsRef(in span.GetPinnableReference()), crypto_sign_ed25519_PUBLICKEYBYTES);
         }
@@ -27,7 +31,11 @@ namespace NSec.Cryptography.Formatting
             in PublicKeyBytes publicKeyBytes,
             Span<byte> span)
         {
-            Debug.Assert(Unsafe.SizeOf<PublicKeyBytes>() == crypto_sign_ed25519_PUBLICKEYBYTES);
+            if (Unsafe.SizeOf<PublicKeyBytes>() != crypto_sign_ed25519_PUBLICKEYBYTES)
+            {
+                throw Error.InvalidOperation_InternalError();
+            }
+
             Debug.Assert(span.Length == crypto_sign_ed25519_PUBLICKEYBYTES);
 
             Unsafe.CopyBlockUnaligned(ref span.GetPinnableReference(), ref Unsafe.As<PublicKeyBytes, byte>(ref Unsafe.AsRef(in publicKeyBytes)), crypto_sign_ed25519_PUBLICKEYBYTES);

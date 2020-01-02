@@ -21,8 +21,12 @@ namespace NSec.Cryptography.Formatting
             out IMemoryOwner<byte> owner,
             out PublicKeyBytes publicKeyBytes)
         {
+            if (Unsafe.SizeOf<PublicKeyBytes>() != crypto_sign_ed25519_PUBLICKEYBYTES)
+            {
+                throw Error.InvalidOperation_InternalError();
+            }
+
             Debug.Assert(span.Length == crypto_sign_ed25519_SEEDBYTES);
-            Debug.Assert(Unsafe.SizeOf<PublicKeyBytes>() == crypto_sign_ed25519_PUBLICKEYBYTES);
 
             owner = memoryPool.Rent(crypto_sign_ed25519_SECRETKEYBYTES);
             memory = owner.Memory.Slice(0, crypto_sign_ed25519_SECRETKEYBYTES);

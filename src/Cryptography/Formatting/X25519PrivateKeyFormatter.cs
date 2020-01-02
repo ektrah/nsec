@@ -21,8 +21,12 @@ namespace NSec.Cryptography.Formatting
             out IMemoryOwner<byte> owner,
             out PublicKeyBytes publicKeyBytes)
         {
+            if (Unsafe.SizeOf<PublicKeyBytes>() != crypto_scalarmult_curve25519_SCALARBYTES)
+            {
+                throw Error.InvalidOperation_InternalError();
+            }
+
             Debug.Assert(span.Length == crypto_scalarmult_curve25519_SCALARBYTES);
-            Debug.Assert(Unsafe.SizeOf<PublicKeyBytes>() == crypto_scalarmult_curve25519_SCALARBYTES);
 
             owner = memoryPool.Rent(crypto_scalarmult_curve25519_SCALARBYTES);
             memory = owner.Memory.Slice(0, crypto_scalarmult_curve25519_SCALARBYTES);
