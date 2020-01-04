@@ -189,6 +189,13 @@ namespace NSec.Cryptography
             return new ArgumentException(ResourceManager.GetString(nameof(Argument_SaltNotSupported)), paramName);
         }
 
+        internal static ArgumentException Argument_SeedLength(
+            string paramName,
+            object? arg0)
+        {
+            return new ArgumentException(string.Format(ResourceManager.GetString(nameof(Argument_SeedLength))!, arg0), paramName);
+        }
+
         internal static ArgumentException Argument_SharedSecretLength(
             string paramName,
             object? arg0)

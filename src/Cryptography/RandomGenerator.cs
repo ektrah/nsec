@@ -111,33 +111,56 @@ namespace NSec.Cryptography
             }
 
             int seedSize = algorithm.GetSeedSize();
-            Debug.Assert(seedSize <= 64);
+            Span<byte> seed = stackalloc byte[seedSize];
 
-            ReadOnlyMemory<byte> memory = default;
-            IMemoryOwner<byte>? owner = default;
-            PublicKey? publicKey = default;
-            bool success = false;
-
+            Key key;
             try
             {
-                Span<byte> seed = stackalloc byte[seedSize];
-                try
-                {
-                    GenerateBytesCore(seed);
-                    algorithm.CreateKey(seed, creationParameters.GetMemoryPool(), out memory, out owner, out publicKey);
-                    success = true;
-                }
-                finally
-                {
-                    CryptographicOperations.ZeroMemory(seed);
-                }
+                GenerateBytesCore(seed);
+                key = GenerateKey(algorithm, seed);
             }
             finally
             {
-                if (!success && owner != null)
-                {
-                    owner.Dispose();
-                }
+                CryptographicOperations.ZeroMemory(seed);
+            }
+
+            return key;
+        }
+
+        public Key GenerateKey(
+            Algorithm algorithm,
+            Span<byte> seed,
+            in KeyCreationParameters creationParameters = default)
+        {
+            if (algorithm == null)
+            {
+                throw Error.ArgumentNull_Algorithm(nameof(algorithm));
+            }
+
+            int seedSize = algorithm.GetSeedSize();
+            Debug.Assert(seedSize <= 64);
+
+            if (seed.Length != seedSize)
+            {
+                throw Error.Argument_SeedLength(nameof(seed), seedSize);
+            }
+
+            ReadOnlyMemory<byte> memory;
+            IMemoryOwner<byte>? owner = default;
+            PublicKey? publicKey;
+
+            try
+            {
+                algorithm.CreateKey(seed, creationParameters.GetMemoryPool(), out memory, out owner, out publicKey);
+            }
+            catch
+            {
+                owner?.Dispose();
+                throw;
+            }
+            finally
+            {
+                CryptographicOperations.ZeroMemory(seed);
             }
 
             return new Key(algorithm, in creationParameters, memory, owner, publicKey);

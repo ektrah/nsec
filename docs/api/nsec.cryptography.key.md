@@ -156,6 +156,50 @@ This method is a shortcut for
 KeyCreationParameters)|RandomGenerator Class#GenerateKey(Algorithm, in
 KeyCreationParameters)]].
 
+### Create(Algorithm, Span<byte>, in KeyCreationParameters)
+
+Creates a new instance of the [[Key|Key Class]] class with a key generated with the given seed.
+
+    Span<byte> mySeed = // [...]
+    public static Key Create(
+        Algorithm algorithm,
+        mySeed,
+        in KeyCreationParameters creationParameters = default)
+
+#### Parameters
+
+algorithm
+: The algorithm for the key.
+
+seed
+: The seed for the key.
+
+creationParameters
+: A [[KeyCreationParameters|KeyCreationParameters Struct]] value that specifies
+    advanced parameters for the creation of the [[Key|Key Class]] instance.
+
+#### Return Value
+
+A new instance of the [[Key|Key Class]] class that represents the new key.
+
+#### Exceptions
+
+ArgumentNullException
+: `algorithm` is `null`.
+
+ArgumentException
+: The seed length does not match the required length.
+
+NotSupportedException
+: The specified algorithm does not use keys.
+
+#### Remarks
+
+This method is a shortcut for
+[[RandomGenerator.Default.GenerateKey(Algorithm, Span<byte>, in
+KeyCreationParameters)|RandomGenerator Class#GenerateKey(Algorithm, Span<byte>, in
+KeyCreationParameters)]].
+
 
 ### Import(Algorithm, ReadOnlySpan<byte>, KeyBlobFormat, in KeyCreationParameters)
 

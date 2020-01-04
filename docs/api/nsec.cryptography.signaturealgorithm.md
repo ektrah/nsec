@@ -61,6 +61,17 @@ Gets the size of a signature.
 The signature size, in bytes.
 
 
+### SeedSize
+
+Gets the size of a seed.
+
+    public int SeedSize { get; }
+
+#### Property Value
+
+The seed size, in bytes.
+
+
 ## Methods
 
 

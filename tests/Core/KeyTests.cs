@@ -98,6 +98,7 @@ namespace NSec.Tests.Core
         public static void CreateWithNullAlgorithm()
         {
             Assert.Throws<ArgumentNullException>("algorithm", () => Key.Create(null!));
+            Assert.Throws<ArgumentNullException>("algorithm", () => Key.Create(null!, stackalloc byte[0]));
         }
 
         [Theory]

@@ -59,6 +59,8 @@ namespace NSec.Cryptography
 
         public int SignatureSize => _signatureSize;
 
+        public int SeedSize => GetSeedSize();
+
         public byte[] Sign(
             Key key,
             ReadOnlySpan<byte> data)

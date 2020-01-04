@@ -107,6 +107,14 @@ namespace NSec.Cryptography
             return RandomGenerator.Default.GenerateKey(algorithm, in creationParameters);
         }
 
+        public static Key Create(
+            Algorithm algorithm,
+            Span<byte> seed,
+            in KeyCreationParameters creationParameters = default)
+        {
+            return RandomGenerator.Default.GenerateKey(algorithm, seed, in creationParameters);
+        }
+
         public static Key Import(
            Algorithm algorithm,
            ReadOnlySpan<byte> blob,
