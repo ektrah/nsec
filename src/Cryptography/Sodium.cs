@@ -31,7 +31,7 @@ namespace NSec.Cryptography
                 if (sodium_library_version_major() != SODIUM_LIBRARY_VERSION_MAJOR ||
                     sodium_library_version_minor() != SODIUM_LIBRARY_VERSION_MINOR)
                 {
-                    throw Error.InvalidOperation_InitializationFailed();
+                    throw Error.InvalidOperation_InitializationFailed_InvalidLibSodiumVersion($"{SODIUM_LIBRARY_VERSION_MAJOR}.{SODIUM_LIBRARY_VERSION_MINOR}", $"{sodium_library_version_major()}.{sodium_library_version_minor()}");
                 }
 
                 if (sodium_set_misuse_handler(s_misuseHandler) != 0)

@@ -270,6 +270,9 @@
   <data name="InvalidOperation_InitializationFailed" xml:space="preserve">
     <value>An error occurred while initializing cryptographic primitives.</value>
   </data>
+  <data name="InvalidOperation_InitializationFailed_InvalidLibSodiumVersion" xml:space="preserve">
+    <value>Could not initialize, libsodium version provided is invalid! (Expected: {0} | Provided {1})</value>
+  </data>
   <data name="InvalidOperation_InternalError" xml:space="preserve">
     <value>An internal error occurred.</value>
   </data>
