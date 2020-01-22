@@ -31,7 +31,7 @@ NSec.Cryptography.X25519</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="libsodium" Version="[1.0.17.1,1.0.18)" />
+    <PackageReference Include="libsodium" Version="[1.0.18,1.0.19)" />
     <PackageReference Include="System.Memory" Version="4.5.3" Condition="'$(TargetFramework)' == 'netstandard2.0'" />
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.7.0" />
   </ItemGroup>
