@@ -10,7 +10,7 @@ namespace NSec.Tests.Examples
         [Fact]
         public static void ExportImportNSecPrivateKey()
         {
-            // fake System.IO.File
+            // mock System.IO.File
             var File = new Dictionary<string, byte[]>();
 
             {
@@ -24,13 +24,12 @@ namespace NSec.Tests.Examples
                 };
 
                 // create a new key
-                using (var key = new Key(algorithm, creationParameters))
-                {
-                    // export it
-                    var blob = key.Export(KeyBlobFormat.NSecPrivateKey);
+                using var key = new Key(algorithm, creationParameters);
 
-                    File.WriteAllBytes("myprivatekey.nsec", blob);
-                }
+                // export it
+                var blob = key.Export(KeyBlobFormat.NSecPrivateKey);
+
+                File.WriteAllBytes("myprivatekey.nsec", blob);
 
                 #endregion
             }
@@ -43,10 +42,9 @@ namespace NSec.Tests.Examples
                 var blob = File.ReadAllBytes("myprivatekey.nsec");
 
                 // re-import it
-                using (var key = Key.Import(algorithm, blob, KeyBlobFormat.NSecPrivateKey))
-                {
-                    var signature = algorithm.Sign(key, /*{*/new byte[0]/*}*/);
-                }
+                using var key = Key.Import(algorithm, blob, KeyBlobFormat.NSecPrivateKey);
+
+                var signature = algorithm.Sign(key, /*{*/new byte[0]/*}*/);
 
                 #endregion
             }
