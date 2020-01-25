@@ -53,7 +53,7 @@ namespace NSec.Cryptography.Formatting
             }
 
             _blobHeader.CopyTo(blob);
-            Serialize(in publicKeyBytes, blob.Slice(_blobHeader.Length));
+            Serialize(in publicKeyBytes, blob.Slice(_blobHeader.Length, _keySize));
             return true;
         }
 
@@ -74,7 +74,7 @@ namespace NSec.Cryptography.Formatting
             _blobHeader.CopyTo(temp);
             Serialize(in publicKeyBytes, temp.Slice(_blobHeader.Length));
 
-            Armor.EncodeToUtf8(temp, s_beginLabel, s_endLabel, blob);
+            Armor.EncodeToUtf8(temp, s_beginLabel, s_endLabel, blob.Slice(0, _blobTextSize));
             return true;
         }
 
