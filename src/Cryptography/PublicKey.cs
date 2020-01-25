@@ -113,18 +113,6 @@ namespace NSec.Cryptography
             return blob;
         }
 
-        public void Export(
-            KeyBlobFormat format,
-            Span<byte> blob)
-        {
-            if (!_algorithm.TryExportPublicKey(this, format, blob, out int blobSize))
-            {
-                throw Error.InvalidOperation_InternalError();
-            }
-
-            Debug.Assert(blobSize == blob.Length);
-        }
-
         public int GetExportBlobSize(
             KeyBlobFormat format)
         {
@@ -158,6 +146,14 @@ namespace NSec.Cryptography
         public override string? ToString()
         {
             return typeof(PublicKey).ToString();
+        }
+
+        public bool TryExport(
+            KeyBlobFormat format,
+            Span<byte> blob,
+            out int blobSize)
+        {
+            return _algorithm.TryExportPublicKey(this, format, blob, out blobSize);
         }
 
         internal ref PublicKeyBytes GetPinnableReference()

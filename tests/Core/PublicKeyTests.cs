@@ -160,28 +160,88 @@ namespace NSec.Tests.Core
             }
         }
 
+        #endregion
+
+        #region GetExportBlobSize
+
         [Theory]
         [MemberData(nameof(PublicKeyBlobFormats))]
         public static void GetExportBlobSize(Algorithm a, KeyBlobFormat format)
         {
             using (var k = new Key(a))
             {
-                var b = k.Export(format);
+                var b = k.PublicKey.Export(format);
+                Assert.NotNull(b);
+
                 var blobSize = k.PublicKey.GetExportBlobSize(format);
                 Assert.Equal(b.Length, blobSize);
             }
         }
 
+        #endregion
+
+        #region TryExport
+
         [Theory]
-        [MemberData(nameof(PublicKeyBlobFormats))]
-        public static void ExportPublicKeyToSpan(Algorithm a, KeyBlobFormat format)
+        [MemberData(nameof(AsymmetricKeyAlgorithms))]
+        public static void TryExportWithFormatMin(Algorithm a)
         {
             using (var k = new Key(a))
             {
-                Span<byte> b = stackalloc byte[k.PublicKey.GetExportBlobSize(format)];
-                k.PublicKey.Export(format, b);
+                Assert.Throws<ArgumentException>("format", () => k.PublicKey.TryExport((KeyBlobFormat)int.MinValue, Span<byte>.Empty, out _));
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(AsymmetricKeyAlgorithms))]
+        public static void TryExportWithFormatMax(Algorithm a)
+        {
+            using (var k = new Key(a))
+            {
+                Assert.Throws<ArgumentException>("format", () => k.PublicKey.TryExport((KeyBlobFormat)int.MaxValue, Span<byte>.Empty, out _));
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(PublicKeyBlobFormats))]
+        public static void TryExportSmaller(Algorithm a, KeyBlobFormat format)
+        {
+            using (var k = new Key(a))
+            {
+                Assert.False(k.PublicKey.TryExport(format, Span<byte>.Empty, out _));
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(PublicKeyBlobFormats))]
+        public static void TryExportExact(Algorithm a, KeyBlobFormat format)
+        {
+            using (var k = new Key(a))
+            {
+                var expected = k.PublicKey.GetExportBlobSize(format);
+                var b = new byte[expected + 0];
+                Assert.True(k.PublicKey.TryExport(format, b, out var actual));
+                Assert.Equal(expected, actual);
 
                 var pk = PublicKey.Import(a, b, format);
+                Assert.NotNull(pk);
+                Assert.Equal(k.PublicKey, pk);
+                Assert.Same(a, pk.Algorithm);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(PublicKeyBlobFormats))]
+        public static void TryExportLarger(Algorithm a, KeyBlobFormat format)
+        {
+            using (var k = new Key(a))
+            {
+                var expected = k.PublicKey.GetExportBlobSize(format);
+                var b = new byte[expected + 100];
+                Assert.True(k.PublicKey.TryExport(format, b, out var actual));
+                Assert.Equal(expected, actual);
+
+                var pk = PublicKey.Import(a, new ReadOnlySpan<byte>(b, 0, actual), format);
                 Assert.NotNull(pk);
                 Assert.Equal(k.PublicKey, pk);
                 Assert.Same(a, pk.Algorithm);
