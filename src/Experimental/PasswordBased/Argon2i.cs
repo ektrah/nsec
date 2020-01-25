@@ -21,10 +21,11 @@ namespace NSec.Experimental.PasswordBased
     //
     //  Parameters
     //
-    //      Password Size - Any length from 0 to 2^32-1 bytes.
+    //      Password Size - Any length from 0 to 2^32-1 bytes. (A Span<byte> can
+    //          hold only up to 2^31-1 bytes.)
     //
-    //      Salt Size - Any length from 8 to 2^32-1 bytes. 16 bytes is
-    //          recommended for password hashing and is the only value accepted
+    //      Salt Size - Any length from 8 to 2^32-1 bytes. A length of 16 bytes
+    //          is recommended for password hashing and the only value accepted
     //          by libsodium.
     //
     //      Degree of Parallelism (p) - Any integer value from 1 to 2**24-1.
@@ -33,12 +34,13 @@ namespace NSec.Experimental.PasswordBased
     //
     //      Memory Size (m) - Any integer number of kibibytes from 8*p to
     //          2^32-1. libsodium accepts this parameter as the 'memlimit'
-    //          argument, which is in bytes rather than kibibytes however.
+    //          argument (in bytes rather than kibibytes).
     //
     //      Number of Iterations (t) - Any integer number from 1 to 2^32-1.
     //          libsodium accepts this parameter as the 'opslimit' argument.
     //
-    //      Tag Size - Any integer number of bytes from 4 to 2^32-1.
+    //      Tag Size - Any integer number of bytes from 4 to 2^32-1. libsodium
+    //          requires this parameter to be at least 16 bytes.
     //
     //  Parameter Presets
     //
