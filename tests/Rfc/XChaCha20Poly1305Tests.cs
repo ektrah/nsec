@@ -7,7 +7,7 @@ namespace NSec.Tests.Rfc
 {
     public static class XChaCha20Poly1305Tests
     {
-        // draft-irtf-cfrg-xchacha-01
+        // draft-irtf-cfrg-xchacha-03
         public static readonly TheoryData<string[]> TestVectors = new TheoryData<string[]>
         {
             // Appendix A.1
