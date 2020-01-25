@@ -268,7 +268,6 @@ of bytes.
     public byte[] Export(
         KeyBlobFormat format)
 
-
 #### Parameters
 
 format
@@ -278,6 +277,81 @@ format
 #### Return Value
 
 A BLOB that contains the key in the specified format.
+
+#### Exceptions
+
+ArgumentException
+: The algorithm for the key does not support the specified format.
+
+InvalidOperationException
+: The export policy for the key do not allow the key to be exported.
+
+NotSupportedException
+: The algorithm for the key does not support exporting keys.
+
+ObjectDisposedException
+: The key has been disposed.
+
+
+### GetExportBlobSize(KeyBlobFormat)
+
+Returns the BLOB size of the key if it were exported in the specified format.
+
+    public int GetExportBlobSize(
+        KeyBlobFormat format)
+
+#### Parameters
+
+format
+: One of the [[KeyBlobFormat|KeyBlobFormat Enum]] values that specifies the
+    format of the key BLOB.
+
+#### Return Value
+
+The size (in bytes) of the key if it were exported as a BLOB in the specified
+format.
+
+#### Exceptions
+
+ArgumentException
+: The algorithm for the key does not support the specified format.
+
+NotSupportedException
+: The algorithm for the key does not support exporting keys.
+
+ObjectDisposedException
+: The key has been disposed.
+
+
+### TryExport(KeyBlobFormat, Span<byte>, out int)
+
+Exports the specified key BLOB in the specified format and attempts to fill the
+specified span of bytes with the BLOB.
+
+    public bool TryExport(
+        KeyBlobFormat format,
+        Span<byte> blob,
+        out int blobSize)
+
+#### Parameters
+
+format
+: One of the [[KeyBlobFormat|KeyBlobFormat Enum]] values that specifies the
+    format of the key BLOB.
+
+blob
+: The span to fill with the exported public key BLOB.
+    The length of the span must be greater than or equal to
+    `GetExportBlobSize(format)`.
+
+blobSize
+: When this method returns, contains the number of bytes written into the output
+    span.
+
+#### Return Value
+
+`false` if there is not enough space in the output span to write the key BLOB;
+otherwise `true`.
 
 #### Exceptions
 

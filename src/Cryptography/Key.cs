@@ -207,8 +207,6 @@ namespace NSec.Cryptography
                     }
                 }
 
-                _exported = true;
-
                 _algorithm.TryExportKey(_memory.Span, format, Span<byte>.Empty, out blobSize);
                 blob = new byte[blobSize];
 
@@ -218,6 +216,7 @@ namespace NSec.Cryptography
                 }
 
                 Debug.Assert(blobSize == blob.Length);
+                _exported = true;
                 return blob;
             }
             else
@@ -240,10 +239,85 @@ namespace NSec.Cryptography
             }
         }
 
+        public int GetExportBlobSize(
+            KeyBlobFormat format)
+        {
+            int blobSize;
+
+            if (format < 0)
+            {
+                if (_disposed)
+                {
+                    throw new ObjectDisposedException(typeof(Key).FullName);
+                }
+
+                _algorithm.TryExportKey(_memory.Span, format, Span<byte>.Empty, out blobSize);
+            }
+            else
+            {
+                if (_publicKey == null)
+                {
+                    throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
+                }
+
+                _algorithm.TryExportPublicKey(_publicKey, format, Span<byte>.Empty, out blobSize);
+            }
+
+            return blobSize;
+        }
+
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override string? ToString()
         {
             return typeof(Key).ToString();
+        }
+
+        public bool TryExport(
+            KeyBlobFormat format,
+            Span<byte> blob,
+            out int blobSize)
+        {
+            if (format < 0)
+            {
+                if (_disposed)
+                {
+                    throw new ObjectDisposedException(typeof(Key).FullName);
+                }
+
+                if ((_exportPolicy & KeyExportPolicies.AllowPlaintextExport) == 0)
+                {
+                    if ((_exportPolicy & KeyExportPolicies.AllowPlaintextArchiving) == 0)
+                    {
+                        throw Error.InvalidOperation_ExportNotAllowed();
+                    }
+                    if (_exported)
+                    {
+                        throw Error.InvalidOperation_AlreadyArchived();
+                    }
+                }
+
+                if (!_algorithm.TryExportKey(_memory.Span, format, blob, out blobSize))
+                {
+                    return false;
+                }
+
+                _exported = true;
+                return true;
+            }
+            else
+            {
+                if (_publicKey == null)
+                {
+                    throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
+                }
+
+                if (!_algorithm.TryExportPublicKey(_publicKey, format, blob, out blobSize))
+                {
+                    return false;
+                }
+
+                return true;
+            }
         }
     }
 }
