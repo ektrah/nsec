@@ -45,32 +45,23 @@ and verify the signature:
 
     $ dotnet add package NSec.Cryptography --version 19.12.0-preview1
 
-NSec works with .NET Core 3.1, 3.0 and 2.1 on Windows, Linux and Mac.
-See [[Installation]] for additional information.
+NSec works with .NET Core 3.1, 3.0 and 2.1 on Windows, Linux and macOS.
+
+See [[Installation]] for more information.
 
 
 ## Documentation
 
-### API Reference
+| Class                            | Algorithms                                      |
+|:-------------------------------- |:----------------------------------------------- |
+| [[AeadAlgorithm Class]]          | AES-256-GCM &bull; ChaCha20-Poly1305            |
+| [[HashAlgorithm Class]]          | BLAKE2b &bull; SHA-256 &bull; SHA-512           |
+| [[KeyAgreementAlgorithm Class]]  | X25519                                          |
+| [[KeyDerivationAlgorithm Class]] | HKDF-SHA-256 &bull; HKDF-SHA-512                |
+| [[MacAlgorithm Class]]           | BLAKE2b &bull; HMAC-SHA-256 &bull; HMAC-SHA-512 |
+| [[SignatureAlgorithm Class]]     | Ed25519                                         |
 
-* [[Algorithm Class]]
-    * [[AeadAlgorithm Class]]
-    * [[HashAlgorithm Class]]
-    * [[KeyAgreementAlgorithm Class]]
-    * [[KeyDerivationAlgorithm Class]]
-    * [[MacAlgorithm Class]]
-    * [[SignatureAlgorithm Class]]
-* [[IncrementalHash Struct]]
-* [[IncrementalMac Struct]]
-* [[Key Class]]
-    * [[KeyCreationParameters Struct]]
-    * [[KeyExportPolicies Enum]]
-    * [[KeyBlobFormat Enum]]
-* [[Nonce Struct]]
-* [[PublicKey Class]]
-* [[RandomGenerator Class]]
-* [[SharedSecret Class]]
-    * [[SharedSecretCreationParameters Struct]]
+See [[API Reference|NSec.Cryptography Namespace]] for more information.
 
 
 ## Contributing
