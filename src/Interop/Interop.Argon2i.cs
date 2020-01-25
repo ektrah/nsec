@@ -26,6 +26,9 @@ internal static partial class Interop
         internal static extern int crypto_pwhash_argon2i_alg_argon2i13();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern UIntPtr crypto_pwhash_argon2i_bytes_max();
+
+        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern UIntPtr crypto_pwhash_argon2i_bytes_min();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]

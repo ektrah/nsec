@@ -28,6 +28,7 @@ Interop.Argon2i.cs:
   - crypto_pwhash_argon2i
   - crypto_pwhash_argon2i_alg_argon2i13
   - crypto_pwhash_argon2i_bytes_min
+  - crypto_pwhash_argon2i_bytes_max
   - crypto_pwhash_argon2i_memlimit_max
   - crypto_pwhash_argon2i_memlimit_min
   - crypto_pwhash_argon2i_opslimit_max

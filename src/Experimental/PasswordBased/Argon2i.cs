@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using NSec.Cryptography;
 using static Interop.Libsodium;
 
 namespace NSec.Experimental.PasswordBased
@@ -58,7 +59,7 @@ namespace NSec.Experimental.PasswordBased
         {
         }
 
-        internal /*public*/ unsafe Argon2i(int p, long m, int t) : base(
+        internal /*public*/ Argon2i(int p, long m, int t) : base(
             saltSize: crypto_pwhash_argon2i_SALTBYTES,
             maxCount: int.MaxValue)
         {
@@ -67,7 +68,7 @@ namespace NSec.Experimental.PasswordBased
                 throw new ArgumentOutOfRangeException(nameof(p));
             }
             if (m < crypto_pwhash_argon2i_MEMLIMIT_MIN / 1024 ||
-                m > (sizeof(byte*) == sizeof(uint) ? 0x200000 : uint.MaxValue))
+                m > (IntPtr.Size == sizeof(int) ? 2147483648 / 1024 : 4398046510080 / 1024))
             {
                 throw new ArgumentOutOfRangeException(nameof(m));
             }
@@ -133,15 +134,19 @@ namespace NSec.Experimental.PasswordBased
             }
         }
 
-        private static unsafe bool SelfTest()
+        private static void SelfTest()
         {
-            return (crypto_pwhash_argon2i_alg_argon2i13() == crypto_pwhash_argon2i_ALG_ARGON2I13)
-                && (crypto_pwhash_argon2i_bytes_min() == (UIntPtr)crypto_pwhash_argon2i_BYTES_MIN)
-                && (crypto_pwhash_argon2i_memlimit_min() == (UIntPtr)(sizeof(byte*) == sizeof(uint) ? 0x200000 : uint.MaxValue))
-                && (crypto_pwhash_argon2i_memlimit_min() == (UIntPtr)crypto_pwhash_argon2i_MEMLIMIT_MIN)
-                && (crypto_pwhash_argon2i_opslimit_max() == (UIntPtr)uint.MaxValue)
-                && (crypto_pwhash_argon2i_opslimit_min() == (UIntPtr)crypto_pwhash_argon2i_OPSLIMIT_MIN)
-                && (crypto_pwhash_argon2i_saltbytes() == (UIntPtr)crypto_pwhash_argon2i_SALTBYTES);
+            if ((crypto_pwhash_argon2i_alg_argon2i13() != crypto_pwhash_argon2i_ALG_ARGON2I13) ||
+                (crypto_pwhash_argon2i_bytes_max() != (UIntPtr)uint.MaxValue) ||
+                (crypto_pwhash_argon2i_bytes_min() != (UIntPtr)crypto_pwhash_argon2i_BYTES_MIN) ||
+                (crypto_pwhash_argon2i_memlimit_max() != (UIntPtr)(IntPtr.Size == sizeof(int) ? 2147483648 : 4398046510080)) ||
+                (crypto_pwhash_argon2i_memlimit_min() != (UIntPtr)crypto_pwhash_argon2i_MEMLIMIT_MIN) ||
+                (crypto_pwhash_argon2i_opslimit_max() != (UIntPtr)uint.MaxValue) ||
+                (crypto_pwhash_argon2i_opslimit_min() != (UIntPtr)crypto_pwhash_argon2i_OPSLIMIT_MIN) ||
+                (crypto_pwhash_argon2i_saltbytes() != (UIntPtr)crypto_pwhash_argon2i_SALTBYTES))
+            {
+                throw Error.InvalidOperation_InitializationFailed();
+            }
         }
     }
 }
