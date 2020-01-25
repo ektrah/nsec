@@ -100,13 +100,6 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(PasswordHashAlgorithms))]
-        public static void DeriveBytesWithSpanWithNegativeCount(PasswordBasedKeyDerivationAlgorithm a)
-        {
-            Assert.Throws<ArgumentOutOfRangeException>("count", () => a.DeriveBytes(s_password, Utilities.RandomBytes.Slice(0, a.SaltSize), -1));
-        }
-
-        [Theory]
-        [MemberData(nameof(PasswordHashAlgorithms))]
         public static void DeriveBytesWithSpanWithSmallCount(PasswordBasedKeyDerivationAlgorithm a)
         {
             a.DeriveBytes(s_password, Utilities.RandomBytes.Slice(0, a.SaltSize), new byte[3]);

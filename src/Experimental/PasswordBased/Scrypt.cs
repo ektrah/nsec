@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using NSec.Cryptography;
@@ -31,6 +32,7 @@ namespace NSec.Experimental.PasswordBased
     //          the 'opslimit' and 'memlimit' arguments.
     //
     //      Output Size - A positive integer less than or equal to (2^32-1)*32.
+    //          libsodium requires this parameter to be at least 16 bytes.
     //
     //  Parameter Presets
     //
@@ -96,6 +98,8 @@ namespace NSec.Experimental.PasswordBased
             ReadOnlySpan<byte> salt,
             Span<byte> bytes)
         {
+            Debug.Assert(salt.Length == crypto_pwhash_scryptsalsa208sha256_SALTBYTES);
+
             const int MinCount = crypto_pwhash_scryptsalsa208sha256_BYTES_MIN;
             bool min = bytes.Length < MinCount;
             byte* temp = stackalloc byte[MinCount];
