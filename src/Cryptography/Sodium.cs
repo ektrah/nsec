@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Threading;
 using static Interop.Libsodium;
 
@@ -31,7 +32,10 @@ namespace NSec.Cryptography
                 if (sodium_library_version_major() != SODIUM_LIBRARY_VERSION_MAJOR ||
                     sodium_library_version_minor() != SODIUM_LIBRARY_VERSION_MINOR)
                 {
-                    throw Error.InvalidOperation_InitializationFailed_InvalidLibSodiumVersion($"{SODIUM_LIBRARY_VERSION_MAJOR}.{SODIUM_LIBRARY_VERSION_MINOR}", $"{sodium_library_version_major()}.{sodium_library_version_minor()}");
+                    string? version = Marshal.PtrToStringAnsi(sodium_version_string());
+                    throw (version != null && version != SODIUM_VERSION_STRING)
+                        ? Error.InvalidOperation_InitializationFailed_VersionMismatch(SODIUM_VERSION_STRING, version)
+                        : Error.InvalidOperation_InitializationFailed();
                 }
 
                 if (sodium_set_misuse_handler(s_misuseHandler) != 0)

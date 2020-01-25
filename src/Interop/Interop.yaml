@@ -242,6 +242,8 @@ Interop.Version.cs:
   constants:
   - SODIUM_LIBRARY_VERSION_MAJOR
   - SODIUM_LIBRARY_VERSION_MINOR
+  - SODIUM_VERSION_STRING
   functions:
   - sodium_library_version_major
   - sodium_library_version_minor
+  - sodium_version_string (IntPtr)

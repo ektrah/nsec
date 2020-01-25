@@ -340,9 +340,12 @@ namespace NSec.Cryptography
         {
             return new InvalidOperationException(ResourceManager.GetString(nameof(InvalidOperation_InitializationFailed)));
         }
-        internal static InvalidOperationException InvalidOperation_InitializationFailed_InvalidLibSodiumVersion(string expected, string provided)
+
+        internal static InvalidOperationException InvalidOperation_InitializationFailed_VersionMismatch(
+            object? arg0,
+            object? arg1)
         {
-            return new InvalidOperationException(string.Format(ResourceManager.GetString(nameof(InvalidOperation_InitializationFailed_InvalidLibSodiumVersion))!, expected, provided));
+            return new InvalidOperationException(string.Format(ResourceManager.GetString(nameof(InvalidOperation_InitializationFailed_VersionMismatch))!, arg0, arg1));
         }
 
         internal static InvalidOperationException InvalidOperation_InternalError()
