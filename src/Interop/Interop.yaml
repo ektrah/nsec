@@ -197,6 +197,7 @@ Interop.Scrypt.cs:
   - crypto_pwhash_scryptsalsa208sha256_SALTBYTES
   functions:
   - crypto_pwhash_scryptsalsa208sha256_ll
+  - crypto_pwhash_scryptsalsa208sha256_bytes_max
   - crypto_pwhash_scryptsalsa208sha256_bytes_min
   - crypto_pwhash_scryptsalsa208sha256_memlimit_max
   - crypto_pwhash_scryptsalsa208sha256_memlimit_min

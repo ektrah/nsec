@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using NSec.Cryptography;
 using static Interop.Libsodium;
 
 namespace NSec.Experimental.PasswordBased
@@ -51,7 +52,7 @@ namespace NSec.Experimental.PasswordBased
         {
         }
 
-        internal /*public*/ unsafe Scrypt(long n, int r, int p) : base(
+        internal /*public*/ Scrypt(long n, int r, int p) : base(
             saltSize: crypto_pwhash_scryptsalsa208sha256_SALTBYTES,
             maxCount: int.MaxValue)
         {
@@ -63,12 +64,12 @@ namespace NSec.Experimental.PasswordBased
             {
                 throw new ArgumentOutOfRangeException(nameof(r));
             }
-            if ((sizeof(byte*) == sizeof(uint) ? n > (int)(uint.MaxValue / 128) / r : n > (long)(ulong.MaxValue / 128) / r))
+            if ((IntPtr.Size == sizeof(uint) ? n > (int)(uint.MaxValue / 128) / r : n > (long)(ulong.MaxValue / 128) / r))
             {
                 throw new ArgumentOutOfRangeException(nameof(n));
             }
-            if ((sizeof(byte*) == sizeof(uint) ? r > (int)(uint.MaxValue / 128) / p : r > (long)(ulong.MaxValue / 128) / p) ||
-                (sizeof(byte*) == sizeof(uint) ? r > (int)(uint.MaxValue / 256) : false))
+            if ((IntPtr.Size == sizeof(uint) ? r > (int)(uint.MaxValue / 128) / p : r > (long)(ulong.MaxValue / 128) / p) ||
+                (IntPtr.Size == sizeof(uint) ? r > (int)(uint.MaxValue / 256) : false))
             {
                 throw new ArgumentOutOfRangeException(nameof(r));
             }
@@ -130,14 +131,18 @@ namespace NSec.Experimental.PasswordBased
             }
         }
 
-        private static unsafe bool SelfTest()
+        private static void SelfTest()
         {
-            return (crypto_pwhash_scryptsalsa208sha256_bytes_min() == (UIntPtr)crypto_pwhash_scryptsalsa208sha256_BYTES_MIN)
-                && (crypto_pwhash_scryptsalsa208sha256_memlimit_min() == (UIntPtr)(sizeof(byte*) == sizeof(uint) ? uint.MaxValue : 0x1000000000))
-                && (crypto_pwhash_scryptsalsa208sha256_memlimit_min() == (UIntPtr)crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_MIN)
-                && (crypto_pwhash_scryptsalsa208sha256_opslimit_max() == (UIntPtr)uint.MaxValue)
-                && (crypto_pwhash_scryptsalsa208sha256_opslimit_min() == (UIntPtr)crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MIN)
-                && (crypto_pwhash_scryptsalsa208sha256_saltbytes() == (UIntPtr)crypto_pwhash_scryptsalsa208sha256_SALTBYTES);
+            if ((crypto_pwhash_scryptsalsa208sha256_bytes_max() != (UIntPtr)(IntPtr.Size == sizeof(int) ? uint.MaxValue : 0x1fffffffe0)) ||
+                (crypto_pwhash_scryptsalsa208sha256_bytes_min() != (UIntPtr)crypto_pwhash_scryptsalsa208sha256_BYTES_MIN) ||
+                (crypto_pwhash_scryptsalsa208sha256_memlimit_max() != (UIntPtr)(IntPtr.Size == sizeof(uint) ? uint.MaxValue : 68719476736)) ||
+                (crypto_pwhash_scryptsalsa208sha256_memlimit_min() != (UIntPtr)crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_MIN) ||
+                (crypto_pwhash_scryptsalsa208sha256_opslimit_max() != (UIntPtr)uint.MaxValue) ||
+                (crypto_pwhash_scryptsalsa208sha256_opslimit_min() != (UIntPtr)crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MIN) ||
+                (crypto_pwhash_scryptsalsa208sha256_saltbytes() != (UIntPtr)crypto_pwhash_scryptsalsa208sha256_SALTBYTES))
+            {
+                throw Error.InvalidOperation_InitializationFailed();
+            }
         }
     }
 }
