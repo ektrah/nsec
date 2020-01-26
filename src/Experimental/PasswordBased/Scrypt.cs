@@ -58,20 +58,20 @@ namespace NSec.Experimental.PasswordBased
             saltSize: crypto_pwhash_scryptsalsa208sha256_SALTBYTES,
             maxCount: int.MaxValue)
         {
-            if (n <= 1 || n > uint.MaxValue || (n & (n - 1)) != 0)
+            // checks from libsodium/crypto_pwhash/scryptsalsa208sha256/nosse/pwhash_scryptsalsa208sha256_nosse.c
+            if (n < 2 || n > uint.MaxValue || unchecked(n & (n - 1)) != 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(n));
             }
-            if (r <= 0 || p <= 0 || (long)r * p >= 1 << 30)
+            if (r < 1 || p < 1 || (long)r * p >= 1 << 30)
             {
                 throw new ArgumentOutOfRangeException(nameof(r));
             }
-            if ((IntPtr.Size == sizeof(uint) ? n > (int)(uint.MaxValue / 128) / r : n > (long)(ulong.MaxValue / 128) / r))
+            if (IntPtr.Size == sizeof(uint) ? n > (int)(uint.MaxValue / 128) / r : n > (long)(ulong.MaxValue / 128) / r)
             {
                 throw new ArgumentOutOfRangeException(nameof(n));
             }
-            if ((IntPtr.Size == sizeof(uint) ? r > (int)(uint.MaxValue / 128) / p : r > (long)(ulong.MaxValue / 128) / p) ||
-                (IntPtr.Size == sizeof(uint) ? r > (int)(uint.MaxValue / 256) : false))
+            if (IntPtr.Size == sizeof(uint) ? r > (int)(uint.MaxValue / 128) / p || r > (int)(uint.MaxValue / 256) : r > (long)(ulong.MaxValue / 128) / p)
             {
                 throw new ArgumentOutOfRangeException(nameof(r));
             }
