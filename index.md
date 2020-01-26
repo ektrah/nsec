@@ -54,7 +54,7 @@ See [[Installation]] for more information.
 
 | Class                            | Algorithms                                      |
 |:-------------------------------- |:----------------------------------------------- |
-| [[AeadAlgorithm Class]]          | AES-256-GCM &bull; ChaCha20-Poly1305            |
+| [[AeadAlgorithm Class]]          | AES256-GCM &bull; ChaCha20-Poly1305             |
 | [[HashAlgorithm Class]]          | BLAKE2b &bull; SHA-256 &bull; SHA-512           |
 | [[KeyAgreementAlgorithm Class]]  | X25519                                          |
 | [[KeyDerivationAlgorithm Class]] | HKDF-SHA-256 &bull; HKDF-SHA-512                |
