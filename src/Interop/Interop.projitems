@@ -27,6 +27,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Interop.XChaCha20Poly1305.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Interop.Ed25519ToX25519.cs" />
     <None Include="$(MSBuildThisFileDirectory)Interop.yaml" />
   </ItemGroup>
 </Project>
