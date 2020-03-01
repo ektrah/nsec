@@ -173,14 +173,14 @@ namespace NSec.Tests.Core
         [MemberData(nameof(PrivateKeyBlobFormats))]
         public static void TryImportPrivateKeyEmpty(Algorithm a, KeyBlobFormat format)
         {
-            Assert.False(Key.TryImport(a, ReadOnlySpan<byte>.Empty, format, out var k, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }));
+            Assert.False(Key.TryImport(a, ReadOnlySpan<byte>.Empty, format, out _, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }));
         }
 
         [Theory]
         [MemberData(nameof(SymmetricKeyBlobFormats))]
         public static void TryImportSymmetricKeyEmpty(Algorithm a, KeyBlobFormat format)
         {
-            Assert.False(Key.TryImport(a, ReadOnlySpan<byte>.Empty, format, out var k, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }));
+            Assert.False(Key.TryImport(a, ReadOnlySpan<byte>.Empty, format, out _, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }));
         }
 
         #endregion
