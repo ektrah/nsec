@@ -300,7 +300,7 @@ jobs:
 
   fedora31:
     docker:
-      - image: fedora:30
+      - image: fedora:31
     environment: *environment
     steps:
       - run:
