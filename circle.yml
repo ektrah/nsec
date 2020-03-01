@@ -57,12 +57,6 @@ shared:
       command: |
         if [ ! -f ~/dotnet-install.sh ]; then curl -fsLo ~/dotnet-install.sh 'https://dot.net/v1/dotnet-install.sh'; fi
         bash ~/dotnet-install.sh --channel 2.1 --version latest --install-dir ~/.dotnet --no-path --runtime dotnet
-  dotnet-install-3-0: &dotnet-install-3-0
-    run:
-      name: Install .NET Core 3.0 Runtime
-      command: |
-        if [ ! -f ~/dotnet-install.sh ]; then curl -fsLo ~/dotnet-install.sh 'https://dot.net/v1/dotnet-install.sh'; fi
-        bash ~/dotnet-install.sh --channel 3.0 --version latest --install-dir ~/.dotnet --no-path --runtime dotnet
   dotnet-install-3-1: &dotnet-install-3-1
     run:
       name: Install .NET Core 3.1 SDK
@@ -121,14 +115,6 @@ shared:
     run:
       name: Run unit tests (Release) (.NET Core 2.1)
       command: dotnet test tests -c Release -f netcoreapp2.1
-  dotnet-test-debug-3-0: &dotnet-test-debug-3-0
-    run:
-      name: Run unit tests (Debug) (.NET Core 3.0)
-      command: dotnet test tests -c Debug -f netcoreapp3.0
-  dotnet-test-release-3-0: &dotnet-test-release-3-0
-    run:
-      name: Run unit tests (Release) (.NET Core 3.0)
-      command: dotnet test tests -c Release -f netcoreapp3.0
   dotnet-test-debug-3-1: &dotnet-test-debug-3-1
     run:
       name: Run unit tests (Debug) (.NET Core 3.1)
@@ -163,7 +149,6 @@ jobs:
           no_output_timeout: 2m
           command: yum install -q -y curl ca-certificates libicu
       - *dotnet-install-2-1
-      - *dotnet-install-3-0
       - *dotnet-install-3-1
       - checkout
       - *generate-restore-graph
@@ -172,8 +157,6 @@ jobs:
       - *save-cache
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-      - *dotnet-test-debug-3-0
-      - *dotnet-test-release-3-0
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
 
@@ -187,7 +170,6 @@ jobs:
           no_output_timeout: 2m
           command: yum install -y curl ca-certificates libicu
       - *dotnet-install-2-1
-      - *dotnet-install-3-0
       - *dotnet-install-3-1
       - checkout
       - *generate-restore-graph
@@ -196,8 +178,6 @@ jobs:
       - *save-cache
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-      - *dotnet-test-debug-3-0
-      - *dotnet-test-release-3-0
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
 
@@ -213,7 +193,6 @@ jobs:
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext
       - *dotnet-install-2-1
-      - *dotnet-install-3-0
       - *dotnet-install-3-1
       - checkout
       - *generate-restore-graph
@@ -222,8 +201,6 @@ jobs:
       - *save-cache
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-      - *dotnet-test-debug-3-0
-      - *dotnet-test-release-3-0
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
 
@@ -238,7 +215,6 @@ jobs:
           command: |
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext
-      - *dotnet-install-3-0
       - *dotnet-install-3-1
       - checkout
       - *generate-restore-graph
@@ -247,8 +223,6 @@ jobs:
       - *save-cache
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-      - *dotnet-test-debug-3-0
-      - *dotnet-test-release-3-0
 
   fedora29:
     docker:
@@ -260,7 +234,6 @@ jobs:
           no_output_timeout: 2m
           command: dnf install -q -y curl ca-certificates findutils ncurses libicu compat-openssl10
       - *dotnet-install-2-1
-      - *dotnet-install-3-0
       - *dotnet-install-3-1
       - checkout
       - *generate-restore-graph
@@ -269,8 +242,6 @@ jobs:
       - *save-cache
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-      - *dotnet-test-debug-3-0
-      - *dotnet-test-release-3-0
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
 
@@ -284,7 +255,6 @@ jobs:
           no_output_timeout: 2m
           command: dnf install -q -y curl ca-certificates findutils ncurses libicu compat-openssl10
       - *dotnet-install-2-1
-      - *dotnet-install-3-0
       - *dotnet-install-3-1
       - checkout
       - *generate-restore-graph
@@ -293,8 +263,6 @@ jobs:
       - *save-cache
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-      - *dotnet-test-debug-3-0
-      - *dotnet-test-release-3-0
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
 
@@ -307,7 +275,6 @@ jobs:
           name: Install Prerequisites
           no_output_timeout: 2m
           command: dnf install -q -y curl ca-certificates findutils ncurses libicu compat-openssl10
-      - *dotnet-install-3-0
       - *dotnet-install-3-1
       - checkout
       - *generate-restore-graph
@@ -316,8 +283,6 @@ jobs:
       - *save-cache
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-      - *dotnet-test-debug-3-0
-      - *dotnet-test-release-3-0
 
   opensuse15:
     docker:
@@ -329,7 +294,6 @@ jobs:
           no_output_timeout: 2m
           command: zypper -q install -y --no-recommends curl ca-certificates gzip tar ncurses-utils libicu
       - *dotnet-install-2-1
-      - *dotnet-install-3-0
       - *dotnet-install-3-1
       - checkout
       - *generate-restore-graph
@@ -338,8 +302,6 @@ jobs:
       - *save-cache
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-      - *dotnet-test-debug-3-0
-      - *dotnet-test-release-3-0
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
 
@@ -355,7 +317,6 @@ jobs:
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libicu55 libcurl3
       - *dotnet-install-2-1
-      - *dotnet-install-3-0
       - *dotnet-install-3-1
       - checkout
       - *generate-restore-graph
@@ -364,8 +325,6 @@ jobs:
       - *save-cache
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-      - *dotnet-test-debug-3-0
-      - *dotnet-test-release-3-0
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
 
@@ -381,7 +340,6 @@ jobs:
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libicu60 libssl1.0.0
       - *dotnet-install-2-1
-      - *dotnet-install-3-0
       - *dotnet-install-3-1
       - checkout
       - *generate-restore-graph
@@ -390,8 +348,6 @@ jobs:
       - *save-cache
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-      - *dotnet-test-debug-3-0
-      - *dotnet-test-release-3-0
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
 
@@ -401,7 +357,6 @@ jobs:
     environment: *environment
     steps:
       - *dotnet-install-2-1
-      - *dotnet-install-3-0
       - *dotnet-install-3-1
       - checkout
       - *generate-restore-graph
@@ -410,8 +365,6 @@ jobs:
       - *save-cache-macos
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-      - *dotnet-test-debug-3-0
-      - *dotnet-test-release-3-0
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
 
@@ -421,7 +374,6 @@ jobs:
     environment: *environment
     steps:
       - *dotnet-install-2-1
-      - *dotnet-install-3-0
       - *dotnet-install-3-1
       - checkout
       - *generate-restore-graph
@@ -430,8 +382,6 @@ jobs:
       - *save-cache-macos
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-      - *dotnet-test-debug-3-0
-      - *dotnet-test-release-3-0
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
 
@@ -441,7 +391,6 @@ jobs:
     environment: *environment
     steps:
       - *dotnet-install-2-1
-      - *dotnet-install-3-0
       - *dotnet-install-3-1
       - checkout
       - *generate-restore-graph
@@ -450,7 +399,5 @@ jobs:
       - *save-cache-macos
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-      - *dotnet-test-debug-3-0
-      - *dotnet-test-release-3-0
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
