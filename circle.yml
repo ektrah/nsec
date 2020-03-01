@@ -138,7 +138,7 @@ jobs:
 
   centos7:
     docker:
-      - image: centos:7.7.1908
+      - image: centos:7
     environment: *environment
     steps:
       - run:
@@ -180,7 +180,7 @@ jobs:
 
   debian9:
     docker:
-      - image: debian:9.11
+      - image: debian:9
     environment: *environment
     steps:
       - run:
@@ -203,7 +203,7 @@ jobs:
 
   debian10:
     docker:
-      - image: debian:10.2
+      - image: debian:10
     environment: *environment
     steps:
       - run:
