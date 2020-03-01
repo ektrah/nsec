@@ -18,9 +18,6 @@ workflows:
       - debian10:
           requires:
             - macos10.13
-      - fedora29:
-          requires:
-            - macos10.13
       - fedora30:
           requires:
             - macos10.13
@@ -223,27 +220,6 @@ jobs:
       - *save-cache
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-
-  fedora29:
-    docker:
-      - image: fedora:29
-    environment: *environment
-    steps:
-      - run:
-          name: Install Prerequisites
-          no_output_timeout: 2m
-          command: dnf install -q -y curl ca-certificates findutils ncurses libicu compat-openssl10
-      - *dotnet-install-2-1
-      - *dotnet-install-3-1
-      - checkout
-      - *generate-restore-graph
-      - *restore-cache
-      - *dotnet-restore
-      - *save-cache
-      - *dotnet-test-debug-3-1
-      - *dotnet-test-release-3-1
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
 
   fedora30:
     docker:
