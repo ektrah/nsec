@@ -74,7 +74,7 @@ shared:
       keys:
         - 'linux-nuget-packages-{{ checksum "/tmp/restore.json" }}'
         - 'linux-nuget-packages'
-  restore-cache: &restore-cache-alpine
+  restore-cache-alpine: &restore-cache-alpine
     restore_cache:
       keys:
         - 'alpine-nuget-packages-{{ checksum "/tmp/restore.json" }}'
@@ -94,7 +94,7 @@ shared:
       key: 'linux-nuget-packages-{{ checksum "/tmp/restore.json" }}'
       paths:
         - ~/.nuget/packages
-  save-cache: &save-cache-alpine
+  save-cache-alpine: &save-cache-alpine
     save_cache:
       key: 'alpine-nuget-packages-{{ checksum "/tmp/restore.json" }}'
       paths:
