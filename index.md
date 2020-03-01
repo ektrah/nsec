@@ -43,7 +43,7 @@ and verify the signature:
 
 ## Installation
 
-    $ dotnet add package NSec.Cryptography --version 20.1.0-preview2
+    $ dotnet add package NSec.Cryptography --version 20.2.0
 
 NSec works with .NET Core 3.1 and 2.1 on Windows, Linux and macOS.
 
