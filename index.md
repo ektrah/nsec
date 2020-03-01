@@ -45,7 +45,7 @@ and verify the signature:
 
     $ dotnet add package NSec.Cryptography --version 20.1.0-preview2
 
-NSec works with .NET Core 3.1, 3.0 and 2.1 on Windows, Linux and macOS.
+NSec works with .NET Core 3.1 and 2.1 on Windows, Linux and macOS.
 
 See [[Installation]] for more information.
 
