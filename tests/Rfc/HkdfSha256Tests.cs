@@ -22,11 +22,11 @@ namespace NSec.Tests.Rfc
         {
             var a = KeyDerivationAlgorithm.HkdfSha256;
 
-            using (var s = SharedSecret.Import(ikm.DecodeHex()))
-            {
-                var actualOkm = a.DeriveBytes(s, salt.DecodeHex(), info.DecodeHex(), expectedOkm.DecodeHex().Length);
-                Assert.Equal(expectedOkm.DecodeHex(), actualOkm);
-            }
+            using var s = SharedSecret.Import(ikm.DecodeHex());
+
+            var actualOkm = a.DeriveBytes(s, salt.DecodeHex(), info.DecodeHex(), expectedOkm.DecodeHex().Length);
+
+            Assert.Equal(expectedOkm.DecodeHex(), actualOkm);
         }
 
         [Theory]
@@ -35,14 +35,13 @@ namespace NSec.Tests.Rfc
         {
             var a = KeyDerivationAlgorithm.HkdfSha256;
 
-            using (var s = SharedSecret.Import(ikm.DecodeHex()))
-            {
-                var actualPrk = a.Extract(s, salt.DecodeHex());
-                Assert.Equal(expectedPrk.DecodeHex(), actualPrk);
+            using var s = SharedSecret.Import(ikm.DecodeHex());
 
-                var actualOkm = a.Expand(actualPrk, info.DecodeHex(), expectedOkm.DecodeHex().Length);
-                Assert.Equal(expectedOkm.DecodeHex(), actualOkm);
-            }
+            var actualPrk = a.Extract(s, salt.DecodeHex());
+            Assert.Equal(expectedPrk.DecodeHex(), actualPrk);
+
+            var actualOkm = a.Expand(actualPrk, info.DecodeHex(), expectedOkm.DecodeHex().Length);
+            Assert.Equal(expectedOkm.DecodeHex(), actualOkm);
         }
     }
 }

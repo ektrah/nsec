@@ -563,13 +563,12 @@ namespace NSec.Tests.Algorithms
 
             var a = KeyDerivationAlgorithm.HkdfSha512;
 
-            using (var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty))
-            {
-                var expected = a.Extract(s, new byte[HashLen]);
-                var actual = a.Extract(s, ReadOnlySpan<byte>.Empty);
+            using var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty);
 
-                Assert.Equal(expected, actual);
-            }
+            var expected = a.Extract(s, new byte[HashLen]);
+            var actual = a.Extract(s, ReadOnlySpan<byte>.Empty);
+
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -577,14 +576,13 @@ namespace NSec.Tests.Algorithms
         {
             var a = KeyDerivationAlgorithm.HkdfSha512;
 
-            using (var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty))
-            {
-                var expected = s_prkForEmpty.DecodeHex();
-                var actual = a.Extract(s, ReadOnlySpan<byte>.Empty);
+            using var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty);
 
-                Assert.Equal(expected, actual);
-                Assert.Equal(a.PseudorandomKeySize, actual.Length);
-            }
+            var expected = s_prkForEmpty.DecodeHex();
+            var actual = a.Extract(s, ReadOnlySpan<byte>.Empty);
+
+            Assert.Equal(expected, actual);
+            Assert.Equal(a.PseudorandomKeySize, actual.Length);
         }
 
         #endregion
@@ -604,10 +602,9 @@ namespace NSec.Tests.Algorithms
         {
             var a = KeyDerivationAlgorithm.HkdfSha512;
 
-            using (var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty))
-            {
-                Assert.Throws<ArgumentException>("pseudorandomKey", () => a.Extract(s, ReadOnlySpan<byte>.Empty, new byte[a.PseudorandomKeySize - 1]));
-            }
+            using var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty);
+
+            Assert.Throws<ArgumentException>("pseudorandomKey", () => a.Extract(s, ReadOnlySpan<byte>.Empty, new byte[a.PseudorandomKeySize - 1]));
         }
 
         [Fact]
@@ -615,10 +612,9 @@ namespace NSec.Tests.Algorithms
         {
             var a = KeyDerivationAlgorithm.HkdfSha512;
 
-            using (var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty))
-            {
-                Assert.Throws<ArgumentException>("pseudorandomKey", () => a.Extract(s, ReadOnlySpan<byte>.Empty, new byte[a.PseudorandomKeySize + 1]));
-            }
+            using var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty);
+
+            Assert.Throws<ArgumentException>("pseudorandomKey", () => a.Extract(s, ReadOnlySpan<byte>.Empty, new byte[a.PseudorandomKeySize + 1]));
         }
 
         [Fact]
@@ -628,16 +624,15 @@ namespace NSec.Tests.Algorithms
 
             var a = KeyDerivationAlgorithm.HkdfSha512;
 
-            using (var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty))
-            {
-                var expected = new byte[a.PseudorandomKeySize];
-                var actual = new byte[expected.Length];
+            using var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty);
 
-                a.Extract(s, new byte[HashLen], expected);
-                a.Extract(s, ReadOnlySpan<byte>.Empty, actual);
+            var expected = new byte[a.PseudorandomKeySize];
+            var actual = new byte[expected.Length];
 
-                Assert.Equal(expected, actual);
-            }
+            a.Extract(s, new byte[HashLen], expected);
+            a.Extract(s, ReadOnlySpan<byte>.Empty, actual);
+
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -645,16 +640,15 @@ namespace NSec.Tests.Algorithms
         {
             var a = KeyDerivationAlgorithm.HkdfSha512;
 
-            using (var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty))
-            {
-                var expected = new byte[a.PseudorandomKeySize];
-                var actual = Utilities.RandomBytes.Slice(0, a.PseudorandomKeySize).ToArray();
+            using var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty);
 
-                a.Extract(s, actual, expected);
-                a.Extract(s, actual, actual);
+            var expected = new byte[a.PseudorandomKeySize];
+            var actual = Utilities.RandomBytes.Slice(0, a.PseudorandomKeySize).ToArray();
 
-                Assert.Equal(expected, actual);
-            }
+            a.Extract(s, actual, expected);
+            a.Extract(s, actual, actual);
+
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -662,15 +656,14 @@ namespace NSec.Tests.Algorithms
         {
             var a = KeyDerivationAlgorithm.HkdfSha512;
 
-            using (var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty))
-            {
-                var expected = s_prkForEmpty.DecodeHex();
-                var actual = new byte[expected.Length];
+            using var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty);
 
-                a.Extract(s, ReadOnlySpan<byte>.Empty, actual);
+            var expected = s_prkForEmpty.DecodeHex();
+            var actual = new byte[expected.Length];
 
-                Assert.Equal(expected, actual);
-            }
+            a.Extract(s, ReadOnlySpan<byte>.Empty, actual);
+
+            Assert.Equal(expected, actual);
         }
 
         #endregion
@@ -783,16 +776,15 @@ namespace NSec.Tests.Algorithms
             var a = KeyDerivationAlgorithm.HkdfSha512;
             var x = KeyAgreementAlgorithm.X25519;
 
-            using (var k = new Key(x))
-            using (var s = x.Agree(k, k.PublicKey)!)
-            {
-                var b = new byte[200];
+            using var k = new Key(x);
+            using var s = x.Agree(k, k.PublicKey)!;
 
-                var prk = a.Extract(s, ReadOnlySpan<byte>.Empty);
+            var b = new byte[200];
 
-                Assert.Throws<ArgumentException>("bytes", () => a.Expand(prk, b.AsSpan(10, 100), b.AsSpan(60, 100)));
-                Assert.Throws<ArgumentException>("bytes", () => a.Expand(prk, b.AsSpan(60, 100), b.AsSpan(10, 100)));
-            }
+            var prk = a.Extract(s, ReadOnlySpan<byte>.Empty);
+
+            Assert.Throws<ArgumentException>("bytes", () => a.Expand(prk, b.AsSpan(10, 100), b.AsSpan(60, 100)));
+            Assert.Throws<ArgumentException>("bytes", () => a.Expand(prk, b.AsSpan(60, 100), b.AsSpan(10, 100)));
         }
 
         [Theory]

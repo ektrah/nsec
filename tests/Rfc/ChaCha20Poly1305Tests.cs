@@ -36,14 +36,13 @@ namespace NSec.Tests.Rfc
 
             var a = AeadAlgorithm.ChaCha20Poly1305;
 
-            using (var k = Key.Import(a, key.DecodeHex(), KeyBlobFormat.RawSymmetricKey))
-            {
-                var b = a.Encrypt(k, new Nonce(nonce.DecodeHex(), 0), aad.DecodeHex(), plaintext.DecodeHex());
-                Assert.Equal((ciphertext + tag).DecodeHex(), b);
+            using var k = Key.Import(a, key.DecodeHex(), KeyBlobFormat.RawSymmetricKey);
 
-                Assert.True(a.Decrypt(k, new Nonce(nonce.DecodeHex(), 0), aad.DecodeHex(), b, out var r));
-                Assert.Equal(plaintext.DecodeHex(), r);
-            }
+            var b = a.Encrypt(k, new Nonce(nonce.DecodeHex(), 0), aad.DecodeHex(), plaintext.DecodeHex());
+            Assert.Equal((ciphertext + tag).DecodeHex(), b);
+
+            Assert.True(a.Decrypt(k, new Nonce(nonce.DecodeHex(), 0), aad.DecodeHex(), b, out var r));
+            Assert.Equal(plaintext.DecodeHex(), r);
         }
     }
 }

@@ -23,16 +23,14 @@ namespace NSec.Tests.Rfc
 
             var p = PublicKey.Import(a, pk.DecodeHex(), KeyBlobFormat.RawPublicKey);
 
-            using (var k = Key.Import(a, sk.DecodeHex(), KeyBlobFormat.RawPrivateKey))
-            {
-                var m = msg.DecodeHex();
+            using var k = Key.Import(a, sk.DecodeHex(), KeyBlobFormat.RawPrivateKey);
+            var m = msg.DecodeHex();
 
-                var expected = sig.DecodeHex();
-                var actual = a.Sign(k, m);
-                Assert.Equal(expected, actual);
+            var expected = sig.DecodeHex();
+            var actual = a.Sign(k, m);
+            Assert.Equal(expected, actual);
 
-                Assert.True(a.Verify(p, m, expected));
-            }
+            Assert.True(a.Verify(p, m, expected));
         }
     }
 }

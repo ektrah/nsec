@@ -11,11 +11,9 @@ namespace NSec.Tests.Core
         [Fact]
         public static void ImportEmpty()
         {
-            using (var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty))
-            {
-                Assert.NotNull(s);
-                Assert.Equal(0, s.Size);
-            }
+            using var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty);
+            Assert.NotNull(s);
+            Assert.Equal(0, s.Size);
         }
 
         [Fact]
@@ -23,11 +21,9 @@ namespace NSec.Tests.Core
         {
             var b = Utilities.RandomBytes.Slice(0, 57);
 
-            using (var s = SharedSecret.Import(b))
-            {
-                Assert.NotNull(s);
-                Assert.Equal(b.Length, s.Size);
-            }
+            using var s = SharedSecret.Import(b);
+            Assert.NotNull(s);
+            Assert.Equal(b.Length, s.Size);
         }
 
         [Fact]
@@ -35,11 +31,9 @@ namespace NSec.Tests.Core
         {
             var b = new byte[64];
 
-            using (var s = SharedSecret.Import(b))
-            {
-                Assert.NotNull(s);
-                Assert.Equal(b.Length, s.Size);
-            }
+            using var s = SharedSecret.Import(b);
+            Assert.NotNull(s);
+            Assert.Equal(b.Length, s.Size);
         }
 
         [Fact]

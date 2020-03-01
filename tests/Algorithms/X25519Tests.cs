@@ -57,18 +57,17 @@ namespace NSec.Tests.Algorithms
             pk1[pk1.Length - 1] &= 0x7F;
             pk2[pk2.Length - 1] |= 0x80;
 
-            using (var k = Key.Import(a, privateKey.DecodeHex(), KeyBlobFormat.RawPrivateKey))
-            using (var sharedSecretExpected = SharedSecret.Import(sharedSecret.DecodeHex()))
-            using (var sharedSecretActual1 = a.Agree(k, PublicKey.Import(a, pk1, KeyBlobFormat.RawPublicKey)) ?? throw new Xunit.Sdk.NotNullException())
-            using (var sharedSecretActual2 = a.Agree(k, PublicKey.Import(a, pk2, KeyBlobFormat.RawPublicKey)) ?? throw new Xunit.Sdk.NotNullException())
-            {
-                var expected = kdf.Extract(sharedSecretExpected, ReadOnlySpan<byte>.Empty);
-                var actual1 = kdf.Extract(sharedSecretActual1, ReadOnlySpan<byte>.Empty);
-                var actual2 = kdf.Extract(sharedSecretActual2, ReadOnlySpan<byte>.Empty);
+            using var k = Key.Import(a, privateKey.DecodeHex(), KeyBlobFormat.RawPrivateKey);
+            using var sharedSecretExpected = SharedSecret.Import(sharedSecret.DecodeHex());
+            using var sharedSecretActual1 = a.Agree(k, PublicKey.Import(a, pk1, KeyBlobFormat.RawPublicKey)) ?? throw new Xunit.Sdk.NotNullException();
+            using var sharedSecretActual2 = a.Agree(k, PublicKey.Import(a, pk2, KeyBlobFormat.RawPublicKey)) ?? throw new Xunit.Sdk.NotNullException();
 
-                Assert.Equal(expected, actual1);
-                Assert.Equal(expected, actual2);
-            }
+            var expected = kdf.Extract(sharedSecretExpected, ReadOnlySpan<byte>.Empty);
+            var actual1 = kdf.Extract(sharedSecretActual1, ReadOnlySpan<byte>.Empty);
+            var actual2 = kdf.Extract(sharedSecretActual2, ReadOnlySpan<byte>.Empty);
+
+            Assert.Equal(expected, actual1);
+            Assert.Equal(expected, actual2);
         }
 
         #endregion
@@ -105,10 +104,9 @@ namespace NSec.Tests.Algorithms
 
             var pk = PublicKey.Import(a, publicKey.DecodeHex(), KeyBlobFormat.RawPublicKey);
 
-            using (var k = Key.Import(a, privateKey.DecodeHex(), KeyBlobFormat.RawPrivateKey))
-            {
-                Assert.Null(a.Agree(k, pk));
-            }
+            using var k = Key.Import(a, privateKey.DecodeHex(), KeyBlobFormat.RawPrivateKey);
+
+            Assert.Null(a.Agree(k, pk));
         }
 
         [Theory]
@@ -118,15 +116,14 @@ namespace NSec.Tests.Algorithms
             var a = KeyAgreementAlgorithm.X25519;
             var kdf = KeyDerivationAlgorithm.HkdfSha256;
 
-            using (var k = Key.Import(a, privateKey.DecodeHex(), KeyBlobFormat.RawPrivateKey))
-            using (var sharedSecretExpected = SharedSecret.Import(sharedSecret.DecodeHex()))
-            using (var sharedSecretActual = a.Agree(k, PublicKey.Import(a, publicKey.DecodeHex(), KeyBlobFormat.RawPublicKey)) ?? throw new Xunit.Sdk.NotNullException())
-            {
-                var expected = kdf.Extract(sharedSecretExpected, ReadOnlySpan<byte>.Empty);
-                var actual = kdf.Extract(sharedSecretActual, ReadOnlySpan<byte>.Empty);
+            using var k = Key.Import(a, privateKey.DecodeHex(), KeyBlobFormat.RawPrivateKey);
+            using var sharedSecretExpected = SharedSecret.Import(sharedSecret.DecodeHex());
+            using var sharedSecretActual = a.Agree(k, PublicKey.Import(a, publicKey.DecodeHex(), KeyBlobFormat.RawPublicKey)) ?? throw new Xunit.Sdk.NotNullException();
 
-                Assert.Equal(expected, actual);
-            }
+            var expected = kdf.Extract(sharedSecretExpected, ReadOnlySpan<byte>.Empty);
+            var actual = kdf.Extract(sharedSecretActual, ReadOnlySpan<byte>.Empty);
+
+            Assert.Equal(expected, actual);
         }
 
         #endregion

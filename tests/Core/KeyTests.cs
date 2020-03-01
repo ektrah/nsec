@@ -20,30 +20,26 @@ namespace NSec.Tests.Core
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
         public static void PropertiesAsymmetric(Algorithm a)
         {
-            using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }))
-            {
-                Assert.Same(a, k.Algorithm);
-                Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
-                Assert.True(k.HasPublicKey);
-                Assert.NotNull(k.PublicKey);
-                Assert.Same(a, k.PublicKey.Algorithm);
-                Assert.True(k.PublicKey.Size > 0);
-                Assert.True(k.Size > 0);
-            }
+            using var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None });
+            Assert.Same(a, k.Algorithm);
+            Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
+            Assert.True(k.HasPublicKey);
+            Assert.NotNull(k.PublicKey);
+            Assert.Same(a, k.PublicKey.Algorithm);
+            Assert.True(k.PublicKey.Size > 0);
+            Assert.True(k.Size > 0);
         }
 
         [Theory]
         [MemberData(nameof(SymmetricKeyAlgorithms))]
         public static void PropertiesSymmetric(Algorithm a)
         {
-            using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }))
-            {
-                Assert.Same(a, k.Algorithm);
-                Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
-                Assert.False(k.HasPublicKey);
-                Assert.Throws<InvalidOperationException>(() => k.PublicKey);
-                Assert.True(k.Size > 0);
-            }
+            using var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None });
+            Assert.Same(a, k.Algorithm);
+            Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
+            Assert.False(k.HasPublicKey);
+            Assert.Throws<InvalidOperationException>(() => k.PublicKey);
+            Assert.True(k.Size > 0);
         }
 
         [Theory]
@@ -196,12 +192,10 @@ namespace NSec.Tests.Core
         [MemberData(nameof(SymmetricKeyAlgorithms))]
         public static void ExportWithFormatMin(Algorithm a)
         {
-            using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport }))
-            {
-                Assert.Equal(KeyExportPolicies.AllowPlaintextExport, k.ExportPolicy);
+            using var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport });
+            Assert.Equal(KeyExportPolicies.AllowPlaintextExport, k.ExportPolicy);
 
-                Assert.Throws<ArgumentException>("format", () => k.Export((KeyBlobFormat)int.MinValue));
-            }
+            Assert.Throws<ArgumentException>("format", () => k.Export((KeyBlobFormat)int.MinValue));
         }
 
         [Theory]
@@ -209,26 +203,22 @@ namespace NSec.Tests.Core
         [MemberData(nameof(SymmetricKeyAlgorithms))]
         public static void ExportWithFormatMax(Algorithm a)
         {
-            using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }))
-            {
-                Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
+            using var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None });
+            Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
 
-                Assert.Throws<ArgumentException>("format", () => k.Export((KeyBlobFormat)int.MaxValue));
-            }
+            Assert.Throws<ArgumentException>("format", () => k.Export((KeyBlobFormat)int.MaxValue));
         }
 
         [Theory]
         [MemberData(nameof(PublicKeyBlobFormats))]
         public static void ExportPublicKey(Algorithm a, KeyBlobFormat format)
         {
-            using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }))
-            {
-                Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
+            using var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None });
+            Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
 
-                Assert.NotNull(k.Export(format));
-                Assert.NotNull(k.Export(format));
-                Assert.NotNull(k.Export(format));
-            }
+            Assert.NotNull(k.Export(format));
+            Assert.NotNull(k.Export(format));
+            Assert.NotNull(k.Export(format));
         }
 
         [Theory]
@@ -236,14 +226,12 @@ namespace NSec.Tests.Core
         [MemberData(nameof(SymmetricKeyBlobFormats))]
         public static void ExportKeyNotAllowed(Algorithm a, KeyBlobFormat format)
         {
-            using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }))
-            {
-                Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
+            using var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None });
+            Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
 
-                Assert.Throws<InvalidOperationException>(() => k.Export(format));
-                Assert.Throws<InvalidOperationException>(() => k.Export(format));
-                Assert.Throws<InvalidOperationException>(() => k.Export(format));
-            }
+            Assert.Throws<InvalidOperationException>(() => k.Export(format));
+            Assert.Throws<InvalidOperationException>(() => k.Export(format));
+            Assert.Throws<InvalidOperationException>(() => k.Export(format));
         }
 
         [Theory]
@@ -251,14 +239,12 @@ namespace NSec.Tests.Core
         [MemberData(nameof(SymmetricKeyBlobFormats))]
         public static void ExportKeyExportAllowed(Algorithm a, KeyBlobFormat format)
         {
-            using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport }))
-            {
-                Assert.Equal(KeyExportPolicies.AllowPlaintextExport, k.ExportPolicy);
+            using var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport });
+            Assert.Equal(KeyExportPolicies.AllowPlaintextExport, k.ExportPolicy);
 
-                Assert.NotNull(k.Export(format));
-                Assert.NotNull(k.Export(format));
-                Assert.NotNull(k.Export(format));
-            }
+            Assert.NotNull(k.Export(format));
+            Assert.NotNull(k.Export(format));
+            Assert.NotNull(k.Export(format));
         }
 
         [Theory]
@@ -266,14 +252,12 @@ namespace NSec.Tests.Core
         [MemberData(nameof(SymmetricKeyBlobFormats))]
         public static void ExportPrivateKeyArchivingAllowed(Algorithm a, KeyBlobFormat format)
         {
-            using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
-            {
-                Assert.Equal(KeyExportPolicies.AllowPlaintextArchiving, k.ExportPolicy);
+            using var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving });
+            Assert.Equal(KeyExportPolicies.AllowPlaintextArchiving, k.ExportPolicy);
 
-                Assert.NotNull(k.Export(format));
-                Assert.Throws<InvalidOperationException>(() => k.Export(format));
-                Assert.Throws<InvalidOperationException>(() => k.Export(format));
-            }
+            Assert.NotNull(k.Export(format));
+            Assert.Throws<InvalidOperationException>(() => k.Export(format));
+            Assert.Throws<InvalidOperationException>(() => k.Export(format));
         }
 
         [Theory]
@@ -337,14 +321,13 @@ namespace NSec.Tests.Core
         [MemberData(nameof(PrivateKeyBlobFormats))]
         public static void GetExportBlobSize(Algorithm a, KeyBlobFormat format)
         {
-            using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport }))
-            {
-                var b = k.Export(format);
-                Assert.NotNull(b);
+            using var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport });
 
-                var blobSize = k.GetExportBlobSize(format);
-                Assert.Equal(b.Length, blobSize);
-            }
+            var b = k.Export(format);
+            Assert.NotNull(b);
+
+            var blobSize = k.GetExportBlobSize(format);
+            Assert.Equal(b.Length, blobSize);
         }
 
         #endregion
@@ -356,12 +339,10 @@ namespace NSec.Tests.Core
         [MemberData(nameof(SymmetricKeyAlgorithms))]
         public static void TryExportWithFormatMin(Algorithm a)
         {
-            using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport }))
-            {
-                Assert.Equal(KeyExportPolicies.AllowPlaintextExport, k.ExportPolicy);
+            using var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport });
+            Assert.Equal(KeyExportPolicies.AllowPlaintextExport, k.ExportPolicy);
 
-                Assert.Throws<ArgumentException>("format", () => k.TryExport((KeyBlobFormat)int.MinValue, Span<byte>.Empty, out _));
-            }
+            Assert.Throws<ArgumentException>("format", () => k.TryExport((KeyBlobFormat)int.MinValue, Span<byte>.Empty, out _));
         }
 
         [Theory]
@@ -369,34 +350,30 @@ namespace NSec.Tests.Core
         [MemberData(nameof(SymmetricKeyAlgorithms))]
         public static void TryExportWithFormatMax(Algorithm a)
         {
-            using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }))
-            {
-                Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
+            using var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None });
+            Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
 
-                Assert.Throws<ArgumentException>("format", () => k.TryExport((KeyBlobFormat)int.MaxValue, Span<byte>.Empty, out _));
-            }
+            Assert.Throws<ArgumentException>("format", () => k.TryExport((KeyBlobFormat)int.MaxValue, Span<byte>.Empty, out _));
         }
 
         [Theory]
         [MemberData(nameof(PublicKeyBlobFormats))]
         public static void TryExportPublicKey(Algorithm a, KeyBlobFormat format)
         {
-            using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }))
-            {
-                Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
+            using var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None });
+            Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
 
-                var expected = k.GetExportBlobSize(format);
-                var b = new byte[expected + 100];
+            var expected = k.GetExportBlobSize(format);
+            var b = new byte[expected + 100];
 
-                Assert.True(k.TryExport(format, b, out var actual));
-                Assert.Equal(expected, actual);
+            Assert.True(k.TryExport(format, b, out var actual));
+            Assert.Equal(expected, actual);
 
-                Assert.True(k.TryExport(format, b, out actual));
-                Assert.Equal(expected, actual);
+            Assert.True(k.TryExport(format, b, out actual));
+            Assert.Equal(expected, actual);
 
-                Assert.True(k.TryExport(format, b, out actual));
-                Assert.Equal(expected, actual);
-            }
+            Assert.True(k.TryExport(format, b, out actual));
+            Assert.Equal(expected, actual);
         }
 
         [Theory]
@@ -404,17 +381,15 @@ namespace NSec.Tests.Core
         [MemberData(nameof(SymmetricKeyBlobFormats))]
         public static void TryExportKeyNotAllowed(Algorithm a, KeyBlobFormat format)
         {
-            using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }))
-            {
-                Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
+            using var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None });
+            Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
 
-                var expected = k.GetExportBlobSize(format);
-                var b = new byte[expected + 100];
+            var expected = k.GetExportBlobSize(format);
+            var b = new byte[expected + 100];
 
-                Assert.Throws<InvalidOperationException>(() => k.TryExport(format, b, out _));
-                Assert.Throws<InvalidOperationException>(() => k.TryExport(format, b, out _));
-                Assert.Throws<InvalidOperationException>(() => k.TryExport(format, b, out _));
-            }
+            Assert.Throws<InvalidOperationException>(() => k.TryExport(format, b, out _));
+            Assert.Throws<InvalidOperationException>(() => k.TryExport(format, b, out _));
+            Assert.Throws<InvalidOperationException>(() => k.TryExport(format, b, out _));
         }
 
         [Theory]
@@ -422,22 +397,20 @@ namespace NSec.Tests.Core
         [MemberData(nameof(SymmetricKeyBlobFormats))]
         public static void TryExportKeyExportAllowed(Algorithm a, KeyBlobFormat format)
         {
-            using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport }))
-            {
-                Assert.Equal(KeyExportPolicies.AllowPlaintextExport, k.ExportPolicy);
+            using var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport });
+            Assert.Equal(KeyExportPolicies.AllowPlaintextExport, k.ExportPolicy);
 
-                var expected = k.GetExportBlobSize(format);
-                var b = new byte[expected + 100];
+            var expected = k.GetExportBlobSize(format);
+            var b = new byte[expected + 100];
 
-                Assert.True(k.TryExport(format, b, out var actual));
-                Assert.Equal(expected, actual);
+            Assert.True(k.TryExport(format, b, out var actual));
+            Assert.Equal(expected, actual);
 
-                Assert.True(k.TryExport(format, b, out actual));
-                Assert.Equal(expected, actual);
+            Assert.True(k.TryExport(format, b, out actual));
+            Assert.Equal(expected, actual);
 
-                Assert.True(k.TryExport(format, b, out actual));
-                Assert.Equal(expected, actual);
-            }
+            Assert.True(k.TryExport(format, b, out actual));
+            Assert.Equal(expected, actual);
         }
 
         [Theory]
@@ -445,19 +418,17 @@ namespace NSec.Tests.Core
         [MemberData(nameof(SymmetricKeyBlobFormats))]
         public static void TryExportPrivateKeyArchivingAllowed(Algorithm a, KeyBlobFormat format)
         {
-            using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
-            {
-                Assert.Equal(KeyExportPolicies.AllowPlaintextArchiving, k.ExportPolicy);
+            using var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving });
+            Assert.Equal(KeyExportPolicies.AllowPlaintextArchiving, k.ExportPolicy);
 
-                var expected = k.GetExportBlobSize(format);
-                var b = new byte[expected + 100];
+            var expected = k.GetExportBlobSize(format);
+            var b = new byte[expected + 100];
 
-                Assert.True(k.TryExport(format, b, out var actual));
-                Assert.Equal(expected, actual);
+            Assert.True(k.TryExport(format, b, out var actual));
+            Assert.Equal(expected, actual);
 
-                Assert.Throws<InvalidOperationException>(() => k.TryExport(format, b, out _));
-                Assert.Throws<InvalidOperationException>(() => k.TryExport(format, b, out _));
-            }
+            Assert.Throws<InvalidOperationException>(() => k.TryExport(format, b, out _));
+            Assert.Throws<InvalidOperationException>(() => k.TryExport(format, b, out _));
         }
 
         [Theory]

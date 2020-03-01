@@ -215,12 +215,10 @@ namespace NSec.Tests.Core
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
         public static void GenerateKeyWithAlgorithm(Algorithm a)
         {
-            using (var key = RandomGenerator.Default.GenerateKey(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None }))
-            {
-                Assert.NotNull(key);
-                Assert.Same(a, key.Algorithm);
-                Assert.Equal(KeyExportPolicies.None, key.ExportPolicy);
-            }
+            using var key = RandomGenerator.Default.GenerateKey(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None });
+            Assert.NotNull(key);
+            Assert.Same(a, key.Algorithm);
+            Assert.Equal(KeyExportPolicies.None, key.ExportPolicy);
         }
 
         [Theory]

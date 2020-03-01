@@ -33,16 +33,14 @@ namespace NSec.Tests.Rfc
         {
             var a = MacAlgorithm.HmacSha512;
 
-            using (var k = Key.Import(a, key.DecodeHex(), KeyBlobFormat.RawSymmetricKey))
-            {
-                var m = msg.DecodeHex();
+            using var k = Key.Import(a, key.DecodeHex(), KeyBlobFormat.RawSymmetricKey);
+            var m = msg.DecodeHex();
 
-                var expected = mac.DecodeHex();
-                var actual = a.Mac(k, m);
-                Assert.Equal(expected, actual);
+            var expected = mac.DecodeHex();
+            var actual = a.Mac(k, m);
+            Assert.Equal(expected, actual);
 
-                Assert.True(a.Verify(k, m, expected));
-            }
+            Assert.True(a.Verify(k, m, expected));
         }
     }
 }

@@ -53,10 +53,8 @@ namespace NSec.Experimental.PasswordBased
             in Nonce nonce,
             ReadOnlySpan<byte> plaintext)
         {
-            using (Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _encryptionAlgorithm))
-            {
-                return _encryptionAlgorithm.Encrypt(key, nonce, default, plaintext);
-            }
+            using Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _encryptionAlgorithm);
+            return _encryptionAlgorithm.Encrypt(key, nonce, default, plaintext);
         }
 
         public void Encrypt(
@@ -66,10 +64,8 @@ namespace NSec.Experimental.PasswordBased
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext)
         {
-            using (Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _encryptionAlgorithm))
-            {
-                _encryptionAlgorithm.Encrypt(key, nonce, default, plaintext, ciphertext);
-            }
+            using Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _encryptionAlgorithm);
+            _encryptionAlgorithm.Encrypt(key, nonce, default, plaintext, ciphertext);
         }
 
         public bool Decrypt(
@@ -79,10 +75,8 @@ namespace NSec.Experimental.PasswordBased
             ReadOnlySpan<byte> ciphertext,
             out byte[]? plaintext)
         {
-            using (Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _encryptionAlgorithm))
-            {
-                return _encryptionAlgorithm.Decrypt(key, nonce, default, ciphertext, out plaintext);
-            }
+            using Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _encryptionAlgorithm);
+            return _encryptionAlgorithm.Decrypt(key, nonce, default, ciphertext, out plaintext);
         }
 
         public bool Decrypt(
@@ -92,10 +86,8 @@ namespace NSec.Experimental.PasswordBased
             ReadOnlySpan<byte> ciphertext,
             Span<byte> plaintext)
         {
-            using (Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _encryptionAlgorithm))
-            {
-                return _encryptionAlgorithm.Decrypt(key, nonce, default, ciphertext, plaintext);
-            }
+            using Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _encryptionAlgorithm);
+            return _encryptionAlgorithm.Decrypt(key, nonce, default, ciphertext, plaintext);
         }
     }
 }

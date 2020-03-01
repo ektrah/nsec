@@ -43,23 +43,21 @@ namespace NSec.Tests.Base
         [MemberData(nameof(SignatureAlgorithms))]
         public static void SignWithWrongKey(SignatureAlgorithm a)
         {
-            using (var k = new Key(KeyAgreementAlgorithm.X25519))
-            {
-                Assert.Throws<ArgumentException>("key", () => a.Sign(k, ReadOnlySpan<byte>.Empty));
-            }
+            using var k = new Key(KeyAgreementAlgorithm.X25519);
+
+            Assert.Throws<ArgumentException>("key", () => a.Sign(k, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(SignatureAlgorithms))]
         public static void SignSuccess(SignatureAlgorithm a)
         {
-            using (var k = new Key(a))
-            {
-                var b = a.Sign(k, ReadOnlySpan<byte>.Empty);
+            using var k = new Key(a);
 
-                Assert.NotNull(b);
-                Assert.Equal(a.SignatureSize, b.Length);
-            }
+            var b = a.Sign(k, ReadOnlySpan<byte>.Empty);
+
+            Assert.NotNull(b);
+            Assert.Equal(a.SignatureSize, b.Length);
         }
 
         #endregion
@@ -86,30 +84,27 @@ namespace NSec.Tests.Base
         [MemberData(nameof(SignatureAlgorithms))]
         public static void SignWithSpanWithWrongKey(SignatureAlgorithm a)
         {
-            using (var k = new Key(KeyAgreementAlgorithm.X25519))
-            {
-                Assert.Throws<ArgumentException>("key", () => a.Sign(k, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
-            }
+            using var k = new Key(KeyAgreementAlgorithm.X25519);
+
+            Assert.Throws<ArgumentException>("key", () => a.Sign(k, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(SignatureAlgorithms))]
         public static void SignWithSpanWrongSize(SignatureAlgorithm a)
         {
-            using (var k = new Key(a))
-            {
-                Assert.Throws<ArgumentException>("signature", () => a.Sign(k, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
-            }
+            using var k = new Key(a);
+
+            Assert.Throws<ArgumentException>("signature", () => a.Sign(k, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(SignatureAlgorithms))]
         public static void SignWithSpanSuccess(SignatureAlgorithm a)
         {
-            using (var k = new Key(a))
-            {
-                a.Sign(k, ReadOnlySpan<byte>.Empty, new byte[a.SignatureSize]);
-            }
+            using var k = new Key(a);
+
+            a.Sign(k, ReadOnlySpan<byte>.Empty, new byte[a.SignatureSize]);
         }
 
         #endregion
@@ -127,35 +122,32 @@ namespace NSec.Tests.Base
         [MemberData(nameof(SignatureAlgorithms))]
         public static void VerifyWithWrongKey(SignatureAlgorithm a)
         {
-            using (var k = new Key(KeyAgreementAlgorithm.X25519))
-            {
-                Assert.Throws<ArgumentException>("publicKey", () => a.Verify(k.PublicKey, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
-            }
+            using var k = new Key(KeyAgreementAlgorithm.X25519);
+
+            Assert.Throws<ArgumentException>("publicKey", () => a.Verify(k.PublicKey, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(SignatureAlgorithms))]
         public static void VerifyWithWrongSize(SignatureAlgorithm a)
         {
-            using (var k = new Key(a))
-            {
-                Assert.False(a.Verify(k.PublicKey, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
-            }
+            using var k = new Key(a);
+
+            Assert.False(a.Verify(k.PublicKey, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(SignatureAlgorithms))]
         public static void VerifySuccess(SignatureAlgorithm a)
         {
-            using (var k = new Key(a))
-            {
-                var s = a.Sign(k, ReadOnlySpan<byte>.Empty);
+            using var k = new Key(a);
 
-                Assert.NotNull(s);
-                Assert.Equal(a.SignatureSize, s.Length);
+            var s = a.Sign(k, ReadOnlySpan<byte>.Empty);
 
-                Assert.True(a.Verify(k.PublicKey, ReadOnlySpan<byte>.Empty, s));
-            }
+            Assert.NotNull(s);
+            Assert.Equal(a.SignatureSize, s.Length);
+
+            Assert.True(a.Verify(k.PublicKey, ReadOnlySpan<byte>.Empty, s));
         }
 
         #endregion
@@ -166,22 +158,20 @@ namespace NSec.Tests.Base
         [MemberData(nameof(SignatureAlgorithms))]
         public static void CreateKey(SignatureAlgorithm a)
         {
-            using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
-            {
-                Assert.Same(a, k.Algorithm);
-                Assert.True(k.HasPublicKey);
-                Assert.NotNull(k.PublicKey);
-                Assert.Same(a, k.PublicKey.Algorithm);
-                Assert.Equal(a.PublicKeySize, k.PublicKey.Size);
-                Assert.Equal(a.PrivateKeySize, k.Size);
+            using var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving });
+            Assert.Same(a, k.Algorithm);
+            Assert.True(k.HasPublicKey);
+            Assert.NotNull(k.PublicKey);
+            Assert.Same(a, k.PublicKey.Algorithm);
+            Assert.Equal(a.PublicKeySize, k.PublicKey.Size);
+            Assert.Equal(a.PrivateKeySize, k.Size);
 
-                var actual = k.Export(KeyBlobFormat.RawPrivateKey);
+            var actual = k.Export(KeyBlobFormat.RawPrivateKey);
 
-                var unexpected = new byte[actual.Length];
-                Utilities.Fill(unexpected, actual[0]);
+            var unexpected = new byte[actual.Length];
+            Utilities.Fill(unexpected, actual[0]);
 
-                Assert.NotEqual(unexpected, actual);
-            }
+            Assert.NotEqual(unexpected, actual);
         }
 
         #endregion

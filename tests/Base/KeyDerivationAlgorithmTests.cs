@@ -42,16 +42,17 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveBytesWithUnusedSalt(KeyDerivationAlgorithm a)
         {
-            if (!a.SupportsSalt)
-            {
-                var x = KeyAgreementAlgorithm.X25519;
+            var x = KeyAgreementAlgorithm.X25519;
 
-                using (var k = new Key(x))
-                using (var s = x.Agree(k, k.PublicKey)!)
-                {
-                    Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s, new byte[1], ReadOnlySpan<byte>.Empty, 0));
-                }
+            if (a.SupportsSalt)
+            {
+                return;
             }
+
+            using var k = new Key(x);
+            using var s = x.Agree(k, k.PublicKey)!;
+
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s, new byte[1], ReadOnlySpan<byte>.Empty, 0));
         }
 
         [Theory]
@@ -60,11 +61,10 @@ namespace NSec.Tests.Base
         {
             var x = KeyAgreementAlgorithm.X25519;
 
-            using (var k = new Key(x))
-            using (var s = x.Agree(k, k.PublicKey)!)
-            {
-                Assert.Throws<ArgumentOutOfRangeException>("count", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, -1));
-            }
+            using var k = new Key(x);
+            using var s = x.Agree(k, k.PublicKey)!;
+
+            Assert.Throws<ArgumentOutOfRangeException>("count", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, -1));
         }
 
         [Theory]
@@ -78,11 +78,10 @@ namespace NSec.Tests.Base
                 return;
             }
 
-            using (var k = new Key(x))
-            using (var s = x.Agree(k, k.PublicKey)!)
-            {
-                Assert.Throws<ArgumentOutOfRangeException>("count", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, a.MaxCount + 1));
-            }
+            using var k = new Key(x);
+            using var s = x.Agree(k, k.PublicKey)!;
+
+            Assert.Throws<ArgumentOutOfRangeException>("count", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, a.MaxCount + 1));
         }
 
         [Theory]
@@ -91,14 +90,13 @@ namespace NSec.Tests.Base
         {
             var x = KeyAgreementAlgorithm.X25519;
 
-            using (var k = new Key(x))
-            using (var s = x.Agree(k, k.PublicKey)!)
-            {
-                var b = a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, 0);
+            using var k = new Key(x);
+            using var s = x.Agree(k, k.PublicKey)!;
 
-                Assert.NotNull(b);
-                Assert.Empty(b);
-            }
+            var b = a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, 0);
+
+            Assert.NotNull(b);
+            Assert.Empty(b);
         }
 
         [Theory]
@@ -107,16 +105,14 @@ namespace NSec.Tests.Base
         {
             var x = KeyAgreementAlgorithm.X25519;
 
-            using (var k = new Key(x))
-            using (var s = x.Agree(k, k.PublicKey)!)
-            {
-                var count = Math.Min(a.MaxCount, 500173);
+            using var k = new Key(x);
+            using var s = x.Agree(k, k.PublicKey)!;
+            var count = Math.Min(a.MaxCount, 500173);
 
-                var b = a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, count);
+            var b = a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, count);
 
-                Assert.NotNull(b);
-                Assert.Equal(count, b.Length);
-            }
+            Assert.NotNull(b);
+            Assert.Equal(count, b.Length);
         }
 
         #endregion
@@ -150,11 +146,10 @@ namespace NSec.Tests.Base
 
             var x = KeyAgreementAlgorithm.X25519;
 
-            using (var k = new Key(x))
-            using (var s = x.Agree(k, k.PublicKey)!)
-            {
-                Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s, new byte[1], ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
-            }
+            using var k = new Key(x);
+            using var s = x.Agree(k, k.PublicKey)!;
+
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s, new byte[1], ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
@@ -168,14 +163,12 @@ namespace NSec.Tests.Base
                 return;
             }
 
-            using (var k = new Key(x))
-            using (var s = x.Agree(k, k.PublicKey)!)
-            {
-                var b = new byte[200];
+            using var k = new Key(x);
+            using var s = x.Agree(k, k.PublicKey)!;
+            var b = new byte[200];
 
-                Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, b.AsSpan(10, 100), ReadOnlySpan<byte>.Empty, b.AsSpan(60, 100)));
-                Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, b.AsSpan(60, 100), ReadOnlySpan<byte>.Empty, b.AsSpan(10, 100)));
-            }
+            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, b.AsSpan(10, 100), ReadOnlySpan<byte>.Empty, b.AsSpan(60, 100)));
+            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, b.AsSpan(60, 100), ReadOnlySpan<byte>.Empty, b.AsSpan(10, 100)));
         }
 
         [Theory]
@@ -184,14 +177,12 @@ namespace NSec.Tests.Base
         {
             var x = KeyAgreementAlgorithm.X25519;
 
-            using (var k = new Key(x))
-            using (var s = x.Agree(k, k.PublicKey)!)
-            {
-                var b = new byte[200];
+            using var k = new Key(x);
+            using var s = x.Agree(k, k.PublicKey)!;
+            var b = new byte[200];
 
-                Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, b.AsSpan(10, 100), b.AsSpan(60, 100)));
-                Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, b.AsSpan(60, 100), b.AsSpan(10, 100)));
-            }
+            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, b.AsSpan(10, 100), b.AsSpan(60, 100)));
+            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, b.AsSpan(60, 100), b.AsSpan(10, 100)));
         }
 
         [Theory]
@@ -205,11 +196,10 @@ namespace NSec.Tests.Base
                 return;
             }
 
-            using (var k = new Key(x))
-            using (var s = x.Agree(k, k.PublicKey)!)
-            {
-                Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[a.MaxCount + 1]));
-            }
+            using var k = new Key(x);
+            using var s = x.Agree(k, k.PublicKey)!;
+
+            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[a.MaxCount + 1]));
         }
 
         [Theory]
@@ -218,11 +208,10 @@ namespace NSec.Tests.Base
         {
             var x = KeyAgreementAlgorithm.X25519;
 
-            using (var k = new Key(x))
-            using (var s = x.Agree(k, k.PublicKey)!)
-            {
-                a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty);
-            }
+            using var k = new Key(x);
+            using var s = x.Agree(k, k.PublicKey)!;
+
+            a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty);
         }
 
         [Theory]
@@ -231,13 +220,11 @@ namespace NSec.Tests.Base
         {
             var x = KeyAgreementAlgorithm.X25519;
 
-            using (var k = new Key(x))
-            using (var s = x.Agree(k, k.PublicKey)!)
-            {
-                var count = Math.Min(a.MaxCount, 500173);
+            using var k = new Key(x);
+            using var s = x.Agree(k, k.PublicKey)!;
+            var count = Math.Min(a.MaxCount, 500173);
 
-                a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[count]);
-            }
+            a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[count]);
         }
 
         #endregion
@@ -264,16 +251,17 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveKeyWithUnusedSalt(KeyDerivationAlgorithm a)
         {
-            if (!a.SupportsSalt)
-            {
-                var x = KeyAgreementAlgorithm.X25519;
+            var x = KeyAgreementAlgorithm.X25519;
 
-                using (var k = new Key(x))
-                using (var s = x.Agree(k, k.PublicKey)!)
-                {
-                    Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(s, new byte[1], ReadOnlySpan<byte>.Empty, null!));
-                }
+            if (a.SupportsSalt)
+            {
+                return;
             }
+
+            using var k = new Key(x);
+            using var s = x.Agree(k, k.PublicKey)!;
+
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(s, new byte[1], ReadOnlySpan<byte>.Empty, null!));
         }
 
         [Theory]
@@ -282,11 +270,10 @@ namespace NSec.Tests.Base
         {
             var x = KeyAgreementAlgorithm.X25519;
 
-            using (var k = new Key(x))
-            using (var s = x.Agree(k, k.PublicKey)!)
-            {
-                Assert.Throws<ArgumentNullException>("algorithm", () => a.DeriveKey(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, null!));
-            }
+            using var k = new Key(x);
+            using var s = x.Agree(k, k.PublicKey)!;
+
+            Assert.Throws<ArgumentNullException>("algorithm", () => a.DeriveKey(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, null!));
         }
 
         [Theory]
@@ -296,13 +283,11 @@ namespace NSec.Tests.Base
             var x = KeyAgreementAlgorithm.X25519;
             var y = AeadAlgorithm.ChaCha20Poly1305;
 
-            using (var k = new Key(x))
-            using (var s = x.Agree(k, k.PublicKey)!)
-            using (var i = a.DeriveKey(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, y))
-            {
-                Assert.NotNull(k);
-                Assert.Same(y, i.Algorithm);
-            }
+            using var k = new Key(x);
+            using var s = x.Agree(k, k.PublicKey)!;
+            using var i = a.DeriveKey(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, y);
+            Assert.NotNull(k);
+            Assert.Same(y, i.Algorithm);
         }
 
         #endregion

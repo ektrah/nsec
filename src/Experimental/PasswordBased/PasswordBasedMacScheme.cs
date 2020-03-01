@@ -50,10 +50,8 @@ namespace NSec.Experimental.PasswordBased
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> data)
         {
-            using (Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _macAlgorithm))
-            {
-                return _macAlgorithm.Mac(key, data);
-            }
+            using Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _macAlgorithm);
+            return _macAlgorithm.Mac(key, data);
         }
 
         public void Mac(
@@ -62,10 +60,8 @@ namespace NSec.Experimental.PasswordBased
             ReadOnlySpan<byte> data,
             Span<byte> mac)
         {
-            using (Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _macAlgorithm))
-            {
-                _macAlgorithm.Mac(key, data, mac);
-            }
+            using Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _macAlgorithm);
+            _macAlgorithm.Mac(key, data, mac);
         }
 
         public bool TryVerify(
@@ -74,10 +70,8 @@ namespace NSec.Experimental.PasswordBased
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> mac)
         {
-            using (Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _macAlgorithm))
-            {
-                return _macAlgorithm.Verify(key, data, mac);
-            }
+            using Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _macAlgorithm);
+            return _macAlgorithm.Verify(key, data, mac);
         }
     }
 }

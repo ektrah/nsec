@@ -150,11 +150,9 @@ namespace NSec.Tests.Base
         {
             var x = AeadAlgorithm.ChaCha20Poly1305;
 
-            using (var k = a.DeriveKey(s_password, Utilities.RandomBytes.Slice(0, a.SaltSize), x))
-            {
-                Assert.NotNull(k);
-                Assert.Same(x, k.Algorithm);
-            }
+            using var k = a.DeriveKey(s_password, Utilities.RandomBytes.Slice(0, a.SaltSize), x);
+            Assert.NotNull(k);
+            Assert.Same(x, k.Algorithm);
         }
 
         #endregion

@@ -28,15 +28,13 @@ namespace NSec.Tests.Base
         {
             var b = Utilities.RandomBytes.Slice(0, a.KeySize);
 
-            using (var k = Key.Import(a, b, KeyBlobFormat.RawSymmetricKey, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
-            {
-                Assert.Equal(KeyExportPolicies.AllowPlaintextArchiving, k.ExportPolicy);
+            using var k = Key.Import(a, b, KeyBlobFormat.RawSymmetricKey, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving });
+            Assert.Equal(KeyExportPolicies.AllowPlaintextArchiving, k.ExportPolicy);
 
-                var expected = b.ToArray();
-                var actual = k.Export(KeyBlobFormat.RawSymmetricKey);
+            var expected = b.ToArray();
+            var actual = k.Export(KeyBlobFormat.RawSymmetricKey);
 
-                Assert.Equal(expected, actual);
-            }
+            Assert.Equal(expected, actual);
         }
 
         [Theory]
@@ -45,21 +43,18 @@ namespace NSec.Tests.Base
         {
             var b = Utilities.RandomBytes.Slice(0, a.KeySize);
 
-            using (var k1 = Key.Import(a, b, KeyBlobFormat.RawSymmetricKey, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
-            {
-                Assert.Equal(KeyExportPolicies.AllowPlaintextArchiving, k1.ExportPolicy);
+            using var k1 = Key.Import(a, b, KeyBlobFormat.RawSymmetricKey, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving });
+            Assert.Equal(KeyExportPolicies.AllowPlaintextArchiving, k1.ExportPolicy);
 
-                var n = k1.Export(KeyBlobFormat.NSecSymmetricKey);
-                Assert.NotNull(n);
+            var n = k1.Export(KeyBlobFormat.NSecSymmetricKey);
+            Assert.NotNull(n);
 
-                using (var k2 = Key.Import(a, n, KeyBlobFormat.NSecSymmetricKey, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
-                {
-                    var expected = b.ToArray();
-                    var actual = k2.Export(KeyBlobFormat.RawSymmetricKey);
+            using var k2 = Key.Import(a, n, KeyBlobFormat.NSecSymmetricKey, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving });
 
-                    Assert.Equal(expected, actual);
-                }
-            }
+            var expected = b.ToArray();
+            var actual = k2.Export(KeyBlobFormat.RawSymmetricKey);
+
+            Assert.Equal(expected, actual);
         }
 
         #endregion
@@ -86,27 +81,24 @@ namespace NSec.Tests.Base
         [MemberData(nameof(MacAlgorithms))]
         public static void MacWithWrongKey(MacAlgorithm a)
         {
-            using (var k = new Key(SignatureAlgorithm.Ed25519))
-            {
-                Assert.Throws<ArgumentException>("key", () => a.Mac(k, ReadOnlySpan<byte>.Empty));
-            }
+            using var k = new Key(SignatureAlgorithm.Ed25519);
+
+            Assert.Throws<ArgumentException>("key", () => a.Mac(k, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
         public static void MacSuccess(MacAlgorithm a)
         {
-            using (var k = new Key(a))
-            {
-                var data = Utilities.RandomBytes.Slice(0, 100);
+            using var k = new Key(a);
+            var data = Utilities.RandomBytes.Slice(0, 100);
 
-                var expected = a.Mac(k, data);
-                var actual = a.Mac(k, data);
+            var expected = a.Mac(k, data);
+            var actual = a.Mac(k, data);
 
-                Assert.NotNull(actual);
-                Assert.Equal(a.MacSize, actual.Length);
-                Assert.Equal(expected, actual);
-            }
+            Assert.NotNull(actual);
+            Assert.Equal(a.MacSize, actual.Length);
+            Assert.Equal(expected, actual);
         }
 
         #endregion
@@ -133,65 +125,58 @@ namespace NSec.Tests.Base
         [MemberData(nameof(MacAlgorithms))]
         public static void MacWithSpanWithWrongKey(MacAlgorithm a)
         {
-            using (var k = new Key(SignatureAlgorithm.Ed25519))
-            {
-                Assert.Throws<ArgumentException>("key", () => a.Mac(k, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
-            }
+            using var k = new Key(SignatureAlgorithm.Ed25519);
+
+            Assert.Throws<ArgumentException>("key", () => a.Mac(k, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
         public static void MacWithSpanTooSmall(MacAlgorithm a)
         {
-            using (var k = new Key(a))
-            {
-                Assert.Throws<ArgumentException>("mac", () => a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize - 1]));
-            }
+            using var k = new Key(a);
+
+            Assert.Throws<ArgumentException>("mac", () => a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize - 1]));
         }
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
         public static void MacWithSpanTooLarge(MacAlgorithm a)
         {
-            using (var k = new Key(a))
-            {
-                Assert.Throws<ArgumentException>("mac", () => a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize + 1]));
-            }
+            using var k = new Key(a);
+
+            Assert.Throws<ArgumentException>("mac", () => a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize + 1]));
         }
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
         public static void MacWithSpanSuccess(MacAlgorithm a)
         {
-            using (var k = new Key(a))
-            {
-                var data = Utilities.RandomBytes.Slice(0, 100);
+            using var k = new Key(a);
+            var data = Utilities.RandomBytes.Slice(0, 100);
 
-                var expected = new byte[a.MacSize];
-                var actual = new byte[a.MacSize];
+            var expected = new byte[a.MacSize];
+            var actual = new byte[a.MacSize];
 
-                a.Mac(k, data, expected);
-                a.Mac(k, data, actual);
-                Assert.Equal(expected, actual);
-            }
+            a.Mac(k, data, expected);
+            a.Mac(k, data, actual);
+            Assert.Equal(expected, actual);
         }
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
         public static void MacWithSpanOverlapping(MacAlgorithm a)
         {
-            using (var k = new Key(a))
-            {
-                var data = Utilities.RandomBytes.Slice(0, 100).ToArray();
+            using var k = new Key(a);
+            var data = Utilities.RandomBytes.Slice(0, 100).ToArray();
 
-                var expected = new byte[a.MacSize];
-                var actual = data.AsSpan(0, a.MacSize);
+            var expected = new byte[a.MacSize];
+            var actual = data.AsSpan(0, a.MacSize);
 
-                a.Mac(k, data, expected);
-                a.Mac(k, data, actual);
+            a.Mac(k, data, expected);
+            a.Mac(k, data, actual);
 
-                Assert.Equal(expected, actual.ToArray());
-            }
+            Assert.Equal(expected, actual.ToArray());
         }
 
         #endregion
@@ -218,44 +203,39 @@ namespace NSec.Tests.Base
         [MemberData(nameof(MacAlgorithms))]
         public static void VerifyWithWrongKey(MacAlgorithm a)
         {
-            using (var k = new Key(SignatureAlgorithm.Ed25519))
-            {
-                Assert.Throws<ArgumentException>("key", () => a.Verify(k, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
-            }
+            using var k = new Key(SignatureAlgorithm.Ed25519);
+
+            Assert.Throws<ArgumentException>("key", () => a.Verify(k, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
         public static void VerifyWithSpanTooSmall(MacAlgorithm a)
         {
-            using (var k = new Key(a))
-            {
-                Assert.False(a.Verify(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize - 1]));
-            }
+            using var k = new Key(a);
+
+            Assert.False(a.Verify(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize - 1]));
         }
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
         public static void VerifyWithSpanTooLarge(MacAlgorithm a)
         {
-            using (var k = new Key(a))
-            {
-                Assert.False(a.Verify(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize + 1]));
-            }
+            using var k = new Key(a);
+
+            Assert.False(a.Verify(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize + 1]));
         }
 
         [Theory]
         [MemberData(nameof(MacAlgorithms))]
         public static void VerifyWithSpanSuccess(MacAlgorithm a)
         {
-            using (var k = new Key(a))
-            {
-                var d = ReadOnlySpan<byte>.Empty;
+            using var k = new Key(a);
+            var d = ReadOnlySpan<byte>.Empty;
 
-                var mac = a.Mac(k, d);
+            var mac = a.Mac(k, d);
 
-                Assert.True(a.Verify(k, d, mac));
-            }
+            Assert.True(a.Verify(k, d, mac));
         }
 
         #endregion
@@ -266,20 +246,18 @@ namespace NSec.Tests.Base
         [MemberData(nameof(MacAlgorithms))]
         public static void CreateKey(MacAlgorithm a)
         {
-            using (var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
-            {
-                Assert.Same(a, k.Algorithm);
-                Assert.False(k.HasPublicKey);
-                Assert.Throws<InvalidOperationException>(() => k.PublicKey);
-                Assert.Equal(a.KeySize, k.Size);
+            using var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving });
+            Assert.Same(a, k.Algorithm);
+            Assert.False(k.HasPublicKey);
+            Assert.Throws<InvalidOperationException>(() => k.PublicKey);
+            Assert.Equal(a.KeySize, k.Size);
 
-                var actual = k.Export(KeyBlobFormat.RawSymmetricKey);
+            var actual = k.Export(KeyBlobFormat.RawSymmetricKey);
 
-                var unexpected = new byte[actual.Length];
-                Utilities.Fill(unexpected, actual[0]);
+            var unexpected = new byte[actual.Length];
+            Utilities.Fill(unexpected, actual[0]);
 
-                Assert.NotEqual(unexpected, actual);
-            }
+            Assert.NotEqual(unexpected, actual);
         }
 
         #endregion

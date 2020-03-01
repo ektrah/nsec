@@ -63,16 +63,15 @@ namespace NSec.Tests.Formatting
         {
             var b = Utilities.RandomBytes.Slice(0, seedSize);
 
-            using (var k = Key.Import(a, b, importFormat, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving }))
-            {
-                var blob = k.Export(format);
+            using var k = Key.Import(a, b, importFormat, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving });
 
-                Assert.NotNull(blob);
-                Assert.Equal(blobHeader.Length + sizeof(short) + sizeof(short) + keySize, blob.Length);
-                Assert.Equal(blobHeader, blob.AsSpan(0, blobHeader.Length).ToArray());
-                Assert.Equal(keySize, BitConverter.ToInt16(blob, blobHeader.Length));
-                Assert.Equal(outputSize, BitConverter.ToInt16(blob, blobHeader.Length + sizeof(short)));
-            }
+            var blob = k.Export(format);
+
+            Assert.NotNull(blob);
+            Assert.Equal(blobHeader.Length + sizeof(short) + sizeof(short) + keySize, blob.Length);
+            Assert.Equal(blobHeader, blob.AsSpan(0, blobHeader.Length).ToArray());
+            Assert.Equal(keySize, BitConverter.ToInt16(blob, blobHeader.Length));
+            Assert.Equal(outputSize, BitConverter.ToInt16(blob, blobHeader.Length + sizeof(short)));
         }
     }
 }
