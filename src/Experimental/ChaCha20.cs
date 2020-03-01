@@ -125,13 +125,11 @@ namespace NSec.Experimental
             Span<byte> blob,
             out int blobSize)
         {
-            switch (format)
+            return format switch
             {
-            case KeyBlobFormat.RawSymmetricKey:
-                return RawKeyFormatter.TryExport(key, blob, out blobSize);
-            default:
-                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
-            }
+                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryExport(key, blob, out blobSize),
+                _ => throw Error.Argument_FormatNotSupported(nameof(format), format.ToString()),
+            };
         }
 
         internal override bool TryImportKey(
@@ -144,13 +142,11 @@ namespace NSec.Experimental
         {
             publicKey = null;
 
-            switch (format)
+            return format switch
             {
-            case KeyBlobFormat.RawSymmetricKey:
-                return RawKeyFormatter.TryImport(KeySize, blob, memoryPool, out memory, out owner);
-            default:
-                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
-            }
+                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryImport(KeySize, blob, memoryPool, out memory, out owner),
+                _ => throw Error.Argument_FormatNotSupported(nameof(format), format.ToString()),
+            };
         }
 
         private static void SelfTest()

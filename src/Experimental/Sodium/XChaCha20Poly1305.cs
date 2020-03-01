@@ -149,15 +149,12 @@ namespace NSec.Experimental.Sodium
             Span<byte> blob,
             out int blobSize)
         {
-            switch (format)
+            return format switch
             {
-            case KeyBlobFormat.RawSymmetricKey:
-                return RawKeyFormatter.TryExport(key, blob, out blobSize);
-            case KeyBlobFormat.NSecSymmetricKey:
-                return NSecKeyFormatter.TryExport(NSecBlobHeader, KeySize, TagSize, key, blob, out blobSize);
-            default:
-                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
-            }
+                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryExport(key, blob, out blobSize),
+                KeyBlobFormat.NSecSymmetricKey => NSecKeyFormatter.TryExport(NSecBlobHeader, KeySize, TagSize, key, blob, out blobSize),
+                _ => throw Error.Argument_FormatNotSupported(nameof(format), format.ToString()),
+            };
         }
 
         internal override bool TryImportKey(
@@ -170,15 +167,12 @@ namespace NSec.Experimental.Sodium
         {
             publicKey = null;
 
-            switch (format)
+            return format switch
             {
-            case KeyBlobFormat.RawSymmetricKey:
-                return RawKeyFormatter.TryImport(KeySize, blob, memoryPool, out memory, out owner);
-            case KeyBlobFormat.NSecSymmetricKey:
-                return NSecKeyFormatter.TryImport(NSecBlobHeader, KeySize, TagSize, blob, memoryPool, out memory, out owner);
-            default:
-                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
-            }
+                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryImport(KeySize, blob, memoryPool, out memory, out owner),
+                KeyBlobFormat.NSecSymmetricKey => NSecKeyFormatter.TryImport(NSecBlobHeader, KeySize, TagSize, blob, memoryPool, out memory, out owner),
+                _ => throw Error.Argument_FormatNotSupported(nameof(format), format.ToString()),
+            };
         }
 
         private static void SelfTest()

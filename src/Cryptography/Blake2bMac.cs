@@ -156,15 +156,12 @@ namespace NSec.Cryptography
             Span<byte> blob,
             out int blobSize)
         {
-            switch (format)
+            return format switch
             {
-            case KeyBlobFormat.RawSymmetricKey:
-                return RawKeyFormatter.TryExport(key, blob, out blobSize);
-            case KeyBlobFormat.NSecSymmetricKey:
-                return NSecKeyFormatter.TryExport(NSecBlobHeader, KeySize, MacSize, key, blob, out blobSize);
-            default:
-                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
-            }
+                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryExport(key, blob, out blobSize),
+                KeyBlobFormat.NSecSymmetricKey => NSecKeyFormatter.TryExport(NSecBlobHeader, KeySize, MacSize, key, blob, out blobSize),
+                _ => throw Error.Argument_FormatNotSupported(nameof(format), format.ToString()),
+            };
         }
 
         internal override bool TryImportKey(
@@ -177,15 +174,12 @@ namespace NSec.Cryptography
         {
             publicKey = null;
 
-            switch (format)
+            return format switch
             {
-            case KeyBlobFormat.RawSymmetricKey:
-                return RawKeyFormatter.TryImport(KeySize, blob, memoryPool, out memory, out owner);
-            case KeyBlobFormat.NSecSymmetricKey:
-                return NSecKeyFormatter.TryImport(NSecBlobHeader, KeySize, MacSize, blob, memoryPool, out memory, out owner);
-            default:
-                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
-            }
+                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryImport(KeySize, blob, memoryPool, out memory, out owner),
+                KeyBlobFormat.NSecSymmetricKey => NSecKeyFormatter.TryImport(NSecBlobHeader, KeySize, MacSize, blob, memoryPool, out memory, out owner),
+                _ => throw Error.Argument_FormatNotSupported(nameof(format), format.ToString()),
+            };
         }
 
         internal unsafe override void UpdateCore(

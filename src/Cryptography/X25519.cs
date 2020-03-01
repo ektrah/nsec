@@ -143,19 +143,14 @@ namespace NSec.Cryptography
             Span<byte> blob,
             out int blobSize)
         {
-            switch (format)
+            return format switch
             {
-            case KeyBlobFormat.RawPrivateKey:
-                return s_rawPrivateKeyFormatter.TryExport(key, blob, out blobSize);
-            case KeyBlobFormat.NSecPrivateKey:
-                return s_nsecPrivateKeyFormatter.TryExport(key, blob, out blobSize);
-            case KeyBlobFormat.PkixPrivateKey:
-                return s_pkixPrivateKeyFormatter.TryExport(key, blob, out blobSize);
-            case KeyBlobFormat.PkixPrivateKeyText:
-                return s_pkixPrivateKeyFormatter.TryExportText(key, blob, out blobSize);
-            default:
-                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
-            }
+                KeyBlobFormat.RawPrivateKey => s_rawPrivateKeyFormatter.TryExport(key, blob, out blobSize),
+                KeyBlobFormat.NSecPrivateKey => s_nsecPrivateKeyFormatter.TryExport(key, blob, out blobSize),
+                KeyBlobFormat.PkixPrivateKey => s_pkixPrivateKeyFormatter.TryExport(key, blob, out blobSize),
+                KeyBlobFormat.PkixPrivateKeyText => s_pkixPrivateKeyFormatter.TryExportText(key, blob, out blobSize),
+                _ => throw Error.Argument_FormatNotSupported(nameof(format), format.ToString()),
+            };
         }
 
         internal override bool TryExportPublicKey(
@@ -164,19 +159,14 @@ namespace NSec.Cryptography
             Span<byte> blob,
             out int blobSize)
         {
-            switch (format)
+            return format switch
             {
-            case KeyBlobFormat.RawPublicKey:
-                return s_rawPublicKeyFormatter.TryExport(in publicKey.GetPinnableReference(), blob, out blobSize);
-            case KeyBlobFormat.NSecPublicKey:
-                return s_nsecPublicKeyFormatter.TryExport(in publicKey.GetPinnableReference(), blob, out blobSize);
-            case KeyBlobFormat.PkixPublicKey:
-                return s_pkixPublicKeyFormatter.TryExport(in publicKey.GetPinnableReference(), blob, out blobSize);
-            case KeyBlobFormat.PkixPublicKeyText:
-                return s_pkixPublicKeyFormatter.TryExportText(in publicKey.GetPinnableReference(), blob, out blobSize);
-            default:
-                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
-            }
+                KeyBlobFormat.RawPublicKey => s_rawPublicKeyFormatter.TryExport(in publicKey.GetPinnableReference(), blob, out blobSize),
+                KeyBlobFormat.NSecPublicKey => s_nsecPublicKeyFormatter.TryExport(in publicKey.GetPinnableReference(), blob, out blobSize),
+                KeyBlobFormat.PkixPublicKey => s_pkixPublicKeyFormatter.TryExport(in publicKey.GetPinnableReference(), blob, out blobSize),
+                KeyBlobFormat.PkixPublicKeyText => s_pkixPublicKeyFormatter.TryExportText(in publicKey.GetPinnableReference(), blob, out blobSize),
+                _ => throw Error.Argument_FormatNotSupported(nameof(format), format.ToString()),
+            };
         }
 
         internal override bool TryImportKey(
@@ -189,19 +179,14 @@ namespace NSec.Cryptography
         {
             publicKey = new PublicKey(this);
 
-            switch (format)
+            return format switch
             {
-            case KeyBlobFormat.RawPrivateKey:
-                return s_rawPrivateKeyFormatter.TryImport(blob, memoryPool, out memory, out owner, out publicKey.GetPinnableReference());
-            case KeyBlobFormat.NSecPrivateKey:
-                return s_nsecPrivateKeyFormatter.TryImport(blob, memoryPool, out memory, out owner, out publicKey.GetPinnableReference());
-            case KeyBlobFormat.PkixPrivateKey:
-                return s_pkixPrivateKeyFormatter.TryImport(blob, memoryPool, out memory, out owner, out publicKey.GetPinnableReference());
-            case KeyBlobFormat.PkixPrivateKeyText:
-                return s_pkixPrivateKeyFormatter.TryImportText(blob, memoryPool, out memory, out owner, out publicKey.GetPinnableReference());
-            default:
-                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
-            }
+                KeyBlobFormat.RawPrivateKey => s_rawPrivateKeyFormatter.TryImport(blob, memoryPool, out memory, out owner, out publicKey.GetPinnableReference()),
+                KeyBlobFormat.NSecPrivateKey => s_nsecPrivateKeyFormatter.TryImport(blob, memoryPool, out memory, out owner, out publicKey.GetPinnableReference()),
+                KeyBlobFormat.PkixPrivateKey => s_pkixPrivateKeyFormatter.TryImport(blob, memoryPool, out memory, out owner, out publicKey.GetPinnableReference()),
+                KeyBlobFormat.PkixPrivateKeyText => s_pkixPrivateKeyFormatter.TryImportText(blob, memoryPool, out memory, out owner, out publicKey.GetPinnableReference()),
+                _ => throw Error.Argument_FormatNotSupported(nameof(format), format.ToString()),
+            };
         }
 
         internal override bool TryImportPublicKey(
@@ -211,19 +196,14 @@ namespace NSec.Cryptography
         {
             publicKey = new PublicKey(this);
 
-            switch (format)
+            return format switch
             {
-            case KeyBlobFormat.RawPublicKey:
-                return s_rawPublicKeyFormatter.TryImport(blob, out publicKey.GetPinnableReference());
-            case KeyBlobFormat.NSecPublicKey:
-                return s_nsecPublicKeyFormatter.TryImport(blob, out publicKey.GetPinnableReference());
-            case KeyBlobFormat.PkixPublicKey:
-                return s_pkixPublicKeyFormatter.TryImport(blob, out publicKey.GetPinnableReference());
-            case KeyBlobFormat.PkixPublicKeyText:
-                return s_pkixPublicKeyFormatter.TryImportText(blob, out publicKey.GetPinnableReference());
-            default:
-                throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
-            }
+                KeyBlobFormat.RawPublicKey => s_rawPublicKeyFormatter.TryImport(blob, out publicKey.GetPinnableReference()),
+                KeyBlobFormat.NSecPublicKey => s_nsecPublicKeyFormatter.TryImport(blob, out publicKey.GetPinnableReference()),
+                KeyBlobFormat.PkixPublicKey => s_pkixPublicKeyFormatter.TryImport(blob, out publicKey.GetPinnableReference()),
+                KeyBlobFormat.PkixPublicKeyText => s_pkixPublicKeyFormatter.TryImportText(blob, out publicKey.GetPinnableReference()),
+                _ => throw Error.Argument_FormatNotSupported(nameof(format), format.ToString()),
+            };
         }
 
         private static void SelfTest()
