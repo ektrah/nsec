@@ -84,6 +84,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "howto", "howto", "{68FC96ED
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		src\Interop\Interop.projitems*{839872cc-6af4-456b-a55b-f82ee7b4822e}*SharedItemsImports = 5
 		src\Interop\Interop.projitems*{f9492d32-4406-41ee-b90e-f9ae33f0f4dc}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
