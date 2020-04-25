@@ -268,7 +268,7 @@ jobs:
       - run:
           name: Install Prerequisites
           no_output_timeout: 2m
-          command: zypper -q install -y --no-recommends curl ca-certificates gzip tar ncurses-utils libicu
+          command: zypper -q install -y --no-recommends curl ca-certificates gzip tar ncurses-utils libicu-suse65_1
       - *dotnet-install-2-1
       - *dotnet-install-3-1
       - checkout
