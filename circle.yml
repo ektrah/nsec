@@ -251,6 +251,7 @@ jobs:
           name: Install Prerequisites
           no_output_timeout: 2m
           command: dnf install -q -y curl ca-certificates findutils ncurses libicu compat-openssl10
+      - *dotnet-install-2-1
       - *dotnet-install-3-1
       - checkout
       - *generate-restore-graph
@@ -259,6 +260,8 @@ jobs:
       - *save-cache
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
+      - *dotnet-test-debug-2-1
+      - *dotnet-test-release-2-1
 
   opensuse15:
     docker:
