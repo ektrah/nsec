@@ -37,15 +37,17 @@ NSec runs on the following platforms and .NET Core versions:
 |               | 10.15    | x64           | 3.1 / 2.1          |
 |               |          |               |                    |
 | Alpine        | 3.10     | x64           | 3.1                |
-| CentOS        | 7        | x64           | 3.1 / 2.1          |
-|               | 8        | x64           | 3.1 / 2.1          |
-| Debian        | 9.11     | x64           | 3.1 / 2.1          |
-|               | 10.2     | x64           | 3.1                |
+| CentOS        | 7.8.2003 | x64           | 3.1 / 2.1          |
+|               | 8.2.2004 | x64           | 3.1 / 2.1          |
+| Debian        | 9.13     | x64           | 3.1 / 2.1          |
+|               | 10.5     | x64           | 3.1 / 2.1          |
 | Fedora        | 30       | x64           | 3.1 / 2.1          |
 |               | 31       | x64           | 3.1 / 2.1          |
+|               | 32       | x64           | 3.1                |
 | OpenSUSE      | 15.2     | x64           | 3.1 / 2.1          |
 | Ubuntu        | 16.04    | x64           | 3.1 / 2.1          |
 |               | 18.04    | x64           | 3.1 / 2.1          |
+|               | 20.04    | x64           | 3.1 / 2.1          |
 
 Other operating systems and versions supported by .NET Core should work as well
 but are not tested.

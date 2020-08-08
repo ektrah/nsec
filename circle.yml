@@ -24,12 +24,18 @@ workflows:
       - fedora31:
           requires:
             - macos10.13
+      - fedora32:
+          requires:
+            - macos10.13
       - opensuse15:
           requires:
             - macos10.13
       - ubuntu16.04:
           requires:
       - ubuntu18.04:
+          requires:
+            - macos10.13
+      - ubuntu20.04:
           requires:
             - macos10.13
       - macos10.13:
@@ -48,6 +54,7 @@ shared:
     DOTNET_CLI_TELEMETRY_OPTOUT: 1
     DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
     TERM: dumb
+    DEBIAN_FRONTEND: noninteractive
   dotnet-install-2-1: &dotnet-install-2-1
     run:
       name: Install .NET Core 2.1 Runtime
@@ -212,6 +219,7 @@ jobs:
           command: |
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext
+      - *dotnet-install-2-1
       - *dotnet-install-3-1
       - checkout
       - *generate-restore-graph
@@ -220,6 +228,8 @@ jobs:
       - *save-cache
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
+      - *dotnet-test-debug-2-1
+      - *dotnet-test-release-2-1
 
   fedora30:
     docker:
@@ -262,6 +272,24 @@ jobs:
       - *dotnet-test-release-3-1
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
+
+  fedora32:
+    docker:
+      - image: fedora:32
+    environment: *environment
+    steps:
+      - run:
+          name: Install Prerequisites
+          no_output_timeout: 2m
+          command: dnf install -q -y curl ca-certificates findutils ncurses libicu compat-openssl10
+      - *dotnet-install-3-1
+      - checkout
+      - *generate-restore-graph
+      - *restore-cache
+      - *dotnet-restore
+      - *save-cache
+      - *dotnet-test-debug-3-1
+      - *dotnet-test-release-3-1
 
   opensuse15:
     docker:
@@ -318,6 +346,29 @@ jobs:
           command: |
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libicu60 libssl1.0.0
+      - *dotnet-install-2-1
+      - *dotnet-install-3-1
+      - checkout
+      - *generate-restore-graph
+      - *restore-cache
+      - *dotnet-restore
+      - *save-cache
+      - *dotnet-test-debug-3-1
+      - *dotnet-test-release-3-1
+      - *dotnet-test-debug-2-1
+      - *dotnet-test-release-2-1
+
+  ubuntu20.04:
+    docker:
+      - image: ubuntu:20.04
+    environment: *environment
+    steps:
+      - run:
+          name: Install Prerequisites
+          no_output_timeout: 2m
+          command: |
+            apt-get -qq update
+            apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libicu66
       - *dotnet-install-2-1
       - *dotnet-install-3-1
       - checkout
