@@ -83,7 +83,16 @@ salt
     Must be empty if the algorithm does not support the use of salt.
 
 info
-: Optional context and application specific information.
+: Context and application specific information. This should be used to ensure
+    that the derived bytes are adequately bound to the context of the key
+    agreement.
+
+!!! Note
+    Inadequate context information might lead to subtle vulnerabilities.
+
+: To bind the derived bytes to the context, `info` may need to include the
+    identifiers of the entities involved, their public keys, protocol-related
+    information, and parameter choices. 
 
 count
 : The number of bytes to derive.
@@ -130,7 +139,16 @@ salt
     Must be empty if the algorithm does not support the use of salt.
 
 info
-: Optional context and application specific information.
+: Context and application specific information. This should be used to ensure
+    that the derived bytes are adequately bound to the context of the key
+    agreement.
+
+!!! Note
+    Inadequate context information might lead to subtle vulnerabilities.
+
+: To bind the derived bytes to the context, `info` may need to include the
+    identifiers of the entities involved, their public keys, protocol-related
+    information, and parameter choices. 
 
 bytes
 : The span to fill with bytes derived from the shared secret.
@@ -178,7 +196,16 @@ salt
     Must be empty if the algorithm does not support the use of salt.
 
 info
-: Optional context and application specific information.
+: Context and application specific information. This should be used to ensure
+    that the derived key is adequately bound to the context of the key
+    agreement.
+
+!!! Note
+    Inadequate context information might lead to subtle vulnerabilities.
+
+: To bind the derived key to the context, `info` may need to include the
+    identifiers of the entities involved, their public keys, protocol-related
+    information, and parameter choices. 
 
 algorithm
 : The algorithm for the new key.
