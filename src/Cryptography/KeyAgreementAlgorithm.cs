@@ -68,11 +68,11 @@ namespace NSec.Cryptography
             if (key == null)
                 throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
-                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
+                throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
             if (otherPartyPublicKey == null)
                 throw Error.ArgumentNull_Key(nameof(otherPartyPublicKey));
             if (otherPartyPublicKey.Algorithm != this)
-                throw Error.Argument_KeyWrongAlgorithm(nameof(otherPartyPublicKey), key.Algorithm.GetType().FullName, GetType().FullName);
+                throw Error.Argument_PublicKeyAlgorithmMismatch(nameof(otherPartyPublicKey), nameof(otherPartyPublicKey));
 
             ReadOnlyMemory<byte> memory = default;
             IMemoryOwner<byte>? owner = default;

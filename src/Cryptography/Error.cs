@@ -75,20 +75,17 @@ namespace NSec.Cryptography
             return new ArgumentException(string.Format(ResourceManager.GetString(nameof(Argument_InvalidPrkLengthExact))!, arg0), paramName);
         }
 
-        internal static ArgumentException Argument_KeyWrongAlgorithm(
+        internal static ArgumentException Argument_KeyAlgorithmMismatch(
             string paramName,
-            object? arg0,
-            object? arg1)
+            object? arg0)
         {
-            return new ArgumentException(string.Format(ResourceManager.GetString(nameof(Argument_KeyWrongAlgorithm))!, arg0, arg1), paramName);
+            return new ArgumentException(string.Format(ResourceManager.GetString(nameof(Argument_KeyAlgorithmMismatch))!, arg0), paramName);
         }
 
-        internal static ArgumentException Argument_MacKey(
-            string paramName,
-            object? arg0,
-            object? arg1)
+        internal static ArgumentException Argument_MacKeyRequired(
+            string paramName)
         {
-            return new ArgumentException(string.Format(ResourceManager.GetString(nameof(Argument_MacKey))!, arg0, arg1), paramName);
+            return new ArgumentException(ResourceManager.GetString(nameof(Argument_MacKeyRequired)), paramName);
         }
 
         internal static ArgumentException Argument_MacLength(
@@ -174,6 +171,13 @@ namespace NSec.Cryptography
             object? arg0)
         {
             return new ArgumentException(string.Format(ResourceManager.GetString(nameof(Argument_PlaintextTooLong))!, arg0), paramName);
+        }
+
+        internal static ArgumentException Argument_PublicKeyAlgorithmMismatch(
+            string paramName,
+            object? arg0)
+        {
+            return new ArgumentException(string.Format(ResourceManager.GetString(nameof(Argument_PublicKeyAlgorithmMismatch))!, arg0), paramName);
         }
 
         internal static ArgumentException Argument_SaltLength(

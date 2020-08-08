@@ -94,7 +94,7 @@ namespace NSec.Cryptography
             }
             if (!(key.Algorithm is MacAlgorithm algorithm))
             {
-                throw Error.Argument_MacKey(nameof(key), key.Algorithm.GetType().FullName, typeof(MacAlgorithm).FullName);
+                throw Error.Argument_MacKeyRequired(nameof(key));
             }
 
             state = default;

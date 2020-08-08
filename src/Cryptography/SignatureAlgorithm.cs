@@ -66,7 +66,7 @@ namespace NSec.Cryptography
             if (key == null)
                 throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
-                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
+                throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
 
             byte[] signature = new byte[_signatureSize];
             SignCore(key.Span, data, signature);
@@ -81,7 +81,7 @@ namespace NSec.Cryptography
             if (key == null)
                 throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
-                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
+                throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
             if (signature.Length != _signatureSize)
                 throw Error.Argument_SignatureLength(nameof(signature), _signatureSize);
 
@@ -96,7 +96,7 @@ namespace NSec.Cryptography
             if (publicKey == null)
                 throw Error.ArgumentNull_Key(nameof(publicKey));
             if (publicKey.Algorithm != this)
-                throw Error.Argument_KeyWrongAlgorithm(nameof(publicKey), publicKey.Algorithm.GetType().FullName, GetType().FullName);
+                throw Error.Argument_PublicKeyAlgorithmMismatch(nameof(publicKey), nameof(publicKey));
 
             return signature.Length == _signatureSize && VerifyCore(in publicKey.GetPinnableReference(), data, signature);
         }

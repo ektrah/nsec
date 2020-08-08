@@ -157,7 +157,7 @@ namespace NSec.Cryptography
             }
             if (key.Algorithm != this)
             {
-                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
+                throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
             }
 
             byte[] mac = new byte[_macSize];
@@ -176,7 +176,7 @@ namespace NSec.Cryptography
             }
             if (key.Algorithm != this)
             {
-                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
+                throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
             }
             if (mac.Length != _macSize)
             {
@@ -197,7 +197,7 @@ namespace NSec.Cryptography
             }
             if (key.Algorithm != this)
             {
-                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
+                throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
             }
 
             return mac.Length == _macSize && VerifyCore(key.Span, data, mac);

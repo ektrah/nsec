@@ -38,7 +38,7 @@ namespace NSec.Experimental.Sodium
             if (key == null)
                 throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
-                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
+                throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
             if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
             if (plaintext.Length > int.MaxValue - _macSize)
@@ -58,7 +58,7 @@ namespace NSec.Experimental.Sodium
             if (key == null)
                 throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
-                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
+                throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
             if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
             if (plaintext.Length > int.MaxValue - _macSize)
@@ -80,7 +80,7 @@ namespace NSec.Experimental.Sodium
             if (key == null)
                 throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
-                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
+                throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
             if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
 
@@ -105,7 +105,7 @@ namespace NSec.Experimental.Sodium
             if (key == null)
                 throw Error.ArgumentNull_Key(nameof(key));
             if (key.Algorithm != this)
-                throw Error.Argument_KeyWrongAlgorithm(nameof(key), key.Algorithm.GetType().FullName, GetType().FullName);
+                throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
             if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
             if (ciphertext.Length < _macSize)

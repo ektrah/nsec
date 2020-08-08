@@ -192,11 +192,11 @@
   <data name="Argument_InvalidPrkLengthExact" xml:space="preserve">
     <value>The length of the pseudorandom key must be equal to {0}.</value>
   </data>
-  <data name="Argument_KeyWrongAlgorithm" xml:space="preserve">
-    <value>The specified key is for algorithm '{0}'. Expected '{1}'.</value>
+  <data name="Argument_KeyAlgorithmMismatch" xml:space="preserve">
+    <value>Cannot use a key created for a different algorithm instance. ({0}.Algorithm must be the same object as the current object.)</value>
   </data>
-  <data name="Argument_MacKey" xml:space="preserve">
-    <value>The specified key is for algorithm '{0}'. Expected '{1}'.</value>
+  <data name="Argument_MacKeyRequired" xml:space="preserve">
+    <value>Cannot use a key for an incremental MAC that is not a MAC key.</value>
   </data>
   <data name="Argument_MacLength" xml:space="preserve">
     <value>The length of the MAC must be equal to {0}.</value>
@@ -236,6 +236,9 @@
   </data>
   <data name="Argument_PlaintextTooLong" xml:space="preserve">
     <value>The length of the plaintext must be less than or equal to {0}.</value>
+  </data>
+  <data name="Argument_PublicKeyAlgorithmMismatch" xml:space="preserve">
+    <value>Cannot use a public key created for a different algorithm instance. ({0}.Algorithm must be the same object as the current object.)</value>
   </data>
   <data name="Argument_SaltLength" xml:space="preserve">
     <value>The length of the salt must be equal to {0}.</value>
