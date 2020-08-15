@@ -1,7 +1,5 @@
 ﻿<Project>
-  
-  <Import Project="$(MSBuildThisFileDirectory)..\build\InternalsVisibleTo.targets" />
-  
+
   <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.targets" />
-  
+
 </Project>

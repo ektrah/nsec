@@ -1,5 +1,5 @@
 ﻿<Project>
-  
+
   <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.props" />
 
   <PropertyGroup>
@@ -8,5 +8,5 @@
   </PropertyGroup>
 
   <Import Project="$(MSBuildThisFileDirectory)..\build\Package.props" />
-  
+
 </Project>
