@@ -1,9 +1,5 @@
 ﻿<Project>
 
-  <PropertyGroup>
-    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
-  </PropertyGroup>
-
   <PropertyGroup Condition="'$(APPVEYOR)' == 'true'">
     <GitTag>$(APPVEYOR_REPO_TAG_NAME)</GitTag>
     <GitBranch>$(APPVEYOR_REPO_BRANCH)</GitBranch>

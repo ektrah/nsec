@@ -1,9 +1,5 @@
 ﻿<Project>
 
-  <PropertyGroup>
-    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
-  </PropertyGroup>
-
   <Import Project="$(MSBuildThisFileDirectory)CI.props" />
 
   <PropertyGroup>

@@ -1,7 +1,6 @@
 ﻿<Project>
 
   <PropertyGroup>
-    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <GeneratedInternalsVisibleToFile Condition="'$(GeneratedInternalsVisibleToFile)' == ''">$(IntermediateOutputPath)$(MSBuildProjectName).InternalsVisibleTo$(DefaultLanguageSourceExtension)</GeneratedInternalsVisibleToFile>
     <GenerateInternalsVisibleTo Condition="'$(GenerateInternalsVisibleTo)' == ''">true</GenerateInternalsVisibleTo>
   </PropertyGroup>
