@@ -1,6 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <TargetFrameworks>netstandard2.1;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(Configuration)'=='Debug'">netcoreapp3.1;$(TargetFrameworks)</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <Description>Experimental code</Description>
     <IsPackable Condition="!$(Version.Contains('-'))">false</IsPackable>
   </PropertyGroup>
