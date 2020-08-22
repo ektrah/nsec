@@ -67,6 +67,7 @@ namespace NSec.Tests
         {
             // intentionally weak parameters for unit tests
             new Argon2i(1, 1 << 12, 3),
+            new Argon2id(1, 1 << 12, 3),
             new Scrypt(1 << 11, 5, 1),
             new Pbkdf2HmacSha256(10),
         };
@@ -115,6 +116,7 @@ namespace NSec.Tests
             KeyDerivationAlgorithm.HkdfSha512,
             // intentionally weak parameters for unit tests
             new Argon2i(1, 1 << 12, 3),
+            new Argon2id(1, 1 << 12, 3),
             new Scrypt(1 << 11, 5, 1),
             new Pbkdf2HmacSha256(10),
         };

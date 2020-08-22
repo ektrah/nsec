@@ -35,6 +35,25 @@ Interop.Argon2i.cs:
   - crypto_pwhash_argon2i_opslimit_min
   - crypto_pwhash_argon2i_saltbytes
 
+Interop.Argon2id.cs:
+  include: include/sodium/crypto_pwhash_argon2id.h
+  constants:
+  - crypto_pwhash_argon2id_ALG_ARGON2ID13
+  - crypto_pwhash_argon2id_BYTES_MIN
+  - crypto_pwhash_argon2id_MEMLIMIT_MIN
+  - crypto_pwhash_argon2id_OPSLIMIT_MIN
+  - crypto_pwhash_argon2id_SALTBYTES
+  functions:
+  - crypto_pwhash_argon2id
+  - crypto_pwhash_argon2id_alg_argon2id13
+  - crypto_pwhash_argon2id_bytes_min
+  - crypto_pwhash_argon2id_bytes_max
+  - crypto_pwhash_argon2id_memlimit_max
+  - crypto_pwhash_argon2id_memlimit_min
+  - crypto_pwhash_argon2id_opslimit_max
+  - crypto_pwhash_argon2id_opslimit_min
+  - crypto_pwhash_argon2id_saltbytes
+
 Interop.Blake2b.cs:
   include: include/sodium/crypto_generichash_blake2b.h
   constants:

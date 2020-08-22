@@ -22,6 +22,7 @@ namespace NSec.Experimental.PasswordBased
     public abstract class PasswordBasedKeyDerivationAlgorithm : Algorithm
     {
         private static Argon2i? s_Argon2i;
+        private static Argon2id? s_Argon2id;
         private static Scrypt? s_Scrypt;
 
         private readonly int _maxCount;
@@ -47,6 +48,20 @@ namespace NSec.Experimental.PasswordBased
                 {
                     Interlocked.CompareExchange(ref s_Argon2i, new Argon2i(), null);
                     instance = s_Argon2i;
+                }
+                return instance;
+            }
+        }
+
+        public static Argon2id Argon2id
+        {
+            get
+            {
+                Argon2id? instance = s_Argon2id;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_Argon2id, new Argon2id(), null);
+                    instance = s_Argon2id;
                 }
                 return instance;
             }

@@ -7,6 +7,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Interop.Aes256Gcm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop.Argon2i.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interop.Argon2id.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop.Blake2b.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop.ChaCha20.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop.ChaCha20Poly1305.cs" />
