@@ -67,11 +67,11 @@ namespace NSec.Experimental.PasswordBased
             {
                 throw new ArgumentOutOfRangeException(nameof(r));
             }
-            if (IntPtr.Size == sizeof(uint) ? n > (int)(uint.MaxValue / 128) / r : n > (long)(ulong.MaxValue / 128) / r)
+            if (IntPtr.Size == sizeof(long) ? n > (long)(ulong.MaxValue / 128) / r : n > (int)(uint.MaxValue / 128) / r)
             {
                 throw new ArgumentOutOfRangeException(nameof(n));
             }
-            if (IntPtr.Size == sizeof(uint) ? r > (int)(uint.MaxValue / 128) / p || r > (int)(uint.MaxValue / 256) : r > (long)(ulong.MaxValue / 128) / p)
+            if (IntPtr.Size == sizeof(long) ? r > (long)(ulong.MaxValue / 128) / p : r > (int)(uint.MaxValue / 128) / p || r > (int)(uint.MaxValue / 256))
             {
                 throw new ArgumentOutOfRangeException(nameof(r));
             }
@@ -137,9 +137,9 @@ namespace NSec.Experimental.PasswordBased
 
         private static void SelfTest()
         {
-            if ((crypto_pwhash_scryptsalsa208sha256_bytes_max() != (UIntPtr)(IntPtr.Size == sizeof(int) ? uint.MaxValue : 0x1fffffffe0)) ||
+            if ((crypto_pwhash_scryptsalsa208sha256_bytes_max() != (UIntPtr)(IntPtr.Size == sizeof(long) ? 0x1fffffffe0 : uint.MaxValue)) ||
                 (crypto_pwhash_scryptsalsa208sha256_bytes_min() != (UIntPtr)crypto_pwhash_scryptsalsa208sha256_BYTES_MIN) ||
-                (crypto_pwhash_scryptsalsa208sha256_memlimit_max() != (UIntPtr)(IntPtr.Size == sizeof(uint) ? uint.MaxValue : 68719476736)) ||
+                (crypto_pwhash_scryptsalsa208sha256_memlimit_max() != (UIntPtr)(IntPtr.Size == sizeof(long) ? 68719476736 : uint.MaxValue)) ||
                 (crypto_pwhash_scryptsalsa208sha256_memlimit_min() != (UIntPtr)crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_MIN) ||
                 (crypto_pwhash_scryptsalsa208sha256_opslimit_max() != (UIntPtr)uint.MaxValue) ||
                 (crypto_pwhash_scryptsalsa208sha256_opslimit_min() != (UIntPtr)crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MIN) ||

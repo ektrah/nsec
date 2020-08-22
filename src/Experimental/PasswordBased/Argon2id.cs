@@ -65,12 +65,13 @@ namespace NSec.Experimental.PasswordBased
             saltSize: crypto_pwhash_argon2id_SALTBYTES,
             maxCount: int.MaxValue)
         {
+            // checks from libsodium/crypto_pwhash/argon2/pwhash_argon2id.c
             if (p != 1)
             {
                 throw new ArgumentOutOfRangeException(nameof(p));
             }
             if (m < crypto_pwhash_argon2id_MEMLIMIT_MIN / 1024 ||
-                m > (IntPtr.Size == sizeof(int) ? 2147483648 / 1024 : 4398046510080 / 1024))
+                m > (IntPtr.Size == sizeof(long) ? 4398046510080 / 1024 : 2147483648 / 1024))
             {
                 throw new ArgumentOutOfRangeException(nameof(m));
             }
@@ -141,7 +142,7 @@ namespace NSec.Experimental.PasswordBased
             if ((crypto_pwhash_argon2id_alg_argon2id13() != crypto_pwhash_argon2id_ALG_ARGON2ID13) ||
                 (crypto_pwhash_argon2id_bytes_max() != (UIntPtr)uint.MaxValue) ||
                 (crypto_pwhash_argon2id_bytes_min() != (UIntPtr)crypto_pwhash_argon2id_BYTES_MIN) ||
-                (crypto_pwhash_argon2id_memlimit_max() != (UIntPtr)(IntPtr.Size == sizeof(int) ? 2147483648 : 4398046510080)) ||
+                (crypto_pwhash_argon2id_memlimit_max() != (UIntPtr)(IntPtr.Size == sizeof(long) ? 4398046510080 : 2147483648)) ||
                 (crypto_pwhash_argon2id_memlimit_min() != (UIntPtr)crypto_pwhash_argon2id_MEMLIMIT_MIN) ||
                 (crypto_pwhash_argon2id_opslimit_max() != (UIntPtr)uint.MaxValue) ||
                 (crypto_pwhash_argon2id_opslimit_min() != (UIntPtr)crypto_pwhash_argon2id_OPSLIMIT_MIN) ||
