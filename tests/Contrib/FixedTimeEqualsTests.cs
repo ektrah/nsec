@@ -23,7 +23,7 @@ namespace NSec.Tests.Contrib
         public static unsafe void EqualReturnsTrue(int byteLength)
         {
             byte* left = stackalloc byte[byteLength];
-            RandomGenerator.Default.GenerateBytes(new Span<byte>(left, byteLength));
+            Utilities.RandomBytes.Slice(0, byteLength).CopyTo(new Span<byte>(left, byteLength));
 
             byte* right = stackalloc byte[byteLength];
             Unsafe.CopyBlockUnaligned(right, left, (uint)byteLength);
@@ -43,7 +43,7 @@ namespace NSec.Tests.Contrib
         public static unsafe void UnequalReturnsFalse(int byteLength)
         {
             byte* left = stackalloc byte[byteLength];
-            RandomGenerator.Default.GenerateBytes(new Span<byte>(left, byteLength));
+            Utilities.RandomBytes.Slice(0, byteLength).CopyTo(new Span<byte>(left, byteLength));
 
             byte* right = stackalloc byte[byteLength];
             Unsafe.CopyBlockUnaligned(right, left, (uint)byteLength);

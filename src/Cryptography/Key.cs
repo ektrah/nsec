@@ -36,7 +36,17 @@ namespace NSec.Cryptography
                 Span<byte> seed = stackalloc byte[seedSize];
                 try
                 {
-                    RandomGenerator.Default.GenerateBytes(seed);
+#if NETSTANDARD2_0
+                    unsafe
+                    {
+                        fixed (byte* buf = seed)
+                        {
+                            randombytes_buf(buf, (UIntPtr)seed.Length);
+                        }
+                    }
+#else
+                    System.Security.Cryptography.RandomNumberGenerator.Fill(seed);
+#endif
                     algorithm.CreateKey(seed, out keyHandle, out publicKey);
                     success = true;
                 }
@@ -87,7 +97,7 @@ namespace NSec.Cryptography
             Algorithm algorithm,
             in KeyCreationParameters creationParameters = default)
         {
-            return RandomGenerator.Default.GenerateKey(algorithm, in creationParameters);
+            return new Key(algorithm, in creationParameters);
         }
 
         public static Key Import(

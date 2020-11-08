@@ -101,7 +101,7 @@ array of bytes.
 key
 : The [[Key|Key Class]] to use for encryption.
     This must be a cryptographically strong key as created by the
-    [[RandomGenerator|RandomGenerator Class)]] class, not a password.
+    [[Key.Create|Key Class#Create]] method, not a password.
 
 nonce
 : The [[Nonce|Nonce Struct]] to use for encryption.
@@ -165,7 +165,7 @@ an authentication tag.
 key
 : The [[Key|Key Class]] to use for encryption.
     This must be a cryptographically strong key as created by the
-    [[RandomGenerator|RandomGenerator Class)]] class, not a password.
+    [[Key.Create|Key Class#Create]] class, not a password.
 
 nonce
 : The [[Nonce|Nonce Struct]] to use for encryption.

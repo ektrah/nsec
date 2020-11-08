@@ -32,7 +32,7 @@ namespace NSec.Tests.Contrib
             // The chances of this failing are 1 in 1.2e24, unless the RNG is broken.
             for (int i = 0; i < 10 && !hasData; i++)
             {
-                RandomGenerator.Default.GenerateBytes(testSpan);
+                Utilities.RandomBytes.Slice(0, byteLength).CopyTo(testSpan);
 
                 for (int j = 0; j < testSpan.Length; j++)
                 {

@@ -2,7 +2,11 @@
 
 Provides methods for generating cryptographically strong random data.
 
+    [Obsolete]
     public abstract class RandomGenerator
+
+!!! Note
+    This type is obsolete and will be removed in a future version. The recommended alternative is `System.Security.Cryptography.RandomNumberGenerator`.
 
 
 ## [TOC] Summary

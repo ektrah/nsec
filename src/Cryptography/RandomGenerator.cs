@@ -7,6 +7,7 @@ using static Interop.Libsodium;
 
 namespace NSec.Cryptography
 {
+    [Obsolete("This type is obsolete and will be removed in a future version. The recommended alternative is System.Security.Cryptography.RandomNumberGenerator.")]
     public abstract class RandomGenerator
     {
         private static RandomGenerator? s_Default;

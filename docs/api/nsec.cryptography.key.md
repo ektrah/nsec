@@ -36,13 +36,6 @@ ArgumentNullException
 NotSupportedException
 : The specified algorithm does not use keys.
 
-#### Remarks
-
-This constructor is a shortcut for
-[[RandomGenerator.Default.GenerateKey(Algorithm, in
-KeyCreationParameters)|RandomGenerator Class#GenerateKey(Algorithm, in
-KeyCreationParameters)]].
-
 
 ## Properties
 
@@ -148,13 +141,6 @@ ArgumentNullException
 
 NotSupportedException
 : The specified algorithm does not use keys.
-
-#### Remarks
-
-This method is a shortcut for
-[[RandomGenerator.Default.GenerateKey(Algorithm, in
-KeyCreationParameters)|RandomGenerator Class#GenerateKey(Algorithm, in
-KeyCreationParameters)]].
 
 
 ### Import(Algorithm, ReadOnlySpan<byte>, KeyBlobFormat, in KeyCreationParameters)
