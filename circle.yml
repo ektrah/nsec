@@ -18,13 +18,13 @@ workflows:
       - debian10:
           requires:
             - macos10.13
-      - fedora30:
-          requires:
-            - macos10.13
       - fedora31:
           requires:
             - macos10.13
       - fedora32:
+          requires:
+            - macos10.13
+      - fedora33:
           requires:
             - macos10.13
       - opensuse15:
@@ -231,27 +231,6 @@ jobs:
       - *dotnet-test-debug-2-1
       - *dotnet-test-release-2-1
 
-  fedora30:
-    docker:
-      - image: fedora:30
-    environment: *environment
-    steps:
-      - run:
-          name: Install Prerequisites
-          no_output_timeout: 2m
-          command: dnf install -q -y curl ca-certificates findutils ncurses libicu compat-openssl10
-      - *dotnet-install-2-1
-      - *dotnet-install-3-1
-      - checkout
-      - *generate-restore-graph
-      - *restore-cache
-      - *dotnet-restore
-      - *save-cache
-      - *dotnet-test-debug-3-1
-      - *dotnet-test-release-3-1
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
-
   fedora31:
     docker:
       - image: fedora:31
@@ -282,6 +261,7 @@ jobs:
           name: Install Prerequisites
           no_output_timeout: 2m
           command: dnf install -q -y curl ca-certificates findutils ncurses libicu compat-openssl10
+      - *dotnet-install-2-1
       - *dotnet-install-3-1
       - checkout
       - *generate-restore-graph
@@ -290,6 +270,29 @@ jobs:
       - *save-cache
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
+      - *dotnet-test-debug-2-1
+      - *dotnet-test-release-2-1
+
+  fedora33:
+    docker:
+      - image: fedora:33
+    environment: *environment
+    steps:
+      - run:
+          name: Install Prerequisites
+          no_output_timeout: 2m
+          command: dnf install -q -y curl ca-certificates findutils ncurses libicu compat-openssl10
+      - *dotnet-install-2-1
+      - *dotnet-install-3-1
+      - checkout
+      - *generate-restore-graph
+      - *restore-cache
+      - *dotnet-restore
+      - *save-cache
+      - *dotnet-test-debug-3-1
+      - *dotnet-test-release-3-1
+      - *dotnet-test-debug-2-1
+      - *dotnet-test-release-2-1
 
   opensuse15:
     docker:
