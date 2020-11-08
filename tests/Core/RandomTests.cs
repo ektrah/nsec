@@ -120,7 +120,7 @@ namespace NSec.Tests.Core
         {
             const int upperExclusive = -198400021;
 
-            Assert.Throws<ArgumentOutOfRangeException>("maxValue", () => RandomGenerator.Default.GenerateInt32(upperExclusive));
+            Assert.Throws<ArgumentOutOfRangeException>("upperExclusive", () => RandomGenerator.Default.GenerateInt32(upperExclusive));
         }
 
         [Fact]
@@ -177,7 +177,7 @@ namespace NSec.Tests.Core
             const int lowerInclusive = 2147480009;
             const int upperExclusive = 198400021;
 
-            Assert.Throws<ArgumentException>("minValue", () => RandomGenerator.Default.GenerateInt32(lowerInclusive, upperExclusive));
+            Assert.Throws<ArgumentException>("lowerInclusive", () => RandomGenerator.Default.GenerateInt32(lowerInclusive, upperExclusive));
         }
 
         [Fact]
@@ -299,7 +299,7 @@ namespace NSec.Tests.Core
             const uint lowerInclusive = 2147480009;
             const uint upperExclusive = 198400021;
 
-            Assert.Throws<ArgumentException>("minValue", () => RandomGenerator.Default.GenerateUInt32(lowerInclusive, upperExclusive));
+            Assert.Throws<ArgumentException>("lowerInclusive", () => RandomGenerator.Default.GenerateUInt32(lowerInclusive, upperExclusive));
         }
 
         [Fact]
