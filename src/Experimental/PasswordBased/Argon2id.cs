@@ -16,7 +16,7 @@ namespace NSec.Experimental.PasswordBased
     //          applications <https://github.com/P-H-C/phc-winner-argon2/raw/
     //          master/argon2-specs.pdf>
     //
-    //      draft-irtf-cfrg-argon2-11 - The memory-hard Argon2 password hash and
+    //      draft-irtf-cfrg-argon2-12 - The memory-hard Argon2 password hash and
     //          proof-of-work function
     //
     //  Parameters
