@@ -202,7 +202,7 @@
     <value>The length of the MAC must be equal to {0}.</value>
   </data>
   <data name="Argument_MinMaxValue" xml:space="preserve">
-    <value>'{0}' cannot be greater than {1}.</value>
+    <value>'{0}' cannot be greater than '{1}'.</value>
   </data>
   <data name="Argument_NonceFixedCounterSize" xml:space="preserve">
     <value>The total length of the nonce must be between 0 and {0} bytes.</value>
