@@ -78,26 +78,26 @@ namespace NSec.Cryptography
         }
 
         public int GenerateInt32(
-            int maxValue)
+            int upperExclusive)
         {
-            if (maxValue < 0)
+            if (upperExclusive < 0)
             {
-                throw Error.ArgumentOutOfRange_MustBePositive(nameof(maxValue), nameof(maxValue));
+                throw Error.ArgumentOutOfRange_MustBePositive(nameof(upperExclusive), nameof(upperExclusive));
             }
 
-            return unchecked((int)GenerateUInt32((uint)maxValue));
+            return unchecked((int)GenerateUInt32((uint)upperExclusive));
         }
 
         public int GenerateInt32(
-            int minValue,
-            int maxValue)
+            int lowerInclusive,
+            int upperExclusive)
         {
-            if (minValue > maxValue)
+            if (lowerInclusive > upperExclusive)
             {
-                throw Error.Argument_MinMaxValue(nameof(minValue), nameof(minValue), nameof(maxValue));
+                throw Error.Argument_MinMaxValue(nameof(lowerInclusive), nameof(lowerInclusive), nameof(upperExclusive));
             }
 
-            return unchecked((int)((uint)minValue + GenerateUInt32((uint)maxValue - (uint)minValue)));
+            return unchecked((int)((uint)lowerInclusive + GenerateUInt32((uint)upperExclusive - (uint)lowerInclusive)));
         }
 
         public Key GenerateKey(
@@ -147,14 +147,14 @@ namespace NSec.Cryptography
         }
 
         public uint GenerateUInt32(
-            uint maxValue)
+            uint upperExclusive)
         {
-            if (maxValue < 2)
+            if (upperExclusive < 2)
             {
                 return 0;
             }
 
-            uint min = unchecked((uint)-(int)maxValue) % maxValue;
+            uint min = unchecked((uint)-(int)upperExclusive) % upperExclusive;
 
             uint value;
             do
@@ -163,19 +163,19 @@ namespace NSec.Cryptography
             }
             while (value < min);
 
-            return value % maxValue;
+            return value % upperExclusive;
         }
 
         public uint GenerateUInt32(
-            uint minValue,
-            uint maxValue)
+            uint lowerInclusive,
+            uint upperExclusive)
         {
-            if (minValue > maxValue)
+            if (lowerInclusive > upperExclusive)
             {
-                throw Error.Argument_MinMaxValue(nameof(minValue), nameof(minValue), nameof(maxValue));
+                throw Error.Argument_MinMaxValue(nameof(lowerInclusive), nameof(lowerInclusive), nameof(upperExclusive));
             }
 
-            return unchecked(minValue + GenerateUInt32(maxValue - minValue));
+            return unchecked(lowerInclusive + GenerateUInt32(upperExclusive - lowerInclusive));
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]

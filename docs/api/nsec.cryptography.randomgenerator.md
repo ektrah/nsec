@@ -83,23 +83,23 @@ equal to `int.MaxValue`.
 Returns a non-negative random integer that is less than the specified maximum.
 
     public int GenerateInt32(
-        int maxValue)
+        int upperExclusive)
 
 #### Parameters
 
-maxValue
-: The exclusive upper bound of the random number to be generated. `maxValue`
+upperExclusive
+: The exclusive upper bound of the random number to be generated. `upperExclusive`
     must be greater than or equal to 0.
 
 #### Return Value
 
 A 32-bit signed integer that is greater than or equal to 0 and less than
-`maxValue`. However, if `maxValue` equals 0, `maxValue` is returned.
+`upperExclusive`. However, if `upperExclusive` equals 0, `upperExclusive` is returned.
 
 #### Exceptions
 
 ArgumentOutOfRangeException
-: `maxValue` is less than 0.
+: `upperExclusive` is less than 0.
 
 
 ### GenerateInt32(int, int)
@@ -107,27 +107,27 @@ ArgumentOutOfRangeException
 Returns a random integer that is within a specified range.
 
     public int GenerateInt32(
-        int minValue,
-        int maxValue)
+        int lowerInclusive,
+        int upperExclusive)
 
 #### Parameters
 
-minValue
+lowerInclusive
 : The inclusive lower bound of the random number to be generated.
 
-maxValue
-: The exclusive upper bound of the random number to be generated. `maxValue`
-    must be greater than or equal to `minValue`.
+upperExclusive
+: The exclusive upper bound of the random number to be generated. `upperExclusive`
+    must be greater than or equal to `lowerInclusive`.
 
 #### Return Value
 
-A 32-bit signed integer greater than or equal to `minValue` and less than
-`maxValue`. However, if `minValue` equals `maxValue`, `minValue` is returned.
+A 32-bit signed integer greater than or equal to `lowerInclusive` and less than
+`upperExclusive`. However, if `lowerInclusive` equals `upperExclusive`, `lowerInclusive` is returned.
 
 #### Exceptions
 
 ArgumentException
-: `minValue` is greater than `maxValue`.
+: `lowerInclusive` is greater than `upperExclusive`.
 
 
 ### GenerateKey(Algorithm, in KeyCreationParameters)
@@ -177,17 +177,17 @@ equal to `uint.MaxValue`.
 Returns a random integer that is less than the specified maximum.
 
     public uint GenerateUInt32(
-        uint maxValue)
+        uint upperExclusive)
 
 #### Parameters
 
-maxValue
+upperExclusive
 : The exclusive upper bound of the random number to be generated.
 
 #### Return Value
 
 A 32-bit unsigned integer that is greater than or equal to 0 and less than
-`maxValue`. However, if `maxValue` equals 0, `maxValue` is returned.
+`upperExclusive`. However, if `upperExclusive` equals 0, `upperExclusive` is returned.
 
 
 ### GenerateUInt32(uint, uint)
@@ -195,27 +195,27 @@ A 32-bit unsigned integer that is greater than or equal to 0 and less than
 Returns a random integer that is within a specified range.
 
     public uint GenerateUInt32(
-        uint minValue,
-        uint maxValue)
+        uint lowerInclusive,
+        uint upperExclusive)
 
 #### Parameters
 
-minValue
+lowerInclusive
 : The inclusive lower bound of the random number to be generated.
 
-maxValue
-: The exclusive upper bound of the random number to be generated. `maxValue`
-    must be greater than or equal to `minValue`.
+upperExclusive
+: The exclusive upper bound of the random number to be generated. `upperExclusive`
+    must be greater than or equal to `lowerInclusive`.
 
 #### Return Value
 
-A 32-bit unsigned integer greater than or equal to `minValue` and less than
-`maxValue`. However, if `minValue` equals `maxValue`, `minValue` is returned.
+A 32-bit unsigned integer greater than or equal to `lowerInclusive` and less than
+`upperExclusive`. However, if `lowerInclusive` equals `upperExclusive`, `lowerInclusive` is returned.
 
 #### Exceptions
 
 ArgumentException
-: `minValue` is greater than `maxValue`.
+: `lowerInclusive` is greater than `upperExclusive`.
 
 
 ## Thread Safety
