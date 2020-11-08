@@ -1,5 +1,3 @@
-using System;
-using System.Buffers;
 using System.Diagnostics;
 using System.Threading;
 using static Interop.Libsodium;
@@ -74,23 +72,22 @@ namespace NSec.Cryptography
             if (otherPartyPublicKey.Algorithm != this)
                 throw Error.Argument_PublicKeyAlgorithmMismatch(nameof(otherPartyPublicKey), nameof(otherPartyPublicKey));
 
-            ReadOnlyMemory<byte> memory = default;
-            IMemoryOwner<byte>? owner = default;
+            SecureMemoryHandle? sharedSecretHandle = default;
             bool success = false;
 
             try
             {
-                success = AgreeCore(key.Span, in otherPartyPublicKey.GetPinnableReference(), creationParameters.GetMemoryPool(), out memory, out owner);
+                success = AgreeCore(key.Handle, in otherPartyPublicKey.GetPinnableReference(), out sharedSecretHandle);
             }
             finally
             {
-                if (!success && owner != null)
+                if (!success && sharedSecretHandle != null)
                 {
-                    owner.Dispose();
+                    sharedSecretHandle.Dispose();
                 }
             }
 
-            return success ? new SharedSecret(memory, owner) : null;
+            return success && sharedSecretHandle != null ? new SharedSecret(sharedSecretHandle) : null;
         }
 
         internal sealed override int GetKeySize()
@@ -106,10 +103,8 @@ namespace NSec.Cryptography
         internal abstract override int GetSeedSize();
 
         private protected abstract bool AgreeCore(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             in PublicKeyBytes otherPartyPublicKey,
-            MemoryPool<byte> memoryPool,
-            out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte> owner);
+            out SecureMemoryHandle? sharedSecretHandle);
     }
 }

@@ -1,7 +1,7 @@
 using System;
-using System.Buffers;
 using System.ComponentModel;
 using System.Diagnostics;
+using static Interop.Libsodium;
 
 namespace NSec.Cryptography
 {
@@ -9,12 +9,10 @@ namespace NSec.Cryptography
     public sealed class Key : IDisposable
     {
         private readonly Algorithm _algorithm;
-        private readonly IDisposable _disposable;
         private readonly KeyExportPolicies _exportPolicy;
-        private readonly ReadOnlyMemory<byte> _memory;
+        private readonly SecureMemoryHandle _handle;
         private readonly PublicKey? _publicKey;
 
-        private bool _disposed;
         private bool _exported;
 
         public Key(
@@ -29,8 +27,7 @@ namespace NSec.Cryptography
             int seedSize = algorithm.GetSeedSize();
             Debug.Assert(seedSize <= 64);
 
-            ReadOnlyMemory<byte> memory = default;
-            IMemoryOwner<byte>? owner = default;
+            SecureMemoryHandle? keyHandle = default;
             PublicKey? publicKey = default;
             bool success = false;
 
@@ -40,7 +37,7 @@ namespace NSec.Cryptography
                 try
                 {
                     RandomGenerator.Default.GenerateBytes(seed);
-                    algorithm.CreateKey(seed, creationParameters.GetMemoryPool(), out memory, out owner, out publicKey);
+                    algorithm.CreateKey(seed, out keyHandle, out publicKey);
                     success = true;
                 }
                 finally
@@ -50,30 +47,27 @@ namespace NSec.Cryptography
             }
             finally
             {
-                if (!success && owner != null)
+                if (!success && keyHandle != null)
                 {
-                    owner.Dispose();
+                    keyHandle.Dispose();
                 }
             }
 
             _algorithm = algorithm;
             _exportPolicy = creationParameters.ExportPolicy;
-            _memory = memory;
-            _disposable = owner;
+            _handle = keyHandle;
             _publicKey = publicKey;
         }
 
         internal Key(
             Algorithm algorithm,
             in KeyCreationParameters creationParameters,
-            ReadOnlyMemory<byte> memory,
-            IDisposable owner,
+            SecureMemoryHandle keyHandle,
             PublicKey? publicKey)
         {
             _algorithm = algorithm;
             _exportPolicy = creationParameters.ExportPolicy;
-            _memory = memory;
-            _disposable = owner;
+            _handle = keyHandle;
             _publicKey = publicKey;
         }
 
@@ -87,18 +81,7 @@ namespace NSec.Cryptography
 
         public int Size => _algorithm.GetKeySize();
 
-        internal ReadOnlySpan<byte> Span
-        {
-            get
-            {
-                if (_disposed)
-                {
-                    throw new ObjectDisposedException(typeof(Key).FullName);
-                }
-
-                return _memory.Span;
-            }
-        }
+        internal SecureMemoryHandle Handle => _handle;
 
         public static Key Create(
             Algorithm algorithm,
@@ -118,29 +101,28 @@ namespace NSec.Cryptography
                 throw Error.ArgumentNull_Algorithm(nameof(algorithm));
             }
 
-            ReadOnlyMemory<byte> memory = default;
-            IMemoryOwner<byte>? owner = default;
+            SecureMemoryHandle? keyHandle = default;
             PublicKey? publicKey = default;
             bool success = false;
 
             try
             {
-                success = algorithm.TryImportKey(blob, format, creationParameters.GetMemoryPool(), out memory, out owner, out publicKey);
+                success = algorithm.TryImportKey(blob, format, out keyHandle, out publicKey);
             }
             finally
             {
-                if (!success && owner != null)
+                if (!success && keyHandle != null)
                 {
-                    owner.Dispose();
+                    keyHandle.Dispose();
                 }
             }
 
-            if (!success || owner == null)
+            if (!success || keyHandle == null)
             {
                 throw Error.Format_InvalidBlob();
             }
 
-            return new Key(algorithm, in creationParameters, memory, owner, publicKey);
+            return new Key(algorithm, in creationParameters, keyHandle, publicKey);
         }
 
         public static bool TryImport(
@@ -155,31 +137,29 @@ namespace NSec.Cryptography
                 throw Error.ArgumentNull_Algorithm(nameof(algorithm));
             }
 
-            ReadOnlyMemory<byte> memory = default;
-            IMemoryOwner<byte>? owner = default;
+            SecureMemoryHandle? keyHandle = default;
             PublicKey? publicKey = default;
             bool success = false;
 
             try
             {
-                success = algorithm.TryImportKey(blob, format, creationParameters.GetMemoryPool(), out memory, out owner, out publicKey);
+                success = algorithm.TryImportKey(blob, format, out keyHandle, out publicKey);
             }
             finally
             {
-                if (!success && owner != null)
+                if (!success && keyHandle != null)
                 {
-                    owner.Dispose();
+                    keyHandle.Dispose();
                 }
             }
 
-            result = success && owner != null ? new Key(algorithm, in creationParameters, memory, owner, publicKey) : null;
+            result = success && keyHandle != null ? new Key(algorithm, in creationParameters, keyHandle, publicKey) : null;
             return success;
         }
 
         public void Dispose()
         {
-            _disposed = true;
-            _disposable.Dispose();
+            _handle.Dispose();
         }
 
         public byte[] Export(
@@ -190,7 +170,7 @@ namespace NSec.Cryptography
 
             if (format < 0)
             {
-                if (_disposed)
+                if (_handle.IsClosed)
                 {
                     throw new ObjectDisposedException(typeof(Key).FullName);
                 }
@@ -207,10 +187,10 @@ namespace NSec.Cryptography
                     }
                 }
 
-                _algorithm.TryExportKey(_memory.Span, format, Span<byte>.Empty, out blobSize);
+                _algorithm.TryExportKey(_handle, format, Span<byte>.Empty, out blobSize);
                 blob = new byte[blobSize];
 
-                if (!_algorithm.TryExportKey(_memory.Span, format, blob, out blobSize))
+                if (!_algorithm.TryExportKey(_handle, format, blob, out blobSize))
                 {
                     throw Error.InvalidOperation_InternalError();
                 }
@@ -246,12 +226,12 @@ namespace NSec.Cryptography
 
             if (format < 0)
             {
-                if (_disposed)
+                if (_handle.IsClosed)
                 {
                     throw new ObjectDisposedException(typeof(Key).FullName);
                 }
 
-                _algorithm.TryExportKey(_memory.Span, format, Span<byte>.Empty, out blobSize);
+                _algorithm.TryExportKey(_handle, format, Span<byte>.Empty, out blobSize);
             }
             else
             {
@@ -279,7 +259,7 @@ namespace NSec.Cryptography
         {
             if (format < 0)
             {
-                if (_disposed)
+                if (_handle.IsClosed)
                 {
                     throw new ObjectDisposedException(typeof(Key).FullName);
                 }
@@ -296,7 +276,7 @@ namespace NSec.Cryptography
                     }
                 }
 
-                if (!_algorithm.TryExportKey(_memory.Span, format, blob, out blobSize))
+                if (!_algorithm.TryExportKey(_handle, format, blob, out blobSize))
                 {
                     return false;
                 }

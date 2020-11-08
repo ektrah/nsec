@@ -69,7 +69,7 @@ namespace NSec.Cryptography
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
 
             byte[] signature = new byte[_signatureSize];
-            SignCore(key.Span, data, signature);
+            SignCore(key.Handle, data, signature);
             return signature;
         }
 
@@ -85,7 +85,7 @@ namespace NSec.Cryptography
             if (signature.Length != _signatureSize)
                 throw Error.Argument_SignatureLength(nameof(signature), _signatureSize);
 
-            SignCore(key.Span, data, signature);
+            SignCore(key.Handle, data, signature);
         }
 
         public bool Verify(
@@ -114,7 +114,7 @@ namespace NSec.Cryptography
         internal abstract override int GetSeedSize();
 
         private protected abstract void SignCore(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             Span<byte> signature);
 

@@ -1,5 +1,4 @@
 using System;
-using System.Buffers;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -68,15 +67,11 @@ namespace NSec.Cryptography
 
         internal override void CreateKey(
             ReadOnlySpan<byte> seed,
-            MemoryPool<byte> memoryPool,
-            out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte> owner,
+            out SecureMemoryHandle keyHandle,
             out PublicKey? publicKey)
         {
             publicKey = null;
-            owner = memoryPool.Rent(seed.Length);
-            memory = owner.Memory.Slice(0, seed.Length);
-            seed.CopyTo(owner.Memory.Span);
+            keyHandle = SecureMemoryHandle.CreateFrom(seed);
         }
 
         internal unsafe override bool FinalizeAndVerifyCore(
@@ -131,33 +126,32 @@ namespace NSec.Cryptography
         }
 
         internal unsafe override void InitializeCore(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             out IncrementalMacState state)
         {
-            Debug.Assert(key.Length == crypto_hash_sha256_BYTES);
+            Debug.Assert(keyHandle.Size == crypto_hash_sha256_BYTES);
 
             fixed (crypto_auth_hmacsha256_state* state_ = &state.hmacsha256)
-            fixed (byte* k = key)
             {
                 int error = crypto_auth_hmacsha256_init(
                     state_,
-                    k,
-                    (UIntPtr)key.Length);
+                    keyHandle,
+                    (UIntPtr)keyHandle.Size);
 
                 Debug.Assert(error == 0);
             }
         }
 
         internal override bool TryExportKey(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             KeyBlobFormat format,
             Span<byte> blob,
             out int blobSize)
         {
             return format switch
             {
-                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryExport(key, blob, out blobSize),
-                KeyBlobFormat.NSecSymmetricKey => NSecKeyFormatter.TryExport(NSecBlobHeader, KeySize, MacSize, key, blob, out blobSize),
+                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryExport(keyHandle, blob, out blobSize),
+                KeyBlobFormat.NSecSymmetricKey => NSecKeyFormatter.TryExport(NSecBlobHeader, KeySize, MacSize, keyHandle, blob, out blobSize),
                 _ => throw Error.Argument_FormatNotSupported(nameof(format), format.ToString()),
             };
         }
@@ -165,17 +159,15 @@ namespace NSec.Cryptography
         internal override bool TryImportKey(
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
-            MemoryPool<byte> memoryPool,
-            out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte>? owner,
+            out SecureMemoryHandle? keyHandle,
             out PublicKey? publicKey)
         {
             publicKey = null;
 
             return format switch
             {
-                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryImport(KeySize, blob, memoryPool, out memory, out owner),
-                KeyBlobFormat.NSecSymmetricKey => NSecKeyFormatter.TryImport(NSecBlobHeader, KeySize, MacSize, blob, memoryPool, out memory, out owner),
+                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryImport(KeySize, blob, out keyHandle),
+                KeyBlobFormat.NSecSymmetricKey => NSecKeyFormatter.TryImport(NSecBlobHeader, KeySize, MacSize, blob, out keyHandle),
                 _ => throw Error.Argument_FormatNotSupported(nameof(format), format.ToString()),
             };
         }
@@ -197,24 +189,23 @@ namespace NSec.Cryptography
         }
 
         private protected unsafe override void MacCore(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             Span<byte> mac)
         {
-            Debug.Assert(key.Length == crypto_hash_sha256_BYTES);
+            Debug.Assert(keyHandle.Size == crypto_hash_sha256_BYTES);
             Debug.Assert(mac.Length <= crypto_auth_hmacsha256_BYTES);
 
             byte* temp = stackalloc byte[crypto_auth_hmacsha512_BYTES];
 
             fixed (byte* @in = data)
-            fixed (byte* k = key)
             {
                 crypto_auth_hmacsha256_state state;
 
                 crypto_auth_hmacsha256_init(
                     &state,
-                    k,
-                    (UIntPtr)key.Length);
+                    keyHandle,
+                    (UIntPtr)keyHandle.Size);
 
                 crypto_auth_hmacsha256_update(
                     &state,
@@ -233,24 +224,23 @@ namespace NSec.Cryptography
         }
 
         private protected unsafe override bool VerifyCore(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> mac)
         {
-            Debug.Assert(key.Length == crypto_hash_sha256_BYTES);
+            Debug.Assert(keyHandle.Size == crypto_hash_sha256_BYTES);
             Debug.Assert(mac.Length <= crypto_auth_hmacsha256_BYTES);
 
             byte* temp = stackalloc byte[crypto_auth_hmacsha256_BYTES];
 
             fixed (byte* @in = data)
-            fixed (byte* k = key)
             {
                 crypto_auth_hmacsha256_state state;
 
                 crypto_auth_hmacsha256_init(
                     &state,
-                    k,
-                    (UIntPtr)key.Length);
+                    keyHandle,
+                    (UIntPtr)keyHandle.Size);
 
                 crypto_auth_hmacsha256_update(
                     &state,

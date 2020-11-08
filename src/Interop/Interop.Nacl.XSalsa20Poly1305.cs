@@ -16,7 +16,7 @@ internal static partial class Interop
             byte* m,
             ulong mlen,
             NSec.Cryptography.Nonce* n,
-            byte* k);
+            SecureMemoryHandle k);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern UIntPtr crypto_secretbox_keybytes();
@@ -33,7 +33,7 @@ internal static partial class Interop
             byte* c,
             ulong clen,
             NSec.Cryptography.Nonce* n,
-            byte* k);
+            SecureMemoryHandle k);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern IntPtr crypto_secretbox_primitive();

@@ -23,7 +23,7 @@ internal static partial class Interop
             byte* ad,
             ulong adlen,
             NSec.Cryptography.Nonce* npub,
-            byte* k);
+            SecureMemoryHandle k);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static unsafe extern int crypto_aead_xchacha20poly1305_ietf_encrypt(
@@ -35,7 +35,7 @@ internal static partial class Interop
             ulong adlen,
             byte* nsec,
             NSec.Cryptography.Nonce* npub,
-            byte* k);
+            SecureMemoryHandle k);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern UIntPtr crypto_aead_xchacha20poly1305_ietf_keybytes();

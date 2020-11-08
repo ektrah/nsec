@@ -1,7 +1,7 @@
 using System;
-using System.Buffers;
 using System.Buffers.Binary;
 using System.Diagnostics;
+using static Interop.Libsodium;
 
 namespace NSec.Cryptography.Formatting
 {
@@ -11,11 +11,11 @@ namespace NSec.Cryptography.Formatting
             uint blobHeader,
             int keySize,
             int outputSize,
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             Span<byte> blob,
             out int blobSize)
         {
-            Debug.Assert(key.Length == keySize);
+            Debug.Assert(keyHandle.Size == keySize);
 
             blobSize = sizeof(uint) + sizeof(short) + sizeof(short) + keySize;
 
@@ -27,7 +27,7 @@ namespace NSec.Cryptography.Formatting
             BinaryPrimitives.WriteUInt32BigEndian(blob, blobHeader);
             BinaryPrimitives.WriteInt16LittleEndian(blob.Slice(sizeof(uint)), (short)keySize);
             BinaryPrimitives.WriteInt16LittleEndian(blob.Slice(sizeof(uint) + sizeof(short)), (short)outputSize);
-            key.CopyTo(blob.Slice(sizeof(uint) + sizeof(short) + sizeof(short), keySize));
+            keyHandle.CopyTo(blob.Slice(sizeof(uint) + sizeof(short) + sizeof(short), keySize));
             return true;
         }
 
@@ -36,23 +36,18 @@ namespace NSec.Cryptography.Formatting
             int keySize,
             int outputSize,
             ReadOnlySpan<byte> blob,
-            MemoryPool<byte> memoryPool,
-            out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte>? owner)
+            out SecureMemoryHandle? keyHandle)
         {
             if (blob.Length != sizeof(uint) + sizeof(short) + sizeof(short) + keySize ||
                 BinaryPrimitives.ReadUInt32BigEndian(blob) != blobHeader ||
                 BinaryPrimitives.ReadInt16LittleEndian(blob.Slice(sizeof(uint))) != keySize ||
                 BinaryPrimitives.ReadInt16LittleEndian(blob.Slice(sizeof(uint) + sizeof(short))) != outputSize)
             {
-                memory = default;
-                owner = default;
+                keyHandle = default;
                 return false;
             }
 
-            owner = memoryPool.Rent(keySize);
-            memory = owner.Memory.Slice(0, keySize);
-            blob.Slice(sizeof(uint) + sizeof(short) + sizeof(short), keySize).CopyTo(owner.Memory.Span);
+            keyHandle = SecureMemoryHandle.CreateFrom(blob.Slice(sizeof(uint) + sizeof(short) + sizeof(short), keySize));
             return true;
         }
     }

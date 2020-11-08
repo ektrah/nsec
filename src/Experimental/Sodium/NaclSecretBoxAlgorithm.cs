@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using NSec.Cryptography;
+using static Interop.Libsodium;
 
 namespace NSec.Experimental.Sodium
 {
@@ -45,7 +46,7 @@ namespace NSec.Experimental.Sodium
                 throw Error.Argument_PlaintextTooLong(nameof(plaintext), int.MaxValue - _macSize);
 
             byte[] ciphertext = new byte[_macSize + plaintext.Length];
-            EncryptCore(key.Span, nonce, plaintext, ciphertext);
+            EncryptCore(key.Handle, nonce, plaintext, ciphertext);
             return ciphertext;
         }
 
@@ -68,7 +69,7 @@ namespace NSec.Experimental.Sodium
             if (ciphertext.Overlaps(plaintext))
                 throw Error.Argument_OverlapCiphertext(nameof(ciphertext));
 
-            EncryptCore(key.Span, nonce, plaintext, ciphertext);
+            EncryptCore(key.Handle, nonce, plaintext, ciphertext);
         }
 
         public bool Decrypt(
@@ -91,7 +92,7 @@ namespace NSec.Experimental.Sodium
             }
 
             byte[] result = new byte[ciphertext.Length - _macSize];
-            bool success = DecryptCore(key.Span, nonce, ciphertext, result);
+            bool success = DecryptCore(key.Handle, nonce, ciphertext, result);
             plaintext = success ? result : null;
             return success;
         }
@@ -115,11 +116,11 @@ namespace NSec.Experimental.Sodium
             if (plaintext.Overlaps(ciphertext))
                 throw Error.Argument_OverlapPlaintext(nameof(plaintext));
 
-            return DecryptCore(key.Span, nonce, ciphertext, plaintext);
+            return DecryptCore(key.Handle, nonce, ciphertext, plaintext);
         }
 
         internal abstract void EncryptCore(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             in Nonce nonce,
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext);
@@ -137,7 +138,7 @@ namespace NSec.Experimental.Sodium
         internal abstract override int GetSeedSize();
 
         internal abstract bool DecryptCore(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             in Nonce nonce,
             ReadOnlySpan<byte> ciphertext,
             Span<byte> plaintext);

@@ -98,7 +98,7 @@ namespace NSec.Cryptography
             }
 
             state = default;
-            algorithm.InitializeCore(key.Span, out Unsafe.AsRef(in state._state));
+            algorithm.InitializeCore(key.Handle, out Unsafe.AsRef(in state._state));
             Unsafe.AsRef(in state._algorithm) = algorithm;
         }
 

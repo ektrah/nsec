@@ -161,7 +161,7 @@ namespace NSec.Cryptography
             }
 
             byte[] mac = new byte[_macSize];
-            MacCore(key.Span, data, mac);
+            MacCore(key.Handle, data, mac);
             return mac;
         }
 
@@ -183,7 +183,7 @@ namespace NSec.Cryptography
                 throw Error.Argument_MacLength(nameof(mac), _macSize);
             }
 
-            MacCore(key.Span, data, mac);
+            MacCore(key.Handle, data, mac);
         }
 
         public bool Verify(
@@ -200,7 +200,7 @@ namespace NSec.Cryptography
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
             }
 
-            return mac.Length == _macSize && VerifyCore(key.Span, data, mac);
+            return mac.Length == _macSize && VerifyCore(key.Handle, data, mac);
         }
 
         internal abstract bool FinalizeAndVerifyCore(
@@ -224,7 +224,7 @@ namespace NSec.Cryptography
         internal abstract override int GetSeedSize();
 
         internal abstract void InitializeCore(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             out IncrementalMacState state);
 
         internal abstract void UpdateCore(
@@ -232,12 +232,12 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> data);
 
         private protected abstract void MacCore(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             Span<byte> mac);
 
         private protected abstract bool VerifyCore(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> mac);
     }

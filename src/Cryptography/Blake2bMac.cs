@@ -1,5 +1,4 @@
 using System;
-using System.Buffers;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -65,18 +64,14 @@ namespace NSec.Cryptography
 
         internal override void CreateKey(
             ReadOnlySpan<byte> seed,
-            MemoryPool<byte> memoryPool,
-            out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte> owner,
+            out SecureMemoryHandle keyHandle,
             out PublicKey? publicKey)
         {
             Debug.Assert(seed.Length >= crypto_generichash_blake2b_KEYBYTES_MIN);
             Debug.Assert(seed.Length <= crypto_generichash_blake2b_KEYBYTES_MAX);
 
             publicKey = null;
-            owner = memoryPool.Rent(seed.Length);
-            memory = owner.Memory.Slice(0, seed.Length);
-            seed.CopyTo(owner.Memory.Span);
+            keyHandle = SecureMemoryHandle.CreateFrom(seed);
         }
 
         internal unsafe override bool FinalizeAndVerifyCore(
@@ -129,21 +124,20 @@ namespace NSec.Cryptography
         }
 
         internal unsafe override void InitializeCore(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             out IncrementalMacState state)
         {
-            Debug.Assert(key.Length >= crypto_generichash_blake2b_KEYBYTES_MIN);
-            Debug.Assert(key.Length <= crypto_generichash_blake2b_KEYBYTES_MAX);
+            Debug.Assert(keyHandle.Size >= crypto_generichash_blake2b_KEYBYTES_MIN);
+            Debug.Assert(keyHandle.Size <= crypto_generichash_blake2b_KEYBYTES_MAX);
             Debug.Assert(MacSize >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(MacSize <= crypto_generichash_blake2b_BYTES_MAX);
 
             fixed (crypto_generichash_blake2b_state* state_ = &state.blake2b)
-            fixed (byte* k = key)
             {
                 int error = crypto_generichash_blake2b_init(
                     state_,
-                    k,
-                    (UIntPtr)key.Length,
+                    keyHandle,
+                    (UIntPtr)keyHandle.Size,
                     (UIntPtr)MacSize);
 
                 Debug.Assert(error == 0);
@@ -151,15 +145,15 @@ namespace NSec.Cryptography
         }
 
         internal override bool TryExportKey(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             KeyBlobFormat format,
             Span<byte> blob,
             out int blobSize)
         {
             return format switch
             {
-                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryExport(key, blob, out blobSize),
-                KeyBlobFormat.NSecSymmetricKey => NSecKeyFormatter.TryExport(NSecBlobHeader, KeySize, MacSize, key, blob, out blobSize),
+                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryExport(keyHandle, blob, out blobSize),
+                KeyBlobFormat.NSecSymmetricKey => NSecKeyFormatter.TryExport(NSecBlobHeader, KeySize, MacSize, keyHandle, blob, out blobSize),
                 _ => throw Error.Argument_FormatNotSupported(nameof(format), format.ToString()),
             };
         }
@@ -167,17 +161,15 @@ namespace NSec.Cryptography
         internal override bool TryImportKey(
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
-            MemoryPool<byte> memoryPool,
-            out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte>? owner,
+            out SecureMemoryHandle? keyHandle,
             out PublicKey? publicKey)
         {
             publicKey = null;
 
             return format switch
             {
-                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryImport(KeySize, blob, memoryPool, out memory, out owner),
-                KeyBlobFormat.NSecSymmetricKey => NSecKeyFormatter.TryImport(NSecBlobHeader, KeySize, MacSize, blob, memoryPool, out memory, out owner),
+                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryImport(KeySize, blob, out keyHandle),
+                KeyBlobFormat.NSecSymmetricKey => NSecKeyFormatter.TryImport(NSecBlobHeader, KeySize, MacSize, blob, out keyHandle),
                 _ => throw Error.Argument_FormatNotSupported(nameof(format), format.ToString()),
             };
         }
@@ -199,53 +191,51 @@ namespace NSec.Cryptography
         }
 
         private protected unsafe override void MacCore(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             Span<byte> mac)
         {
-            Debug.Assert(key.Length >= crypto_generichash_blake2b_KEYBYTES_MIN);
-            Debug.Assert(key.Length <= crypto_generichash_blake2b_KEYBYTES_MAX);
+            Debug.Assert(keyHandle.Size >= crypto_generichash_blake2b_KEYBYTES_MIN);
+            Debug.Assert(keyHandle.Size <= crypto_generichash_blake2b_KEYBYTES_MAX);
             Debug.Assert(mac.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(mac.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
             fixed (byte* @out = mac)
             fixed (byte* @in = data)
-            fixed (byte* k = key)
             {
                 int error = crypto_generichash_blake2b(
                     @out,
                     (UIntPtr)mac.Length,
                     @in,
                     (ulong)data.Length,
-                    k,
-                    (UIntPtr)key.Length);
+                    keyHandle,
+                    (UIntPtr)keyHandle.Size);
 
                 Debug.Assert(error == 0);
             }
         }
 
         private protected unsafe override bool VerifyCore(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> mac)
         {
-            Debug.Assert(key.Length >= crypto_generichash_blake2b_KEYBYTES_MIN);
-            Debug.Assert(key.Length <= crypto_generichash_blake2b_KEYBYTES_MAX);
+            Debug.Assert(keyHandle.Size >= crypto_generichash_blake2b_KEYBYTES_MIN);
+            Debug.Assert(keyHandle.Size <= crypto_generichash_blake2b_KEYBYTES_MAX);
             Debug.Assert(mac.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(mac.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
             byte* temp = stackalloc byte[mac.Length];
 
             fixed (byte* @in = data)
-            fixed (byte* k = key)
             {
                 int error = crypto_generichash_blake2b(
                     temp,
                     (UIntPtr)mac.Length,
                     @in,
                     (ulong)data.Length,
-                    k,
-                    (UIntPtr)key.Length);
+                    keyHandle,
+                    (UIntPtr)keyHandle.Size);
 
                 Debug.Assert(error == 0);
             }

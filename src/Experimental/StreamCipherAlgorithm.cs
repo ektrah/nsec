@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using NSec.Cryptography;
+using static Interop.Libsodium;
 
 namespace NSec.Experimental
 {
@@ -59,7 +60,7 @@ namespace NSec.Experimental
                 throw Error.ArgumentOutOfRange_GenerateNegativeCount(nameof(count));
 
             byte[] bytes = new byte[count];
-            GeneratePseudoRandomStreamCore(key.Span, nonce, bytes);
+            GeneratePseudoRandomStreamCore(key.Handle, nonce, bytes);
             return bytes;
         }
 
@@ -75,7 +76,7 @@ namespace NSec.Experimental
             if (nonce.Size != _nonceSize)
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
 
-            GeneratePseudoRandomStreamCore(key.Span, nonce, bytes);
+            GeneratePseudoRandomStreamCore(key.Handle, nonce, bytes);
         }
 
         public byte[] XOr(
@@ -91,7 +92,7 @@ namespace NSec.Experimental
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
 
             byte[] output = new byte[input.Length];
-            XOrCore(key.Span, in nonce, input, output);
+            XOrCore(key.Handle, in nonce, input, output);
             return output;
         }
 
@@ -112,7 +113,7 @@ namespace NSec.Experimental
             if (output.Overlaps(input, out int offset) && offset != 0)
                 throw Error.Argument_OverlapCiphertext(nameof(output)); // TODO
 
-            XOrCore(key.Span, in nonce, input, output);
+            XOrCore(key.Handle, in nonce, input, output);
         }
 
         public byte[] XOrIC(
@@ -129,7 +130,7 @@ namespace NSec.Experimental
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
 
             byte[] output = new byte[input.Length];
-            XOrICCore(key.Span, in nonce, input, ic, output);
+            XOrICCore(key.Handle, in nonce, input, ic, output);
             return output;
         }
 
@@ -151,7 +152,7 @@ namespace NSec.Experimental
             if (output.Overlaps(input, out int offset) && offset != 0)
                 throw Error.Argument_OverlapCiphertext(nameof(output)); // TODO
 
-            XOrICCore(key.Span, in nonce, input, ic, output);
+            XOrICCore(key.Handle, in nonce, input, ic, output);
         }
 
         internal sealed override int GetKeySize()
@@ -167,18 +168,18 @@ namespace NSec.Experimental
         internal abstract override int GetSeedSize();
 
         private protected abstract void GeneratePseudoRandomStreamCore(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             in Nonce nonce,
             Span<byte> bytes);
 
         private protected abstract void XOrCore(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             in Nonce nonce,
             ReadOnlySpan<byte> input,
             Span<byte> output);
 
         private protected abstract void XOrICCore(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             in Nonce nonce,
             ReadOnlySpan<byte> input,
             uint ic,

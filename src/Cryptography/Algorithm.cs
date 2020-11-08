@@ -1,7 +1,7 @@
 using System;
-using System.Buffers;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using static Interop.Libsodium;
 
 namespace NSec.Cryptography
 {
@@ -50,9 +50,7 @@ namespace NSec.Cryptography
         // Creates a new libsodium secret key from a seed.
         internal virtual void CreateKey(
             ReadOnlySpan<byte> seed,
-            MemoryPool<byte> memoryPool,
-            out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte> owner,
+            out SecureMemoryHandle keyHandle,
             out PublicKey? publicKey)
         {
             throw Error.NotSupported_CreateKey();
@@ -78,7 +76,7 @@ namespace NSec.Cryptography
 
         // Converts a libsodium secret key into a key blob.
         internal virtual bool TryExportKey(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             KeyBlobFormat format,
             Span<byte> blob,
             out int blobSize)
@@ -100,9 +98,7 @@ namespace NSec.Cryptography
         internal virtual bool TryImportKey(
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
-            MemoryPool<byte> memoryPool,
-            out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte>? owner,
+            out SecureMemoryHandle? keyHandle,
             out PublicKey? publicKey)
         {
             throw Error.NotSupported_ImportKey();

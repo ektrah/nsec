@@ -43,7 +43,7 @@ namespace NSec.Cryptography.Formatting
         }
 
         public bool TryExport(
-            ReadOnlySpan<byte> privateKeyBytes,
+            SecureMemoryHandle keyHandle,
             Span<byte> blob,
             out int blobSize)
         {
@@ -55,12 +55,12 @@ namespace NSec.Cryptography.Formatting
             }
 
             _blobHeader.CopyTo(blob);
-            Serialize(privateKeyBytes, blob.Slice(_blobHeader.Length, _keySize));
+            Serialize(keyHandle, blob.Slice(_blobHeader.Length, _keySize));
             return true;
         }
 
         public bool TryExportText(
-            ReadOnlySpan<byte> privateKeyBytes,
+            SecureMemoryHandle keyHandle,
             Span<byte> blob,
             out int blobSize)
         {
@@ -75,7 +75,7 @@ namespace NSec.Cryptography.Formatting
             try
             {
                 _blobHeader.CopyTo(temp);
-                Serialize(privateKeyBytes, temp.Slice(_blobHeader.Length));
+                Serialize(keyHandle, temp.Slice(_blobHeader.Length));
 
                 Armor.EncodeToUtf8(temp, s_beginLabel, s_endLabel, blob.Slice(0, _blobTextSize));
                 return true;
@@ -88,28 +88,23 @@ namespace NSec.Cryptography.Formatting
 
         public bool TryImport(
             ReadOnlySpan<byte> blob,
-            MemoryPool<byte> memoryPool,
-            out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte>? owner,
+            out SecureMemoryHandle? keyHandle,
             out PublicKeyBytes publicKeyBytes)
         {
             if (blob.Length != _blobSize || !blob.StartsWith(_blobHeader))
             {
-                memory = default;
-                owner = default;
+                keyHandle = default;
                 publicKeyBytes = default;
                 return false;
             }
 
-            Deserialize(blob.Slice(_blobHeader.Length), memoryPool, out memory, out owner, out publicKeyBytes);
+            Deserialize(blob.Slice(_blobHeader.Length), out keyHandle, out publicKeyBytes);
             return true;
         }
 
         public bool TryImportText(
             ReadOnlySpan<byte> blob,
-            MemoryPool<byte> memoryPool,
-            out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte>? owner,
+            out SecureMemoryHandle? keyHandle,
             out PublicKeyBytes publicKeyBytes)
         {
             Span<byte> temp = stackalloc byte[_blobSize];
@@ -117,13 +112,12 @@ namespace NSec.Cryptography.Formatting
             {
                 if (!Armor.TryDecodeFromUtf8(blob, s_beginLabel, s_endLabel, temp, out int written) || written != _blobSize)
                 {
-                    memory = default;
-                    owner = default;
+                    keyHandle = default;
                     publicKeyBytes = default;
                     return false;
                 }
 
-                return TryImport(temp, memoryPool, out memory, out owner, out publicKeyBytes);
+                return TryImport(temp, out keyHandle, out publicKeyBytes);
             }
             finally
             {
@@ -133,13 +127,11 @@ namespace NSec.Cryptography.Formatting
 
         protected abstract void Deserialize(
             ReadOnlySpan<byte> span,
-            MemoryPool<byte> memoryPool,
-            out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte> owner,
+            out SecureMemoryHandle? keyHandle,
             out PublicKeyBytes publicKeyBytes);
 
         protected abstract void Serialize(
-            ReadOnlySpan<byte> privateKeyBytes,
+            SecureMemoryHandle keyHandle,
             Span<byte> span);
     }
 }

@@ -94,7 +94,7 @@ namespace NSec.Cryptography
                 throw Error.ArgumentNull_SharedSecret(nameof(sharedSecret));
 
             byte[] pseudorandomKey = new byte[crypto_auth_hmacsha256_BYTES];
-            ExtractCore(sharedSecret.Span, salt, pseudorandomKey);
+            ExtractCore(sharedSecret.Handle, salt, pseudorandomKey);
             return pseudorandomKey;
         }
 
@@ -108,11 +108,11 @@ namespace NSec.Cryptography
             if (pseudorandomKey.Length != crypto_auth_hmacsha256_BYTES)
                 throw Error.Argument_InvalidPrkLengthExact(nameof(pseudorandomKey), crypto_auth_hmacsha256_BYTES);
 
-            ExtractCore(sharedSecret.Span, salt, pseudorandomKey);
+            ExtractCore(sharedSecret.Handle, salt, pseudorandomKey);
         }
 
         private protected override void DeriveBytesCore(
-            ReadOnlySpan<byte> inputKeyingMaterial,
+            SecureMemoryHandle inputKeyingMaterial,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> info,
             Span<byte> bytes)
@@ -183,7 +183,7 @@ namespace NSec.Cryptography
         }
 
         private static unsafe void ExtractCore(
-            ReadOnlySpan<byte> inputKeyingMaterial,
+            SecureMemoryHandle inputKeyingMaterial,
             ReadOnlySpan<byte> salt,
             Span<byte> pseudorandomKey)
         {
@@ -194,12 +194,11 @@ namespace NSec.Cryptography
             // "not provided", so this is not implemented.
 
             fixed (byte* key = salt)
-            fixed (byte* @in = inputKeyingMaterial)
             fixed (byte* @out = pseudorandomKey)
             {
                 crypto_auth_hmacsha256_state state;
                 crypto_auth_hmacsha256_init(&state, key, (UIntPtr)salt.Length);
-                crypto_auth_hmacsha256_update(&state, @in, (ulong)inputKeyingMaterial.Length);
+                crypto_auth_hmacsha256_update(&state, inputKeyingMaterial, (ulong)inputKeyingMaterial.Size);
                 crypto_auth_hmacsha256_final(&state, @out);
             }
         }

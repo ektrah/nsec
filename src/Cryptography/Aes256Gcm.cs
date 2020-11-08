@@ -1,5 +1,4 @@
 using System;
-using System.Buffers;
 using System.Diagnostics;
 using System.Threading;
 using NSec.Cryptography.Formatting;
@@ -83,27 +82,23 @@ namespace NSec.Cryptography
 
         internal override void CreateKey(
             ReadOnlySpan<byte> seed,
-            MemoryPool<byte> memoryPool,
-            out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte> owner,
+            out SecureMemoryHandle keyHandle,
             out PublicKey? publicKey)
         {
             Debug.Assert(seed.Length == crypto_aead_aes256gcm_KEYBYTES);
 
             publicKey = null;
-            owner = memoryPool.Rent(seed.Length);
-            memory = owner.Memory.Slice(0, seed.Length);
-            seed.CopyTo(owner.Memory.Span);
+            keyHandle = SecureMemoryHandle.CreateFrom(seed);
         }
 
         private protected unsafe override void EncryptCore(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             in Nonce nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext)
         {
-            Debug.Assert(key.Length == crypto_aead_aes256gcm_KEYBYTES);
+            Debug.Assert(keyHandle.Size == crypto_aead_aes256gcm_KEYBYTES);
             Debug.Assert(nonce.Size == crypto_aead_aes256gcm_NPUBBYTES);
             Debug.Assert(ciphertext.Length == plaintext.Length + crypto_aead_aes256gcm_ABYTES);
 
@@ -111,7 +106,6 @@ namespace NSec.Cryptography
             fixed (byte* m = plaintext)
             fixed (byte* ad = associatedData)
             fixed (Nonce* n = &nonce)
-            fixed (byte* k = key)
             {
                 int error = crypto_aead_aes256gcm_encrypt(
                     c,
@@ -122,7 +116,7 @@ namespace NSec.Cryptography
                     (ulong)associatedData.Length,
                     null,
                     n,
-                    k);
+                    keyHandle);
 
                 Debug.Assert(error == 0);
                 Debug.Assert((ulong)ciphertext.Length == clen_p);
@@ -135,13 +129,13 @@ namespace NSec.Cryptography
         }
 
         private protected unsafe override bool DecryptCore(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             in Nonce nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> ciphertext,
             Span<byte> plaintext)
         {
-            Debug.Assert(key.Length == crypto_aead_aes256gcm_KEYBYTES);
+            Debug.Assert(keyHandle.Size == crypto_aead_aes256gcm_KEYBYTES);
             Debug.Assert(nonce.Size == crypto_aead_aes256gcm_NPUBBYTES);
             Debug.Assert(plaintext.Length == ciphertext.Length - crypto_aead_aes256gcm_ABYTES);
 
@@ -149,7 +143,6 @@ namespace NSec.Cryptography
             fixed (byte* c = ciphertext)
             fixed (byte* ad = associatedData)
             fixed (Nonce* n = &nonce)
-            fixed (byte* k = key)
             {
                 int error = crypto_aead_aes256gcm_decrypt(
                     m,
@@ -160,7 +153,7 @@ namespace NSec.Cryptography
                     ad,
                     (ulong)associatedData.Length,
                     n,
-                    k);
+                    keyHandle);
 
                 // libsodium clears plaintext if decryption fails
 
@@ -170,15 +163,15 @@ namespace NSec.Cryptography
         }
 
         internal override bool TryExportKey(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             KeyBlobFormat format,
             Span<byte> blob,
             out int blobSize)
         {
             return format switch
             {
-                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryExport(key, blob, out blobSize),
-                KeyBlobFormat.NSecSymmetricKey => NSecKeyFormatter.TryExport(NSecBlobHeader, KeySize, TagSize, key, blob, out blobSize),
+                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryExport(keyHandle, blob, out blobSize),
+                KeyBlobFormat.NSecSymmetricKey => NSecKeyFormatter.TryExport(NSecBlobHeader, KeySize, TagSize, keyHandle, blob, out blobSize),
                 _ => throw Error.Argument_FormatNotSupported(nameof(format), format.ToString()),
             };
         }
@@ -186,17 +179,15 @@ namespace NSec.Cryptography
         internal override bool TryImportKey(
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
-            MemoryPool<byte> memoryPool,
-            out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte>? owner,
+            out SecureMemoryHandle? keyHandle,
             out PublicKey? publicKey)
         {
             publicKey = null;
 
             return format switch
             {
-                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryImport(KeySize, blob, memoryPool, out memory, out owner),
-                KeyBlobFormat.NSecSymmetricKey => NSecKeyFormatter.TryImport(NSecBlobHeader, KeySize, TagSize, blob, memoryPool, out memory, out owner),
+                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryImport(KeySize, blob, out keyHandle),
+                KeyBlobFormat.NSecSymmetricKey => NSecKeyFormatter.TryImport(NSecBlobHeader, KeySize, TagSize, blob, out keyHandle),
                 _ => throw Error.Argument_FormatNotSupported(nameof(format), format.ToString()),
             };
         }

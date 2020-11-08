@@ -1,5 +1,4 @@
 using System;
-using System.Buffers;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using static Interop.Libsodium;
@@ -16,9 +15,7 @@ namespace NSec.Cryptography.Formatting
 
         protected override unsafe void Deserialize(
             ReadOnlySpan<byte> span,
-            MemoryPool<byte> memoryPool,
-            out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte> owner,
+            out SecureMemoryHandle? keyHandle,
             out PublicKeyBytes publicKeyBytes)
         {
             if (Unsafe.SizeOf<PublicKeyBytes>() != crypto_scalarmult_curve25519_SCALARBYTES)
@@ -28,14 +25,11 @@ namespace NSec.Cryptography.Formatting
 
             Debug.Assert(span.Length == crypto_scalarmult_curve25519_SCALARBYTES);
 
-            owner = memoryPool.Rent(crypto_scalarmult_curve25519_SCALARBYTES);
-            memory = owner.Memory.Slice(0, crypto_scalarmult_curve25519_SCALARBYTES);
-            span.CopyTo(owner.Memory.Span);
+            keyHandle = SecureMemoryHandle.CreateFrom(span);
 
             fixed (PublicKeyBytes* q = &publicKeyBytes)
-            fixed (byte* n = owner.Memory.Span)
             {
-                int error = crypto_scalarmult_curve25519_base(q, n);
+                int error = crypto_scalarmult_curve25519_base(q, keyHandle);
 
                 Debug.Assert(error == 0);
                 Debug.Assert((((byte*)q)[crypto_scalarmult_curve25519_SCALARBYTES - 1] & 0x80) == 0);
@@ -43,13 +37,13 @@ namespace NSec.Cryptography.Formatting
         }
 
         protected override void Serialize(
-            ReadOnlySpan<byte> privateKeyBytes,
+            SecureMemoryHandle keyHandle,
             Span<byte> span)
         {
-            Debug.Assert(privateKeyBytes.Length == crypto_scalarmult_curve25519_SCALARBYTES);
+            Debug.Assert(keyHandle.Size == crypto_scalarmult_curve25519_SCALARBYTES);
             Debug.Assert(span.Length == crypto_scalarmult_curve25519_SCALARBYTES);
 
-            privateKeyBytes.CopyTo(span);
+            keyHandle.CopyTo(span);
         }
     }
 }

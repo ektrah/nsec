@@ -1,5 +1,4 @@
 using System;
-using System.Buffers;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -81,9 +80,7 @@ namespace NSec.Cryptography
 
         internal override unsafe void CreateKey(
             ReadOnlySpan<byte> seed,
-            MemoryPool<byte> memoryPool,
-            out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte> owner,
+            out SecureMemoryHandle keyHandle,
             out PublicKey? publicKey)
         {
             if (Unsafe.SizeOf<PublicKeyBytes>() != crypto_sign_ed25519_PUBLICKEYBYTES)
@@ -94,14 +91,12 @@ namespace NSec.Cryptography
             Debug.Assert(seed.Length == crypto_sign_ed25519_SEEDBYTES);
 
             publicKey = new PublicKey(this);
-            owner = memoryPool.Rent(crypto_sign_ed25519_SECRETKEYBYTES);
-            memory = owner.Memory.Slice(0, crypto_sign_ed25519_SECRETKEYBYTES);
+            keyHandle = SecureMemoryHandle.Create(crypto_sign_ed25519_SECRETKEYBYTES);
 
             fixed (PublicKeyBytes* pk = publicKey)
-            fixed (byte* sk = owner.Memory.Span)
             fixed (byte* seed_ = seed)
             {
-                int error = crypto_sign_ed25519_seed_keypair(pk, sk, seed_);
+                int error = crypto_sign_ed25519_seed_keypair(pk, keyHandle, seed_);
 
                 Debug.Assert(error == 0);
             }
@@ -113,23 +108,22 @@ namespace NSec.Cryptography
         }
 
         private protected unsafe override void SignCore(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             Span<byte> signature)
         {
-            Debug.Assert(key.Length == crypto_sign_ed25519_SECRETKEYBYTES);
+            Debug.Assert(keyHandle.Size == crypto_sign_ed25519_SECRETKEYBYTES);
             Debug.Assert(signature.Length == crypto_sign_ed25519_BYTES);
 
             fixed (byte* sig = signature)
             fixed (byte* m = data)
-            fixed (byte* sk = key)
             {
                 int error = crypto_sign_ed25519_detached(
                     sig,
                     out ulong signatureLength,
                     m,
                     (ulong)data.Length,
-                    sk);
+                    keyHandle);
 
                 Debug.Assert(error == 0);
                 Debug.Assert((ulong)signature.Length == signatureLength);
@@ -137,17 +131,17 @@ namespace NSec.Cryptography
         }
 
         internal override bool TryExportKey(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             KeyBlobFormat format,
             Span<byte> blob,
             out int blobSize)
         {
             return format switch
             {
-                KeyBlobFormat.RawPrivateKey => s_rawPrivateKeyFormatter.TryExport(key, blob, out blobSize),
-                KeyBlobFormat.NSecPrivateKey => s_nsecPrivateKeyFormatter.TryExport(key, blob, out blobSize),
-                KeyBlobFormat.PkixPrivateKey => s_pkixPrivateKeyFormatter.TryExport(key, blob, out blobSize),
-                KeyBlobFormat.PkixPrivateKeyText => s_pkixPrivateKeyFormatter.TryExportText(key, blob, out blobSize),
+                KeyBlobFormat.RawPrivateKey => s_rawPrivateKeyFormatter.TryExport(keyHandle, blob, out blobSize),
+                KeyBlobFormat.NSecPrivateKey => s_nsecPrivateKeyFormatter.TryExport(keyHandle, blob, out blobSize),
+                KeyBlobFormat.PkixPrivateKey => s_pkixPrivateKeyFormatter.TryExport(keyHandle, blob, out blobSize),
+                KeyBlobFormat.PkixPrivateKeyText => s_pkixPrivateKeyFormatter.TryExportText(keyHandle, blob, out blobSize),
                 _ => throw Error.Argument_FormatNotSupported(nameof(format), format.ToString()),
             };
         }
@@ -171,19 +165,17 @@ namespace NSec.Cryptography
         internal override bool TryImportKey(
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
-            MemoryPool<byte> memoryPool,
-            out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte>? owner,
+            out SecureMemoryHandle? keyHandle,
             out PublicKey? publicKey)
         {
             publicKey = new PublicKey(this);
 
             return format switch
             {
-                KeyBlobFormat.RawPrivateKey => s_rawPrivateKeyFormatter.TryImport(blob, memoryPool, out memory, out owner, out publicKey.GetPinnableReference()),
-                KeyBlobFormat.NSecPrivateKey => s_nsecPrivateKeyFormatter.TryImport(blob, memoryPool, out memory, out owner, out publicKey.GetPinnableReference()),
-                KeyBlobFormat.PkixPrivateKey => s_pkixPrivateKeyFormatter.TryImport(blob, memoryPool, out memory, out owner, out publicKey.GetPinnableReference()),
-                KeyBlobFormat.PkixPrivateKeyText => s_pkixPrivateKeyFormatter.TryImportText(blob, memoryPool, out memory, out owner, out publicKey.GetPinnableReference()),
+                KeyBlobFormat.RawPrivateKey => s_rawPrivateKeyFormatter.TryImport(blob, out keyHandle, out publicKey.GetPinnableReference()),
+                KeyBlobFormat.NSecPrivateKey => s_nsecPrivateKeyFormatter.TryImport(blob, out keyHandle, out publicKey.GetPinnableReference()),
+                KeyBlobFormat.PkixPrivateKey => s_pkixPrivateKeyFormatter.TryImport(blob, out keyHandle, out publicKey.GetPinnableReference()),
+                KeyBlobFormat.PkixPrivateKeyText => s_pkixPrivateKeyFormatter.TryImportText(blob, out keyHandle, out publicKey.GetPinnableReference()),
                 _ => throw Error.Argument_FormatNotSupported(nameof(format), format.ToString()),
             };
         }

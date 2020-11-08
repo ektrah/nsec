@@ -1,5 +1,4 @@
 using System;
-using System.Buffers;
 using System.Diagnostics;
 using System.Threading;
 using NSec.Cryptography;
@@ -25,17 +24,13 @@ namespace NSec.Experimental
 
         internal override void CreateKey(
             ReadOnlySpan<byte> seed,
-            MemoryPool<byte> memoryPool,
-            out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte> owner,
+            out SecureMemoryHandle keyHandle,
             out PublicKey? publicKey)
         {
             Debug.Assert(seed.Length == crypto_stream_chacha20_ietf_KEYBYTES);
 
             publicKey = null;
-            owner = memoryPool.Rent(seed.Length);
-            memory = owner.Memory.Slice(0, seed.Length);
-            seed.CopyTo(owner.Memory.Span);
+            keyHandle = SecureMemoryHandle.CreateFrom(seed);
         }
 
         internal override int GetSeedSize()
@@ -44,68 +39,65 @@ namespace NSec.Experimental
         }
 
         private protected unsafe override void GeneratePseudoRandomStreamCore(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             in Nonce nonce,
             Span<byte> bytes)
         {
-            Debug.Assert(key.Length == crypto_stream_chacha20_ietf_KEYBYTES);
+            Debug.Assert(keyHandle.Size == crypto_stream_chacha20_ietf_KEYBYTES);
             Debug.Assert(nonce.Size == crypto_stream_chacha20_ietf_NONCEBYTES);
 
             fixed (byte* c = bytes)
             fixed (Nonce* n = &nonce)
-            fixed (byte* k = key)
             {
                 int error = crypto_stream_chacha20_ietf(
                     c,
                     (ulong)bytes.Length,
                     n,
-                    k);
+                    keyHandle);
 
                 Debug.Assert(error == 0);
             }
         }
 
         private protected unsafe override void XOrCore(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             in Nonce nonce,
             ReadOnlySpan<byte> input,
             Span<byte> output)
         {
-            Debug.Assert(key.Length == crypto_stream_chacha20_ietf_KEYBYTES);
+            Debug.Assert(keyHandle.Size == crypto_stream_chacha20_ietf_KEYBYTES);
             Debug.Assert(nonce.Size == crypto_stream_chacha20_ietf_NONCEBYTES);
             Debug.Assert(output.Length == input.Length);
 
             fixed (byte* c = output)
             fixed (byte* m = input)
             fixed (Nonce* n = &nonce)
-            fixed (byte* k = key)
             {
                 int error = crypto_stream_chacha20_ietf_xor(
                     c,
                     m,
                     (ulong)input.Length,
                     n,
-                    k);
+                    keyHandle);
 
                 Debug.Assert(error == 0);
             }
         }
 
         private protected unsafe override void XOrICCore(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             in Nonce nonce,
             ReadOnlySpan<byte> input,
             uint ic,
             Span<byte> output)
         {
-            Debug.Assert(key.Length == crypto_stream_chacha20_ietf_KEYBYTES);
+            Debug.Assert(keyHandle.Size == crypto_stream_chacha20_ietf_KEYBYTES);
             Debug.Assert(nonce.Size == crypto_stream_chacha20_ietf_NONCEBYTES);
             Debug.Assert(output.Length == input.Length);
 
             fixed (byte* c = output)
             fixed (byte* m = input)
             fixed (Nonce* n = &nonce)
-            fixed (byte* k = key)
             {
                 int error = crypto_stream_chacha20_ietf_xor_ic(
                     c,
@@ -113,21 +105,21 @@ namespace NSec.Experimental
                     (ulong)input.Length,
                     n,
                     ic,
-                    k);
+                    keyHandle);
 
                 Debug.Assert(error == 0);
             }
         }
 
         internal override bool TryExportKey(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             KeyBlobFormat format,
             Span<byte> blob,
             out int blobSize)
         {
             return format switch
             {
-                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryExport(key, blob, out blobSize),
+                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryExport(keyHandle, blob, out blobSize),
                 _ => throw Error.Argument_FormatNotSupported(nameof(format), format.ToString()),
             };
         }
@@ -135,16 +127,14 @@ namespace NSec.Experimental
         internal override bool TryImportKey(
             ReadOnlySpan<byte> blob,
             KeyBlobFormat format,
-            MemoryPool<byte> memoryPool,
-            out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte>? owner,
+            out SecureMemoryHandle? keyHandle,
             out PublicKey? publicKey)
         {
             publicKey = null;
 
             return format switch
             {
-                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryImport(KeySize, blob, memoryPool, out memory, out owner),
+                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryImport(KeySize, blob, out keyHandle),
                 _ => throw Error.Argument_FormatNotSupported(nameof(format), format.ToString()),
             };
         }

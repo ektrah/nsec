@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Threading;
+using static Interop.Libsodium;
 
 namespace NSec.Cryptography
 {
@@ -93,7 +94,7 @@ namespace NSec.Cryptography
                 throw Error.Argument_PlaintextTooLong(nameof(plaintext), int.MaxValue - _tagSize);
 
             byte[] ciphertext = new byte[plaintext.Length + _tagSize];
-            EncryptCore(key.Span, in nonce, associatedData, plaintext, ciphertext);
+            EncryptCore(key.Handle, in nonce, associatedData, plaintext, ciphertext);
             return ciphertext;
         }
 
@@ -115,7 +116,7 @@ namespace NSec.Cryptography
             if (ciphertext.Overlaps(plaintext, out int offset) && offset != 0)
                 throw Error.Argument_OverlapCiphertext(nameof(ciphertext));
 
-            EncryptCore(key.Span, in nonce, associatedData, plaintext, ciphertext);
+            EncryptCore(key.Handle, in nonce, associatedData, plaintext, ciphertext);
         }
 
         public bool Decrypt(
@@ -137,7 +138,7 @@ namespace NSec.Cryptography
             }
 
             byte[] result = new byte[ciphertext.Length - _tagSize];
-            bool success = DecryptCore(key.Span, in nonce, associatedData, ciphertext, result);
+            bool success = DecryptCore(key.Handle, in nonce, associatedData, ciphertext, result);
             plaintext = success ? result : null;
             return success;
         }
@@ -160,7 +161,7 @@ namespace NSec.Cryptography
             if (plaintext.Overlaps(ciphertext, out int offset) && offset != 0)
                 throw Error.Argument_OverlapPlaintext(nameof(plaintext));
 
-            return DecryptCore(key.Span, in nonce, associatedData, ciphertext, plaintext);
+            return DecryptCore(key.Handle, in nonce, associatedData, ciphertext, plaintext);
         }
 
         internal sealed override int GetKeySize()
@@ -176,14 +177,14 @@ namespace NSec.Cryptography
         internal abstract override int GetSeedSize();
 
         private protected abstract void EncryptCore(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             in Nonce nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext);
 
         private protected abstract bool DecryptCore(
-            ReadOnlySpan<byte> key,
+            SecureMemoryHandle keyHandle,
             in Nonce nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> ciphertext,

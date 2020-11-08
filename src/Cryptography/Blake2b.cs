@@ -102,7 +102,7 @@ namespace NSec.Cryptography
             {
                 int error = crypto_generichash_blake2b_init(
                     state_,
-                    null,
+                    IntPtr.Zero,
                     UIntPtr.Zero,
                     (UIntPtr)HashSize);
 
@@ -141,7 +141,7 @@ namespace NSec.Cryptography
                     (UIntPtr)hash.Length,
                     @in,
                     (ulong)data.Length,
-                    null,
+                    IntPtr.Zero,
                     UIntPtr.Zero);
 
                 Debug.Assert(error == 0);
@@ -164,7 +164,7 @@ namespace NSec.Cryptography
                     (UIntPtr)hash.Length,
                     @in,
                     (ulong)data.Length,
-                    null,
+                    IntPtr.Zero,
                     UIntPtr.Zero);
 
                 Debug.Assert(error == 0);

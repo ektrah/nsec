@@ -19,7 +19,7 @@ internal static partial class Interop
             out ulong siglen_p,
             byte* m,
             ulong mlen,
-            byte* sk);
+            SecureMemoryHandle sk);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern UIntPtr crypto_sign_ed25519_publickeybytes();
@@ -30,7 +30,7 @@ internal static partial class Interop
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static unsafe extern int crypto_sign_ed25519_seed_keypair(
             PublicKeyBytes* pk,
-            byte* sk,
+            SecureMemoryHandle sk,
             byte* seed);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
@@ -39,7 +39,7 @@ internal static partial class Interop
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static unsafe extern int crypto_sign_ed25519_sk_to_seed(
             byte* seed,
-            byte* sk);
+            SecureMemoryHandle sk);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static unsafe extern int crypto_sign_ed25519_verify_detached(

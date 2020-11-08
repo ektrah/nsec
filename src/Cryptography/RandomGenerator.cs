@@ -1,5 +1,4 @@
 using System;
-using System.Buffers;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -113,8 +112,7 @@ namespace NSec.Cryptography
             int seedSize = algorithm.GetSeedSize();
             Debug.Assert(seedSize <= 64);
 
-            ReadOnlyMemory<byte> memory = default;
-            IMemoryOwner<byte>? owner = default;
+            SecureMemoryHandle? keyHandle = default;
             PublicKey? publicKey = default;
             bool success = false;
 
@@ -124,7 +122,7 @@ namespace NSec.Cryptography
                 try
                 {
                     GenerateBytesCore(seed);
-                    algorithm.CreateKey(seed, creationParameters.GetMemoryPool(), out memory, out owner, out publicKey);
+                    algorithm.CreateKey(seed, out keyHandle, out publicKey);
                     success = true;
                 }
                 finally
@@ -134,13 +132,13 @@ namespace NSec.Cryptography
             }
             finally
             {
-                if (!success && owner != null)
+                if (!success && keyHandle != null)
                 {
-                    owner.Dispose();
+                    keyHandle.Dispose();
                 }
             }
 
-            return new Key(algorithm, in creationParameters, memory, owner, publicKey);
+            return new Key(algorithm, in creationParameters, keyHandle, publicKey);
         }
 
         public uint GenerateUInt32()

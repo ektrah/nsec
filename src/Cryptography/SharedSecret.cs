@@ -1,40 +1,24 @@
 using System;
-using System.Buffers;
 using System.ComponentModel;
 using System.Diagnostics;
+using static Interop.Libsodium;
 
 namespace NSec.Cryptography
 {
     [DebuggerDisplay("Size = {Size}")]
     public sealed class SharedSecret : IDisposable
     {
-        private readonly IDisposable _disposable;
-        private readonly ReadOnlyMemory<byte> _memory;
-
-        private bool _disposed;
+        private readonly SecureMemoryHandle _handle;
 
         internal SharedSecret(
-            ReadOnlyMemory<byte> memory,
-            IDisposable owner)
+            SecureMemoryHandle sharedSecretHandle)
         {
-            _memory = memory;
-            _disposable = owner;
+            _handle = sharedSecretHandle;
         }
 
-        public int Size => _memory.Length;
+        public int Size => _handle.Size;
 
-        internal ReadOnlySpan<byte> Span
-        {
-            get
-            {
-                if (_disposed)
-                {
-                    throw new ObjectDisposedException(typeof(SharedSecret).FullName);
-                }
-
-                return _memory.Span;
-            }
-        }
+        internal SecureMemoryHandle Handle => _handle;
 
         public static SharedSecret Import(
             ReadOnlySpan<byte> sharedSecret,
@@ -47,30 +31,33 @@ namespace NSec.Cryptography
 
             Sodium.Initialize();
 
-            ReadOnlyMemory<byte> memory = default;
-            IMemoryOwner<byte>? owner = default;
+            SecureMemoryHandle? sharedSecretHandle = default;
             bool success = false;
 
             try
             {
-                ImportCore(sharedSecret, creationParameters.GetMemoryPool(), out memory, out owner);
+                ImportCore(sharedSecret, out sharedSecretHandle);
                 success = true;
             }
             finally
             {
-                if (!success && owner != null)
+                if (!success && sharedSecretHandle != null)
                 {
-                    owner.Dispose();
+                    sharedSecretHandle.Dispose();
                 }
             }
 
-            return new SharedSecret(memory, owner);
+            if (!success || sharedSecretHandle == null)
+            {
+                throw Error.Format_InvalidBlob();
+            }
+
+            return new SharedSecret(sharedSecretHandle);
         }
 
         public void Dispose()
         {
-            _disposed = true;
-            _disposable.Dispose();
+            _handle.Dispose();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -81,13 +68,9 @@ namespace NSec.Cryptography
 
         private static void ImportCore(
             ReadOnlySpan<byte> sharedSecret,
-            MemoryPool<byte> memoryPool,
-            out ReadOnlyMemory<byte> memory,
-            out IMemoryOwner<byte> owner)
+            out SecureMemoryHandle? sharedSecretHandle)
         {
-            owner = memoryPool.Rent(sharedSecret.Length);
-            memory = owner.Memory.Slice(0, sharedSecret.Length);
-            sharedSecret.CopyTo(owner.Memory.Span);
+            sharedSecretHandle = SecureMemoryHandle.CreateFrom(sharedSecret);
         }
     }
 }

@@ -1,9 +1,9 @@
 using System;
-using System.Buffers;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 using NSec.Cryptography;
+using static Interop.Libsodium;
 
 namespace NSec.Experimental.PasswordBased
 {
@@ -145,8 +145,7 @@ namespace NSec.Experimental.PasswordBased
                 throw Error.NotSupported_CreateKey();
             Debug.Assert(seedSize <= 64);
 
-            ReadOnlyMemory<byte> memory = default;
-            IMemoryOwner<byte>? owner = default;
+            SecureMemoryHandle? keyHandle = default;
             PublicKey? publicKey = default;
             bool success = false;
 
@@ -159,7 +158,7 @@ namespace NSec.Experimental.PasswordBased
                     {
                         throw new NotImplementedException(); // TODO
                     }
-                    algorithm.CreateKey(seed, creationParameters.GetMemoryPool(), out memory, out owner, out publicKey);
+                    algorithm.CreateKey(seed, out keyHandle, out publicKey);
                     success = true;
                 }
                 finally
@@ -169,13 +168,13 @@ namespace NSec.Experimental.PasswordBased
             }
             finally
             {
-                if (!success && owner != null)
+                if (!success && keyHandle != null)
                 {
-                    owner.Dispose();
+                    keyHandle.Dispose();
                 }
             }
 
-            return new Key(algorithm, in creationParameters, memory, owner, publicKey);
+            return new Key(algorithm, in creationParameters, keyHandle, publicKey);
         }
 
         internal sealed override int GetKeySize()

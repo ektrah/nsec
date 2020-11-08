@@ -9,8 +9,8 @@ Interop.Aes256Gcm.cs:
   - crypto_aead_aes256gcm_NSECBYTES
   functions:
   - crypto_aead_aes256gcm_abytes
-  - crypto_aead_aes256gcm_decrypt (NSec.Cryptography.Nonce* npub)
-  - crypto_aead_aes256gcm_encrypt (NSec.Cryptography.Nonce* npub)
+  - crypto_aead_aes256gcm_decrypt (NSec.Cryptography.Nonce* npub, SecureMemoryHandle k)
+  - crypto_aead_aes256gcm_encrypt (NSec.Cryptography.Nonce* npub, SecureMemoryHandle k)
   - crypto_aead_aes256gcm_is_available
   - crypto_aead_aes256gcm_keybytes
   - crypto_aead_aes256gcm_npubbytes
@@ -64,12 +64,14 @@ Interop.Blake2b.cs:
   - crypto_generichash_blake2b_KEYBYTES_MAX
   - crypto_generichash_blake2b_KEYBYTES_MIN
   functions:
-  - crypto_generichash_blake2b
+  - crypto_generichash_blake2b (IntPtr key)
+  - crypto_generichash_blake2b (SecureMemoryHandle key)
   - crypto_generichash_blake2b_bytes
   - crypto_generichash_blake2b_bytes_max
   - crypto_generichash_blake2b_bytes_min
   - crypto_generichash_blake2b_final
-  - crypto_generichash_blake2b_init
+  - crypto_generichash_blake2b_init (IntPtr key)
+  - crypto_generichash_blake2b_init (SecureMemoryHandle key)
   - crypto_generichash_blake2b_keybytes
   - crypto_generichash_blake2b_keybytes_max
   - crypto_generichash_blake2b_keybytes_min
@@ -84,11 +86,11 @@ Interop.ChaCha20.cs:
     - crypto_stream_chacha20_ietf_KEYBYTES
     - crypto_stream_chacha20_ietf_NONCEBYTES
   functions:
-    - crypto_stream_chacha20_ietf (NSec.Cryptography.Nonce* n)
+    - crypto_stream_chacha20_ietf (NSec.Cryptography.Nonce* n, SecureMemoryHandle k)
     - crypto_stream_chacha20_ietf_keybytes
     - crypto_stream_chacha20_ietf_noncebytes
-    - crypto_stream_chacha20_ietf_xor (NSec.Cryptography.Nonce* n)
-    - crypto_stream_chacha20_ietf_xor_ic (NSec.Cryptography.Nonce* n)
+    - crypto_stream_chacha20_ietf_xor (NSec.Cryptography.Nonce* n, SecureMemoryHandle k)
+    - crypto_stream_chacha20_ietf_xor_ic (NSec.Cryptography.Nonce* n, SecureMemoryHandle k)
 
 Interop.ChaCha20Poly1305.cs:
   include: include/sodium/crypto_aead_chacha20poly1305.h
@@ -99,8 +101,8 @@ Interop.ChaCha20Poly1305.cs:
   - crypto_aead_chacha20poly1305_ietf_NSECBYTES
   functions:
   - crypto_aead_chacha20poly1305_ietf_abytes
-  - crypto_aead_chacha20poly1305_ietf_decrypt (NSec.Cryptography.Nonce* npub)
-  - crypto_aead_chacha20poly1305_ietf_encrypt (NSec.Cryptography.Nonce* npub)
+  - crypto_aead_chacha20poly1305_ietf_decrypt (NSec.Cryptography.Nonce* npub, SecureMemoryHandle k)
+  - crypto_aead_chacha20poly1305_ietf_encrypt (NSec.Cryptography.Nonce* npub, SecureMemoryHandle k)
   - crypto_aead_chacha20poly1305_ietf_keybytes
   - crypto_aead_chacha20poly1305_ietf_npubbytes
   - crypto_aead_chacha20poly1305_ietf_nsecbytes
@@ -114,8 +116,8 @@ Interop.XChaCha20Poly1305.cs:
   - crypto_aead_xchacha20poly1305_ietf_NSECBYTES
   functions:
   - crypto_aead_xchacha20poly1305_ietf_abytes
-  - crypto_aead_xchacha20poly1305_ietf_decrypt (NSec.Cryptography.Nonce* npub)
-  - crypto_aead_xchacha20poly1305_ietf_encrypt (NSec.Cryptography.Nonce* npub)
+  - crypto_aead_xchacha20poly1305_ietf_decrypt (NSec.Cryptography.Nonce* npub, SecureMemoryHandle k)
+  - crypto_aead_xchacha20poly1305_ietf_encrypt (NSec.Cryptography.Nonce* npub, SecureMemoryHandle k)
   - crypto_aead_xchacha20poly1305_ietf_keybytes
   - crypto_aead_xchacha20poly1305_ietf_npubbytes
   - crypto_aead_xchacha20poly1305_ietf_nsecbytes
@@ -132,8 +134,8 @@ Interop.X25519.cs:
   - crypto_scalarmult_curve25519_BYTES
   - crypto_scalarmult_curve25519_SCALARBYTES
   functions:
-  - crypto_scalarmult_curve25519 (PublicKeyBytes* p)
-  - crypto_scalarmult_curve25519_base (PublicKeyBytes* q)
+  - crypto_scalarmult_curve25519 (SecureMemoryHandle q, SecureMemoryHandle n, PublicKeyBytes* p)
+  - crypto_scalarmult_curve25519_base (PublicKeyBytes* q, SecureMemoryHandle n)
   - crypto_scalarmult_curve25519_bytes
   - crypto_scalarmult_curve25519_scalarbytes
 
@@ -146,12 +148,12 @@ Interop.Ed25519.cs:
   - crypto_sign_ed25519_SEEDBYTES
   functions:
   - crypto_sign_ed25519_bytes
-  - crypto_sign_ed25519_detached
+  - crypto_sign_ed25519_detached (SecureMemoryHandle sk)
   - crypto_sign_ed25519_publickeybytes
   - crypto_sign_ed25519_secretkeybytes
-  - crypto_sign_ed25519_seed_keypair (PublicKeyBytes* pk)
+  - crypto_sign_ed25519_seed_keypair (PublicKeyBytes* pk, SecureMemoryHandle sk)
   - crypto_sign_ed25519_seedbytes
-  - crypto_sign_ed25519_sk_to_seed
+  - crypto_sign_ed25519_sk_to_seed (SecureMemoryHandle sk)
   - crypto_sign_ed25519_verify_detached (PublicKeyBytes* pk)
 
 Interop.HmacSha256.cs:
@@ -163,9 +165,11 @@ Interop.HmacSha256.cs:
   - crypto_auth_hmacsha256_bytes
   - crypto_auth_hmacsha256_final
   - crypto_auth_hmacsha256_init
+  - crypto_auth_hmacsha256_init (SecureMemoryHandle key)
   - crypto_auth_hmacsha256_keybytes
   - crypto_auth_hmacsha256_statebytes
   - crypto_auth_hmacsha256_update
+  - crypto_auth_hmacsha256_update (SecureMemoryHandle in)
   structs:
   - crypto_auth_hmacsha256_state
 
@@ -178,9 +182,11 @@ Interop.HmacSha512.cs:
   - crypto_auth_hmacsha512_bytes
   - crypto_auth_hmacsha512_final
   - crypto_auth_hmacsha512_init
+  - crypto_auth_hmacsha512_init (SecureMemoryHandle key)
   - crypto_auth_hmacsha512_keybytes
   - crypto_auth_hmacsha512_statebytes
   - crypto_auth_hmacsha512_update
+  - crypto_auth_hmacsha512_update (SecureMemoryHandle in)
   structs:
   - crypto_auth_hmacsha512_state
 
@@ -194,11 +200,11 @@ Interop.Nacl.XSalsa20Poly1305.cs:
   - crypto_secretbox_xsalsa20poly1305_MACBYTES
   - crypto_secretbox_xsalsa20poly1305_NONCEBYTES
   functions:
-  - crypto_secretbox_easy (NSec.Cryptography.Nonce* n)
+  - crypto_secretbox_easy (NSec.Cryptography.Nonce* n, SecureMemoryHandle k)
   - crypto_secretbox_keybytes
   - crypto_secretbox_macbytes
   - crypto_secretbox_noncebytes
-  - crypto_secretbox_open_easy (NSec.Cryptography.Nonce* n)
+  - crypto_secretbox_open_easy (NSec.Cryptography.Nonce* n, SecureMemoryHandle k)
   - crypto_secretbox_primitive (IntPtr)
 
 Interop.Random.cs:
@@ -235,6 +241,7 @@ Interop.Sha256.cs:
   - crypto_hash_sha256_init
   - crypto_hash_sha256_statebytes
   - crypto_hash_sha256_update
+  - crypto_hash_sha256_update (SecureMemoryHandle in)
   structs:
   - crypto_hash_sha256_state
 
@@ -256,7 +263,7 @@ Interop.Utils.cs:
   include: include/sodium/utils.h
   functions:
   - sodium_free (IntPtr ptr)
-  - sodium_malloc (IntPtr)
+  - sodium_malloc (SecureMemoryHandle)
 
 Interop.Version.cs:
   include: include/sodium/version.h

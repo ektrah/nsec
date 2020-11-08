@@ -1,6 +1,5 @@
 using System;
 using System.Buffers.Binary;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using NSec.Cryptography;
 using static Interop.Libsodium;
@@ -34,7 +33,7 @@ namespace NSec.Experimental
         }
 
         private protected unsafe override void DeriveBytesCore(
-            ReadOnlySpan<byte> inputKeyingMaterial,
+            SecureMemoryHandle inputKeyingMaterial,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> info,
             Span<byte> bytes)
@@ -44,7 +43,6 @@ namespace NSec.Experimental
             try
             {
                 fixed (byte* key = salt)
-                fixed (byte* ikm = inputKeyingMaterial)
                 fixed (byte* @in = info)
                 fixed (byte* @out = bytes)
                 {
@@ -61,7 +59,7 @@ namespace NSec.Experimental
                         crypto_auth_hmacsha256_state state;
                         crypto_auth_hmacsha256_init(&state, key, (UIntPtr)salt.Length);
                         crypto_auth_hmacsha256_update(&state, (byte*)&counterBigEndian, sizeof(uint));
-                        crypto_auth_hmacsha256_update(&state, ikm, (ulong)inputKeyingMaterial.Length);
+                        crypto_auth_hmacsha256_update(&state, inputKeyingMaterial, (ulong)inputKeyingMaterial.Size);
                         crypto_auth_hmacsha256_update(&state, @in, (ulong)info.Length);
                         crypto_auth_hmacsha256_final(&state, temp);
 

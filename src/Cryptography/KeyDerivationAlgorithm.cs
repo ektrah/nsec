@@ -1,7 +1,7 @@
 using System;
-using System.Buffers;
 using System.Diagnostics;
 using System.Threading;
+using static Interop.Libsodium;
 
 namespace NSec.Cryptography
 {
@@ -93,7 +93,7 @@ namespace NSec.Cryptography
                 throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), MaxCount);
 
             byte[] bytes = new byte[count];
-            DeriveBytesCore(sharedSecret.Span, salt, info, bytes);
+            DeriveBytesCore(sharedSecret.Handle, salt, info, bytes);
             return bytes;
         }
 
@@ -114,7 +114,7 @@ namespace NSec.Cryptography
             if (bytes.Overlaps(info))
                 throw Error.Argument_OverlapInfo(nameof(bytes));
 
-            DeriveBytesCore(sharedSecret.Span, salt, info, bytes);
+            DeriveBytesCore(sharedSecret.Handle, salt, info, bytes);
         }
 
         public Key DeriveKey(
@@ -136,8 +136,7 @@ namespace NSec.Cryptography
                 throw Error.NotSupported_CreateKey();
             Debug.Assert(seedSize <= 64);
 
-            ReadOnlyMemory<byte> memory = default;
-            IMemoryOwner<byte>? owner = default;
+            SecureMemoryHandle? keyHandle = default;
             PublicKey? publicKey = default;
             bool success = false;
 
@@ -146,8 +145,8 @@ namespace NSec.Cryptography
                 Span<byte> seed = stackalloc byte[seedSize];
                 try
                 {
-                    DeriveBytesCore(sharedSecret.Span, salt, info, seed);
-                    algorithm.CreateKey(seed, creationParameters.GetMemoryPool(), out memory, out owner, out publicKey);
+                    DeriveBytesCore(sharedSecret.Handle, salt, info, seed);
+                    algorithm.CreateKey(seed, out keyHandle, out publicKey);
                     success = true;
                 }
                 finally
@@ -157,13 +156,13 @@ namespace NSec.Cryptography
             }
             finally
             {
-                if (!success && owner != null)
+                if (!success && keyHandle != null)
                 {
-                    owner.Dispose();
+                    keyHandle.Dispose();
                 }
             }
 
-            return new Key(algorithm, in creationParameters, memory, owner, publicKey);
+            return new Key(algorithm, in creationParameters, keyHandle, publicKey);
         }
 
         internal sealed override int GetKeySize()
@@ -182,7 +181,7 @@ namespace NSec.Cryptography
         }
 
         private protected abstract void DeriveBytesCore(
-            ReadOnlySpan<byte> inputKeyingMaterial,
+            SecureMemoryHandle inputKeyingMaterial,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> info,
             Span<byte> bytes);

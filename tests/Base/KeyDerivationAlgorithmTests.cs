@@ -35,7 +35,7 @@ namespace NSec.Tests.Base
         {
             var s = SharedSecret.Import(Utilities.RandomBytes.Slice(0, 32));
             s.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, 0));
+            Assert.Throws<ObjectDisposedException>(() => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, 200));
         }
 
         [Theory]
@@ -132,7 +132,7 @@ namespace NSec.Tests.Base
         {
             var s = SharedSecret.Import(Utilities.RandomBytes.Slice(0, 32));
             s.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ObjectDisposedException>(() => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[200]));
         }
 
         [Theory]

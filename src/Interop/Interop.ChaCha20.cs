@@ -13,7 +13,7 @@ internal static partial class Interop
             byte* c,
             ulong clen,
             NSec.Cryptography.Nonce* n,
-            byte* k);
+            SecureMemoryHandle k);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern UIntPtr crypto_stream_chacha20_ietf_keybytes();
@@ -27,7 +27,7 @@ internal static partial class Interop
             byte* m,
             ulong mlen,
             NSec.Cryptography.Nonce* n,
-            byte* k);
+            SecureMemoryHandle k);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static unsafe extern int crypto_stream_chacha20_ietf_xor_ic(
@@ -36,6 +36,6 @@ internal static partial class Interop
             ulong mlen,
             NSec.Cryptography.Nonce* n,
             uint ic,
-            byte* k);
+            SecureMemoryHandle k);
     }
 }
