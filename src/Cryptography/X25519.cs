@@ -195,8 +195,8 @@ namespace NSec.Cryptography
 
         private static void SelfTest()
         {
-            if ((crypto_scalarmult_curve25519_bytes() != (UIntPtr)crypto_scalarmult_curve25519_BYTES) ||
-                (crypto_scalarmult_curve25519_scalarbytes() != (UIntPtr)crypto_scalarmult_curve25519_SCALARBYTES))
+            if ((crypto_scalarmult_curve25519_bytes() != crypto_scalarmult_curve25519_BYTES) ||
+                (crypto_scalarmult_curve25519_scalarbytes() != crypto_scalarmult_curve25519_SCALARBYTES))
             {
                 throw Error.InvalidOperation_InitializationFailed();
             }

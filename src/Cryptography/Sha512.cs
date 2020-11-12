@@ -176,8 +176,8 @@ namespace NSec.Cryptography
 
         private static void SelfTest()
         {
-            if ((crypto_hash_sha512_bytes() != (UIntPtr)crypto_hash_sha512_BYTES) ||
-                (crypto_hash_sha512_statebytes() != (UIntPtr)Unsafe.SizeOf<crypto_hash_sha512_state>()))
+            if ((crypto_hash_sha512_bytes() != crypto_hash_sha512_BYTES) ||
+                (crypto_hash_sha512_statebytes() != (nuint)Unsafe.SizeOf<crypto_hash_sha512_state>()))
             {
                 throw Error.InvalidOperation_InitializationFailed();
             }

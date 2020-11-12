@@ -112,14 +112,14 @@ namespace NSec.Experimental.PasswordBased
                 {
                     int error = crypto_pwhash_scryptsalsa208sha256_ll(
                         @in,
-                        (UIntPtr)password.Length,
+                        (nuint)password.Length,
                         salt_,
-                        (UIntPtr)salt.Length,
+                        (nuint)salt.Length,
                         _n,
                         _r,
                         _p,
                         min ? temp : @out,
-                        (UIntPtr)(min ? MinCount : bytes.Length));
+                        (nuint)(min ? MinCount : bytes.Length));
 
                     if (min)
                     {
@@ -137,13 +137,13 @@ namespace NSec.Experimental.PasswordBased
 
         private static void SelfTest()
         {
-            if ((crypto_pwhash_scryptsalsa208sha256_bytes_max() != (UIntPtr)(IntPtr.Size == sizeof(long) ? 0x1fffffffe0 : uint.MaxValue)) ||
-                (crypto_pwhash_scryptsalsa208sha256_bytes_min() != (UIntPtr)crypto_pwhash_scryptsalsa208sha256_BYTES_MIN) ||
-                (crypto_pwhash_scryptsalsa208sha256_memlimit_max() != (UIntPtr)(IntPtr.Size == sizeof(long) ? 68719476736 : uint.MaxValue)) ||
-                (crypto_pwhash_scryptsalsa208sha256_memlimit_min() != (UIntPtr)crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_MIN) ||
-                (crypto_pwhash_scryptsalsa208sha256_opslimit_max() != (UIntPtr)uint.MaxValue) ||
-                (crypto_pwhash_scryptsalsa208sha256_opslimit_min() != (UIntPtr)crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MIN) ||
-                (crypto_pwhash_scryptsalsa208sha256_saltbytes() != (UIntPtr)crypto_pwhash_scryptsalsa208sha256_SALTBYTES))
+            if ((crypto_pwhash_scryptsalsa208sha256_bytes_max() != (nuint)(IntPtr.Size == sizeof(long) ? 0x1fffffffe0 : uint.MaxValue)) ||
+                (crypto_pwhash_scryptsalsa208sha256_bytes_min() != crypto_pwhash_scryptsalsa208sha256_BYTES_MIN) ||
+                (crypto_pwhash_scryptsalsa208sha256_memlimit_max() != (nuint)(IntPtr.Size == sizeof(long) ? 68719476736 : uint.MaxValue)) ||
+                (crypto_pwhash_scryptsalsa208sha256_memlimit_min() != crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_MIN) ||
+                (crypto_pwhash_scryptsalsa208sha256_opslimit_max() != uint.MaxValue) ||
+                (crypto_pwhash_scryptsalsa208sha256_opslimit_min() != crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MIN) ||
+                (crypto_pwhash_scryptsalsa208sha256_saltbytes() != crypto_pwhash_scryptsalsa208sha256_SALTBYTES))
             {
                 throw Error.InvalidOperation_InitializationFailed();
             }

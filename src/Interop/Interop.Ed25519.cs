@@ -11,7 +11,7 @@ internal static partial class Interop
         internal const int crypto_sign_ed25519_SEEDBYTES = 32;
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern UIntPtr crypto_sign_ed25519_bytes();
+        internal static extern nuint crypto_sign_ed25519_bytes();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static unsafe extern int crypto_sign_ed25519_detached(
@@ -22,10 +22,10 @@ internal static partial class Interop
             SecureMemoryHandle sk);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern UIntPtr crypto_sign_ed25519_publickeybytes();
+        internal static extern nuint crypto_sign_ed25519_publickeybytes();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern UIntPtr crypto_sign_ed25519_secretkeybytes();
+        internal static extern nuint crypto_sign_ed25519_secretkeybytes();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static unsafe extern int crypto_sign_ed25519_seed_keypair(
@@ -34,7 +34,7 @@ internal static partial class Interop
             byte* seed);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern UIntPtr crypto_sign_ed25519_seedbytes();
+        internal static extern nuint crypto_sign_ed25519_seedbytes();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static unsafe extern int crypto_sign_ed25519_sk_to_seed(

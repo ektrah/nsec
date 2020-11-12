@@ -126,9 +126,9 @@ namespace NSec.Experimental.Sodium
 
         private static void SelfTest()
         {
-            if ((crypto_secretbox_keybytes() != (UIntPtr)crypto_secretbox_xsalsa20poly1305_KEYBYTES) ||
-                (crypto_secretbox_macbytes() != (UIntPtr)crypto_secretbox_xsalsa20poly1305_MACBYTES) ||
-                (crypto_secretbox_noncebytes() != (UIntPtr)crypto_secretbox_xsalsa20poly1305_NONCEBYTES) ||
+            if ((crypto_secretbox_keybytes() != crypto_secretbox_xsalsa20poly1305_KEYBYTES) ||
+                (crypto_secretbox_macbytes() != crypto_secretbox_xsalsa20poly1305_MACBYTES) ||
+                (crypto_secretbox_noncebytes() != crypto_secretbox_xsalsa20poly1305_NONCEBYTES) ||
                 (Marshal.PtrToStringAnsi(crypto_secretbox_primitive()) != crypto_secretbox_PRIMITIVE))
             {
                 throw Error.InvalidOperation_InitializationFailed();

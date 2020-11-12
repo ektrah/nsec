@@ -20,7 +20,7 @@ internal static partial class Interop
             public static SecureMemoryHandle Create(
                 int size)
             {
-                SecureMemoryHandle handle = sodium_malloc((UIntPtr)size);
+                SecureMemoryHandle handle = sodium_malloc((nuint)size);
 
                 if (handle.IsInvalid)
                 {

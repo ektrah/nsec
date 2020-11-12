@@ -62,7 +62,7 @@ namespace NSec.Cryptography
                 int error = crypto_generichash_blake2b_final(
                     state_,
                     temp,
-                    (UIntPtr)hash.Length);
+                    (nuint)hash.Length);
 
                 Debug.Assert(error == 0);
             }
@@ -86,7 +86,7 @@ namespace NSec.Cryptography
                 int error = crypto_generichash_blake2b_final(
                     state_,
                     @out,
-                    (UIntPtr)hash.Length);
+                    (nuint)hash.Length);
 
                 Debug.Assert(error == 0);
             }
@@ -103,8 +103,8 @@ namespace NSec.Cryptography
                 int error = crypto_generichash_blake2b_init(
                     state_,
                     IntPtr.Zero,
-                    UIntPtr.Zero,
-                    (UIntPtr)HashSize);
+                    0,
+                    (nuint)HashSize);
 
                 Debug.Assert(error == 0);
             }
@@ -138,11 +138,11 @@ namespace NSec.Cryptography
             {
                 int error = crypto_generichash_blake2b(
                     @out,
-                    (UIntPtr)hash.Length,
+                    (nuint)hash.Length,
                     @in,
                     (ulong)data.Length,
                     IntPtr.Zero,
-                    UIntPtr.Zero);
+                    0);
 
                 Debug.Assert(error == 0);
             }
@@ -161,11 +161,11 @@ namespace NSec.Cryptography
             {
                 int error = crypto_generichash_blake2b(
                     temp,
-                    (UIntPtr)hash.Length,
+                    (nuint)hash.Length,
                     @in,
                     (ulong)data.Length,
                     IntPtr.Zero,
-                    UIntPtr.Zero);
+                    0);
 
                 Debug.Assert(error == 0);
             }
@@ -178,10 +178,10 @@ namespace NSec.Cryptography
 
         private static void SelfTest()
         {
-            if ((crypto_generichash_blake2b_bytes() != (UIntPtr)crypto_generichash_blake2b_BYTES) ||
-                (crypto_generichash_blake2b_bytes_max() != (UIntPtr)crypto_generichash_blake2b_BYTES_MAX) ||
-                (crypto_generichash_blake2b_bytes_min() != (UIntPtr)crypto_generichash_blake2b_BYTES_MIN) ||
-                (crypto_generichash_blake2b_statebytes() != (UIntPtr)Unsafe.SizeOf<crypto_generichash_blake2b_state>()))
+            if ((crypto_generichash_blake2b_bytes() != crypto_generichash_blake2b_BYTES) ||
+                (crypto_generichash_blake2b_bytes_max() != crypto_generichash_blake2b_BYTES_MAX) ||
+                (crypto_generichash_blake2b_bytes_min() != crypto_generichash_blake2b_BYTES_MIN) ||
+                (crypto_generichash_blake2b_statebytes() != (nuint)Unsafe.SizeOf<crypto_generichash_blake2b_state>()))
             {
                 throw Error.InvalidOperation_InitializationFailed();
             }

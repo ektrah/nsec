@@ -141,8 +141,8 @@ namespace NSec.Experimental
 
         private static void SelfTest()
         {
-            if ((crypto_stream_chacha20_ietf_keybytes() != (UIntPtr)crypto_stream_chacha20_ietf_KEYBYTES) ||
-                (crypto_stream_chacha20_ietf_noncebytes() != (UIntPtr)crypto_stream_chacha20_ietf_NONCEBYTES))
+            if ((crypto_stream_chacha20_ietf_keybytes() != crypto_stream_chacha20_ietf_KEYBYTES) ||
+                (crypto_stream_chacha20_ietf_noncebytes() != crypto_stream_chacha20_ietf_NONCEBYTES))
             {
                 throw Error.InvalidOperation_InitializationFailed();
             }

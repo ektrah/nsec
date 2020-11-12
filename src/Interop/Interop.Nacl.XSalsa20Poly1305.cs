@@ -19,13 +19,13 @@ internal static partial class Interop
             SecureMemoryHandle k);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern UIntPtr crypto_secretbox_keybytes();
+        internal static extern nuint crypto_secretbox_keybytes();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern UIntPtr crypto_secretbox_macbytes();
+        internal static extern nuint crypto_secretbox_macbytes();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern UIntPtr crypto_secretbox_noncebytes();
+        internal static extern nuint crypto_secretbox_noncebytes();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static unsafe extern int crypto_secretbox_open_easy(

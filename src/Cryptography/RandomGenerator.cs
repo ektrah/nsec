@@ -203,13 +203,13 @@ namespace NSec.Cryptography
             {
                 fixed (byte* buf = bytes)
                 {
-                    randombytes_buf(buf, (UIntPtr)bytes.Length);
+                    randombytes_buf(buf, (nuint)bytes.Length);
                 }
             }
 
             private protected override uint GenerateUInt32Core()
             {
-                randombytes_buf(out uint value, (UIntPtr)sizeof(uint));
+                randombytes_buf(out uint value, sizeof(uint));
                 return value;
             }
         }

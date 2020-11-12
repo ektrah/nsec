@@ -194,10 +194,10 @@ namespace NSec.Cryptography
 
         private static void SelfTest()
         {
-            if ((crypto_aead_aes256gcm_abytes() != (UIntPtr)crypto_aead_aes256gcm_ABYTES) ||
-                (crypto_aead_aes256gcm_keybytes() != (UIntPtr)crypto_aead_aes256gcm_KEYBYTES) ||
-                (crypto_aead_aes256gcm_npubbytes() != (UIntPtr)crypto_aead_aes256gcm_NPUBBYTES) ||
-                (crypto_aead_aes256gcm_nsecbytes() != (UIntPtr)crypto_aead_aes256gcm_NSECBYTES))
+            if ((crypto_aead_aes256gcm_abytes() != crypto_aead_aes256gcm_ABYTES) ||
+                (crypto_aead_aes256gcm_keybytes() != crypto_aead_aes256gcm_KEYBYTES) ||
+                (crypto_aead_aes256gcm_npubbytes() != crypto_aead_aes256gcm_NPUBBYTES) ||
+                (crypto_aead_aes256gcm_nsecbytes() != crypto_aead_aes256gcm_NSECBYTES))
             {
                 throw Error.InvalidOperation_InitializationFailed();
             }

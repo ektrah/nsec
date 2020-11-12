@@ -139,7 +139,7 @@ namespace NSec.Cryptography
                 int error = crypto_auth_hmacsha512_init(
                     state_,
                     keyHandle,
-                    (UIntPtr)keyHandle.Size);
+                    (nuint)keyHandle.Size);
 
                 Debug.Assert(error == 0);
             }
@@ -208,7 +208,7 @@ namespace NSec.Cryptography
                 crypto_auth_hmacsha512_init(
                     &state,
                     keyHandle,
-                    (UIntPtr)keyHandle.Size);
+                    (nuint)keyHandle.Size);
 
                 crypto_auth_hmacsha512_update(
                     &state,
@@ -243,7 +243,7 @@ namespace NSec.Cryptography
                 crypto_auth_hmacsha512_init(
                     &state,
                     keyHandle,
-                    (UIntPtr)keyHandle.Size);
+                    (nuint)keyHandle.Size);
 
                 crypto_auth_hmacsha512_update(
                     &state,
@@ -263,9 +263,9 @@ namespace NSec.Cryptography
 
         private static void SelfTest()
         {
-            if ((crypto_auth_hmacsha512_bytes() != (UIntPtr)crypto_auth_hmacsha512_BYTES) ||
-                (crypto_auth_hmacsha512_keybytes() != (UIntPtr)crypto_auth_hmacsha512_KEYBYTES) ||
-                (crypto_auth_hmacsha512_statebytes() != (UIntPtr)Unsafe.SizeOf<crypto_auth_hmacsha512_state>()))
+            if ((crypto_auth_hmacsha512_bytes() != crypto_auth_hmacsha512_BYTES) ||
+                (crypto_auth_hmacsha512_keybytes() != crypto_auth_hmacsha512_KEYBYTES) ||
+                (crypto_auth_hmacsha512_statebytes() != (nuint)Unsafe.SizeOf<crypto_auth_hmacsha512_state>()))
             {
                 throw Error.InvalidOperation_InitializationFailed();
             }

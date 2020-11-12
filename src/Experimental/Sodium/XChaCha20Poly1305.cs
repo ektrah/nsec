@@ -168,10 +168,10 @@ namespace NSec.Experimental.Sodium
 
         private static void SelfTest()
         {
-            if ((crypto_aead_xchacha20poly1305_ietf_abytes() != (UIntPtr)crypto_aead_xchacha20poly1305_ietf_ABYTES) ||
-                (crypto_aead_xchacha20poly1305_ietf_keybytes() != (UIntPtr)crypto_aead_xchacha20poly1305_ietf_KEYBYTES) ||
-                (crypto_aead_xchacha20poly1305_ietf_npubbytes() != (UIntPtr)crypto_aead_xchacha20poly1305_ietf_NPUBBYTES) ||
-                (crypto_aead_xchacha20poly1305_ietf_nsecbytes() != (UIntPtr)crypto_aead_xchacha20poly1305_ietf_NSECBYTES))
+            if ((crypto_aead_xchacha20poly1305_ietf_abytes() != crypto_aead_xchacha20poly1305_ietf_ABYTES) ||
+                (crypto_aead_xchacha20poly1305_ietf_keybytes() != crypto_aead_xchacha20poly1305_ietf_KEYBYTES) ||
+                (crypto_aead_xchacha20poly1305_ietf_npubbytes() != crypto_aead_xchacha20poly1305_ietf_NPUBBYTES) ||
+                (crypto_aead_xchacha20poly1305_ietf_nsecbytes() != crypto_aead_xchacha20poly1305_ietf_NSECBYTES))
             {
                 throw Error.InvalidOperation_InitializationFailed();
             }

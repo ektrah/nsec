@@ -225,10 +225,10 @@ namespace NSec.Cryptography
 
         private static void SelfTest()
         {
-            if ((crypto_sign_ed25519_bytes() != (UIntPtr)crypto_sign_ed25519_BYTES) ||
-                (crypto_sign_ed25519_publickeybytes() != (UIntPtr)crypto_sign_ed25519_PUBLICKEYBYTES) ||
-                (crypto_sign_ed25519_secretkeybytes() != (UIntPtr)crypto_sign_ed25519_SECRETKEYBYTES) ||
-                (crypto_sign_ed25519_seedbytes() != (UIntPtr)crypto_sign_ed25519_SEEDBYTES))
+            if ((crypto_sign_ed25519_bytes() != crypto_sign_ed25519_BYTES) ||
+                (crypto_sign_ed25519_publickeybytes() != crypto_sign_ed25519_PUBLICKEYBYTES) ||
+                (crypto_sign_ed25519_secretkeybytes() != crypto_sign_ed25519_SECRETKEYBYTES) ||
+                (crypto_sign_ed25519_seedbytes() != crypto_sign_ed25519_SEEDBYTES))
             {
                 throw Error.InvalidOperation_InitializationFailed();
             }

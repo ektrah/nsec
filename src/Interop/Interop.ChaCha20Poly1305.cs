@@ -11,7 +11,7 @@ internal static partial class Interop
         internal const int crypto_aead_chacha20poly1305_ietf_NSECBYTES = 0;
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern UIntPtr crypto_aead_chacha20poly1305_ietf_abytes();
+        internal static extern nuint crypto_aead_chacha20poly1305_ietf_abytes();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static unsafe extern int crypto_aead_chacha20poly1305_ietf_decrypt(
@@ -38,12 +38,12 @@ internal static partial class Interop
             SecureMemoryHandle k);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern UIntPtr crypto_aead_chacha20poly1305_ietf_keybytes();
+        internal static extern nuint crypto_aead_chacha20poly1305_ietf_keybytes();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern UIntPtr crypto_aead_chacha20poly1305_ietf_npubbytes();
+        internal static extern nuint crypto_aead_chacha20poly1305_ietf_npubbytes();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern UIntPtr crypto_aead_chacha20poly1305_ietf_nsecbytes();
+        internal static extern nuint crypto_aead_chacha20poly1305_ietf_nsecbytes();
     }
 }

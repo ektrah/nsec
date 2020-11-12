@@ -41,7 +41,7 @@ namespace NSec.Cryptography
                     {
                         fixed (byte* buf = seed)
                         {
-                            randombytes_buf(buf, (UIntPtr)seed.Length);
+                            randombytes_buf(buf, (nuint)seed.Length);
                         }
                     }
 #else

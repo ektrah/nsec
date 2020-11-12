@@ -54,7 +54,7 @@ namespace NSec.Experimental.PasswordBased
     {
         private static int s_selfTest;
 
-        private readonly UIntPtr _memLimit;
+        private readonly nuint _memLimit;
         private readonly ulong _opsLimit;
 
         public Argon2i() : this(1, 1 << 17, 6)
@@ -80,7 +80,7 @@ namespace NSec.Experimental.PasswordBased
                 throw new ArgumentOutOfRangeException(nameof(t));
             }
 
-            _memLimit = (UIntPtr)(m * 1024);
+            _memLimit = (nuint)(m * 1024);
             _opsLimit = (ulong)t;
 
             if (s_selfTest == 0)
@@ -140,13 +140,13 @@ namespace NSec.Experimental.PasswordBased
         private static void SelfTest()
         {
             if ((crypto_pwhash_argon2i_alg_argon2i13() != crypto_pwhash_argon2i_ALG_ARGON2I13) ||
-                (crypto_pwhash_argon2i_bytes_max() != (UIntPtr)uint.MaxValue) ||
-                (crypto_pwhash_argon2i_bytes_min() != (UIntPtr)crypto_pwhash_argon2i_BYTES_MIN) ||
-                (crypto_pwhash_argon2i_memlimit_max() != (UIntPtr)(IntPtr.Size == sizeof(long) ? 4398046510080 : 2147483648)) ||
-                (crypto_pwhash_argon2i_memlimit_min() != (UIntPtr)crypto_pwhash_argon2i_MEMLIMIT_MIN) ||
-                (crypto_pwhash_argon2i_opslimit_max() != (UIntPtr)uint.MaxValue) ||
-                (crypto_pwhash_argon2i_opslimit_min() != (UIntPtr)crypto_pwhash_argon2i_OPSLIMIT_MIN) ||
-                (crypto_pwhash_argon2i_saltbytes() != (UIntPtr)crypto_pwhash_argon2i_SALTBYTES))
+                (crypto_pwhash_argon2i_bytes_max() != uint.MaxValue) ||
+                (crypto_pwhash_argon2i_bytes_min() != crypto_pwhash_argon2i_BYTES_MIN) ||
+                (crypto_pwhash_argon2i_memlimit_max() != (nuint)(IntPtr.Size == sizeof(long) ? 4398046510080 : 2147483648)) ||
+                (crypto_pwhash_argon2i_memlimit_min() != crypto_pwhash_argon2i_MEMLIMIT_MIN) ||
+                (crypto_pwhash_argon2i_opslimit_max() != uint.MaxValue) ||
+                (crypto_pwhash_argon2i_opslimit_min() != crypto_pwhash_argon2i_OPSLIMIT_MIN) ||
+                (crypto_pwhash_argon2i_saltbytes() != crypto_pwhash_argon2i_SALTBYTES))
             {
                 throw Error.InvalidOperation_InitializationFailed();
             }

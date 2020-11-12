@@ -14,7 +14,7 @@ internal static partial class Interop
             ulong inlen);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern UIntPtr crypto_hash_sha512_bytes();
+        internal static extern nuint crypto_hash_sha512_bytes();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static unsafe extern int crypto_hash_sha512_final(
@@ -26,7 +26,7 @@ internal static partial class Interop
             crypto_hash_sha512_state* state);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern UIntPtr crypto_hash_sha512_statebytes();
+        internal static extern nuint crypto_hash_sha512_statebytes();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static unsafe extern int crypto_hash_sha512_update(

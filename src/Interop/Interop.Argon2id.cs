@@ -19,31 +19,31 @@ internal static partial class Interop
             ulong passwdlen,
             byte* salt,
             ulong opslimit,
-            UIntPtr memlimit,
+            nuint memlimit,
             int alg);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int crypto_pwhash_argon2id_alg_argon2id13();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern UIntPtr crypto_pwhash_argon2id_bytes_max();
+        internal static extern nuint crypto_pwhash_argon2id_bytes_max();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern UIntPtr crypto_pwhash_argon2id_bytes_min();
+        internal static extern nuint crypto_pwhash_argon2id_bytes_min();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern UIntPtr crypto_pwhash_argon2id_memlimit_max();
+        internal static extern nuint crypto_pwhash_argon2id_memlimit_max();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern UIntPtr crypto_pwhash_argon2id_memlimit_min();
+        internal static extern nuint crypto_pwhash_argon2id_memlimit_min();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern UIntPtr crypto_pwhash_argon2id_opslimit_max();
+        internal static extern nuint crypto_pwhash_argon2id_opslimit_max();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern UIntPtr crypto_pwhash_argon2id_opslimit_min();
+        internal static extern nuint crypto_pwhash_argon2id_opslimit_min();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern UIntPtr crypto_pwhash_argon2id_saltbytes();
+        internal static extern nuint crypto_pwhash_argon2id_saltbytes();
     }
 }

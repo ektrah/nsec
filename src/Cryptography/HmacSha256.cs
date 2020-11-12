@@ -136,7 +136,7 @@ namespace NSec.Cryptography
                 int error = crypto_auth_hmacsha256_init(
                     state_,
                     keyHandle,
-                    (UIntPtr)keyHandle.Size);
+                    (nuint)keyHandle.Size);
 
                 Debug.Assert(error == 0);
             }
@@ -205,7 +205,7 @@ namespace NSec.Cryptography
                 crypto_auth_hmacsha256_init(
                     &state,
                     keyHandle,
-                    (UIntPtr)keyHandle.Size);
+                    (nuint)keyHandle.Size);
 
                 crypto_auth_hmacsha256_update(
                     &state,
@@ -240,7 +240,7 @@ namespace NSec.Cryptography
                 crypto_auth_hmacsha256_init(
                     &state,
                     keyHandle,
-                    (UIntPtr)keyHandle.Size);
+                    (nuint)keyHandle.Size);
 
                 crypto_auth_hmacsha256_update(
                     &state,
@@ -260,9 +260,9 @@ namespace NSec.Cryptography
 
         private static void SelfTest()
         {
-            if ((crypto_auth_hmacsha256_bytes() != (UIntPtr)crypto_auth_hmacsha256_BYTES) ||
-                (crypto_auth_hmacsha256_keybytes() != (UIntPtr)crypto_auth_hmacsha256_KEYBYTES) ||
-                (crypto_auth_hmacsha256_statebytes() != (UIntPtr)Unsafe.SizeOf<crypto_auth_hmacsha256_state>()))
+            if ((crypto_auth_hmacsha256_bytes() != crypto_auth_hmacsha256_BYTES) ||
+                (crypto_auth_hmacsha256_keybytes() != crypto_auth_hmacsha256_KEYBYTES) ||
+                (crypto_auth_hmacsha256_statebytes() != (nuint)Unsafe.SizeOf<crypto_auth_hmacsha256_state>()))
             {
                 throw Error.InvalidOperation_InitializationFailed();
             }
