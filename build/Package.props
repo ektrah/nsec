@@ -1,7 +1,5 @@
 ﻿<Project>
 
-  <Import Project="$(MSBuildThisFileDirectory)CI.props" />
-
   <PropertyGroup>
     <BuildNumberMajor>$([MSBuild]::Add($([MSBuild]::Multiply(100, $([MSBuild]::Add($([MSBuild]::Multiply(12, $([MSBuild]::Subtract($([System.DateTime]::UtcNow.Year), 1996)))), $([MSBuild]::Subtract($([System.DateTime]::UtcNow.Month), 4)))))), $([System.DateTime]::UtcNow.Day)).ToString('00000'))</BuildNumberMajor>
     <BuildNumberMinor>$([MSBuild]::Divide($([MSBuild]::Add($([MSBuild]::Multiply(60, $([System.DateTime]::UtcNow.Hour))), $([System.DateTime]::UtcNow.Minute))), 15).ToString('00'))</BuildNumberMinor>
