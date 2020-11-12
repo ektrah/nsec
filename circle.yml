@@ -4,9 +4,6 @@ workflows:
   version: 2
   test:
     jobs:
-      - alpine3.10:
-          requires:
-            - macos10.13
       - alpine3.12:
           requires:
       - centos7:
@@ -143,19 +140,6 @@ shared:
       command: dotnet test tests -f net5.0 -c Release
 
 jobs:
-
-  alpine3.10:
-    docker:
-      - image: mcr.microsoft.com/dotnet/core/sdk:3.1-alpine3.10
-    environment: *environment
-    steps:
-      - checkout
-      - *generate-restore-graph
-      - *restore-cache-alpine
-      - *dotnet-restore
-      - *save-cache-alpine
-      - *dotnet-test-debug-3-1
-      - *dotnet-test-release-3-1
 
   alpine3.12:
     docker:
