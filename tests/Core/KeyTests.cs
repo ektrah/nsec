@@ -69,6 +69,38 @@ namespace NSec.Tests.Core
             Assert.True(k.Size > 0);
         }
 
+        [Theory]
+        [MemberData(nameof(PrivateKeyBlobFormats))]
+        public static void PropertiesAsymmetricAfterImport(Algorithm a, KeyBlobFormat format)
+        {
+            using var k1 = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport });
+            var b = k1.Export(format);
+
+            using var k = Key.Import(a, b, format, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None });
+            Assert.Same(a, k.Algorithm);
+            Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
+            Assert.True(k.HasPublicKey);
+            Assert.NotNull(k.PublicKey);
+            Assert.Same(a, k.PublicKey.Algorithm);
+            Assert.True(k.PublicKey.Size > 0);
+            Assert.True(k.Size > 0);
+        }
+
+        [Theory]
+        [MemberData(nameof(SymmetricKeyBlobFormats))]
+        public static void PropertiesSymmetricAfterImport(Algorithm a, KeyBlobFormat format)
+        {
+            using var k1 = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport });
+            var b = k1.Export(format);
+
+            using var k = Key.Import(a, b, format, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None });
+            Assert.Same(a, k.Algorithm);
+            Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
+            Assert.False(k.HasPublicKey);
+            Assert.Throws<InvalidOperationException>(() => k.PublicKey);
+            Assert.True(k.Size > 0);
+        }
+
         #endregion
 
         #region Ctor
