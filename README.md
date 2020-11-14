@@ -1,15 +1,15 @@
 # NSec
 
-[![CircleCI](https://circleci.com/gh/ektrah/nsec/tree/master.svg?style=shield)](https://circleci.com/gh/ektrah/nsec)
 [![Maintenance](https://img.shields.io/maintenance/yes/2020)](https://github.com/ektrah/nsec)
 [![License](https://img.shields.io/github/license/ektrah/nsec)](https://nsec.rocks/license)
 [![NuGet](https://img.shields.io/nuget/vpre/NSec.Cryptography)](https://www.nuget.org/packages/NSec.Cryptography)
 
-[NSec](https://nsec.rocks/) is a new cryptographic library for
-[.NET Core](https://docs.microsoft.com/en-us/dotnet/core/) based on
+[NSec](https://nsec.rocks/) is a cryptographic library for
+[.NET 5.0](https://dotnet.microsoft.com/) and
+[.NET Core](https://dotnet.microsoft.com/) based on
 [libsodium](https://libsodium.org/) &#x2764;.
 It provides modern cryptographic primitives in a modern API based on
-[the new `Span<T>` and `ReadOnlySpan<T>` types](https://docs.microsoft.com/en-us/archive/msdn-magazine/2017/connect/csharp-all-about-span-exploring-a-new-net-mainstay).
+[Span<T>](https://docs.microsoft.com/en-us/archive/msdn-magazine/2017/connect/csharp-all-about-span-exploring-a-new-net-mainstay).
 NSec aims to be easy to use, secure by default, fast, and agile.
 
 For more information about NSec, please refer to the following resources:
