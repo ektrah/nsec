@@ -115,15 +115,14 @@ namespace NSec.Experimental.PasswordBased
             return _encryptionAlgorithm.Decrypt(key, nonce, default, ciphertext, plaintext);
         }
 
-        public bool Decrypt(
+        public byte[]? Decrypt(
             string password,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> nonce,
-            ReadOnlySpan<byte> ciphertext,
-            out byte[]? plaintext)
+            ReadOnlySpan<byte> ciphertext)
         {
             using Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _encryptionAlgorithm);
-            return _encryptionAlgorithm.Decrypt(key, nonce, default, ciphertext, out plaintext);
+            return _encryptionAlgorithm.Decrypt(key, nonce, default, ciphertext);
         }
 
         public bool Decrypt(

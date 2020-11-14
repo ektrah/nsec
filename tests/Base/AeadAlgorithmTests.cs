@@ -237,7 +237,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AeadAlgorithms))]
         public static void DecryptWithNullKey(AeadAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Decrypt(null!, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out var pt));
+            Assert.Throws<ArgumentNullException>("key", () => a.Decrypt(null!, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
@@ -246,7 +246,7 @@ namespace NSec.Tests.Base
         {
             var k = new Key(a);
             k.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize], out var pt));
+            Assert.Throws<ObjectDisposedException>(() => a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize]));
         }
 
         [Theory]
@@ -255,7 +255,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(SignatureAlgorithm.Ed25519);
 
-            Assert.Throws<ArgumentException>("key", () => a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out var pt));
+            Assert.Throws<ArgumentException>("key", () => a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
@@ -264,7 +264,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.False(a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out var pt));
+            Assert.Null(a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
@@ -273,7 +273,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.False(a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out var pt));
+            Assert.Null(a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
@@ -282,8 +282,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.False(a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize - 1], out var pt));
-            Assert.Null(pt);
+            Assert.Null(a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize - 1]));
         }
 
         [Theory]
@@ -314,7 +313,7 @@ namespace NSec.Tests.Base
             Assert.NotNull(ct);
             Assert.Equal(a.TagSize, ct.Length);
 
-            Assert.True(a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ct, out var pt));
+            var pt = a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ct);
             Assert.NotNull(pt);
             Assert.Empty(pt);
         }

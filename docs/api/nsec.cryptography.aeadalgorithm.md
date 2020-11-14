@@ -216,18 +216,17 @@ ObjectDisposedException
 : `key` has been disposed.
 
 
-### Decrypt(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>, ReadOnlySpan<byte>, out byte[])
+### Decrypt(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
 
 Decrypts and authenticates the specified ciphertext using the specified key,
 nonce, and associated data. If successful, returns the decrypted plaintext as an
 array of bytes.
 
-    public bool Decrypt(
+    public byte[]? Decrypt(
         Key key,
         ReadOnlySpan<byte> nonce,
         ReadOnlySpan<byte> associatedData,
-        ReadOnlySpan<byte> ciphertext,
-        out byte[] plaintext)
+        ReadOnlySpan<byte> ciphertext)
 
 #### Parameters
 
@@ -250,13 +249,10 @@ ciphertext
 : The encrypted data to authenticate and decrypt.
     Authentication fails if the integrity of the data was compromised.
 
-plaintext
-: When this method returns, contains an array of bytes that contains the
-    decrypted and authenticated data, or `null` if authentication fails.
-
 #### Return Value
 
-`true` if decryption and authentication succeed; otherwise, `false`.
+An array of bytes that contains the decrypted and authenticated data, or
+`null` if authentication fails.
 
 #### Exceptions
 

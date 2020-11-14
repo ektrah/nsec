@@ -221,12 +221,11 @@ namespace NSec.Cryptography
             return DecryptCore(key.Handle, n, associatedData, ciphertext, plaintext);
         }
 
-        public bool Decrypt(
+        public byte[]? Decrypt(
             Key key,
             ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> associatedData,
-            ReadOnlySpan<byte> ciphertext,
-            out byte[]? plaintext)
+            ReadOnlySpan<byte> ciphertext)
         {
             if (key == null)
                 throw Error.ArgumentNull_Key(nameof(key));
@@ -235,14 +234,12 @@ namespace NSec.Cryptography
 
             if (nonce.Length != _nonceSize || ciphertext.Length < _tagSize)
             {
-                plaintext = null;
-                return false;
+                return null;
             }
 
             byte[] result = new byte[ciphertext.Length - _tagSize];
             bool success = DecryptCore(key.Handle, nonce, associatedData, ciphertext, result);
-            plaintext = success ? result : null;
-            return success;
+            return success ? result : null;
         }
 
         public bool Decrypt(

@@ -38,11 +38,11 @@ namespace NSec.Tests.Rfc
 
             using var k = Key.Import(a, key.DecodeHex(), KeyBlobFormat.RawSymmetricKey);
 
-            var b = a.Encrypt(k, nonce.DecodeHex(), aad.DecodeHex(), plaintext.DecodeHex());
-            Assert.Equal((ciphertext + tag).DecodeHex(), b);
+            var ct = a.Encrypt(k, nonce.DecodeHex(), aad.DecodeHex(), plaintext.DecodeHex());
+            Assert.Equal((ciphertext + tag).DecodeHex(), ct);
 
-            Assert.True(a.Decrypt(k, nonce.DecodeHex(), aad.DecodeHex(), b, out var r));
-            Assert.Equal(plaintext.DecodeHex(), r);
+            var pt = a.Decrypt(k, nonce.DecodeHex(), aad.DecodeHex(), ct);
+            Assert.Equal(plaintext.DecodeHex(), pt);
         }
     }
 }
