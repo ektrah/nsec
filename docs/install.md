@@ -26,30 +26,30 @@ NSec requires **C# 7.2** or **F# 4.5** (or later).
 
 ## Supported Platforms
 
-NSec runs on the following platforms and .NET Core versions:
+NSec runs on the following platforms and .NET versions:
 
-| OS            | Version  | Architectures | .NET Core Runtimes |
-|:------------- |:-------- |:------------- |:-------------------|
-| Windows 10    | 1809     | x64 / x86     | 5.0 / 3.1 / 2.1    |
-|               |          |               |                    |
-| macOS         | 10.13    | x64           | 5.0 / 3.1 / 2.1    |
-|               | 10.14    | x64           | 5.0 / 3.1 / 2.1    |
-|               | 10.15    | x64           | 5.0 / 3.1 / 2.1    |
-|               |          |               |                    |
-| Alpine        | 3.12     | x64           | 5.0                |
-| CentOS        | 7.8.2003 | x64           | 5.0 / 3.1 / 2.1    |
-|               | 8.2.2004 | x64           | 5.0 / 3.1 / 2.1    |
-| Debian        | 9.13     | x64           | 5.0 / 3.1 / 2.1    |
-|               | 10.6     | x64           | 5.0 / 3.1 / 2.1    |
-| Fedora        | 32       | x64           | 5.0 / 3.1 / 2.1    |
-|               | 33       | x64           | 5.0 / 3.1 / 2.1    |
-| OpenSUSE      | 15.2     | x64           | 5.0 / 3.1 / 2.1    |
-| Ubuntu        | 16.04    | x64           | 5.0 / 3.1 / 2.1    |
-|               | 18.04    | x64           | 5.0 / 3.1 / 2.1    |
-|               | 20.04    | x64           | 5.0 / 3.1 / 2.1    |
+| OS            | Version  | Architectures | .NET          | .NET Core   |
+|:------------- |:-------- |:------------- |:--------------|:------------|
+| Windows 10    | 1809     | x64 / x86     | 5.0           | 3.1 / 2.1   |
+|               |          |               |               |             |
+| macOS         | 10.13    | x64           | 5.0           | 3.1 / 2.1   |
+|               | 10.14    | x64           | 5.0           | 3.1 / 2.1   |
+|               | 10.15    | x64           | 5.0           | 3.1 / 2.1   |
+|               |          |               |               |             |
+| Alpine        | 3.12     | x64           | 5.0           |             |
+| CentOS        | 7.8.2003 | x64           | 5.0           | 3.1 / 2.1   |
+|               | 8.2.2004 | x64           | 5.0           | 3.1 / 2.1   |
+| Debian        | 9.13     | x64           | 5.0           | 3.1 / 2.1   |
+|               | 10.6     | x64           | 5.0           | 3.1 / 2.1   |
+| Fedora        | 32       | x64           | 5.0           | 3.1 / 2.1   |
+|               | 33       | x64           | 5.0           | 3.1 / 2.1   |
+| OpenSUSE      | 15.2     | x64           | 5.0           | 3.1 / 2.1   |
+| Ubuntu        | 16.04    | x64           | 5.0           | 3.1 / 2.1   |
+|               | 18.04    | x64           | 5.0           | 3.1 / 2.1   |
+|               | 20.04    | x64           | 5.0           | 3.1 / 2.1   |
 
-Other operating systems and versions supported by .NET Core should work as well
-but are not tested.
+Other, similar operating systems and versions supported by .NET Core should
+work as well but are not tested.
 
 Using NSec on Windows requires the
 [Microsoft Visual C++ Redistributable for Visual Studio 2015, 2017 and 2019](https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads).
@@ -65,11 +65,13 @@ be determined at runtime using the static `IsSupported` property of the
 ### .NET Framework
 
 Running NSec on recent versions of .NET Framework might work as well but is not
-tested. It seems that at least the following conditions need to be met:
+tested.
+
+It seems that at least the following conditions need to be met to make .NET
+Framework happy:
 First, the project needs to use
 [*<PackageReference>* package references](https://devblogs.microsoft.com/nuget/NuGet-now-fully-integrated-into-MSBuild/);
 projects using *Packages.config* don't work.
 Second, the project needs to have the
 [Platform Target](https://docs.microsoft.com/en-us/visualstudio/ide/reference/build-page-project-designer-csharp?view=vs-2019#configuration-and-platform)
-set to **x64** or **x86**; other platform targets -- including *Any CPU* --
-don't work.
+set to **x64** or **x86**; the target **Any CPU** doesn't work.
