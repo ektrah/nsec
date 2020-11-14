@@ -13,16 +13,6 @@
         "source": "/docs/api/nsec.cryptography.keyflags",
         "destination": "/docs/api/nsec.cryptography.keyexportpolicies",
         "type": 301
-      },
-      {
-        "source": "/docs/api/nsec.cryptography.randomnumbergenerator",
-        "destination": "/docs/api/nsec.cryptography.randomgenerator",
-        "type": 301
-      },
-      {
-        "source": "/docs/api/nsec.cryptography.securerandom",
-        "destination": "/docs/api/nsec.cryptography.randomgenerator",
-        "type": 301
       }
     ]
   }

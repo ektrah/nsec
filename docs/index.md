@@ -2,4 +2,3 @@
 
 * [[Installation]]
 * [[API Reference]]
-* [[Working with NSec]]

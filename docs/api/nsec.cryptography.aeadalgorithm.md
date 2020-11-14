@@ -114,8 +114,7 @@ nonce
 
 : To prevent nonce reuse when encrypting multiple plaintexts with the same key,
     it is recommended to increment the previous nonce; a randomly generated
-    nonce is not suitable. See [[How to: Generate
-    Nonces]] for more information on generating nonces.
+    nonce is not suitable.
 
 associatedData
 : Optional additional data to be authenticated during decryption.
@@ -178,8 +177,7 @@ nonce
 
 : To prevent nonce reuse when encrypting multiple plaintexts with the same key,
     it is recommended to increment the previous nonce; a randomly generated
-    nonce is not suitable. See [[How to: Generate
-    Nonces]] for more information on generating nonces.
+    nonce is not suitable.
 
 associatedData
 : Optional additional data to be authenticated during decryption.
@@ -354,5 +352,3 @@ All methods yield the same result for the same arguments.
 * API Reference
     * [[Algorithm Class]]
     * [[Key Class]]
-* Working with NSec
-    * [[How to: Generate Nonces]]

@@ -70,18 +70,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{F058E702-CA9
 		docs\api\nsec.cryptography.keyexportpolicies.md = docs\api\nsec.cryptography.keyexportpolicies.md
 		docs\api\nsec.cryptography.macalgorithm.md = docs\api\nsec.cryptography.macalgorithm.md
 		docs\api\nsec.cryptography.md = docs\api\nsec.cryptography.md
-		docs\api\nsec.cryptography.nonce.md = docs\api\nsec.cryptography.nonce.md
 		docs\api\nsec.cryptography.publickey.md = docs\api\nsec.cryptography.publickey.md
-		docs\api\nsec.cryptography.randomgenerator.md = docs\api\nsec.cryptography.randomgenerator.md
 		docs\api\nsec.cryptography.sharedsecret.md = docs\api\nsec.cryptography.sharedsecret.md
 		docs\api\nsec.cryptography.sharedsecretcreationparameters.md = docs\api\nsec.cryptography.sharedsecretcreationparameters.md
 		docs\api\nsec.cryptography.signaturealgorithm.md = docs\api\nsec.cryptography.signaturealgorithm.md
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "howto", "howto", "{68FC96ED-2B25-47FC-8DBA-19001A96C919}"
-	ProjectSection(SolutionItems) = preProject
-		docs\howto\generate-nonces.md = docs\howto\generate-nonces.md
-		docs\howto\index.md = docs\howto\index.md
 	EndProjectSection
 EndProject
 Global
@@ -116,7 +108,6 @@ Global
 		{F9D92917-A968-4F64-8F28-98B2CADE6417} = {DF40D4F3-D18D-45F3-87DD-2A8378354B57}
 		{D24568A9-54F1-48E0-88FF-2E067F9BDA95} = {DF40D4F3-D18D-45F3-87DD-2A8378354B57}
 		{F058E702-CA96-47D4-AA3C-0CC93FD07B53} = {F9D92917-A968-4F64-8F28-98B2CADE6417}
-		{68FC96ED-2B25-47FC-8DBA-19001A96C919} = {F9D92917-A968-4F64-8F28-98B2CADE6417}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ED81BE7D-A09F-4466-8138-E0F420A24568}

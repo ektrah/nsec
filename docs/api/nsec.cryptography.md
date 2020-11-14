@@ -25,8 +25,6 @@
     * [[KeyCreationParameters Struct]]
     * [[KeyExportPolicies Enum]]
     * [[KeyBlobFormat Enum]]
-* [[Nonce Struct]]
 * [[PublicKey Class]]
-* [[RandomGenerator Class]]
 * [[SharedSecret Class]]
     * [[SharedSecretCreationParameters Struct]]
