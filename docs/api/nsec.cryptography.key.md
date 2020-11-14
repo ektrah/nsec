@@ -188,7 +188,7 @@ NotSupportedException
 : The specified algorithm does not support importing keys.
 
 
-### TryImport(Algorithm, ReadOnlySpan<byte>, KeyBlobFormat, out Key, in KeyCreationParameters)
+### TryImport(Algorithm, ReadOnlySpan<byte>, KeyBlobFormat, out Key?, in KeyCreationParameters)
 
 Attempts to import the specified key BLOB in the specified format.
 
@@ -196,7 +196,7 @@ Attempts to import the specified key BLOB in the specified format.
         Algorithm algorithm,
         ReadOnlySpan<byte> blob,
         KeyBlobFormat format,
-        out Key result,
+        out Key? result,
         in KeyCreationParameters creationParameters = default)
 
 #### Parameters

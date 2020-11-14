@@ -77,7 +77,7 @@ NotSupportedException
 : The specified algorithm does not support importing public keys.
 
 
-### TryImport(Algorithm, ReadOnlySpan<byte>, KeyBlobFormat, out PublicKey)
+### TryImport(Algorithm, ReadOnlySpan<byte>, KeyBlobFormat, out PublicKey?)
 
 Attempts to import the specified public key BLOB in the specified format.
 
@@ -85,7 +85,7 @@ Attempts to import the specified public key BLOB in the specified format.
         Algorithm algorithm,
         ReadOnlySpan<byte> blob,
         KeyBlobFormat format,
-        out PublicKey result)
+        out PublicKey? result)
 
 #### Parameters
 

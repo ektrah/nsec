@@ -33,7 +33,7 @@ data:
 
 Gets the algorithm that was used to initialize the state.
 
-    public HashAlgorithm Algorithm { get; }
+    public HashAlgorithm? Algorithm { get; }
 
 #### Property Value
 

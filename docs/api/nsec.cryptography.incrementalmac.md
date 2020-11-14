@@ -33,7 +33,7 @@ multiple segments of data:
 
 Gets the algorithm that was used to initialize the state.
 
-    public MacAlgorithm Algorithm { get; }
+    public MacAlgorithm? Algorithm { get; }
 
 #### Property Value
 
