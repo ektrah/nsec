@@ -53,13 +53,19 @@ See [[Installation]] for more information.
 
 ## Documentation
 
-| Class                            | Algorithms                                      |
+| Class                            | Algorithm                                       |
 |:-------------------------------- |:----------------------------------------------- |
-| [[AeadAlgorithm Class]]          | AES256-GCM &bull; ChaCha20-Poly1305             |
-| [[HashAlgorithm Class]]          | BLAKE2b &bull; SHA-256 &bull; SHA-512           |
+| [[AeadAlgorithm Class]]          | AES256-GCM                                      |
+|                                  | ChaCha20-Poly1305                               |
+| [[HashAlgorithm Class]]          | BLAKE2b (unkeyed)                               |
+|                                  | SHA-256                                         |
+|                                  | SHA-512                                         |
 | [[KeyAgreementAlgorithm Class]]  | X25519                                          |
-| [[KeyDerivationAlgorithm Class]] | HKDF-SHA-256 &bull; HKDF-SHA-512                |
-| [[MacAlgorithm Class]]           | BLAKE2b &bull; HMAC-SHA-256 &bull; HMAC-SHA-512 |
+| [[KeyDerivationAlgorithm Class]] | HKDF-SHA-256                                    |
+|                                  | HKDF-SHA-512                                    |
+| [[MacAlgorithm Class]]           | BLAKE2b (keyed)                                 |
+|                                  | HMAC-SHA-256                                    |
+|                                  | HMAC-SHA-512                                    |
 | [[SignatureAlgorithm Class]]     | Ed25519                                         |
 
 See [[API Reference|NSec.Cryptography Namespace]] for more information.
