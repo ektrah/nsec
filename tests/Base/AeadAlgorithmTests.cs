@@ -287,24 +287,6 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void DecryptFailClearsPlaintext(AeadAlgorithm a)
-        {
-            using var k = new Key(a);
-
-            var pt = new byte[16];
-            for (var i = 0; i < pt.Length; i++)
-            {
-                pt[i] = 0xD6;
-            }
-
-            var ct = new byte[pt.Length + a.TagSize];
-
-            Assert.False(a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ct, pt));
-            Assert.Equal(new byte[pt.Length], pt);
-        }
-
-        [Theory]
-        [MemberData(nameof(AeadAlgorithms))]
         public static void DecryptEmptySuccess(AeadAlgorithm a)
         {
             using var k = new Key(a);
@@ -452,6 +434,24 @@ namespace NSec.Tests.Base
             Assert.True(a.Decrypt(k, n, ad, actual, expected.AsSpan(0, L)));
             Assert.True(a.Decrypt(k, n, ad, actual, actual.AsSpan(0, L)));
             Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [MemberData(nameof(AeadAlgorithms))]
+        public static void DecryptFailClearsPlaintext(AeadAlgorithm a)
+        {
+            using var k = new Key(a);
+
+            var pt = new byte[16];
+            for (var i = 0; i < pt.Length; i++)
+            {
+                pt[i] = 0xD6;
+            }
+
+            var ct = new byte[pt.Length + a.TagSize];
+
+            Assert.False(a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ct, pt));
+            Assert.Equal(new byte[pt.Length], pt);
         }
 
         #endregion
