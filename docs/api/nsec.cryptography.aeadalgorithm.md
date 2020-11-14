@@ -84,7 +84,7 @@ The authentication tag size, in bytes.
 ## Methods
 
 
-### Encrypt(Key, in Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
+### Encrypt(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>, ReadOnlySpan<byte>)
 
 Encrypts the specified plaintext using the specified key, nonce, and associated
 data, and returns the ciphertext, which includes an authentication tag, as an
@@ -92,7 +92,7 @@ array of bytes.
 
     public byte[] Encrypt(
         Key key,
-        in Nonce nonce,
+        ReadOnlySpan<byte> nonce,
         ReadOnlySpan<byte> associatedData,
         ReadOnlySpan<byte> plaintext)
 
@@ -104,7 +104,7 @@ key
     [[Key.Create|Key Class#Create]] method, not a password.
 
 nonce
-: The [[Nonce|Nonce Struct]] to use for encryption.
+: The nonce to use for encryption.
     The same nonce must not be used more than once to encrypt data with the
     specified key.
 
@@ -114,7 +114,7 @@ nonce
 
 : To prevent nonce reuse when encrypting multiple plaintexts with the same key,
     it is recommended to increment the previous nonce; a randomly generated
-    nonce is not suitable. See [[Nonce Struct]] and [[How to: Generate
+    nonce is not suitable. See [[How to: Generate
     Nonces]] for more information on generating nonces.
 
 associatedData
@@ -137,7 +137,7 @@ ArgumentException
     [[AeadAlgorithm|AeadAlgorithm Class]] object.
 
 ArgumentException
-: `nonce.Size` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
+: `nonce.Length` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
 
 ArgumentException
 : `plaintext.Length` plus [[TagSize|AeadAlgorithm Class#TagSize]] is greater
@@ -147,7 +147,7 @@ ObjectDisposedException
 : `key` has been disposed.
 
 
-### Encrypt(Key, in Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
+### Encrypt(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
 
 Encrypts the specified plaintext using the specified key, nonce, and associated
 data, and fills the specified span of bytes with the ciphertext, which includes
@@ -155,7 +155,7 @@ an authentication tag.
 
     public void Encrypt(
         Key key,
-        in Nonce nonce,
+        ReadOnlySpan<byte> nonce,
         ReadOnlySpan<byte> associatedData,
         ReadOnlySpan<byte> plaintext,
         Span<byte> ciphertext)
@@ -168,7 +168,7 @@ key
     [[Key.Create|Key Class#Create]] class, not a password.
 
 nonce
-: The [[Nonce|Nonce Struct]] to use for encryption.
+: The nonce to use for encryption.
     The same nonce must not be used more than once to encrypt data with the
     specified key.
 
@@ -178,7 +178,7 @@ nonce
 
 : To prevent nonce reuse when encrypting multiple plaintexts with the same key,
     it is recommended to increment the previous nonce; a randomly generated
-    nonce is not suitable. See [[Nonce Struct]] and [[How to: Generate
+    nonce is not suitable. See [[How to: Generate
     Nonces]] for more information on generating nonces.
 
 associatedData
@@ -205,7 +205,7 @@ ArgumentException
     [[AeadAlgorithm|AeadAlgorithm Class]] object.
 
 ArgumentException
-: `nonce.Size` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
+: `nonce.Length` is not equal to [[NonceSize|AeadAlgorithm Class#NonceSize]].
 
 ArgumentException
 : `ciphertext.Length` is not equal to `plaintext.Length` plus
@@ -218,7 +218,7 @@ ObjectDisposedException
 : `key` has been disposed.
 
 
-### Decrypt(Key, in Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>, out byte[])
+### Decrypt(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>, ReadOnlySpan<byte>, out byte[])
 
 Decrypts and authenticates the specified ciphertext using the specified key,
 nonce, and associated data. If successful, returns the decrypted plaintext as an
@@ -226,7 +226,7 @@ array of bytes.
 
     public bool Decrypt(
         Key key,
-        in Nonce nonce,
+        ReadOnlySpan<byte> nonce,
         ReadOnlySpan<byte> associatedData,
         ReadOnlySpan<byte> ciphertext,
         out byte[] plaintext)
@@ -239,7 +239,7 @@ key
     encryption.
 
 nonce
-: The [[Nonce|Nonce Struct]] to use for decryption.
+: The nonce to use for decryption.
     Authentication fails if this is not the same nonce that was used for
     encryption.
 
@@ -273,7 +273,7 @@ ObjectDisposedException
 : `key` has been disposed.
 
 
-### Decrypt(Key, in Nonce, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
+### Decrypt(Key, ReadOnlySpan<byte>, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
 
 Decrypts and authenticates the specified ciphertext using the specified key,
 nonce, and associated data. If successful, fills the specified span of bytes
@@ -281,7 +281,7 @@ with the decrypted plaintext.
 
     public bool Decrypt(
         Key key,
-        in Nonce nonce,
+        ReadOnlySpan<byte> nonce,
         ReadOnlySpan<byte> associatedData,
         ReadOnlySpan<byte> ciphertext,
         Span<byte> plaintext)
@@ -294,7 +294,7 @@ key
     encryption.
 
 nonce
-: The [[Nonce|Nonce Struct]] to use for decryption.
+: The nonce to use for decryption.
     Authentication fails if this is not the same nonce that was used for
     encryption.
 
@@ -354,6 +354,5 @@ All methods yield the same result for the same arguments.
 * API Reference
     * [[Algorithm Class]]
     * [[Key Class]]
-    * [[Nonce Struct]]
 * Working with NSec
     * [[How to: Generate Nonces]]

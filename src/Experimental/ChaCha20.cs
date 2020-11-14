@@ -40,14 +40,14 @@ namespace NSec.Experimental
 
         private protected unsafe override void GeneratePseudoRandomStreamCore(
             SecureMemoryHandle keyHandle,
-            in Nonce nonce,
+            ReadOnlySpan<byte> nonce,
             Span<byte> bytes)
         {
             Debug.Assert(keyHandle.Size == crypto_stream_chacha20_ietf_KEYBYTES);
-            Debug.Assert(nonce.Size == crypto_stream_chacha20_ietf_NONCEBYTES);
+            Debug.Assert(nonce.Length == crypto_stream_chacha20_ietf_NONCEBYTES);
 
             fixed (byte* c = bytes)
-            fixed (Nonce* n = &nonce)
+            fixed (byte* n = nonce)
             {
                 int error = crypto_stream_chacha20_ietf(
                     c,
@@ -61,17 +61,17 @@ namespace NSec.Experimental
 
         private protected unsafe override void XOrCore(
             SecureMemoryHandle keyHandle,
-            in Nonce nonce,
+            ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> input,
             Span<byte> output)
         {
             Debug.Assert(keyHandle.Size == crypto_stream_chacha20_ietf_KEYBYTES);
-            Debug.Assert(nonce.Size == crypto_stream_chacha20_ietf_NONCEBYTES);
+            Debug.Assert(nonce.Length == crypto_stream_chacha20_ietf_NONCEBYTES);
             Debug.Assert(output.Length == input.Length);
 
             fixed (byte* c = output)
             fixed (byte* m = input)
-            fixed (Nonce* n = &nonce)
+            fixed (byte* n = nonce)
             {
                 int error = crypto_stream_chacha20_ietf_xor(
                     c,
@@ -86,18 +86,18 @@ namespace NSec.Experimental
 
         private protected unsafe override void XOrICCore(
             SecureMemoryHandle keyHandle,
-            in Nonce nonce,
+            ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> input,
             uint ic,
             Span<byte> output)
         {
             Debug.Assert(keyHandle.Size == crypto_stream_chacha20_ietf_KEYBYTES);
-            Debug.Assert(nonce.Size == crypto_stream_chacha20_ietf_NONCEBYTES);
+            Debug.Assert(nonce.Length == crypto_stream_chacha20_ietf_NONCEBYTES);
             Debug.Assert(output.Length == input.Length);
 
             fixed (byte* c = output)
             fixed (byte* m = input)
-            fixed (Nonce* n = &nonce)
+            fixed (byte* n = nonce)
             {
                 int error = crypto_stream_chacha20_ietf_xor_ic(
                     c,

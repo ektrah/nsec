@@ -1,3 +1,6 @@
+#pragma warning disable 612
+#pragma warning disable 618
+
 using System;
 using System.Diagnostics;
 using NSec.Cryptography;

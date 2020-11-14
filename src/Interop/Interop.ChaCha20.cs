@@ -12,7 +12,7 @@ internal static partial class Interop
         internal static unsafe extern int crypto_stream_chacha20_ietf(
             byte* c,
             ulong clen,
-            NSec.Cryptography.Nonce* n,
+            byte* n,
             SecureMemoryHandle k);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
@@ -26,7 +26,7 @@ internal static partial class Interop
             byte* c,
             byte* m,
             ulong mlen,
-            NSec.Cryptography.Nonce* n,
+            byte* n,
             SecureMemoryHandle k);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
@@ -34,7 +34,7 @@ internal static partial class Interop
             byte* c,
             byte* m,
             ulong mlen,
-            NSec.Cryptography.Nonce* n,
+            byte* n,
             uint ic,
             SecureMemoryHandle k);
     }

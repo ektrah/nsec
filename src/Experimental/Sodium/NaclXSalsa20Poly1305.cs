@@ -39,17 +39,17 @@ namespace NSec.Experimental.Sodium
 
         internal unsafe override void EncryptCore(
             SecureMemoryHandle keyHandle,
-            in Nonce nonce,
+            ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext)
         {
             Debug.Assert(keyHandle.Size == crypto_secretbox_xsalsa20poly1305_KEYBYTES);
-            Debug.Assert(nonce.Size == crypto_secretbox_xsalsa20poly1305_NONCEBYTES);
+            Debug.Assert(nonce.Length == crypto_secretbox_xsalsa20poly1305_NONCEBYTES);
             Debug.Assert(ciphertext.Length == crypto_secretbox_xsalsa20poly1305_MACBYTES + plaintext.Length);
 
             fixed (byte* c = ciphertext)
             fixed (byte* m = plaintext)
-            fixed (Nonce* n = &nonce)
+            fixed (byte* n = nonce)
             {
                 int error = crypto_secretbox_easy(
                     c,
@@ -69,17 +69,17 @@ namespace NSec.Experimental.Sodium
 
         internal unsafe override bool DecryptCore(
             SecureMemoryHandle keyHandle,
-            in Nonce nonce,
+            ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> ciphertext,
             Span<byte> plaintext)
         {
             Debug.Assert(keyHandle.Size == crypto_secretbox_xsalsa20poly1305_KEYBYTES);
-            Debug.Assert(nonce.Size == crypto_secretbox_xsalsa20poly1305_NONCEBYTES);
+            Debug.Assert(nonce.Length == crypto_secretbox_xsalsa20poly1305_NONCEBYTES);
             Debug.Assert(plaintext.Length == ciphertext.Length - crypto_secretbox_xsalsa20poly1305_MACBYTES);
 
             fixed (byte* m = plaintext)
             fixed (byte* c = ciphertext)
-            fixed (Nonce* n = &nonce)
+            fixed (byte* n = nonce)
             {
                 int error = crypto_secretbox_open_easy(
                     m,

@@ -18,7 +18,7 @@ namespace NSec.Tests.Base
         public static void Properties(StreamCipherAlgorithm a)
         {
             Assert.True(a.KeySize > 0);
-            Assert.InRange(a.NonceSize, 0, Nonce.MaxSize);
+            Assert.InRange(a.NonceSize, 0, 24);
         }
 
         #endregion
@@ -29,9 +29,9 @@ namespace NSec.Tests.Base
         [MemberData(nameof(StreamCipherAlgorithms))]
         public static void OperationWithNullKey(StreamCipherAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.GeneratePseudoRandomStream(null!, default, 1));
-            Assert.Throws<ArgumentNullException>("key", () => a.XOr(null!, default, ReadOnlySpan<byte>.Empty));
-            Assert.Throws<ArgumentNullException>("key", () => a.XOrIC(null!, default, ReadOnlySpan<byte>.Empty, 1));
+            Assert.Throws<ArgumentNullException>("key", () => a.GeneratePseudoRandomStream(null!, Utilities.RandomBytes.Slice(0, a.NonceSize), 1));
+            Assert.Throws<ArgumentNullException>("key", () => a.XOr(null!, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.XOrIC(null!, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, 1));
         }
 
         [Theory]
@@ -40,9 +40,9 @@ namespace NSec.Tests.Base
         {
             var k = new Key(a);
             k.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => a.GeneratePseudoRandomStream(k, new Nonce(0, a.NonceSize), 1));
-            Assert.Throws<ObjectDisposedException>(() => a.XOr(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty));
-            Assert.Throws<ObjectDisposedException>(() => a.XOrIC(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, 1));
+            Assert.Throws<ObjectDisposedException>(() => a.GeneratePseudoRandomStream(k, Utilities.RandomBytes.Slice(0, a.NonceSize), 1));
+            Assert.Throws<ObjectDisposedException>(() => a.XOr(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ObjectDisposedException>(() => a.XOrIC(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, 1));
         }
 
         [Theory]
@@ -51,9 +51,9 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(SignatureAlgorithm.Ed25519);
 
-            Assert.Throws<ArgumentException>("key", () => a.GeneratePseudoRandomStream(k, default, 1));
-            Assert.Throws<ArgumentException>("key", () => a.XOr(k, default, ReadOnlySpan<byte>.Empty));
-            Assert.Throws<ArgumentException>("key", () => a.XOrIC(k, default, ReadOnlySpan<byte>.Empty, 1));
+            Assert.Throws<ArgumentException>("key", () => a.GeneratePseudoRandomStream(k, Utilities.RandomBytes.Slice(0, a.NonceSize), 1));
+            Assert.Throws<ArgumentException>("key", () => a.XOr(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentException>("key", () => a.XOrIC(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, 1));
         }
 
         [Theory]
@@ -62,25 +62,20 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.Throws<ArgumentException>("nonce", () => a.GeneratePseudoRandomStream(k, new Nonce(0, a.NonceSize - 1), 1));
-            Assert.Throws<ArgumentException>("nonce", () => a.XOr(k, new Nonce(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty));
-            Assert.Throws<ArgumentException>("nonce", () => a.XOrIC(k, new Nonce(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, 1));
+            Assert.Throws<ArgumentException>("nonce", () => a.GeneratePseudoRandomStream(k, Utilities.RandomBytes.Slice(0, a.NonceSize - 1), 1));
+            Assert.Throws<ArgumentException>("nonce", () => a.XOr(k, Utilities.RandomBytes.Slice(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentException>("nonce", () => a.XOrIC(k, Utilities.RandomBytes.Slice(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, 1));
         }
 
         [Theory]
         [MemberData(nameof(StreamCipherAlgorithms))]
         public static void OperationWithNonceTooLarge(StreamCipherAlgorithm a)
         {
-            if (a.NonceSize == Nonce.MaxSize)
-            {
-                return;
-            }
-
             using var k = new Key(a);
 
-            Assert.Throws<ArgumentException>("nonce", () => a.GeneratePseudoRandomStream(k, new Nonce(0, a.NonceSize + 1), 1));
-            Assert.Throws<ArgumentException>("nonce", () => a.XOr(k, new Nonce(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty));
-            Assert.Throws<ArgumentException>("nonce", () => a.XOrIC(k, new Nonce(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, 1));
+            Assert.Throws<ArgumentException>("nonce", () => a.GeneratePseudoRandomStream(k, Utilities.RandomBytes.Slice(0, a.NonceSize + 1), 1));
+            Assert.Throws<ArgumentException>("nonce", () => a.XOr(k, Utilities.RandomBytes.Slice(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentException>("nonce", () => a.XOrIC(k, Utilities.RandomBytes.Slice(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, 1));
         }
 
         #endregion
@@ -91,9 +86,9 @@ namespace NSec.Tests.Base
         [MemberData(nameof(StreamCipherAlgorithms))]
         public static void OperationWithSpanWithNullKey(StreamCipherAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.GeneratePseudoRandomStream(null!, default, Span<byte>.Empty));
-            Assert.Throws<ArgumentNullException>("key", () => a.XOr(null!, default, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
-            Assert.Throws<ArgumentNullException>("key", () => a.XOrIC(null!, default, ReadOnlySpan<byte>.Empty, Span<byte>.Empty, 1));
+            Assert.Throws<ArgumentNullException>("key", () => a.GeneratePseudoRandomStream(null!, Utilities.RandomBytes.Slice(0, a.NonceSize), Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.XOr(null!, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.XOrIC(null!, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, Span<byte>.Empty, 1));
         }
 
         [Theory]
@@ -102,9 +97,9 @@ namespace NSec.Tests.Base
         {
             var k = new Key(a);
             k.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => a.GeneratePseudoRandomStream(k, new Nonce(0, a.NonceSize), Span<byte>.Empty));
-            Assert.Throws<ObjectDisposedException>(() => a.XOr(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
-            Assert.Throws<ObjectDisposedException>(() => a.XOrIC(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, Span<byte>.Empty, 1));
+            Assert.Throws<ObjectDisposedException>(() => a.GeneratePseudoRandomStream(k, Utilities.RandomBytes.Slice(0, a.NonceSize), Span<byte>.Empty));
+            Assert.Throws<ObjectDisposedException>(() => a.XOr(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ObjectDisposedException>(() => a.XOrIC(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, Span<byte>.Empty, 1));
         }
 
         [Theory]
@@ -113,9 +108,9 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(SignatureAlgorithm.Ed25519);
 
-            Assert.Throws<ArgumentException>("key", () => a.GeneratePseudoRandomStream(k, default, Span<byte>.Empty));
-            Assert.Throws<ArgumentException>("key", () => a.XOr(k, default, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
-            Assert.Throws<ArgumentException>("key", () => a.XOrIC(k, default, ReadOnlySpan<byte>.Empty, Span<byte>.Empty, 1));
+            Assert.Throws<ArgumentException>("key", () => a.GeneratePseudoRandomStream(k, Utilities.RandomBytes.Slice(0, a.NonceSize), Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("key", () => a.XOr(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("key", () => a.XOrIC(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, Span<byte>.Empty, 1));
         }
 
         [Theory]
@@ -124,9 +119,9 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.Throws<ArgumentException>("nonce", () => a.GeneratePseudoRandomStream(k, new Nonce(0, a.NonceSize - 1), Span<byte>.Empty));
-            Assert.Throws<ArgumentException>("nonce", () => a.XOr(k, new Nonce(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
-            Assert.Throws<ArgumentException>("nonce", () => a.XOrIC(k, new Nonce(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, Span<byte>.Empty, 1));
+            Assert.Throws<ArgumentException>("nonce", () => a.GeneratePseudoRandomStream(k, Utilities.RandomBytes.Slice(0, a.NonceSize - 1), Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("nonce", () => a.XOr(k, Utilities.RandomBytes.Slice(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("nonce", () => a.XOrIC(k, Utilities.RandomBytes.Slice(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, Span<byte>.Empty, 1));
         }
 
         [Theory]
@@ -135,9 +130,9 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.Throws<ArgumentException>("nonce", () => a.GeneratePseudoRandomStream(k, new Nonce(0, a.NonceSize + 1), Span<byte>.Empty));
-            Assert.Throws<ArgumentException>("nonce", () => a.XOr(k, new Nonce(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
-            Assert.Throws<ArgumentException>("nonce", () => a.XOrIC(k, new Nonce(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, Span<byte>.Empty, 1));
+            Assert.Throws<ArgumentException>("nonce", () => a.GeneratePseudoRandomStream(k, Utilities.RandomBytes.Slice(0, a.NonceSize + 1), Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("nonce", () => a.XOr(k, Utilities.RandomBytes.Slice(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("nonce", () => a.XOrIC(k, Utilities.RandomBytes.Slice(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, Span<byte>.Empty, 1));
         }
 
         [Theory]
@@ -151,7 +146,7 @@ namespace NSec.Tests.Base
             var actual = new byte[b.Length];
             Utilities.RandomBytes.Slice(200, actual.Length).CopyTo(actual);
 
-            var n = new Nonce(actual.AsSpan(10, a.NonceSize), 0);
+            var n = actual.AsSpan(10, a.NonceSize);
             a.XOr(k, n, b, expected);
             a.XOr(k, n, b, actual);
             Assert.Equal(expected, actual);
@@ -168,7 +163,7 @@ namespace NSec.Tests.Base
         public static void OperationWithPlainTextOverlapping(StreamCipherAlgorithm a)
         {
             using var k = new Key(a);
-            var n = new Nonce(Utilities.RandomBytes.Slice(0, a.NonceSize), 0);
+            var n = Utilities.RandomBytes.Slice(0, a.NonceSize).ToArray();
             var b = Utilities.RandomBytes.Slice(200, 200).ToArray();
 
             Assert.Throws<ArgumentException>("output", () => a.XOr(k, n, b.AsSpan(10, 100), b.AsSpan(60, 100)));
@@ -180,7 +175,7 @@ namespace NSec.Tests.Base
         public static void OperationWithSpanOutOfPlace(StreamCipherAlgorithm a)
         {
             using var k = new Key(a);
-            var n = new Nonce(Utilities.RandomBytes.Slice(0, a.NonceSize), 0);
+            var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
 
             var expected = new byte[L];
             var actual = new byte[L];
@@ -202,7 +197,7 @@ namespace NSec.Tests.Base
         public static void OperationWithSpanInPlace(StreamCipherAlgorithm a)
         {
             using var k = new Key(a);
-            var n = new Nonce(Utilities.RandomBytes.Slice(0, a.NonceSize), 0);
+            var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
 
             var expected = new byte[L];
             var actual = new byte[L];

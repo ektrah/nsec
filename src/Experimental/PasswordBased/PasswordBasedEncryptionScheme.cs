@@ -47,6 +47,7 @@ namespace NSec.Experimental.PasswordBased
 
         public int TagSize => _encryptionAlgorithm.TagSize;
 
+        [Obsolete("The 'Nonce' type has been deprecated. Pass the nonce as 'ReadOnlySpan<byte>' instead.")]
         public byte[] Encrypt(
             string password,
             ReadOnlySpan<byte> salt,
@@ -57,6 +58,7 @@ namespace NSec.Experimental.PasswordBased
             return _encryptionAlgorithm.Encrypt(key, nonce, default, plaintext);
         }
 
+        [Obsolete("The 'Nonce' type has been deprecated. Pass the nonce as 'ReadOnlySpan<byte>' instead.")]
         public void Encrypt(
             string password,
             ReadOnlySpan<byte> salt,
@@ -68,6 +70,28 @@ namespace NSec.Experimental.PasswordBased
             _encryptionAlgorithm.Encrypt(key, nonce, default, plaintext, ciphertext);
         }
 
+        public byte[] Encrypt(
+            string password,
+            ReadOnlySpan<byte> salt,
+            ReadOnlySpan<byte> nonce,
+            ReadOnlySpan<byte> plaintext)
+        {
+            using Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _encryptionAlgorithm);
+            return _encryptionAlgorithm.Encrypt(key, nonce, default, plaintext);
+        }
+
+        public void Encrypt(
+            string password,
+            ReadOnlySpan<byte> salt,
+            ReadOnlySpan<byte> nonce,
+            ReadOnlySpan<byte> plaintext,
+            Span<byte> ciphertext)
+        {
+            using Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _encryptionAlgorithm);
+            _encryptionAlgorithm.Encrypt(key, nonce, default, plaintext, ciphertext);
+        }
+
+        [Obsolete("The 'Nonce' type has been deprecated. Pass the nonce as 'ReadOnlySpan<byte>' instead.")]
         public bool Decrypt(
             string password,
             ReadOnlySpan<byte> salt,
@@ -79,10 +103,33 @@ namespace NSec.Experimental.PasswordBased
             return _encryptionAlgorithm.Decrypt(key, nonce, default, ciphertext, out plaintext);
         }
 
+        [Obsolete("The 'Nonce' type has been deprecated. Pass the nonce as 'ReadOnlySpan<byte>' instead.")]
         public bool Decrypt(
             string password,
             ReadOnlySpan<byte> salt,
             in Nonce nonce,
+            ReadOnlySpan<byte> ciphertext,
+            Span<byte> plaintext)
+        {
+            using Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _encryptionAlgorithm);
+            return _encryptionAlgorithm.Decrypt(key, nonce, default, ciphertext, plaintext);
+        }
+
+        public bool Decrypt(
+            string password,
+            ReadOnlySpan<byte> salt,
+            ReadOnlySpan<byte> nonce,
+            ReadOnlySpan<byte> ciphertext,
+            out byte[]? plaintext)
+        {
+            using Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _encryptionAlgorithm);
+            return _encryptionAlgorithm.Decrypt(key, nonce, default, ciphertext, out plaintext);
+        }
+
+        public bool Decrypt(
+            string password,
+            ReadOnlySpan<byte> salt,
+            ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> ciphertext,
             Span<byte> plaintext)
         {

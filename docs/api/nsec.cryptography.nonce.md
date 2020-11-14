@@ -2,6 +2,7 @@
 
 Represents a nonce for [[authenticated encryption|AeadAlgorithm Class]].
 
+    [Obsolete]
     public readonly struct Nonce : IEquatable<Nonce>
 
 A [[Nonce|Nonce Struct]] value consists of two fields: a fixed field and a
@@ -15,6 +16,9 @@ set to a new value for each encryption operation, and the size of the counter
 field to zero.
 
 See [[How to: Generate Nonces]] for additional information on generating nonces.
+
+!!! Note
+    This type is obsolete and will be removed in a future version. Pass nonces as `ReadOnlySpan<byte>` instead.
 
 
 ## [TOC] Summary

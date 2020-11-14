@@ -36,7 +36,7 @@ namespace NSec.Cryptography
             int tagSize)
         {
             Debug.Assert(keySize > 0);
-            Debug.Assert(nonceSize >= 0 && nonceSize <= Nonce.MaxSize);
+            Debug.Assert(nonceSize >= 0 && nonceSize <= 24);
             Debug.Assert(tagSize >= 0 && tagSize <= 255);
 
             _keySize = keySize;
@@ -78,6 +78,7 @@ namespace NSec.Cryptography
 
         public int TagSize => _tagSize;
 
+        [Obsolete("The 'Nonce' type has been deprecated. Pass the nonce as 'ReadOnlySpan<byte>' instead.")]
         public byte[] Encrypt(
             Key key,
             in Nonce nonce,
@@ -93,11 +94,15 @@ namespace NSec.Cryptography
             if (plaintext.Length > int.MaxValue - _tagSize)
                 throw Error.Argument_PlaintextTooLong(nameof(plaintext), int.MaxValue - _tagSize);
 
+            Span<byte> n = stackalloc byte[_nonceSize];
+            nonce.CopyTo(n);
+
             byte[] ciphertext = new byte[plaintext.Length + _tagSize];
-            EncryptCore(key.Handle, in nonce, associatedData, plaintext, ciphertext);
+            EncryptCore(key.Handle, n, associatedData, plaintext, ciphertext);
             return ciphertext;
         }
 
+        [Obsolete("The 'Nonce' type has been deprecated. Pass the nonce as 'ReadOnlySpan<byte>' instead.")]
         public void Encrypt(
             Key key,
             in Nonce nonce,
@@ -116,9 +121,54 @@ namespace NSec.Cryptography
             if (ciphertext.Overlaps(plaintext, out int offset) && offset != 0)
                 throw Error.Argument_OverlapCiphertext(nameof(ciphertext));
 
-            EncryptCore(key.Handle, in nonce, associatedData, plaintext, ciphertext);
+            Span<byte> n = stackalloc byte[_nonceSize];
+            nonce.CopyTo(n);
+
+            EncryptCore(key.Handle, n, associatedData, plaintext, ciphertext);
         }
 
+        public byte[] Encrypt(
+            Key key,
+            ReadOnlySpan<byte> nonce,
+            ReadOnlySpan<byte> associatedData,
+            ReadOnlySpan<byte> plaintext)
+        {
+            if (key == null)
+                throw Error.ArgumentNull_Key(nameof(key));
+            if (key.Algorithm != this)
+                throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            if (nonce.Length != _nonceSize)
+                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
+            if (plaintext.Length > int.MaxValue - _tagSize)
+                throw Error.Argument_PlaintextTooLong(nameof(plaintext), int.MaxValue - _tagSize);
+
+            byte[] ciphertext = new byte[plaintext.Length + _tagSize];
+            EncryptCore(key.Handle, nonce, associatedData, plaintext, ciphertext);
+            return ciphertext;
+        }
+
+        public void Encrypt(
+            Key key,
+            ReadOnlySpan<byte> nonce,
+            ReadOnlySpan<byte> associatedData,
+            ReadOnlySpan<byte> plaintext,
+            Span<byte> ciphertext)
+        {
+            if (key == null)
+                throw Error.ArgumentNull_Key(nameof(key));
+            if (key.Algorithm != this)
+                throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            if (nonce.Length != _nonceSize)
+                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
+            if (ciphertext.Length - _tagSize != plaintext.Length)
+                throw Error.Argument_CiphertextLength(nameof(ciphertext));
+            if (ciphertext.Overlaps(plaintext, out int offset) && offset != 0)
+                throw Error.Argument_OverlapCiphertext(nameof(ciphertext));
+
+            EncryptCore(key.Handle, nonce, associatedData, plaintext, ciphertext);
+        }
+
+        [Obsolete("The 'Nonce' type has been deprecated. Pass the nonce as 'ReadOnlySpan<byte>' instead.")]
         public bool Decrypt(
             Key key,
             in Nonce nonce,
@@ -137,12 +187,16 @@ namespace NSec.Cryptography
                 return false;
             }
 
+            Span<byte> n = stackalloc byte[_nonceSize];
+            nonce.CopyTo(n);
+
             byte[] result = new byte[ciphertext.Length - _tagSize];
-            bool success = DecryptCore(key.Handle, in nonce, associatedData, ciphertext, result);
+            bool success = DecryptCore(key.Handle, n, associatedData, ciphertext, result);
             plaintext = success ? result : null;
             return success;
         }
 
+        [Obsolete("The 'Nonce' type has been deprecated. Pass the nonce as 'ReadOnlySpan<byte>' instead.")]
         public bool Decrypt(
             Key key,
             in Nonce nonce,
@@ -161,7 +215,55 @@ namespace NSec.Cryptography
             if (plaintext.Overlaps(ciphertext, out int offset) && offset != 0)
                 throw Error.Argument_OverlapPlaintext(nameof(plaintext));
 
-            return DecryptCore(key.Handle, in nonce, associatedData, ciphertext, plaintext);
+            Span<byte> n = stackalloc byte[_nonceSize];
+            nonce.CopyTo(n);
+
+            return DecryptCore(key.Handle, n, associatedData, ciphertext, plaintext);
+        }
+
+        public bool Decrypt(
+            Key key,
+            ReadOnlySpan<byte> nonce,
+            ReadOnlySpan<byte> associatedData,
+            ReadOnlySpan<byte> ciphertext,
+            out byte[]? plaintext)
+        {
+            if (key == null)
+                throw Error.ArgumentNull_Key(nameof(key));
+            if (key.Algorithm != this)
+                throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+
+            if (nonce.Length != _nonceSize || ciphertext.Length < _tagSize)
+            {
+                plaintext = null;
+                return false;
+            }
+
+            byte[] result = new byte[ciphertext.Length - _tagSize];
+            bool success = DecryptCore(key.Handle, nonce, associatedData, ciphertext, result);
+            plaintext = success ? result : null;
+            return success;
+        }
+
+        public bool Decrypt(
+            Key key,
+            ReadOnlySpan<byte> nonce,
+            ReadOnlySpan<byte> associatedData,
+            ReadOnlySpan<byte> ciphertext,
+            Span<byte> plaintext)
+        {
+            if (key == null)
+                throw Error.ArgumentNull_Key(nameof(key));
+            if (key.Algorithm != this)
+                throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            if (nonce.Length != _nonceSize || ciphertext.Length < _tagSize)
+                return false;
+            if (plaintext.Length != ciphertext.Length - _tagSize)
+                throw Error.Argument_PlaintextLength(nameof(plaintext));
+            if (plaintext.Overlaps(ciphertext, out int offset) && offset != 0)
+                throw Error.Argument_OverlapPlaintext(nameof(plaintext));
+
+            return DecryptCore(key.Handle, nonce, associatedData, ciphertext, plaintext);
         }
 
         internal sealed override int GetKeySize()
@@ -178,14 +280,14 @@ namespace NSec.Cryptography
 
         private protected abstract void EncryptCore(
             SecureMemoryHandle keyHandle,
-            in Nonce nonce,
+            ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext);
 
         private protected abstract bool DecryptCore(
             SecureMemoryHandle keyHandle,
-            in Nonce nonce,
+            ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> ciphertext,
             Span<byte> plaintext);

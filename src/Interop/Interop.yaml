@@ -9,8 +9,8 @@ Interop.Aes256Gcm.cs:
   - crypto_aead_aes256gcm_NSECBYTES
   functions:
   - crypto_aead_aes256gcm_abytes
-  - crypto_aead_aes256gcm_decrypt (NSec.Cryptography.Nonce* npub, SecureMemoryHandle k)
-  - crypto_aead_aes256gcm_encrypt (NSec.Cryptography.Nonce* npub, SecureMemoryHandle k)
+  - crypto_aead_aes256gcm_decrypt (SecureMemoryHandle k)
+  - crypto_aead_aes256gcm_encrypt (SecureMemoryHandle k)
   - crypto_aead_aes256gcm_is_available
   - crypto_aead_aes256gcm_keybytes
   - crypto_aead_aes256gcm_npubbytes
@@ -86,11 +86,11 @@ Interop.ChaCha20.cs:
     - crypto_stream_chacha20_ietf_KEYBYTES
     - crypto_stream_chacha20_ietf_NONCEBYTES
   functions:
-    - crypto_stream_chacha20_ietf (NSec.Cryptography.Nonce* n, SecureMemoryHandle k)
+    - crypto_stream_chacha20_ietf (SecureMemoryHandle k)
     - crypto_stream_chacha20_ietf_keybytes
     - crypto_stream_chacha20_ietf_noncebytes
-    - crypto_stream_chacha20_ietf_xor (NSec.Cryptography.Nonce* n, SecureMemoryHandle k)
-    - crypto_stream_chacha20_ietf_xor_ic (NSec.Cryptography.Nonce* n, SecureMemoryHandle k)
+    - crypto_stream_chacha20_ietf_xor (SecureMemoryHandle k)
+    - crypto_stream_chacha20_ietf_xor_ic (SecureMemoryHandle k)
 
 Interop.ChaCha20Poly1305.cs:
   include: include/sodium/crypto_aead_chacha20poly1305.h
@@ -101,8 +101,8 @@ Interop.ChaCha20Poly1305.cs:
   - crypto_aead_chacha20poly1305_ietf_NSECBYTES
   functions:
   - crypto_aead_chacha20poly1305_ietf_abytes
-  - crypto_aead_chacha20poly1305_ietf_decrypt (NSec.Cryptography.Nonce* npub, SecureMemoryHandle k)
-  - crypto_aead_chacha20poly1305_ietf_encrypt (NSec.Cryptography.Nonce* npub, SecureMemoryHandle k)
+  - crypto_aead_chacha20poly1305_ietf_decrypt (SecureMemoryHandle k)
+  - crypto_aead_chacha20poly1305_ietf_encrypt (SecureMemoryHandle k)
   - crypto_aead_chacha20poly1305_ietf_keybytes
   - crypto_aead_chacha20poly1305_ietf_npubbytes
   - crypto_aead_chacha20poly1305_ietf_nsecbytes
@@ -116,8 +116,8 @@ Interop.XChaCha20Poly1305.cs:
   - crypto_aead_xchacha20poly1305_ietf_NSECBYTES
   functions:
   - crypto_aead_xchacha20poly1305_ietf_abytes
-  - crypto_aead_xchacha20poly1305_ietf_decrypt (NSec.Cryptography.Nonce* npub, SecureMemoryHandle k)
-  - crypto_aead_xchacha20poly1305_ietf_encrypt (NSec.Cryptography.Nonce* npub, SecureMemoryHandle k)
+  - crypto_aead_xchacha20poly1305_ietf_decrypt (SecureMemoryHandle k)
+  - crypto_aead_xchacha20poly1305_ietf_encrypt (SecureMemoryHandle k)
   - crypto_aead_xchacha20poly1305_ietf_keybytes
   - crypto_aead_xchacha20poly1305_ietf_npubbytes
   - crypto_aead_xchacha20poly1305_ietf_nsecbytes
@@ -200,11 +200,11 @@ Interop.Nacl.XSalsa20Poly1305.cs:
   - crypto_secretbox_xsalsa20poly1305_MACBYTES
   - crypto_secretbox_xsalsa20poly1305_NONCEBYTES
   functions:
-  - crypto_secretbox_easy (NSec.Cryptography.Nonce* n, SecureMemoryHandle k)
+  - crypto_secretbox_easy (SecureMemoryHandle k)
   - crypto_secretbox_keybytes
   - crypto_secretbox_macbytes
   - crypto_secretbox_noncebytes
-  - crypto_secretbox_open_easy (NSec.Cryptography.Nonce* n, SecureMemoryHandle k)
+  - crypto_secretbox_open_easy (SecureMemoryHandle k)
   - crypto_secretbox_primitive (IntPtr)
 
 Interop.Random.cs:

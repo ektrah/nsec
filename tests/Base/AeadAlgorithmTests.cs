@@ -17,7 +17,7 @@ namespace NSec.Tests.Base
         public static void Properties(AeadAlgorithm a)
         {
             Assert.True(a.KeySize > 0);
-            Assert.InRange(a.NonceSize, 0, Nonce.MaxSize);
+            Assert.InRange(a.NonceSize, 0, 24);
             Assert.InRange(a.TagSize, 0, 255);
         }
 
@@ -29,7 +29,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AeadAlgorithms))]
         public static void EncryptWithNullKey(AeadAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Encrypt(null!, default, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Encrypt(null!, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
@@ -38,7 +38,7 @@ namespace NSec.Tests.Base
         {
             var k = new Key(a);
             k.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => a.Encrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ObjectDisposedException>(() => a.Encrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
@@ -47,7 +47,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(SignatureAlgorithm.Ed25519);
 
-            Assert.Throws<ArgumentException>("key", () => a.Encrypt(k, default, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentException>("key", () => a.Encrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
@@ -56,21 +56,16 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.Throws<ArgumentException>("nonce", () => a.Encrypt(k, new Nonce(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentException>("nonce", () => a.Encrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
         public static void EncryptWithNonceTooLarge(AeadAlgorithm a)
         {
-            if (a.NonceSize == Nonce.MaxSize)
-            {
-                return;
-            }
-
             using var k = new Key(a);
 
-            Assert.Throws<ArgumentException>("nonce", () => a.Encrypt(k, new Nonce(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentException>("nonce", () => a.Encrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
         }
 
         [Theory]
@@ -79,7 +74,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            var b = a.Encrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty);
+            var b = a.Encrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty);
             Assert.NotNull(b);
             Assert.Equal(a.TagSize, b.Length);
         }
@@ -92,7 +87,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AeadAlgorithms))]
         public static void EncryptWithSpanWithNullKey(AeadAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Encrypt(null!, default, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Encrypt(null!, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
@@ -101,7 +96,7 @@ namespace NSec.Tests.Base
         {
             var k = new Key(a);
             k.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => a.Encrypt(k, new Nonce(a.NonceSize, 0), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[a.TagSize]));
+            Assert.Throws<ObjectDisposedException>(() => a.Encrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[a.TagSize]));
         }
 
         [Theory]
@@ -110,7 +105,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(SignatureAlgorithm.Ed25519);
 
-            Assert.Throws<ArgumentException>("key", () => a.Encrypt(k, default, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("key", () => a.Encrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
@@ -119,21 +114,16 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.Throws<ArgumentException>("nonce", () => a.Encrypt(k, new Nonce(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("nonce", () => a.Encrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
         public static void EncryptWithSpanWithNonceTooLarge(AeadAlgorithm a)
         {
-            if (a.NonceSize == Nonce.MaxSize)
-            {
-                return;
-            }
-
             using var k = new Key(a);
 
-            Assert.Throws<ArgumentException>("nonce", () => a.Encrypt(k, new Nonce(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("nonce", () => a.Encrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
@@ -142,7 +132,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.Throws<ArgumentException>("ciphertext", () => a.Encrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[a.TagSize - 1]));
+            Assert.Throws<ArgumentException>("ciphertext", () => a.Encrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[a.TagSize - 1]));
         }
 
         [Theory]
@@ -151,7 +141,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.Throws<ArgumentException>("ciphertext", () => a.Encrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[a.TagSize + 1]));
+            Assert.Throws<ArgumentException>("ciphertext", () => a.Encrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[a.TagSize + 1]));
         }
 
         [Theory]
@@ -166,8 +156,8 @@ namespace NSec.Tests.Base
             var actual = new byte[b.Length + a.TagSize];
             Utilities.RandomBytes.Slice(200, actual.Length).CopyTo(actual);
 
-            a.Encrypt(k, new Nonce(actual.AsSpan(10, a.NonceSize), 0), ad, b, expected);
-            a.Encrypt(k, new Nonce(actual.AsSpan(10, a.NonceSize), 0), ad, b, actual);
+            a.Encrypt(k, actual.AsSpan(10, a.NonceSize), ad, b, expected);
+            a.Encrypt(k, actual.AsSpan(10, a.NonceSize), ad, b, actual);
 
             Assert.Equal(expected, actual);
         }
@@ -177,7 +167,7 @@ namespace NSec.Tests.Base
         public static void EncryptWithAdOverlapping(AeadAlgorithm a)
         {
             using var k = new Key(a);
-            var n = new Nonce(Utilities.RandomBytes.Slice(0, a.NonceSize), 0);
+            var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
             var b = Utilities.RandomBytes.Slice(0, L);
 
             var expected = new byte[b.Length + a.TagSize];
@@ -195,7 +185,7 @@ namespace NSec.Tests.Base
         public static void EncryptWithPlaintextOverlapping(AeadAlgorithm a)
         {
             using var k = new Key(a);
-            var n = new Nonce(Utilities.RandomBytes.Slice(0, a.NonceSize), 0);
+            var n = Utilities.RandomBytes.Slice(0, a.NonceSize).ToArray();
             var ad = Utilities.RandomBytes.Slice(0, 100).ToArray();
             var b = Utilities.RandomBytes.Slice(200, 200).ToArray();
 
@@ -208,7 +198,7 @@ namespace NSec.Tests.Base
         public static void EncryptWithSpanOutOfPlace(AeadAlgorithm a)
         {
             using var k = new Key(a);
-            var n = new Nonce(Utilities.RandomBytes.Slice(0, a.NonceSize), 0);
+            var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
             var ad = Utilities.RandomBytes.Slice(0, 100);
 
             var expected = new byte[L + a.TagSize];
@@ -226,7 +216,7 @@ namespace NSec.Tests.Base
         public static void EncryptWithSpanInPlace(AeadAlgorithm a)
         {
             using var k = new Key(a);
-            var n = new Nonce(Utilities.RandomBytes.Slice(0, a.NonceSize), 0);
+            var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
             var ad = Utilities.RandomBytes.Slice(0, 100);
 
             var expected = new byte[L + a.TagSize];
@@ -247,7 +237,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AeadAlgorithms))]
         public static void DecryptWithNullKey(AeadAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Decrypt(null!, default, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out var pt));
+            Assert.Throws<ArgumentNullException>("key", () => a.Decrypt(null!, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out var pt));
         }
 
         [Theory]
@@ -256,7 +246,7 @@ namespace NSec.Tests.Base
         {
             var k = new Key(a);
             k.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => a.Decrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize], out var pt));
+            Assert.Throws<ObjectDisposedException>(() => a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize], out var pt));
         }
 
         [Theory]
@@ -265,7 +255,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(SignatureAlgorithm.Ed25519);
 
-            Assert.Throws<ArgumentException>("key", () => a.Decrypt(k, default, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out var pt));
+            Assert.Throws<ArgumentException>("key", () => a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out var pt));
         }
 
         [Theory]
@@ -274,21 +264,16 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.False(a.Decrypt(k, new Nonce(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out var pt));
+            Assert.False(a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out var pt));
         }
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
         public static void DecryptWithNonceTooLarge(AeadAlgorithm a)
         {
-            if (a.NonceSize == Nonce.MaxSize)
-            {
-                return;
-            }
-
             using var k = new Key(a);
 
-            Assert.False(a.Decrypt(k, new Nonce(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out var pt));
+            Assert.False(a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, out var pt));
         }
 
         [Theory]
@@ -297,7 +282,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.False(a.Decrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize - 1], out var pt));
+            Assert.False(a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize - 1], out var pt));
             Assert.Null(pt);
         }
 
@@ -315,7 +300,7 @@ namespace NSec.Tests.Base
 
             var ct = new byte[pt.Length + a.TagSize];
 
-            Assert.False(a.Decrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ct, pt));
+            Assert.False(a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ct, pt));
             Assert.Equal(new byte[pt.Length], pt);
         }
 
@@ -325,11 +310,11 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            var ct = a.Encrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty);
+            var ct = a.Encrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty);
             Assert.NotNull(ct);
             Assert.Equal(a.TagSize, ct.Length);
 
-            Assert.True(a.Decrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ct, out var pt));
+            Assert.True(a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ct, out var pt));
             Assert.NotNull(pt);
             Assert.Empty(pt);
         }
@@ -342,7 +327,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AeadAlgorithms))]
         public static void DecryptWithSpanWithNullKey(AeadAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Decrypt(null!, default, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Decrypt(null!, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
@@ -351,7 +336,7 @@ namespace NSec.Tests.Base
         {
             var k = new Key(a);
             k.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => a.Decrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize], Span<byte>.Empty));
+            Assert.Throws<ObjectDisposedException>(() => a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize], Span<byte>.Empty));
         }
 
         [Theory]
@@ -360,7 +345,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(SignatureAlgorithm.Ed25519);
 
-            Assert.Throws<ArgumentException>("key", () => a.Decrypt(k, default, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("key", () => a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
@@ -369,21 +354,16 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.False(a.Decrypt(k, new Nonce(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.False(a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
         public static void DecryptWithSpanWithNonceTooLarge(AeadAlgorithm a)
         {
-            if (a.NonceSize == Nonce.MaxSize)
-            {
-                return;
-            }
-
             using var k = new Key(a);
 
-            Assert.False(a.Decrypt(k, new Nonce(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.False(a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
@@ -392,7 +372,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.False(a.Decrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize - 1], Span<byte>.Empty));
+            Assert.False(a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize - 1], Span<byte>.Empty));
         }
 
         [Theory]
@@ -400,12 +380,13 @@ namespace NSec.Tests.Base
         public static void DecryptWithSpanTooLarge(AeadAlgorithm a)
         {
             using var k = new Key(a);
+            var n = Utilities.RandomBytes.Slice(0, a.NonceSize).ToArray();
 
-            var ct = a.Encrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty);
+            var ct = a.Encrypt(k, n, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty);
             Assert.NotNull(ct);
             Assert.Equal(a.TagSize, ct.Length);
 
-            Assert.Throws<ArgumentException>("plaintext", () => a.Decrypt(k, new Nonce(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ct, new byte[1]));
+            Assert.Throws<ArgumentException>("plaintext", () => a.Decrypt(k, n, ReadOnlySpan<byte>.Empty, ct, new byte[1]));
         }
 
         [Theory]
@@ -413,7 +394,7 @@ namespace NSec.Tests.Base
         public static void DecryptWithAdOverlapping(AeadAlgorithm a)
         {
             using var k = new Key(a);
-            var n = new Nonce(Utilities.RandomBytes.Slice(0, a.NonceSize), 0);
+            var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
             var b = Utilities.RandomBytes.Slice(0, L);
 
             var expected = b.ToArray();
@@ -430,7 +411,7 @@ namespace NSec.Tests.Base
         public static void DecryptWithCiphertextOverlapping(AeadAlgorithm a)
         {
             using var k = new Key(a);
-            var n = new Nonce(Utilities.RandomBytes.Slice(0, a.NonceSize), 0);
+            var n = Utilities.RandomBytes.Slice(0, a.NonceSize).ToArray();
             var ad = Utilities.RandomBytes.Slice(0, 100).ToArray();
             var b = Utilities.RandomBytes.Slice(200, 200).ToArray();
 
@@ -443,7 +424,7 @@ namespace NSec.Tests.Base
         public static void DecryptWithSpanOutOfPlace(AeadAlgorithm a)
         {
             using var k = new Key(a);
-            var n = new Nonce(Utilities.RandomBytes.Slice(0, a.NonceSize), 0);
+            var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
             var ad = Utilities.RandomBytes.Slice(0, 100);
 
             var expected = Utilities.RandomBytes.Slice(0, L).ToArray();
@@ -460,7 +441,7 @@ namespace NSec.Tests.Base
         public static void DecryptWithSpanInPlace(AeadAlgorithm a)
         {
             using var k = new Key(a);
-            var n = new Nonce(Utilities.RandomBytes.Slice(0, a.NonceSize), 0);
+            var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
             var ad = Utilities.RandomBytes.Slice(0, 100);
 
             var actual = new byte[L + a.TagSize];

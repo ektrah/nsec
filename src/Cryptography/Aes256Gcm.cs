@@ -93,19 +93,19 @@ namespace NSec.Cryptography
 
         private protected unsafe override void EncryptCore(
             SecureMemoryHandle keyHandle,
-            in Nonce nonce,
+            ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> plaintext,
             Span<byte> ciphertext)
         {
             Debug.Assert(keyHandle.Size == crypto_aead_aes256gcm_KEYBYTES);
-            Debug.Assert(nonce.Size == crypto_aead_aes256gcm_NPUBBYTES);
+            Debug.Assert(nonce.Length == crypto_aead_aes256gcm_NPUBBYTES);
             Debug.Assert(ciphertext.Length == plaintext.Length + crypto_aead_aes256gcm_ABYTES);
 
             fixed (byte* c = ciphertext)
             fixed (byte* m = plaintext)
             fixed (byte* ad = associatedData)
-            fixed (Nonce* n = &nonce)
+            fixed (byte* n = nonce)
             {
                 int error = crypto_aead_aes256gcm_encrypt(
                     c,
@@ -130,19 +130,19 @@ namespace NSec.Cryptography
 
         private protected unsafe override bool DecryptCore(
             SecureMemoryHandle keyHandle,
-            in Nonce nonce,
+            ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> associatedData,
             ReadOnlySpan<byte> ciphertext,
             Span<byte> plaintext)
         {
             Debug.Assert(keyHandle.Size == crypto_aead_aes256gcm_KEYBYTES);
-            Debug.Assert(nonce.Size == crypto_aead_aes256gcm_NPUBBYTES);
+            Debug.Assert(nonce.Length == crypto_aead_aes256gcm_NPUBBYTES);
             Debug.Assert(plaintext.Length == ciphertext.Length - crypto_aead_aes256gcm_ABYTES);
 
             fixed (byte* m = plaintext)
             fixed (byte* c = ciphertext)
             fixed (byte* ad = associatedData)
-            fixed (Nonce* n = &nonce)
+            fixed (byte* n = nonce)
             {
                 int error = crypto_aead_aes256gcm_decrypt(
                     m,

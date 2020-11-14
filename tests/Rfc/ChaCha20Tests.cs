@@ -70,7 +70,7 @@ namespace NSec.Tests.Rfc
 
             using var k = Key.Import(a, key.DecodeHex(), KeyBlobFormat.RawSymmetricKey);
 
-            var b = a.XOrIC(k, new Nonce(nonce.DecodeHex(), 0), plaintext.DecodeHex(), initialBlockCounter);
+            var b = a.XOrIC(k, nonce.DecodeHex(), plaintext.DecodeHex(), initialBlockCounter);
 
             Assert.Equal(ciphertext.DecodeHex(), b);
         }

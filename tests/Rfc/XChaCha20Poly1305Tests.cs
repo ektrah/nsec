@@ -29,10 +29,10 @@ namespace NSec.Tests.Rfc
 
             using var k = Key.Import(a, key.DecodeHex(), KeyBlobFormat.RawSymmetricKey);
 
-            var b = a.Encrypt(k, new Nonce(nonce.DecodeHex(), 0), aad.DecodeHex(), plaintext.DecodeHex());
+            var b = a.Encrypt(k, nonce.DecodeHex(), aad.DecodeHex(), plaintext.DecodeHex());
             Assert.Equal((ciphertext + tag).DecodeHex(), b);
 
-            Assert.True(a.Decrypt(k, new Nonce(nonce.DecodeHex(), 0), aad.DecodeHex(), b, out var r));
+            Assert.True(a.Decrypt(k, nonce.DecodeHex(), aad.DecodeHex(), b, out var r));
             Assert.Equal(plaintext.DecodeHex(), r);
         }
     }
