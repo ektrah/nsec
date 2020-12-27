@@ -69,7 +69,7 @@ namespace NSec.Cryptography
             return new Key(algorithm, in creationParameters, keyHandle, publicKey);
         }
 
-        public unsafe static PublicKey ConvertPublicKey(
+        public static PublicKey ConvertPublicKey(
             PublicKey publicKey,
             Algorithm algorithm)
         {
@@ -92,14 +92,17 @@ namespace NSec.Cryptography
 
             PublicKey newPublicKey = new PublicKey(algorithm);
 
-            fixed (PublicKeyBytes* curve25519_pk = newPublicKey)
-            fixed (PublicKeyBytes* ed25519_pk = publicKey)
+            unsafe
             {
-                int error = crypto_sign_ed25519_pk_to_curve25519(curve25519_pk, ed25519_pk);
-
-                if (error != 0)
+                fixed (PublicKeyBytes* curve25519_pk = newPublicKey)
+                fixed (PublicKeyBytes* ed25519_pk = publicKey)
                 {
-                    throw Error.InvalidOperation_InternalError();
+                    int error = crypto_sign_ed25519_pk_to_curve25519(curve25519_pk, ed25519_pk);
+
+                    if (error != 0)
+                    {
+                        throw Error.InvalidOperation_InternalError();
+                    }
                 }
             }
 
