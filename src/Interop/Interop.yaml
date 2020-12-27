@@ -159,8 +159,8 @@ Interop.Ed25519.cs:
 Interop.Ed25519ToX25519.cs:
   include: include/sodium/crypto_sign_ed25519.h
   functions:
-  - crypto_sign_ed25519_pk_to_curve25519
-  - crypto_sign_ed25519_sk_to_curve25519
+  - crypto_sign_ed25519_pk_to_curve25519 (PublicKeyBytes* curve25519_pk, PublicKeyBytes* ed25519_pk)
+  - crypto_sign_ed25519_sk_to_curve25519 (SecureMemoryHandle ed25519_sk)
 
 Interop.HmacSha256.cs:
   include: include/sodium/crypto_auth_hmacsha256.h

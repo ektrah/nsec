@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using static Interop.Libsodium;
 
@@ -5,31 +6,98 @@ namespace NSec.Cryptography
 {
     public static class Ed25519ToX25519
     {
-        public unsafe static Key SignEd25519SecretToCurve25519(Key privateKey)
+        public static Key ConvertPrivateKey(
+            Key key,
+            Algorithm algorithm,
+            in KeyCreationParameters creationParameters = default)
         {
-            var xPrivateKey = new byte[32];
-
-            fixed (byte* x25519_sk = xPrivateKey)
-            fixed (byte* ed25519_sk = privateKey.Export(KeyBlobFormat.RawPrivateKey))
+            if (key == null)
             {
-                int error = crypto_sign_ed25519_sk_to_curve25519(x25519_sk, ed25519_sk);
-                Debug.Assert(error == 0);
+                throw new ArgumentNullException(nameof(key));
+            }
+            if (!(key.Algorithm is Ed25519))
+            {
+                throw new ArgumentException(); // TODO: exception message
+            }
+            if (algorithm == null)
+            {
+                throw new ArgumentNullException(nameof(algorithm));
+            }
+            if (!(algorithm is X25519))
+            {
+                throw new ArgumentException(); // TODO: exception message
             }
 
-            return Key.Import(KeyAgreementAlgorithm.X25519, xPrivateKey, KeyBlobFormat.RawPrivateKey, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport});
+            SecureMemoryHandle? keyHandle = default;
+            PublicKey? publicKey = default;
+            bool success = false;
+
+            try
+            {
+                Span<byte> seed = stackalloc byte[crypto_scalarmult_curve25519_BYTES];
+                try
+                {
+                    unsafe
+                    {
+                        fixed (byte* buf = seed)
+                        {
+                            int error = crypto_sign_ed25519_sk_to_curve25519(buf, key.Handle);
+
+                            Debug.Assert(error == 0);
+                        }
+                    }
+
+                    algorithm.CreateKey(seed, out keyHandle, out publicKey);
+                    success = true;
+                }
+                finally
+                {
+                    CryptographicOperations.ZeroMemory(seed);
+                }
+            }
+            finally
+            {
+                if (!success && keyHandle != null)
+                {
+                    keyHandle.Dispose();
+                }
+            }
+
+            return new Key(algorithm, in creationParameters, keyHandle, publicKey);
         }
-        public unsafe static PublicKey SignEd25519PublicToCurve25519(PublicKey publicKey)
-        {
-            var xPublicKey = new byte[32];
 
-            fixed (byte* x25519_sk = xPublicKey)
-            fixed (byte* ed25519_sk = publicKey.Export(KeyBlobFormat.RawPublicKey))
+        public unsafe static PublicKey ConvertPublicKey(
+            PublicKey publicKey,
+            Algorithm algorithm)
+        {
+            if (publicKey == null)
             {
-                int error = crypto_sign_ed25519_pk_to_curve25519(x25519_sk, ed25519_sk);
+                throw new ArgumentNullException(nameof(publicKey));
+            }
+            if (!(publicKey.Algorithm is Ed25519))
+            {
+                throw new ArgumentException(); // TODO: exception message
+            }
+            if (algorithm == null)
+            {
+                throw new ArgumentNullException(nameof(algorithm));
+            }
+            if (!(algorithm is X25519))
+            {
+                throw new ArgumentException(); // TODO: exception message
+            }
+
+            PublicKey newPublicKey = new PublicKey(algorithm);
+
+            fixed (PublicKeyBytes* curve25519_pk = newPublicKey)
+            fixed (PublicKeyBytes* ed25519_pk = publicKey)
+            {
+                int error = crypto_sign_ed25519_pk_to_curve25519(curve25519_pk, ed25519_pk);
+
                 Debug.Assert(error == 0);
             }
 
-            return PublicKey.Import(KeyAgreementAlgorithm.X25519, xPublicKey, KeyBlobFormat.RawPublicKey);
+            return newPublicKey;
         }
     }
 }
