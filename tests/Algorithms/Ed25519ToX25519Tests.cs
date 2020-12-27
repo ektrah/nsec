@@ -3,7 +3,7 @@ using Xunit;
 
 namespace NSec.Tests.Algorithms
 {
-    public class Ed25519ToX25519Test
+    public class Ed25519ToX25519Tests
     {
         [Fact]
         public void TestConvertPrivateKey()
@@ -48,12 +48,10 @@ namespace NSec.Tests.Algorithms
             using var k = Key.Create(SignatureAlgorithm.Ed25519);
 
             using var x25519priv = Ed25519ToX25519.ConvertPrivateKey(k, a);
-            var expected = x25519priv.Export(KeyBlobFormat.NSecPublicKey);
 
             var x25519pub = Ed25519ToX25519.ConvertPublicKey(k.PublicKey, a);
-            var actual = x25519pub.Export(KeyBlobFormat.NSecPublicKey);
 
-            Assert.Equal(expected, actual);
+            Assert.Equal(x25519priv.PublicKey, x25519pub);
         }
     }
 }

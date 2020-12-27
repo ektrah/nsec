@@ -43,7 +43,10 @@ namespace NSec.Cryptography
                         {
                             int error = crypto_sign_ed25519_sk_to_curve25519(buf, key.Handle);
 
-                            Debug.Assert(error == 0);
+                            if (error != 0)
+                            {
+                                throw Error.InvalidOperation_InternalError();
+                            }
                         }
                     }
 
@@ -94,7 +97,10 @@ namespace NSec.Cryptography
             {
                 int error = crypto_sign_ed25519_pk_to_curve25519(curve25519_pk, ed25519_pk);
 
-                Debug.Assert(error == 0);
+                if (error != 0)
+                {
+                    throw Error.InvalidOperation_InternalError();
+                }
             }
 
             return newPublicKey;
