@@ -69,7 +69,7 @@ shared:
       name: Install .NET 5.0 SDK
       command: |
         if [ ! -f ~/dotnet-install.sh ]; then curl -fsLo ~/dotnet-install.sh 'https://dot.net/v1/dotnet-install.sh'; fi
-        bash ~/dotnet-install.sh --channel Current --version latest --install-dir ~/.dotnet --no-path
+        bash ~/dotnet-install.sh --channel 5.0 --version latest --install-dir ~/.dotnet --no-path
         ~/.dotnet/dotnet --info
         echo 'export PATH=~/.dotnet:$PATH' >> $BASH_ENV
   generate-restore-graph: &generate-restore-graph
