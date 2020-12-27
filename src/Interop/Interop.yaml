@@ -156,6 +156,12 @@ Interop.Ed25519.cs:
   - crypto_sign_ed25519_sk_to_seed (SecureMemoryHandle sk)
   - crypto_sign_ed25519_verify_detached (PublicKeyBytes* pk)
 
+Interop.Ed25519ToX25519.cs:
+  include: include/sodium/crypto_sign_ed25519.h
+  functions:
+  - crypto_sign_ed25519_pk_to_curve25519
+  - crypto_sign_ed25519_sk_to_curve25519
+
 Interop.HmacSha256.cs:
   include: include/sodium/crypto_auth_hmacsha256.h
   constants:
