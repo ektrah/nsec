@@ -54,7 +54,7 @@ internal static partial class Interop
             }
 
             public void CopyTo(
-                 Span<byte> destination)
+                Span<byte> destination)
             {
                 bool mustCallRelease = false;
                 try
@@ -71,15 +71,15 @@ internal static partial class Interop
                 }
             }
 
+            public unsafe Span<byte> DangerousGetSpan()
+            {
+                return new Span<byte>((void*)handle, _size);
+            }
+
             protected override bool ReleaseHandle()
             {
                 sodium_free(handle);
                 return true;
-            }
-
-            private unsafe Span<byte> DangerousGetSpan()
-            {
-                return new Span<byte>((void*)handle, _size);
             }
         }
     }
