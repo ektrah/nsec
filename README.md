@@ -9,7 +9,7 @@
 [.NET Core](https://dotnet.microsoft.com/) based on
 [libsodium](https://libsodium.org/) &#x2764;.
 It provides modern cryptographic primitives in a modern API based on
-[Span<T>](https://docs.microsoft.com/en-us/archive/msdn-magazine/2017/connect/csharp-all-about-span-exploring-a-new-net-mainstay).
+[Span&lt;T&gt;](https://docs.microsoft.com/en-us/archive/msdn-magazine/2017/connect/csharp-all-about-span-exploring-a-new-net-mainstay).
 NSec aims to be easy to use, secure by default, fast, and agile.
 
 For more information about NSec, please refer to the following resources:
