@@ -1,3 +1,5 @@
+#pragma warning disable 618
+
 using System;
 using NSec.Cryptography;
 using Xunit;
