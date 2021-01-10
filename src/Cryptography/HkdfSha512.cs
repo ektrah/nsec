@@ -117,29 +117,6 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> info,
             Span<byte> bytes)
         {
-#if NET5_0
-            bool mustCallRelease = false;
-            try
-            {
-                inputKeyingMaterial.DangerousAddRef(ref mustCallRelease);
-
-                ReadOnlySpan<byte> ikm = inputKeyingMaterial.DangerousGetSpan();
-
-                System.Security.Cryptography.HKDF.DeriveKey(
-                    System.Security.Cryptography.HashAlgorithmName.SHA512,
-                    ikm,
-                    bytes,
-                    salt,
-                    info);
-            }
-            finally
-            {
-                if (mustCallRelease)
-                {
-                    inputKeyingMaterial.DangerousRelease();
-                }
-            }
-#else
             Debug.Assert(bytes.Length <= byte.MaxValue * crypto_auth_hmacsha512_BYTES);
 
             Span<byte> pseudorandomKey = stackalloc byte[crypto_auth_hmacsha512_BYTES];
@@ -153,7 +130,6 @@ namespace NSec.Cryptography
             {
                 CryptographicOperations.ZeroMemory(pseudorandomKey);
             }
-#endif
         }
 
         private static unsafe void ExpandCore(
@@ -161,13 +137,6 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> info,
             Span<byte> bytes)
         {
-#if NET5_0
-            System.Security.Cryptography.HKDF.Expand(
-                System.Security.Cryptography.HashAlgorithmName.SHA512,
-                pseudorandomKey,
-                bytes,
-                info);
-#else
             Debug.Assert(pseudorandomKey.Length >= crypto_auth_hmacsha512_BYTES);
             Debug.Assert(bytes.Length <= byte.MaxValue * crypto_auth_hmacsha512_BYTES);
 
@@ -211,7 +180,6 @@ namespace NSec.Cryptography
             {
                 Unsafe.InitBlockUnaligned(temp, 0, crypto_auth_hmacsha512_BYTES);
             }
-#endif
         }
 
         private static unsafe void ExtractCore(
@@ -219,28 +187,6 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> salt,
             Span<byte> pseudorandomKey)
         {
-#if NET5_0
-            bool mustCallRelease = false;
-            try
-            {
-                inputKeyingMaterial.DangerousAddRef(ref mustCallRelease);
-
-                ReadOnlySpan<byte> ikm = inputKeyingMaterial.DangerousGetSpan();
-
-                System.Security.Cryptography.HKDF.Extract(
-                    System.Security.Cryptography.HashAlgorithmName.SHA512,
-                    ikm,
-                    salt,
-                    pseudorandomKey);
-            }
-            finally
-            {
-                if (mustCallRelease)
-                {
-                    inputKeyingMaterial.DangerousRelease();
-                }
-            }
-#else
             Debug.Assert(pseudorandomKey.Length == crypto_auth_hmacsha512_BYTES);
 
             // According to RFC 5869, the salt must be set to a string of
@@ -255,7 +201,6 @@ namespace NSec.Cryptography
                 crypto_auth_hmacsha512_update(&state, inputKeyingMaterial, (ulong)inputKeyingMaterial.Size);
                 crypto_auth_hmacsha512_final(&state, @out);
             }
-#endif
         }
 
         private static void SelfTest()
