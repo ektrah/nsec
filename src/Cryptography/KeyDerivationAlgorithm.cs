@@ -78,7 +78,7 @@ namespace NSec.Cryptography
         public bool SupportsSalt => _supportsSalt;
 
         public byte[] DeriveBytes(
-            ReadOnlySpan<byte> sharedSecret,
+            ReadOnlySpan<byte> inputKeyingMaterial,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> info,
             int count)
@@ -91,12 +91,12 @@ namespace NSec.Cryptography
                 throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), MaxCount);
 
             byte[] bytes = new byte[count];
-            DeriveBytesCore(sharedSecret, salt, info, bytes);
+            DeriveBytesCore(inputKeyingMaterial, salt, info, bytes);
             return bytes;
         }
 
         public void DeriveBytes(
-            ReadOnlySpan<byte> sharedSecret,
+            ReadOnlySpan<byte> inputKeyingMaterial,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> info,
             Span<byte> bytes)
@@ -110,11 +110,11 @@ namespace NSec.Cryptography
             if (bytes.Overlaps(info))
                 throw Error.Argument_OverlapInfo(nameof(bytes));
 
-            DeriveBytesCore(sharedSecret, salt, info, bytes);
+            DeriveBytesCore(inputKeyingMaterial, salt, info, bytes);
         }
 
         public Key DeriveKey(
-            ReadOnlySpan<byte> sharedSecret,
+            ReadOnlySpan<byte> inputKeyingMaterial,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> info,
             Algorithm algorithm,
@@ -139,7 +139,7 @@ namespace NSec.Cryptography
                 Span<byte> seed = stackalloc byte[seedSize];
                 try
                 {
-                    DeriveBytesCore(sharedSecret, salt, info, seed);
+                    DeriveBytesCore(inputKeyingMaterial, salt, info, seed);
                     algorithm.CreateKey(seed, out keyHandle, out publicKey);
                     success = true;
                 }
@@ -263,7 +263,7 @@ namespace NSec.Cryptography
         }
 
         private protected virtual void DeriveBytesCore(
-            SecureMemoryHandle inputKeyingMaterial,
+            SecureMemoryHandle sharedSecretHandle,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> info,
             Span<byte> bytes)
@@ -271,15 +271,15 @@ namespace NSec.Cryptography
             bool mustCallRelease = false;
             try
             {
-                inputKeyingMaterial.DangerousAddRef(ref mustCallRelease);
+                sharedSecretHandle.DangerousAddRef(ref mustCallRelease);
 
-                DeriveBytesCore(inputKeyingMaterial.DangerousGetSpan(), salt, info, bytes);
+                DeriveBytesCore(sharedSecretHandle.DangerousGetSpan(), salt, info, bytes);
             }
             finally
             {
                 if (mustCallRelease)
                 {
-                    inputKeyingMaterial.DangerousRelease();
+                    sharedSecretHandle.DangerousRelease();
                 }
             }
         }
