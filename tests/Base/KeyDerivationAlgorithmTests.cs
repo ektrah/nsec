@@ -480,7 +480,7 @@ namespace NSec.Tests.Base
             using var k = new Key(x);
             using var s = x.Agree(k, k.PublicKey)!;
             using var i = a.DeriveKey(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, y);
-            Assert.NotNull(k);
+            Assert.NotNull(i);
             Assert.Same(y, i.Algorithm);
         }
 
