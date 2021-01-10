@@ -153,12 +153,14 @@ namespace NSec.Cryptography
                     byte counter = 0;
                     int chunkSize;
 
+                    crypto_auth_hmacsha256_state initialState;
+                    crypto_auth_hmacsha256_init(&initialState, key, (nuint)pseudorandomKey.Length);
+
                     while ((chunkSize = bytes.Length - offset) > 0)
                     {
                         counter++;
 
-                        crypto_auth_hmacsha256_state state;
-                        crypto_auth_hmacsha256_init(&state, key, (nuint)pseudorandomKey.Length);
+                        crypto_auth_hmacsha256_state state = initialState;
                         crypto_auth_hmacsha256_update(&state, temp, (ulong)tempLength);
                         crypto_auth_hmacsha256_update(&state, @in, (ulong)info.Length);
                         crypto_auth_hmacsha256_update(&state, &counter, sizeof(byte));
