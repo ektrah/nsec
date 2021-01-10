@@ -112,7 +112,7 @@ namespace NSec.Cryptography
         }
 
         private protected override void DeriveBytesCore(
-            SecureMemoryHandle inputKeyingMaterial,
+            ReadOnlySpan<byte> inputKeyingMaterial,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> info,
             Span<byte> bytes)
@@ -179,6 +179,28 @@ namespace NSec.Cryptography
             finally
             {
                 Unsafe.InitBlockUnaligned(temp, 0, crypto_auth_hmacsha256_BYTES);
+            }
+        }
+
+        private static unsafe void ExtractCore(
+            ReadOnlySpan<byte> inputKeyingMaterial,
+            ReadOnlySpan<byte> salt,
+            Span<byte> pseudorandomKey)
+        {
+            Debug.Assert(pseudorandomKey.Length == crypto_auth_hmacsha256_BYTES);
+
+            // According to RFC 5869, the salt must be set to a string of
+            // HashLen zeros if not provided. A ReadOnlySpan<byte> cannot be
+            // "not provided", so this is not implemented.
+
+            fixed (byte* ikm = inputKeyingMaterial)
+            fixed (byte* key = salt)
+            fixed (byte* @out = pseudorandomKey)
+            {
+                crypto_auth_hmacsha256_state state;
+                crypto_auth_hmacsha256_init(&state, key, (nuint)salt.Length);
+                crypto_auth_hmacsha256_update(&state, ikm, (ulong)inputKeyingMaterial.Length);
+                crypto_auth_hmacsha256_final(&state, @out);
             }
         }
 

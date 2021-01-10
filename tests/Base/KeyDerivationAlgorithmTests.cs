@@ -26,7 +26,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveBytesWithNullSecret(KeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.DeriveBytes(null!, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, 0));
+            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.DeriveBytes((SharedSecret)null!, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, 0));
         }
 
         [Theory]
@@ -123,7 +123,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveBytesWithNullSecretAndSpan(KeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.DeriveBytes(null!, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.DeriveBytes((SharedSecret)null!, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
@@ -235,7 +235,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveKeyWithNullSecret(KeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.DeriveKey(null!, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, null!));
+            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.DeriveKey((SharedSecret)null!, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, null!));
         }
 
         [Theory]

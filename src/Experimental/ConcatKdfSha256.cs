@@ -34,7 +34,7 @@ namespace NSec.Experimental
         }
 
         private protected unsafe override void DeriveBytesCore(
-            SecureMemoryHandle inputKeyingMaterial,
+            ReadOnlySpan<byte> inputKeyingMaterial,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> info,
             Span<byte> bytes)
@@ -45,6 +45,7 @@ namespace NSec.Experimental
 
             try
             {
+                fixed (byte* ikm = inputKeyingMaterial)
                 fixed (byte* @in = info)
                 fixed (byte* @out = bytes)
                 {
@@ -61,7 +62,7 @@ namespace NSec.Experimental
                         crypto_hash_sha256_state state;
                         crypto_hash_sha256_init(&state);
                         crypto_hash_sha256_update(&state, (byte*)&counterBigEndian, sizeof(uint));
-                        crypto_hash_sha256_update(&state, inputKeyingMaterial, (ulong)inputKeyingMaterial.Size);
+                        crypto_hash_sha256_update(&state, ikm, (ulong)inputKeyingMaterial.Length);
                         crypto_hash_sha256_update(&state, @in, (ulong)info.Length);
                         crypto_hash_sha256_final(&state, temp);
 
