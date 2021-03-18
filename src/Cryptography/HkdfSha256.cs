@@ -117,8 +117,6 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> info,
             Span<byte> bytes)
         {
-            Debug.Assert(bytes.Length <= byte.MaxValue * crypto_auth_hmacsha256_BYTES);
-
 #if NET5_0_OR_GREATER
             System.Security.Cryptography.HKDF.DeriveKey(
                 System.Security.Cryptography.HashAlgorithmName.SHA256,
@@ -127,6 +125,8 @@ namespace NSec.Cryptography
                 salt,
                 info);
 #else
+            Debug.Assert(bytes.Length <= byte.MaxValue * crypto_auth_hmacsha256_BYTES);
+
             Span<byte> pseudorandomKey = stackalloc byte[crypto_auth_hmacsha256_BYTES];
             try
             {
@@ -146,9 +146,6 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> info,
             Span<byte> bytes)
         {
-            Debug.Assert(pseudorandomKey.Length >= crypto_auth_hmacsha256_BYTES);
-            Debug.Assert(bytes.Length <= byte.MaxValue * crypto_auth_hmacsha256_BYTES);
-
 #if NET5_0_OR_GREATER
             System.Security.Cryptography.HKDF.Expand(
                 System.Security.Cryptography.HashAlgorithmName.SHA256,
@@ -156,6 +153,9 @@ namespace NSec.Cryptography
                 bytes,
                 info);
 #else
+            Debug.Assert(pseudorandomKey.Length >= crypto_auth_hmacsha256_BYTES);
+            Debug.Assert(bytes.Length <= byte.MaxValue * crypto_auth_hmacsha256_BYTES);
+
             byte* temp = stackalloc byte[crypto_auth_hmacsha256_BYTES];
 
             try
@@ -206,8 +206,6 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> salt,
             Span<byte> pseudorandomKey)
         {
-            Debug.Assert(pseudorandomKey.Length == crypto_auth_hmacsha256_BYTES);
-
 #if NET5_0_OR_GREATER
             System.Security.Cryptography.HKDF.Extract(
                 System.Security.Cryptography.HashAlgorithmName.SHA256,
@@ -215,6 +213,8 @@ namespace NSec.Cryptography
                 salt,
                 pseudorandomKey);
 #else
+            Debug.Assert(pseudorandomKey.Length == crypto_auth_hmacsha256_BYTES);
+
             // According to RFC 5869, the salt must be set to a string of
             // HashLen zeros if not provided. A ReadOnlySpan<byte> cannot be
             // "not provided", so this is not implemented.
@@ -236,8 +236,6 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> salt,
             Span<byte> pseudorandomKey)
         {
-            Debug.Assert(pseudorandomKey.Length == crypto_auth_hmacsha256_BYTES);
-
 #if NET5_0_OR_GREATER
             bool mustCallRelease = false;
             try
@@ -258,6 +256,8 @@ namespace NSec.Cryptography
                 }
             }
 #else
+            Debug.Assert(pseudorandomKey.Length == crypto_auth_hmacsha256_BYTES);
+
             // According to RFC 5869, the salt must be set to a string of
             // HashLen zeros if not provided. A ReadOnlySpan<byte> cannot be
             // "not provided", so this is not implemented.
