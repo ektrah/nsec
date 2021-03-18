@@ -104,7 +104,7 @@ An array of bytes that contains the derived bytes.
 #### Exceptions
 
 ArgumentNullException
-: `sharedSecret` is `null`
+: `sharedSecret` is `null`.
 
 ArgumentException
 : [[SupportsSalt|KeyDerivationAlgorithm Class#SupportsSalt]] is `false` but
@@ -120,7 +120,7 @@ ObjectDisposedException
 
 ### DeriveBytes(ReadOnlySpan<byte>, ReadOnlySpan<byte>, ReadOnlySpan<byte>, int)
 
-Derives the specified number of bytes from a shared secret, using the specified
+Derives the specified number of bytes from some input keying material, using the specified
 salt and context information.
 
     public byte[] DeriveBytes(
@@ -159,9 +159,6 @@ An array of bytes that contains the derived bytes.
 
 #### Exceptions
 
-ArgumentNullException
-: `sharedSecret` is `null`
-
 ArgumentException
 : [[SupportsSalt|KeyDerivationAlgorithm Class#SupportsSalt]] is `false` but
     `salt` is not empty.
@@ -169,9 +166,6 @@ ArgumentException
 ArgumentOutOfRangeException
 : `count` is less than 0 or greater than
     [[MaxCount|KeyDerivationAlgorithm Class#MaxCount]].
-
-ObjectDisposedException
-: `sharedSecret` has been disposed.
 
 
 ### DeriveBytes(SharedSecret, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
@@ -213,7 +207,7 @@ bytes
 #### Exceptions
 
 ArgumentNullException
-: `sharedSecret` is `null`
+: `sharedSecret` is `null`.
 
 ArgumentException
 : [[SupportsSalt|KeyDerivationAlgorithm Class#SupportsSalt]] is `false` but
@@ -232,7 +226,7 @@ ObjectDisposedException
 
 ### DeriveBytes(ReadOnlySpan<byte>, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
 
-Fills the specified span of bytes with bytes derived from a shared secret, using
+Fills the specified span of bytes with bytes derived from some input keying material, using
 the specified salt and context information.
 
     public void DeriveBytes(
@@ -263,13 +257,10 @@ info
     information, and parameter choices. 
 
 bytes
-: The span to fill with bytes derived from the shared secret.
+: The span to fill with bytes derived from the input keying material.
     `bytes` must not overlap in memory with `salt` or `info`.
 
 #### Exceptions
-
-ArgumentNullException
-: `sharedSecret` is `null`
 
 ArgumentException
 : [[SupportsSalt|KeyDerivationAlgorithm Class#SupportsSalt]] is `false` but
@@ -281,9 +272,6 @@ ArgumentException
 
 ArgumentException
 : `bytes` overlaps in memory with `salt` or `info`.
-
-ObjectDisposedException
-: `sharedSecret` has been disposed.
 
 
 ### DeriveKey(SharedSecret, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Algorithm, in KeyCreationParameters)
@@ -348,7 +336,7 @@ ObjectDisposedException
 
 ### DeriveKey(ReadOnlySpan<byte>, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Algorithm, in KeyCreationParameters)
 
-Derives a key for the specified algorithm from a shared secret, using the
+Derives a key for the specified algorithm from some input keying material, using the
 specified salt and context information.
 
     public Key DeriveKey(
@@ -393,17 +381,14 @@ A new instance of the [[Key|Key Class]] class that represents the derived key.
 #### Exceptions
 
 ArgumentNullException
-: `sharedSecret` or `algorithm` is `null`.
+: `algorithm` is `null`.
 
 ArgumentException
 : [[SupportsSalt|KeyDerivationAlgorithm Class#SupportsSalt]] is `false` but
     `salt` is not empty.
 
 NotSupportedException
-: The specified algorithm does not support keys derived from a shared secret.
-
-ObjectDisposedException
-: `sharedSecret` has been disposed.
+: The specified algorithm does not support keys derived from input keying material.
 
 
 ## Thread Safety
