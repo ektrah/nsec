@@ -119,6 +119,14 @@ namespace NSec.Cryptography
         {
             Debug.Assert(bytes.Length <= byte.MaxValue * crypto_auth_hmacsha512_BYTES);
 
+#if NET5_0_OR_GREATER
+            System.Security.Cryptography.HKDF.DeriveKey(
+                System.Security.Cryptography.HashAlgorithmName.SHA512,
+                inputKeyingMaterial,
+                bytes,
+                salt,
+                info);
+#else
             Span<byte> pseudorandomKey = stackalloc byte[crypto_auth_hmacsha512_BYTES];
             try
             {
@@ -130,6 +138,7 @@ namespace NSec.Cryptography
             {
                 CryptographicOperations.ZeroMemory(pseudorandomKey);
             }
+#endif
         }
 
         private static unsafe void ExpandCore(
@@ -140,6 +149,13 @@ namespace NSec.Cryptography
             Debug.Assert(pseudorandomKey.Length >= crypto_auth_hmacsha512_BYTES);
             Debug.Assert(bytes.Length <= byte.MaxValue * crypto_auth_hmacsha512_BYTES);
 
+#if NET5_0_OR_GREATER
+            System.Security.Cryptography.HKDF.Expand(
+                System.Security.Cryptography.HashAlgorithmName.SHA512,
+                pseudorandomKey,
+                bytes,
+                info);
+#else
             byte* temp = stackalloc byte[crypto_auth_hmacsha512_BYTES];
 
             try
@@ -182,6 +198,7 @@ namespace NSec.Cryptography
             {
                 Unsafe.InitBlockUnaligned(temp, 0, crypto_auth_hmacsha512_BYTES);
             }
+#endif
         }
 
         private static unsafe void ExtractCore(
@@ -191,6 +208,13 @@ namespace NSec.Cryptography
         {
             Debug.Assert(pseudorandomKey.Length == crypto_auth_hmacsha512_BYTES);
 
+#if NET5_0_OR_GREATER
+            System.Security.Cryptography.HKDF.Extract(
+                System.Security.Cryptography.HashAlgorithmName.SHA512,
+                inputKeyingMaterial,
+                salt,
+                pseudorandomKey);
+#else
             // According to RFC 5869, the salt must be set to a string of
             // HashLen zeros if not provided. A ReadOnlySpan<byte> cannot be
             // "not provided", so this is not implemented.
@@ -204,6 +228,7 @@ namespace NSec.Cryptography
                 crypto_auth_hmacsha512_update(&state, ikm, (ulong)inputKeyingMaterial.Length);
                 crypto_auth_hmacsha512_final(&state, @out);
             }
+#endif
         }
 
         private static unsafe void ExtractCore(
@@ -213,6 +238,26 @@ namespace NSec.Cryptography
         {
             Debug.Assert(pseudorandomKey.Length == crypto_auth_hmacsha512_BYTES);
 
+#if NET5_0_OR_GREATER
+            bool mustCallRelease = false;
+            try
+            {
+                inputKeyingMaterial.DangerousAddRef(ref mustCallRelease);
+
+                System.Security.Cryptography.HKDF.Extract(
+                    System.Security.Cryptography.HashAlgorithmName.SHA512,
+                    inputKeyingMaterial.DangerousGetSpan(),
+                    salt,
+                    pseudorandomKey);
+            }
+            finally
+            {
+                if (mustCallRelease)
+                {
+                    inputKeyingMaterial.DangerousRelease();
+                }
+            }
+#else
             // According to RFC 5869, the salt must be set to a string of
             // HashLen zeros if not provided. A ReadOnlySpan<byte> cannot be
             // "not provided", so this is not implemented.
@@ -225,6 +270,7 @@ namespace NSec.Cryptography
                 crypto_auth_hmacsha512_update(&state, inputKeyingMaterial, (ulong)inputKeyingMaterial.Size);
                 crypto_auth_hmacsha512_final(&state, @out);
             }
+#endif
         }
 
         private static void SelfTest()
