@@ -51,15 +51,17 @@ namespace NSec.Experimental
                     uint counter = 0;
                     int chunkSize;
 
+                    crypto_hash_sha256_state initialState;
+                    crypto_hash_sha256_init(&initialState);
+                    crypto_hash_sha256_update(&initialState, ikm, (ulong)inputKeyingMaterial.Length);
+
                     while ((chunkSize = bytes.Length - offset) > 0)
                     {
                         counter++;
 
                         uint counterBigEndian = BitConverter.IsLittleEndian ? BinaryPrimitives.ReverseEndianness(counter) : counter;
 
-                        crypto_hash_sha256_state state;
-                        crypto_hash_sha256_init(&state);
-                        crypto_hash_sha256_update(&state, ikm, (ulong)inputKeyingMaterial.Length);
+                        crypto_hash_sha256_state state = initialState;
                         crypto_hash_sha256_update(&state, (byte*)&counterBigEndian, sizeof(uint));
                         crypto_hash_sha256_update(&state, @in, (ulong)info.Length);
                         crypto_hash_sha256_final(&state, temp);
