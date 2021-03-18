@@ -23,38 +23,6 @@ Gets the size of the shared secret.
 The size, in bytes, of the shared secret.
 
 
-## Static Methods
-
-
-### Import(ReadOnlySpan<byte>, in SharedSecretCreationParameters)
-
-Imports the specified shared secret.
-
-    public static SharedSecret Import(
-        ReadOnlySpan<byte> sharedSecret,
-        in SharedSecretCreationParameters creationParameters = default)
-
-#### Parameters
-
-sharedSecret
-: The shared secret to import.
-
-creationParameters
-: A [[SharedSecretCreationParameters|SharedSecretCreationParameters Struct]]
-    value that specifies advanced parameters for the creation of the
-    [[SharedSecret|SharedSecret Class]] instance.
-
-#### Return Value
-
-A new instance of the [[SharedSecret|SharedSecret Class]] class that represents
-the imported shared secret.
-
-#### Exceptions
-
-ArgumentException
-: The length of `sharedSecret` is greater than 128.
-
-
 ## Methods
 
 

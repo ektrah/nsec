@@ -18,6 +18,17 @@ namespace NSec.Tests.Rfc
 
         [Theory]
         [MemberData(nameof(Rfc5869TestVectors))]
+        public static void TestOneStepSpan(string ikm, string salt, string info, string expectedPrk, string expectedOkm)
+        {
+            var a = KeyDerivationAlgorithm.HkdfSha256;
+
+            var actualOkm = a.DeriveBytes(ikm.DecodeHex(), salt.DecodeHex(), info.DecodeHex(), expectedOkm.DecodeHex().Length);
+
+            Assert.Equal(expectedOkm.DecodeHex(), actualOkm);
+        }
+
+        [Theory]
+        [MemberData(nameof(Rfc5869TestVectors))]
         public static void TestOneStep(string ikm, string salt, string info, string expectedPrk, string expectedOkm)
         {
             var a = KeyDerivationAlgorithm.HkdfSha256;

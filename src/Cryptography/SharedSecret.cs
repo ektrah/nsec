@@ -20,6 +20,7 @@ namespace NSec.Cryptography
 
         internal SecureMemoryHandle Handle => _handle;
 
+        [Obsolete("The 'Import' method is obsolete. Use the method overloads in the 'KeyDerivationAlgorithm' class that accept a 'ReadOnlySpan<byte>' directly instead.")]
         public static SharedSecret Import(
             ReadOnlySpan<byte> sharedSecret,
             in SharedSecretCreationParameters creationParameters = default)

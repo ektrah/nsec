@@ -78,6 +78,88 @@ namespace NSec.Cryptography
         public bool SupportsSalt => _supportsSalt;
 
         public byte[] DeriveBytes(
+            ReadOnlySpan<byte> inputKeyingMaterial,
+            ReadOnlySpan<byte> salt,
+            ReadOnlySpan<byte> info,
+            int count)
+        {
+            if (!_supportsSalt && !salt.IsEmpty)
+                throw Error.Argument_SaltNotSupported(nameof(salt));
+            if (count < 0)
+                throw Error.ArgumentOutOfRange_DeriveNegativeCount(nameof(count));
+            if (count > MaxCount)
+                throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), MaxCount);
+
+            byte[] bytes = new byte[count];
+            DeriveBytesCore(inputKeyingMaterial, salt, info, bytes);
+            return bytes;
+        }
+
+        public void DeriveBytes(
+            ReadOnlySpan<byte> inputKeyingMaterial,
+            ReadOnlySpan<byte> salt,
+            ReadOnlySpan<byte> info,
+            Span<byte> bytes)
+        {
+            if (!_supportsSalt && !salt.IsEmpty)
+                throw Error.Argument_SaltNotSupported(nameof(salt));
+            if (bytes.Length > MaxCount)
+                throw Error.Argument_DeriveInvalidCount(nameof(bytes), MaxCount);
+            if (bytes.Overlaps(salt))
+                throw Error.Argument_OverlapSalt(nameof(bytes));
+            if (bytes.Overlaps(info))
+                throw Error.Argument_OverlapInfo(nameof(bytes));
+
+            DeriveBytesCore(inputKeyingMaterial, salt, info, bytes);
+        }
+
+        public Key DeriveKey(
+            ReadOnlySpan<byte> inputKeyingMaterial,
+            ReadOnlySpan<byte> salt,
+            ReadOnlySpan<byte> info,
+            Algorithm algorithm,
+            in KeyCreationParameters creationParameters = default)
+        {
+            if (!_supportsSalt && !salt.IsEmpty)
+                throw Error.Argument_SaltNotSupported(nameof(salt));
+            if (algorithm == null)
+                throw Error.ArgumentNull_Algorithm(nameof(algorithm));
+
+            int seedSize = algorithm.GetSeedSize();
+            if (seedSize > MaxCount)
+                throw Error.NotSupported_CreateKey();
+            Debug.Assert(seedSize <= 64);
+
+            SecureMemoryHandle? keyHandle = default;
+            PublicKey? publicKey = default;
+            bool success = false;
+
+            try
+            {
+                Span<byte> seed = stackalloc byte[seedSize];
+                try
+                {
+                    DeriveBytesCore(inputKeyingMaterial, salt, info, seed);
+                    algorithm.CreateKey(seed, out keyHandle, out publicKey);
+                    success = true;
+                }
+                finally
+                {
+                    CryptographicOperations.ZeroMemory(seed);
+                }
+            }
+            finally
+            {
+                if (!success && keyHandle != null)
+                {
+                    keyHandle.Dispose();
+                }
+            }
+
+            return new Key(algorithm, in creationParameters, keyHandle, publicKey);
+        }
+
+        public byte[] DeriveBytes(
             SharedSecret sharedSecret,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> info,
@@ -180,8 +262,30 @@ namespace NSec.Cryptography
             throw Error.NotSupported_CreateKey();
         }
 
+        private protected virtual void DeriveBytesCore(
+            SecureMemoryHandle sharedSecretHandle,
+            ReadOnlySpan<byte> salt,
+            ReadOnlySpan<byte> info,
+            Span<byte> bytes)
+        {
+            bool mustCallRelease = false;
+            try
+            {
+                sharedSecretHandle.DangerousAddRef(ref mustCallRelease);
+
+                DeriveBytesCore(sharedSecretHandle.DangerousGetSpan(), salt, info, bytes);
+            }
+            finally
+            {
+                if (mustCallRelease)
+                {
+                    sharedSecretHandle.DangerousRelease();
+                }
+            }
+        }
+
         private protected abstract void DeriveBytesCore(
-            SecureMemoryHandle inputKeyingMaterial,
+            ReadOnlySpan<byte> inputKeyingMaterial,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> info,
             Span<byte> bytes);

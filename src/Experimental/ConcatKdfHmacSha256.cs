@@ -33,7 +33,7 @@ namespace NSec.Experimental
         }
 
         private protected unsafe override void DeriveBytesCore(
-            SecureMemoryHandle inputKeyingMaterial,
+            ReadOnlySpan<byte> inputKeyingMaterial,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> info,
             Span<byte> bytes)
@@ -42,6 +42,7 @@ namespace NSec.Experimental
 
             try
             {
+                fixed (byte* ikm = inputKeyingMaterial)
                 fixed (byte* key = salt)
                 fixed (byte* @in = info)
                 fixed (byte* @out = bytes)
@@ -50,16 +51,18 @@ namespace NSec.Experimental
                     uint counter = 0;
                     int chunkSize;
 
+                    crypto_auth_hmacsha256_state initialState;
+                    crypto_auth_hmacsha256_init(&initialState, key, (nuint)salt.Length);
+
                     while ((chunkSize = bytes.Length - offset) > 0)
                     {
                         counter++;
 
                         uint counterBigEndian = BitConverter.IsLittleEndian ? BinaryPrimitives.ReverseEndianness(counter) : counter;
 
-                        crypto_auth_hmacsha256_state state;
-                        crypto_auth_hmacsha256_init(&state, key, (nuint)salt.Length);
+                        crypto_auth_hmacsha256_state state = initialState;
                         crypto_auth_hmacsha256_update(&state, (byte*)&counterBigEndian, sizeof(uint));
-                        crypto_auth_hmacsha256_update(&state, inputKeyingMaterial, (ulong)inputKeyingMaterial.Size);
+                        crypto_auth_hmacsha256_update(&state, ikm, (ulong)inputKeyingMaterial.Length);
                         crypto_auth_hmacsha256_update(&state, @in, (ulong)info.Length);
                         crypto_auth_hmacsha256_final(&state, temp);
 
