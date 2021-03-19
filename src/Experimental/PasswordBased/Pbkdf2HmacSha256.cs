@@ -28,7 +28,7 @@ namespace NSec.Experimental.PasswordBased
     {
         private readonly int _c;
 
-        public Pbkdf2HmacSha256() : this(100000)
+        public Pbkdf2HmacSha256() : this(c: 100000)
         {
         }
 

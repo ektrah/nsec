@@ -34,13 +34,19 @@ namespace NSec.Experimental.PasswordBased
     //      Output Size - A positive integer less than or equal to (2^32-1)*32.
     //          libsodium requires this parameter to be at least 16 bytes.
     //
-    //  Parameter Presets
+    //  Recommended Parameters
     //
-    //      | Strength    | opslimit | memlimit              | N    | r | p |
-    //      | ----------- | -------- | --------------------- | ---- | - | - |
-    //      | Interactive | 2^19     | 2^24 bytes   (16 MiB) | 2^14 | 8 | 1 |
-    //      | Moderate    | 2^22     | 2^27 bytes  (128 MiB) | 2^17 | 8 | 1 |
-    //      | Sensitive   | 2^25     | 2^30 bytes (1024 MiB) | 2^20 | 8 | 1 |
+    //      The parameters N, r, and p should be tuned to match CPU power and
+    //      memory capacity. RFC 7914, Section 2, mentions r=8 and p=1 as
+    //      yielding good results at the time of writing (August 2016).
+    //
+    //      libsodium includes the following three parameter sets:
+    //
+    //      | Strength      | opslimit | memlimit              | N    | r | p |
+    //      | ------------- | -------- | --------------------- | ---- | - | - |
+    //      | "Interactive" | 2^19     | 2^24 bytes   (16 MiB) | 2^14 | 8 | 1 |
+    //      | "Moderate"    | 2^22     | 2^27 bytes  (128 MiB) | 2^17 | 8 | 1 |
+    //      | "Sensitive"   | 2^25     | 2^30 bytes (1024 MiB) | 2^20 | 8 | 1 |
     //
     public sealed class Scrypt : PasswordBasedKeyDerivationAlgorithm
     {
@@ -50,7 +56,7 @@ namespace NSec.Experimental.PasswordBased
         private readonly uint _r;
         private readonly uint _p;
 
-        public Scrypt() : this(1 << 17, 8, 1)
+        public Scrypt() : this(n: 1 << 17, r: 8, p: 1)
         {
         }
 

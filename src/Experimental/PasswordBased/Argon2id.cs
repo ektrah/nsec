@@ -16,7 +16,7 @@ namespace NSec.Experimental.PasswordBased
     //          applications <https://github.com/P-H-C/phc-winner-argon2/raw/
     //          master/argon2-specs.pdf>
     //
-    //      draft-irtf-cfrg-argon2-12 - The memory-hard Argon2 password hash and
+    //      draft-irtf-cfrg-argon2-13 - The memory-hard Argon2 password hash and
     //          proof-of-work function
     //
     //  Parameters
@@ -24,9 +24,9 @@ namespace NSec.Experimental.PasswordBased
     //      Password Size - Any length from 0 to 2^32-1 bytes. (A Span<byte> can
     //          hold only up to 2^31-1 bytes.)
     //
-    //      Salt Size - Any length from 8 to 2^32-1 bytes. A length of 16 bytes
-    //          is recommended for password hashing and the only value accepted
-    //          by libsodium.
+    //      Nonce Length - Any length from 8 to 2^32-1 bytes. A length of
+    //          16 bytes is recommended for password hashing and the only value
+    //          accepted by libsodium.
     //
     //      Degree of Parallelism (p) - Any integer value from 1 to 2**24-1.
     //          libsodium does not accept this parameter and always uses a
@@ -36,19 +36,30 @@ namespace NSec.Experimental.PasswordBased
     //          2^32-1. libsodium accepts this parameter as the 'memlimit'
     //          argument (in bytes rather than kibibytes).
     //
-    //      Number of Iterations (t) - Any integer number from 1 to 2^32-1.
+    //      Number of Passes (t) - Any integer number from 1 to 2^32-1.
     //          libsodium accepts this parameter as the 'opslimit' argument.
     //
-    //      Tag Size - Any integer number of bytes from 4 to 2^32-1. libsodium
-    //          requires this parameter to be at least 16 bytes.
+    //      Tag Length (T) - Any integer number of bytes from 4 to 2^32-1.
+    //          libsodium requires this parameter to be at least 16 bytes.
     //
-    //  Parameter Presets
+    //  Recommended Parameters
     //
-    //      | Strength    | opslimit | memlimit             | p | m    | t |
-    //      | ----------- | -------- | -------------------- | - | ---- | - |
-    //      | Interactive | 4        | 2^25 bytes  (32 MiB) | 1 | 2^15 | 4 |
-    //      | Moderate    | 6        | 2^27 bytes (128 MiB) | 1 | 2^17 | 6 |
-    //      | Sensitive   | 8        | 2^29 bytes (512 MiB) | 1 | 2^19 | 8 |
+    //      draft-irtf-cfrg-argon2-13, Section 4, recommends the following
+    //      parameter sets for practical use of Argon2id. However, libsodium
+    //      does not support the recommended p=4 lanes.
+    //
+    //      | Recommendation | p | m             | t |
+    //      | -------------- | - | ------------- | - |
+    //      | First Option   | 4 | 2^21  (2 GiB) | 1 |
+    //      | Second Option  | 4 | 2^16 (64 MiB) | 3 |
+    //
+    //      libsodium includes the following three parameter sets:
+    //
+    //      | Strength      | opslimit | memlimit              | p | m    | t |
+    //      | ------------- | -------- | --------------------- | - | ---- | - |
+    //      | "Interactive" | 2        | 2^26 bytes   (64 MiB) | 1 | 2^16 | 2 |
+    //      | "Moderate"    | 3        | 2^28 bytes  (256 MiB) | 1 | 2^18 | 3 |
+    //      | "Sensitive"   | 4        | 2^30 bytes (1024 MiB) | 1 | 2^20 | 4 |
     //
     public sealed class Argon2id : PasswordBasedKeyDerivationAlgorithm
     {
@@ -57,7 +68,7 @@ namespace NSec.Experimental.PasswordBased
         private readonly nuint _memLimit;
         private readonly ulong _opsLimit;
 
-        public Argon2id() : this(1, 1 << 17, 6)
+        public Argon2id() : this(p: 1, m: 1 << 18, t: 3)
         {
         }
 
