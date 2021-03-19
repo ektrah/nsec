@@ -39,6 +39,10 @@ workflows:
           requires:
             - alpine3.12
             - ubuntu16.04
+          filters:
+            branches:
+              only:
+                - master
       - macos10.14:
           requires:
             - macos10.13
