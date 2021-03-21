@@ -49,7 +49,7 @@ namespace NSec.Experimental.PasswordBased
 
         [Obsolete("The 'Nonce' type has been deprecated. Pass the nonce as 'ReadOnlySpan<byte>' instead.")]
         public byte[] Encrypt(
-            string password,
+            ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,
             in Nonce nonce,
             ReadOnlySpan<byte> plaintext)
@@ -60,7 +60,7 @@ namespace NSec.Experimental.PasswordBased
 
         [Obsolete("The 'Nonce' type has been deprecated. Pass the nonce as 'ReadOnlySpan<byte>' instead.")]
         public void Encrypt(
-            string password,
+            ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,
             in Nonce nonce,
             ReadOnlySpan<byte> plaintext,
@@ -71,7 +71,7 @@ namespace NSec.Experimental.PasswordBased
         }
 
         public byte[] Encrypt(
-            string password,
+            ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> plaintext)
@@ -81,7 +81,7 @@ namespace NSec.Experimental.PasswordBased
         }
 
         public void Encrypt(
-            string password,
+            ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> plaintext,
@@ -93,7 +93,7 @@ namespace NSec.Experimental.PasswordBased
 
         [Obsolete("The 'Nonce' type has been deprecated. Pass the nonce as 'ReadOnlySpan<byte>' instead.")]
         public bool Decrypt(
-            string password,
+            ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,
             in Nonce nonce,
             ReadOnlySpan<byte> ciphertext,
@@ -105,7 +105,7 @@ namespace NSec.Experimental.PasswordBased
 
         [Obsolete("The 'Nonce' type has been deprecated. Pass the nonce as 'ReadOnlySpan<byte>' instead.")]
         public bool Decrypt(
-            string password,
+            ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,
             in Nonce nonce,
             ReadOnlySpan<byte> ciphertext,
@@ -116,7 +116,7 @@ namespace NSec.Experimental.PasswordBased
         }
 
         public byte[]? Decrypt(
-            string password,
+            ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> ciphertext)
@@ -126,7 +126,7 @@ namespace NSec.Experimental.PasswordBased
         }
 
         public bool Decrypt(
-            string password,
+            ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> ciphertext,

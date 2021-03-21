@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using NSec.Cryptography;
 using static Interop.Libsodium;
 
@@ -39,12 +38,10 @@ namespace NSec.Experimental.PasswordBased
         public int SaltSize => _saltSize;
 
         public byte[] DeriveBytes(
-            string password,
+            ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,
             int count)
         {
-            if (password == null)
-                throw Error.ArgumentNull_Password(nameof(password));
             if (salt.Length != SaltSize)
                 throw Error.Argument_SaltLength(nameof(salt), SaltSize);
             if (count < 0)
@@ -53,7 +50,7 @@ namespace NSec.Experimental.PasswordBased
                 throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), MaxCount);
 
             byte[] bytes = new byte[count];
-            if (!TryDeriveBytesCore(MemoryMarshal.AsBytes(password.AsSpan()), salt, bytes))
+            if (!TryDeriveBytesCore(password, salt, bytes))
             {
                 throw new NotImplementedException(); // TODO
             }
@@ -61,12 +58,10 @@ namespace NSec.Experimental.PasswordBased
         }
 
         public void DeriveBytes(
-            string password,
+            ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,
             Span<byte> bytes)
         {
-            if (password == null)
-                throw Error.ArgumentNull_Password(nameof(password));
             if (salt.Length != SaltSize)
                 throw Error.Argument_SaltLength(nameof(salt), SaltSize);
             if (bytes.Length > MaxCount)
@@ -74,20 +69,18 @@ namespace NSec.Experimental.PasswordBased
             if (bytes.IsEmpty)
                 return;
 
-            if (!TryDeriveBytesCore(MemoryMarshal.AsBytes(password.AsSpan()), salt, bytes))
+            if (!TryDeriveBytesCore(password, salt, bytes))
             {
                 throw new NotImplementedException(); // TODO
             }
         }
 
         public Key DeriveKey(
-            string password,
+            ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,
             Algorithm algorithm,
             in KeyCreationParameters creationParameters = default)
         {
-            if (password == null)
-                throw Error.ArgumentNull_Password(nameof(password));
             if (salt.Length != SaltSize)
                 throw Error.Argument_SaltLength(nameof(salt), SaltSize);
             if (algorithm == null)
@@ -107,7 +100,7 @@ namespace NSec.Experimental.PasswordBased
                 Span<byte> seed = stackalloc byte[seedSize];
                 try
                 {
-                    if (!TryDeriveBytesCore(MemoryMarshal.AsBytes(password.AsSpan()), salt, seed))
+                    if (!TryDeriveBytesCore(password, salt, seed))
                     {
                         throw new NotImplementedException(); // TODO
                     }

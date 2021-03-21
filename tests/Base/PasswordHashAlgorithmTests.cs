@@ -9,8 +9,6 @@ namespace NSec.Tests.Base
     {
         public static readonly TheoryData<PasswordBasedKeyDerivationAlgorithm> PasswordHashAlgorithms = Registry.PasswordHashAlgorithms;
 
-        private const string s_password = "passw0rd123";
-
         #region Properties
 
         [Theory]
@@ -27,37 +25,30 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(PasswordHashAlgorithms))]
-        public static void DeriveBytesWithNullPassword(PasswordBasedKeyDerivationAlgorithm a)
-        {
-            Assert.Throws<ArgumentNullException>("password", () => a.DeriveBytes(null!, ReadOnlySpan<byte>.Empty, 0));
-        }
-
-        [Theory]
-        [MemberData(nameof(PasswordHashAlgorithms))]
         public static void DeriveBytesWithSaltTooShort(PasswordBasedKeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s_password, Utilities.RandomBytes.Slice(0, a.SaltSize - 1), 0));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(Utilities.RandomBytes.Slice(0, 13), Utilities.RandomBytes.Slice(0, a.SaltSize - 1), 0));
         }
 
         [Theory]
         [MemberData(nameof(PasswordHashAlgorithms))]
         public static void DeriveBytesWithSaltTooLarge(PasswordBasedKeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s_password, Utilities.RandomBytes.Slice(0, a.SaltSize + 1), 0));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(Utilities.RandomBytes.Slice(0, 13), Utilities.RandomBytes.Slice(0, a.SaltSize + 1), 0));
         }
 
         [Theory]
         [MemberData(nameof(PasswordHashAlgorithms))]
         public static void DeriveBytesWithNegativeCount(PasswordBasedKeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentOutOfRangeException>("count", () => a.DeriveBytes(s_password, Utilities.RandomBytes.Slice(0, a.SaltSize), -1));
+            Assert.Throws<ArgumentOutOfRangeException>("count", () => a.DeriveBytes(Utilities.RandomBytes.Slice(0, 13), Utilities.RandomBytes.Slice(0, a.SaltSize), -1));
         }
 
         [Theory]
         [MemberData(nameof(PasswordHashAlgorithms))]
         public static void DeriveBytesWithSmallCount(PasswordBasedKeyDerivationAlgorithm a)
         {
-            var b = a.DeriveBytes(s_password, Utilities.RandomBytes.Slice(0, a.SaltSize), 3);
+            var b = a.DeriveBytes(Utilities.RandomBytes.Slice(0, 13), Utilities.RandomBytes.Slice(0, a.SaltSize), 3);
 
             Assert.NotNull(b);
             Assert.Equal(3, b.Length);
@@ -67,7 +58,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(PasswordHashAlgorithms))]
         public static void DeriveBytesSuccess(PasswordBasedKeyDerivationAlgorithm a)
         {
-            var b = a.DeriveBytes(s_password, Utilities.RandomBytes.Slice(0, a.SaltSize), 32);
+            var b = a.DeriveBytes(Utilities.RandomBytes.Slice(0, 13), Utilities.RandomBytes.Slice(0, a.SaltSize), 32);
 
             Assert.NotNull(b);
             Assert.Equal(32, b.Length);
@@ -79,37 +70,30 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(PasswordHashAlgorithms))]
-        public static void DeriveBytesWithSpanWithNullPassword(PasswordBasedKeyDerivationAlgorithm a)
-        {
-            Assert.Throws<ArgumentNullException>("password", () => a.DeriveBytes(null!, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
-        }
-
-        [Theory]
-        [MemberData(nameof(PasswordHashAlgorithms))]
         public static void DeriveBytesWithSpanWithSaltTooShort(PasswordBasedKeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s_password, Utilities.RandomBytes.Slice(0, a.SaltSize - 1), Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(Utilities.RandomBytes.Slice(0, 13), Utilities.RandomBytes.Slice(0, a.SaltSize - 1), Span<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(PasswordHashAlgorithms))]
         public static void DeriveBytesWithSpanWithSaltTooLarge(PasswordBasedKeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s_password, Utilities.RandomBytes.Slice(0, a.SaltSize + 1), Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(Utilities.RandomBytes.Slice(0, 13), Utilities.RandomBytes.Slice(0, a.SaltSize + 1), Span<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(PasswordHashAlgorithms))]
         public static void DeriveBytesWithSpanWithSmallCount(PasswordBasedKeyDerivationAlgorithm a)
         {
-            a.DeriveBytes(s_password, Utilities.RandomBytes.Slice(0, a.SaltSize), new byte[3]);
+            a.DeriveBytes(Utilities.RandomBytes.Slice(0, 13), Utilities.RandomBytes.Slice(0, a.SaltSize), new byte[3]);
         }
 
         [Theory]
         [MemberData(nameof(PasswordHashAlgorithms))]
         public static void DeriveBytesWithSpanSuccess(PasswordBasedKeyDerivationAlgorithm a)
         {
-            a.DeriveBytes(s_password, Utilities.RandomBytes.Slice(0, a.SaltSize), new byte[32]);
+            a.DeriveBytes(Utilities.RandomBytes.Slice(0, 13), Utilities.RandomBytes.Slice(0, a.SaltSize), new byte[32]);
         }
 
         #endregion
@@ -118,30 +102,23 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(PasswordHashAlgorithms))]
-        public static void DeriveKeyWithNullPassword(PasswordBasedKeyDerivationAlgorithm a)
-        {
-            Assert.Throws<ArgumentNullException>("password", () => a.DeriveKey(null!, ReadOnlySpan<byte>.Empty, null!));
-        }
-
-        [Theory]
-        [MemberData(nameof(PasswordHashAlgorithms))]
         public static void DeriveKeyWithSaltTooShort(PasswordBasedKeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(s_password, Utilities.RandomBytes.Slice(0, a.SaltSize - 1), null!));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(Utilities.RandomBytes.Slice(0, 13), Utilities.RandomBytes.Slice(0, a.SaltSize - 1), null!));
         }
 
         [Theory]
         [MemberData(nameof(PasswordHashAlgorithms))]
         public static void DeriveKeyWithSaltTooLarge(PasswordBasedKeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(s_password, Utilities.RandomBytes.Slice(0, a.SaltSize + 1), null!));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(Utilities.RandomBytes.Slice(0, 13), Utilities.RandomBytes.Slice(0, a.SaltSize + 1), null!));
         }
 
         [Theory]
         [MemberData(nameof(PasswordHashAlgorithms))]
         public static void DeriveKeyWithNullAlgorithm(PasswordBasedKeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("algorithm", () => a.DeriveKey(s_password, Utilities.RandomBytes.Slice(0, a.SaltSize), null!));
+            Assert.Throws<ArgumentNullException>("algorithm", () => a.DeriveKey(Utilities.RandomBytes.Slice(0, 13), Utilities.RandomBytes.Slice(0, a.SaltSize), null!));
         }
 
         [Theory]
@@ -150,7 +127,7 @@ namespace NSec.Tests.Base
         {
             var x = AeadAlgorithm.ChaCha20Poly1305;
 
-            using var k = a.DeriveKey(s_password, Utilities.RandomBytes.Slice(0, a.SaltSize), x);
+            using var k = a.DeriveKey(Utilities.RandomBytes.Slice(0, 13), Utilities.RandomBytes.Slice(0, a.SaltSize), x);
             Assert.NotNull(k);
             Assert.Same(x, k.Algorithm);
         }

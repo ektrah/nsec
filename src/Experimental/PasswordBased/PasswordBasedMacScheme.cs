@@ -46,7 +46,7 @@ namespace NSec.Experimental.PasswordBased
         public int SaltSize => _keyDerivationAlgorithm.SaltSize;
 
         public byte[] Mac(
-            string password,
+            ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> data)
         {
@@ -55,7 +55,7 @@ namespace NSec.Experimental.PasswordBased
         }
 
         public void Mac(
-            string password,
+            ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> data,
             Span<byte> mac)
@@ -65,7 +65,7 @@ namespace NSec.Experimental.PasswordBased
         }
 
         public bool TryVerify(
-            string password,
+            ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> mac)
