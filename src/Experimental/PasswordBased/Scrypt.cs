@@ -56,30 +56,31 @@ namespace NSec.Experimental.PasswordBased
         private readonly uint _r;
         private readonly uint _p;
 
-        internal /*public*/ Scrypt() : this(n: 1 << 17, r: 8, p: 1)
-        {
-        }
-
-        internal /*public*/ Scrypt(long n, int r, int p) : base(
+        public Scrypt(
+            in ScryptParameters parameters) : base(
             saltSize: crypto_pwhash_scryptsalsa208sha256_SALTBYTES,
             maxCount: int.MaxValue)
         {
+            long n = parameters.Cost;
+            int r = parameters.BlockSize;
+            int p = parameters.Parallelization;
+
             // checks from libsodium/crypto_pwhash/scryptsalsa208sha256/nosse/pwhash_scryptsalsa208sha256_nosse.c
             if (n < 2 || n > uint.MaxValue || unchecked(n & (n - 1)) != 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(n));
+                throw new ArgumentException(); // TODO
             }
             if (r < 1 || p < 1 || (long)r * p >= 1 << 30)
             {
-                throw new ArgumentOutOfRangeException(nameof(r));
+                throw new ArgumentException(); // TODO
             }
             if (IntPtr.Size == sizeof(long) ? n > (long)(ulong.MaxValue / 128) / r : n > (int)(uint.MaxValue / 128) / r)
             {
-                throw new ArgumentOutOfRangeException(nameof(n));
+                throw new ArgumentException(); // TODO
             }
             if (IntPtr.Size == sizeof(long) ? r > (long)(ulong.MaxValue / 128) / p : r > (int)(uint.MaxValue / 128) / p || r > (int)(uint.MaxValue / 256))
             {
-                throw new ArgumentOutOfRangeException(nameof(r));
+                throw new ArgumentException(); // TODO
             }
 
             _n = (ulong)n;

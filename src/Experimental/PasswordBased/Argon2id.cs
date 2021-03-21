@@ -13,8 +13,7 @@ namespace NSec.Experimental.PasswordBased
     //  References
     //
     //      Argon2: the memory-hard function for password hashing and other
-    //          applications <https://github.com/P-H-C/phc-winner-argon2/raw/
-    //          master/argon2-specs.pdf>
+    //          applications
     //
     //      draft-irtf-cfrg-argon2-13 - The memory-hard Argon2 password hash and
     //          proof-of-work function
@@ -68,27 +67,28 @@ namespace NSec.Experimental.PasswordBased
         private readonly nuint _memLimit;
         private readonly ulong _opsLimit;
 
-        internal /*public*/ Argon2id() : this(p: 1, m: 1 << 18, t: 3)
-        {
-        }
-
-        internal /*public*/ Argon2id(int p, long m, int t) : base(
+        public Argon2id(
+            in Argon2Parameters parameters) : base(
             saltSize: crypto_pwhash_argon2id_SALTBYTES,
             maxCount: int.MaxValue)
         {
+            int p = parameters.DegreeOfParallelism;
+            long m = parameters.MemorySize;
+            int t = parameters.NumberOfPasses;
+
             // checks from libsodium/crypto_pwhash/argon2/pwhash_argon2id.c
             if (p != 1)
             {
-                throw new ArgumentOutOfRangeException(nameof(p));
+                throw new ArgumentException(); // TODO
             }
             if (m < crypto_pwhash_argon2id_MEMLIMIT_MIN / 1024 ||
                 m > (IntPtr.Size == sizeof(long) ? 4398046510080 / 1024 : 2147483648 / 1024))
             {
-                throw new ArgumentOutOfRangeException(nameof(m));
+                throw new ArgumentException(); // TODO
             }
             if (t < crypto_pwhash_argon2id_OPSLIMIT_MIN)
             {
-                throw new ArgumentOutOfRangeException(nameof(t));
+                throw new ArgumentException(); // TODO
             }
 
             _memLimit = (nuint)(m * 1024);

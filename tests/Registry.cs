@@ -66,10 +66,10 @@ namespace NSec.Tests
         public static readonly TheoryData<PasswordBasedKeyDerivationAlgorithm> PasswordHashAlgorithms = new TheoryData<PasswordBasedKeyDerivationAlgorithm>
         {
             // intentionally weak parameters for unit tests
-            new Argon2i(1, 1 << 12, 3),
-            new Argon2id(1, 1 << 12, 3),
-            new Scrypt(1 << 11, 5, 1),
-            new Pbkdf2HmacSha256(10),
+            PasswordBasedKeyDerivationAlgorithm.Argon2i(new Argon2Parameters { DegreeOfParallelism = 1, MemorySize = 1 << 12, NumberOfPasses = 3 }),
+            PasswordBasedKeyDerivationAlgorithm.Argon2id(new Argon2Parameters { DegreeOfParallelism = 1, MemorySize = 1 << 12, NumberOfPasses = 3 }),
+            PasswordBasedKeyDerivationAlgorithm.Scrypt(new ScryptParameters { Cost = 1 << 11, BlockSize = 5, Parallelization = 1 }),
+            new Pbkdf2HmacSha256(new Pbkdf2Parameters { IterationCount = 10 }),
         };
 
         public static readonly TheoryData<SignatureAlgorithm> SignatureAlgorithms = new TheoryData<SignatureAlgorithm>
@@ -115,10 +115,10 @@ namespace NSec.Tests
             KeyDerivationAlgorithm.HkdfSha256,
             KeyDerivationAlgorithm.HkdfSha512,
             // intentionally weak parameters for unit tests
-            new Argon2i(1, 1 << 12, 3),
-            new Argon2id(1, 1 << 12, 3),
-            new Scrypt(1 << 11, 5, 1),
-            new Pbkdf2HmacSha256(10),
+            PasswordBasedKeyDerivationAlgorithm.Argon2i(new Argon2Parameters { DegreeOfParallelism = 1, MemorySize = 1 << 12, NumberOfPasses = 3 }),
+            PasswordBasedKeyDerivationAlgorithm.Argon2id(new Argon2Parameters { DegreeOfParallelism = 1, MemorySize = 1 << 12, NumberOfPasses = 3 }),
+            PasswordBasedKeyDerivationAlgorithm.Scrypt(new ScryptParameters { Cost = 1 << 11, BlockSize = 5, Parallelization = 1 }),
+            new Pbkdf2HmacSha256(new Pbkdf2Parameters { IterationCount = 10 }),
         };
 
         #endregion

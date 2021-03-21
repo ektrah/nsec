@@ -28,17 +28,16 @@ namespace NSec.Experimental.PasswordBased
     {
         private readonly int _c;
 
-        public Pbkdf2HmacSha256() : this(c: 100000)
-        {
-        }
-
-        internal /*public*/ Pbkdf2HmacSha256(int c) : base(
+        public Pbkdf2HmacSha256(
+            in Pbkdf2Parameters parameters) : base(
             saltSize: 8,
             maxCount: int.MaxValue)
         {
+            int c = parameters.IterationCount;
+
             if (c <= 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(c));
+                throw new ArgumentException(); // TODO
             }
 
             _c = c;

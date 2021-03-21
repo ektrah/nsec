@@ -37,6 +37,24 @@ namespace NSec.Experimental.PasswordBased
 
         public int SaltSize => _saltSize;
 
+        public static Argon2i Argon2i(
+            in Argon2Parameters parameters)
+        {
+            return new Argon2i(in parameters);
+        }
+
+        public static Argon2id Argon2id(
+            in Argon2Parameters parameters)
+        {
+            return new Argon2id(in parameters);
+        }
+
+        public static Scrypt Scrypt(
+            in ScryptParameters parameters)
+        {
+            return new Scrypt(in parameters);
+        }
+
         public byte[] DeriveBytes(
             ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,
