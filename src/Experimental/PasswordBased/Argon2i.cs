@@ -62,7 +62,7 @@ namespace NSec.Experimental.PasswordBased
         private readonly nuint _memLimit;
         private readonly ulong _opsLimit;
 
-        public Argon2i() : this(p: 1, m: 1 << 17, t: 6)
+        internal /*public*/ Argon2i() : this(p: 1, m: 1 << 17, t: 6)
         {
         }
 

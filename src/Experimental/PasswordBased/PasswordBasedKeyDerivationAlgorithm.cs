@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Threading;
 using NSec.Cryptography;
 using static Interop.Libsodium;
 
@@ -21,10 +20,6 @@ namespace NSec.Experimental.PasswordBased
     //
     public abstract class PasswordBasedKeyDerivationAlgorithm : Algorithm
     {
-        private static Argon2i? s_Argon2i;
-        private static Argon2id? s_Argon2id;
-        private static Scrypt? s_Scrypt;
-
         private readonly int _maxCount;
         private readonly int _saltSize;
 
@@ -37,48 +32,6 @@ namespace NSec.Experimental.PasswordBased
 
             _saltSize = saltSize;
             _maxCount = maxCount;
-        }
-
-        public static Argon2i Argon2i
-        {
-            get
-            {
-                Argon2i? instance = s_Argon2i;
-                if (instance == null)
-                {
-                    Interlocked.CompareExchange(ref s_Argon2i, new Argon2i(), null);
-                    instance = s_Argon2i;
-                }
-                return instance;
-            }
-        }
-
-        public static Argon2id Argon2id
-        {
-            get
-            {
-                Argon2id? instance = s_Argon2id;
-                if (instance == null)
-                {
-                    Interlocked.CompareExchange(ref s_Argon2id, new Argon2id(), null);
-                    instance = s_Argon2id;
-                }
-                return instance;
-            }
-        }
-
-        public static Scrypt Scrypt
-        {
-            get
-            {
-                Scrypt? instance = s_Scrypt;
-                if (instance == null)
-                {
-                    Interlocked.CompareExchange(ref s_Scrypt, new Scrypt(), null);
-                    instance = s_Scrypt;
-                }
-                return instance;
-            }
         }
 
         public int MaxCount => _maxCount;

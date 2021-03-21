@@ -56,7 +56,7 @@ namespace NSec.Experimental.PasswordBased
         private readonly uint _r;
         private readonly uint _p;
 
-        public Scrypt() : this(n: 1 << 17, r: 8, p: 1)
+        internal /*public*/ Scrypt() : this(n: 1 << 17, r: 8, p: 1)
         {
         }
 
