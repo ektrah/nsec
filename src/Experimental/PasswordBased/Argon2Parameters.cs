@@ -7,6 +7,6 @@ namespace NSec.Experimental.PasswordBased
     {
         public int DegreeOfParallelism;
         public long MemorySize;
-        public int NumberOfPasses;
+        public long NumberOfPasses;
     }
 }

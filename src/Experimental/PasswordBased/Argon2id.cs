@@ -74,7 +74,7 @@ namespace NSec.Experimental.PasswordBased
         {
             int p = parameters.DegreeOfParallelism;
             long m = parameters.MemorySize;
-            int t = parameters.NumberOfPasses;
+            long t = parameters.NumberOfPasses;
 
             // checks from libsodium/crypto_pwhash/argon2/pwhash_argon2id.c
             if (p != 1)
@@ -86,7 +86,8 @@ namespace NSec.Experimental.PasswordBased
             {
                 throw new ArgumentException(); // TODO
             }
-            if (t < crypto_pwhash_argon2id_OPSLIMIT_MIN)
+            if (t < crypto_pwhash_argon2id_OPSLIMIT_MIN ||
+                t > crypto_pwhash_argon2id_OPSLIMIT_MAX)
             {
                 throw new ArgumentException(); // TODO
             }
