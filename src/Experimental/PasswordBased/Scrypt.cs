@@ -142,7 +142,7 @@ namespace NSec.Experimental.PasswordBased
                 (crypto_pwhash_scryptsalsa208sha256_bytes_min() != crypto_pwhash_scryptsalsa208sha256_BYTES_MIN) ||
                 (crypto_pwhash_scryptsalsa208sha256_memlimit_max() != (nuint)(IntPtr.Size == sizeof(long) ? 68719476736 : uint.MaxValue)) ||
                 (crypto_pwhash_scryptsalsa208sha256_memlimit_min() != crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_MIN) ||
-                (crypto_pwhash_scryptsalsa208sha256_opslimit_max() != uint.MaxValue) ||
+                (crypto_pwhash_scryptsalsa208sha256_opslimit_max() != crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MAX) ||
                 (crypto_pwhash_scryptsalsa208sha256_opslimit_min() != crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MIN) ||
                 (crypto_pwhash_scryptsalsa208sha256_saltbytes() != crypto_pwhash_scryptsalsa208sha256_SALTBYTES))
             {

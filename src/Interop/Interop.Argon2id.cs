@@ -7,8 +7,9 @@ internal static partial class Interop
     {
         internal const int crypto_pwhash_argon2id_ALG_ARGON2ID13 = 2;
         internal const int crypto_pwhash_argon2id_BYTES_MIN = 16;
-        internal const int crypto_pwhash_argon2id_MEMLIMIT_MIN = 8192;
-        internal const int crypto_pwhash_argon2id_OPSLIMIT_MIN = 1;
+        internal const long crypto_pwhash_argon2id_MEMLIMIT_MIN = 8192;
+        internal const long crypto_pwhash_argon2id_OPSLIMIT_MAX = 4294967295;
+        internal const long crypto_pwhash_argon2id_OPSLIMIT_MIN = 1;
         internal const int crypto_pwhash_argon2id_SALTBYTES = 16;
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]

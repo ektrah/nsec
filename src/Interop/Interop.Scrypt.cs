@@ -6,8 +6,9 @@ internal static partial class Interop
     internal static partial class Libsodium
     {
         internal const int crypto_pwhash_scryptsalsa208sha256_BYTES_MIN = 16;
-        internal const int crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_MIN = 16777216;
-        internal const int crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MIN = 32768;
+        internal const long crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_MIN = 16777216;
+        internal const long crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MAX = 4294967295;
+        internal const long crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MIN = 32768;
         internal const int crypto_pwhash_scryptsalsa208sha256_SALTBYTES = 32;
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]

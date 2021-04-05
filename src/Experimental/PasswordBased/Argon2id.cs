@@ -149,7 +149,7 @@ namespace NSec.Experimental.PasswordBased
                 (crypto_pwhash_argon2id_bytes_min() != crypto_pwhash_argon2id_BYTES_MIN) ||
                 (crypto_pwhash_argon2id_memlimit_max() != (nuint)(IntPtr.Size == sizeof(long) ? 4398046510080 : 2147483648)) ||
                 (crypto_pwhash_argon2id_memlimit_min() != crypto_pwhash_argon2id_MEMLIMIT_MIN) ||
-                (crypto_pwhash_argon2id_opslimit_max() != uint.MaxValue) ||
+                (crypto_pwhash_argon2id_opslimit_max() != crypto_pwhash_argon2id_OPSLIMIT_MAX) ||
                 (crypto_pwhash_argon2id_opslimit_min() != crypto_pwhash_argon2id_OPSLIMIT_MIN) ||
                 (crypto_pwhash_argon2id_saltbytes() != crypto_pwhash_argon2id_SALTBYTES))
             {

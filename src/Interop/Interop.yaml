@@ -21,8 +21,9 @@ Interop.Argon2i.cs:
   constants:
   - crypto_pwhash_argon2i_ALG_ARGON2I13
   - crypto_pwhash_argon2i_BYTES_MIN
-  - crypto_pwhash_argon2i_MEMLIMIT_MIN
-  - crypto_pwhash_argon2i_OPSLIMIT_MIN
+  - crypto_pwhash_argon2i_MEMLIMIT_MIN (long)
+  - crypto_pwhash_argon2i_OPSLIMIT_MAX (long)
+  - crypto_pwhash_argon2i_OPSLIMIT_MIN (long)
   - crypto_pwhash_argon2i_SALTBYTES
   functions:
   - crypto_pwhash_argon2i
@@ -40,8 +41,9 @@ Interop.Argon2id.cs:
   constants:
   - crypto_pwhash_argon2id_ALG_ARGON2ID13
   - crypto_pwhash_argon2id_BYTES_MIN
-  - crypto_pwhash_argon2id_MEMLIMIT_MIN
-  - crypto_pwhash_argon2id_OPSLIMIT_MIN
+  - crypto_pwhash_argon2id_MEMLIMIT_MIN (long)
+  - crypto_pwhash_argon2id_OPSLIMIT_MAX (long)
+  - crypto_pwhash_argon2id_OPSLIMIT_MIN (long)
   - crypto_pwhash_argon2id_SALTBYTES
   functions:
   - crypto_pwhash_argon2id
@@ -223,8 +225,9 @@ Interop.Scrypt.cs:
   include: include/sodium/crypto_pwhash_scryptsalsa208sha256.h
   constants:
   - crypto_pwhash_scryptsalsa208sha256_BYTES_MIN
-  - crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_MIN
-  - crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MIN
+  - crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_MIN (long)
+  - crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MAX (long)
+  - crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MIN (long)
   - crypto_pwhash_scryptsalsa208sha256_SALTBYTES
   functions:
   - crypto_pwhash_scryptsalsa208sha256_ll
