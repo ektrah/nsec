@@ -95,12 +95,6 @@ namespace NSec.Experimental.PasswordBased
             }
         }
 
-        internal /*public*/ int P => 1;
-
-        internal /*public*/ long M => (long)_memLimit / 1024;
-
-        internal /*public*/ int T => (int)_opsLimit;
-
         internal override unsafe bool TryDeriveBytesCore(
             ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,
