@@ -8,34 +8,34 @@ workflows:
           requires:
       - centos7:
           requires:
-            - macos10.13
+            - macos10.14
       - centos8:
           requires:
-            - macos10.13
+            - macos10.14
       - debian9:
           requires:
-            - macos10.13
+            - macos10.14
       - debian10:
           requires:
-            - macos10.13
+            - macos10.14
       - fedora32:
           requires:
-            - macos10.13
+            - macos10.14
       - fedora33:
           requires:
-            - macos10.13
+            - macos10.14
       - opensuse15:
           requires:
-            - macos10.13
+            - macos10.14
       - ubuntu16.04:
           requires:
       - ubuntu18.04:
           requires:
-            - macos10.13
+            - macos10.14
       - ubuntu20.04:
           requires:
-            - macos10.13
-      - macos10.13:
+            - macos10.14
+      - macos10.14:
           requires:
             - alpine3.12
             - ubuntu16.04
@@ -43,12 +43,9 @@ workflows:
             branches:
               only:
                 - master
-      - macos10.14:
-          requires:
-            - macos10.13
       - macos10.15:
           requires:
-            - macos10.13
+            - macos10.14
 
 shared:
   environment: &environment
@@ -407,26 +404,6 @@ jobs:
       - *restore-cache
       - *dotnet-restore
       - *save-cache
-      - *dotnet-test-debug-5-0
-      - *dotnet-test-release-5-0
-      - *dotnet-test-debug-3-1
-      - *dotnet-test-release-3-1
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
-
-  macos10.13:
-    macos:
-      xcode: "10.1.0"
-    environment: *environment
-    steps:
-      - *dotnet-install-2-1
-      - *dotnet-install-3-1
-      - *dotnet-install-5-0
-      - checkout
-      - *generate-restore-graph
-      - *restore-cache-macos
-      - *dotnet-restore
-      - *save-cache-macos
       - *dotnet-test-debug-5-0
       - *dotnet-test-release-5-0
       - *dotnet-test-debug-3-1
