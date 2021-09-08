@@ -4,6 +4,13 @@ Represents a key derivation algorithm.
 
     public abstract class KeyDerivationAlgorithm : Algorithm
 
+!!! Note
+    The [[KeyDerivationAlgorithm|KeyDerivationAlgorithm Class]] class requires
+    cryptographically strong input keying material. To derive keys from secret
+    passwords or passphrases, use the
+    [[PasswordBasedKeyDerivationAlgorithm|PasswordBasedKeyDerivationAlgorithm
+    Class]] class.
+
 
 ## Inheritance Hierarchy
 

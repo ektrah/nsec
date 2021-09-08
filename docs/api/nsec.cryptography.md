@@ -17,6 +17,11 @@
         * Blake2bMac Class
         * HmacSha256 Class
         * HmacSha512 Class
+    * [[PasswordBasedKeyDerivationAlgorithm Class]]
+        * Argon2id Class
+            * [[Argon2Parameters Struct]]
+        * Scrypt Class
+            * [[ScryptParameters Struct]]
     * [[SignatureAlgorithm Class]]
         * Ed25519 Class
 * [[IncrementalHash Struct]]

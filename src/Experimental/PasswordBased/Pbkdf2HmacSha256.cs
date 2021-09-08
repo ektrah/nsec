@@ -2,6 +2,7 @@ using System;
 using System.Buffers.Binary;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using NSec.Cryptography;
 using static Interop.Libsodium;
 
 namespace NSec.Experimental.PasswordBased

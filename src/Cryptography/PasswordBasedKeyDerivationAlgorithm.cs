@@ -1,9 +1,8 @@
 using System;
 using System.Diagnostics;
-using NSec.Cryptography;
 using static Interop.Libsodium;
 
-namespace NSec.Experimental.PasswordBased
+namespace NSec.Cryptography
 {
     //
     //  A password hashing algorithm
@@ -36,12 +35,6 @@ namespace NSec.Experimental.PasswordBased
         public int MaxCount => _maxCount;
 
         public int SaltSize => _saltSize;
-
-        public static Argon2i Argon2i(
-            in Argon2Parameters parameters)
-        {
-            return new Argon2i(in parameters);
-        }
 
         public static Argon2id Argon2id(
             in Argon2Parameters parameters)

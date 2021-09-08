@@ -53,20 +53,22 @@ See [[Installation]] for more information.
 
 ## Documentation
 
-| Class                            | Algorithm                                       |
-|:-------------------------------- |:----------------------------------------------- |
-| [[AeadAlgorithm Class]]          | AES256-GCM                                      |
-|                                  | ChaCha20-Poly1305                               |
-| [[HashAlgorithm Class]]          | BLAKE2b (unkeyed)                               |
-|                                  | SHA-256                                         |
-|                                  | SHA-512                                         |
-| [[KeyAgreementAlgorithm Class]]  | X25519                                          |
-| [[KeyDerivationAlgorithm Class]] | HKDF-SHA-256                                    |
-|                                  | HKDF-SHA-512                                    |
-| [[MacAlgorithm Class]]           | BLAKE2b (keyed)                                 |
-|                                  | HMAC-SHA-256                                    |
-|                                  | HMAC-SHA-512                                    |
-| [[SignatureAlgorithm Class]]     | Ed25519                                         |
+| Class                                           | Algorithms                |
+|:----------------------------------------------- |:------------------------- |
+| [[AeadAlgorithm Class]]                         | AES256-GCM                |
+|                                                 | ChaCha20-Poly1305         |
+| [[HashAlgorithm Class]]                         | BLAKE2b (unkeyed)         |
+|                                                 | SHA-256                   |
+|                                                 | SHA-512                   |
+| [[KeyAgreementAlgorithm Class]]                 | X25519                    |
+| [[KeyDerivationAlgorithm Class]]                | HKDF-SHA-256              |
+|                                                 | HKDF-SHA-512              |
+| [[MacAlgorithm Class]]                          | BLAKE2b (keyed)           |
+|                                                 | HMAC-SHA-256              |
+|                                                 | HMAC-SHA-512              |
+| [[PasswordBasedKeyDerivationAlgorithm Class]]   | Argon2id                  |
+|                                                 | scrypt                    |
+| [[SignatureAlgorithm Class]]                    | Ed25519                   |
 
 See [[API Reference|NSec.Cryptography Namespace]] for more information.
 

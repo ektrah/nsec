@@ -2,10 +2,9 @@ using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using NSec.Cryptography;
 using static Interop.Libsodium;
 
-namespace NSec.Experimental.PasswordBased
+namespace NSec.Cryptography
 {
     //
     //  scrypt

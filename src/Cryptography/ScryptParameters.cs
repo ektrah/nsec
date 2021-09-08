@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace NSec.Experimental.PasswordBased
+namespace NSec.Cryptography
 {
     [StructLayout(LayoutKind.Auto)]
     public struct ScryptParameters
