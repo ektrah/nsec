@@ -53,12 +53,6 @@ shared:
     DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
     TERM: dumb
     DEBIAN_FRONTEND: noninteractive
-  dotnet-install-2-1: &dotnet-install-2-1
-    run:
-      name: Install .NET Core 2.1 Runtime
-      command: |
-        if [ ! -f ~/dotnet-install.sh ]; then curl -fsLo ~/dotnet-install.sh 'https://dot.net/v1/dotnet-install.sh'; fi
-        bash ~/dotnet-install.sh --channel 2.1 --version latest --install-dir ~/.dotnet --no-path --runtime dotnet
   dotnet-install-3-1: &dotnet-install-3-1
     run:
       name: Install .NET Core 3.1 Runtime
@@ -120,14 +114,6 @@ shared:
       key: 'macos-nuget-packages-{{ checksum "/tmp/restore.json" }}'
       paths:
         - ~/.nuget/packages
-  dotnet-test-debug-2-1: &dotnet-test-debug-2-1
-    run:
-      name: Run unit tests (.NET Core 2.1/Debug)
-      command: dotnet test tests -f netcoreapp2.1 -c Debug
-  dotnet-test-release-2-1: &dotnet-test-release-2-1
-    run:
-      name: Run unit tests (.NET Core 2.1/Release)
-      command: dotnet test tests -f netcoreapp2.1 -c Release
   dotnet-test-debug-3-1: &dotnet-test-debug-3-1
     run:
       name: Run unit tests (.NET Core 3.1/Debug)
@@ -170,7 +156,6 @@ jobs:
           name: Install Prerequisites
           no_output_timeout: 2m
           command: yum install -q -y curl ca-certificates libicu
-      - *dotnet-install-2-1
       - *dotnet-install-3-1
       - *dotnet-install-5-0
       - checkout
@@ -182,8 +167,6 @@ jobs:
       - *dotnet-test-release-5-0
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
 
   centos8:
     docker:
@@ -194,7 +177,6 @@ jobs:
           name: Install Prerequisites
           no_output_timeout: 2m
           command: yum install -y curl ca-certificates libicu
-      - *dotnet-install-2-1
       - *dotnet-install-3-1
       - *dotnet-install-5-0
       - checkout
@@ -206,8 +188,6 @@ jobs:
       - *dotnet-test-release-5-0
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
 
   debian9:
     docker:
@@ -220,7 +200,6 @@ jobs:
           command: |
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext
-      - *dotnet-install-2-1
       - *dotnet-install-3-1
       - *dotnet-install-5-0
       - checkout
@@ -232,8 +211,6 @@ jobs:
       - *dotnet-test-release-5-0
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
 
   debian10:
     docker:
@@ -246,7 +223,6 @@ jobs:
           command: |
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext
-      - *dotnet-install-2-1
       - *dotnet-install-3-1
       - *dotnet-install-5-0
       - checkout
@@ -258,8 +234,6 @@ jobs:
       - *dotnet-test-release-5-0
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
 
   fedora32:
     docker:
@@ -270,7 +244,6 @@ jobs:
           name: Install Prerequisites
           no_output_timeout: 2m
           command: dnf install -q -y curl ca-certificates findutils ncurses libicu compat-openssl10
-      - *dotnet-install-2-1
       - *dotnet-install-3-1
       - *dotnet-install-5-0
       - checkout
@@ -282,8 +255,6 @@ jobs:
       - *dotnet-test-release-5-0
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
 
   fedora33:
     docker:
@@ -294,7 +265,6 @@ jobs:
           name: Install Prerequisites
           no_output_timeout: 2m
           command: dnf install -q -y curl ca-certificates findutils ncurses libicu compat-openssl10
-      - *dotnet-install-2-1
       - *dotnet-install-3-1
       - *dotnet-install-5-0
       - checkout
@@ -306,8 +276,6 @@ jobs:
       - *dotnet-test-release-5-0
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
 
   opensuse15:
     docker:
@@ -318,7 +286,6 @@ jobs:
           name: Install Prerequisites
           no_output_timeout: 2m
           command: zypper -q install -y --no-recommends curl ca-certificates gzip tar ncurses-utils libicu-suse65_1
-      - *dotnet-install-2-1
       - *dotnet-install-3-1
       - *dotnet-install-5-0
       - checkout
@@ -330,8 +297,6 @@ jobs:
       - *dotnet-test-release-5-0
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
 
   ubuntu16.04:
     docker:
@@ -344,7 +309,6 @@ jobs:
           command: |
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libicu55 libcurl3
-      - *dotnet-install-2-1
       - *dotnet-install-3-1
       - *dotnet-install-5-0
       - checkout
@@ -356,8 +320,6 @@ jobs:
       - *dotnet-test-release-5-0
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
 
   ubuntu18.04:
     docker:
@@ -370,7 +332,6 @@ jobs:
           command: |
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libicu60 libssl1.0.0
-      - *dotnet-install-2-1
       - *dotnet-install-3-1
       - *dotnet-install-5-0
       - checkout
@@ -382,8 +343,6 @@ jobs:
       - *dotnet-test-release-5-0
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
 
   ubuntu20.04:
     docker:
@@ -396,7 +355,6 @@ jobs:
           command: |
             apt-get -qq update
             apt-get -qq install --yes --no-install-recommends curl ca-certificates apt-transport-https gettext libicu66
-      - *dotnet-install-2-1
       - *dotnet-install-3-1
       - *dotnet-install-5-0
       - checkout
@@ -408,15 +366,12 @@ jobs:
       - *dotnet-test-release-5-0
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
 
   macos10.14:
     macos:
       xcode: "11.1.0"
     environment: *environment
     steps:
-      - *dotnet-install-2-1
       - *dotnet-install-3-1
       - *dotnet-install-5-0
       - checkout
@@ -428,15 +383,12 @@ jobs:
       - *dotnet-test-release-5-0
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
 
   macos10.15:
     macos:
       xcode: "11.3.0"
     environment: *environment
     steps:
-      - *dotnet-install-2-1
       - *dotnet-install-3-1
       - *dotnet-install-5-0
       - checkout
@@ -448,5 +400,3 @@ jobs:
       - *dotnet-test-release-5-0
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-      - *dotnet-test-debug-2-1
-      - *dotnet-test-release-2-1
