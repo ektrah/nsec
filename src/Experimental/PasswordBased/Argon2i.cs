@@ -15,8 +15,8 @@ namespace NSec.Experimental.PasswordBased
     //      Argon2: the memory-hard function for password hashing and other
     //          applications
     //
-    //      draft-irtf-cfrg-argon2-13 - The memory-hard Argon2 password hash and
-    //          proof-of-work function
+    //      RFC 9106 - Argon2 Memory-Hard Function for Password Hashing and
+    //          Proof-of-Work Applications
     //
     //  Parameters
     //
@@ -44,7 +44,7 @@ namespace NSec.Experimental.PasswordBased
     //
     //  Recommended Parameters
     //
-    //      draft-irtf-cfrg-argon2-13, Section 4, does not recommend Argon2i.
+    //      RFC 9106, Section 4, recommends Argon2id rather than Argon2i.
     //
     //      libsodium includes the following three parameter sets:
     //

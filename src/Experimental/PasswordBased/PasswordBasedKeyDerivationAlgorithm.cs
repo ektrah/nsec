@@ -10,12 +10,12 @@ namespace NSec.Experimental.PasswordBased
     //
     //  Candidates
     //
-    //      | Algorithm | Reference                 |
-    //      | --------- | ------------------------- |
-    //      | Argon2d   | draft-irtf-cfrg-argon2-13 |
-    //      | Argon2i   | draft-irtf-cfrg-argon2-13 |
-    //      | Argon2id  | draft-irtf-cfrg-argon2-13 |
-    //      | scrypt    | RFC 7914                  |
+    //      | Algorithm | Reference |
+    //      | --------- | --------- |
+    //      | Argon2d   | RFC 9106  |
+    //      | Argon2i   | RFC 9106  |
+    //      | Argon2id  | RFC 9106  |
+    //      | scrypt    | RFC 7914  |
     //
     public abstract class PasswordBasedKeyDerivationAlgorithm : Algorithm
     {

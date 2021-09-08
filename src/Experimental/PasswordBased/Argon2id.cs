@@ -15,8 +15,8 @@ namespace NSec.Experimental.PasswordBased
     //      Argon2: the memory-hard function for password hashing and other
     //          applications
     //
-    //      draft-irtf-cfrg-argon2-13 - The memory-hard Argon2 password hash and
-    //          proof-of-work function
+    //      RFC 9106 - Argon2 Memory-Hard Function for Password Hashing and
+    //          Proof-of-Work Applications
     //
     //  Parameters
     //
@@ -43,9 +43,17 @@ namespace NSec.Experimental.PasswordBased
     //
     //  Recommended Parameters
     //
-    //      draft-irtf-cfrg-argon2-13, Section 4, recommends the following
-    //      parameter sets for practical use of Argon2id. However, libsodium
-    //      does not support the recommended p=4 lanes.
+    //      RFC 9106, Section 4, suggests the following settings:
+    //
+    //      | Scenario                                 | Lanes | RAM   |
+    //      | ---------------------------------------- | ----- | ------|
+    //      | Backend server authentication            |     8 | 4 GiB |
+    //      | Key derivation for hard-drive encryption |     4 | 6 GiB |
+    //      | Frontend server authentication           |     4 | 1 GiB |
+    //
+    //      Additionally, RFC 9106, Section 4, recommends the following general
+    //      parameter sets for practical use. Note, however, that libsodium does
+    //      not support the recommended p=4 lanes.
     //
     //      | Recommendation | p | m             | t |
     //      | -------------- | - | ------------- | - |
