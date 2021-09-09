@@ -4,7 +4,7 @@ Represents the base class from which all algorithm implementations derive.
 
     public abstract class Algorithm
 
-The class has no public members.
+This class has no public members.
 
 
 ## Inheritance Hierarchy
