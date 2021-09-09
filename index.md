@@ -12,9 +12,9 @@ wraps these primitives in a modern .NET API based on [Span<T>](https://docs.micr
 * **Easy-to-use** -- NSec wants you to fall into the "pit of success." It
 provides a strongly typed data model that represents keys and shared secrets
 with specific classes rather than naked byte arrays. This avoids accidentally
-using a key with a wrong algorithm, etc. There are still some hard problems,
-though, where NSec isn't as easy-to-use as one might wish, such as nonce
-generation and key management.
+using a key with a wrong algorithm, etc. (There are still some hard problems
+where NSec isn't as easy-to-use as one might wish, though, such as nonce
+generation and key management.)
 
 * **Secure** -- In addition to the security provided by the cryptographic
 primitives themselves, NSec tries to make using these primitives as secure by
@@ -45,8 +45,7 @@ and verify the signature:
 
     $ dotnet add package NSec.Cryptography --version 20.11.0-preview1
 
-NSec works with .NET 5.0 as well as .NET Core 3.1 and 2.1 on Windows, Linux and
-macOS.
+NSec works with .NET 5.0 and .NET Core 3.1 on Windows, Linux and macOS.
 
 See [[Installation]] for more information.
 
@@ -57,13 +56,13 @@ See [[Installation]] for more information.
 |:----------------------------------------------- |:------------------------- |
 | [[AeadAlgorithm Class]]                         | AES256-GCM                |
 |                                                 | ChaCha20-Poly1305         |
-| [[HashAlgorithm Class]]                         | BLAKE2b (unkeyed)         |
+| [[HashAlgorithm Class]]                         | BLAKE2b *(unkeyed)*       |
 |                                                 | SHA-256                   |
 |                                                 | SHA-512                   |
 | [[KeyAgreementAlgorithm Class]]                 | X25519                    |
 | [[KeyDerivationAlgorithm Class]]                | HKDF-SHA-256              |
 |                                                 | HKDF-SHA-512              |
-| [[MacAlgorithm Class]]                          | BLAKE2b (keyed)           |
+| [[MacAlgorithm Class]]                          | BLAKE2b *(keyed)*         |
 |                                                 | HMAC-SHA-256              |
 |                                                 | HMAC-SHA-512              |
 | [[PasswordBasedKeyDerivationAlgorithm Class]]   | Argon2id                  |
