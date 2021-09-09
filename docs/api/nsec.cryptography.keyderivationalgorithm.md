@@ -1,13 +1,13 @@
 # KeyDerivationAlgorithm Class
 
-Represents a key derivation algorithm.
+Represents a key derivation algorithm using keying material as input.
 
     public abstract class KeyDerivationAlgorithm : Algorithm
 
 !!! Note
     The [[KeyDerivationAlgorithm|KeyDerivationAlgorithm Class]] class requires
-    cryptographically strong input keying material. To derive keys from secret
-    passwords or passphrases, use the
+    cryptographically strong input keying material. To derive keys from
+    passwords, use the
     [[PasswordBasedKeyDerivationAlgorithm|PasswordBasedKeyDerivationAlgorithm
     Class]] class.
 
@@ -412,4 +412,5 @@ All methods yield the same result for the same arguments.
 
 * API Reference
     * [[Algorithm Class]]
+    * [[PasswordBasedKeyDerivationAlgorithm Class]]
     * [[SharedSecret Class]]

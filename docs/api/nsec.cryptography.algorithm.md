@@ -26,5 +26,8 @@ This class has no public members.
         * Blake2bMac
         * HmacSha256
         * HmacSha512
+    * [[PasswordBasedKeyDerivationAlgorithm Class]]
+        * Argon2id
+        * Scrypt
     * [[SignatureAlgorithm|SignatureAlgorithm Class]]
         * Ed25519
