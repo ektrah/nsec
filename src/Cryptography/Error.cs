@@ -61,6 +61,12 @@ namespace NSec.Cryptography
             return new ArgumentException(string.Format(ResourceManager.GetString(nameof(Argument_HashLength))!, arg0), paramName);
         }
 
+        internal static ArgumentException Argument_InvalidArgon2Parameters(
+            string paramName)
+        {
+            return new ArgumentException(ResourceManager.GetString(nameof(Argument_InvalidArgon2Parameters)), paramName);
+        }
+
         internal static ArgumentException Argument_InvalidPrkLength(
             string paramName,
             object? arg0)
@@ -73,6 +79,12 @@ namespace NSec.Cryptography
             object? arg0)
         {
             return new ArgumentException(string.Format(ResourceManager.GetString(nameof(Argument_InvalidPrkLengthExact))!, arg0), paramName);
+        }
+
+        internal static ArgumentException Argument_InvalidScryptParameters(
+            string paramName)
+        {
+            return new ArgumentException(ResourceManager.GetString(nameof(Argument_InvalidScryptParameters)), paramName);
         }
 
         internal static ArgumentException Argument_KeyAlgorithmMismatch(

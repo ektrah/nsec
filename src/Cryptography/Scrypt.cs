@@ -67,19 +67,19 @@ namespace NSec.Cryptography
             // checks from libsodium/crypto_pwhash/scryptsalsa208sha256/nosse/pwhash_scryptsalsa208sha256_nosse.c
             if (n < 2 || n > uint.MaxValue || unchecked(n & (n - 1)) != 0)
             {
-                throw new ArgumentException(); // TODO
+                throw Error.Argument_InvalidScryptParameters(nameof(parameters));
             }
             if (r < 1 || p < 1 || (long)r * p >= 1 << 30)
             {
-                throw new ArgumentException(); // TODO
+                throw Error.Argument_InvalidScryptParameters(nameof(parameters));
             }
             if (IntPtr.Size == sizeof(long) ? n > (long)(ulong.MaxValue / 128) / r : n > (int)(uint.MaxValue / 128) / r)
             {
-                throw new ArgumentException(); // TODO
+                throw Error.Argument_InvalidScryptParameters(nameof(parameters));
             }
             if (IntPtr.Size == sizeof(long) ? r > (long)(ulong.MaxValue / 128) / p : r > (int)(uint.MaxValue / 128) / p || r > (int)(uint.MaxValue / 256))
             {
-                throw new ArgumentException(); // TODO
+                throw Error.Argument_InvalidScryptParameters(nameof(parameters));
             }
 
             _n = (ulong)n;

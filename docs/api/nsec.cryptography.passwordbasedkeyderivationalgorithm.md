@@ -26,14 +26,15 @@ use the [[KeyDerivationAlgorithm|KeyDerivationAlgorithm Class]] class.
 
 ### Argon2id(in Argon2Parameters)
 
-...
+Gets the Argon2id algorithm with the specified parameters.
 
     public static Argon2id Argon2id(
         in Argon2Parameters parameters)
 
 #### Parameters
 
-...
+parameters
+: The parameters to use with the Argon2id algorithm.
 
 !!! Note
     The parameters must be tuned according to the amount of memory and computing
@@ -41,23 +42,27 @@ use the [[KeyDerivationAlgorithm|KeyDerivationAlgorithm Class]] class.
 
 #### Return Value
 
-...
+An instance of the
+[[PasswordBasedKeyDerivationAlgorithm|PasswordBasedKeyDerivationAlgorithm
+Class]] class.
 
 #### Exceptions
 
-...
+ArgumentException
+: The specified parameters are out of the range of valid values.
 
 
 ### Scrypt(in ScryptParameters)
 
-...
+Gets the scrypt algorithm with the specified parameters.
 
     public static Scrypt Scrypt(
         in ScryptParameters parameters)
 
 #### Parameters
 
-...
+parameters
+: The parameters to use with the scrypt algorithm.
 
 !!! Note
     The parameters must be tuned according to the amount of memory and computing
@@ -65,11 +70,14 @@ use the [[KeyDerivationAlgorithm|KeyDerivationAlgorithm Class]] class.
 
 #### Return Value
 
-...
+An instance of the
+[[PasswordBasedKeyDerivationAlgorithm|PasswordBasedKeyDerivationAlgorithm
+Class]] class.
 
 #### Exceptions
 
-...
+ArgumentException
+: The specified parameters are out of the range of valid values.
 
 
 ## Properties
