@@ -200,12 +200,10 @@ namespace NSec.Cryptography
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
             }
 
-            return mac.Length == _macSize && VerifyCore(key.Handle, data, mac);
+            Span<byte> temp = stackalloc byte[_macSize];
+            MacCore(key.Handle, data, temp);
+            return System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(temp, mac);
         }
-
-        internal abstract bool FinalizeAndVerifyCore(
-            ref IncrementalMacState state,
-            ReadOnlySpan<byte> mac);
 
         internal abstract void FinalizeCore(
             ref IncrementalMacState state,
@@ -235,10 +233,5 @@ namespace NSec.Cryptography
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             Span<byte> mac);
-
-        private protected abstract bool VerifyCore(
-            SecureMemoryHandle keyHandle,
-            ReadOnlySpan<byte> data,
-            ReadOnlySpan<byte> mac);
     }
 }

@@ -48,29 +48,6 @@ namespace NSec.Cryptography
             }
         }
 
-        internal unsafe override bool FinalizeAndVerifyCore(
-            ref IncrementalHashState state,
-            ReadOnlySpan<byte> hash)
-        {
-            Debug.Assert(hash.Length >= crypto_generichash_blake2b_BYTES_MIN);
-            Debug.Assert(hash.Length <= crypto_generichash_blake2b_BYTES_MAX);
-
-            Span<byte> temp = stackalloc byte[hash.Length];
-
-            fixed (crypto_generichash_blake2b_state* state_ = &state.blake2b)
-            fixed (byte* @out = temp)
-            {
-                int error = crypto_generichash_blake2b_final(
-                    state_,
-                    @out,
-                    (nuint)temp.Length);
-
-                Debug.Assert(error == 0);
-            }
-
-            return System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(temp, hash);
-        }
-
         internal unsafe override void FinalizeCore(
             ref IncrementalHashState state,
             Span<byte> hash)
@@ -144,32 +121,6 @@ namespace NSec.Cryptography
 
                 Debug.Assert(error == 0);
             }
-        }
-
-        private protected unsafe override bool VerifyCore(
-            ReadOnlySpan<byte> data,
-            ReadOnlySpan<byte> hash)
-        {
-            Debug.Assert(hash.Length >= crypto_generichash_blake2b_BYTES_MIN);
-            Debug.Assert(hash.Length <= crypto_generichash_blake2b_BYTES_MAX);
-
-            Span<byte> temp = stackalloc byte[hash.Length];
-
-            fixed (byte* @out = temp)
-            fixed (byte* @in = data)
-            {
-                int error = crypto_generichash_blake2b(
-                    @out,
-                    (nuint)temp.Length,
-                    @in,
-                    (ulong)data.Length,
-                    IntPtr.Zero,
-                    0);
-
-                Debug.Assert(error == 0);
-            }
-
-            return System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(temp, hash);
         }
 
         private static void SelfTest()

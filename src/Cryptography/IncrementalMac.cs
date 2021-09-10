@@ -76,7 +76,9 @@ namespace NSec.Cryptography
 
             try
             {
-                return mac.Length == state._algorithm.MacSize && state._algorithm.FinalizeAndVerifyCore(ref Unsafe.AsRef(in state._state), mac);
+                Span<byte> temp = stackalloc byte[state._algorithm.MacSize];
+                state._algorithm.FinalizeCore(ref Unsafe.AsRef(in state._state), temp);
+                return System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(temp, mac);
             }
             finally
             {

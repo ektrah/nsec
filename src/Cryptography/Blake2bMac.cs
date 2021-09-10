@@ -74,29 +74,6 @@ namespace NSec.Cryptography
             keyHandle = SecureMemoryHandle.CreateFrom(seed);
         }
 
-        internal unsafe override bool FinalizeAndVerifyCore(
-            ref IncrementalMacState state,
-            ReadOnlySpan<byte> mac)
-        {
-            Debug.Assert(mac.Length >= crypto_generichash_blake2b_BYTES_MIN);
-            Debug.Assert(mac.Length <= crypto_generichash_blake2b_BYTES_MAX);
-
-            Span<byte> temp = stackalloc byte[mac.Length];
-
-            fixed (crypto_generichash_blake2b_state* state_ = &state.blake2b)
-            fixed (byte* @out = temp)
-            {
-                int error = crypto_generichash_blake2b_final(
-                    state_,
-                    @out,
-                    (nuint)temp.Length);
-
-                Debug.Assert(error == 0);
-            }
-
-            return System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(temp, mac);
-        }
-
         internal unsafe override void FinalizeCore(
             ref IncrementalMacState state,
             Span<byte> mac)
@@ -211,35 +188,6 @@ namespace NSec.Cryptography
 
                 Debug.Assert(error == 0);
             }
-        }
-
-        private protected unsafe override bool VerifyCore(
-            SecureMemoryHandle keyHandle,
-            ReadOnlySpan<byte> data,
-            ReadOnlySpan<byte> mac)
-        {
-            Debug.Assert(keyHandle.Size >= crypto_generichash_blake2b_KEYBYTES_MIN);
-            Debug.Assert(keyHandle.Size <= crypto_generichash_blake2b_KEYBYTES_MAX);
-            Debug.Assert(mac.Length >= crypto_generichash_blake2b_BYTES_MIN);
-            Debug.Assert(mac.Length <= crypto_generichash_blake2b_BYTES_MAX);
-
-            Span<byte> temp = stackalloc byte[mac.Length];
-
-            fixed (byte* @out = temp)
-            fixed (byte* @in = data)
-            {
-                int error = crypto_generichash_blake2b(
-                    @out,
-                    (nuint)temp.Length,
-                    @in,
-                    (ulong)data.Length,
-                    keyHandle,
-                    (nuint)keyHandle.Size);
-
-                Debug.Assert(error == 0);
-            }
-
-            return System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(temp, mac);
         }
 
         private static void SelfTest()

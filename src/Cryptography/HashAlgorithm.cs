@@ -135,12 +135,10 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> hash)
         {
-            return hash.Length == _hashSize && VerifyCore(data, hash);
+            Span<byte> temp = stackalloc byte[_hashSize];
+            HashCore(data, temp);
+            return System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(temp, hash);
         }
-
-        internal abstract bool FinalizeAndVerifyCore(
-            ref IncrementalHashState state,
-            ReadOnlySpan<byte> hash);
 
         internal abstract void FinalizeCore(
             ref IncrementalHashState state,
@@ -171,9 +169,5 @@ namespace NSec.Cryptography
         private protected abstract void HashCore(
             ReadOnlySpan<byte> data,
             Span<byte> hash);
-
-        private protected abstract bool VerifyCore(
-            ReadOnlySpan<byte> data,
-            ReadOnlySpan<byte> hash);
     }
 }

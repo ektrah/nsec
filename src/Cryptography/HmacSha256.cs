@@ -74,27 +74,6 @@ namespace NSec.Cryptography
             keyHandle = SecureMemoryHandle.CreateFrom(seed);
         }
 
-        internal unsafe override bool FinalizeAndVerifyCore(
-            ref IncrementalMacState state,
-            ReadOnlySpan<byte> mac)
-        {
-            Debug.Assert(mac.Length <= crypto_auth_hmacsha256_BYTES);
-
-            Span<byte> temp = stackalloc byte[crypto_auth_hmacsha256_BYTES];
-
-            fixed (crypto_auth_hmacsha256_state* state_ = &state.hmacsha256)
-            fixed (byte* @out = temp)
-            {
-                int error = crypto_auth_hmacsha256_final(
-                    state_,
-                    @out);
-
-                Debug.Assert(error == 0);
-            }
-
-            return System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(temp.Slice(0, mac.Length), mac);
-        }
-
         internal unsafe override void FinalizeCore(
             ref IncrementalMacState state,
             Span<byte> mac)
@@ -219,39 +198,6 @@ namespace NSec.Cryptography
             {
                 Unsafe.CopyBlockUnaligned(@out, temp, (uint)mac.Length);
             }
-        }
-
-        private protected unsafe override bool VerifyCore(
-            SecureMemoryHandle keyHandle,
-            ReadOnlySpan<byte> data,
-            ReadOnlySpan<byte> mac)
-        {
-            Debug.Assert(keyHandle.Size == crypto_hash_sha256_BYTES);
-            Debug.Assert(mac.Length <= crypto_auth_hmacsha256_BYTES);
-
-            Span<byte> temp = stackalloc byte[crypto_auth_hmacsha256_BYTES];
-
-            fixed (byte* @in = data)
-            fixed (byte* @out = temp)
-            {
-                crypto_auth_hmacsha256_state state;
-
-                crypto_auth_hmacsha256_init(
-                    &state,
-                    keyHandle,
-                    (nuint)keyHandle.Size);
-
-                crypto_auth_hmacsha256_update(
-                    &state,
-                    @in,
-                    (ulong)data.Length);
-
-                crypto_auth_hmacsha256_final(
-                    &state,
-                    @out);
-            }
-
-            return System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(temp.Slice(0, mac.Length), mac);
         }
 
         private static void SelfTest()

@@ -52,27 +52,6 @@ namespace NSec.Cryptography
             }
         }
 
-        internal unsafe override bool FinalizeAndVerifyCore(
-            ref IncrementalHashState state,
-            ReadOnlySpan<byte> hash)
-        {
-            Debug.Assert(hash.Length <= crypto_hash_sha512_BYTES);
-
-            Span<byte> temp = stackalloc byte[crypto_hash_sha512_BYTES];
-
-            fixed (crypto_hash_sha512_state* state_ = &state.sha512)
-            fixed (byte* @out = temp)
-            {
-                int error = crypto_hash_sha512_final(
-                    state_,
-                    @out);
-
-                Debug.Assert(error == 0);
-            }
-
-            return System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(temp.Slice(0, hash.Length), hash);
-        }
-
         internal unsafe override void FinalizeCore(
             ref IncrementalHashState state,
             Span<byte> hash)
@@ -146,28 +125,6 @@ namespace NSec.Cryptography
             {
                 Unsafe.CopyBlockUnaligned(@out, temp, (uint)hash.Length);
             }
-        }
-
-        private protected unsafe override bool VerifyCore(
-            ReadOnlySpan<byte> data,
-            ReadOnlySpan<byte> hash)
-        {
-            Debug.Assert(hash.Length <= crypto_hash_sha512_BYTES);
-
-            Span<byte> temp = stackalloc byte[crypto_hash_sha512_BYTES];
-
-            fixed (byte* @out = temp)
-            fixed (byte* @in = data)
-            {
-                int error = crypto_hash_sha512(
-                    @out,
-                    @in,
-                    (ulong)data.Length);
-
-                Debug.Assert(error == 0);
-            }
-
-            return System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(temp.Slice(0, hash.Length), hash);
         }
 
         private static void SelfTest()
