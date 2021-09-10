@@ -136,7 +136,7 @@ namespace NSec.Cryptography
             }
             finally
             {
-                CryptographicOperations.ZeroMemory(pseudorandomKey);
+                System.Security.Cryptography.CryptographicOperations.ZeroMemory(pseudorandomKey);
             }
 #endif
         }

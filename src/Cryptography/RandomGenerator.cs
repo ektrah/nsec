@@ -128,7 +128,7 @@ namespace NSec.Cryptography
                 }
                 finally
                 {
-                    CryptographicOperations.ZeroMemory(seed);
+                    global::System.Security.Cryptography.CryptographicOperations.ZeroMemory(seed);
                 }
             }
             finally

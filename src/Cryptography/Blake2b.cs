@@ -55,22 +55,20 @@ namespace NSec.Cryptography
             Debug.Assert(hash.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(hash.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
-            byte* temp = stackalloc byte[hash.Length];
+            Span<byte> temp = stackalloc byte[hash.Length];
 
             fixed (crypto_generichash_blake2b_state* state_ = &state.blake2b)
+            fixed (byte* @out = temp)
             {
                 int error = crypto_generichash_blake2b_final(
                     state_,
-                    temp,
-                    (nuint)hash.Length);
+                    @out,
+                    (nuint)temp.Length);
 
                 Debug.Assert(error == 0);
             }
 
-            fixed (byte* @out = hash)
-            {
-                return CryptographicOperations.FixedTimeEquals(temp, @out, hash.Length);
-            }
+            return System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(temp, hash);
         }
 
         internal unsafe override void FinalizeCore(
@@ -155,13 +153,14 @@ namespace NSec.Cryptography
             Debug.Assert(hash.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(hash.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
-            byte* temp = stackalloc byte[hash.Length];
+            Span<byte> temp = stackalloc byte[hash.Length];
 
+            fixed (byte* @out = temp)
             fixed (byte* @in = data)
             {
                 int error = crypto_generichash_blake2b(
-                    temp,
-                    (nuint)hash.Length,
+                    @out,
+                    (nuint)temp.Length,
                     @in,
                     (ulong)data.Length,
                     IntPtr.Zero,
@@ -170,10 +169,7 @@ namespace NSec.Cryptography
                 Debug.Assert(error == 0);
             }
 
-            fixed (byte* @out = hash)
-            {
-                return CryptographicOperations.FixedTimeEquals(temp, @out, hash.Length);
-            }
+            return System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(temp, hash);
         }
 
         private static void SelfTest()

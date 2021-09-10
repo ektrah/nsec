@@ -36,23 +36,13 @@ namespace NSec.Cryptography
                 Span<byte> seed = stackalloc byte[seedSize];
                 try
                 {
-#if NETSTANDARD2_0
-                    unsafe
-                    {
-                        fixed (byte* buf = seed)
-                        {
-                            randombytes_buf(buf, (nuint)seed.Length);
-                        }
-                    }
-#else
                     System.Security.Cryptography.RandomNumberGenerator.Fill(seed);
-#endif
                     algorithm.CreateKey(seed, out keyHandle, out publicKey);
                     success = true;
                 }
                 finally
                 {
-                    CryptographicOperations.ZeroMemory(seed);
+                    System.Security.Cryptography.CryptographicOperations.ZeroMemory(seed);
                 }
             }
             finally

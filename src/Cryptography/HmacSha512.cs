@@ -83,21 +83,19 @@ namespace NSec.Cryptography
         {
             Debug.Assert(mac.Length <= crypto_auth_hmacsha512_BYTES);
 
-            byte* temp = stackalloc byte[crypto_auth_hmacsha512_BYTES];
+            Span<byte> temp = stackalloc byte[crypto_auth_hmacsha512_BYTES];
 
             fixed (crypto_auth_hmacsha512_state* state_ = &state.hmacsha512)
+            fixed (byte* @out = temp)
             {
                 int error = crypto_auth_hmacsha512_final(
                     state_,
-                    temp);
+                    @out);
 
                 Debug.Assert(error == 0);
             }
 
-            fixed (byte* @out = mac)
-            {
-                return CryptographicOperations.FixedTimeEquals(temp, @out, mac.Length);
-            }
+            return System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(temp.Slice(0, mac.Length), mac);
         }
 
         internal unsafe override void FinalizeCore(
@@ -234,9 +232,10 @@ namespace NSec.Cryptography
             Debug.Assert(keyHandle.Size == crypto_hash_sha512_BYTES);
             Debug.Assert(mac.Length <= crypto_auth_hmacsha512_BYTES);
 
-            byte* temp = stackalloc byte[crypto_auth_hmacsha512_BYTES];
+            Span<byte> temp = stackalloc byte[crypto_auth_hmacsha512_BYTES];
 
             fixed (byte* @in = data)
+            fixed (byte* @out = temp)
             {
                 crypto_auth_hmacsha512_state state;
 
@@ -252,13 +251,10 @@ namespace NSec.Cryptography
 
                 crypto_auth_hmacsha512_final(
                     &state,
-                    temp);
+                    @out);
             }
 
-            fixed (byte* @out = mac)
-            {
-                return CryptographicOperations.FixedTimeEquals(temp, @out, mac.Length);
-            }
+            return System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(temp.Slice(0, mac.Length), mac);
         }
 
         private static void SelfTest()

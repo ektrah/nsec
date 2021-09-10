@@ -120,7 +120,7 @@ namespace NSec.Cryptography
                 }
                 finally
                 {
-                    CryptographicOperations.ZeroMemory(seed);
+                    System.Security.Cryptography.CryptographicOperations.ZeroMemory(seed);
                 }
             }
             finally

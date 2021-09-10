@@ -55,21 +55,19 @@ namespace NSec.Cryptography
         {
             Debug.Assert(hash.Length == crypto_hash_sha256_BYTES);
 
-            byte* temp = stackalloc byte[crypto_hash_sha256_BYTES];
+            Span<byte> temp = stackalloc byte[crypto_hash_sha256_BYTES];
 
             fixed (crypto_hash_sha256_state* state_ = &state.sha256)
+            fixed (byte* @out = temp)
             {
                 int error = crypto_hash_sha256_final(
                     state_,
-                    temp);
+                    @out);
 
                 Debug.Assert(error == 0);
             }
 
-            fixed (byte* @out = hash)
-            {
-                return CryptographicOperations.FixedTimeEquals(temp, @out, hash.Length);
-            }
+            return System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(temp, hash);
         }
 
         internal unsafe override void FinalizeCore(
@@ -141,22 +139,20 @@ namespace NSec.Cryptography
         {
             Debug.Assert(hash.Length == crypto_hash_sha256_BYTES);
 
-            byte* temp = stackalloc byte[crypto_hash_sha256_BYTES];
+            Span<byte> temp = stackalloc byte[crypto_hash_sha256_BYTES];
 
+            fixed (byte* @out = temp)
             fixed (byte* @in = data)
             {
                 int error = crypto_hash_sha256(
-                    temp,
+                    @out,
                     @in,
                     (ulong)data.Length);
 
                 Debug.Assert(error == 0);
             }
 
-            fixed (byte* @out = hash)
-            {
-                return CryptographicOperations.FixedTimeEquals(temp, @out, hash.Length);
-            }
+            return System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(temp, hash);
         }
 
         private static void SelfTest()
