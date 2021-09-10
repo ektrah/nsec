@@ -189,6 +189,9 @@
   <data name="Argument_InvalidArgon2Parameters" xml:space="preserve">
     <value>The specified Argon2 parameters are out of the range of valid values.</value>
   </data>
+  <data name="Argument_InvalidPbkdf2Parameters" xml:space="preserve">
+    <value>The specified PBKDF2 parameters are out of the range of valid values.</value>
+  </data>
   <data name="Argument_InvalidPrkLength" xml:space="preserve">
     <value>The length of the pseudorandom key must be greater than or equal to {0}.</value>
   </data>

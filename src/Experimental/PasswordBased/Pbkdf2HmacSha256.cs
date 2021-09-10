@@ -38,7 +38,7 @@ namespace NSec.Experimental.PasswordBased
 
             if (c <= 0)
             {
-                throw new ArgumentException(); // TODO
+                throw Error.Argument_InvalidPbkdf2Parameters(nameof(parameters));
             }
 
             _c = c;

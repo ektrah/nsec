@@ -73,17 +73,17 @@ namespace NSec.Experimental.PasswordBased
             // checks from libsodium/crypto_pwhash/argon2/pwhash_argon2i.c
             if (p != 1)
             {
-                throw new ArgumentException(); // TODO
+                throw Error.Argument_InvalidArgon2Parameters(nameof(parameters));
             }
             if (m < crypto_pwhash_argon2i_MEMLIMIT_MIN / 1024 ||
                 m > (IntPtr.Size == sizeof(long) ? 4398046510080 / 1024 : 2147483648 / 1024))
             {
-                throw new ArgumentException(); // TODO
+                throw Error.Argument_InvalidArgon2Parameters(nameof(parameters));
             }
             if (t < crypto_pwhash_argon2i_OPSLIMIT_MIN ||
                 t > crypto_pwhash_argon2i_OPSLIMIT_MAX)
             {
-                throw new ArgumentException(); // TODO
+                throw Error.Argument_InvalidArgon2Parameters(nameof(parameters));
             }
 
             _memLimit = (nuint)(m * 1024);
