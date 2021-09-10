@@ -44,8 +44,6 @@ namespace NSec.Experimental.PasswordBased
             _c = c;
         }
 
-        internal /*public*/ int C => _c;
-
         internal override unsafe bool TryDeriveBytesCore(
             ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,
