@@ -94,7 +94,7 @@ namespace NSec.Cryptography
             {
                 throw Error.ArgumentNull_Key(nameof(key));
             }
-            if (!(key.Algorithm is MacAlgorithm algorithm))
+            if (key.Algorithm is not MacAlgorithm algorithm)
             {
                 throw Error.Argument_MacKeyRequired(nameof(key));
             }
