@@ -1,9 +1,9 @@
 using NSec.Cryptography;
 using Xunit;
 
-namespace NSec.Tests.Algorithms
+namespace NSec.Tests.Core
 {
-    public class Ed25519ToX25519Tests
+    public class KeyConverterTests
     {
         [Fact]
         public void TestConvertPrivateKey()
@@ -12,7 +12,7 @@ namespace NSec.Tests.Algorithms
 
             using var e = Key.Create(SignatureAlgorithm.Ed25519);
 
-            using var k = Ed25519ToX25519.ConvertPrivateKey(e, a);
+            using var k = KeyConverter.ConvertPrivateKey(e, a);
 
             Assert.Same(a, k.Algorithm);
 
@@ -31,7 +31,7 @@ namespace NSec.Tests.Algorithms
 
             using var e = Key.Create(SignatureAlgorithm.Ed25519);
 
-            var p = Ed25519ToX25519.ConvertPublicKey(e.PublicKey, a);
+            var p = KeyConverter.ConvertPublicKey(e.PublicKey, a);
 
             Assert.NotNull(p);
             Assert.Same(a, p.Algorithm);
@@ -47,9 +47,9 @@ namespace NSec.Tests.Algorithms
 
             using var k = Key.Create(SignatureAlgorithm.Ed25519);
 
-            using var x25519priv = Ed25519ToX25519.ConvertPrivateKey(k, a);
+            using var x25519priv = KeyConverter.ConvertPrivateKey(k, a);
 
-            var x25519pub = Ed25519ToX25519.ConvertPublicKey(k.PublicKey, a);
+            var x25519pub = KeyConverter.ConvertPublicKey(k.PublicKey, a);
 
             Assert.Equal(x25519priv.PublicKey, x25519pub);
         }

@@ -1,10 +1,9 @@
 using System;
-using System.Diagnostics;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
 {
-    public static class Ed25519ToX25519
+    public static class KeyConverter
     {
         public static Key ConvertPrivateKey(
             Key key,
@@ -15,7 +14,7 @@ namespace NSec.Cryptography
             {
                 throw new ArgumentNullException(nameof(key));
             }
-            if (!(key.Algorithm is Ed25519))
+            if (key.Algorithm is not Ed25519)
             {
                 throw new ArgumentException(); // TODO: exception message
             }
@@ -23,7 +22,7 @@ namespace NSec.Cryptography
             {
                 throw new ArgumentNullException(nameof(algorithm));
             }
-            if (!(algorithm is X25519))
+            if (algorithm is not X25519)
             {
                 throw new ArgumentException(); // TODO: exception message
             }
@@ -77,7 +76,7 @@ namespace NSec.Cryptography
             {
                 throw new ArgumentNullException(nameof(publicKey));
             }
-            if (!(publicKey.Algorithm is Ed25519))
+            if (publicKey.Algorithm is not Ed25519)
             {
                 throw new ArgumentException(); // TODO: exception message
             }
@@ -85,7 +84,7 @@ namespace NSec.Cryptography
             {
                 throw new ArgumentNullException(nameof(algorithm));
             }
-            if (!(algorithm is X25519))
+            if (algorithm is not X25519)
             {
                 throw new ArgumentException(); // TODO: exception message
             }
