@@ -64,9 +64,13 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> data)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
 
             byte[] signature = new byte[_signatureSize];
             SignCore(key.Handle, data, signature);
@@ -79,11 +83,17 @@ namespace NSec.Cryptography
             Span<byte> signature)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (signature.Length != _signatureSize)
+            {
                 throw Error.Argument_SignatureLength(nameof(signature), _signatureSize);
+            }
 
             SignCore(key.Handle, data, signature);
         }
@@ -94,9 +104,13 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> signature)
         {
             if (publicKey == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(publicKey));
+            }
             if (publicKey.Algorithm != this)
+            {
                 throw Error.Argument_PublicKeyAlgorithmMismatch(nameof(publicKey), nameof(publicKey));
+            }
 
             return signature.Length == _signatureSize && VerifyCore(in publicKey.GetPinnableReference(), data, signature);
         }

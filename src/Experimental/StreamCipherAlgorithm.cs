@@ -52,13 +52,21 @@ namespace NSec.Experimental
             int count)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Size != _nonceSize)
+            {
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
+            }
             if (count < 0)
+            {
                 throw Error.ArgumentOutOfRange_GenerateNegativeCount(nameof(count));
+            }
 
             Span<byte> n = stackalloc byte[_nonceSize];
             nonce.CopyTo(n);
@@ -75,11 +83,17 @@ namespace NSec.Experimental
             Span<byte> bytes)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Size != _nonceSize)
+            {
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
+            }
 
             Span<byte> n = stackalloc byte[_nonceSize];
             nonce.CopyTo(n);
@@ -93,13 +107,21 @@ namespace NSec.Experimental
             int count)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Length != _nonceSize)
+            {
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
+            }
             if (count < 0)
+            {
                 throw Error.ArgumentOutOfRange_GenerateNegativeCount(nameof(count));
+            }
 
             byte[] bytes = new byte[count];
             GeneratePseudoRandomStreamCore(key.Handle, nonce, bytes);
@@ -112,11 +134,17 @@ namespace NSec.Experimental
             Span<byte> bytes)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Length != _nonceSize)
+            {
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
+            }
 
             GeneratePseudoRandomStreamCore(key.Handle, nonce, bytes);
         }
@@ -128,11 +156,17 @@ namespace NSec.Experimental
             ReadOnlySpan<byte> input)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Size != _nonceSize)
+            {
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
+            }
 
             Span<byte> n = stackalloc byte[_nonceSize];
             nonce.CopyTo(n);
@@ -150,15 +184,25 @@ namespace NSec.Experimental
             Span<byte> output)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Size != _nonceSize)
+            {
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
+            }
             if (output.Length != input.Length)
+            {
                 throw Error.Argument_CiphertextLength(nameof(output)); // TODO
+            }
             if (output.Overlaps(input, out int offset) && offset != 0)
+            {
                 throw Error.Argument_OverlapCiphertext(nameof(output)); // TODO
+            }
 
             Span<byte> n = stackalloc byte[_nonceSize];
             nonce.CopyTo(n);
@@ -172,11 +216,17 @@ namespace NSec.Experimental
             ReadOnlySpan<byte> input)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Length != _nonceSize)
+            {
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
+            }
 
             byte[] output = new byte[input.Length];
             XOrCore(key.Handle, nonce, input, output);
@@ -190,15 +240,25 @@ namespace NSec.Experimental
             Span<byte> output)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Length != _nonceSize)
+            {
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
+            }
             if (output.Length != input.Length)
+            {
                 throw Error.Argument_CiphertextLength(nameof(output)); // TODO
+            }
             if (output.Overlaps(input, out int offset) && offset != 0)
+            {
                 throw Error.Argument_OverlapCiphertext(nameof(output)); // TODO
+            }
 
             XOrCore(key.Handle, nonce, input, output);
         }
@@ -211,11 +271,17 @@ namespace NSec.Experimental
             uint ic)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Size != _nonceSize)
+            {
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
+            }
 
             Span<byte> n = stackalloc byte[_nonceSize];
             nonce.CopyTo(n);
@@ -234,15 +300,25 @@ namespace NSec.Experimental
             uint ic)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Size != _nonceSize)
+            {
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
+            }
             if (output.Length != input.Length)
+            {
                 throw Error.Argument_CiphertextLength(nameof(output)); // TODO
+            }
             if (output.Overlaps(input, out int offset) && offset != 0)
+            {
                 throw Error.Argument_OverlapCiphertext(nameof(output)); // TODO
+            }
 
             Span<byte> n = stackalloc byte[_nonceSize];
             nonce.CopyTo(n);
@@ -257,11 +333,17 @@ namespace NSec.Experimental
             uint ic)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Length != _nonceSize)
+            {
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
+            }
 
             byte[] output = new byte[input.Length];
             XOrICCore(key.Handle, nonce, input, ic, output);
@@ -276,15 +358,25 @@ namespace NSec.Experimental
             uint ic)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Length != _nonceSize)
+            {
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
+            }
             if (output.Length != input.Length)
+            {
                 throw Error.Argument_CiphertextLength(nameof(output)); // TODO
+            }
             if (output.Overlaps(input, out int offset) && offset != 0)
+            {
                 throw Error.Argument_OverlapCiphertext(nameof(output)); // TODO
+            }
 
             XOrICCore(key.Handle, nonce, input, ic, output);
         }

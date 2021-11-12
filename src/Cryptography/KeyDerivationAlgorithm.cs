@@ -84,11 +84,17 @@ namespace NSec.Cryptography
             int count)
         {
             if (!_supportsSalt && !salt.IsEmpty)
+            {
                 throw Error.Argument_SaltNotSupported(nameof(salt));
+            }
             if (count < 0)
+            {
                 throw Error.ArgumentOutOfRange_DeriveNegativeCount(nameof(count));
+            }
             if (count > MaxCount)
+            {
                 throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), MaxCount);
+            }
 
             byte[] bytes = new byte[count];
             DeriveBytesCore(inputKeyingMaterial, salt, info, bytes);
@@ -102,13 +108,21 @@ namespace NSec.Cryptography
             Span<byte> bytes)
         {
             if (!_supportsSalt && !salt.IsEmpty)
+            {
                 throw Error.Argument_SaltNotSupported(nameof(salt));
+            }
             if (bytes.Length > MaxCount)
+            {
                 throw Error.Argument_DeriveInvalidCount(nameof(bytes), MaxCount);
+            }
             if (bytes.Overlaps(salt))
+            {
                 throw Error.Argument_OverlapSalt(nameof(bytes));
+            }
             if (bytes.Overlaps(info))
+            {
                 throw Error.Argument_OverlapInfo(nameof(bytes));
+            }
 
             DeriveBytesCore(inputKeyingMaterial, salt, info, bytes);
         }
@@ -121,14 +135,20 @@ namespace NSec.Cryptography
             in KeyCreationParameters creationParameters = default)
         {
             if (!_supportsSalt && !salt.IsEmpty)
+            {
                 throw Error.Argument_SaltNotSupported(nameof(salt));
+            }
             if (algorithm == null)
+            {
                 throw Error.ArgumentNull_Algorithm(nameof(algorithm));
+            }
 
             int seedSize = algorithm.GetSeedSize();
             if (seedSize > MaxCount)
+            {
                 throw Error.NotSupported_CreateKey();
             Debug.Assert(seedSize <= 64);
+            }
 
             SecureMemoryHandle? keyHandle = default;
             PublicKey? publicKey = default;
@@ -166,13 +186,21 @@ namespace NSec.Cryptography
             int count)
         {
             if (sharedSecret == null)
+            {
                 throw Error.ArgumentNull_SharedSecret(nameof(sharedSecret));
+            }
             if (!_supportsSalt && !salt.IsEmpty)
+            {
                 throw Error.Argument_SaltNotSupported(nameof(salt));
+            }
             if (count < 0)
+            {
                 throw Error.ArgumentOutOfRange_DeriveNegativeCount(nameof(count));
+            }
             if (count > MaxCount)
+            {
                 throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), MaxCount);
+            }
 
             byte[] bytes = new byte[count];
             DeriveBytesCore(sharedSecret.Handle, salt, info, bytes);
@@ -186,15 +214,25 @@ namespace NSec.Cryptography
             Span<byte> bytes)
         {
             if (sharedSecret == null)
+            {
                 throw Error.ArgumentNull_SharedSecret(nameof(sharedSecret));
+            }
             if (!_supportsSalt && !salt.IsEmpty)
+            {
                 throw Error.Argument_SaltNotSupported(nameof(salt));
+            }
             if (bytes.Length > MaxCount)
+            {
                 throw Error.Argument_DeriveInvalidCount(nameof(bytes), MaxCount);
+            }
             if (bytes.Overlaps(salt))
+            {
                 throw Error.Argument_OverlapSalt(nameof(bytes));
+            }
             if (bytes.Overlaps(info))
+            {
                 throw Error.Argument_OverlapInfo(nameof(bytes));
+            }
 
             DeriveBytesCore(sharedSecret.Handle, salt, info, bytes);
         }
@@ -207,16 +245,24 @@ namespace NSec.Cryptography
             in KeyCreationParameters creationParameters = default)
         {
             if (sharedSecret == null)
+            {
                 throw Error.ArgumentNull_SharedSecret(nameof(sharedSecret));
+            }
             if (!_supportsSalt && !salt.IsEmpty)
+            {
                 throw Error.Argument_SaltNotSupported(nameof(salt));
+            }
             if (algorithm == null)
+            {
                 throw Error.ArgumentNull_Algorithm(nameof(algorithm));
+            }
 
             int seedSize = algorithm.GetSeedSize();
             if (seedSize > MaxCount)
+            {
                 throw Error.NotSupported_CreateKey();
             Debug.Assert(seedSize <= 64);
+            }
 
             SecureMemoryHandle? keyHandle = default;
             PublicKey? publicKey = default;

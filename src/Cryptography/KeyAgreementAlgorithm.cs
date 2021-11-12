@@ -64,13 +64,21 @@ namespace NSec.Cryptography
             in SharedSecretCreationParameters creationParameters = default)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (otherPartyPublicKey == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(otherPartyPublicKey));
+            }
             if (otherPartyPublicKey.Algorithm != this)
+            {
                 throw Error.Argument_PublicKeyAlgorithmMismatch(nameof(otherPartyPublicKey), nameof(otherPartyPublicKey));
+            }
 
             SecureMemoryHandle? sharedSecretHandle = default;
             bool success = false;

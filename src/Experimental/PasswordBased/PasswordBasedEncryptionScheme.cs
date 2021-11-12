@@ -29,9 +29,13 @@ namespace NSec.Experimental.PasswordBased
             AeadAlgorithm encryptionAlgorithm)
         {
             if (keyDerivationAlgorithm == null)
+            {
                 throw new ArgumentNullException(nameof(keyDerivationAlgorithm));
+            }
             if (encryptionAlgorithm == null)
+            {
                 throw new ArgumentNullException(nameof(encryptionAlgorithm));
+            }
 
             _keyDerivationAlgorithm = keyDerivationAlgorithm;
             _encryptionAlgorithm = encryptionAlgorithm;

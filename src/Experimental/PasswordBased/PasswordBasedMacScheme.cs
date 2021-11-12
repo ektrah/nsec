@@ -29,9 +29,13 @@ namespace NSec.Experimental.PasswordBased
             MacAlgorithm macAlgorithm)
         {
             if (keyDerivationAlgorithm == null)
+            {
                 throw new ArgumentNullException(nameof(keyDerivationAlgorithm));
+            }
             if (macAlgorithm == null)
+            {
                 throw new ArgumentNullException(nameof(macAlgorithm));
+            }
 
             _keyDerivationAlgorithm = keyDerivationAlgorithm;
             _macAlgorithm = macAlgorithm;

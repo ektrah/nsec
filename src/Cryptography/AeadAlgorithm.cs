@@ -86,13 +86,21 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> plaintext)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Size != _nonceSize)
+            {
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
+            }
             if (plaintext.Length > int.MaxValue - _tagSize)
+            {
                 throw Error.Argument_PlaintextTooLong(nameof(plaintext), int.MaxValue - _tagSize);
+            }
 
             Span<byte> n = stackalloc byte[_nonceSize];
             nonce.CopyTo(n);
@@ -111,15 +119,25 @@ namespace NSec.Cryptography
             Span<byte> ciphertext)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Size != _nonceSize)
+            {
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
+            }
             if (ciphertext.Length - _tagSize != plaintext.Length)
+            {
                 throw Error.Argument_CiphertextLength(nameof(ciphertext));
+            }
             if (ciphertext.Overlaps(plaintext, out int offset) && offset != 0)
+            {
                 throw Error.Argument_OverlapCiphertext(nameof(ciphertext));
+            }
 
             Span<byte> n = stackalloc byte[_nonceSize];
             nonce.CopyTo(n);
@@ -134,13 +152,21 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> plaintext)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Length != _nonceSize)
+            {
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
+            }
             if (plaintext.Length > int.MaxValue - _tagSize)
+            {
                 throw Error.Argument_PlaintextTooLong(nameof(plaintext), int.MaxValue - _tagSize);
+            }
 
             byte[] ciphertext = new byte[plaintext.Length + _tagSize];
             EncryptCore(key.Handle, nonce, associatedData, plaintext, ciphertext);
@@ -155,15 +181,25 @@ namespace NSec.Cryptography
             Span<byte> ciphertext)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Length != _nonceSize)
+            {
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
+            }
             if (ciphertext.Length - _tagSize != plaintext.Length)
+            {
                 throw Error.Argument_CiphertextLength(nameof(ciphertext));
+            }
             if (ciphertext.Overlaps(plaintext, out int offset) && offset != 0)
+            {
                 throw Error.Argument_OverlapCiphertext(nameof(ciphertext));
+            }
 
             EncryptCore(key.Handle, nonce, associatedData, plaintext, ciphertext);
         }
@@ -177,10 +213,13 @@ namespace NSec.Cryptography
             out byte[]? plaintext)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
-
+            }
             if (nonce.Size != _nonceSize || ciphertext.Length < _tagSize)
             {
                 plaintext = null;
@@ -205,15 +244,25 @@ namespace NSec.Cryptography
             Span<byte> plaintext)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Size != _nonceSize || ciphertext.Length < _tagSize)
+            {
                 return false;
+            }
             if (plaintext.Length != ciphertext.Length - _tagSize)
+            {
                 throw Error.Argument_PlaintextLength(nameof(plaintext));
+            }
             if (plaintext.Overlaps(ciphertext, out int offset) && offset != 0)
+            {
                 throw Error.Argument_OverlapPlaintext(nameof(plaintext));
+            }
 
             Span<byte> n = stackalloc byte[_nonceSize];
             nonce.CopyTo(n);
@@ -228,10 +277,13 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> ciphertext)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
-
+            }
             if (nonce.Length != _nonceSize || ciphertext.Length < _tagSize)
             {
                 return null;
@@ -250,15 +302,25 @@ namespace NSec.Cryptography
             Span<byte> plaintext)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Length != _nonceSize || ciphertext.Length < _tagSize)
+            {
                 return false;
+            }
             if (plaintext.Length != ciphertext.Length - _tagSize)
+            {
                 throw Error.Argument_PlaintextLength(nameof(plaintext));
+            }
             if (plaintext.Overlaps(ciphertext, out int offset) && offset != 0)
+            {
                 throw Error.Argument_OverlapPlaintext(nameof(plaintext));
+            }
 
             return DecryptCore(key.Handle, nonce, associatedData, ciphertext, plaintext);
         }

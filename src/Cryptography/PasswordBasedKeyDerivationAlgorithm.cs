@@ -54,11 +54,17 @@ namespace NSec.Cryptography
             int count)
         {
             if (salt.Length != SaltSize)
+            {
                 throw Error.Argument_SaltLength(nameof(salt), SaltSize);
+            }
             if (count < 0)
+            {
                 throw Error.ArgumentOutOfRange_DeriveNegativeCount(nameof(count));
+            }
             if (count > MaxCount)
+            {
                 throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), MaxCount);
+            }
 
             byte[] bytes = new byte[count];
             if (!TryDeriveBytesCore(password, salt, bytes))
@@ -74,11 +80,17 @@ namespace NSec.Cryptography
             Span<byte> bytes)
         {
             if (salt.Length != SaltSize)
+            {
                 throw Error.Argument_SaltLength(nameof(salt), SaltSize);
+            }
             if (bytes.Length > MaxCount)
+            {
                 throw Error.Argument_DeriveInvalidCount(nameof(bytes), MaxCount);
+            }
             if (bytes.IsEmpty)
+            {
                 return;
+            }
 
             if (!TryDeriveBytesCore(password, salt, bytes))
             {
@@ -93,14 +105,20 @@ namespace NSec.Cryptography
             in KeyCreationParameters creationParameters = default)
         {
             if (salt.Length != SaltSize)
+            {
                 throw Error.Argument_SaltLength(nameof(salt), SaltSize);
+            }
             if (algorithm == null)
+            {
                 throw Error.ArgumentNull_Algorithm(nameof(algorithm));
+            }
 
             int seedSize = algorithm.GetSeedSize();
             if (seedSize > MaxCount)
+            {
                 throw Error.NotSupported_CreateKey();
             Debug.Assert(seedSize <= 64);
+            }
 
             SecureMemoryHandle? keyHandle = default;
             PublicKey? publicKey = default;

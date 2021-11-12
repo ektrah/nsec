@@ -38,13 +38,21 @@ namespace NSec.Experimental.Sodium
             ReadOnlySpan<byte> plaintext)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Size != _nonceSize)
+            {
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
+            }
             if (plaintext.Length > int.MaxValue - _macSize)
+            {
                 throw Error.Argument_PlaintextTooLong(nameof(plaintext), int.MaxValue - _macSize);
+            }
 
             Span<byte> n = stackalloc byte[_nonceSize];
             nonce.CopyTo(n);
@@ -62,17 +70,29 @@ namespace NSec.Experimental.Sodium
             Span<byte> ciphertext)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Size != _nonceSize)
+            {
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
+            }
             if (plaintext.Length > int.MaxValue - _macSize)
+            {
                 throw Error.Argument_PlaintextTooLong(nameof(plaintext), int.MaxValue - _macSize);
+            }
             if (ciphertext.Length != _macSize + plaintext.Length)
+            {
                 throw Error.Argument_CiphertextLength(nameof(ciphertext));
+            }
             if (ciphertext.Overlaps(plaintext))
+            {
                 throw Error.Argument_OverlapCiphertext(nameof(ciphertext));
+            }
 
             Span<byte> n = stackalloc byte[_nonceSize];
             nonce.CopyTo(n);
@@ -86,13 +106,21 @@ namespace NSec.Experimental.Sodium
             ReadOnlySpan<byte> plaintext)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Length != _nonceSize)
+            {
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
+            }
             if (plaintext.Length > int.MaxValue - _macSize)
+            {
                 throw Error.Argument_PlaintextTooLong(nameof(plaintext), int.MaxValue - _macSize);
+            }
 
             byte[] ciphertext = new byte[_macSize + plaintext.Length];
             EncryptCore(key.Handle, nonce, plaintext, ciphertext);
@@ -106,17 +134,29 @@ namespace NSec.Experimental.Sodium
             Span<byte> ciphertext)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Length != _nonceSize)
+            {
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
+            }
             if (plaintext.Length > int.MaxValue - _macSize)
+            {
                 throw Error.Argument_PlaintextTooLong(nameof(plaintext), int.MaxValue - _macSize);
+            }
             if (ciphertext.Length != _macSize + plaintext.Length)
+            {
                 throw Error.Argument_CiphertextLength(nameof(ciphertext));
+            }
             if (ciphertext.Overlaps(plaintext))
+            {
                 throw Error.Argument_OverlapCiphertext(nameof(ciphertext));
+            }
 
             EncryptCore(key.Handle, nonce, plaintext, ciphertext);
         }
@@ -129,12 +169,17 @@ namespace NSec.Experimental.Sodium
             out byte[]? plaintext)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Size != _nonceSize)
+            {
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
-
+            }
             if (ciphertext.Length < _macSize)
             {
                 plaintext = null;
@@ -158,17 +203,29 @@ namespace NSec.Experimental.Sodium
             Span<byte> plaintext)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Size != _nonceSize)
+            {
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
+            }
             if (ciphertext.Length < _macSize)
+            {
                 return false;
+            }
             if (plaintext.Length != ciphertext.Length - _macSize)
+            {
                 throw Error.Argument_PlaintextLength(nameof(plaintext));
+            }
             if (plaintext.Overlaps(ciphertext))
+            {
                 throw Error.Argument_OverlapPlaintext(nameof(plaintext));
+            }
 
             Span<byte> n = stackalloc byte[_nonceSize];
             nonce.CopyTo(n);
@@ -183,12 +240,17 @@ namespace NSec.Experimental.Sodium
             out byte[]? plaintext)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Length != _nonceSize)
+            {
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
-
+            }
             if (ciphertext.Length < _macSize)
             {
                 plaintext = null;
@@ -208,17 +270,29 @@ namespace NSec.Experimental.Sodium
             Span<byte> plaintext)
         {
             if (key == null)
+            {
                 throw Error.ArgumentNull_Key(nameof(key));
+            }
             if (key.Algorithm != this)
+            {
                 throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
             if (nonce.Length != _nonceSize)
+            {
                 throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
+            }
             if (ciphertext.Length < _macSize)
+            {
                 return false;
+            }
             if (plaintext.Length != ciphertext.Length - _macSize)
+            {
                 throw Error.Argument_PlaintextLength(nameof(plaintext));
+            }
             if (plaintext.Overlaps(ciphertext))
+            {
                 throw Error.Argument_OverlapPlaintext(nameof(plaintext));
+            }
 
             return DecryptCore(key.Handle, nonce, ciphertext, plaintext);
         }
