@@ -1,6 +1,6 @@
 using System;
-using NSec.Cryptography;
 using System.Collections.Generic;
+using NSec.Cryptography;
 using Xunit;
 
 namespace NSec.Tests.Examples
