@@ -89,7 +89,7 @@ namespace NSec.Cryptography
                 throw new ArgumentException(); // TODO: exception message
             }
 
-            PublicKey newPublicKey = new PublicKey(algorithm);
+            PublicKey newPublicKey = new(algorithm);
 
             unsafe
             {

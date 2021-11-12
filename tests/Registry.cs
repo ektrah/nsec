@@ -11,14 +11,14 @@ namespace NSec.Tests
     {
         #region Algorithms By Base Class
 
-        public static readonly TheoryData<AeadAlgorithm> AeadAlgorithms = new TheoryData<AeadAlgorithm>
+        public static readonly TheoryData<AeadAlgorithm> AeadAlgorithms = new()
         {
             AeadAlgorithm.Aes256Gcm,
             AeadAlgorithm.ChaCha20Poly1305,
             new XChaCha20Poly1305(),
         };
 
-        public static readonly TheoryData<MacAlgorithm> MacAlgorithms = new TheoryData<MacAlgorithm>
+        public static readonly TheoryData<MacAlgorithm> MacAlgorithms = new()
         {
             new Blake2bMac(16, 16),
             new Blake2bMac(16, 32),
@@ -35,12 +35,12 @@ namespace NSec.Tests
             MacAlgorithm.HmacSha512_256,
         };
 
-        public static readonly TheoryData<StreamCipherAlgorithm> StreamCipherAlgorithms = new TheoryData<StreamCipherAlgorithm>
+        public static readonly TheoryData<StreamCipherAlgorithm> StreamCipherAlgorithms = new()
         {
             StreamCipherAlgorithm.ChaCha20
         };
 
-        public static readonly TheoryData<HashAlgorithm> HashAlgorithms = new TheoryData<HashAlgorithm>
+        public static readonly TheoryData<HashAlgorithm> HashAlgorithms = new()
         {
             HashAlgorithm.Blake2b_256,
             HashAlgorithm.Blake2b_512,
@@ -49,12 +49,12 @@ namespace NSec.Tests
             HashAlgorithm.Sha512_256,
         };
 
-        public static readonly TheoryData<KeyAgreementAlgorithm> KeyAgreementAlgorithms = new TheoryData<KeyAgreementAlgorithm>
+        public static readonly TheoryData<KeyAgreementAlgorithm> KeyAgreementAlgorithms = new()
         {
             KeyAgreementAlgorithm.X25519,
         };
 
-        public static readonly TheoryData<KeyDerivationAlgorithm> KeyDerivationAlgorithms = new TheoryData<KeyDerivationAlgorithm>
+        public static readonly TheoryData<KeyDerivationAlgorithm> KeyDerivationAlgorithms = new()
         {
             new AnsiX963KdfSha256(),
             new ConcatKdfHmacSha256(),
@@ -63,7 +63,7 @@ namespace NSec.Tests
             KeyDerivationAlgorithm.HkdfSha512,
         };
 
-        public static readonly TheoryData<PasswordBasedKeyDerivationAlgorithm> PasswordHashAlgorithms = new TheoryData<PasswordBasedKeyDerivationAlgorithm>
+        public static readonly TheoryData<PasswordBasedKeyDerivationAlgorithm> PasswordHashAlgorithms = new()
         {
             // intentionally weak parameters for unit testing
             new Argon2i(new Argon2Parameters { DegreeOfParallelism = 1, MemorySize = 1 << 12, NumberOfPasses = 3 }),
@@ -72,7 +72,7 @@ namespace NSec.Tests
             new Pbkdf2HmacSha256(new Pbkdf2Parameters { IterationCount = 10 }),
         };
 
-        public static readonly TheoryData<SignatureAlgorithm> SignatureAlgorithms = new TheoryData<SignatureAlgorithm>
+        public static readonly TheoryData<SignatureAlgorithm> SignatureAlgorithms = new()
         {
             SignatureAlgorithm.Ed25519,
         };
@@ -81,13 +81,13 @@ namespace NSec.Tests
 
         #region Algorithms By Key Type
 
-        public static readonly TheoryData<Algorithm> AsymmetricAlgorithms = new TheoryData<Algorithm>
+        public static readonly TheoryData<Algorithm> AsymmetricAlgorithms = new()
         {
             KeyAgreementAlgorithm.X25519,
             SignatureAlgorithm.Ed25519,
         };
 
-        public static readonly TheoryData<Algorithm> SymmetricAlgorithms = new TheoryData<Algorithm>
+        public static readonly TheoryData<Algorithm> SymmetricAlgorithms = new()
         {
             AeadAlgorithm.Aes256Gcm,
             AeadAlgorithm.ChaCha20Poly1305,
@@ -102,7 +102,7 @@ namespace NSec.Tests
             StreamCipherAlgorithm.ChaCha20,
         };
 
-        public static readonly TheoryData<Algorithm> KeylessAlgorithms = new TheoryData<Algorithm>
+        public static readonly TheoryData<Algorithm> KeylessAlgorithms = new()
         {
             HashAlgorithm.Blake2b_256,
             HashAlgorithm.Blake2b_512,
@@ -125,7 +125,7 @@ namespace NSec.Tests
 
         #region Key Blob Formats
 
-        public static readonly TheoryData<Algorithm, KeyBlobFormat> PublicKeyBlobFormats = new TheoryData<Algorithm, KeyBlobFormat>
+        public static readonly TheoryData<Algorithm, KeyBlobFormat> PublicKeyBlobFormats = new()
         {
             { KeyAgreementAlgorithm.X25519, KeyBlobFormat.RawPublicKey },
             { KeyAgreementAlgorithm.X25519, KeyBlobFormat.NSecPublicKey },
@@ -137,7 +137,7 @@ namespace NSec.Tests
             { SignatureAlgorithm.Ed25519, KeyBlobFormat.PkixPublicKeyText },
         };
 
-        public static readonly TheoryData<Algorithm, KeyBlobFormat> PrivateKeyBlobFormats = new TheoryData<Algorithm, KeyBlobFormat>
+        public static readonly TheoryData<Algorithm, KeyBlobFormat> PrivateKeyBlobFormats = new()
         {
             { KeyAgreementAlgorithm.X25519, KeyBlobFormat.RawPrivateKey },
             { KeyAgreementAlgorithm.X25519, KeyBlobFormat.NSecPrivateKey },
@@ -149,7 +149,7 @@ namespace NSec.Tests
             { SignatureAlgorithm.Ed25519, KeyBlobFormat.PkixPrivateKeyText },
         };
 
-        public static readonly TheoryData<Algorithm, KeyBlobFormat> SymmetricKeyBlobFormats = new TheoryData<Algorithm, KeyBlobFormat>
+        public static readonly TheoryData<Algorithm, KeyBlobFormat> SymmetricKeyBlobFormats = new()
         {
             { AeadAlgorithm.Aes256Gcm, KeyBlobFormat.RawSymmetricKey },
             { AeadAlgorithm.Aes256Gcm, KeyBlobFormat.NSecSymmetricKey },

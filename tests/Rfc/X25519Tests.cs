@@ -6,7 +6,7 @@ namespace NSec.Tests.Rfc
 {
     public static class X25519Tests
     {
-        public static readonly TheoryData<string, string, string> Rfc7748TestVectors = new TheoryData<string, string, string>
+        public static readonly TheoryData<string, string, string> Rfc7748TestVectors = new()
         {
             // Section 5.2
             { "a546e36bf0527c9d3b16154b82465edd62144c0ac1fc5a18506a2244ba449ac4", "e6db6867583030db3594c1a424b15f7c726624ec26b3353b10a903a6d0ab1c4c", "c3da55379de9c6908e94ea4df28d084f32eccf03491c71f754b4075577a28552" },

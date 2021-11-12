@@ -8,7 +8,7 @@ namespace NSec.Tests.Algorithms
     {
         public static readonly TheoryData<string, string, string> Rfc7748TestVectors = Rfc.X25519Tests.Rfc7748TestVectors;
 
-        public static readonly TheoryData<string, string> TestVectorsAllZeros = new TheoryData<string, string>
+        public static readonly TheoryData<string, string> TestVectorsAllZeros = new()
         {
             { "a546e36bf0527c9d3b16154b82465edd62144c0ac1fc5a18506a2244ba449ac4", "0000000000000000000000000000000000000000000000000000000000000000" },
             { "a546e36bf0527c9d3b16154b82465edd62144c0ac1fc5a18506a2244ba449ac4", "0100000000000000000000000000000000000000000000000000000000000000" },
@@ -19,7 +19,7 @@ namespace NSec.Tests.Algorithms
             { "a546e36bf0527c9d3b16154b82465edd62144c0ac1fc5a18506a2244ba449ac4", "eeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f" },
         };
 
-        public static readonly TheoryData<string, string, string> TestVectorsNotAllZeros = new TheoryData<string, string, string>
+        public static readonly TheoryData<string, string, string> TestVectorsNotAllZeros = new()
         {
             { "a546e36bf0527c9d3b16154b82465edd62144c0ac1fc5a18506a2244ba449ac4", "cdeb7a7c3b41b8ae1656e3faf19fc46ada098deb9c32b1fd866205165f49b880", "7ce548bc4919008436244d2da7a9906528fe3a6d278047654bd32d8acde9707b" },
             { "a546e36bf0527c9d3b16154b82465edd62144c0ac1fc5a18506a2244ba449ac4", "4c9c95bca3508c24b1d0b1559c83ef5b04445cc4581c8e86d8224eddd09f11d7", "e17902e989a034acdf7248260e2c94cdaf2fe1e72aaac7024a128058b6189939" },

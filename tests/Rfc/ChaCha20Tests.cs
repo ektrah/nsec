@@ -7,7 +7,7 @@ namespace NSec.Tests.Rfc
 {
     public class ChaCha20Tests
     {
-        public static readonly TheoryData<string[]> Rfc8439TestVectors = new TheoryData<string[]>
+        public static readonly TheoryData<string[]> Rfc8439TestVectors = new()
         {
             // Appendix A.1 Test Vector #1
             new string[]

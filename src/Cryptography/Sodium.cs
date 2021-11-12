@@ -8,7 +8,7 @@ namespace NSec.Cryptography
 {
     internal static class Sodium
     {
-        private static readonly Action s_misuseHandler = new Action(InternalError);
+        private static readonly Action s_misuseHandler = new(InternalError);
 
         private static int s_initialized;
 
