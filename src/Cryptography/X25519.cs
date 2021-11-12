@@ -57,9 +57,9 @@ namespace NSec.Cryptography
             0x6E, 0x03, 0x21, 0x00,
         });
 
-        private static readonly PrivateKeyFormatter s_rawPrivateKeyFormatter = new X25519PrivateKeyFormatter(new byte[] { });
+        private static readonly PrivateKeyFormatter s_rawPrivateKeyFormatter = new X25519PrivateKeyFormatter(Array.Empty<byte>());
 
-        private static readonly PublicKeyFormatter s_rawPublicKeyFormatter = new X25519PublicKeyFormatter(new byte[] { });
+        private static readonly PublicKeyFormatter s_rawPublicKeyFormatter = new X25519PublicKeyFormatter(Array.Empty<byte>());
 
         private static int s_selfTest;
 
