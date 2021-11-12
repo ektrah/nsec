@@ -65,6 +65,10 @@ namespace NSec.Cryptography
             {
                 throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), MaxCount);
             }
+            if (count == 0)
+            {
+                return Array.Empty<byte>();
+            }
 
             byte[] bytes = new byte[count];
             if (!TryDeriveBytesCore(password, salt, bytes))
@@ -117,8 +121,8 @@ namespace NSec.Cryptography
             if (seedSize > MaxCount)
             {
                 throw Error.NotSupported_CreateKey();
-            Debug.Assert(seedSize <= 64);
             }
+            Debug.Assert(seedSize > 0 && seedSize <= 64);
 
             SecureMemoryHandle? keyHandle = default;
             PublicKey? publicKey = default;

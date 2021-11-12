@@ -69,6 +69,10 @@ namespace NSec.Cryptography
             {
                 throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), MaxCount);
             }
+            if (count == 0)
+            {
+                return Array.Empty<byte>();
+            }
 
             byte[] bytes = new byte[count];
             ExpandCore(pseudorandomKey, info, bytes);
@@ -95,6 +99,10 @@ namespace NSec.Cryptography
             if (bytes.Overlaps(info))
             {
                 throw Error.Argument_OverlapInfo(nameof(bytes));
+            }
+            if (bytes.IsEmpty)
+            {
+                return;
             }
 
             ExpandCore(pseudorandomKey, info, bytes);
