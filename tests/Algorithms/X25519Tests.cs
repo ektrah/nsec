@@ -54,8 +54,8 @@ namespace NSec.Tests.Algorithms
             var pk1 = publicKey.DecodeHex();
             var pk2 = publicKey.DecodeHex();
 
-            pk1[pk1.Length - 1] &= 0x7F;
-            pk2[pk2.Length - 1] |= 0x80;
+            pk1[^1] &= 0x7F;
+            pk2[^1] |= 0x80;
 
             using var k = Key.Import(a, privateKey.DecodeHex(), KeyBlobFormat.RawPrivateKey);
             using var sharedSecretExpected = SharedSecret.Import(sharedSecret.DecodeHex());
@@ -83,8 +83,8 @@ namespace NSec.Tests.Algorithms
             var pk1 = publicKey.DecodeHex();
             var pk2 = publicKey.DecodeHex();
 
-            pk1[pk1.Length - 1] &= 0x7F;
-            pk2[pk2.Length - 1] |= 0x80;
+            pk1[^1] &= 0x7F;
+            pk2[^1] |= 0x80;
 
             var p1 = PublicKey.Import(a, pk1, KeyBlobFormat.RawPublicKey);
             var p2 = PublicKey.Import(a, pk2, KeyBlobFormat.RawPublicKey);
