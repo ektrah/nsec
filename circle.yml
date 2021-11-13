@@ -46,7 +46,6 @@ workflows:
             branches:
               only:
                 - master
-                - net6
       - macos10.15:
           requires:
             - macos10.14
