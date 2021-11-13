@@ -72,6 +72,19 @@ namespace NSec.Tests.Formatting
             Assert.Equal(blobHeader, blob.AsSpan(0, blobHeader.Length).ToArray());
             Assert.Equal(keySize, BitConverter.ToInt16(blob, blobHeader.Length));
             Assert.Equal(outputSize, BitConverter.ToInt16(blob, blobHeader.Length + sizeof(short)));
+
+            if (format < 0)
+            {
+                Assert.True(Key.TryImport(a, blob, format, out var k2));
+                Assert.NotNull(k2);
+                k2!.Dispose();
+            }
+            else
+            {
+                Assert.True(PublicKey.TryImport(a, blob, format, out var p));
+                Assert.NotNull(p);
+                Assert.Equal(k.PublicKey, p);
+            }
         }
 
         [Fact]
