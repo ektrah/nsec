@@ -19,7 +19,15 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
+    - name: Setup .NET 6.0
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
     - run: dotnet --info
+    - name: Test (.NET 6.0/Debug)
+      run: dotnet test tests -f net6.0 -c Debug
+    - name: Test (.NET 6.0/Release)
+      run: dotnet test tests -f net6.0 -c Release
     - name: Test (.NET 5.0/Debug)
       run: dotnet test tests -f net5.0 -c Debug
     - name: Test (.NET 5.0/Release)
