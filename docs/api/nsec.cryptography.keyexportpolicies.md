@@ -1,6 +1,6 @@
 # KeyExportPolicies Enum
 
-Specifies the key export policies for a [[key|Key Class]].
+Specifies the key export policies for a [[private or symmetric key|Key Class]] or a [[shared secret|SharedSecret Class]].
 
     [Flags]
     public enum KeyExportPolicies
@@ -9,13 +9,13 @@ Specifies the key export policies for a [[key|Key Class]].
 ## Members
 
 None
-: The private key cannot be exported.
+: The key or shared secret cannot be exported.
 
 AllowPlaintextArchiving
-: The private key can be exported one time for archiving purposes.
+: The key or shared secret can be exported one time for archiving purposes.
 
 AllowPlaintextExport
-: The private key can be exported multiple times.
+: The key or shared secret can be exported multiple times.
 
 
 ## See Also
@@ -23,3 +23,4 @@ AllowPlaintextExport
 * API Reference
     * [[Key Class]]
     * [[KeyCreationParameters Struct]]
+    * [[SharedSecretCreationParameters Struct]]

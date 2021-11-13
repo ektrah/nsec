@@ -34,3 +34,4 @@
 * [[PublicKey Class]]
 * [[SharedSecret Class]]
     * [[SharedSecretCreationParameters Struct]]
+    * [[SharedSecretBlobFormat Enum]]

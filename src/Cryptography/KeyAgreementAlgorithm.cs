@@ -95,7 +95,7 @@ namespace NSec.Cryptography
                 }
             }
 
-            return success && sharedSecretHandle != null ? new SharedSecret(sharedSecretHandle) : null;
+            return success && sharedSecretHandle != null ? new SharedSecret(in creationParameters, sharedSecretHandle) : null;
         }
 
         internal sealed override int GetKeySize()

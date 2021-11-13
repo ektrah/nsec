@@ -73,5 +73,28 @@ namespace NSec.Tests.Formatting
             Assert.Equal(keySize, BitConverter.ToInt16(blob, blobHeader.Length));
             Assert.Equal(outputSize, BitConverter.ToInt16(blob, blobHeader.Length + sizeof(short)));
         }
+
+        [Fact]
+        public static void TestSharedSecret()
+        {
+            var blobHeader = new byte[] { 0xDE, 0x70, 0x00, 0xDE };
+
+            var b = Utilities.RandomBytes[..64];
+
+            using var s = SharedSecret.Import(b, new() { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving });
+
+            var blob = s.Export(SharedSecretBlobFormat.NSecSharedSecret);
+
+            Assert.NotNull(blob);
+            Assert.Equal(blobHeader.Length + sizeof(short) + sizeof(short) + b.Length, blob.Length);
+            Assert.Equal(blobHeader, blob.AsSpan(0, blobHeader.Length).ToArray());
+            Assert.Equal(b.Length, BitConverter.ToInt16(blob, blobHeader.Length));
+            Assert.Equal(0, BitConverter.ToInt16(blob, blobHeader.Length + sizeof(short)));
+
+            Assert.True(SharedSecret.TryImport(blob, SharedSecretBlobFormat.NSecSharedSecret, out var s2));
+            Assert.NotNull(s2);
+            Assert.Equal(b.Length, s2!.Size);
+            s2!.Dispose();
+        }
     }
 }

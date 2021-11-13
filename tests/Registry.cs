@@ -170,5 +170,15 @@ namespace NSec.Tests
         };
 
         #endregion
+
+        #region SharedSecret Blob Formats
+
+        public static readonly TheoryData<SharedSecretBlobFormat> SharedSecretBlobFormats = new()
+        {
+            SharedSecretBlobFormat.RawSharedSecret,
+            SharedSecretBlobFormat.NSecSharedSecret,
+        };
+
+        #endregion
     }
 }

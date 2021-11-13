@@ -21,6 +21,23 @@ default values.
     public SharedSecretCreationParameters()
 
 
+## Fields
+
+
+### ExportPolicy
+
+Gets or sets the export policy for the shared secret.
+
+    public KeyExportPolicies ExportPolicy;
+
+#### Field Value
+
+A bitwise combination of [[KeyExportPolicies|KeyExportPolicies Enum]] values
+that specifies the export policy for the shared secret.
+
+The default value is [[KeyExportPolicies.None|KeyExportPolicies Enum]].
+
+
 ## Thread Safety
 
 Any public static members of this type are thread safe. Any instance members are
@@ -31,3 +48,4 @@ not guaranteed to be thread safe.
 
 * API Reference
     * [[SharedSecret Class]]
+    * [[KeyExportPolicies Enum]]
