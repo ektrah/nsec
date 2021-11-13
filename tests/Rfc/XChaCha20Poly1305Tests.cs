@@ -1,6 +1,5 @@
 using System;
 using NSec.Cryptography;
-using NSec.Experimental.Sodium;
 using Xunit;
 
 namespace NSec.Tests.Rfc
@@ -25,7 +24,7 @@ namespace NSec.Tests.Rfc
             var ciphertext = testVector[4];
             var tag = testVector[5];
 
-            var a = new XChaCha20Poly1305();
+            var a = AeadAlgorithm.XChaCha20Poly1305;
 
             using var k = Key.Import(a, key.DecodeHex(), KeyBlobFormat.RawSymmetricKey);
 

@@ -1,11 +1,10 @@
 using System;
 using System.Diagnostics;
 using System.Threading;
-using NSec.Cryptography;
 using NSec.Cryptography.Formatting;
 using static Interop.Libsodium;
 
-namespace NSec.Experimental.Sodium
+namespace NSec.Cryptography
 {
     //
     //  XChaCha20-Poly1305

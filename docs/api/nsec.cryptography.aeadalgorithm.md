@@ -11,6 +11,7 @@ Represents an authenticated encryption with associated data (AEAD) algorithm.
     * **AeadAlgorithm**
         * Aes256Gcm
         * ChaCha20Poly1305
+        * XChaCha20Poly1305
 
 
 ## [TOC] Summary
@@ -43,6 +44,13 @@ be determined at runtime using the static `IsSupported` property of the
 Gets the ChaCha20-Poly1305 AEAD algorithm.
 
     public static ChaCha20Poly1305 ChaCha20Poly1305 { get; }
+
+
+### XChaCha20Poly1305
+
+Gets the XChaCha20-Poly1305 AEAD algorithm.
+
+    public static XChaCha20Poly1305 XChaCha20Poly1305 { get; }
 
 
 ## Properties

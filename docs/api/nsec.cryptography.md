@@ -4,6 +4,7 @@
     * [[AeadAlgorithm Class]]
         * Aes256Gcm Class
         * ChaCha20Poly1305 Class
+        * XChaCha20Poly1305 Class
     * [[HashAlgorithm Class]]
         * Blake2b Class
         * Sha256 Class

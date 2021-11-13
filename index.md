@@ -56,6 +56,7 @@ See [[Installation]] for more information.
 |:----------------------------------------------- |:------------------------- |
 | [[AeadAlgorithm Class]]                         | AES256-GCM                |
 |                                                 | ChaCha20-Poly1305         |
+|                                                 | XChaCha20-Poly1305        |
 | [[HashAlgorithm Class]]                         | BLAKE2b *(unkeyed)*       |
 |                                                 | SHA-256                   |
 |                                                 | SHA-512                   |

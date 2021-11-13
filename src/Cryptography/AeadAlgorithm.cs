@@ -25,6 +25,7 @@ namespace NSec.Cryptography
     {
         private static Aes256Gcm? s_Aes256Gcm;
         private static ChaCha20Poly1305? s_ChaCha20Poly1305;
+        private static XChaCha20Poly1305? s_XChaCha20Poly1305;
 
         private readonly int _keySize;
         private readonly int _nonceSize;
@@ -67,6 +68,20 @@ namespace NSec.Cryptography
                 {
                     Interlocked.CompareExchange(ref s_ChaCha20Poly1305, new ChaCha20Poly1305(), null);
                     instance = s_ChaCha20Poly1305;
+                }
+                return instance;
+            }
+        }
+
+        public static XChaCha20Poly1305 XChaCha20Poly1305
+        {
+            get
+            {
+                XChaCha20Poly1305? instance = s_XChaCha20Poly1305;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_XChaCha20Poly1305, new XChaCha20Poly1305(), null);
+                    instance = s_XChaCha20Poly1305;
                 }
                 return instance;
             }

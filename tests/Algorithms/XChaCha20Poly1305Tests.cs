@@ -1,5 +1,5 @@
 using System;
-using NSec.Experimental.Sodium;
+using NSec.Cryptography;
 using Xunit;
 
 namespace NSec.Tests.Algorithms
@@ -11,7 +11,7 @@ namespace NSec.Tests.Algorithms
         [Fact]
         public static void Properties()
         {
-            var a = new XChaCha20Poly1305();
+            var a = AeadAlgorithm.XChaCha20Poly1305;
 
             Assert.Equal(32, a.KeySize);
             Assert.Equal(24, a.NonceSize);

@@ -2,7 +2,6 @@ using System;
 using NSec.Cryptography;
 using NSec.Experimental;
 using NSec.Experimental.PasswordBased;
-using NSec.Experimental.Sodium;
 using Xunit;
 
 namespace NSec.Tests
@@ -15,7 +14,7 @@ namespace NSec.Tests
         {
             AeadAlgorithm.Aes256Gcm,
             AeadAlgorithm.ChaCha20Poly1305,
-            new XChaCha20Poly1305(),
+            AeadAlgorithm.XChaCha20Poly1305,
         };
 
         public static readonly TheoryData<MacAlgorithm> MacAlgorithms = new()
@@ -91,7 +90,7 @@ namespace NSec.Tests
         {
             AeadAlgorithm.Aes256Gcm,
             AeadAlgorithm.ChaCha20Poly1305,
-            new XChaCha20Poly1305(),
+            AeadAlgorithm.XChaCha20Poly1305,
             MacAlgorithm.Blake2b_128,
             MacAlgorithm.Blake2b_256,
             MacAlgorithm.Blake2b_512,
@@ -166,8 +165,8 @@ namespace NSec.Tests
             { MacAlgorithm.HmacSha256, KeyBlobFormat.NSecSymmetricKey },
             { MacAlgorithm.HmacSha512, KeyBlobFormat.RawSymmetricKey },
             { MacAlgorithm.HmacSha512, KeyBlobFormat.NSecSymmetricKey },
-            { new XChaCha20Poly1305(), KeyBlobFormat.RawSymmetricKey },
-            { new XChaCha20Poly1305(), KeyBlobFormat.NSecSymmetricKey },
+            { AeadAlgorithm.XChaCha20Poly1305, KeyBlobFormat.RawSymmetricKey },
+            { AeadAlgorithm.XChaCha20Poly1305, KeyBlobFormat.NSecSymmetricKey },
         };
 
         #endregion
