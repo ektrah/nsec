@@ -137,6 +137,21 @@ namespace NSec.Tests.Core
 
         #endregion
 
+        #region Dispose
+
+        [Theory]
+        [MemberData(nameof(AsymmetricKeyAlgorithms))]
+        [MemberData(nameof(SymmetricKeyAlgorithms))]
+        public static void DisposeMoreThanOnce(Algorithm a)
+        {
+            var k = new Key(a);
+            k.Dispose();
+            k.Dispose();
+            k.Dispose();
+        }
+
+        #endregion
+
         #region Import
 
         [Fact]
@@ -235,8 +250,8 @@ namespace NSec.Tests.Core
         [MemberData(nameof(SymmetricKeyAlgorithms))]
         public static void ExportWithFormatMax(Algorithm a)
         {
-            using var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None });
-            Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
+            using var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport });
+            Assert.Equal(KeyExportPolicies.AllowPlaintextExport, k.ExportPolicy);
 
             Assert.Throws<ArgumentException>("format", () => k.Export((KeyBlobFormat)int.MaxValue));
         }
@@ -330,23 +345,7 @@ namespace NSec.Tests.Core
 
         #endregion
 
-        #region Dispose
-
-        [Theory]
-        [MemberData(nameof(AsymmetricKeyAlgorithms))]
-        [MemberData(nameof(SymmetricKeyAlgorithms))]
-        public static void DisposeMoreThanOnce(Algorithm a)
-        {
-            var k = new Key(a);
-            k.Dispose();
-            k.Dispose();
-            k.Dispose();
-        }
-
-        #endregion
-
         #region GetExportBlobSize
-
 
         [Theory]
         [MemberData(nameof(SymmetricKeyBlobFormats))]
@@ -382,8 +381,8 @@ namespace NSec.Tests.Core
         [MemberData(nameof(SymmetricKeyAlgorithms))]
         public static void TryExportWithFormatMax(Algorithm a)
         {
-            using var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.None });
-            Assert.Equal(KeyExportPolicies.None, k.ExportPolicy);
+            using var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport });
+            Assert.Equal(KeyExportPolicies.AllowPlaintextExport, k.ExportPolicy);
 
             Assert.Throws<ArgumentException>("format", () => k.TryExport((KeyBlobFormat)int.MaxValue, Span<byte>.Empty, out _));
         }
@@ -490,9 +489,9 @@ namespace NSec.Tests.Core
             var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport });
             k.Dispose();
 
-            Assert.Throws<ObjectDisposedException>(() => k.TryExport(KeyBlobFormat.RawPrivateKey, new byte[200], out _));
-            Assert.Throws<ObjectDisposedException>(() => k.TryExport(KeyBlobFormat.RawPrivateKey, new byte[200], out _));
-            Assert.Throws<ObjectDisposedException>(() => k.TryExport(KeyBlobFormat.RawPrivateKey, new byte[200], out _));
+            Assert.Throws<ObjectDisposedException>(() => k.TryExport(KeyBlobFormat.RawPrivateKey, Span<byte>.Empty, out _));
+            Assert.Throws<ObjectDisposedException>(() => k.TryExport(KeyBlobFormat.RawPrivateKey, Span<byte>.Empty, out _));
+            Assert.Throws<ObjectDisposedException>(() => k.TryExport(KeyBlobFormat.RawPrivateKey, Span<byte>.Empty, out _));
         }
 
         [Theory]
@@ -502,9 +501,9 @@ namespace NSec.Tests.Core
             var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport });
             k.Dispose();
 
-            Assert.Throws<ObjectDisposedException>(() => k.TryExport(KeyBlobFormat.RawSymmetricKey, new byte[200], out _));
-            Assert.Throws<ObjectDisposedException>(() => k.TryExport(KeyBlobFormat.RawSymmetricKey, new byte[200], out _));
-            Assert.Throws<ObjectDisposedException>(() => k.TryExport(KeyBlobFormat.RawSymmetricKey, new byte[200], out _));
+            Assert.Throws<ObjectDisposedException>(() => k.TryExport(KeyBlobFormat.RawSymmetricKey, Span<byte>.Empty, out _));
+            Assert.Throws<ObjectDisposedException>(() => k.TryExport(KeyBlobFormat.RawSymmetricKey, Span<byte>.Empty, out _));
+            Assert.Throws<ObjectDisposedException>(() => k.TryExport(KeyBlobFormat.RawSymmetricKey, Span<byte>.Empty, out _));
         }
 
         #endregion
