@@ -270,7 +270,7 @@ ArgumentException
 : The algorithm for the key does not support the specified format.
 
 InvalidOperationException
-: The export policy for the key do not allow the key to be exported.
+: The export policy for the key does not allow the key to be exported.
 
 NotSupportedException
 : The algorithm for the key does not support exporting keys.
@@ -326,7 +326,7 @@ format
     format of the key BLOB.
 
 blob
-: The span to fill with the exported public key BLOB.
+: The span to fill with the exported key BLOB.
     The length of the span must be greater than or equal to
     `GetExportBlobSize(format)`.
 
@@ -345,7 +345,7 @@ ArgumentException
 : The algorithm for the key does not support the specified format.
 
 InvalidOperationException
-: The export policy for the key do not allow the key to be exported.
+: The export policy for the key does not allow the key to be exported.
 
 NotSupportedException
 : The algorithm for the key does not support exporting keys.
@@ -364,7 +364,7 @@ not guaranteed to be thread safe.
 
 * API Reference
     * [[Algorithm Class]]
+    * [[KeyBlobFormat Enum]]
     * [[KeyCreationParameters Struct]]
     * [[KeyExportPolicies Enum]]
-    * [[KeyBlobFormat Enum]]
     * [[PublicKey Class]]
