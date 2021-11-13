@@ -12,19 +12,19 @@ namespace NSec.Cryptography
         {
             if (key == null)
             {
-                throw new ArgumentNullException(nameof(key));
+                throw Error.ArgumentNull_Key(nameof(key));
             }
             if (key.Algorithm is not Ed25519)
             {
-                throw new ArgumentException(); // TODO: exception message
+                throw Error.NotSupported_KeyConversion(key.Algorithm.GetType().Name, algorithm.GetType().Name);
             }
             if (algorithm == null)
             {
-                throw new ArgumentNullException(nameof(algorithm));
+                throw Error.ArgumentNull_Algorithm(nameof(algorithm));
             }
             if (algorithm is not X25519)
             {
-                throw new ArgumentException(); // TODO: exception message
+                throw Error.NotSupported_KeyConversion(key.Algorithm.GetType().Name, algorithm.GetType().Name);
             }
 
             SecureMemoryHandle? keyHandle = default;
@@ -74,19 +74,19 @@ namespace NSec.Cryptography
         {
             if (publicKey == null)
             {
-                throw new ArgumentNullException(nameof(publicKey));
+                throw Error.ArgumentNull_Key(nameof(publicKey));
             }
             if (publicKey.Algorithm is not Ed25519)
             {
-                throw new ArgumentException(); // TODO: exception message
+                throw Error.NotSupported_KeyConversion(publicKey.Algorithm.GetType().Name, algorithm.GetType().Name);
             }
             if (algorithm == null)
             {
-                throw new ArgumentNullException(nameof(algorithm));
+                throw Error.ArgumentNull_Algorithm(nameof(algorithm));
             }
             if (algorithm is not X25519)
             {
-                throw new ArgumentException(); // TODO: exception message
+                throw Error.NotSupported_KeyConversion(publicKey.Algorithm.GetType().Name, algorithm.GetType().Name);
             }
 
             PublicKey newPublicKey = new(algorithm);

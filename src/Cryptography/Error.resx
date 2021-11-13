@@ -306,6 +306,9 @@
   <data name="NotSupported_ImportKey" xml:space="preserve">
     <value>The specified algorithm does not support importing keys.</value>
   </data>
+  <data name="NotSupported_KeyConversion" xml:space="preserve">
+    <value>The key conversion from {0} to {1} is not supported.</value>
+  </data>
   <data name="NotSupported_Operation" xml:space="preserve">
     <value>This operation is not supported.</value>
   </data>

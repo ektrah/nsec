@@ -406,6 +406,13 @@ namespace NSec.Cryptography
             return new NotSupportedException(ResourceManager.GetString(nameof(NotSupported_ImportKey)));
         }
 
+        internal static NotSupportedException NotSupported_KeyConversion(
+            object? arg0,
+            object? arg1)
+        {
+            return new NotSupportedException(string.Format(ResourceManager.GetString(nameof(NotSupported_KeyConversion))!, arg0, arg1));
+        }
+
         internal static NotSupportedException NotSupported_Operation()
         {
             return new NotSupportedException(ResourceManager.GetString(nameof(NotSupported_Operation)));

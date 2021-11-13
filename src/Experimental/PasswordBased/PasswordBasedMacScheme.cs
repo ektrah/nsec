@@ -30,11 +30,11 @@ namespace NSec.Experimental.PasswordBased
         {
             if (keyDerivationAlgorithm == null)
             {
-                throw new ArgumentNullException(nameof(keyDerivationAlgorithm));
+                throw Error.ArgumentNull_Algorithm(nameof(keyDerivationAlgorithm));
             }
             if (macAlgorithm == null)
             {
-                throw new ArgumentNullException(nameof(macAlgorithm));
+                throw Error.ArgumentNull_Algorithm(nameof(macAlgorithm));
             }
 
             _keyDerivationAlgorithm = keyDerivationAlgorithm;
