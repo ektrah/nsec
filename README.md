@@ -5,7 +5,7 @@
 [![NuGet](https://img.shields.io/nuget/vpre/NSec.Cryptography)](https://www.nuget.org/packages/NSec.Cryptography/20.11.0-preview1)
 
 [NSec](https://nsec.rocks/) is a cryptographic library for
-[.NET 5.0](https://dotnet.microsoft.com/) and
+[.NET 5+](https://dotnet.microsoft.com/) and
 [.NET Core](https://dotnet.microsoft.com/) based on
 [libsodium](https://libsodium.org/) &#x2764;.
 It provides modern cryptographic primitives in a modern API based on

@@ -88,10 +88,10 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-## License Notice for .NET Core Libraries
+## License Notice for .NET Runtime
 
-NSec contains code derived from the
-[.NET Core Libraries](https://github.com/dotnet/runtime),
+NSec contains code derived from libraries of the
+[.NET Runtime](https://github.com/dotnet/runtime),
 which are available under the MIT license.
 
 Copyright &copy; .NET Foundation and Contributors  
