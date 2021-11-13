@@ -261,6 +261,9 @@
   <data name="Argument_SignatureLength" xml:space="preserve">
     <value>The signature must have a length of {0} bytes.</value>
   </data>
+  <data name="Cryptographic_PasswordBasedKeyDerivationFailed" xml:space="preserve">
+    <value>The password-based key derivation failed.</value>
+  </data>
   <data name="Format_BadBase16" xml:space="preserve">
     <value>The input is not a valid Base16 string as it contains a non-Base16 character.</value>
   </data>

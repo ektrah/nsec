@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using System.Resources;
+using System.Security.Cryptography;
 
 namespace NSec.Cryptography
 {
@@ -326,6 +327,11 @@ namespace NSec.Cryptography
             object? arg0)
         {
             return new ArgumentOutOfRangeException(paramName, string.Format(ResourceManager.GetString(nameof(ArgumentOutOfRange_NonceFixedCounterSize))!, arg0));
+        }
+
+        internal static CryptographicException Cryptographic_PasswordBasedKeyDerivationFailed()
+        {
+            return new CryptographicException(ResourceManager.GetString(nameof(Cryptographic_PasswordBasedKeyDerivationFailed)));
         }
 
         internal static FormatException Format_BadBase16()

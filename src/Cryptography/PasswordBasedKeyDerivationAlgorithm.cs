@@ -73,7 +73,7 @@ namespace NSec.Cryptography
             byte[] bytes = new byte[count];
             if (!TryDeriveBytesCore(password, salt, bytes))
             {
-                throw new NotImplementedException(); // TODO
+                throw Error.Cryptographic_PasswordBasedKeyDerivationFailed();
             }
             return bytes;
         }
@@ -98,7 +98,7 @@ namespace NSec.Cryptography
 
             if (!TryDeriveBytesCore(password, salt, bytes))
             {
-                throw new NotImplementedException(); // TODO
+                throw Error.Cryptographic_PasswordBasedKeyDerivationFailed();
             }
         }
 
@@ -135,7 +135,7 @@ namespace NSec.Cryptography
                 {
                     if (!TryDeriveBytesCore(password, salt, seed))
                     {
-                        throw new NotImplementedException(); // TODO
+                        throw Error.Cryptographic_PasswordBasedKeyDerivationFailed();
                     }
                     algorithm.CreateKey(seed, out keyHandle, out publicKey);
                     success = true;

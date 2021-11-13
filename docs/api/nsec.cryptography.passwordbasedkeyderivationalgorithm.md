@@ -146,8 +146,9 @@ ArgumentOutOfRangeException
 : `count` is less than 0 or greater than
     [[MaxCount|PasswordBasedKeyDerivationAlgorithm Class#MaxCount]].
 
-NotImplementedException
-: TODO
+CryptographicException
+: The computation of the derived bytes failed, usually because the operating
+    system refused to allocate the amount of requested memory.
 
 
 ### DeriveBytes(ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
@@ -186,8 +187,9 @@ ArgumentException
 : `bytes.Length` is greater than
     [[MaxCount|PasswordBasedKeyDerivationAlgorithm Class#MaxCount]].
 
-NotImplementedException
-: TODO
+CryptographicException
+: The computation of the derived bytes failed, usually because the operating
+    system refused to allocate the amount of requested memory.
 
 
 ### DeriveKey(ReadOnlySpan<byte>, ReadOnlySpan<byte>, Algorithm, in KeyCreationParameters creationParameters)
@@ -237,8 +239,9 @@ ArgumentNullException
 NotSupportedException
 : The specified algorithm does not support keys derived from a password.
 
-NotImplementedException
-: TODO
+CryptographicException
+: The computation of the derived key failed, usually because the operating
+    system refused to allocate the amount of requested memory.
 
 
 ## Remarks
