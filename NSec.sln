@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28803.156
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSec.Cryptography", "src\Cryptography\NSec.Cryptography.csproj", "{839872CC-6AF4-456B-A55B-F82EE7B4822E}"
 EndProject
@@ -79,6 +79,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{F058E702-CA9
 		docs\api\nsec.cryptography.signaturealgorithm.md = docs\api\nsec.cryptography.signaturealgorithm.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{030978CE-A451-4F42-887C-1B200DF7211C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{893DCC2B-F4F2-457E-8159-9B27D73393FE}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\test.yml = .github\workflows\test.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		src\Interop\Interop.projitems*{839872cc-6af4-456b-a55b-f82ee7b4822e}*SharedItemsImports = 5
@@ -111,6 +118,8 @@ Global
 		{F9D92917-A968-4F64-8F28-98B2CADE6417} = {DF40D4F3-D18D-45F3-87DD-2A8378354B57}
 		{D24568A9-54F1-48E0-88FF-2E067F9BDA95} = {DF40D4F3-D18D-45F3-87DD-2A8378354B57}
 		{F058E702-CA96-47D4-AA3C-0CC93FD07B53} = {F9D92917-A968-4F64-8F28-98B2CADE6417}
+		{030978CE-A451-4F42-887C-1B200DF7211C} = {DF40D4F3-D18D-45F3-87DD-2A8378354B57}
+		{893DCC2B-F4F2-457E-8159-9B27D73393FE} = {030978CE-A451-4F42-887C-1B200DF7211C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ED81BE7D-A09F-4466-8138-E0F420A24568}
