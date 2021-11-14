@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
@@ -46,6 +47,46 @@ namespace NSec.Cryptography
             in ScryptParameters parameters)
         {
             return new Scrypt(in parameters);
+        }
+
+        public byte[] DeriveBytes(
+            string password,
+            ReadOnlySpan<byte> salt,
+            int count)
+        {
+            if (password == null)
+            {
+                throw Error.ArgumentNull_Password(nameof(password));
+            }
+
+            return DeriveBytes(MemoryMarshal.AsBytes(password.AsSpan()), salt, count);
+        }
+
+        public void DeriveBytes(
+            string password,
+            ReadOnlySpan<byte> salt,
+            Span<byte> bytes)
+        {
+            if (password == null)
+            {
+                throw Error.ArgumentNull_Password(nameof(password));
+            }
+
+            DeriveBytes(MemoryMarshal.AsBytes(password.AsSpan()), salt, bytes);
+        }
+
+        public Key DeriveKey(
+            string password,
+            ReadOnlySpan<byte> salt,
+            Algorithm algorithm,
+            in KeyCreationParameters creationParameters = default)
+        {
+            if (password == null)
+            {
+                throw Error.ArgumentNull_Password(nameof(password));
+            }
+
+            return DeriveKey(MemoryMarshal.AsBytes(password.AsSpan()), salt, algorithm, in creationParameters);
         }
 
         public byte[] DeriveBytes(

@@ -4,6 +4,12 @@ Represents a key derivation algorithm using passwords as input.
 
     public abstract class PasswordBasedKeyDerivationAlgorithm : Algorithm
 
+!!! Note
+    The [[PasswordBasedKeyDerivationAlgorithm|PasswordBasedKeyDerivationAlgorithm
+    Class]] class is intended for deriving keys from passwords. To derive keys from
+    cryptographically strong input keying material, use the
+    [[KeyDerivationAlgorithm|KeyDerivationAlgorithm Class]] class.
+
 
 ## Inheritance Hierarchy
 
@@ -107,9 +113,14 @@ The salt size, in bytes.
 ## Methods
 
 
-### DeriveBytes(ReadOnlySpan<byte>, ReadOnlySpan<byte>, int)
+### DeriveBytes(string or ReadOnlySpan<byte>, ReadOnlySpan<byte>, int)
 
 Derives the specified number of bytes from a password, using the specified salt.
+
+    public byte[] DeriveBytes(
+        string password,
+        ReadOnlySpan<byte> salt,
+        int count)
 
     public byte[] DeriveBytes(
         ReadOnlySpan<byte> password,
@@ -117,14 +128,21 @@ Derives the specified number of bytes from a password, using the specified salt.
         int count)
 
 !!! Note
-    Depending on algorithm parameters, this method may require large amounts of
-    memory. Callers should protect against a denial-of-service attack resulting
-    from careless invocation.
+    Depending on algorithm parameters, this method may need a long time and/or
+    large amounts of memory. Callers should protect against a denial-of-service
+    attack resulting from careless invocation.
 
 #### Parameters
 
 password
 : The password to derive the bytes from.
+
+!!! Note
+    If the password is a `string`, the bytes are derived from the in-memory
+    representation of the string. This may lead to different results on
+    different hardware platforms. For portable results, the password should
+    be first converted to bytes using one of the character encoding classes
+    in .NET.
 
 salt
 : The salt.
@@ -137,6 +155,9 @@ count
 An array of bytes that contains the derived bytes.
 
 #### Exceptions
+
+ArgumentNullException
+: `password` is `null`.
 
 ArgumentException
 : `salt.Length` is not equal to [[SaltSize|PasswordBasedKeyDerivationAlgorithm
@@ -151,10 +172,15 @@ CryptographicException
     system refused to allocate the amount of requested memory.
 
 
-### DeriveBytes(ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
+### DeriveBytes(string or ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
 
 Fills the specified span of bytes with bytes derived from a password, using the
 specified salt.
+
+    public void DeriveBytes(
+        string password,
+        ReadOnlySpan<byte> salt,
+        Span<byte> bytes)
 
     public void DeriveBytes(
         ReadOnlySpan<byte> password,
@@ -162,14 +188,21 @@ specified salt.
         Span<byte> bytes)
 
 !!! Note
-    Depending on algorithm parameters, this method may require large amounts of
-    memory. Callers should protect against a denial-of-service attack resulting
-    from careless invocation.
+    Depending on algorithm parameters, this method may need a long time and/or
+    large amounts of memory. Callers should protect against a denial-of-service
+    attack resulting from careless invocation.
 
 #### Parameters
 
 password
 : The password to derive the bytes from.
+
+!!! Note
+    If the password is a `string`, the bytes are derived from the in-memory
+    representation of the string. This may lead to different results on
+    different hardware platforms. For portable results, the password should
+    be first converted to bytes using one of the character encoding classes
+    in .NET.
 
 salt
 : The salt.
@@ -178,6 +211,9 @@ bytes
 : The span to fill with bytes derived from the password.
 
 #### Exceptions
+
+ArgumentNullException
+: `password` is `null`.
 
 ArgumentException
 : `salt.Length` is not equal to [[SaltSize|PasswordBasedKeyDerivationAlgorithm
@@ -192,10 +228,16 @@ CryptographicException
     system refused to allocate the amount of requested memory.
 
 
-### DeriveKey(ReadOnlySpan<byte>, ReadOnlySpan<byte>, Algorithm, in KeyCreationParameters creationParameters)
+### DeriveKey(string or ReadOnlySpan<byte>, ReadOnlySpan<byte>, Algorithm, in KeyCreationParameters creationParameters)
 
 Derives a key for the specified algorithm from a password, using the specified
 salt.
+
+    public Key DeriveKey(
+        string password,
+        ReadOnlySpan<byte> salt,
+        Algorithm algorithm,
+        in KeyCreationParameters creationParameters = default)
 
     public Key DeriveKey(
         ReadOnlySpan<byte> password,
@@ -204,14 +246,21 @@ salt.
         in KeyCreationParameters creationParameters = default)
 
 !!! Note
-    Depending on algorithm parameters, this method may require large amounts of
-    memory. Callers should protect against a denial-of-service attack resulting
-    from careless invocation.
+    Depending on algorithm parameters, this method may need a long time and/or
+    large amounts of memory. Callers should protect against a denial-of-service
+    attack resulting from careless invocation.
 
 #### Parameters
 
 password
 : The password to derive the key from.
+
+!!! Note
+    If the password is a `string`, the bytes are derived from the in-memory
+    representation of the string. This may lead to different results on
+    different hardware platforms. For portable results, the password should
+    be first converted to bytes using one of the character encoding classes
+    in .NET.
 
 salt
 : The salt.
@@ -229,6 +278,9 @@ A new instance of the [[Key|Key Class]] class that represents the derived key.
 
 #### Exceptions
 
+ArgumentNullException
+: `password` is `null`.
+
 ArgumentException
 : `salt.Length` is not equal to [[SaltSize|PasswordBasedKeyDerivationAlgorithm
     Class#SaltSize]].
@@ -242,14 +294,6 @@ NotSupportedException
 CryptographicException
 : The computation of the derived key failed, usually because the operating
     system refused to allocate the amount of requested memory.
-
-
-## Remarks
-
-The [[PasswordBasedKeyDerivationAlgorithm|PasswordBasedKeyDerivationAlgorithm
-Class]] class is intended for deriving keys from passwords. To derive keys from
-cryptographically strong input keying material, use the
-[[KeyDerivationAlgorithm|KeyDerivationAlgorithm Class]] class.
 
 
 ## Thread Safety
