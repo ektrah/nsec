@@ -69,9 +69,9 @@ Gets a value that indicates whether the algorithm supports the use of salt.
 ## Methods
 
 
-### DeriveBytes(SharedSecret, ReadOnlySpan<byte>, ReadOnlySpan<byte>, int)
+### DeriveBytes(SharedSecret or ReadOnlySpan<byte>, ReadOnlySpan<byte>, ReadOnlySpan<byte>, int)
 
-Derives the specified number of bytes from a shared secret, using the specified
+Derives the specified number of bytes from a shared secret or some other input keying material, using the specified
 salt and context information.
 
     public byte[] DeriveBytes(
@@ -80,10 +80,19 @@ salt and context information.
         ReadOnlySpan<byte> info,
         int count)
 
+    public byte[] DeriveBytes(
+        ReadOnlySpan<byte> inputKeyingMaterial,
+        ReadOnlySpan<byte> salt,
+        ReadOnlySpan<byte> info,
+        int count)
+
 #### Parameters
 
 sharedSecret
 : The [[SharedSecret|SharedSecret Class]] to derive the bytes from.
+
+inputKeyingMaterial
+: The input keying material to derive the bytes from.
 
 salt
 : Optional salt.
@@ -125,59 +134,9 @@ ObjectDisposedException
 : `sharedSecret` has been disposed.
 
 
-### DeriveBytes(ReadOnlySpan<byte>, ReadOnlySpan<byte>, ReadOnlySpan<byte>, int)
+### DeriveBytes(SharedSecret or ReadOnlySpan<byte>, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
 
-Derives the specified number of bytes from some input keying material, using the specified
-salt and context information.
-
-    public byte[] DeriveBytes(
-        ReadOnlySpan<byte> inputKeyingMaterial,
-        ReadOnlySpan<byte> salt,
-        ReadOnlySpan<byte> info,
-        int count)
-
-#### Parameters
-
-inputKeyingMaterial
-: The input keying material to derive the bytes from.
-
-salt
-: Optional salt.
-    Must be empty if the algorithm does not support the use of salt.
-
-info
-: Context and application specific information. This should be used to ensure
-    that the derived bytes are adequately bound to the context of the key
-    agreement.
-
-!!! Note
-    Inadequate context information might lead to subtle vulnerabilities.
-
-: To bind the derived bytes to the context, `info` may need to include the
-    identifiers of the entities involved, their public keys, protocol-related
-    information, and parameter choices. 
-
-count
-: The number of bytes to derive.
-
-#### Return Value
-
-An array of bytes that contains the derived bytes.
-
-#### Exceptions
-
-ArgumentException
-: [[SupportsSalt|KeyDerivationAlgorithm Class#SupportsSalt]] is `false` but
-    `salt` is not empty.
-
-ArgumentOutOfRangeException
-: `count` is less than 0 or greater than
-    [[MaxCount|KeyDerivationAlgorithm Class#MaxCount]].
-
-
-### DeriveBytes(SharedSecret, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
-
-Fills the specified span of bytes with bytes derived from a shared secret, using
+Fills the specified span of bytes with bytes derived from a shared secret or some other input keying material, using
 the specified salt and context information.
 
     public void DeriveBytes(
@@ -186,10 +145,19 @@ the specified salt and context information.
         ReadOnlySpan<byte> info,
         Span<byte> bytes)
 
+    public void DeriveBytes(
+        ReadOnlySpan<byte> inputKeyingMaterial,
+        ReadOnlySpan<byte> salt,
+        ReadOnlySpan<byte> info,
+        Span<byte> bytes)
+
 #### Parameters
 
 sharedSecret
 : The [[SharedSecret|SharedSecret Class]] to derive the bytes from.
+
+inputKeyingMaterial
+: The input keying material to derive the bytes from.
 
 salt
 : Optional salt.
@@ -231,59 +199,9 @@ ObjectDisposedException
 : `sharedSecret` has been disposed.
 
 
-### DeriveBytes(ReadOnlySpan<byte>, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Span<byte>)
+### DeriveKey(SharedSecret or ReadOnlySpan<byte>, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Algorithm, in KeyCreationParameters)
 
-Fills the specified span of bytes with bytes derived from some input keying material, using
-the specified salt and context information.
-
-    public void DeriveBytes(
-        ReadOnlySpan<byte> inputKeyingMaterial,
-        ReadOnlySpan<byte> salt,
-        ReadOnlySpan<byte> info,
-        Span<byte> bytes)
-
-#### Parameters
-
-inputKeyingMaterial
-: The input keying material to derive the bytes from.
-
-salt
-: Optional salt.
-    Must be empty if the algorithm does not support the use of salt.
-
-info
-: Context and application specific information. This should be used to ensure
-    that the derived bytes are adequately bound to the context of the key
-    agreement.
-
-!!! Note
-    Inadequate context information might lead to subtle vulnerabilities.
-
-: To bind the derived bytes to the context, `info` may need to include the
-    identifiers of the entities involved, their public keys, protocol-related
-    information, and parameter choices. 
-
-bytes
-: The span to fill with bytes derived from the input keying material.
-    `bytes` must not overlap in memory with `salt` or `info`.
-
-#### Exceptions
-
-ArgumentException
-: [[SupportsSalt|KeyDerivationAlgorithm Class#SupportsSalt]] is `false` but
-    `salt` is not empty.
-
-ArgumentException
-: `bytes.Length` is greater than
-    [[MaxCount|KeyDerivationAlgorithm Class#MaxCount]].
-
-ArgumentException
-: `bytes` overlaps in memory with `salt` or `info`.
-
-
-### DeriveKey(SharedSecret, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Algorithm, in KeyCreationParameters)
-
-Derives a key for the specified algorithm from a shared secret, using the
+Derives a key for the specified algorithm from a shared secret or some other input keying material, using the
 specified salt and context information.
 
     public Key DeriveKey(
@@ -293,10 +211,21 @@ specified salt and context information.
         Algorithm algorithm,
         in KeyCreationParameters creationParameters = default)
 
+    public Key DeriveKey(
+        ReadOnlySpan<byte> inputKeyingMaterial,
+        ReadOnlySpan<byte> salt,
+        ReadOnlySpan<byte> info,
+        Algorithm algorithm,
+        in KeyCreationParameters creationParameters = default)
+
+
 #### Parameters
 
 sharedSecret
 : The [[SharedSecret|SharedSecret Class]] to derive the key from.
+
+inputKeyingMaterial
+: The input keying material to derive the bytes from.
 
 salt
 : Optional salt.
@@ -339,63 +268,6 @@ NotSupportedException
 
 ObjectDisposedException
 : `sharedSecret` has been disposed.
-
-
-### DeriveKey(ReadOnlySpan<byte>, ReadOnlySpan<byte>, ReadOnlySpan<byte>, Algorithm, in KeyCreationParameters)
-
-Derives a key for the specified algorithm from some input keying material, using the
-specified salt and context information.
-
-    public Key DeriveKey(
-        ReadOnlySpan<byte> inputKeyingMaterial,
-        ReadOnlySpan<byte> salt,
-        ReadOnlySpan<byte> info,
-        Algorithm algorithm,
-        in KeyCreationParameters creationParameters = default)
-
-#### Parameters
-
-inputKeyingMaterial
-: The input keying material to derive the bytes from.
-
-salt
-: Optional salt.
-    Must be empty if the algorithm does not support the use of salt.
-
-info
-: Context and application specific information. This should be used to ensure
-    that the derived key is adequately bound to the context of the key
-    agreement.
-
-!!! Note
-    Inadequate context information might lead to subtle vulnerabilities.
-
-: To bind the derived key to the context, `info` may need to include the
-    identifiers of the entities involved, their public keys, protocol-related
-    information, and parameter choices. 
-
-algorithm
-: The algorithm for the new key.
-
-creationParameters
-: A [[KeyCreationParameters|KeyCreationParameters Struct]] value that specifies
-    advanced parameters for the creation of the [[Key|Key Class]] instance.
-
-#### Return Value
-
-A new instance of the [[Key|Key Class]] class that represents the derived key.
-
-#### Exceptions
-
-ArgumentNullException
-: `algorithm` is `null`.
-
-ArgumentException
-: [[SupportsSalt|KeyDerivationAlgorithm Class#SupportsSalt]] is `false` but
-    `salt` is not empty.
-
-NotSupportedException
-: The specified algorithm does not support keys derived from input keying material.
 
 
 ## Thread Safety
