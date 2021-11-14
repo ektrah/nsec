@@ -1,6 +1,12 @@
 # libsodium
 
-Interop.Aes256Gcm.cs:
+Interop.Core.cs:
+  include: include/sodium/core.h
+  functions:
+  - sodium_init
+  - sodium_set_misuse_handler (Action handler)
+
+Interop.Aead.Aes256Gcm.cs:
   include: include/sodium/crypto_aead_aes256gcm.h
   constants:
   - crypto_aead_aes256gcm_ABYTES
@@ -16,47 +22,101 @@ Interop.Aes256Gcm.cs:
   - crypto_aead_aes256gcm_npubbytes
   - crypto_aead_aes256gcm_nsecbytes
 
-Interop.Argon2i.cs:
-  include: include/sodium/crypto_pwhash_argon2i.h
+Interop.Aead.ChaCha20Poly1305.cs:
+  include: include/sodium/crypto_aead_chacha20poly1305.h
   constants:
-  - crypto_pwhash_argon2i_ALG_ARGON2I13
-  - crypto_pwhash_argon2i_BYTES_MIN
-  - crypto_pwhash_argon2i_MEMLIMIT_MIN (long)
-  - crypto_pwhash_argon2i_OPSLIMIT_MAX (long)
-  - crypto_pwhash_argon2i_OPSLIMIT_MIN (long)
-  - crypto_pwhash_argon2i_SALTBYTES
+  - crypto_aead_chacha20poly1305_ietf_ABYTES
+  - crypto_aead_chacha20poly1305_ietf_KEYBYTES
+  - crypto_aead_chacha20poly1305_ietf_NPUBBYTES
+  - crypto_aead_chacha20poly1305_ietf_NSECBYTES
   functions:
-  - crypto_pwhash_argon2i
-  - crypto_pwhash_argon2i_alg_argon2i13
-  - crypto_pwhash_argon2i_bytes_min
-  - crypto_pwhash_argon2i_bytes_max
-  - crypto_pwhash_argon2i_memlimit_max
-  - crypto_pwhash_argon2i_memlimit_min
-  - crypto_pwhash_argon2i_opslimit_max
-  - crypto_pwhash_argon2i_opslimit_min
-  - crypto_pwhash_argon2i_saltbytes
+  - crypto_aead_chacha20poly1305_ietf_abytes
+  - crypto_aead_chacha20poly1305_ietf_decrypt (SecureMemoryHandle k)
+  - crypto_aead_chacha20poly1305_ietf_encrypt (SecureMemoryHandle k)
+  - crypto_aead_chacha20poly1305_ietf_keybytes
+  - crypto_aead_chacha20poly1305_ietf_npubbytes
+  - crypto_aead_chacha20poly1305_ietf_nsecbytes
 
-Interop.Argon2id.cs:
-  include: include/sodium/crypto_pwhash_argon2id.h
+Interop.Aead.XChaCha20Poly1305.cs:
+  include: include/sodium/crypto_aead_xchacha20poly1305.h
   constants:
-  - crypto_pwhash_argon2id_ALG_ARGON2ID13
-  - crypto_pwhash_argon2id_BYTES_MIN
-  - crypto_pwhash_argon2id_MEMLIMIT_MIN (long)
-  - crypto_pwhash_argon2id_OPSLIMIT_MAX (long)
-  - crypto_pwhash_argon2id_OPSLIMIT_MIN (long)
-  - crypto_pwhash_argon2id_SALTBYTES
+  - crypto_aead_xchacha20poly1305_ietf_ABYTES
+  - crypto_aead_xchacha20poly1305_ietf_KEYBYTES
+  - crypto_aead_xchacha20poly1305_ietf_NPUBBYTES
+  - crypto_aead_xchacha20poly1305_ietf_NSECBYTES
   functions:
-  - crypto_pwhash_argon2id
-  - crypto_pwhash_argon2id_alg_argon2id13
-  - crypto_pwhash_argon2id_bytes_min
-  - crypto_pwhash_argon2id_bytes_max
-  - crypto_pwhash_argon2id_memlimit_max
-  - crypto_pwhash_argon2id_memlimit_min
-  - crypto_pwhash_argon2id_opslimit_max
-  - crypto_pwhash_argon2id_opslimit_min
-  - crypto_pwhash_argon2id_saltbytes
+  - crypto_aead_xchacha20poly1305_ietf_abytes
+  - crypto_aead_xchacha20poly1305_ietf_decrypt (SecureMemoryHandle k)
+  - crypto_aead_xchacha20poly1305_ietf_encrypt (SecureMemoryHandle k)
+  - crypto_aead_xchacha20poly1305_ietf_keybytes
+  - crypto_aead_xchacha20poly1305_ietf_npubbytes
+  - crypto_aead_xchacha20poly1305_ietf_nsecbytes
 
-Interop.Blake2b.cs:
+Interop.Auth.HmacSha256.cs:
+  include: include/sodium/crypto_auth_hmacsha256.h
+  constants:
+  - crypto_auth_hmacsha256_BYTES
+  - crypto_auth_hmacsha256_KEYBYTES
+  functions:
+  - crypto_auth_hmacsha256_bytes
+  - crypto_auth_hmacsha256_final
+  - crypto_auth_hmacsha256_init
+  - crypto_auth_hmacsha256_init (SecureMemoryHandle key)
+  - crypto_auth_hmacsha256_keybytes
+  - crypto_auth_hmacsha256_statebytes
+  - crypto_auth_hmacsha256_update
+  - crypto_auth_hmacsha256_update (SecureMemoryHandle in)
+  structs:
+  - crypto_auth_hmacsha256_state
+
+Interop.Auth.HmacSha512.cs:
+  include: include/sodium/crypto_auth_hmacsha512.h
+  constants:
+  - crypto_auth_hmacsha512_BYTES
+  - crypto_auth_hmacsha512_KEYBYTES
+  functions:
+  - crypto_auth_hmacsha512_bytes
+  - crypto_auth_hmacsha512_final
+  - crypto_auth_hmacsha512_init
+  - crypto_auth_hmacsha512_init (SecureMemoryHandle key)
+  - crypto_auth_hmacsha512_keybytes
+  - crypto_auth_hmacsha512_statebytes
+  - crypto_auth_hmacsha512_update
+  - crypto_auth_hmacsha512_update (SecureMemoryHandle in)
+  structs:
+  - crypto_auth_hmacsha512_state
+
+Interop.Auth.HmacSha512256.cs:
+  include: include/sodium/crypto_auth_hmacsha512256.h
+
+Interop.Box.Curve25519XChaCha20Poly1305.cs:
+  include: include/sodium/crypto_box_curve25519xchacha20poly1305.h
+
+Interop.Box.Curve25519XSalsa20Poly1305.cs:
+  include: include/sodium/crypto_box_curve25519xsalsa20poly1305.h
+
+Interop.Core.Ed25519.cs:
+  include: include/sodium/crypto_core_ed25519.h
+
+Interop.Core.HChaCha20.cs:
+  include: include/sodium/crypto_core_hchacha20.h
+
+Interop.Core.HSalsa20.cs:
+  include: include/sodium/crypto_core_hsalsa20.h
+
+Interop.Core.Ristretto255.cs:
+  include: include/sodium/crypto_core_ristretto255.h
+
+Interop.Core.Salsa20.cs:
+  include: include/sodium/crypto_core_salsa20.h
+
+Interop.Core.Salsa2012.cs:
+  include: include/sodium/crypto_core_salsa2012.h
+
+#Interop.Core.Salsa208.cs:
+#  include: include/sodium/crypto_core_salsa208.h
+
+Interop.GenericHash.Blake2b.cs:
   include: include/sodium/crypto_generichash_blake2b.h
   constants:
   - crypto_generichash_blake2b_BYTES
@@ -82,146 +142,81 @@ Interop.Blake2b.cs:
   structs:
   - crypto_generichash_blake2b_state
 
-Interop.ChaCha20.cs:
-  include: include/sodium/crypto_stream_chacha20.h
+Interop.Hash.Sha256.cs:
+  include: include/sodium/crypto_hash_sha256.h
   constants:
-    - crypto_stream_chacha20_ietf_KEYBYTES
-    - crypto_stream_chacha20_ietf_NONCEBYTES
+  - crypto_hash_sha256_BYTES
   functions:
-    - crypto_stream_chacha20_ietf (SecureMemoryHandle k)
-    - crypto_stream_chacha20_ietf_keybytes
-    - crypto_stream_chacha20_ietf_noncebytes
-    - crypto_stream_chacha20_ietf_xor (SecureMemoryHandle k)
-    - crypto_stream_chacha20_ietf_xor_ic (SecureMemoryHandle k)
-
-Interop.ChaCha20Poly1305.cs:
-  include: include/sodium/crypto_aead_chacha20poly1305.h
-  constants:
-  - crypto_aead_chacha20poly1305_ietf_ABYTES
-  - crypto_aead_chacha20poly1305_ietf_KEYBYTES
-  - crypto_aead_chacha20poly1305_ietf_NPUBBYTES
-  - crypto_aead_chacha20poly1305_ietf_NSECBYTES
-  functions:
-  - crypto_aead_chacha20poly1305_ietf_abytes
-  - crypto_aead_chacha20poly1305_ietf_decrypt (SecureMemoryHandle k)
-  - crypto_aead_chacha20poly1305_ietf_encrypt (SecureMemoryHandle k)
-  - crypto_aead_chacha20poly1305_ietf_keybytes
-  - crypto_aead_chacha20poly1305_ietf_npubbytes
-  - crypto_aead_chacha20poly1305_ietf_nsecbytes
-
-Interop.XChaCha20Poly1305.cs:
-  include: include/sodium/crypto_aead_xchacha20poly1305.h
-  constants:
-  - crypto_aead_xchacha20poly1305_ietf_ABYTES
-  - crypto_aead_xchacha20poly1305_ietf_KEYBYTES
-  - crypto_aead_xchacha20poly1305_ietf_NPUBBYTES
-  - crypto_aead_xchacha20poly1305_ietf_NSECBYTES
-  functions:
-  - crypto_aead_xchacha20poly1305_ietf_abytes
-  - crypto_aead_xchacha20poly1305_ietf_decrypt (SecureMemoryHandle k)
-  - crypto_aead_xchacha20poly1305_ietf_encrypt (SecureMemoryHandle k)
-  - crypto_aead_xchacha20poly1305_ietf_keybytes
-  - crypto_aead_xchacha20poly1305_ietf_npubbytes
-  - crypto_aead_xchacha20poly1305_ietf_nsecbytes
-
-Interop.Core.cs:
-  include: include/sodium/core.h
-  functions:
-  - sodium_init
-  - sodium_set_misuse_handler (Action handler)
-
-Interop.X25519.cs:
-  include: include/sodium/crypto_scalarmult_curve25519.h
-  constants:
-  - crypto_scalarmult_curve25519_BYTES
-  - crypto_scalarmult_curve25519_SCALARBYTES
-  functions:
-  - crypto_scalarmult_curve25519 (SecureMemoryHandle q, SecureMemoryHandle n, PublicKeyBytes* p)
-  - crypto_scalarmult_curve25519_base (PublicKeyBytes* q, SecureMemoryHandle n)
-  - crypto_scalarmult_curve25519_bytes
-  - crypto_scalarmult_curve25519_scalarbytes
-
-Interop.Ed25519.cs:
-  include: include/sodium/crypto_sign_ed25519.h
-  constants:
-  - crypto_sign_ed25519_BYTES
-  - crypto_sign_ed25519_PUBLICKEYBYTES
-  - crypto_sign_ed25519_SECRETKEYBYTES
-  - crypto_sign_ed25519_SEEDBYTES
-  functions:
-  - crypto_sign_ed25519_bytes
-  - crypto_sign_ed25519_detached (SecureMemoryHandle sk)
-  - crypto_sign_ed25519_publickeybytes
-  - crypto_sign_ed25519_secretkeybytes
-  - crypto_sign_ed25519_seed_keypair (PublicKeyBytes* pk, SecureMemoryHandle sk)
-  - crypto_sign_ed25519_seedbytes
-  - crypto_sign_ed25519_sk_to_seed (SecureMemoryHandle sk)
-  - crypto_sign_ed25519_verify_detached (PublicKeyBytes* pk)
-
-Interop.Ed25519ToX25519.cs:
-  include: include/sodium/crypto_sign_ed25519.h
-  functions:
-  - crypto_sign_ed25519_pk_to_curve25519 (PublicKeyBytes* curve25519_pk, PublicKeyBytes* ed25519_pk)
-  - crypto_sign_ed25519_sk_to_curve25519 (SecureMemoryHandle ed25519_sk)
-
-Interop.HmacSha256.cs:
-  include: include/sodium/crypto_auth_hmacsha256.h
-  constants:
-  - crypto_auth_hmacsha256_BYTES
-  - crypto_auth_hmacsha256_KEYBYTES
-  functions:
-  - crypto_auth_hmacsha256_bytes
-  - crypto_auth_hmacsha256_final
-  - crypto_auth_hmacsha256_init
-  - crypto_auth_hmacsha256_init (SecureMemoryHandle key)
-  - crypto_auth_hmacsha256_keybytes
-  - crypto_auth_hmacsha256_statebytes
-  - crypto_auth_hmacsha256_update
-  - crypto_auth_hmacsha256_update (SecureMemoryHandle in)
+  - crypto_hash_sha256
+  - crypto_hash_sha256_bytes
+  - crypto_hash_sha256_final
+  - crypto_hash_sha256_init
+  - crypto_hash_sha256_statebytes
+  - crypto_hash_sha256_update
   structs:
-  - crypto_auth_hmacsha256_state
+  - crypto_hash_sha256_state
 
-Interop.HmacSha512.cs:
-  include: include/sodium/crypto_auth_hmacsha512.h
+Interop.Hash.Sha512.cs:
+  include: include/sodium/crypto_hash_sha512.h
   constants:
-  - crypto_auth_hmacsha512_BYTES
-  - crypto_auth_hmacsha512_KEYBYTES
+  - crypto_hash_sha512_BYTES
   functions:
-  - crypto_auth_hmacsha512_bytes
-  - crypto_auth_hmacsha512_final
-  - crypto_auth_hmacsha512_init
-  - crypto_auth_hmacsha512_init (SecureMemoryHandle key)
-  - crypto_auth_hmacsha512_keybytes
-  - crypto_auth_hmacsha512_statebytes
-  - crypto_auth_hmacsha512_update
-  - crypto_auth_hmacsha512_update (SecureMemoryHandle in)
+  - crypto_hash_sha512
+  - crypto_hash_sha512_bytes
+  - crypto_hash_sha512_final
+  - crypto_hash_sha512_init
+  - crypto_hash_sha512_statebytes
+  - crypto_hash_sha512_update
   structs:
-  - crypto_auth_hmacsha512_state
+  - crypto_hash_sha512_state
 
-Interop.Nacl.XSalsa20Poly1305.cs:
-  include:
-  - include/sodium/crypto_secretbox.h
-  - include/sodium/crypto_secretbox_xsalsa20poly1305.h
+Interop.Kdf.Blake2b.cs:
+  include: include/sodium/crypto_kdf_blake2b.h
+
+Interop.OneTimeAuth.Poly1305.cs:
+  include: include/sodium/crypto_onetimeauth_poly1305.h
+
+Interop.Pwhash.Argon2i.cs:
+  include: include/sodium/crypto_pwhash_argon2i.h
   constants:
-  - crypto_secretbox_PRIMITIVE
-  - crypto_secretbox_xsalsa20poly1305_KEYBYTES
-  - crypto_secretbox_xsalsa20poly1305_MACBYTES
-  - crypto_secretbox_xsalsa20poly1305_NONCEBYTES
+  - crypto_pwhash_argon2i_ALG_ARGON2I13
+  - crypto_pwhash_argon2i_BYTES_MIN
+  - crypto_pwhash_argon2i_MEMLIMIT_MIN (long)
+  - crypto_pwhash_argon2i_OPSLIMIT_MAX (long)
+  - crypto_pwhash_argon2i_OPSLIMIT_MIN (long)
+  - crypto_pwhash_argon2i_SALTBYTES
   functions:
-  - crypto_secretbox_easy (SecureMemoryHandle k)
-  - crypto_secretbox_keybytes
-  - crypto_secretbox_macbytes
-  - crypto_secretbox_noncebytes
-  - crypto_secretbox_open_easy (SecureMemoryHandle k)
-  - crypto_secretbox_primitive (IntPtr)
+  - crypto_pwhash_argon2i
+  - crypto_pwhash_argon2i_alg_argon2i13
+  - crypto_pwhash_argon2i_bytes_min
+  - crypto_pwhash_argon2i_bytes_max
+  - crypto_pwhash_argon2i_memlimit_max
+  - crypto_pwhash_argon2i_memlimit_min
+  - crypto_pwhash_argon2i_opslimit_max
+  - crypto_pwhash_argon2i_opslimit_min
+  - crypto_pwhash_argon2i_saltbytes
 
-Interop.Random.cs:
-  include: include/sodium/randombytes.h
+Interop.Pwhash.Argon2id.cs:
+  include: include/sodium/crypto_pwhash_argon2id.h
+  constants:
+  - crypto_pwhash_argon2id_ALG_ARGON2ID13
+  - crypto_pwhash_argon2id_BYTES_MIN
+  - crypto_pwhash_argon2id_MEMLIMIT_MIN (long)
+  - crypto_pwhash_argon2id_OPSLIMIT_MAX (long)
+  - crypto_pwhash_argon2id_OPSLIMIT_MIN (long)
+  - crypto_pwhash_argon2id_SALTBYTES
   functions:
-  - randombytes_buf
-  - randombytes_buf (out uint buf)
+  - crypto_pwhash_argon2id
+  - crypto_pwhash_argon2id_alg_argon2id13
+  - crypto_pwhash_argon2id_bytes_min
+  - crypto_pwhash_argon2id_bytes_max
+  - crypto_pwhash_argon2id_memlimit_max
+  - crypto_pwhash_argon2id_memlimit_min
+  - crypto_pwhash_argon2id_opslimit_max
+  - crypto_pwhash_argon2id_opslimit_min
+  - crypto_pwhash_argon2id_saltbytes
 
-Interop.Scrypt.cs:
+Interop.Pwhash.Scrypt.cs:
   include: include/sodium/crypto_pwhash_scryptsalsa208sha256.h
   constants:
   - crypto_pwhash_scryptsalsa208sha256_BYTES_MIN
@@ -239,34 +234,115 @@ Interop.Scrypt.cs:
   - crypto_pwhash_scryptsalsa208sha256_opslimit_min
   - crypto_pwhash_scryptsalsa208sha256_saltbytes
 
-Interop.Sha256.cs:
-  include: include/sodium/crypto_hash_sha256.h
+Interop.Scalarmult.X25519.cs:
+  include: include/sodium/crypto_scalarmult_curve25519.h
   constants:
-  - crypto_hash_sha256_BYTES
+  - crypto_scalarmult_curve25519_BYTES
+  - crypto_scalarmult_curve25519_SCALARBYTES
   functions:
-  - crypto_hash_sha256
-  - crypto_hash_sha256_bytes
-  - crypto_hash_sha256_final
-  - crypto_hash_sha256_init
-  - crypto_hash_sha256_statebytes
-  - crypto_hash_sha256_update
-  - crypto_hash_sha256_update (SecureMemoryHandle in)
-  structs:
-  - crypto_hash_sha256_state
+  - crypto_scalarmult_curve25519 (SecureMemoryHandle q, SecureMemoryHandle n, PublicKeyBytes* p)
+  - crypto_scalarmult_curve25519_base (PublicKeyBytes* q, SecureMemoryHandle n)
+  - crypto_scalarmult_curve25519_bytes
+  - crypto_scalarmult_curve25519_scalarbytes
 
-Interop.Sha512.cs:
-  include: include/sodium/crypto_hash_sha512.h
+Interop.Scalarmult.Ed25519.cs:
+  include: include/sodium/crypto_scalarmult_ed25519.h
+
+Interop.Scalarmult.Ristretto255.cs:
+  include: include/sodium/crypto_scalarmult_ristretto255.h
+
+Interop.SecretBox.XChaCha20Poly1305.cs:
+  include: include/sodium/crypto_secretbox_xchacha20poly1305.h
+
+Interop.SecretBox.XSalsa20Poly1305.cs:
+  include:
+  - include/sodium/crypto_secretbox.h
+  - include/sodium/crypto_secretbox_xsalsa20poly1305.h
   constants:
-  - crypto_hash_sha512_BYTES
+  - crypto_secretbox_PRIMITIVE
+  - crypto_secretbox_xsalsa20poly1305_KEYBYTES
+  - crypto_secretbox_xsalsa20poly1305_MACBYTES
+  - crypto_secretbox_xsalsa20poly1305_NONCEBYTES
   functions:
-  - crypto_hash_sha512
-  - crypto_hash_sha512_bytes
-  - crypto_hash_sha512_final
-  - crypto_hash_sha512_init
-  - crypto_hash_sha512_statebytes
-  - crypto_hash_sha512_update
-  structs:
-  - crypto_hash_sha512_state
+  - crypto_secretbox_easy (SecureMemoryHandle k)
+  - crypto_secretbox_keybytes
+  - crypto_secretbox_macbytes
+  - crypto_secretbox_noncebytes
+  - crypto_secretbox_open_easy (SecureMemoryHandle k)
+  - crypto_secretbox_primitive (IntPtr)
+
+Interop.SecretStream.XChaCha20Poly1305.cs:
+  include: include/sodium/crypto_secretstream_xchacha20poly1305.h
+
+Interop.ShortHash.SipHash24.cs:
+  include: include/sodium/crypto_shorthash_siphash24.h
+
+Interop.Sign.Ed25519.cs:
+  include: include/sodium/crypto_sign_ed25519.h
+  constants:
+  - crypto_sign_ed25519_BYTES
+  - crypto_sign_ed25519_PUBLICKEYBYTES
+  - crypto_sign_ed25519_SECRETKEYBYTES
+  - crypto_sign_ed25519_SEEDBYTES
+  functions:
+  - crypto_sign_ed25519_bytes
+  - crypto_sign_ed25519_detached (SecureMemoryHandle sk)
+  - crypto_sign_ed25519_publickeybytes
+  - crypto_sign_ed25519_secretkeybytes
+  - crypto_sign_ed25519_seed_keypair (PublicKeyBytes* pk, SecureMemoryHandle sk)
+  - crypto_sign_ed25519_seedbytes
+  - crypto_sign_ed25519_sk_to_seed (SecureMemoryHandle sk)
+  - crypto_sign_ed25519_verify_detached (PublicKeyBytes* pk)
+  - crypto_sign_ed25519_pk_to_curve25519 (PublicKeyBytes* curve25519_pk, PublicKeyBytes* ed25519_pk)
+  - crypto_sign_ed25519_sk_to_curve25519 (SecureMemoryHandle ed25519_sk)
+
+#Interop.Sign.Edwards25519Sha512Batch.cs:
+#  include: include/sodium/crypto_sign_edwards25519sha512batch.h
+
+Interop.Stream.ChaCha20.cs:
+  include: include/sodium/crypto_stream_chacha20.h
+  constants:
+    - crypto_stream_chacha20_ietf_KEYBYTES
+    - crypto_stream_chacha20_ietf_NONCEBYTES
+  functions:
+    - crypto_stream_chacha20_ietf (SecureMemoryHandle k)
+    - crypto_stream_chacha20_ietf_keybytes
+    - crypto_stream_chacha20_ietf_noncebytes
+    - crypto_stream_chacha20_ietf_xor (SecureMemoryHandle k)
+    - crypto_stream_chacha20_ietf_xor_ic (SecureMemoryHandle k)
+
+Interop.Stream.Salsa20.cs:
+  include: include/sodium/crypto_stream_salsa20.h
+
+Interop.Stream.Salsa2012.cs:
+  include: include/sodium/crypto_stream_salsa2012.h
+
+#Interop.Stream.Salsa208.cs:
+#  include: include/sodium/crypto_stream_salsa208.h
+
+Interop.Stream.XChaCha20.cs:
+  include: include/sodium/crypto_stream_xchacha20.h
+
+Interop.Stream.XSalsa20.cs:
+  include: include/sodium/crypto_stream_xsalsa20.h
+
+Interop.Verify16.cs:
+  include: include/sodium/crypto_verify_16.h
+
+Interop.Verify32.cs:
+  include: include/sodium/crypto_verify_32.h
+
+Interop.Verify64.cs:
+  include: include/sodium/crypto_verify_64.h
+
+Interop.Random.cs:
+  include: include/sodium/randombytes.h
+  functions:
+  - randombytes_buf
+  - randombytes_buf (out uint buf)
+
+Interop.Runtime.cs:
+  include: include/sodium/runtime.h
 
 Interop.Utils.cs:
   include: include/sodium/utils.h

@@ -22,6 +22,11 @@ internal static partial class Interop
             SecureMemoryHandle sk);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
+        internal static unsafe extern int crypto_sign_ed25519_pk_to_curve25519(
+            PublicKeyBytes* curve25519_pk,
+            PublicKeyBytes* ed25519_pk);
+
+        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern nuint crypto_sign_ed25519_publickeybytes();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
@@ -35,6 +40,11 @@ internal static partial class Interop
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern nuint crypto_sign_ed25519_seedbytes();
+
+        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
+        internal static unsafe extern int crypto_sign_ed25519_sk_to_curve25519(
+            byte* curve25519_sk,
+            SecureMemoryHandle ed25519_sk);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static unsafe extern int crypto_sign_ed25519_sk_to_seed(
