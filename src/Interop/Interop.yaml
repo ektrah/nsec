@@ -4,7 +4,7 @@ Interop.Core.cs:
   include: include/sodium/core.h
   functions:
   - sodium_init
-  - sodium_set_misuse_handler (Action handler)
+  - sodium_set_misuse_handler
 
 Interop.Aead.Aes256Gcm.cs:
   include: include/sodium/crypto_aead_aes256gcm.h
@@ -15,8 +15,8 @@ Interop.Aead.Aes256Gcm.cs:
   - crypto_aead_aes256gcm_NSECBYTES
   functions:
   - crypto_aead_aes256gcm_abytes
-  - crypto_aead_aes256gcm_decrypt (SecureMemoryHandle k)
-  - crypto_aead_aes256gcm_encrypt (SecureMemoryHandle k)
+  - crypto_aead_aes256gcm_decrypt (out ulong mlen_p, SecureMemoryHandle k)
+  - crypto_aead_aes256gcm_encrypt (out ulong clen_p, SecureMemoryHandle k)
   - crypto_aead_aes256gcm_is_available
   - crypto_aead_aes256gcm_keybytes
   - crypto_aead_aes256gcm_npubbytes
@@ -31,8 +31,8 @@ Interop.Aead.ChaCha20Poly1305.cs:
   - crypto_aead_chacha20poly1305_ietf_NSECBYTES
   functions:
   - crypto_aead_chacha20poly1305_ietf_abytes
-  - crypto_aead_chacha20poly1305_ietf_decrypt (SecureMemoryHandle k)
-  - crypto_aead_chacha20poly1305_ietf_encrypt (SecureMemoryHandle k)
+  - crypto_aead_chacha20poly1305_ietf_decrypt (out ulong mlen_p, SecureMemoryHandle k)
+  - crypto_aead_chacha20poly1305_ietf_encrypt (out ulong clen_p, SecureMemoryHandle k)
   - crypto_aead_chacha20poly1305_ietf_keybytes
   - crypto_aead_chacha20poly1305_ietf_npubbytes
   - crypto_aead_chacha20poly1305_ietf_nsecbytes
@@ -46,8 +46,8 @@ Interop.Aead.XChaCha20Poly1305.cs:
   - crypto_aead_xchacha20poly1305_ietf_NSECBYTES
   functions:
   - crypto_aead_xchacha20poly1305_ietf_abytes
-  - crypto_aead_xchacha20poly1305_ietf_decrypt (SecureMemoryHandle k)
-  - crypto_aead_xchacha20poly1305_ietf_encrypt (SecureMemoryHandle k)
+  - crypto_aead_xchacha20poly1305_ietf_decrypt (out ulong mlen_p, SecureMemoryHandle k)
+  - crypto_aead_xchacha20poly1305_ietf_encrypt (out ulong clen_p, SecureMemoryHandle k)
   - crypto_aead_xchacha20poly1305_ietf_keybytes
   - crypto_aead_xchacha20poly1305_ietf_npubbytes
   - crypto_aead_xchacha20poly1305_ietf_nsecbytes
@@ -286,15 +286,15 @@ Interop.Sign.Ed25519.cs:
   - crypto_sign_ed25519_SEEDBYTES
   functions:
   - crypto_sign_ed25519_bytes
-  - crypto_sign_ed25519_detached (SecureMemoryHandle sk)
+  - crypto_sign_ed25519_detached (out ulong siglen_p, SecureMemoryHandle sk)
+  - crypto_sign_ed25519_pk_to_curve25519 (PublicKeyBytes* curve25519_pk, PublicKeyBytes* ed25519_pk)
   - crypto_sign_ed25519_publickeybytes
   - crypto_sign_ed25519_secretkeybytes
+  - crypto_sign_ed25519_sk_to_curve25519 (SecureMemoryHandle ed25519_sk)
+  - crypto_sign_ed25519_sk_to_seed (SecureMemoryHandle sk)
   - crypto_sign_ed25519_seed_keypair (PublicKeyBytes* pk, SecureMemoryHandle sk)
   - crypto_sign_ed25519_seedbytes
-  - crypto_sign_ed25519_sk_to_seed (SecureMemoryHandle sk)
   - crypto_sign_ed25519_verify_detached (PublicKeyBytes* pk)
-  - crypto_sign_ed25519_pk_to_curve25519 (PublicKeyBytes* curve25519_pk, PublicKeyBytes* ed25519_pk)
-  - crypto_sign_ed25519_sk_to_curve25519 (SecureMemoryHandle ed25519_sk)
 
 #Interop.Sign.Edwards25519Sha512Batch.cs:
 #  include: include/sodium/crypto_sign_edwards25519sha512batch.h
