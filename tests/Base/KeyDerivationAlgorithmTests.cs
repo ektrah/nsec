@@ -14,8 +14,9 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void Properties(KeyDerivationAlgorithm a)
         {
-            Assert.True(a.SupportsSalt || !a.SupportsSalt);
-            Assert.True(a.MaxCount > 0);
+            Assert.InRange(a.MaxCount, 0, int.MaxValue);
+            Assert.InRange(a.MinSaltSize, 0, a.MaxSaltSize);
+            Assert.InRange(a.MaxSaltSize, a.MinSaltSize, int.MaxValue);
         }
 
         #endregion
@@ -36,21 +37,33 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveBytesSpanWithUnusedSalt(KeyDerivationAlgorithm a)
+        public static void DeriveBytesSpanWithSaltTooSmall(KeyDerivationAlgorithm a)
         {
-            if (a.SupportsSalt)
+            if (a.MinSaltSize == 0)
             {
                 return;
             }
 
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(Utilities.RandomBytes.Slice(0, 100), new byte[1], ReadOnlySpan<byte>.Empty, 0));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(Utilities.RandomBytes[..100], Utilities.RandomBytes[..(a.MinSaltSize - 1)], ReadOnlySpan<byte>.Empty, 0));
+        }
+
+        [Theory]
+        [MemberData(nameof(KeyDerivationAlgorithms))]
+        public static void DeriveBytesSpanWithSaltTooLarge(KeyDerivationAlgorithm a)
+        {
+            if (a.MaxSaltSize == int.MaxValue)
+            {
+                return;
+            }
+
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(Utilities.RandomBytes[..100], Utilities.RandomBytes[..(a.MaxSaltSize + 1)], ReadOnlySpan<byte>.Empty, 0));
         }
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveBytesSpanWithNegativeCount(KeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentOutOfRangeException>("count", () => a.DeriveBytes(Utilities.RandomBytes.Slice(0, 100), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, -1));
+            Assert.Throws<ArgumentOutOfRangeException>("count", () => a.DeriveBytes(Utilities.RandomBytes[..100], ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, -1));
         }
 
         [Theory]
@@ -62,14 +75,14 @@ namespace NSec.Tests.Base
                 return;
             }
 
-            Assert.Throws<ArgumentOutOfRangeException>("count", () => a.DeriveBytes(Utilities.RandomBytes.Slice(0, 100), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, a.MaxCount + 1));
+            Assert.Throws<ArgumentOutOfRangeException>("count", () => a.DeriveBytes(Utilities.RandomBytes[..100], ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, a.MaxCount + 1));
         }
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveBytesSpanWithZeroCount(KeyDerivationAlgorithm a)
         {
-            var b = a.DeriveBytes(Utilities.RandomBytes.Slice(0, 100), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, 0);
+            var b = a.DeriveBytes(Utilities.RandomBytes[..100], ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, 0);
 
             Assert.NotNull(b);
             Assert.Empty(b);
@@ -81,7 +94,7 @@ namespace NSec.Tests.Base
         {
             var count = Math.Min(a.MaxCount, 500173);
 
-            var b = a.DeriveBytes(Utilities.RandomBytes.Slice(0, 100), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, count);
+            var b = a.DeriveBytes(Utilities.RandomBytes[..100], ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, count);
 
             Assert.NotNull(b);
             Assert.Equal(count, b.Length);
@@ -102,29 +115,41 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveBytesSpanWithSpanWithUnusedSalt(KeyDerivationAlgorithm a)
+        public static void DeriveBytesSpanWithSpanWithSaltTooSmall(KeyDerivationAlgorithm a)
         {
-            if (a.SupportsSalt)
+            if (a.MinSaltSize == 0)
             {
                 return;
             }
 
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(Utilities.RandomBytes.Slice(0, 100), new byte[1], ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(Utilities.RandomBytes[..100], Utilities.RandomBytes[..(a.MinSaltSize - 1)], ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+        }
+
+        [Theory]
+        [MemberData(nameof(KeyDerivationAlgorithms))]
+        public static void DeriveBytesSpanWithSpanWithSaltTooLarge(KeyDerivationAlgorithm a)
+        {
+            if (a.MaxSaltSize == int.MaxValue)
+            {
+                return;
+            }
+
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(Utilities.RandomBytes[..100], Utilities.RandomBytes[..(a.MaxSaltSize + 1)], ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveBytesSpanWithSaltOverlapping(KeyDerivationAlgorithm a)
         {
-            if (!a.SupportsSalt)
+            if (a.MaxSaltSize == 0)
             {
                 return;
             }
 
             var b = new byte[200];
 
-            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(Utilities.RandomBytes.Slice(0, 100), b.AsSpan(10, 100), ReadOnlySpan<byte>.Empty, b.AsSpan(60, 100)));
-            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(Utilities.RandomBytes.Slice(0, 100), b.AsSpan(60, 100), ReadOnlySpan<byte>.Empty, b.AsSpan(10, 100)));
+            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(Utilities.RandomBytes[..100], b.AsSpan(10, 100), ReadOnlySpan<byte>.Empty, b.AsSpan(60, 100)));
+            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(Utilities.RandomBytes[..100], b.AsSpan(60, 100), ReadOnlySpan<byte>.Empty, b.AsSpan(10, 100)));
         }
 
         [Theory]
@@ -133,8 +158,8 @@ namespace NSec.Tests.Base
         {
             var b = new byte[200];
 
-            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(Utilities.RandomBytes.Slice(0, 100), ReadOnlySpan<byte>.Empty, b.AsSpan(10, 100), b.AsSpan(60, 100)));
-            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(Utilities.RandomBytes.Slice(0, 100), ReadOnlySpan<byte>.Empty, b.AsSpan(60, 100), b.AsSpan(10, 100)));
+            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(Utilities.RandomBytes[..100], ReadOnlySpan<byte>.Empty, b.AsSpan(10, 100), b.AsSpan(60, 100)));
+            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(Utilities.RandomBytes[..100], ReadOnlySpan<byte>.Empty, b.AsSpan(60, 100), b.AsSpan(10, 100)));
         }
 
         [Theory]
@@ -146,14 +171,14 @@ namespace NSec.Tests.Base
                 return;
             }
 
-            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(Utilities.RandomBytes.Slice(0, 100), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[a.MaxCount + 1]));
+            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(Utilities.RandomBytes[..100], ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[a.MaxCount + 1]));
         }
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveBytesSpanWithEmptySpan(KeyDerivationAlgorithm a)
         {
-            a.DeriveBytes(Utilities.RandomBytes.Slice(0, 100), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty);
+            a.DeriveBytes(Utilities.RandomBytes[..100], ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty);
         }
 
         [Theory]
@@ -162,7 +187,7 @@ namespace NSec.Tests.Base
         {
             var count = Math.Min(a.MaxCount, 500173);
 
-            a.DeriveBytes(Utilities.RandomBytes.Slice(0, 100), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[count]);
+            a.DeriveBytes(Utilities.RandomBytes[..100], ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[count]);
         }
 
         #endregion
@@ -182,21 +207,33 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveKeySpanWithUnusedSalt(KeyDerivationAlgorithm a)
+        public static void DeriveKeySpanWithSaltTooSmall(KeyDerivationAlgorithm a)
         {
-            if (a.SupportsSalt)
+            if (a.MinSaltSize == 0)
             {
                 return;
             }
 
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(Utilities.RandomBytes.Slice(0, 100), new byte[1], ReadOnlySpan<byte>.Empty, null!));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(Utilities.RandomBytes[..100], Utilities.RandomBytes[0..(a.MinSaltSize - 1)], ReadOnlySpan<byte>.Empty, null!));
+        }
+
+        [Theory]
+        [MemberData(nameof(KeyDerivationAlgorithms))]
+        public static void DeriveKeySpanWithSaltTooLarge(KeyDerivationAlgorithm a)
+        {
+            if (a.MaxSaltSize == int.MaxValue)
+            {
+                return;
+            }
+
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(Utilities.RandomBytes[..100], Utilities.RandomBytes[0..(a.MaxSaltSize + 1)], ReadOnlySpan<byte>.Empty, null!));
         }
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveKeySpanWithNullAlgorithm(KeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("algorithm", () => a.DeriveKey(Utilities.RandomBytes.Slice(0, 100), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, null!));
+            Assert.Throws<ArgumentNullException>("algorithm", () => a.DeriveKey(Utilities.RandomBytes[..100], ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, null!));
         }
 
         [Theory]
@@ -205,7 +242,7 @@ namespace NSec.Tests.Base
         {
             var y = AeadAlgorithm.ChaCha20Poly1305;
 
-            using var i = a.DeriveKey(Utilities.RandomBytes.Slice(0, 100), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, y);
+            using var i = a.DeriveKey(Utilities.RandomBytes[..100], ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, y);
             Assert.NotNull(i);
             Assert.Same(y, i.Algorithm);
         }
@@ -225,26 +262,43 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveBytesWithDisposedSecret(KeyDerivationAlgorithm a)
         {
-            var s = SharedSecret.Import(Utilities.RandomBytes.Slice(0, 32));
+            var s = SharedSecret.Import(Utilities.RandomBytes[..32]);
             s.Dispose();
             Assert.Throws<ObjectDisposedException>(() => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, 200));
         }
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveBytesWithUnusedSalt(KeyDerivationAlgorithm a)
+        public static void DeriveBytesWithSaltTooSmall(KeyDerivationAlgorithm a)
         {
-            var x = KeyAgreementAlgorithm.X25519;
-
-            if (a.SupportsSalt)
+            if (a.MinSaltSize == 0)
             {
                 return;
             }
 
+            var x = KeyAgreementAlgorithm.X25519;
+
             using var k = new Key(x);
             using var s = x.Agree(k, k.PublicKey)!;
 
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s, new byte[1], ReadOnlySpan<byte>.Empty, 0));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s, Utilities.RandomBytes[..(a.MinSaltSize - 1)], ReadOnlySpan<byte>.Empty, 0));
+        }
+
+        [Theory]
+        [MemberData(nameof(KeyDerivationAlgorithms))]
+        public static void DeriveBytesWithSaltTooLarge(KeyDerivationAlgorithm a)
+        {
+            if (a.MaxSaltSize == int.MaxValue)
+            {
+                return;
+            }
+
+            var x = KeyAgreementAlgorithm.X25519;
+
+            using var k = new Key(x);
+            using var s = x.Agree(k, k.PublicKey)!;
+
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s, Utilities.RandomBytes[..(a.MaxSaltSize + 1)], ReadOnlySpan<byte>.Empty, 0));
         }
 
         [Theory]
@@ -322,16 +376,16 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveBytesWithDisposedSecretAndSpan(KeyDerivationAlgorithm a)
         {
-            var s = SharedSecret.Import(Utilities.RandomBytes.Slice(0, 32));
+            var s = SharedSecret.Import(Utilities.RandomBytes[..32]);
             s.Dispose();
             Assert.Throws<ObjectDisposedException>(() => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[200]));
         }
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveBytesWithSpanWithUnusedSalt(KeyDerivationAlgorithm a)
+        public static void DeriveBytesWithSpanWithSaltTooSmall(KeyDerivationAlgorithm a)
         {
-            if (a.SupportsSalt)
+            if (a.MinSaltSize == 0)
             {
                 return;
             }
@@ -341,19 +395,36 @@ namespace NSec.Tests.Base
             using var k = new Key(x);
             using var s = x.Agree(k, k.PublicKey)!;
 
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s, new byte[1], ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s, Utilities.RandomBytes[..(a.MinSaltSize - 1)], ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+        }
+
+        [Theory]
+        [MemberData(nameof(KeyDerivationAlgorithms))]
+        public static void DeriveBytesWithSpanWithSaltTooLarge(KeyDerivationAlgorithm a)
+        {
+            if (a.MaxSaltSize == int.MaxValue)
+            {
+                return;
+            }
+
+            var x = KeyAgreementAlgorithm.X25519;
+
+            using var k = new Key(x);
+            using var s = x.Agree(k, k.PublicKey)!;
+
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s, Utilities.RandomBytes[..(a.MaxSaltSize + 1)], ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
         }
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveBytesWithSaltOverlapping(KeyDerivationAlgorithm a)
         {
-            var x = KeyAgreementAlgorithm.X25519;
-
-            if (!a.SupportsSalt)
+            if (a.MaxSaltSize == 0)
             {
                 return;
             }
+
+            var x = KeyAgreementAlgorithm.X25519;
 
             using var k = new Key(x);
             using var s = x.Agree(k, k.PublicKey)!;
@@ -434,26 +505,43 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveKeyWithDisposedSecret(KeyDerivationAlgorithm a)
         {
-            var s = SharedSecret.Import(Utilities.RandomBytes.Slice(0, 32));
+            var s = SharedSecret.Import(Utilities.RandomBytes[..32]);
             s.Dispose();
             Assert.Throws<ObjectDisposedException>(() => a.DeriveKey(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, AeadAlgorithm.ChaCha20Poly1305));
         }
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
-        public static void DeriveKeyWithUnusedSalt(KeyDerivationAlgorithm a)
+        public static void DeriveKeyWithSaltTooSmall(KeyDerivationAlgorithm a)
         {
-            var x = KeyAgreementAlgorithm.X25519;
-
-            if (a.SupportsSalt)
+            if (a.MinSaltSize == 0)
             {
                 return;
             }
 
+            var x = KeyAgreementAlgorithm.X25519;
+
             using var k = new Key(x);
             using var s = x.Agree(k, k.PublicKey)!;
 
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(s, new byte[1], ReadOnlySpan<byte>.Empty, null!));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(s, Utilities.RandomBytes[..(a.MinSaltSize - 1)], ReadOnlySpan<byte>.Empty, null!));
+        }
+
+        [Theory]
+        [MemberData(nameof(KeyDerivationAlgorithms))]
+        public static void DeriveKeyWithSaltTooLarge(KeyDerivationAlgorithm a)
+        {
+            if (a.MaxSaltSize == int.MaxValue)
+            {
+                return;
+            }
+
+            var x = KeyAgreementAlgorithm.X25519;
+
+            using var k = new Key(x);
+            using var s = x.Agree(k, k.PublicKey)!;
+
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(s, Utilities.RandomBytes[..(a.MaxSaltSize + 1)], ReadOnlySpan<byte>.Empty, null!));
         }
 
         [Theory]

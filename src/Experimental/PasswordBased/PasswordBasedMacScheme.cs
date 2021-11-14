@@ -47,6 +47,11 @@ namespace NSec.Experimental.PasswordBased
 
         public int MacSize => _macAlgorithm.MacSize;
 
+        public int MinSaltSize => _keyDerivationAlgorithm.MinSaltSize;
+
+        public int MaxSaltSize => _keyDerivationAlgorithm.MaxSaltSize;
+
+        [Obsolete("The 'SaltSize' property has been deprecated. Use the 'MinSaltSize' and 'MaxSaltSize' properties instead.")]
         public int SaltSize => _keyDerivationAlgorithm.SaltSize;
 
         public byte[] Mac(

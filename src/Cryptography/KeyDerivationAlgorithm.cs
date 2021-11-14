@@ -33,7 +33,7 @@ namespace NSec.Cryptography
         private static HkdfSha512? s_HkdfSha512;
 
         private readonly int _maxCount;
-        private readonly bool _supportsSalt;
+        private readonly int _maxSaltSize;
 
         private protected KeyDerivationAlgorithm(
             bool supportsSalt,
@@ -41,8 +41,8 @@ namespace NSec.Cryptography
         {
             Debug.Assert(maxCount > 0);
 
-            _supportsSalt = supportsSalt;
             _maxCount = maxCount;
+            _maxSaltSize = supportsSalt ? int.MaxValue : 0;
         }
 
         public static HkdfSha256 HkdfSha256
@@ -75,7 +75,12 @@ namespace NSec.Cryptography
 
         public int MaxCount => _maxCount;
 
-        public bool SupportsSalt => _supportsSalt;
+        public int MaxSaltSize => _maxSaltSize;
+
+        public int MinSaltSize => 0;
+
+        [Obsolete("The 'SupportsSalt' property has been deprecated. Use the 'MinSaltSize' and 'MaxSaltSize' properties instead.")]
+        public bool SupportsSalt => _maxSaltSize != 0;
 
         public byte[] DeriveBytes(
             ReadOnlySpan<byte> inputKeyingMaterial,
@@ -83,9 +88,9 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> info,
             int count)
         {
-            if (!_supportsSalt && !salt.IsEmpty)
+            if (salt.Length < MinSaltSize || salt.Length > MaxSaltSize)
             {
-                throw Error.Argument_SaltNotSupported(nameof(salt));
+                throw (MinSaltSize == MaxSaltSize) ? Error.Argument_SaltLength(nameof(salt), MinSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), MinSaltSize, MaxSaltSize);
             }
             if (count < 0)
             {
@@ -111,9 +116,9 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> info,
             Span<byte> bytes)
         {
-            if (!_supportsSalt && !salt.IsEmpty)
+            if (salt.Length < MinSaltSize || salt.Length > MaxSaltSize)
             {
-                throw Error.Argument_SaltNotSupported(nameof(salt));
+                throw (MinSaltSize == MaxSaltSize) ? Error.Argument_SaltLength(nameof(salt), MinSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), MinSaltSize, MaxSaltSize);
             }
             if (bytes.Length > MaxCount)
             {
@@ -142,9 +147,9 @@ namespace NSec.Cryptography
             Algorithm algorithm,
             in KeyCreationParameters creationParameters = default)
         {
-            if (!_supportsSalt && !salt.IsEmpty)
+            if (salt.Length < MinSaltSize || salt.Length > MaxSaltSize)
             {
-                throw Error.Argument_SaltNotSupported(nameof(salt));
+                throw (MinSaltSize == MaxSaltSize) ? Error.Argument_SaltLength(nameof(salt), MinSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), MinSaltSize, MaxSaltSize);
             }
             if (algorithm == null)
             {
@@ -197,9 +202,9 @@ namespace NSec.Cryptography
             {
                 throw Error.ArgumentNull_SharedSecret(nameof(sharedSecret));
             }
-            if (!_supportsSalt && !salt.IsEmpty)
+            if (salt.Length < MinSaltSize || salt.Length > MaxSaltSize)
             {
-                throw Error.Argument_SaltNotSupported(nameof(salt));
+                throw (MinSaltSize == MaxSaltSize) ? Error.Argument_SaltLength(nameof(salt), MinSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), MinSaltSize, MaxSaltSize);
             }
             if (count < 0)
             {
@@ -229,9 +234,9 @@ namespace NSec.Cryptography
             {
                 throw Error.ArgumentNull_SharedSecret(nameof(sharedSecret));
             }
-            if (!_supportsSalt && !salt.IsEmpty)
+            if (salt.Length < MinSaltSize || salt.Length > MaxSaltSize)
             {
-                throw Error.Argument_SaltNotSupported(nameof(salt));
+                throw (MinSaltSize == MaxSaltSize) ? Error.Argument_SaltLength(nameof(salt), MinSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), MinSaltSize, MaxSaltSize);
             }
             if (bytes.Length > MaxCount)
             {
@@ -264,9 +269,9 @@ namespace NSec.Cryptography
             {
                 throw Error.ArgumentNull_SharedSecret(nameof(sharedSecret));
             }
-            if (!_supportsSalt && !salt.IsEmpty)
+            if (salt.Length < MinSaltSize || salt.Length > MaxSaltSize)
             {
-                throw Error.Argument_SaltNotSupported(nameof(salt));
+                throw (MinSaltSize == MaxSaltSize) ? Error.Argument_SaltLength(nameof(salt), MinSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), MinSaltSize, MaxSaltSize);
             }
             if (algorithm == null)
             {

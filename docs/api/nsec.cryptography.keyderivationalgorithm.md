@@ -55,15 +55,26 @@ Gets the maximum number of bytes that can be derived from a shared secret.
 The maximum size, in bytes, of the key derivation output.
 
 
-### SupportsSalt
+### MaxSaltSize
 
-Gets a value that indicates whether the algorithm supports the use of salt.
+Gets the maximum size of the salt used for key derivation.
 
-    public bool SupportsSalt { get; }
+    public int MaxSaltSize { get; }
 
 #### Property Value
 
-`true` if the algorithm supports the use of salt; otherwise, `false`.
+The maximum salt size, in bytes.
+
+
+### MinSaltSize
+
+Gets the minimum size of the salt used for key derivation.
+
+    public int MinSaltSize { get; }
+
+#### Property Value
+
+The minimum salt size, in bytes.
 
 
 ## Methods
@@ -123,8 +134,10 @@ ArgumentNullException
 : `sharedSecret` is `null`.
 
 ArgumentException
-: [[SupportsSalt|KeyDerivationAlgorithm Class#SupportsSalt]] is `false` but
-    `salt` is not empty.
+: `salt.Length` is less than
+    [[MinSaltSize|KeyDerivationAlgorithm Class#MinSaltSize]]
+    or greater than
+    [[MaxSaltSize|KeyDerivationAlgorithm Class#MaxSaltSize]].
 
 ArgumentOutOfRangeException
 : `count` is less than 0 or greater than
@@ -185,8 +198,10 @@ ArgumentNullException
 : `sharedSecret` is `null`.
 
 ArgumentException
-: [[SupportsSalt|KeyDerivationAlgorithm Class#SupportsSalt]] is `false` but
-    `salt` is not empty.
+: `salt.Length` is less than
+    [[MinSaltSize|KeyDerivationAlgorithm Class#MinSaltSize]]
+    or greater than
+    [[MaxSaltSize|KeyDerivationAlgorithm Class#MaxSaltSize]].
 
 ArgumentException
 : `bytes.Length` is greater than
@@ -260,8 +275,10 @@ ArgumentNullException
 : `sharedSecret` or `algorithm` is `null`.
 
 ArgumentException
-: [[SupportsSalt|KeyDerivationAlgorithm Class#SupportsSalt]] is `false` but
-    `salt` is not empty.
+: `salt.Length` is less than
+    [[MinSaltSize|KeyDerivationAlgorithm Class#MinSaltSize]]
+    or greater than
+    [[MaxSaltSize|KeyDerivationAlgorithm Class#MaxSaltSize]].
 
 NotSupportedException
 : The specified algorithm does not support keys derived from a shared secret.

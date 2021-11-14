@@ -99,15 +99,26 @@ Gets the maximum number of bytes that can be derived from a password.
 The maximum size, in bytes, of the key derivation output.
 
 
-### SaltSize
+### MaxSaltSize
 
-Gets the size of the salt used for key derivation.
+Gets the maximum size of the salt used for key derivation.
 
-    public int SaltSize { get; }
+    public int MaxSaltSize { get; }
 
 #### Property Value
 
-The salt size, in bytes.
+The maximum salt size, in bytes.
+
+
+### MinSaltSize
+
+Gets the minimum size of the salt used for key derivation.
+
+    public int MinSaltSize { get; }
+
+#### Property Value
+
+The minimum salt size, in bytes.
 
 
 ## Methods
@@ -160,8 +171,10 @@ ArgumentNullException
 : `password` is `null`.
 
 ArgumentException
-: `salt.Length` is not equal to [[SaltSize|PasswordBasedKeyDerivationAlgorithm
-    Class#SaltSize]].
+: `salt.Length` is less than
+    [[MinSaltSize|PasswordBasedKeyDerivationAlgorithm Class#MinSaltSize]]
+    or greater than
+    [[MaxSaltSize|PasswordBasedKeyDerivationAlgorithm Class#MaxSaltSize]].
 
 ArgumentOutOfRangeException
 : `count` is less than 0 or greater than
@@ -216,8 +229,10 @@ ArgumentNullException
 : `password` is `null`.
 
 ArgumentException
-: `salt.Length` is not equal to [[SaltSize|PasswordBasedKeyDerivationAlgorithm
-    Class#SaltSize]].
+: `salt.Length` is less than
+    [[MinSaltSize|PasswordBasedKeyDerivationAlgorithm Class#MinSaltSize]]
+    or greater than
+    [[MaxSaltSize|PasswordBasedKeyDerivationAlgorithm Class#MaxSaltSize]].
 
 ArgumentException
 : `bytes.Length` is greater than
@@ -282,8 +297,10 @@ ArgumentNullException
 : `password` is `null`.
 
 ArgumentException
-: `salt.Length` is not equal to [[SaltSize|PasswordBasedKeyDerivationAlgorithm
-    Class#SaltSize]].
+: `salt.Length` is less than
+    [[MinSaltSize|PasswordBasedKeyDerivationAlgorithm Class#MinSaltSize]]
+    or greater than
+    [[MaxSaltSize|PasswordBasedKeyDerivationAlgorithm Class#MaxSaltSize]].
 
 ArgumentNullException
 : `algorithm` is `null`.

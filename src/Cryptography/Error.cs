@@ -206,10 +206,12 @@ namespace NSec.Cryptography
             return new ArgumentException(string.Format(ResourceManager.GetString(nameof(Argument_SaltLength))!, arg0), paramName);
         }
 
-        internal static ArgumentException Argument_SaltNotSupported(
-            string paramName)
+        internal static ArgumentException Argument_SaltLengthRange(
+            string paramName,
+            object? arg0,
+            object? arg1)
         {
-            return new ArgumentException(ResourceManager.GetString(nameof(Argument_SaltNotSupported)), paramName);
+            return new ArgumentException(string.Format(ResourceManager.GetString(nameof(Argument_SaltLengthRange))!, arg0, arg1), paramName);
         }
 
         internal static ArgumentException Argument_SharedSecretLength(

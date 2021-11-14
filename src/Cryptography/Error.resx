@@ -252,8 +252,8 @@
   <data name="Argument_SaltLength" xml:space="preserve">
     <value>The length of the salt must be equal to {0}.</value>
   </data>
-  <data name="Argument_SaltNotSupported" xml:space="preserve">
-    <value>A salt is not supported by this algorithm and must be an empty span.</value>
+  <data name="Argument_SaltLengthRange" xml:space="preserve">
+    <value>The length of the salt must be between {0} and {1} (inclusive).</value>
   </data>
   <data name="Argument_SharedSecretLength" xml:space="preserve">
     <value>The length of the shared secret must be less than or equal to {0}.</value>

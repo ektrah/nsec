@@ -35,6 +35,11 @@ namespace NSec.Cryptography
 
         public int MaxCount => _maxCount;
 
+        public int MaxSaltSize => _saltSize;
+
+        public int MinSaltSize => _saltSize;
+
+        [Obsolete("The 'SaltSize' property has been deprecated. Use the 'MinSaltSize' and 'MaxSaltSize' properties instead.")]
         public int SaltSize => _saltSize;
 
         public static Argon2id Argon2id(
@@ -94,9 +99,9 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> salt,
             int count)
         {
-            if (salt.Length != SaltSize)
+            if (salt.Length < MinSaltSize || salt.Length > MaxSaltSize)
             {
-                throw Error.Argument_SaltLength(nameof(salt), SaltSize);
+                throw (MinSaltSize == MaxSaltSize) ? Error.Argument_SaltLength(nameof(salt), MinSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), MinSaltSize, MaxSaltSize);
             }
             if (count < 0)
             {
@@ -124,9 +129,9 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> salt,
             Span<byte> bytes)
         {
-            if (salt.Length != SaltSize)
+            if (salt.Length < MinSaltSize || salt.Length > MaxSaltSize)
             {
-                throw Error.Argument_SaltLength(nameof(salt), SaltSize);
+                throw (MinSaltSize == MaxSaltSize) ? Error.Argument_SaltLength(nameof(salt), MinSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), MinSaltSize, MaxSaltSize);
             }
             if (bytes.Length > MaxCount)
             {
@@ -149,9 +154,9 @@ namespace NSec.Cryptography
             Algorithm algorithm,
             in KeyCreationParameters creationParameters = default)
         {
-            if (salt.Length != SaltSize)
+            if (salt.Length < MinSaltSize || salt.Length > MaxSaltSize)
             {
-                throw Error.Argument_SaltLength(nameof(salt), SaltSize);
+                throw (MinSaltSize == MaxSaltSize) ? Error.Argument_SaltLength(nameof(salt), MinSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), MinSaltSize, MaxSaltSize);
             }
             if (algorithm == null)
             {

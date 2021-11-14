@@ -541,7 +541,8 @@ namespace NSec.Tests.Algorithms
 
             Assert.Equal(16320, a.MaxCount);
             Assert.Equal(64, a.PseudorandomKeySize);
-            Assert.True(a.SupportsSalt);
+            Assert.Equal(0, a.MinSaltSize);
+            Assert.Equal(int.MaxValue, a.MaxSaltSize);
         }
 
         #endregion
@@ -643,7 +644,7 @@ namespace NSec.Tests.Algorithms
             using var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty);
 
             var expected = new byte[a.PseudorandomKeySize];
-            var actual = Utilities.RandomBytes.Slice(0, a.PseudorandomKeySize).ToArray();
+            var actual = Utilities.RandomBytes[..a.PseudorandomKeySize].ToArray();
 
             a.Extract(s, actual, expected);
             a.Extract(s, actual, actual);
