@@ -45,62 +45,6 @@ namespace NSec.Experimental
 
         public int NonceSize => _nonceSize;
 
-        [Obsolete("The 'Nonce' type has been deprecated. Pass the nonce as 'ReadOnlySpan<byte>' instead.")]
-        public byte[] GeneratePseudoRandomStream(
-            Key key,
-            in Nonce nonce,
-            int count)
-        {
-            if (key == null)
-            {
-                throw Error.ArgumentNull_Key(nameof(key));
-            }
-            if (key.Algorithm != this)
-            {
-                throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
-            }
-            if (nonce.Size != _nonceSize)
-            {
-                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
-            }
-            if (count < 0)
-            {
-                throw Error.ArgumentOutOfRange_GenerateNegativeCount(nameof(count));
-            }
-
-            Span<byte> n = stackalloc byte[_nonceSize];
-            nonce.CopyTo(n);
-
-            byte[] bytes = new byte[count];
-            GeneratePseudoRandomStreamCore(key.Handle, n, bytes);
-            return bytes;
-        }
-
-        [Obsolete("The 'Nonce' type has been deprecated. Pass the nonce as 'ReadOnlySpan<byte>' instead.")]
-        public void GeneratePseudoRandomStream(
-            Key key,
-            in Nonce nonce,
-            Span<byte> bytes)
-        {
-            if (key == null)
-            {
-                throw Error.ArgumentNull_Key(nameof(key));
-            }
-            if (key.Algorithm != this)
-            {
-                throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
-            }
-            if (nonce.Size != _nonceSize)
-            {
-                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
-            }
-
-            Span<byte> n = stackalloc byte[_nonceSize];
-            nonce.CopyTo(n);
-
-            GeneratePseudoRandomStreamCore(key.Handle, n, bytes);
-        }
-
         public byte[] GeneratePseudoRandomStream(
             Key key,
             ReadOnlySpan<byte> nonce,
@@ -147,67 +91,6 @@ namespace NSec.Experimental
             }
 
             GeneratePseudoRandomStreamCore(key.Handle, nonce, bytes);
-        }
-
-        [Obsolete("The 'Nonce' type has been deprecated. Pass the nonce as 'ReadOnlySpan<byte>' instead.")]
-        public byte[] XOr(
-            Key key,
-            in Nonce nonce,
-            ReadOnlySpan<byte> input)
-        {
-            if (key == null)
-            {
-                throw Error.ArgumentNull_Key(nameof(key));
-            }
-            if (key.Algorithm != this)
-            {
-                throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
-            }
-            if (nonce.Size != _nonceSize)
-            {
-                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
-            }
-
-            Span<byte> n = stackalloc byte[_nonceSize];
-            nonce.CopyTo(n);
-
-            byte[] output = new byte[input.Length];
-            XOrCore(key.Handle, n, input, output);
-            return output;
-        }
-
-        [Obsolete("The 'Nonce' type has been deprecated. Pass the nonce as 'ReadOnlySpan<byte>' instead.")]
-        public void XOr(
-            Key key,
-            in Nonce nonce,
-            ReadOnlySpan<byte> input,
-            Span<byte> output)
-        {
-            if (key == null)
-            {
-                throw Error.ArgumentNull_Key(nameof(key));
-            }
-            if (key.Algorithm != this)
-            {
-                throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
-            }
-            if (nonce.Size != _nonceSize)
-            {
-                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
-            }
-            if (output.Length != input.Length)
-            {
-                throw Error.Argument_CiphertextLength(nameof(output)); // TODO
-            }
-            if (output.Overlaps(input, out int offset) && offset != 0)
-            {
-                throw Error.Argument_OverlapCiphertext(nameof(output)); // TODO
-            }
-
-            Span<byte> n = stackalloc byte[_nonceSize];
-            nonce.CopyTo(n);
-
-            XOrCore(key.Handle, n, input, output);
         }
 
         public byte[] XOr(
@@ -261,69 +144,6 @@ namespace NSec.Experimental
             }
 
             XOrCore(key.Handle, nonce, input, output);
-        }
-
-        [Obsolete("The 'Nonce' type has been deprecated. Pass the nonce as 'ReadOnlySpan<byte>' instead.")]
-        public byte[] XOrIC(
-            Key key,
-            in Nonce nonce,
-            ReadOnlySpan<byte> input,
-            uint ic)
-        {
-            if (key == null)
-            {
-                throw Error.ArgumentNull_Key(nameof(key));
-            }
-            if (key.Algorithm != this)
-            {
-                throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
-            }
-            if (nonce.Size != _nonceSize)
-            {
-                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
-            }
-
-            Span<byte> n = stackalloc byte[_nonceSize];
-            nonce.CopyTo(n);
-
-            byte[] output = new byte[input.Length];
-            XOrICCore(key.Handle, n, input, ic, output);
-            return output;
-        }
-
-        [Obsolete("The 'Nonce' type has been deprecated. Pass the nonce as 'ReadOnlySpan<byte>' instead.")]
-        public void XOrIC(
-            Key key,
-            in Nonce nonce,
-            ReadOnlySpan<byte> input,
-            Span<byte> output,
-            uint ic)
-        {
-            if (key == null)
-            {
-                throw Error.ArgumentNull_Key(nameof(key));
-            }
-            if (key.Algorithm != this)
-            {
-                throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
-            }
-            if (nonce.Size != _nonceSize)
-            {
-                throw Error.Argument_NonceLength(nameof(nonce), _nonceSize);
-            }
-            if (output.Length != input.Length)
-            {
-                throw Error.Argument_CiphertextLength(nameof(output)); // TODO
-            }
-            if (output.Overlaps(input, out int offset) && offset != 0)
-            {
-                throw Error.Argument_OverlapCiphertext(nameof(output)); // TODO
-            }
-
-            Span<byte> n = stackalloc byte[_nonceSize];
-            nonce.CopyTo(n);
-
-            XOrICCore(key.Handle, n, input, ic, output);
         }
 
         public byte[] XOrIC(
