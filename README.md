@@ -2,11 +2,11 @@
 
 [![Maintenance](https://img.shields.io/maintenance/yes/2021)](https://github.com/ektrah/nsec)
 [![License](https://img.shields.io/github/license/ektrah/nsec)](https://nsec.rocks/license)
-[![NuGet](https://img.shields.io/nuget/vpre/NSec.Cryptography)](https://www.nuget.org/packages/NSec.Cryptography/20.11.0-preview1)
+[![NuGet](https://img.shields.io/nuget/vpre/NSec.Cryptography)](https://www.nuget.org/packages/NSec.Cryptography/21.11.0-preview2)
 
 [NSec](https://nsec.rocks/) is a cryptographic library for
 [.NET 5+](https://dotnet.microsoft.com/) and
-[.NET Core](https://dotnet.microsoft.com/) based on
+[.NET Core 3.1](https://dotnet.microsoft.com/) based on
 [libsodium](https://libsodium.org/) &#x2764;.
 It provides modern cryptographic primitives in a modern API based on
 [Span&lt;T&gt;](https://docs.microsoft.com/en-us/archive/msdn-magazine/2017/connect/csharp-all-about-span-exploring-a-new-net-mainstay).
