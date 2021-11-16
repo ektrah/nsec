@@ -34,6 +34,7 @@ namespace NSec.Cryptography
 
         private readonly int _maxCount;
         private readonly int _maxSaltSize;
+        private readonly int _minSaltSize;
 
         private protected KeyDerivationAlgorithm(
             bool supportsSalt,
@@ -43,6 +44,7 @@ namespace NSec.Cryptography
 
             _maxCount = maxCount;
             _maxSaltSize = supportsSalt ? int.MaxValue : 0;
+            _minSaltSize = 0;
         }
 
         public static HkdfSha256 HkdfSha256
@@ -77,7 +79,7 @@ namespace NSec.Cryptography
 
         public int MaxSaltSize => _maxSaltSize;
 
-        public int MinSaltSize => 0;
+        public int MinSaltSize => _minSaltSize;
 
         [Obsolete("The 'SupportsSalt' property has been deprecated. Use the 'MinSaltSize' and 'MaxSaltSize' properties instead.")]
         public bool SupportsSalt => _maxSaltSize != 0;
@@ -88,17 +90,17 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> info,
             int count)
         {
-            if (salt.Length < MinSaltSize || salt.Length > MaxSaltSize)
+            if (salt.Length < _minSaltSize || salt.Length > _maxSaltSize)
             {
-                throw (MinSaltSize == MaxSaltSize) ? Error.Argument_SaltLength(nameof(salt), MinSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), MinSaltSize, MaxSaltSize);
+                throw (_minSaltSize == _maxSaltSize) ? Error.Argument_SaltLength(nameof(salt), _minSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), _minSaltSize, _maxSaltSize);
             }
             if (count < 0)
             {
                 throw Error.ArgumentOutOfRange_DeriveNegativeCount(nameof(count));
             }
-            if (count > MaxCount)
+            if (count > _maxCount)
             {
-                throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), MaxCount);
+                throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), _maxCount);
             }
             if (count == 0)
             {
@@ -116,13 +118,13 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> info,
             Span<byte> bytes)
         {
-            if (salt.Length < MinSaltSize || salt.Length > MaxSaltSize)
+            if (salt.Length < _minSaltSize || salt.Length > _maxSaltSize)
             {
-                throw (MinSaltSize == MaxSaltSize) ? Error.Argument_SaltLength(nameof(salt), MinSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), MinSaltSize, MaxSaltSize);
+                throw (_minSaltSize == _maxSaltSize) ? Error.Argument_SaltLength(nameof(salt), _minSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), _minSaltSize, _maxSaltSize);
             }
-            if (bytes.Length > MaxCount)
+            if (bytes.Length > _maxCount)
             {
-                throw Error.Argument_DeriveInvalidCount(nameof(bytes), MaxCount);
+                throw Error.Argument_DeriveInvalidCount(nameof(bytes), _maxCount);
             }
             if (bytes.Overlaps(salt))
             {
@@ -147,9 +149,9 @@ namespace NSec.Cryptography
             Algorithm algorithm,
             in KeyCreationParameters creationParameters = default)
         {
-            if (salt.Length < MinSaltSize || salt.Length > MaxSaltSize)
+            if (salt.Length < _minSaltSize || salt.Length > _maxSaltSize)
             {
-                throw (MinSaltSize == MaxSaltSize) ? Error.Argument_SaltLength(nameof(salt), MinSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), MinSaltSize, MaxSaltSize);
+                throw (_minSaltSize == _maxSaltSize) ? Error.Argument_SaltLength(nameof(salt), _minSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), _minSaltSize, _maxSaltSize);
             }
             if (algorithm == null)
             {
@@ -157,7 +159,7 @@ namespace NSec.Cryptography
             }
 
             int seedSize = algorithm.GetSeedSize();
-            if (seedSize > MaxCount)
+            if (seedSize > _maxCount)
             {
                 throw Error.NotSupported_CreateKey();
             }
@@ -202,17 +204,17 @@ namespace NSec.Cryptography
             {
                 throw Error.ArgumentNull_SharedSecret(nameof(sharedSecret));
             }
-            if (salt.Length < MinSaltSize || salt.Length > MaxSaltSize)
+            if (salt.Length < _minSaltSize || salt.Length > _maxSaltSize)
             {
-                throw (MinSaltSize == MaxSaltSize) ? Error.Argument_SaltLength(nameof(salt), MinSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), MinSaltSize, MaxSaltSize);
+                throw (_minSaltSize == _maxSaltSize) ? Error.Argument_SaltLength(nameof(salt), _minSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), _minSaltSize, _maxSaltSize);
             }
             if (count < 0)
             {
                 throw Error.ArgumentOutOfRange_DeriveNegativeCount(nameof(count));
             }
-            if (count > MaxCount)
+            if (count > _maxCount)
             {
-                throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), MaxCount);
+                throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), _maxCount);
             }
             if (count == 0)
             {
@@ -234,13 +236,13 @@ namespace NSec.Cryptography
             {
                 throw Error.ArgumentNull_SharedSecret(nameof(sharedSecret));
             }
-            if (salt.Length < MinSaltSize || salt.Length > MaxSaltSize)
+            if (salt.Length < _minSaltSize || salt.Length > _maxSaltSize)
             {
-                throw (MinSaltSize == MaxSaltSize) ? Error.Argument_SaltLength(nameof(salt), MinSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), MinSaltSize, MaxSaltSize);
+                throw (_minSaltSize == _maxSaltSize) ? Error.Argument_SaltLength(nameof(salt), _minSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), _minSaltSize, _maxSaltSize);
             }
-            if (bytes.Length > MaxCount)
+            if (bytes.Length > _maxCount)
             {
-                throw Error.Argument_DeriveInvalidCount(nameof(bytes), MaxCount);
+                throw Error.Argument_DeriveInvalidCount(nameof(bytes), _maxCount);
             }
             if (bytes.Overlaps(salt))
             {
@@ -269,9 +271,9 @@ namespace NSec.Cryptography
             {
                 throw Error.ArgumentNull_SharedSecret(nameof(sharedSecret));
             }
-            if (salt.Length < MinSaltSize || salt.Length > MaxSaltSize)
+            if (salt.Length < _minSaltSize || salt.Length > _maxSaltSize)
             {
-                throw (MinSaltSize == MaxSaltSize) ? Error.Argument_SaltLength(nameof(salt), MinSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), MinSaltSize, MaxSaltSize);
+                throw (_minSaltSize == _maxSaltSize) ? Error.Argument_SaltLength(nameof(salt), _minSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), _minSaltSize, _maxSaltSize);
             }
             if (algorithm == null)
             {
@@ -279,7 +281,7 @@ namespace NSec.Cryptography
             }
 
             int seedSize = algorithm.GetSeedSize();
-            if (seedSize > MaxCount)
+            if (seedSize > _maxCount)
             {
                 throw Error.NotSupported_CreateKey();
             }

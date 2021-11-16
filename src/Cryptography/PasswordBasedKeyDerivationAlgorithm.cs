@@ -20,7 +20,8 @@ namespace NSec.Cryptography
     public abstract class PasswordBasedKeyDerivationAlgorithm : Algorithm
     {
         private readonly int _maxCount;
-        private readonly int _saltSize;
+        private readonly int _maxSaltSize;
+        private readonly int _minSaltSize;
 
         private protected PasswordBasedKeyDerivationAlgorithm(
             int saltSize,
@@ -29,18 +30,19 @@ namespace NSec.Cryptography
             Debug.Assert(saltSize > 0);
             Debug.Assert(maxCount > 0);
 
-            _saltSize = saltSize;
             _maxCount = maxCount;
+            _maxSaltSize = saltSize;
+            _minSaltSize = saltSize;
         }
 
         public int MaxCount => _maxCount;
 
-        public int MaxSaltSize => _saltSize;
+        public int MaxSaltSize => _maxSaltSize;
 
-        public int MinSaltSize => _saltSize;
+        public int MinSaltSize => _minSaltSize;
 
         [Obsolete("The 'SaltSize' property has been deprecated. Use the 'MinSaltSize' and 'MaxSaltSize' properties instead.")]
-        public int SaltSize => _saltSize;
+        public int SaltSize => _minSaltSize;
 
         public static Argon2id Argon2id(
             in Argon2Parameters parameters)
@@ -99,17 +101,17 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> salt,
             int count)
         {
-            if (salt.Length < MinSaltSize || salt.Length > MaxSaltSize)
+            if (salt.Length < _minSaltSize || salt.Length > _maxSaltSize)
             {
-                throw (MinSaltSize == MaxSaltSize) ? Error.Argument_SaltLength(nameof(salt), MinSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), MinSaltSize, MaxSaltSize);
+                throw (_minSaltSize == _maxSaltSize) ? Error.Argument_SaltLength(nameof(salt), _minSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), _minSaltSize, _maxSaltSize);
             }
             if (count < 0)
             {
                 throw Error.ArgumentOutOfRange_DeriveNegativeCount(nameof(count));
             }
-            if (count > MaxCount)
+            if (count > _maxCount)
             {
-                throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), MaxCount);
+                throw Error.ArgumentOutOfRange_DeriveInvalidCount(nameof(count), _maxCount);
             }
             if (count == 0)
             {
@@ -129,13 +131,13 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> salt,
             Span<byte> bytes)
         {
-            if (salt.Length < MinSaltSize || salt.Length > MaxSaltSize)
+            if (salt.Length < _minSaltSize || salt.Length > _maxSaltSize)
             {
-                throw (MinSaltSize == MaxSaltSize) ? Error.Argument_SaltLength(nameof(salt), MinSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), MinSaltSize, MaxSaltSize);
+                throw (_minSaltSize == _maxSaltSize) ? Error.Argument_SaltLength(nameof(salt), _minSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), _minSaltSize, _maxSaltSize);
             }
-            if (bytes.Length > MaxCount)
+            if (bytes.Length > _maxCount)
             {
-                throw Error.Argument_DeriveInvalidCount(nameof(bytes), MaxCount);
+                throw Error.Argument_DeriveInvalidCount(nameof(bytes), _maxCount);
             }
             if (bytes.IsEmpty)
             {
@@ -154,9 +156,9 @@ namespace NSec.Cryptography
             Algorithm algorithm,
             in KeyCreationParameters creationParameters = default)
         {
-            if (salt.Length < MinSaltSize || salt.Length > MaxSaltSize)
+            if (salt.Length < _minSaltSize || salt.Length > _maxSaltSize)
             {
-                throw (MinSaltSize == MaxSaltSize) ? Error.Argument_SaltLength(nameof(salt), MinSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), MinSaltSize, MaxSaltSize);
+                throw (_minSaltSize == _maxSaltSize) ? Error.Argument_SaltLength(nameof(salt), _minSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), _minSaltSize, _maxSaltSize);
             }
             if (algorithm == null)
             {
@@ -164,7 +166,7 @@ namespace NSec.Cryptography
             }
 
             int seedSize = algorithm.GetSeedSize();
-            if (seedSize > MaxCount)
+            if (seedSize > _maxCount)
             {
                 throw Error.NotSupported_CreateKey();
             }
