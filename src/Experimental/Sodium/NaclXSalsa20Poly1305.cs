@@ -103,7 +103,7 @@ namespace NSec.Experimental.Sodium
             return format switch
             {
                 KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryExport(keyHandle, blob, out blobSize),
-                KeyBlobFormat.NSecSymmetricKey => NSecKeyFormatter.TryExport(NSecBlobHeader, KeySize, MacSize, keyHandle, blob, out blobSize),
+                KeyBlobFormat.NSecSymmetricKey => NSecKeyFormatter.TryExport(NSecBlobHeader, crypto_secretbox_xsalsa20poly1305_KEYBYTES, crypto_secretbox_xsalsa20poly1305_MACBYTES, keyHandle, blob, out blobSize),
                 _ => throw Error.Argument_FormatNotSupported(nameof(format), format.ToString()),
             };
         }
@@ -118,8 +118,8 @@ namespace NSec.Experimental.Sodium
 
             return format switch
             {
-                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryImport(KeySize, blob, out keyHandle),
-                KeyBlobFormat.NSecSymmetricKey => NSecKeyFormatter.TryImport(NSecBlobHeader, KeySize, MacSize, blob, out keyHandle),
+                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryImport(crypto_secretbox_xsalsa20poly1305_KEYBYTES, blob, out keyHandle),
+                KeyBlobFormat.NSecSymmetricKey => NSecKeyFormatter.TryImport(NSecBlobHeader, crypto_secretbox_xsalsa20poly1305_KEYBYTES, crypto_secretbox_xsalsa20poly1305_MACBYTES, blob, out keyHandle),
                 _ => throw Error.Argument_FormatNotSupported(nameof(format), format.ToString()),
             };
         }

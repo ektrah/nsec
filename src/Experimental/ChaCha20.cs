@@ -134,7 +134,7 @@ namespace NSec.Experimental
 
             return format switch
             {
-                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryImport(KeySize, blob, out keyHandle),
+                KeyBlobFormat.RawSymmetricKey => RawKeyFormatter.TryImport(crypto_stream_chacha20_ietf_KEYBYTES, blob, out keyHandle),
                 _ => throw Error.Argument_FormatNotSupported(nameof(format), format.ToString()),
             };
         }
