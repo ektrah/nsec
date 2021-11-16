@@ -24,7 +24,7 @@ namespace NSec.Tests
             return array;
         }
 
-        public static byte[] Substring(this byte[] array, int offset, int length) => new ReadOnlySpan<byte>(array, offset, length).ToArray();
+        public static byte[] Substring(this byte[] array, Range range) => array.AsSpan(range).ToArray();
 
         #region Random Bytes
 

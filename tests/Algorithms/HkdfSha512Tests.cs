@@ -709,7 +709,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = KeyDerivationAlgorithm.HkdfSha512;
 
-            var expected = s_outputForEmpty.DecodeHex().Substring(0, count);
+            var expected = s_outputForEmpty.DecodeHex().Substring(..count);
             var actual = a.Expand(s_prkForEmpty.DecodeHex(), ReadOnlySpan<byte>.Empty, count);
 
             Assert.NotNull(actual);
@@ -802,7 +802,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = KeyDerivationAlgorithm.HkdfSha512;
 
-            var expected = s_outputForEmpty.DecodeHex().Substring(0, count);
+            var expected = s_outputForEmpty.DecodeHex().Substring(..count);
             var actual = new byte[count];
 
             a.Expand(s_prkForEmpty.DecodeHex(), ReadOnlySpan<byte>.Empty, actual);
