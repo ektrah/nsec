@@ -150,8 +150,7 @@ namespace NSec.Tests.Formatting
         [Fact]
         public static void Length100()
         {
-            var value = new byte[100];
-            Utilities.Fill(value, 0xCD);
+            var value = Utilities.FillArray(100, 0xCD);
 
             var expected = new byte[2 + value.Length];
             expected[0] = 0x04;
@@ -166,8 +165,7 @@ namespace NSec.Tests.Formatting
         [Fact]
         public static void Length200()
         {
-            var value = new byte[200];
-            Utilities.Fill(value, 0xCD);
+            var value = Utilities.FillArray(200, 0xCD);
 
             var expected = new byte[3 + value.Length];
             expected[0] = 0x04;
@@ -183,8 +181,7 @@ namespace NSec.Tests.Formatting
         [Fact]
         public static void Length400()
         {
-            var value = new byte[400];
-            Utilities.Fill(value, 0xCD);
+            var value = Utilities.FillArray(400, 0xCD);
 
             var expected = new byte[4 + value.Length];
             expected[0] = 0x04;

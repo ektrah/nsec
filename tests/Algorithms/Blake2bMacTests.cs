@@ -225,9 +225,7 @@ namespace NSec.Tests.Algorithms
             using var k = new Key(a, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving });
 
             var actual = k.Export(KeyBlobFormat.RawSymmetricKey);
-
-            var unexpected = new byte[actual.Length];
-            Utilities.Fill(unexpected, actual[0]);
+            var unexpected = Utilities.FillArray(actual.Length, actual[0]);
 
             Assert.NotEqual(unexpected, actual);
         }

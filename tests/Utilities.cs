@@ -17,7 +17,12 @@ namespace NSec.Tests
 
         public static string EncodeHex(this byte[] bytes) => NSec.Experimental.Text.Base16.Encode(bytes);
 
-        public static void Fill(byte[] array, byte value) => new Span<byte>(array).Fill(value);
+        public static byte[] FillArray(int length, byte value)
+        {
+            var array = new byte[length];
+            array.AsSpan().Fill(value);
+            return array;
+        }
 
         public static byte[] Substring(this byte[] array, int offset, int length) => new ReadOnlySpan<byte>(array, offset, length).ToArray();
 

@@ -253,9 +253,7 @@ namespace NSec.Tests.Base
             Assert.Equal(a.KeySize, k.Size);
 
             var actual = k.Export(KeyBlobFormat.RawSymmetricKey);
-
-            var unexpected = new byte[actual.Length];
-            Utilities.Fill(unexpected, actual[0]);
+            var unexpected = Utilities.FillArray(actual.Length, actual[0]);
 
             Assert.NotEqual(unexpected, actual);
         }
