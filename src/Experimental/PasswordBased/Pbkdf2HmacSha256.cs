@@ -49,6 +49,16 @@ namespace NSec.Experimental.PasswordBased
             ReadOnlySpan<byte> salt,
             Span<byte> bytes)
         {
+#if NET6_0_OR_GREATER
+            System.Security.Cryptography.Rfc2898DeriveBytes.Pbkdf2(
+                password,
+                salt,
+                bytes,
+                _c,
+                System.Security.Cryptography.HashAlgorithmName.SHA256);
+
+            return true;
+#else
             Debug.Assert(crypto_auth_hmacsha256_BYTES % sizeof(uint) == 0);
 
             uint* t = stackalloc uint[crypto_auth_hmacsha256_BYTES / sizeof(uint)];
@@ -105,6 +115,7 @@ namespace NSec.Experimental.PasswordBased
                 Unsafe.InitBlockUnaligned(t, 0, crypto_auth_hmacsha256_BYTES);
                 Unsafe.InitBlockUnaligned(u, 0, crypto_auth_hmacsha256_BYTES);
             }
+#endif
         }
     }
 }
