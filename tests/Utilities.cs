@@ -1,10 +1,17 @@
 using System;
+using Xunit;
 
 namespace NSec.Tests
 {
     internal static class Utilities
     {
         public static ReadOnlySpan<byte> RandomBytes => s_randomBytes;
+
+        public static T AssertNotNull<T>(T? obj) where T : class
+        {
+            Assert.NotNull(obj);
+            return obj!;
+        }
 
         public static byte[] DecodeHex(this string hex) => NSec.Experimental.Text.Base16.Decode(hex);
 

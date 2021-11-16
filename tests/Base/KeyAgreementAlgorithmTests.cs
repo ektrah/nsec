@@ -79,10 +79,10 @@ namespace NSec.Tests.Base
             using var k1 = new Key(a);
             using var k2 = new Key(a);
 
-            using var s1 = AssertNotNull(a.Agree(k1, k2.PublicKey));
+            using var s1 = Utilities.AssertNotNull(a.Agree(k1, k2.PublicKey));
             Assert.Equal(a.SharedSecretSize, s1.Size);
 
-            using var s2 = AssertNotNull(a.Agree(k2, k1.PublicKey));
+            using var s2 = Utilities.AssertNotNull(a.Agree(k2, k1.PublicKey));
             Assert.Equal(a.SharedSecretSize, s2.Size);
         }
 
@@ -91,7 +91,7 @@ namespace NSec.Tests.Base
         public static void AgreeSelf(KeyAgreementAlgorithm a)
         {
             using var k = new Key(a);
-            using var s = AssertNotNull(a.Agree(k, k.PublicKey));
+            using var s = Utilities.AssertNotNull(a.Agree(k, k.PublicKey));
             Assert.Equal(a.SharedSecretSize, s.Size);
         }
 
@@ -112,19 +112,11 @@ namespace NSec.Tests.Base
             Assert.Equal(a.PrivateKeySize, k.Size);
 
             var actual = k.Export(KeyBlobFormat.RawPrivateKey);
-
-            var unexpected = new byte[actual.Length];
-            Utilities.Fill(unexpected, actual[0]);
+            var unexpected = Utilities.FillArray(actual.Length, actual[0]);
 
             Assert.NotEqual(unexpected, actual);
         }
 
         #endregion
-
-        private static SharedSecret AssertNotNull(SharedSecret? sharedSecret)
-        {
-            Assert.NotNull(sharedSecret);
-            return sharedSecret!;
-        }
     }
 }

@@ -25,18 +25,12 @@ namespace NSec.Tests.Rfc
 
             using var k = Key.Import(a, privateKey.DecodeHex(), KeyBlobFormat.RawPrivateKey);
             using var sharedSecretExpected = SharedSecret.Import(sharedSecret.DecodeHex());
-            using var sharedSecretActual = AssertNotNull(a.Agree(k, PublicKey.Import(a, publicKey.DecodeHex(), KeyBlobFormat.RawPublicKey)));
+            using var sharedSecretActual = Utilities.AssertNotNull(a.Agree(k, PublicKey.Import(a, publicKey.DecodeHex(), KeyBlobFormat.RawPublicKey)));
 
             var expected = kdf.Extract(sharedSecretExpected, ReadOnlySpan<byte>.Empty);
             var actual = kdf.Extract(sharedSecretActual, ReadOnlySpan<byte>.Empty);
 
             Assert.Equal(expected, actual);
-        }
-
-        private static SharedSecret AssertNotNull(SharedSecret? sharedSecret)
-        {
-            Assert.NotNull(sharedSecret);
-            return sharedSecret!;
         }
     }
 }
