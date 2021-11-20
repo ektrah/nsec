@@ -39,6 +39,23 @@ namespace NSec.Tests.Formatting
 
         [Theory]
         [InlineData("", "")]
+        [InlineData("f", "MY======")]
+        [InlineData("fo", "MZXQ====")]
+        [InlineData("foo", "MZXW6===")]
+        [InlineData("foob", "MZXW6YQ=")]
+        [InlineData("fooba", "MZXW6YTB")]
+        [InlineData("foobar", "MZXW6YTBOI======")]
+        public static void EncodeUtf8(string input, string expected)
+        {
+            var expectedUtf8 = Encoding.UTF8.GetBytes(expected);
+            var bytes = Encoding.UTF8.GetBytes(input);
+            var base32 = new byte[Base32.GetEncodedLength(bytes.Length)];
+            Base32.EncodeToUtf8(bytes, base32);
+            Assert.Equal(expectedUtf8, base32);
+        }
+
+        [Theory]
+        [InlineData("", "")]
         [InlineData("MY======", "f")]
         [InlineData("MZXQ====", "fo")]
         [InlineData("MZXW6===", "foo")]
@@ -76,6 +93,30 @@ namespace NSec.Tests.Formatting
         }
 
         [Theory]
+        [InlineData("", "")]
+        [InlineData("MY======", "f")]
+        [InlineData("MZXQ====", "fo")]
+        [InlineData("MZXW6===", "foo")]
+        [InlineData("MZXW6YQ=", "foob")]
+        [InlineData("MZXW6YTB", "fooba")]
+        [InlineData("MZXW6YTBOI======", "foobar")]
+        [InlineData("my======", "f")]
+        [InlineData("mzxq====", "fo")]
+        [InlineData("mzxw6===", "foo")]
+        [InlineData("mzxw6yq=", "foob")]
+        [InlineData("mzxw6ytb", "fooba")]
+        [InlineData("mzxw6ytboi======", "foobar")]
+        public static void DecodeUf8(string input, string expected)
+        {
+            var bytes = Encoding.UTF8.GetBytes(expected);
+            var base32 = Encoding.UTF8.GetBytes(input);
+            Assert.True(Base32.TryGetDecodedLength(base32, out var length));
+            var actual = new byte[length];
+            Assert.True(Base32.TryDecodeFromUtf8(base32, actual));
+            Assert.Equal(bytes, actual);
+        }
+
+        [Theory]
         [InlineData("M")]
         [InlineData("MZ")]
         [InlineData("MZX")]
@@ -106,6 +147,22 @@ namespace NSec.Tests.Formatting
             Assert.True(Base32.TryGetDecodedLength(base32, out var length));
             var actual = new byte[length];
             Assert.False(Base32.TryDecode(base32, actual));
+        }
+
+        [Theory]
+        [InlineData("========")]
+        [InlineData("M=======")]
+        [InlineData("MY=====A")]
+        [InlineData("MZX=====")]
+        [InlineData("MZXQ===A")]
+        [InlineData("MZXW6==A")]
+        [InlineData("MZXW6Y==")]
+        public static void DecodeInvalidPaddingUtf8(string input)
+        {
+            var base32 = Encoding.UTF8.GetBytes(input);
+            Assert.True(Base32.TryGetDecodedLength(base32, out var length));
+            var actual = new byte[length];
+            Assert.False(Base32.TryDecodeFromUtf8(base32, actual));
         }
 
         [Theory]

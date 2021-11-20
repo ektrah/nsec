@@ -41,6 +41,24 @@ namespace NSec.Tests.Formatting
 
         [Theory]
         [InlineData("", "")]
+        [InlineData("f", "Zg==")]
+        [InlineData("fo", "Zm8=")]
+        [InlineData("foo", "Zm9v")]
+        [InlineData("foob", "Zm9vYg==")]
+        [InlineData("fooba", "Zm9vYmE=")]
+        [InlineData("foobar", "Zm9vYmFy")]
+        [InlineData("a", "YQ==")]
+        public static void EncodeUtf8(string input, string expected)
+        {
+            var expectedUtf8 = Encoding.UTF8.GetBytes(expected);
+            var bytes = Encoding.UTF8.GetBytes(input);
+            var base64 = new byte[Base64.GetEncodedLength(bytes.Length)];
+            Base64.EncodeToUtf8(bytes, base64);
+            Assert.Equal(expectedUtf8, base64);
+        }
+
+        [Theory]
+        [InlineData("", "")]
         [InlineData("Zg==", "f")]
         [InlineData("Zm8=", "fo")]
         [InlineData("Zm9v", "foo")]
@@ -74,6 +92,26 @@ namespace NSec.Tests.Formatting
         }
 
         [Theory]
+        [InlineData("", "")]
+        [InlineData("Zg==", "f")]
+        [InlineData("Zm8=", "fo")]
+        [InlineData("Zm9v", "foo")]
+        [InlineData("Zm9vYg==", "foob")]
+        [InlineData("Zm9vYmE=", "fooba")]
+        [InlineData("Zm9vYmFy", "foobar")]
+        [InlineData("YQ==", "a")]
+        [InlineData("YR==", "a")]
+        public static void DecodeUtf8(string input, string expected)
+        {
+            var bytes = Encoding.UTF8.GetBytes(expected);
+            var base64 = Encoding.UTF8.GetBytes(input);
+            Assert.True(Base64.TryGetDecodedLength(base64, out var length));
+            var actual = new byte[length];
+            Assert.True(Base64.TryDecodeFromUtf8(base64, actual));
+            Assert.Equal(bytes, actual);
+        }
+
+        [Theory]
         [InlineData("Z")]
         [InlineData("Zg")]
         [InlineData("Zg=")]
@@ -97,6 +135,18 @@ namespace NSec.Tests.Formatting
             Assert.True(Base64.TryGetDecodedLength(base64, out var length));
             var actual = new byte[length];
             Assert.False(Base64.TryDecode(base64, actual));
+        }
+
+        [Theory]
+        [InlineData("====")]
+        [InlineData("Z===")]
+        [InlineData("Zg=A")]
+        public static void DecodeInvalidPaddingUtf8(string input)
+        {
+            var base64 = Encoding.UTF8.GetBytes(input);
+            Assert.True(Base64.TryGetDecodedLength(base64, out var length));
+            var actual = new byte[length];
+            Assert.False(Base64.TryDecodeFromUtf8(base64, actual));
         }
 
         [Theory]

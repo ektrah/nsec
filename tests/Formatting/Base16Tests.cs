@@ -39,6 +39,23 @@ namespace NSec.Tests.Formatting
 
         [Theory]
         [InlineData("", "")]
+        [InlineData("f", "66")]
+        [InlineData("fo", "666F")]
+        [InlineData("foo", "666F6F")]
+        [InlineData("foob", "666F6F62")]
+        [InlineData("fooba", "666F6F6261")]
+        [InlineData("foobar", "666F6F626172")]
+        public static void EncodeUtf8(string input, string expected)
+        {
+            var expectedUtf8 = Encoding.UTF8.GetBytes(expected);
+            var bytes = Encoding.UTF8.GetBytes(input);
+            var base16 = new byte[Base16.GetEncodedLength(bytes.Length)];
+            Base16.EncodeToUtf8(bytes, base16);
+            Assert.Equal(expectedUtf8, base16);
+        }
+
+        [Theory]
+        [InlineData("", "")]
         [InlineData("66", "f")]
         [InlineData("666F", "fo")]
         [InlineData("666F6F", "foo")]
@@ -72,6 +89,29 @@ namespace NSec.Tests.Formatting
         {
             var bytes = Encoding.UTF8.GetBytes(expected);
             Assert.Equal(bytes, Base16.Decode(input));
+        }
+
+        [Theory]
+        [InlineData("", "")]
+        [InlineData("66", "f")]
+        [InlineData("666F", "fo")]
+        [InlineData("666F6F", "foo")]
+        [InlineData("666F6F62", "foob")]
+        [InlineData("666F6F6261", "fooba")]
+        [InlineData("666F6F626172", "foobar")]
+        [InlineData("666f", "fo")]
+        [InlineData("666f6f", "foo")]
+        [InlineData("666f6f62", "foob")]
+        [InlineData("666f6f6261", "fooba")]
+        [InlineData("666f6f626172", "foobar")]
+        public static void DecodeUtf8(string input, string expected)
+        {
+            var bytes = Encoding.UTF8.GetBytes(expected);
+            var base16 = Encoding.UTF8.GetBytes(input);
+            Assert.True(Base16.TryGetDecodedLength(base16, out var length));
+            var actual = new byte[length];
+            Assert.True(Base16.TryDecodeFromUtf8(base16, actual));
+            Assert.Equal(bytes, actual);
         }
 
         [Theory]
