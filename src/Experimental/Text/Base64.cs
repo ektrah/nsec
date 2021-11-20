@@ -282,13 +282,10 @@ namespace NSec.Experimental.Text
             }
 
             int padding = 0;
-            if (base64.Length != 0 && base64[base64.Length - 1] == '=')
+            if (base64.Length != 0)
             {
-                padding++;
-                if (base64[base64.Length - 2] == '=')
-                {
-                    padding++;
-                }
+                padding += 1 & (((base64[^1] ^ 0x3d) - 1) >> 31);
+                padding += 1 & (((base64[^2] ^ 0x3d) - 1) >> 31) & ((0 - padding) >> 31);
             }
 
             decodedLength = (base64.Length / 4) * 3 - padding;
@@ -306,13 +303,10 @@ namespace NSec.Experimental.Text
             }
 
             int padding = 0;
-            if (base64.Length != 0 && base64[base64.Length - 1] == '=')
+            if (base64.Length != 0)
             {
-                padding++;
-                if (base64[base64.Length - 2] == '=')
-                {
-                    padding++;
-                }
+                padding += 1 & (((base64[^1] ^ 0x3d) - 1) >> 31);
+                padding += 1 & (((base64[^2] ^ 0x3d) - 1) >> 31) & ((0 - padding) >> 31);
             }
 
             decodedLength = (base64.Length / 4) * 3 - padding;

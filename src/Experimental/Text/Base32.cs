@@ -410,21 +410,12 @@ namespace NSec.Experimental.Text
             }
 
             int padding = 0;
-            if (base32.Length != 0 && base32[base32.Length - 1] == '=')
+            if (base32.Length != 0)
             {
-                padding++;
-                if (base32[base32.Length - 2] == '=' && base32[base32.Length - 3] == '=')
-                {
-                    padding++;
-                    if (base32[base32.Length - 4] == '=')
-                    {
-                        padding++;
-                        if (base32[base32.Length - 5] == '=' && base32[base32.Length - 6] == '=')
-                        {
-                            padding++;
-                        }
-                    }
-                }
+                padding += 1 & (((base32[^1] ^ 0x3d) - 1) >> 31);
+                padding += 1 & (((base32[^2] ^ 0x3d) - 1) >> 31) & (((base32[^3] ^ 0x3d) - 1) >> 31) & ((0 - padding) >> 31);
+                padding += 1 & (((base32[^4] ^ 0x3d) - 1) >> 31) & /*                               */ ((1 - padding) >> 31);
+                padding += 1 & (((base32[^5] ^ 0x3d) - 1) >> 31) & (((base32[^6] ^ 0x3d) - 1) >> 31) & ((2 - padding) >> 31);
             }
 
             decodedLength = (base32.Length / 8) * 5 - padding;
@@ -442,21 +433,12 @@ namespace NSec.Experimental.Text
             }
 
             int padding = 0;
-            if (base32.Length != 0 && base32[base32.Length - 1] == '=')
+            if (base32.Length != 0)
             {
-                padding++;
-                if (base32[base32.Length - 2] == '=' && base32[base32.Length - 3] == '=')
-                {
-                    padding++;
-                    if (base32[base32.Length - 4] == '=')
-                    {
-                        padding++;
-                        if (base32[base32.Length - 5] == '=' && base32[base32.Length - 6] == '=')
-                        {
-                            padding++;
-                        }
-                    }
-                }
+                padding += 1 & (((base32[^1] ^ 0x3d) - 1) >> 31);
+                padding += 1 & (((base32[^2] ^ 0x3d) - 1) >> 31) & (((base32[^3] ^ 0x3d) - 1) >> 31) & ((0 - padding) >> 31);
+                padding += 1 & (((base32[^4] ^ 0x3d) - 1) >> 31) /*                               */ & ((1 - padding) >> 31);
+                padding += 1 & (((base32[^5] ^ 0x3d) - 1) >> 31) & (((base32[^6] ^ 0x3d) - 1) >> 31) & ((2 - padding) >> 31);
             }
 
             decodedLength = (base32.Length / 8) * 5 - padding;
