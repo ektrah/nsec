@@ -29,6 +29,25 @@ namespace NSec.Experimental
             return System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(left, right);
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
+        public static bool FixedTimeIsAllZeros(ReadOnlySpan<byte> data)
+        {
+            // NoOptimization because we want this method to be exactly as non-short-circuiting
+            // as written.
+            //
+            // NoInlining because the NoOptimization would get lost if the method got inlined.
+
+            int length = data.Length;
+            int accum = 0;
+
+            for (int i = 0; i < length; i++)
+            {
+                accum |= data[i];
+            }
+
+            return accum == 0;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte[] HexDecode(string base16)
         {
