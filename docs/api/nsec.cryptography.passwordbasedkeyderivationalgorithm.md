@@ -243,7 +243,7 @@ CryptographicException
     system refused to allocate the amount of requested memory.
 
 
-### DeriveKey(string or ReadOnlySpan<byte>, ReadOnlySpan<byte>, Algorithm, in KeyCreationParameters creationParameters)
+### DeriveKey(string or ReadOnlySpan<byte>, ReadOnlySpan<byte>, Algorithm, in KeyCreationParameters)
 
 Derives a key for the specified algorithm from a password, using the specified
 salt.
