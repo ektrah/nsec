@@ -25,7 +25,7 @@ namespace NSec.Cryptography
             }
 
             int seedSize = algorithm.GetSeedSize();
-            Debug.Assert(seedSize <= 64);
+            Debug.Assert(seedSize > 0 && seedSize <= 64);
 
             SecureMemoryHandle? keyHandle = default;
             PublicKey? publicKey = default;
