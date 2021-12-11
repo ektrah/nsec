@@ -47,7 +47,7 @@ and verify the signature:
 
 NSec works with .NET 6, .NET 5, and .NET Core 3.1 on Windows, Linux and macOS.
 
-See [[Installation]] for more information.
+See [[Installation]] for more details.
 
 
 ## Documentation
@@ -70,7 +70,7 @@ See [[Installation]] for more information.
 |                                                 | scrypt                    |
 | [[SignatureAlgorithm Class]]                    | Ed25519                   |
 
-See [[API Reference|NSec.Cryptography Namespace]] for more information.
+See [[API Reference|NSec.Cryptography Namespace]] for detailed information.
 
 
 ## Contributing
