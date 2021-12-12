@@ -55,6 +55,35 @@ namespace NSec.Experimental.PasswordBased
         public int SaltSize => _keyDerivationAlgorithm.SaltSize;
 
         public byte[] Mac(
+            string password,
+            ReadOnlySpan<byte> salt,
+            ReadOnlySpan<byte> data)
+        {
+            using Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _macAlgorithm);
+            return _macAlgorithm.Mac(key, data);
+        }
+
+        public void Mac(
+            string password,
+            ReadOnlySpan<byte> salt,
+            ReadOnlySpan<byte> data,
+            Span<byte> mac)
+        {
+            using Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _macAlgorithm);
+            _macAlgorithm.Mac(key, data, mac);
+        }
+
+        public bool TryVerify(
+            string password,
+            ReadOnlySpan<byte> salt,
+            ReadOnlySpan<byte> data,
+            ReadOnlySpan<byte> mac)
+        {
+            using Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _macAlgorithm);
+            return _macAlgorithm.Verify(key, data, mac);
+        }
+
+        public byte[] Mac(
             ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> data)

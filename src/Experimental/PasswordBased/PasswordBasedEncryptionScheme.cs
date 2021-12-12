@@ -57,6 +57,28 @@ namespace NSec.Experimental.PasswordBased
         public int TagSize => _encryptionAlgorithm.TagSize;
 
         public byte[] Encrypt(
+            string password,
+            ReadOnlySpan<byte> salt,
+            ReadOnlySpan<byte> nonce,
+            ReadOnlySpan<byte> plaintext)
+        {
+            using Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _encryptionAlgorithm);
+            return _encryptionAlgorithm.Encrypt(key, nonce, default, plaintext);
+        }
+
+        public void Encrypt(
+            string password,
+            ReadOnlySpan<byte> salt,
+            ReadOnlySpan<byte> nonce,
+            ReadOnlySpan<byte> plaintext,
+            Span<byte> ciphertext)
+        {
+            using Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _encryptionAlgorithm);
+            _encryptionAlgorithm.Encrypt(key, nonce, default, plaintext, ciphertext);
+        }
+
+
+        public byte[] Encrypt(
             ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> nonce,
@@ -75,6 +97,27 @@ namespace NSec.Experimental.PasswordBased
         {
             using Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _encryptionAlgorithm);
             _encryptionAlgorithm.Encrypt(key, nonce, default, plaintext, ciphertext);
+        }
+
+        public byte[]? Decrypt(
+            string password,
+            ReadOnlySpan<byte> salt,
+            ReadOnlySpan<byte> nonce,
+            ReadOnlySpan<byte> ciphertext)
+        {
+            using Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _encryptionAlgorithm);
+            return _encryptionAlgorithm.Decrypt(key, nonce, default, ciphertext);
+        }
+
+        public bool Decrypt(
+            string password,
+            ReadOnlySpan<byte> salt,
+            ReadOnlySpan<byte> nonce,
+            ReadOnlySpan<byte> ciphertext,
+            Span<byte> plaintext)
+        {
+            using Key key = _keyDerivationAlgorithm.DeriveKey(password, salt, _encryptionAlgorithm);
+            return _encryptionAlgorithm.Decrypt(key, nonce, default, ciphertext, plaintext);
         }
 
         public byte[]? Decrypt(
