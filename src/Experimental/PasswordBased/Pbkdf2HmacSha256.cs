@@ -44,6 +44,12 @@ namespace NSec.Experimental.PasswordBased
             _c = c;
         }
 
+        internal void GetParameters(
+            out Pbkdf2Parameters parameters)
+        {
+            parameters.IterationCount = _c;
+        }
+
         internal override unsafe bool TryDeriveBytesCore(
             ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,

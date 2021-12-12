@@ -109,6 +109,14 @@ namespace NSec.Cryptography
             }
         }
 
+        internal void GetParameters(
+            out Argon2Parameters parameters)
+        {
+            parameters.DegreeOfParallelism = 1;
+            parameters.MemorySize = (long)_memLimit / 1024;
+            parameters.NumberOfPasses = (long)_opsLimit;
+        }
+
         internal override unsafe bool TryDeriveBytesCore(
             ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,

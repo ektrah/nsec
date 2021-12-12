@@ -93,6 +93,14 @@ namespace NSec.Cryptography
             }
         }
 
+        internal void GetParameters(
+            out ScryptParameters parameters)
+        {
+            parameters.Cost = (long)_n;
+            parameters.BlockSize = (int)_r;
+            parameters.Parallelization = (int)_p;
+        }
+
         internal override unsafe bool TryDeriveBytesCore(
             ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,
