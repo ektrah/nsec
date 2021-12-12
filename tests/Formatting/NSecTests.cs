@@ -94,7 +94,7 @@ namespace NSec.Tests.Formatting
 
             var b = Utilities.RandomBytes[..64];
 
-            using var s = SharedSecret.Import(b, new() { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving });
+            using var s = SharedSecret.Import(b, SharedSecretBlobFormat.RawSharedSecret, new() { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving });
 
             var blob = s.Export(SharedSecretBlobFormat.NSecSharedSecret);
 

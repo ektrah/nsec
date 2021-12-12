@@ -58,7 +58,7 @@ namespace NSec.Tests.Algorithms
             pk2[^1] |= 0x80;
 
             using var k = Key.Import(a, privateKey.DecodeHex(), KeyBlobFormat.RawPrivateKey);
-            using var sharedSecretExpected = SharedSecret.Import(sharedSecret.DecodeHex());
+            using var sharedSecretExpected = SharedSecret.Import(sharedSecret.DecodeHex(), SharedSecretBlobFormat.RawSharedSecret);
             using var sharedSecretActual1 = Utilities.AssertNotNull(a.Agree(k, PublicKey.Import(a, pk1, KeyBlobFormat.RawPublicKey)));
             using var sharedSecretActual2 = Utilities.AssertNotNull(a.Agree(k, PublicKey.Import(a, pk2, KeyBlobFormat.RawPublicKey)));
 
@@ -117,7 +117,7 @@ namespace NSec.Tests.Algorithms
             var kdf = KeyDerivationAlgorithm.HkdfSha256;
 
             using var k = Key.Import(a, privateKey.DecodeHex(), KeyBlobFormat.RawPrivateKey);
-            using var sharedSecretExpected = SharedSecret.Import(sharedSecret.DecodeHex());
+            using var sharedSecretExpected = SharedSecret.Import(sharedSecret.DecodeHex(), SharedSecretBlobFormat.RawSharedSecret);
             using var sharedSecretActual = Utilities.AssertNotNull(a.Agree(k, PublicKey.Import(a, publicKey.DecodeHex(), KeyBlobFormat.RawPublicKey)));
 
             var expected = kdf.Extract(sharedSecretExpected, ReadOnlySpan<byte>.Empty);

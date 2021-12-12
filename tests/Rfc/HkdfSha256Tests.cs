@@ -33,7 +33,7 @@ namespace NSec.Tests.Rfc
         {
             var a = KeyDerivationAlgorithm.HkdfSha256;
 
-            using var s = SharedSecret.Import(ikm.DecodeHex());
+            using var s = SharedSecret.Import(ikm.DecodeHex(), SharedSecretBlobFormat.RawSharedSecret);
 
             var actualOkm = a.DeriveBytes(s, salt.DecodeHex(), info.DecodeHex(), expectedOkm.DecodeHex().Length);
 
@@ -46,7 +46,7 @@ namespace NSec.Tests.Rfc
         {
             var a = KeyDerivationAlgorithm.HkdfSha256;
 
-            using var s = SharedSecret.Import(ikm.DecodeHex());
+            using var s = SharedSecret.Import(ikm.DecodeHex(), SharedSecretBlobFormat.RawSharedSecret);
 
             var actualPrk = a.Extract(s, salt.DecodeHex());
             Assert.Equal(expectedPrk.DecodeHex(), actualPrk);
