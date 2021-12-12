@@ -6,7 +6,7 @@ Represents a key derivation algorithm using keying material as input.
 
 !!! Note
     The [[KeyDerivationAlgorithm|KeyDerivationAlgorithm Class]] class requires
-    cryptographically strong input keying material. To derive keys from
+    cryptographically suitable input keying material. To derive keys from
     passwords, use the
     [[PasswordBasedKeyDerivationAlgorithm|PasswordBasedKeyDerivationAlgorithm
     Class]] class.
@@ -16,8 +16,9 @@ Represents a key derivation algorithm using keying material as input.
 
 * [[Algorithm|Algorithm Class]]
     * **KeyDerivationAlgorithm**
-        * HkdfSha256
-        * HkdfSha512
+        * [[KeyDerivationAlgorithm2|KeyDerivationAlgorithm2 Class]]
+            * HkdfSha256
+            * HkdfSha512
 
 
 ## [TOC] Summary
@@ -297,5 +298,6 @@ All methods yield the same result for the same arguments.
 
 * API Reference
     * [[Algorithm Class]]
+    * [[KeyDerivationAlgorithm2 Class]]
     * [[PasswordBasedKeyDerivationAlgorithm Class]]
     * [[SharedSecret Class]]

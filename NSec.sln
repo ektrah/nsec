@@ -68,6 +68,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{F058E702-CA9
 		docs\api\nsec.cryptography.keyblobformat.md = docs\api\nsec.cryptography.keyblobformat.md
 		docs\api\nsec.cryptography.keycreationparameters.md = docs\api\nsec.cryptography.keycreationparameters.md
 		docs\api\nsec.cryptography.keyderivationalgorithm.md = docs\api\nsec.cryptography.keyderivationalgorithm.md
+		docs\api\nsec.cryptography.keyderivationalgorithm2.md = docs\api\nsec.cryptography.keyderivationalgorithm2.md
 		docs\api\nsec.cryptography.keyexportpolicies.md = docs\api\nsec.cryptography.keyexportpolicies.md
 		docs\api\nsec.cryptography.macalgorithm.md = docs\api\nsec.cryptography.macalgorithm.md
 		docs\api\nsec.cryptography.md = docs\api\nsec.cryptography.md

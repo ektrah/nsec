@@ -329,4 +329,5 @@ All methods yield the same result for the same arguments.
     * [[Algorithm Class]]
     * [[Argon2Parameters Struct]]
     * [[KeyDerivationAlgorithm Class]]
+    * [[KeyDerivationAlgorithm2 Class]]
     * [[ScryptParameters Struct]]

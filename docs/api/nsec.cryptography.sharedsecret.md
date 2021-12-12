@@ -222,5 +222,6 @@ not guaranteed to be thread safe.
 * API Reference
     * [[KeyAgreementAlgorithm Class]]
     * [[KeyDerivationAlgorithm Class]]
+    * [[KeyDerivationAlgorithm2 Class]]
     * [[SharedSecretBlobFormat Enum]]
     * [[SharedSecretCreationParameters Struct]]

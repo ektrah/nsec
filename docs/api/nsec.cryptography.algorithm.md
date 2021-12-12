@@ -20,8 +20,9 @@ This class has no public members.
     * [[KeyAgreementAlgorithm|KeyAgreementAlgorithm Class]]
         * X25519
     * [[KeyDerivationAlgorithm|KeyDerivationAlgorithm Class]]
-        * HkdfSha256
-        * HkdfSha512
+        * [[KeyDerivationAlgorithm2|KeyDerivationAlgorithm2 Class]]
+            * HkdfSha256
+            * HkdfSha512
     * [[MacAlgorithm|MacAlgorithm Class]]
         * Blake2bMac
         * HmacSha256

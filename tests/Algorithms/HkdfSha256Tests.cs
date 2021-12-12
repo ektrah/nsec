@@ -294,37 +294,12 @@ namespace NSec.Tests.Algorithms
         #region Extract #1
 
         [Fact]
-        public static void ExtractWithNullSecret()
-        {
-            var a = KeyDerivationAlgorithm.HkdfSha256;
-
-            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.Extract(null!, ReadOnlySpan<byte>.Empty));
-        }
-
-        [Fact]
-        public static void ExtractWithEmptySalt()
-        {
-            const int HashLen = 256 / 8;
-
-            var a = KeyDerivationAlgorithm.HkdfSha256;
-
-            using var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty);
-
-            var expected = a.Extract(s, new byte[HashLen]);
-            var actual = a.Extract(s, ReadOnlySpan<byte>.Empty);
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
         public static void ExtractSuccess()
         {
             var a = KeyDerivationAlgorithm.HkdfSha256;
 
-            using var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty);
-
             var expected = s_prkForEmpty.DecodeHex();
-            var actual = a.Extract(s, ReadOnlySpan<byte>.Empty);
+            var actual = a.Extract(ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty);
 
             Assert.Equal(expected, actual);
             Assert.Equal(a.PseudorandomKeySize, actual.Length);
@@ -335,78 +310,14 @@ namespace NSec.Tests.Algorithms
         #region Extract #2
 
         [Fact]
-        public static void ExtractWithSpanWithNullSecret()
-        {
-            var a = KeyDerivationAlgorithm.HkdfSha256;
-
-            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.Extract(null!, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
-        }
-
-        [Fact]
-        public static void ExtractWithSpanTooShort()
-        {
-            var a = KeyDerivationAlgorithm.HkdfSha256;
-
-            using var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty);
-
-            Assert.Throws<ArgumentException>("pseudorandomKey", () => a.Extract(s, ReadOnlySpan<byte>.Empty, new byte[a.PseudorandomKeySize - 1]));
-        }
-
-        [Fact]
-        public static void ExtractWithSpanTooLong()
-        {
-            var a = KeyDerivationAlgorithm.HkdfSha256;
-
-            using var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty);
-
-            Assert.Throws<ArgumentException>("pseudorandomKey", () => a.Extract(s, ReadOnlySpan<byte>.Empty, new byte[a.PseudorandomKeySize + 1]));
-        }
-
-        [Fact]
-        public static void ExtractWithSpanWithEmptySalt()
-        {
-            const int HashLen = 256 / 8;
-
-            var a = KeyDerivationAlgorithm.HkdfSha256;
-
-            using var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty);
-
-            var expected = new byte[a.PseudorandomKeySize];
-            var actual = new byte[expected.Length];
-
-            a.Extract(s, new byte[HashLen], expected);
-            a.Extract(s, ReadOnlySpan<byte>.Empty, actual);
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public static void ExtractWithSpanWithSaltOverlapping()
-        {
-            var a = KeyDerivationAlgorithm.HkdfSha256;
-
-            using var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty);
-
-            var expected = new byte[a.PseudorandomKeySize];
-            var actual = Utilities.RandomBytes[..a.PseudorandomKeySize].ToArray();
-
-            a.Extract(s, actual, expected);
-            a.Extract(s, actual, actual);
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
         public static void ExtractWithSpanSuccess()
         {
             var a = KeyDerivationAlgorithm.HkdfSha256;
 
-            using var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty);
-
             var expected = s_prkForEmpty.DecodeHex();
             var actual = new byte[expected.Length];
 
-            a.Extract(s, ReadOnlySpan<byte>.Empty, actual);
+            a.Extract(ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, actual);
 
             Assert.Equal(expected, actual);
         }
@@ -414,30 +325,6 @@ namespace NSec.Tests.Algorithms
         #endregion
 
         #region Expand #1
-
-        [Fact]
-        public static void ExpandWithCountWithPrkTooShort()
-        {
-            var a = KeyDerivationAlgorithm.HkdfSha256;
-
-            Assert.Throws<ArgumentException>("pseudorandomKey", () => a.Expand(new byte[a.PseudorandomKeySize - 1], ReadOnlySpan<byte>.Empty, 0));
-        }
-
-        [Fact]
-        public static void ExpandWithNegativeCount()
-        {
-            var a = KeyDerivationAlgorithm.HkdfSha256;
-
-            Assert.Throws<ArgumentOutOfRangeException>("count", () => a.Expand(s_prkForEmpty.DecodeHex(), ReadOnlySpan<byte>.Empty, -1));
-        }
-
-        [Fact]
-        public static void ExpandWithCountTooLarge()
-        {
-            var a = KeyDerivationAlgorithm.HkdfSha256;
-
-            Assert.Throws<ArgumentOutOfRangeException>("count", () => a.Expand(s_prkForEmpty.DecodeHex(), ReadOnlySpan<byte>.Empty, a.MaxCount + 1));
-        }
 
         [Theory]
         [InlineData(0)]
@@ -489,49 +376,6 @@ namespace NSec.Tests.Algorithms
 
         #region Expand #2
 
-        [Fact]
-        public static void ExpandWithSpanWithPrkTooShort()
-        {
-            var a = KeyDerivationAlgorithm.HkdfSha256;
-
-            Assert.Throws<ArgumentException>("pseudorandomKey", () => a.Expand(new byte[a.PseudorandomKeySize - 1], ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
-        }
-
-        [Fact]
-        public static void ExpandWithSpanTooLarge()
-        {
-            var a = KeyDerivationAlgorithm.HkdfSha256;
-
-            Assert.Throws<ArgumentException>("bytes", () => a.Expand(s_prkForEmpty.DecodeHex(), ReadOnlySpan<byte>.Empty, new byte[a.MaxCount + 1]));
-        }
-
-        [Fact]
-        public static void ExpandWithKeyOverlapping()
-        {
-            var a = KeyDerivationAlgorithm.HkdfSha256;
-            var b = new byte[200];
-
-            Assert.Throws<ArgumentException>("bytes", () => a.Expand(b.AsSpan(10, a.PseudorandomKeySize), ReadOnlySpan<byte>.Empty, b.AsSpan(30, 100)));
-            Assert.Throws<ArgumentException>("bytes", () => a.Expand(b.AsSpan(30, a.PseudorandomKeySize), ReadOnlySpan<byte>.Empty, b.AsSpan(10, 100)));
-        }
-
-        [Fact]
-        public static void ExpandWithInfoOverlapping()
-        {
-            var a = KeyDerivationAlgorithm.HkdfSha256;
-            var x = KeyAgreementAlgorithm.X25519;
-
-            using var k = new Key(x);
-            using var s = x.Agree(k, k.PublicKey)!;
-
-            var b = new byte[200];
-
-            var prk = a.Extract(s, ReadOnlySpan<byte>.Empty);
-
-            Assert.Throws<ArgumentException>("bytes", () => a.Expand(prk, b.AsSpan(10, 100), b.AsSpan(60, 100)));
-            Assert.Throws<ArgumentException>("bytes", () => a.Expand(prk, b.AsSpan(60, 100), b.AsSpan(10, 100)));
-        }
-
         [Theory]
         [InlineData(0)]
         [InlineData(1)]
@@ -578,6 +422,40 @@ namespace NSec.Tests.Algorithms
 
             Assert.NotNull(b);
             Assert.Equal(256, b.Length);
+        }
+
+        #endregion
+
+        #region DeriveBytes #1
+
+        [Fact]
+        public static void DeriveBytesEmpty()
+        {
+            var a = KeyDerivationAlgorithm.HkdfSha256;
+
+            var expected = s_outputForEmpty.DecodeHex();
+            var actual = a.DeriveBytes(ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, a.MaxCount);
+
+            Assert.NotNull(actual);
+            Assert.Equal(expected, actual);
+            Assert.Equal(a.MaxCount, actual.Length);
+        }
+
+        #endregion
+
+        #region DeriveBytes #2
+
+        [Fact]
+        public static void DeriveBytesWithSpanEmpty()
+        {
+            var a = KeyDerivationAlgorithm.HkdfSha256;
+
+            var expected = s_outputForEmpty.DecodeHex();
+            var actual = new byte[a.MaxCount];
+
+            a.DeriveBytes(ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, actual);
+
+            Assert.Equal(expected, actual);
         }
 
         #endregion

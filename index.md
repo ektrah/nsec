@@ -61,7 +61,7 @@ See [[Installation]] for more details.
 |                                                 | SHA-256                   |
 |                                                 | SHA-512                   |
 | [[KeyAgreementAlgorithm Class]]                 | X25519                    |
-| [[KeyDerivationAlgorithm Class]]                | HKDF-SHA-256              |
+| [[KeyDerivationAlgorithm2 Class]]               | HKDF-SHA-256              |
 |                                                 | HKDF-SHA-512              |
 | [[MacAlgorithm Class]]                          | BLAKE2b *(keyed)*         |
 |                                                 | HMAC-SHA-256              |

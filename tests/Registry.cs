@@ -62,6 +62,12 @@ namespace NSec.Tests
             KeyDerivationAlgorithm.HkdfSha512,
         };
 
+        public static readonly TheoryData<KeyDerivationAlgorithm2> KeyDerivationAlgorithms2 = new()
+        {
+            KeyDerivationAlgorithm2.HkdfSha256,
+            KeyDerivationAlgorithm2.HkdfSha512,
+        };
+
         public static readonly TheoryData<PasswordBasedKeyDerivationAlgorithm> PasswordHashAlgorithms = new()
         {
             // intentionally weak parameters for unit testing
