@@ -107,7 +107,6 @@ inputKeyingMaterial
 
 salt
 : Optional salt.
-    Must be empty if the algorithm does not support the use of salt.
 
 info
 : Context and application specific information. This should be used to ensure
@@ -174,7 +173,6 @@ inputKeyingMaterial
 
 salt
 : Optional salt.
-    Must be empty if the algorithm does not support the use of salt.
 
 info
 : Context and application specific information. This should be used to ensure
@@ -233,7 +231,6 @@ specified salt and context information.
         Algorithm algorithm,
         in KeyCreationParameters creationParameters = default)
 
-
 #### Parameters
 
 sharedSecret
@@ -244,7 +241,6 @@ inputKeyingMaterial
 
 salt
 : Optional salt.
-    Must be empty if the algorithm does not support the use of salt.
 
 info
 : Context and application specific information. This should be used to ensure
