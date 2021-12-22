@@ -8,37 +8,37 @@ workflows:
           requires:
       - centos7:
           requires:
-            - macos10.14
+            - macos10.15
       - centos8:
           requires:
-            - macos10.14
+            - macos10.15
       - debian9:
           requires:
-            - macos10.14
+            - macos10.15
       - debian10:
           requires:
-            - macos10.14
+            - macos10.15
       - debian11:
           requires:
-            - macos10.14
+            - macos10.15
       - fedora33:
           requires:
-            - macos10.14
+            - macos10.15
       - fedora34:
           requires:
-            - macos10.14
+            - macos10.15
       - opensuse15:
           requires:
-            - macos10.14
+            - macos10.15
       - ubuntu16.04:
           requires:
       - ubuntu18.04:
           requires:
-            - macos10.14
+            - macos10.15
       - ubuntu20.04:
           requires:
-            - macos10.14
-      - macos10.14:
+            - macos10.15
+      - macos10.15:
           requires:
             - alpine3.14
             - ubuntu16.04
@@ -46,12 +46,9 @@ workflows:
             branches:
               only:
                 - master
-      - macos10.15:
-          requires:
-            - macos10.14
       - macos11:
           requires:
-            - macos10.14
+            - macos10.15
 
 shared:
   environment: &environment
@@ -443,26 +440,6 @@ jobs:
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
 
-  macos10.14:
-    macos:
-      xcode: "11.1.0"
-    environment: *environment
-    steps:
-      - *dotnet-install-3-1
-      - *dotnet-install-5-0
-      - *dotnet-install-6-0
-      - checkout
-      - *generate-restore-graph
-      - *restore-cache-macos
-      - *dotnet-restore
-      - *save-cache-macos
-      - *dotnet-test-debug-6-0
-      - *dotnet-test-release-6-0
-      - *dotnet-test-debug-5-0
-      - *dotnet-test-release-5-0
-      - *dotnet-test-debug-3-1
-      - *dotnet-test-release-3-1
-
   macos10.15:
     macos:
       xcode: "12.4.0"
@@ -485,7 +462,7 @@ jobs:
       
   macos11:
     macos:
-      xcode: "13.1.0"
+      xcode: "13.2.1"
     environment: *environment
     steps:
       - *dotnet-install-3-1
