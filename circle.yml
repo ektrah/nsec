@@ -55,7 +55,7 @@ workflows:
             - macos10.15
       - macos10.15:
           requires:
-            - alpine3.14
+            - alpine3.14-6.0
             - ubuntu16.04
           filters:
             branches:
