@@ -7,15 +7,6 @@ workflows:
       - alpine3.14-3.1:
           requires:
             - macos10.15
-      - alpine3.15-3.1:
-          requires:
-            - macos10.15
-      - alpine3.14-5.0:
-          requires:
-            - macos10.15
-      - alpine3.15-5.0:
-          requires:
-            - macos10.15
       - alpine3.14-6.0:
           requires:
       - alpine3.15-6.0:
@@ -181,48 +172,6 @@ jobs:
       - *save-cache-alpine
       - *dotnet-test-debug-3-1
       - *dotnet-test-release-3-1
-
-  alpine3.15-3.1:
-    docker:
-      - image: mcr.microsoft.com/dotnet/sdk:3.1-alpine3.15
-    environment: *environment
-    steps:
-      - *dotnet-info
-      - checkout
-      - *generate-restore-graph
-      - *restore-cache-alpine
-      - *dotnet-restore
-      - *save-cache-alpine
-      - *dotnet-test-debug-3-1
-      - *dotnet-test-release-3-1
-
-  alpine3.14-5.0:
-    docker:
-      - image: mcr.microsoft.com/dotnet/sdk:5.0-alpine3.14
-    environment: *environment
-    steps:
-      - *dotnet-info
-      - checkout
-      - *generate-restore-graph
-      - *restore-cache-alpine
-      - *dotnet-restore
-      - *save-cache-alpine
-      - *dotnet-test-debug-5-0
-      - *dotnet-test-release-5-0
-
-  alpine3.15-5.0:
-    docker:
-      - image: mcr.microsoft.com/dotnet/sdk:5.0-alpine3.15
-    environment: *environment
-    steps:
-      - *dotnet-info
-      - checkout
-      - *generate-restore-graph
-      - *restore-cache-alpine
-      - *dotnet-restore
-      - *save-cache-alpine
-      - *dotnet-test-debug-5-0
-      - *dotnet-test-release-5-0
 
   alpine3.14-6.0:
     docker:
