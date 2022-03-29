@@ -4,12 +4,24 @@ workflows:
   version: 2
   test:
     jobs:
-      - alpine3.14:
-          requires:
-      - centos7:
+      - alpine3.14-3.1:
           requires:
             - macos10.15
-      - centos8:
+      - alpine3.15-3.1:
+          requires:
+            - macos10.15
+      - alpine3.14-5.0:
+          requires:
+            - macos10.15
+      - alpine3.15-5.0:
+          requires:
+            - macos10.15
+      - alpine3.14-6.0:
+          requires:
+      - alpine3.15-6.0:
+          requires:
+            - macos10.15
+      - centos7:
           requires:
             - macos10.15
       - debian9:
@@ -25,6 +37,9 @@ workflows:
           requires:
             - macos10.15
       - fedora34:
+          requires:
+            - macos10.15
+      - fedora35:
           requires:
             - macos10.15
       - opensuse15:
@@ -47,6 +62,9 @@ workflows:
               only:
                 - master
       - macos11:
+          requires:
+            - macos10.15
+      - macos12:
           requires:
             - macos10.15
 
@@ -150,9 +168,79 @@ shared:
 
 jobs:
 
-  alpine3.14:
+  alpine3.14-3.1:
+    docker:
+      - image: mcr.microsoft.com/dotnet/sdk:3.1-alpine3.14
+    environment: *environment
+    steps:
+      - *dotnet-info
+      - checkout
+      - *generate-restore-graph
+      - *restore-cache-alpine
+      - *dotnet-restore
+      - *save-cache-alpine
+      - *dotnet-test-debug-3-1
+      - *dotnet-test-release-3-1
+
+  alpine3.15-3.1:
+    docker:
+      - image: mcr.microsoft.com/dotnet/sdk:3.1-alpine3.15
+    environment: *environment
+    steps:
+      - *dotnet-info
+      - checkout
+      - *generate-restore-graph
+      - *restore-cache-alpine
+      - *dotnet-restore
+      - *save-cache-alpine
+      - *dotnet-test-debug-3-1
+      - *dotnet-test-release-3-1
+
+  alpine3.14-5.0:
+    docker:
+      - image: mcr.microsoft.com/dotnet/sdk:5.0-alpine3.14
+    environment: *environment
+    steps:
+      - *dotnet-info
+      - checkout
+      - *generate-restore-graph
+      - *restore-cache-alpine
+      - *dotnet-restore
+      - *save-cache-alpine
+      - *dotnet-test-debug-5-0
+      - *dotnet-test-release-5-0
+
+  alpine3.15-5.0:
+    docker:
+      - image: mcr.microsoft.com/dotnet/sdk:5.0-alpine3.15
+    environment: *environment
+    steps:
+      - *dotnet-info
+      - checkout
+      - *generate-restore-graph
+      - *restore-cache-alpine
+      - *dotnet-restore
+      - *save-cache-alpine
+      - *dotnet-test-debug-5-0
+      - *dotnet-test-release-5-0
+
+  alpine3.14-6.0:
     docker:
       - image: mcr.microsoft.com/dotnet/sdk:6.0-alpine3.14
+    environment: *environment
+    steps:
+      - *dotnet-info
+      - checkout
+      - *generate-restore-graph
+      - *restore-cache-alpine
+      - *dotnet-restore
+      - *save-cache-alpine
+      - *dotnet-test-debug-6-0
+      - *dotnet-test-release-6-0
+
+  alpine3.15-6.0:
+    docker:
+      - image: mcr.microsoft.com/dotnet/sdk:6.0-alpine3.15
     environment: *environment
     steps:
       - *dotnet-info
@@ -173,30 +261,6 @@ jobs:
           name: Install Prerequisites
           no_output_timeout: 2m
           command: yum install -q -y curl ca-certificates libicu
-      - *dotnet-install-3-1
-      - *dotnet-install-5-0
-      - *dotnet-install-6-0
-      - checkout
-      - *generate-restore-graph
-      - *restore-cache
-      - *dotnet-restore
-      - *save-cache
-      - *dotnet-test-debug-6-0
-      - *dotnet-test-release-6-0
-      - *dotnet-test-debug-5-0
-      - *dotnet-test-release-5-0
-      - *dotnet-test-debug-3-1
-      - *dotnet-test-release-3-1
-
-  centos8:
-    docker:
-      - image: centos:8
-    environment: *environment
-    steps:
-      - run:
-          name: Install Prerequisites
-          no_output_timeout: 2m
-          command: yum install -y curl ca-certificates libicu
       - *dotnet-install-3-1
       - *dotnet-install-5-0
       - *dotnet-install-6-0
@@ -317,6 +381,30 @@ jobs:
   fedora34:
     docker:
       - image: fedora:34
+    environment: *environment
+    steps:
+      - run:
+          name: Install Prerequisites
+          no_output_timeout: 2m
+          command: dnf install -q -y curl ca-certificates findutils ncurses libicu openssl-libs
+      - *dotnet-install-3-1
+      - *dotnet-install-5-0
+      - *dotnet-install-6-0
+      - checkout
+      - *generate-restore-graph
+      - *restore-cache
+      - *dotnet-restore
+      - *save-cache
+      - *dotnet-test-debug-6-0
+      - *dotnet-test-release-6-0
+      - *dotnet-test-debug-5-0
+      - *dotnet-test-release-5-0
+      - *dotnet-test-debug-3-1
+      - *dotnet-test-release-3-1
+
+  fedora35:
+    docker:
+      - image: fedora:35
     environment: *environment
     steps:
       - run:
@@ -463,6 +551,26 @@ jobs:
   macos11:
     macos:
       xcode: "13.2.1"
+    environment: *environment
+    steps:
+      - *dotnet-install-3-1
+      - *dotnet-install-5-0
+      - *dotnet-install-6-0
+      - checkout
+      - *generate-restore-graph
+      - *restore-cache-macos
+      - *dotnet-restore
+      - *save-cache-macos
+      - *dotnet-test-debug-6-0
+      - *dotnet-test-release-6-0
+      - *dotnet-test-debug-5-0
+      - *dotnet-test-release-5-0
+      - *dotnet-test-debug-3-1
+      - *dotnet-test-release-3-1
+      
+  macos12:
+    macos:
+      xcode: "13.3.0"
     environment: *environment
     steps:
       - *dotnet-install-3-1
