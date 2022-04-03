@@ -1,22 +1,22 @@
 # Installation
 
 NSec is available as
-[a NuGet package from nuget.org](https://www.nuget.org/packages/NSec.Cryptography/21.11.0-preview2).
+[a NuGet package from nuget.org](https://www.nuget.org/packages/NSec.Cryptography/22.4.0-preview3).
 It can be added to a project in a number of ways, depending on the project type
 and tools used:
 
 
 #### dotnet CLI
 
-    $ dotnet add package NSec.Cryptography --version 21.11.0-preview2
+    $ dotnet add package NSec.Cryptography --version 22.4.0-preview3
 
 #### Visual Studio
 
-    PM> Install-Package NSec.Cryptography -Version 21.11.0-preview2
+    PM> Install-Package NSec.Cryptography -Version 22.4.0-preview3
 
 #### .csproj
 
-    <PackageReference Include="NSec.Cryptography" Version="21.11.0-preview2"/>
+    <PackageReference Include="NSec.Cryptography" Version="22.4.0-preview3"/>
 
 
 ## Supported Languages
