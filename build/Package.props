@@ -18,7 +18,6 @@
     <PackageReleaseNotes>https://nsec.rocks/releases</PackageReleaseNotes>
     <PackageProjectUrl>https://nsec.rocks/</PackageProjectUrl>
     <PackageIcon>nsec.png</PackageIcon>
-    <PackageIconUrl>https://nsec.rocks/nsec.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/ektrah/nsec.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <MinClientVersion>4.0</MinClientVersion>
