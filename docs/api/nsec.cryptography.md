@@ -12,8 +12,9 @@
     * [[KeyAgreementAlgorithm Class]]
         * X25519 Class
     * [[KeyDerivationAlgorithm Class]]
-        * HkdfSha256 Class
-        * HkdfSha512 Class
+        * [[KeyDerivationAlgorithm2 Class]]
+            * HkdfSha256 Class
+            * HkdfSha512 Class
     * [[MacAlgorithm Class]]
         * Blake2bMac Class
         * HmacSha256 Class

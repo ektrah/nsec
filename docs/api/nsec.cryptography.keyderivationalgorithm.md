@@ -41,7 +41,6 @@ Gets the HKDF-SHA512 key derivation algorithm.
     public static HkdfSha512 HkdfSha512 { get; }
 
 
-
 ## Properties
 
 

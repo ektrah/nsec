@@ -8,7 +8,7 @@ Represents a key derivation algorithm using passwords as input.
     The [[PasswordBasedKeyDerivationAlgorithm|PasswordBasedKeyDerivationAlgorithm
     Class]] class is intended for deriving keys from passwords. To derive keys from
     cryptographically strong input keying material, use the
-    [[KeyDerivationAlgorithm|KeyDerivationAlgorithm Class]] class.
+    [[KeyDerivationAlgorithm2|KeyDerivationAlgorithm2 Class]] class.
 
 
 ## Inheritance Hierarchy
