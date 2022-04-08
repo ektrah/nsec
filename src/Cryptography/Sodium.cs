@@ -20,7 +20,6 @@ namespace NSec.Cryptography
             if (s_initialized == 0)
             {
                 InitializeCore();
-                Interlocked.Exchange(ref s_initialized, 1);
             }
         }
 
@@ -45,7 +44,6 @@ namespace NSec.Cryptography
 
                 // sodium_init() returns 0 on success, -1 on failure, and 1 if the
                 // library had already been initialized.
-
                 if (sodium_init() < 0)
                 {
                     throw Error.InvalidOperation_InitializationFailed();
@@ -59,6 +57,8 @@ namespace NSec.Cryptography
             {
                 throw Error.PlatformNotSupported_Initialization(e);
             }
+
+            Interlocked.Exchange(ref s_initialized, 1);
         }
 
         private static void InternalError()
