@@ -8,6 +8,23 @@ namespace NSec.Experimental.PasswordBased
         public static byte[] Export(
             Key key,
             PasswordBasedEncryptionScheme scheme,
+            string password,
+            ReadOnlySpan<byte> salt,
+            ReadOnlySpan<byte> nonce)
+        {
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            KeyBlobFormat format = SelectKeyBlobFormat(key.Algorithm);
+            byte[] plaintext = key.Export(format);
+            return Encrypt(plaintext, scheme, password, salt, nonce);
+        }
+
+        public static byte[] Export(
+            Key key,
+            PasswordBasedEncryptionScheme scheme,
             ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,
             ReadOnlySpan<byte> nonce)
@@ -17,9 +34,26 @@ namespace NSec.Experimental.PasswordBased
                 throw new ArgumentNullException(nameof(key));
             }
 
-            KeyBlobFormat format = GetKeyBlobFormat(key.Algorithm);
+            KeyBlobFormat format = SelectKeyBlobFormat(key.Algorithm);
             byte[] plaintext = key.Export(format);
             return Encrypt(plaintext, scheme, password, salt, nonce);
+        }
+
+        public static Key Import(
+            Algorithm algorithm,
+            ReadOnlySpan<byte> blob,
+            PasswordBasedEncryptionScheme scheme,
+            string password,
+            in KeyCreationParameters creationParameters = default)
+        {
+            if (algorithm == null)
+            {
+                throw new ArgumentNullException(nameof(algorithm));
+            }
+
+            KeyBlobFormat format = SelectKeyBlobFormat(algorithm);
+            byte[]? plaintext = Decrypt(blob, scheme, password);
+            return Key.Import(algorithm, plaintext, format, in creationParameters);
         }
 
         public static Key Import(
@@ -34,9 +68,25 @@ namespace NSec.Experimental.PasswordBased
                 throw new ArgumentNullException(nameof(algorithm));
             }
 
-            KeyBlobFormat format = GetKeyBlobFormat(algorithm);
+            KeyBlobFormat format = SelectKeyBlobFormat(algorithm);
             byte[]? plaintext = Decrypt(blob, scheme, password);
             return Key.Import(algorithm, plaintext, format, in creationParameters);
+        }
+
+        internal static byte[]? Decrypt(
+            ReadOnlySpan<byte> blob,
+            PasswordBasedEncryptionScheme scheme,
+            string password)
+        {
+            if (scheme == null)
+            {
+                throw new ArgumentNullException(nameof(scheme));
+            }
+
+            Reader reader = new(blob);
+            ReadParametersAndCiphertext(ref reader, scheme, out ReadOnlySpan<byte> salt, out ReadOnlySpan<byte> nonce, out ReadOnlySpan<byte> ciphertext);
+
+            return scheme.Decrypt(password, salt, nonce, ciphertext);
         }
 
         internal static byte[]? Decrypt(
@@ -50,11 +100,28 @@ namespace NSec.Experimental.PasswordBased
             }
 
             Reader reader = new(blob);
-            Read(ref reader, 0x0000);
-            ReadPasswordParameters(ref reader, scheme.KeyDerivationAlgorithm, out ReadOnlySpan<byte> salt);
-            ReadEncryptionParameters(ref reader, scheme.EncryptionAlgorithm, out ReadOnlySpan<byte> nonce);
-            Read(ref reader, out ReadOnlySpan<byte> ciphertext);
+            ReadParametersAndCiphertext(ref reader, scheme, out ReadOnlySpan<byte> salt, out ReadOnlySpan<byte> nonce, out ReadOnlySpan<byte> ciphertext);
+
             return scheme.Decrypt(password, salt, nonce, ciphertext);
+        }
+
+        internal static byte[] Encrypt(
+            ReadOnlySpan<byte> plaintext,
+            PasswordBasedEncryptionScheme scheme,
+            string password,
+            ReadOnlySpan<byte> salt,
+            ReadOnlySpan<byte> nonce)
+        {
+            if (scheme == null)
+            {
+                throw new ArgumentNullException(nameof(scheme));
+            }
+
+            byte[] ciphertext = scheme.Encrypt(password, salt, nonce, plaintext);
+
+            Writer writer = new(new byte[1000]);
+            WriteParametersAndCiphertext(ref writer, scheme, salt, nonce, ciphertext);
+            return writer.ToArray();
         }
 
         internal static byte[] Encrypt(
@@ -69,16 +136,14 @@ namespace NSec.Experimental.PasswordBased
                 throw new ArgumentNullException(nameof(scheme));
             }
 
-            Writer writer = new(new byte[1000]);
-            Write(ref writer, 0x0000);
-            WritePasswordParameters(ref writer, scheme.KeyDerivationAlgorithm, salt);
-            WriteEncryptionParameters(ref writer, scheme.EncryptionAlgorithm, nonce);
             byte[] ciphertext = scheme.Encrypt(password, salt, nonce, plaintext);
-            Write(ref writer, ciphertext);
+
+            Writer writer = new(new byte[1000]);
+            WriteParametersAndCiphertext(ref writer, scheme, salt, nonce, ciphertext);
             return writer.ToArray();
         }
 
-        private static KeyBlobFormat GetKeyBlobFormat(
+        private static KeyBlobFormat SelectKeyBlobFormat(
             Algorithm algorithm)
         {
             return algorithm switch
@@ -87,6 +152,19 @@ namespace NSec.Experimental.PasswordBased
                 KeyAgreementAlgorithm _ or SignatureAlgorithm _ => KeyBlobFormat.NSecPrivateKey,
                 _ => throw new NotSupportedException(),
             };
+        }
+
+        private static void ReadParametersAndCiphertext(
+            ref Reader reader,
+            PasswordBasedEncryptionScheme scheme,
+            out ReadOnlySpan<byte> salt,
+            out ReadOnlySpan<byte> nonce,
+            out ReadOnlySpan<byte> ciphertext)
+        {
+            Read(ref reader, 0x0000);
+            ReadPasswordParameters(ref reader, scheme.KeyDerivationAlgorithm, out salt);
+            ReadEncryptionParameters(ref reader, scheme.EncryptionAlgorithm, out nonce);
+            Read(ref reader, out ciphertext);
         }
 
         private static void ReadEncryptionParameters(
@@ -160,6 +238,19 @@ namespace NSec.Experimental.PasswordBased
             default:
                 throw new NotSupportedException();
             };
+        }
+
+        private static void WriteParametersAndCiphertext(
+            ref Writer writer,
+            PasswordBasedEncryptionScheme scheme,
+            ReadOnlySpan<byte> salt,
+            ReadOnlySpan<byte> nonce,
+            ReadOnlySpan<byte> ciphertext)
+        {
+            Write(ref writer, 0x0000);
+            WritePasswordParameters(ref writer, scheme.KeyDerivationAlgorithm, salt);
+            WriteEncryptionParameters(ref writer, scheme.EncryptionAlgorithm, nonce);
+            Write(ref writer, ciphertext);
         }
 
         private static void WriteEncryptionParameters(
