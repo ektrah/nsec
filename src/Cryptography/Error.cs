@@ -425,9 +425,9 @@ namespace NSec.Cryptography
             return new OverflowException(ResourceManager.GetString(nameof(Overflow_NonceCounter)));
         }
 
-        internal static PlatformNotSupportedException PlatformNotSupported_Algorithm()
+        internal static PlatformNotSupportedException PlatformNotSupported_Aes256Gcm()
         {
-            return new PlatformNotSupportedException(ResourceManager.GetString(nameof(PlatformNotSupported_Algorithm)));
+            return new PlatformNotSupportedException(ResourceManager.GetString(nameof(PlatformNotSupported_Aes256Gcm)));
         }
 
         internal static PlatformNotSupportedException PlatformNotSupported_Initialization(

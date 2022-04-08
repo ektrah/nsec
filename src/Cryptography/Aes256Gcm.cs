@@ -61,7 +61,7 @@ namespace NSec.Cryptography
             }
             if (s_isSupported < 0)
             {
-                throw Error.PlatformNotSupported_Algorithm();
+                throw Error.PlatformNotSupported_Aes256Gcm();
             }
         }
 
@@ -69,14 +69,12 @@ namespace NSec.Cryptography
         {
             get
             {
-                int isSupported = s_isSupported;
-                if (isSupported == 0)
+                if (s_isSupported == 0)
                 {
                     Sodium.Initialize();
                     Interlocked.Exchange(ref s_isSupported, crypto_aead_aes256gcm_is_available() != 0 ? 1 : -1);
-                    isSupported = s_isSupported;
                 }
-                return isSupported > 0;
+                return s_isSupported > 0;
             }
         }
 

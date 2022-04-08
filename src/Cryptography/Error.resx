@@ -315,8 +315,8 @@
   <data name="Overflow_NonceCounter" xml:space="preserve">
     <value>Increasing the counter of the nonce results in an overflow.</value>
   </data>
-  <data name="PlatformNotSupported_Algorithm" xml:space="preserve">
-    <value>The algorithm is not supported on this platform.</value>
+  <data name="PlatformNotSupported_Aes256Gcm" xml:space="preserve">
+    <value>AES-GCM is not supported on this platform. See https://nsec.rocks/docs/install for more information.</value>
   </data>
   <data name="PlatformNotSupported_Initialization" xml:space="preserve">
     <value>Could not initialize platform-specific components. NSec may not be supported on this platform. See https://nsec.rocks/docs/install for more information.</value>
