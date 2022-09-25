@@ -82,7 +82,7 @@ namespace NSec.Cryptography.Formatting
             }
             finally
             {
-                System.Security.Cryptography.CryptographicOperations.ZeroMemory(temp);
+                FrameworkHelpers.ZeroMemory(temp);
             }
         }
 
@@ -121,7 +121,7 @@ namespace NSec.Cryptography.Formatting
             }
             finally
             {
-                System.Security.Cryptography.CryptographicOperations.ZeroMemory(temp);
+                FrameworkHelpers.ZeroMemory(temp);
             }
         }
 

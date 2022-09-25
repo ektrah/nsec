@@ -57,7 +57,9 @@ namespace NSec.Cryptography
             Interlocked.Exchange(ref s_initialized, 1);
         }
 
+#if !NETSTANDARD2_0
         [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+#endif
         private static void InternalError()
         {
             throw Error.InvalidOperation_InternalError();

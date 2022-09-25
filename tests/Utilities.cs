@@ -24,7 +24,7 @@ namespace NSec.Tests
             return array;
         }
 
-        public static byte[] Substring(this byte[] array, Range range) => array.AsSpan(range).ToArray();
+        public static byte[] Substring(this byte[] array, Range range) => array.AsSpan(range.Start.Value, range.End.Value - range.Start.Value).ToArray();
 
         #region Random Bytes
 

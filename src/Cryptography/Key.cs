@@ -36,13 +36,13 @@ namespace NSec.Cryptography
                 Span<byte> seed = stackalloc byte[seedSize];
                 try
                 {
-                    System.Security.Cryptography.RandomNumberGenerator.Fill(seed);
+                    FrameworkHelpers.Fill(seed);
                     algorithm.CreateKey(seed, out keyHandle, out publicKey);
                     success = true;
                 }
                 finally
                 {
-                    System.Security.Cryptography.CryptographicOperations.ZeroMemory(seed);
+                    FrameworkHelpers.ZeroMemory(seed);
                 }
             }
             finally

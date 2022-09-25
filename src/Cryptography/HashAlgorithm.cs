@@ -137,7 +137,7 @@ namespace NSec.Cryptography
         {
             Span<byte> temp = stackalloc byte[_hashSize];
             HashCore(data, temp);
-            return System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(temp, hash);
+            return FrameworkHelpers.FixedTimeEquals(temp, hash);
         }
 
         internal abstract void FinalizeCore(

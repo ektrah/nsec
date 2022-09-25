@@ -202,7 +202,7 @@ namespace NSec.Cryptography
 
             Span<byte> temp = stackalloc byte[_macSize];
             MacCore(key.Handle, data, temp);
-            return System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(temp, mac);
+            return FrameworkHelpers.FixedTimeEquals(temp, mac);
         }
 
         internal abstract void FinalizeCore(

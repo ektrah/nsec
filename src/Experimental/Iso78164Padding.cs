@@ -56,7 +56,7 @@ namespace NSec.Experimental
             }
 
             padded[unpadded.Length] = 0x80;
-            padded[(unpadded.Length + 1)..].Clear();
+            padded.Slice(unpadded.Length + 1).Clear();
         }
 
         public static byte[]? Unpad(
@@ -88,7 +88,7 @@ namespace NSec.Experimental
                     }
                     else if (padded[i] == 0x80)
                     {
-                        result = padded[..i];
+                        result = padded.Slice(0, i);
                         return true;
                     }
                     else

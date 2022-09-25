@@ -128,7 +128,7 @@ namespace NSec.Cryptography
                 }
                 finally
                 {
-                    global::System.Security.Cryptography.CryptographicOperations.ZeroMemory(seed);
+                    FrameworkHelpers.ZeroMemory(seed);
                 }
             }
             finally
@@ -201,13 +201,13 @@ namespace NSec.Cryptography
             private protected unsafe override void GenerateBytesCore(
                 Span<byte> bytes)
             {
-                global::System.Security.Cryptography.RandomNumberGenerator.Fill(bytes);
+                FrameworkHelpers.Fill(bytes);
             }
 
             private protected override uint GenerateUInt32Core()
             {
                 Span<byte> bytes = stackalloc byte[sizeof(uint)];
-                global::System.Security.Cryptography.RandomNumberGenerator.Fill(bytes);
+                FrameworkHelpers.Fill(bytes);
                 return global::System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(bytes);
             }
         }

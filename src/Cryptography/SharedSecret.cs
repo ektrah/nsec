@@ -215,9 +215,9 @@ namespace NSec.Cryptography
             }
 
             BinaryPrimitives.WriteUInt32BigEndian(blob, NSecBlobHeader);
-            BinaryPrimitives.WriteInt16LittleEndian(blob[sizeof(uint)..], (short)sharedSecretHandle.Size);
-            BinaryPrimitives.WriteInt16LittleEndian(blob[(sizeof(uint) + sizeof(short))..], 0);
-            sharedSecretHandle.CopyTo(blob[(sizeof(uint) + sizeof(short) + sizeof(short))..]);
+            BinaryPrimitives.WriteInt16LittleEndian(blob.Slice(sizeof(uint)), (short)sharedSecretHandle.Size);
+            BinaryPrimitives.WriteInt16LittleEndian(blob.Slice((sizeof(uint) + sizeof(short))), 0);
+            sharedSecretHandle.CopyTo(blob.Slice((sizeof(uint) + sizeof(short) + sizeof(short))));
             return true;
         }
 
@@ -257,13 +257,13 @@ namespace NSec.Cryptography
             if (blob.Length < sizeof(uint) + sizeof(short) + sizeof(short) ||
                 blob.Length > sizeof(uint) + sizeof(short) + sizeof(short) + MaxSize ||
                 BinaryPrimitives.ReadUInt32BigEndian(blob) != NSecBlobHeader ||
-                BinaryPrimitives.ReadInt16LittleEndian(blob[sizeof(uint)..]) != blob.Length - (sizeof(uint) + sizeof(short) + sizeof(short)))
+                BinaryPrimitives.ReadInt16LittleEndian(blob.Slice(sizeof(uint))) != blob.Length - (sizeof(uint) + sizeof(short) + sizeof(short)))
             {
                 sharedSecretHandle = null;
                 return false;
             }
 
-            sharedSecretHandle = SecureMemoryHandle.CreateFrom(blob[(sizeof(uint) + sizeof(short) + sizeof(short))..]);
+            sharedSecretHandle = SecureMemoryHandle.CreateFrom(blob.Slice((sizeof(uint) + sizeof(short) + sizeof(short))));
             return true;
         }
 

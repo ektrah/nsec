@@ -23,7 +23,7 @@ namespace NSec.Experimental
         public static void FillRandomBytes(
             Span<byte> data)
         {
-            System.Security.Cryptography.RandomNumberGenerator.Fill(data);
+            Cryptography.FrameworkHelpers.Fill(data);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -31,7 +31,7 @@ namespace NSec.Experimental
             ReadOnlySpan<byte> left,
             ReadOnlySpan<byte> right)
         {
-            return System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(left, right);
+            return Cryptography.FrameworkHelpers.FixedTimeEquals(left, right);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
@@ -72,7 +72,7 @@ namespace NSec.Experimental
         public static void ZeroMemory(
             Span<byte> buffer)
         {
-            System.Security.Cryptography.CryptographicOperations.ZeroMemory(buffer);
+            Cryptography.FrameworkHelpers.ZeroMemory(buffer);
         }
     }
 }

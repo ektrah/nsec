@@ -19,6 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Interop.Pwhash.Argon2i.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop.Pwhash.Argon2id.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop.Pwhash.Scrypt.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interop.Random.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop.Scalarmult.X25519.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop.SecretBox.XSalsa20Poly1305.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop.SecureMemoryHandle.cs" />

@@ -37,6 +37,12 @@ internal static partial class Interop
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static unsafe extern int crypto_auth_hmacsha512_update(
             crypto_auth_hmacsha512_state* state,
+            SecureMemoryHandle @in,
+            ulong inlen);
+
+        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
+        internal static unsafe extern int crypto_auth_hmacsha512_update(
+            crypto_auth_hmacsha512_state* state,
             byte* @in,
             ulong inlen);
 

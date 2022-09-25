@@ -152,7 +152,7 @@ namespace NSec.Tests.Base
             Assert.Equal(expected, actual);
 
             Utilities.RandomBytes.Slice(200, actual.Length).CopyTo(actual);
-            var incrCount = BitConverter.ToUInt32(Utilities.RandomBytes.Slice(0, 4));
+            var incrCount = BitConverter.ToUInt32(Utilities.RandomBytes.Slice(0, 4).ToArray(), 0);
             a.XOrIC(k, n, b, expected, incrCount);
             a.XOrIC(k, n, b, actual, incrCount);
             Assert.Equal(expected, actual);
@@ -186,7 +186,7 @@ namespace NSec.Tests.Base
             a.XOr(k, n, plaintext, actual);
             Assert.Equal(expected, actual);
 
-            var incrCount = BitConverter.ToUInt32(Utilities.RandomBytes.Slice(0, 4));
+            var incrCount = BitConverter.ToUInt32(Utilities.RandomBytes.Slice(0, 4).ToArray(), 0);
             a.XOrIC(k, n, actual.AsSpan(0, L), expected, incrCount);
             a.XOrIC(k, n, actual.AsSpan(0, L), actual, incrCount);
             Assert.Equal(expected, actual);
@@ -207,7 +207,7 @@ namespace NSec.Tests.Base
             a.XOr(k, n, actual.AsSpan(0, L), actual);
             Assert.Equal(expected, actual);
 
-            var incrCount = BitConverter.ToUInt32(Utilities.RandomBytes.Slice(0, 4));
+            var incrCount = BitConverter.ToUInt32(Utilities.RandomBytes.Slice(0, 4).ToArray(), 0);
             a.XOrIC(k, n, actual.AsSpan(0, L), expected, incrCount);
             a.XOrIC(k, n, actual.AsSpan(0, L), actual, incrCount);
             Assert.Equal(expected, actual);

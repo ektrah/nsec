@@ -190,7 +190,7 @@ namespace NSec.Cryptography
                 }
                 finally
                 {
-                    System.Security.Cryptography.CryptographicOperations.ZeroMemory(seed);
+                    FrameworkHelpers.ZeroMemory(seed);
                 }
             }
             finally

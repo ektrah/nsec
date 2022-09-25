@@ -78,7 +78,7 @@ namespace NSec.Cryptography
             {
                 Span<byte> temp = stackalloc byte[state._algorithm.HashSize];
                 state._algorithm.FinalizeCore(ref Unsafe.AsRef(in state._state), temp);
-                return System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(temp, hash);
+                return FrameworkHelpers.FixedTimeEquals(temp, hash);
             }
             finally
             {
