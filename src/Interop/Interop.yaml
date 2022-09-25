@@ -335,11 +335,8 @@ Interop.Verify32.cs:
 Interop.Verify64.cs:
   include: include/sodium/crypto_verify_64.h
 
-Interop.Random.cs:
-  include: include/sodium/randombytes.h
-  functions:
-  - randombytes_buf
-  - randombytes_buf (out uint buf)
+#Interop.Random.cs:
+#  include: include/sodium/randombytes.h
 
 Interop.Runtime.cs:
   include: include/sodium/runtime.h

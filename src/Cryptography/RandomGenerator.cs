@@ -201,16 +201,14 @@ namespace NSec.Cryptography
             private protected unsafe override void GenerateBytesCore(
                 Span<byte> bytes)
             {
-                fixed (byte* buf = bytes)
-                {
-                    randombytes_buf(buf, (nuint)bytes.Length);
-                }
+                global::System.Security.Cryptography.RandomNumberGenerator.Fill(bytes);
             }
 
             private protected override uint GenerateUInt32Core()
             {
-                randombytes_buf(out uint value, sizeof(uint));
-                return value;
+                Span<byte> bytes = stackalloc byte[sizeof(uint)];
+                global::System.Security.Cryptography.RandomNumberGenerator.Fill(bytes);
+                return global::System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(bytes);
             }
         }
     }
