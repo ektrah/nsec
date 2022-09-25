@@ -65,7 +65,6 @@ Interop.Auth.HmacSha256.cs:
   - crypto_auth_hmacsha256_keybytes
   - crypto_auth_hmacsha256_statebytes
   - crypto_auth_hmacsha256_update
-  - crypto_auth_hmacsha256_update (SecureMemoryHandle in)
   structs:
   - crypto_auth_hmacsha256_state
 
@@ -82,7 +81,6 @@ Interop.Auth.HmacSha512.cs:
   - crypto_auth_hmacsha512_keybytes
   - crypto_auth_hmacsha512_statebytes
   - crypto_auth_hmacsha512_update
-  - crypto_auth_hmacsha512_update (SecureMemoryHandle in)
   structs:
   - crypto_auth_hmacsha512_state
 

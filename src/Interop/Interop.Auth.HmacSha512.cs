@@ -40,12 +40,6 @@ internal static partial class Interop
             byte* @in,
             ulong inlen);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_auth_hmacsha512_update(
-            crypto_auth_hmacsha512_state* state,
-            SecureMemoryHandle @in,
-            ulong inlen);
-
         [StructLayout(LayoutKind.Explicit, Size = 416)]
         internal struct crypto_auth_hmacsha512_state
         {

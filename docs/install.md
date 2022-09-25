@@ -41,28 +41,28 @@ Specifically,
 [NSec 22.4.0](https://www.nuget.org/packages/NSec.Cryptography/22.4.0)
 has been tested to run on the following platforms and .NET versions:
 
-| OS                   | Version  | Architectures | .NET          | .NET Core   |
-|:-------------------- |:-------- |:------------- |:--------------|:------------|
-| Windows 10 Client    | 20H2     | x64 / x86     | 6.0           | 3.1         |
-| Windows Server       | 2022     | x64           | 6.0           | 3.1         |
-|                      |          |               |               |             |
-| macOS                | 10.15.5  | x64           | 6.0           | 3.1         |
-|                      | 11.6.2   | x64           | 6.0           | 3.1         |
-|                      | 12.2.1   | x64           | 6.0           | 3.1         |
-|                      |          |               |               |             |
-| Alpine               | 3.14     | x64           | 6.0           | 3.1         |
-|                      | 3.15     | x64           | 6.0           |             |
-| CentOS               | 7.9.2009 | x64           | 6.0           | 3.1         |
-| Debian               | 9.13     | x64           | 6.0           | 3.1         |
-|                      | 10.11    | x64           | 6.0           | 3.1         |
-|                      | 11.1     | x64           | 6.0           | 3.1         |
-| Fedora               | 33       | x64           | 6.0           | 3.1         |
-|                      | 34       | x64           | 6.0           | 3.1         |
-|                      | 35       | x64           | 6.0           | 3.1         |
-| OpenSUSE             | 15.2     | x64           | 6.0           | 3.1         |
-| Ubuntu               | 16.04    | x64           | 6.0           | 3.1         |
-|                      | 18.04    | x64           | 6.0           | 3.1         |
-|                      | 20.04    | x64           | 6.0           | 3.1         |
+| OS                   | Version  | Architectures | .NET          |
+|:-------------------- |:-------- |:------------- |:--------------|
+| Windows 10 Client    | 20H2     | x64 / x86     | 6.0           |
+| Windows Server       | 2022     | x64           | 6.0           |
+|                      |          |               |               |
+| macOS                | 10.15.5  | x64           | 6.0           |
+|                      | 11.6.2   | x64           | 6.0           |
+|                      | 12.2.1   | x64           | 6.0           |
+|                      |          |               |               |
+| Alpine               | 3.14     | x64           | 6.0           |
+|                      | 3.15     | x64           | 6.0           |
+| CentOS               | 7.9.2009 | x64           | 6.0           |
+| Debian               | 9.13     | x64           | 6.0           |
+|                      | 10.11    | x64           | 6.0           |
+|                      | 11.1     | x64           | 6.0           |
+| Fedora               | 33       | x64           | 6.0           |
+|                      | 34       | x64           | 6.0           |
+|                      | 35       | x64           | 6.0           |
+| OpenSUSE             | 15.2     | x64           | 6.0           |
+| Ubuntu               | 16.04    | x64           | 6.0           |
+|                      | 18.04    | x64           | 6.0           |
+|                      | 20.04    | x64           | 6.0           |
 
 Other, similar platforms supported by .NET should work as well but have not been tested.
 
