@@ -46,9 +46,8 @@ has been tested to run on the following platforms and .NET versions:
 | Windows 10 Client    | 20H2     | x64 / x86     | 6.0           |
 | Windows Server       | 2022     | x64           | 6.0           |
 |                      |          |               |               |
-| macOS                | 10.15.5  | x64           | 6.0           |
-|                      | 11.6.2   | x64           | 6.0           |
-|                      | 12.2.1   | x64           | 6.0           |
+| macOS                | 11.6.2   | x64           | 6.0           |
+|                      | 12.3.1   | x64           | 6.0           |
 |                      |          |               |               |
 | Alpine               | 3.14     | x64           | 6.0           |
 |                      | 3.15     | x64           | 6.0           |

@@ -8,40 +8,40 @@ workflows:
           requires:
       - alpine3.15-6.0:
           requires:
-            - macos10.15
+            - macos11
       - centos7:
           requires:
-            - macos10.15
+            - macos11
       - debian9:
           requires:
-            - macos10.15
+            - macos11
       - debian10:
           requires:
-            - macos10.15
+            - macos11
       - debian11:
           requires:
-            - macos10.15
+            - macos11
       - fedora33:
           requires:
-            - macos10.15
+            - macos11
       - fedora34:
           requires:
-            - macos10.15
+            - macos11
       - fedora35:
           requires:
-            - macos10.15
+            - macos11
       - opensuse15:
           requires:
-            - macos10.15
+            - macos11
       - ubuntu16.04:
           requires:
       - ubuntu18.04:
           requires:
-            - macos10.15
+            - macos11
       - ubuntu20.04:
           requires:
-            - macos10.15
-      - macos10.15:
+            - macos11
+      - macos11:
           requires:
             - alpine3.14-6.0
             - ubuntu16.04
@@ -49,12 +49,9 @@ workflows:
             branches:
               only:
                 - master
-      - macos11:
-          requires:
-            - macos10.15
       - macos12:
           requires:
-            - macos10.15
+            - macos11
 
 shared:
   environment: &environment
@@ -365,20 +362,6 @@ jobs:
       - *save-cache
       - *dotnet-test-debug-6-0
       - *dotnet-test-release-6-0
-
-  macos10.15:
-    macos:
-      xcode: "12.4.0"
-    environment: *environment
-    steps:
-      - *dotnet-install-6-0
-      - checkout
-      - *generate-restore-graph
-      - *restore-cache-macos
-      - *dotnet-restore
-      - *save-cache-macos
-      - *dotnet-test-debug-6-0
-      - *dotnet-test-release-6-0
       
   macos11:
     macos:
@@ -396,7 +379,7 @@ jobs:
       
   macos12:
     macos:
-      xcode: "13.3.0"
+      xcode: "13.4.1"
     environment: *environment
     steps:
       - *dotnet-install-6-0
