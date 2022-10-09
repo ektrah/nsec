@@ -74,7 +74,9 @@ namespace NSec.Tests
             new Argon2i(new Argon2Parameters { DegreeOfParallelism = 1, MemorySize = 1 << 12, NumberOfPasses = 3 }),
             PasswordBasedKeyDerivationAlgorithm.Argon2id(new Argon2Parameters { DegreeOfParallelism = 1, MemorySize = 1 << 12, NumberOfPasses = 3 }),
             PasswordBasedKeyDerivationAlgorithm.Scrypt(new ScryptParameters { Cost = 1 << 11, BlockSize = 5, Parallelization = 1 }),
+            #if NET5_0_OR_GREATER
             new Pbkdf2HmacSha256(new Pbkdf2Parameters { IterationCount = 10 }),
+            #endif
         };
 
         public static readonly TheoryData<SignatureAlgorithm> SignatureAlgorithms = new()

@@ -51,13 +51,17 @@ namespace NSec.Experimental.PasswordBased
             ReadOnlySpan<byte> salt,
             Span<byte> bytes)
         {
+#if NETSTANDARD2_0
+            throw new PlatformNotSupportedException();
+#else
+
             System.Security.Cryptography.Rfc2898DeriveBytes.Pbkdf2(
                 password,
                 salt,
                 bytes,
                 _c,
                 System.Security.Cryptography.HashAlgorithmName.SHA256);
-
+#endif
             return true;
         }
     }

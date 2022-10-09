@@ -15,11 +15,18 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
+    - name: Setup msbuild
+      uses: microsoft/setup-msbuild@v1.1
     - run: dotnet --info
     - name: Test (.NET 6.0/Debug)
       run: dotnet test tests -f net6.0 -c Debug
     - name: Test (.NET 6.0/Release)
       run: dotnet test tests -f net6.0 -c Release
+    - name: Test (.NET 4.x)
+      run: |
+        dotnet restore tests/Tests.csproj
+        msbuild tests/Tests.csproj /p:Configuration=Release
+        dotnet test tests -f net48 -c Release --no-build --no-restore
     - name: Pack
       run: dotnet pack -c Release
     - name: Upload artifacts

@@ -9,7 +9,6 @@ internal static partial class Interop
         internal static extern int sodium_init();
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int sodium_set_misuse_handler(
-            delegate* unmanaged[Cdecl]<void> handler);
+        internal static extern int sodium_set_misuse_handler(Action handler);
     }
 }

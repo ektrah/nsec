@@ -13,8 +13,9 @@
   <PropertyGroup>
     <NoWarn>0618;IDE0060;$(NoWarn)</NoWarn>
   </PropertyGroup>
-
+  
   <ItemGroup>
+    <PackageReference Include="libsodium" Version="[1.0.18.2,1.0.19)" GeneratePathProperty="true" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
@@ -28,4 +29,19 @@
     <ProjectReference Include="..\src\Experimental\NSec.Experimental.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="$(Pkglibsodium)\runtimes\win-x86\native\libsodium.dll">
+      <Link>runtimes\win-x86\native\libsodium.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(Pkglibsodium)\runtimes\win-x64\native\libsodium.dll">
+      <Link>runtimes\win-x64\native\libsodium.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+  
 </Project>

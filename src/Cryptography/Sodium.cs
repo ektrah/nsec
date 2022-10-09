@@ -8,6 +8,8 @@ namespace NSec.Cryptography
 {
     internal static class Sodium
     {
+        private static readonly Action s_misuseHandler = new(InternalError);
+
         private static int s_initialized;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -20,7 +22,7 @@ namespace NSec.Cryptography
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        private static unsafe void InitializeCore()
+        private static void InitializeCore()
         {
             try
             {
@@ -33,7 +35,7 @@ namespace NSec.Cryptography
                         : Error.InvalidOperation_InitializationFailed();
                 }
 
-                if (sodium_set_misuse_handler(&InternalError) != 0)
+                if (sodium_set_misuse_handler(s_misuseHandler) != 0)
                 {
                     throw Error.InvalidOperation_InitializationFailed();
                 }
@@ -57,9 +59,6 @@ namespace NSec.Cryptography
             Interlocked.Exchange(ref s_initialized, 1);
         }
 
-#if !NETSTANDARD2_0
-        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
-#endif
         private static void InternalError()
         {
             throw Error.InvalidOperation_InternalError();
