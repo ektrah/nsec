@@ -4,18 +4,24 @@ on: [push, pull_request]
 
 jobs:
 
-  build:
+  test-win:
     runs-on: windows-latest
     env:
-      DOTNET_CLI_TELEMETRY_OPTOUT: true
-      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET 6.0
-      uses: actions/setup-dotnet@v1
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: |
+          6.0.x
+          7.0.x
     - run: dotnet --info
+    - uses: actions/checkout@v3
+    - name: Test (.NET 7.0/Debug)
+      run: dotnet test tests -f net7.0 -c Debug
+    - name: Test (.NET 7.0/Release)
+      run: dotnet test tests -f net7.0 -c Release
     - name: Test (.NET 6.0/Debug)
       run: dotnet test tests -f net6.0 -c Debug
     - name: Test (.NET 6.0/Release)
@@ -23,6 +29,112 @@ jobs:
     - name: Pack
       run: dotnet pack -c Release
     - name: Upload artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         path: '**/*.nupkg'
+
+  test-macos:
+    needs: [test-win, test-linux-musl]
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - os: macos-11
+        - os: macos-12
+    runs-on: ${{ matrix.os }}
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+    steps:
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: |
+          6.0.x
+          7.0.x
+    - run: dotnet --info
+    - uses: actions/checkout@v3
+    - name: Test (.NET 7.0/Debug)
+      run: dotnet test tests -f net7.0 -c Debug
+    - name: Test (.NET 7.0/Release)
+      run: dotnet test tests -f net7.0 -c Release
+    - name: Test (.NET 6.0/Debug)
+      run: dotnet test tests -f net6.0 -c Debug
+    - name: Test (.NET 6.0/Release)
+      run: dotnet test tests -f net6.0 -c Release
+
+  test-linux:
+    needs: [test-win, test-linux-musl]
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - os: centos:7
+        - os: debian:10
+        - os: debian:11
+        - os: fedora:35
+        - os: fedora:36
+        - os: ubuntu:16.04
+          icu: libicu55
+        - os: ubuntu:18.04
+          icu: libicu60
+        - os: ubuntu:20.04
+          icu: libicu66
+        - os: ubuntu:22.04
+          icu: libicu70
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ matrix.os }}
+      env:
+        DOTNET_CLI_TELEMETRY_OPTOUT: 1
+        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+    steps:
+    - name: Install prerequisites
+      run: yum install -q -y curl ca-certificates libicu
+      if: ${{ startsWith(matrix.os, 'centos') }}
+    - name: Install prerequisites
+      run: apt-get -qq update && apt-get -qq install --yes --no-install-recommends curl ca-certificates gettext
+      if: ${{ startsWith(matrix.os, 'debian') }}
+    - name: Install prerequisites
+      run: dnf install -q -y curl ca-certificates findutils libicu
+      if: ${{ startsWith(matrix.os, 'fedora') }}
+    - name: Install prerequisites
+      run: apt-get -qq update && apt-get -qq install --yes --no-install-recommends curl ca-certificates ${{ matrix.icu }}
+      if: ${{ startsWith(matrix.os, 'ubuntu') }}
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: |
+          6.0.x
+          7.0.x
+    - run: dotnet --info
+    - uses: actions/checkout@v3
+    - name: Test (.NET 7.0/Debug)
+      run: dotnet test tests -f net7.0 -c Debug
+    - name: Test (.NET 7.0/Release)
+      run: dotnet test tests -f net7.0 -c Release
+    - name: Test (.NET 6.0/Debug)
+      run: dotnet test tests -f net6.0 -c Debug
+    - name: Test (.NET 6.0/Release)
+      run: dotnet test tests -f net6.0 -c Release
+
+  test-linux-musl:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - os: alpine3.15
+        - os: alpine3.16
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/dotnet/sdk:7.0-${{ matrix.os }}
+      env:
+        DOTNET_CLI_TELEMETRY_OPTOUT: 1
+        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+    steps:
+    - run: dotnet --info
+    - uses: actions/checkout@v3
+    - name: Test (.NET 7.0/Debug)
+      run: dotnet test tests -f net7.0 -c Debug
+    - name: Test (.NET 7.0/Release)
+      run: dotnet test tests -f net7.0 -c Release

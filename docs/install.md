@@ -43,25 +43,23 @@ has been tested to run on the following platforms and .NET versions:
 
 | OS                   | Version  | Architectures | .NET          |
 |:-------------------- |:-------- |:------------- |:--------------|
-| Windows 10 Client    | 20H2     | x64 / x86     | 6.0           |
-| Windows Server       | 2022     | x64           | 6.0           |
+| Windows 10 Client    | 20H2     | x64 / x86     | 7.0, 6.0      |
+| Windows Server       | 2022     | x64           | 7.0, 6.0      |
 |                      |          |               |               |
-| macOS                | 11.6.2   | x64           | 6.0           |
-|                      | 12.3.1   | x64           | 6.0           |
+| macOS                | 11.7     | x64           | 7.0, 6.0      |
+|                      | 12.6     | x64           | 7.0, 6.0      |
 |                      |          |               |               |
-| Alpine               | 3.14     | x64           | 6.0           |
-|                      | 3.15     | x64           | 6.0           |
-| CentOS               | 7.9.2009 | x64           | 6.0           |
-| Debian               | 9.13     | x64           | 6.0           |
-|                      | 10.11    | x64           | 6.0           |
-|                      | 11.1     | x64           | 6.0           |
-| Fedora               | 33       | x64           | 6.0           |
-|                      | 34       | x64           | 6.0           |
-|                      | 35       | x64           | 6.0           |
-| OpenSUSE             | 15.2     | x64           | 6.0           |
-| Ubuntu               | 16.04    | x64           | 6.0           |
-|                      | 18.04    | x64           | 6.0           |
-|                      | 20.04    | x64           | 6.0           |
+| Alpine               | 3.15     | x64           | 7.0           |
+|                      | 3.16     | x64           | 7.0           |
+| CentOS               | 7.9.2009 | x64           | 7.0, 6.0      |
+| Debian               | 10.13    | x64           | 7.0, 6.0      |
+|                      | 11.5     | x64           | 7.0, 6.0      |
+| Fedora               | 35       | x64           | 7.0, 6.0      |
+|                      | 36       | x64           | 7.0, 6.0      |
+| Ubuntu               | 16.04    | x64           | 7.0, 6.0      |
+|                      | 18.04    | x64           | 7.0, 6.0      |
+|                      | 20.04    | x64           | 7.0, 6.0      |
+|                      | 22.04    | x64           | 7.0, 6.0      |
 
 Other, similar platforms supported by .NET should work as well but have not been tested.
 
