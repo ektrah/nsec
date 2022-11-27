@@ -72,16 +72,12 @@ jobs:
         - os: centos:7
         - os: debian:10
         - os: debian:11
-        - os: fedora:35
         - os: fedora:36
+        - os: fedora:37
         - os: ubuntu:16.04
-          icu: libicu55
         - os: ubuntu:18.04
-          icu: libicu60
         - os: ubuntu:20.04
-          icu: libicu66
         - os: ubuntu:22.04
-          icu: libicu70
     runs-on: ubuntu-latest
     container:
       image: ${{ matrix.os }}
@@ -96,10 +92,10 @@ jobs:
       run: apt-get -qq update && apt-get -qq install --yes --no-install-recommends curl ca-certificates gettext
       if: ${{ startsWith(matrix.os, 'debian') }}
     - name: Install prerequisites
-      run: dnf install -q -y curl ca-certificates findutils libicu
+      run: dnf install -q -y curl ca-certificates libicu findutils
       if: ${{ startsWith(matrix.os, 'fedora') }}
     - name: Install prerequisites
-      run: apt-get -qq update && apt-get -qq install --yes --no-install-recommends curl ca-certificates ${{ matrix.icu }}
+      run: apt-get -qq update && apt-get -qq install --yes --no-install-recommends curl ca-certificates gettext
       if: ${{ startsWith(matrix.os, 'ubuntu') }}
     - name: Set up .NET
       uses: actions/setup-dotnet@v3
@@ -123,7 +119,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - os: alpine3.15
         - os: alpine3.16
     runs-on: ubuntu-latest
     container:
