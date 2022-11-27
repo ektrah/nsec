@@ -51,9 +51,6 @@ namespace NSec.Experimental.PasswordBased
 
         public int MaxSaltSize => _keyDerivationAlgorithm.MaxSaltSize;
 
-        [Obsolete("The 'SaltSize' property has been deprecated. Use the 'MinSaltSize' and 'MaxSaltSize' properties instead.")]
-        public int SaltSize => _keyDerivationAlgorithm.SaltSize;
-
         public int TagSize => _encryptionAlgorithm.TagSize;
 
         public byte[] Encrypt(

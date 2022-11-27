@@ -41,9 +41,6 @@ namespace NSec.Cryptography
 
         public int MinSaltSize => _minSaltSize;
 
-        [Obsolete("The 'SaltSize' property has been deprecated. Use the 'MinSaltSize' and 'MaxSaltSize' properties instead.")]
-        public int SaltSize => _minSaltSize;
-
         public static Argon2id Argon2id(
             in Argon2Parameters parameters)
         {

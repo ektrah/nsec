@@ -18,7 +18,6 @@ namespace NSec.Tests.Algorithms
 
             Assert.Equal(16, a.MaxSaltSize);
             Assert.Equal(16, a.MinSaltSize);
-            Assert.Equal(16, a.SaltSize);
             Assert.Equal(int.MaxValue, a.MaxCount);
 
             Assert.Equal(expected.DegreeOfParallelism, actual.DegreeOfParallelism);

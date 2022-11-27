@@ -81,9 +81,6 @@ namespace NSec.Cryptography
 
         public int MinSaltSize => _minSaltSize;
 
-        [Obsolete("The 'SupportsSalt' property has been deprecated. Use the 'MinSaltSize' and 'MaxSaltSize' properties instead.")]
-        public bool SupportsSalt => _maxSaltSize != 0;
-
         public byte[] DeriveBytes(
             ReadOnlySpan<byte> inputKeyingMaterial,
             ReadOnlySpan<byte> salt,

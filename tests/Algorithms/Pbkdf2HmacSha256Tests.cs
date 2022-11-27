@@ -18,7 +18,6 @@ namespace NSec.Tests.Algorithms
 
             Assert.Equal(8, a.MaxSaltSize);
             Assert.Equal(8, a.MinSaltSize);
-            Assert.Equal(8, a.SaltSize);
             Assert.Equal(int.MaxValue, a.MaxCount);
 
             Assert.Equal(expected.IterationCount, actual.IterationCount);
