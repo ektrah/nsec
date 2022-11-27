@@ -5,8 +5,9 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
+using NSec.Cryptography;
 
-namespace NSec.Cryptography
+namespace NSec.Experimental
 {
     // RFC 5116
     [DebuggerDisplay("{GetDebuggerDisplay(),nq}")]

@@ -1,7 +1,8 @@
 using System;
+using NSec.Cryptography;
 using static Interop.Libsodium;
 
-namespace NSec.Cryptography
+namespace NSec.Experimental
 {
     public static class KeyConverter
     {
