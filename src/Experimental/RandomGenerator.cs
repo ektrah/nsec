@@ -3,18 +3,18 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using NSec.Cryptography;
 using static Interop.Libsodium;
 
-namespace NSec.Cryptography
+namespace NSec.Experimental
 {
-    [Obsolete("This type is obsolete and will be removed in a future version. The recommended alternative is System.Security.Cryptography.RandomNumberGenerator.")]
     public abstract class RandomGenerator
     {
         private static RandomGenerator? s_Default;
 
         private protected RandomGenerator()
         {
-            Sodium.Initialize();
+            NSec.Cryptography.Sodium.Initialize();
         }
 
         public static RandomGenerator Default
