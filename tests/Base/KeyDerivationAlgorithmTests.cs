@@ -262,7 +262,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveBytesWithDisposedSecret(KeyDerivationAlgorithm a)
         {
-            var s = SharedSecret.Import(Utilities.RandomBytes[..32]);
+            var s = SharedSecret.Import(Utilities.RandomBytes[..32], SharedSecretBlobFormat.RawSharedSecret);
             s.Dispose();
             Assert.Throws<ObjectDisposedException>(() => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, 200));
         }
@@ -376,7 +376,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveBytesWithDisposedSecretAndSpan(KeyDerivationAlgorithm a)
         {
-            var s = SharedSecret.Import(Utilities.RandomBytes[..32]);
+            var s = SharedSecret.Import(Utilities.RandomBytes[..32], SharedSecretBlobFormat.RawSharedSecret);
             s.Dispose();
             Assert.Throws<ObjectDisposedException>(() => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[200]));
         }
@@ -505,7 +505,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveKeyWithDisposedSecret(KeyDerivationAlgorithm a)
         {
-            var s = SharedSecret.Import(Utilities.RandomBytes[..32]);
+            var s = SharedSecret.Import(Utilities.RandomBytes[..32], SharedSecretBlobFormat.RawSharedSecret);
             s.Dispose();
             Assert.Throws<ObjectDisposedException>(() => a.DeriveKey(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, AeadAlgorithm.ChaCha20Poly1305));
         }

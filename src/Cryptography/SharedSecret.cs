@@ -31,19 +31,6 @@ namespace NSec.Cryptography
 
         internal SecureMemoryHandle Handle => _handle;
 
-        [Obsolete("This method overload is obsolete and will be removed in a future version.")]
-        public static SharedSecret Import(
-            ReadOnlySpan<byte> sharedSecret,
-            in SharedSecretCreationParameters creationParameters = default)
-        {
-            if (sharedSecret.Length > MaxSize)
-            {
-                throw Error.Argument_SharedSecretLength(nameof(sharedSecret), MaxSize);
-            }
-
-            return Import(sharedSecret, SharedSecretBlobFormat.RawSharedSecret, in creationParameters);
-        }
-
         public static SharedSecret Import(
             ReadOnlySpan<byte> blob,
             SharedSecretBlobFormat format,
