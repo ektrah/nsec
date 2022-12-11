@@ -18,7 +18,7 @@ NSec.Cryptography.X25519</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="libsodium" Version="[1.0.18.3,1.0.19)" />
+    <PackageReference Include="libsodium" Version="[1.0.18.2,1.0.19)" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.1'">
