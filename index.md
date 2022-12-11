@@ -1,8 +1,7 @@
 # NSec
 
 NSec is a modern and easy-to-use cryptographic library for
-[.NET 5+](https://dotnet.microsoft.com/) and
-[.NET Core](https://dotnet.microsoft.com/) based on
+[.NET 6+](https://dotnet.microsoft.com/) based on
 [libsodium](https://libsodium.org/).
 
 * **Modern** -- libsodium provides a small set of high-quality, modern
