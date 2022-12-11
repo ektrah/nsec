@@ -25,40 +25,35 @@ NSec is intended to run on
 [supported versions of .NET](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core)
 on the following platforms:
 
-* Windows
-    * `win-x64`
-    * `win-x86`
-* Linux
-    * `linux-x64` (Most desktop distributions like CentOS, Debian, Fedora, Ubuntu, and derivatives)
-    * `linux-musl-x64` (Lightweight distributions using musl like Alpine Linux)
-    * `linux-arm` (Linux distributions running on ARM like Raspbian on Raspberry Pi Model 2+)
-    * `linux-arm64` (Linux distributions running on 64-bit ARM like Ubuntu Server 64-bit on Raspberry Pi Model 3+)
-* macOS
-    * `osx-x64`
-    * `osx-arm64`
+|                   | `-x64`   | `-x86`   | `-arm64` | `-arm`   |
+|:------------------|:--------:|:--------:|:--------:|:--------:|
+| **`win-`**        | &check;  | &check;  |          |          |
+| **`linux-`**      | &check;  |          | &check;  | &check;  |
+| **`linux-musl-`** | &check;  |          |          |          |
+| **`osx-`**        | &check;  |          | &check;  |          |
 
 Specifically,
 [NSec 22.4.0](https://www.nuget.org/packages/NSec.Cryptography/22.4.0)
 has been tested to run on the following platforms and .NET versions:
 
-| OS                   | Version  | Architectures | .NET          |
-|:-------------------- |:-------- |:------------- |:--------------|
-| Windows 10 Client    | 20H2     | x64 / x86     | 7.0 / 6.0     |
-| Windows Server       | 2022     | x64           | 7.0 / 6.0     |
-|                      |          |               |               |
-| macOS                | 11.7     | x64           | 7.0 / 6.0     |
-|                      | 12.6     | x64           | 7.0 / 6.0     |
-|                      |          |               |               |
-| Alpine               | 3.16     | x64           | 7.0           |
-| CentOS               | 7.9.2009 | x64           | 7.0 / 6.0     |
-| Debian               | 10.13    | x64           | 7.0 / 6.0     |
-|                      | 11.5     | x64           | 7.0 / 6.0     |
-| Fedora               | 36       | x64           | 7.0 / 6.0     |
-|                      | 37       | x64           | 7.0 / 6.0     |
-| Ubuntu               | 16.04    | x64           | 7.0 / 6.0     |
-|                      | 18.04    | x64           | 7.0 / 6.0     |
-|                      | 20.04    | x64           | 7.0 / 6.0     |
-|                      | 22.04    | x64           | 7.0 / 6.0     |
+| OS                   | Version  | Architectures | .NET            |
+|:-------------------- |:-------- |:------------- |:--------------- |
+| Windows 10 Client    | 20H2     | x64 / x86     | 7.0.0 / 6.0.11  |
+| Windows Server       | 2022     | x64           | 7.0.0 / 6.0.11  |
+|                      |          |               |                 |
+| macOS                | 11.7     | x64           | 7.0.0 / 6.0.11  |
+|                      | 12.6     | x64           | 7.0.0 / 6.0.11  |
+|                      |          |               |                 |
+| Alpine               | 3.16     | x64           | 7.0.0           |
+| CentOS               | 7.9.2009 | x64           | 7.0.0 / 6.0.11  |
+| Debian               | 10.13    | x64           | 7.0.0 / 6.0.11  |
+|                      | 11.5     | x64           | 7.0.0 / 6.0.11  |
+| Fedora               | 36       | x64           | 7.0.0 / 6.0.11  |
+|                      | 37       | x64           | 7.0.0 / 6.0.11  |
+| Ubuntu               | 16.04    | x64           | 7.0.0 / 6.0.11  |
+|                      | 18.04    | x64           | 7.0.0 / 6.0.11  |
+|                      | 20.04    | x64           | 7.0.0 / 6.0.11  |
+|                      | 22.04    | x64           | 7.0.0 / 6.0.11  |
 
 Other, similar platforms supported by .NET should work as well but have not been tested.
 
