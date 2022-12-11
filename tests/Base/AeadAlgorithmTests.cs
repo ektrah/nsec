@@ -441,17 +441,15 @@ namespace NSec.Tests.Base
         public static void DecryptFailClearsPlaintext(AeadAlgorithm a)
         {
             using var k = new Key(a);
+            var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
+            var ad = Utilities.RandomBytes.Slice(0, 100);
 
-            var pt = new byte[16];
-            for (var i = 0; i < pt.Length; i++)
-            {
-                pt[i] = 0xD6;
-            }
+            var actual = Utilities.RandomBytes.Slice(0, L).ToArray();
 
-            var ct = new byte[pt.Length + a.TagSize];
+            var ciphertext = new byte[actual.Length + a.TagSize];
 
-            Assert.False(a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ct, pt));
-            Assert.Equal(new byte[pt.Length], pt);
+            Assert.False(a.Decrypt(k, n, ad, ciphertext, actual));
+            Assert.Equal(Utilities.FillArray(actual.Length, actual[0]), actual);
         }
 
         #endregion
