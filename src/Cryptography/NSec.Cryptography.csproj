@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Description>Provides modern cryptographic algorithm implementations for .NET Core based on libsodium.
+    <Description>Provides modern cryptographic algorithm implementations for .NET based on libsodium.
 
 Commonly Used Types:
 NSec.Cryptography.Aes256Gcm
@@ -19,10 +19,6 @@ NSec.Cryptography.X25519</Description>
 
   <ItemGroup>
     <PackageReference Include="libsodium" Version="[1.0.18.2,1.0.19)" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.1'">
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
