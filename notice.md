@@ -90,8 +90,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ## License Notice for .NET Runtime
 
-NSec contains code derived from libraries of the
-[.NET Runtime](https://github.com/dotnet/runtime),
+NSec contains code derived from the
+[.NET runtime and libraries](https://github.com/dotnet/runtime),
 which are available under the MIT license.
 
 Copyright &copy; .NET Foundation and Contributors  
@@ -118,9 +118,9 @@ SOFTWARE.
 
 ## License Notice for .NET Core Lab
 
-NSec contains code derived from libraries in the
+NSec contains code derived from
 [.NET Core Lab](https://github.com/dotnet/corefxlab/),
-which are available under the MIT license.
+which is available under the MIT license.
 
 Copyright &copy; .NET Foundation and Contributors  
 All rights reserved.
