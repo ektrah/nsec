@@ -290,14 +290,34 @@ namespace NSec.Tests.Base
         public static void DecryptEmptySuccess(AeadAlgorithm a)
         {
             using var k = new Key(a);
+            var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
+            var ad = ReadOnlySpan<byte>.Empty;
 
-            var ct = a.Encrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty);
+            var ct = a.Encrypt(k, n, ad, ReadOnlySpan<byte>.Empty);
             Assert.NotNull(ct);
             Assert.Equal(a.TagSize, ct.Length);
 
-            var pt = a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ct);
+            var pt = a.Decrypt(k, n, ad, ct);
             Assert.NotNull(pt);
             Assert.Empty(pt);
+        }
+
+        [Theory]
+        [MemberData(nameof(AeadAlgorithms))]
+        public static void DecryptSuccess(AeadAlgorithm a)
+        {
+            using var k = new Key(a);
+            var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
+            var ad = Utilities.RandomBytes.Slice(0, 100);
+
+            var expected = Utilities.RandomBytes.Slice(0, L).ToArray();
+
+            var ct = a.Encrypt(k, n, ad, expected);
+            Assert.NotNull(ct);
+            Assert.Equal(expected.Length + a.TagSize, ct.Length);
+
+            var pt = a.Decrypt(k, n, ad, ct);
+            Assert.Equal(expected, pt);
         }
 
         #endregion
@@ -372,7 +392,7 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void DecryptWithAdOverlapping(AeadAlgorithm a)
+        public static void DecryptWithAdOverlappingSuccess(AeadAlgorithm a)
         {
             using var k = new Key(a);
             var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
@@ -402,7 +422,7 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void DecryptWithSpanOutOfPlace(AeadAlgorithm a)
+        public static void DecryptWithSpanSuccess(AeadAlgorithm a)
         {
             using var k = new Key(a);
             var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
@@ -419,7 +439,7 @@ namespace NSec.Tests.Base
 
         [Theory]
         [MemberData(nameof(AeadAlgorithms))]
-        public static void DecryptWithSpanInPlace(AeadAlgorithm a)
+        public static void DecryptWithSpanInPlaceSuccess(AeadAlgorithm a)
         {
             using var k = new Key(a);
             var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
