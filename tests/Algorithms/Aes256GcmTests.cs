@@ -6,6 +6,8 @@ namespace NSec.Tests.Algorithms
 {
     public static class Aes256GcmTests
     {
+        public static readonly TheoryData<int> PlaintextLengths = Utilities.Primes;
+
         #region Properties
 
         [Fact]
@@ -22,6 +24,31 @@ namespace NSec.Tests.Algorithms
         public static void IsSupported()
         {
             Assert.InRange(Aes256Gcm.IsSupported, false, true);
+        }
+
+        #endregion
+
+        #region Encrypt/Decrypt
+
+        [Theory]
+        [MemberData(nameof(PlaintextLengths))]
+        public static void EncryptDecrypt(int length)
+        {
+            var a = AeadAlgorithm.Aes256Gcm;
+
+            using var k = new Key(a);
+            var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
+            var ad = Utilities.RandomBytes.Slice(0, 100);
+
+            var expected = Utilities.RandomBytes.Slice(0, length).ToArray();
+
+            var ciphertext = a.Encrypt(k, n, ad, expected);
+            Assert.NotNull(ciphertext);
+            Assert.Equal(length + a.TagSize, ciphertext.Length);
+
+            var actual = a.Decrypt(k, n, ad, ciphertext);
+            Assert.NotNull(actual);
+            Assert.Equal(expected, actual);
         }
 
         #endregion
