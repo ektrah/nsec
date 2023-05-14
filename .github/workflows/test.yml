@@ -41,6 +41,7 @@ jobs:
         include:
         - os: macos-11
         - os: macos-12
+        - os: macos-13
     runs-on: ${{ matrix.os }}
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
@@ -72,8 +73,8 @@ jobs:
         - os: centos:7
         - os: debian:10
         - os: debian:11
-        - os: fedora:36
         - os: fedora:37
+        - os: fedora:38
         - os: ubuntu:16.04
         - os: ubuntu:18.04
         - os: ubuntu:20.04
@@ -119,7 +120,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - os: alpine3.16
+        - os: alpine3.17
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/dotnet/sdk:7.0-${{ matrix.os }}
