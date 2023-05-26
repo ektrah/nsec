@@ -415,6 +415,11 @@ namespace NSec.Cryptography
             return new NotSupportedException(string.Format(ResourceManager.GetString(nameof(NotSupported_KeyConversion))!, arg0, arg1));
         }
 
+        internal static NotSupportedException NotSupported_Algorithm()
+        {
+            return new NotSupportedException(ResourceManager.GetString(nameof(NotSupported_Algorithm)));
+        }
+
         internal static NotSupportedException NotSupported_Operation()
         {
             return new NotSupportedException(ResourceManager.GetString(nameof(NotSupported_Operation)));

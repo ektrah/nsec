@@ -77,5 +77,83 @@ namespace NSec.Tests.Examples
 
             Assert.Equal(algorithm.Mac(key, Encoding.UTF8.GetBytes(string.Concat(lines))), mac);
         }
+
+        [Fact]
+        public static void Signature()
+        {
+            #region Incremental Signature
+
+            // select the Ed25519ph algorithm
+            var algorithm = SignatureAlgorithm.Ed25519ph;
+
+            // create a new key
+            using var key = Key.Create(algorithm);
+
+            // initialize the state with the key
+            IncrementalSignature.Initialize(algorithm, out var state);
+
+            // incrementally update the state with some data
+            var lines = new[]
+            {
+                "It is a dark time for the\n",
+                "Rebellion. Although the Death\n",
+                "Star has been destroyed,\n",
+                "Imperial troops have driven the\n",
+                "Rebel forces from their hidden\n",
+                "base and pursued them across\n",
+                "the galaxy.\n"
+            };
+            foreach (var line in lines)
+            {
+                IncrementalSignature.Update(ref state, Encoding.UTF8.GetBytes(line));
+            }
+
+            // finalize the computation and get the result
+            var signature = IncrementalSignature.FinalSignature(ref state, key);
+
+            #endregion
+
+            Assert.Equal(algorithm.Sign(key, Encoding.UTF8.GetBytes(string.Concat(lines))), signature);
+        }
+
+        [Fact]
+        public static void Verify()
+        {
+            #region Incremental Signature Verification
+
+            // select the Ed25519ph algorithm
+            var algorithm = SignatureAlgorithm.Ed25519ph;
+
+            // create a new key
+            using var key = Key.Create(algorithm);
+
+            // initialize the state with the key
+            IncrementalSignature.Initialize(algorithm, out var state);
+
+            // incrementally update the state with some data
+            var lines = new[]
+            {
+                "It is a dark time for the\n",
+                "Rebellion. Although the Death\n",
+                "Star has been destroyed,\n",
+                "Imperial troops have driven the\n",
+                "Rebel forces from their hidden\n",
+                "base and pursued them across\n",
+                "the galaxy.\n"
+            };
+            foreach (var line in lines)
+            {
+                IncrementalSignature.Update(ref state, Encoding.UTF8.GetBytes(line));
+            }
+
+            // calculate the signature
+            var signature = algorithm.Sign(key, Encoding.UTF8.GetBytes(string.Concat(lines)));
+
+            //verify the signature
+            var isValid = IncrementalSignature.FinalVerify(ref state, key.PublicKey, signature);
+            #endregion
+
+            Assert.True(isValid);
+        }
     }
 }

@@ -80,6 +80,12 @@ namespace NSec.Tests
         public static readonly TheoryData<SignatureAlgorithm> SignatureAlgorithms = new()
         {
             SignatureAlgorithm.Ed25519,
+            SignatureAlgorithm.Ed25519ph,
+        };
+
+        public static readonly TheoryData<SignatureAlgorithm> IncrementalSignatureAlgorithms = new()
+        {
+            SignatureAlgorithm.Ed25519ph,
         };
 
         #endregion
@@ -90,6 +96,7 @@ namespace NSec.Tests
         {
             KeyAgreementAlgorithm.X25519,
             SignatureAlgorithm.Ed25519,
+            SignatureAlgorithm.Ed25519ph,
         };
 
         public static readonly TheoryData<Algorithm> SymmetricAlgorithms = new()

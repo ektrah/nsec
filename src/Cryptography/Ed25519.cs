@@ -32,7 +32,7 @@ namespace NSec.Cryptography
     //
     //      Signature Size - 64 bytes.
     //
-    public sealed class Ed25519 : SignatureAlgorithm
+    public class Ed25519 : SignatureAlgorithm
     {
         private static readonly PrivateKeyFormatter s_nsecPrivateKeyFormatter = new Ed25519PrivateKeyFormatter(new byte[] { 0xDE, 0x64, 0x42, 0xDE, crypto_sign_ed25519_SEEDBYTES, 0, crypto_sign_ed25519_BYTES, 0 });
 
@@ -65,6 +65,8 @@ namespace NSec.Cryptography
         private static readonly PublicKeyFormatter s_rawPublicKeyFormatter = new Ed25519PublicKeyFormatter(Array.Empty<byte>());
 
         private static int s_selfTest;
+
+        public override bool SupportsPartialUpdated => false;
 
         public Ed25519() : base(
             privateKeySize: crypto_sign_ed25519_SEEDBYTES,
@@ -221,6 +223,26 @@ namespace NSec.Cryptography
 
                 return error == 0;
             }
+        }
+
+        internal override void InitializeCore(out IncrementalSignatureState state)
+        {
+            throw Error.NotSupported_Algorithm();
+        }
+
+        internal override void UpdateCore(ref IncrementalSignatureState state, ReadOnlySpan<byte> data)
+        {
+            throw Error.NotSupported_Algorithm();
+        }
+
+        internal override void FinalSignCore(ref IncrementalSignatureState state, SecureMemoryHandle keyHandle, Span<byte> signature)
+        {
+            throw Error.NotSupported_Algorithm();
+        }
+
+        internal override bool FinalVerifyCore(ref IncrementalSignatureState state, in PublicKeyBytes publicKeyBytes, ReadOnlySpan<byte> signature)
+        {
+            throw Error.NotSupported_Algorithm();
         }
 
         private static void SelfTest()

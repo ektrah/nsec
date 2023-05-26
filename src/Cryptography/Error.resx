@@ -321,4 +321,7 @@
   <data name="PlatformNotSupported_Initialization" xml:space="preserve">
     <value>Could not initialize platform-specific components. NSec may not be supported on this platform. See https://nsec.rocks/docs/install for more information.</value>
   </data>
+  <data name="NotSupported_Algorithm" xml:space="preserve">
+      <value>The specified algorithm is not supported for this opeation.</value>
+  </data>
 </root>

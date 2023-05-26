@@ -57,5 +57,33 @@ internal static partial class Interop
             byte* m,
             ulong mlen,
             PublicKeyBytes* pk);
+
+        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
+        internal static unsafe extern int crypto_sign_ed25519ph_init(
+            crypto_sign_ed25519ph_state* state);
+
+        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
+        internal static unsafe extern int crypto_sign_ed25519ph_update(
+            crypto_sign_ed25519ph_state* state,
+            byte* m,
+            ulong mlen);
+
+        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
+        internal static unsafe extern int crypto_sign_ed25519ph_final_create(
+            crypto_sign_ed25519ph_state* state,
+            byte* sig,
+            out ulong siglen_p,
+            SecureMemoryHandle sk);
+
+        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
+        internal static unsafe extern int crypto_sign_ed25519ph_final_verify(
+            crypto_sign_ed25519ph_state* state,
+            byte* sig,
+            PublicKeyBytes* pk);
+
+        [StructLayout(LayoutKind.Explicit, Size = 208)]
+        internal struct crypto_sign_ed25519ph_state
+        {
+        }
     }
 }
