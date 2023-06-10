@@ -20,7 +20,7 @@ namespace NSec.Cryptography
     public abstract class SignatureAlgorithm : Algorithm
     {
         private static Ed25519? s_Ed25519;
-        private static Ed25519Ph? s_Ed25519ph;
+        private static Ed25519ph? s_Ed25519ph;
 
         private readonly int _privateKeySize;
         private readonly int _publicKeySize;
@@ -54,23 +54,18 @@ namespace NSec.Cryptography
             }
         }
 
-        public static Ed25519Ph Ed25519ph
+        public static Ed25519ph Ed25519ph
         {
             get
             {
-                Ed25519Ph? instance = s_Ed25519ph;
+                Ed25519ph? instance = s_Ed25519ph;
                 if (instance == null)
                 {
-                    Interlocked.CompareExchange(ref s_Ed25519ph, new Ed25519Ph(), null);
+                    Interlocked.CompareExchange(ref s_Ed25519ph, new Ed25519ph(), null);
                     instance = s_Ed25519ph;
                 }
                 return instance;
             }
-        }
-
-        public abstract bool SupportsPartialUpdated
-        {
-            get;
         }
 
         public int PrivateKeySize => _privateKeySize;
@@ -155,23 +150,6 @@ namespace NSec.Cryptography
         private protected abstract bool VerifyCore(
             in PublicKeyBytes publicKeyBytes,
             ReadOnlySpan<byte> data,
-            ReadOnlySpan<byte> signature);
-
-        internal abstract void InitializeCore(
-            out IncrementalSignatureState state);
-
-        internal abstract void UpdateCore(
-            ref IncrementalSignatureState state,
-            ReadOnlySpan<byte> data);
-
-        internal abstract void FinalSignCore(
-            ref IncrementalSignatureState state,
-            SecureMemoryHandle keyHandle,
-            Span<byte> signature);
-
-        internal abstract bool FinalVerifyCore(
-            ref IncrementalSignatureState state,
-            in PublicKeyBytes publicKeyBytes,
             ReadOnlySpan<byte> signature);
     }
 }

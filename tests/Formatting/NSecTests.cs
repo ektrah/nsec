@@ -44,6 +44,22 @@ namespace NSec.Tests.Formatting
         }
 
         [Fact]
+        public static void Ed25519phPrivate()
+        {
+            var a = SignatureAlgorithm.Ed25519ph;
+
+            Test(a, a.PrivateKeySize, KeyBlobFormat.RawPrivateKey, a.PrivateKeySize, a.SignatureSize, KeyBlobFormat.NSecPrivateKey, new byte[] { 0xDE, 0x64, 0x48, 0xDE });
+        }
+
+        [Fact]
+        public static void Ed25519phPublic()
+        {
+            var a = SignatureAlgorithm.Ed25519ph;
+
+            Test(a, a.PrivateKeySize, KeyBlobFormat.RawPrivateKey, a.PublicKeySize, a.SignatureSize, KeyBlobFormat.NSecPublicKey, new byte[] { 0xDE, 0x65, 0x48, 0xDE });
+        }
+
+        [Fact]
         public static void X25519Private()
         {
             var a = KeyAgreementAlgorithm.X25519;

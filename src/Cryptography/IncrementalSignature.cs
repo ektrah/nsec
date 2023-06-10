@@ -9,9 +9,9 @@ namespace NSec.Cryptography
     public struct IncrementalSignature
     {
         private readonly IncrementalSignatureState _state;
-        private readonly SignatureAlgorithm? _algorithm;
+        private readonly SignatureAlgorithm2? _algorithm;
 
-        public SignatureAlgorithm? Algorithm => _algorithm;
+        public SignatureAlgorithm2? Algorithm => _algorithm;
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static new bool Equals(
@@ -22,17 +22,12 @@ namespace NSec.Cryptography
         }
 
         public static void Initialize(
-            SignatureAlgorithm algorithm,
+            SignatureAlgorithm2 algorithm,
             out IncrementalSignature state)
         {
             if (algorithm == null)
             {
                 throw Error.ArgumentNull_Algorithm(nameof(algorithm));
-            }
-
-            if (!algorithm.SupportsPartialUpdated)
-            {
-                throw Error.NotSupported_Algorithm();
             }
 
             state = default;
@@ -52,13 +47,21 @@ namespace NSec.Cryptography
             state._algorithm.UpdateCore(ref Unsafe.AsRef(in state._state), data);
         }
 
-        public static byte[] FinalSignature(
+        public static byte[] Finalize(
             ref IncrementalSignature state,
             Key key)
         {
             if (state._algorithm == null)
             {
                 throw Error.InvalidOperation_UninitializedState();
+            }
+            if (key == null)
+            {
+                throw Error.ArgumentNull_Key(nameof(key));
+            }
+            if (key.Algorithm != state._algorithm)
+            {
+                throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
             }
 
             try
@@ -69,11 +72,11 @@ namespace NSec.Cryptography
             }
             finally
             {
-                Unsafe.AsRef<SignatureAlgorithm?>(in state._algorithm) = null;
+                Unsafe.AsRef<SignatureAlgorithm2?>(in state._algorithm) = null;
             }
         }
 
-        public static void FinalSignature(
+        public static void Finalize(
             ref IncrementalSignature state,
             Key key,
             Span<byte> signature)
@@ -81,6 +84,14 @@ namespace NSec.Cryptography
             if (state._algorithm == null)
             {
                 throw Error.InvalidOperation_UninitializedState();
+            }
+            if (key == null)
+            {
+                throw Error.ArgumentNull_Key(nameof(key));
+            }
+            if (key.Algorithm != state._algorithm)
+            {
+                throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
             }
             if (signature.Length != state._algorithm.SignatureSize)
             {
@@ -93,11 +104,11 @@ namespace NSec.Cryptography
             }
             finally
             {
-                Unsafe.AsRef<SignatureAlgorithm?>(in state._algorithm) = null;
+                Unsafe.AsRef<SignatureAlgorithm2?>(in state._algorithm) = null;
             }
         }
 
-        public static bool FinalVerify(
+        public static bool FinalizeAndVerify(
             ref IncrementalSignature state,
             PublicKey publicKey,
             ReadOnlySpan<byte> signature)
@@ -122,7 +133,7 @@ namespace NSec.Cryptography
             }
             finally
             {
-                Unsafe.AsRef<SignatureAlgorithm?>(in state._algorithm) = null;
+                Unsafe.AsRef<SignatureAlgorithm2?>(in state._algorithm) = null;
             }
         }
     }
@@ -131,6 +142,6 @@ namespace NSec.Cryptography
     internal struct IncrementalSignatureState
     {
         [FieldOffset(0)]
-        internal Interop.Libsodium.crypto_sign_ed25519ph_state ed25519PhState;
+        internal Interop.Libsodium.crypto_sign_ed25519ph_state ed25519ph;
     }
 }

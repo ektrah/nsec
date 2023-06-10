@@ -6,7 +6,7 @@ namespace NSec.Tests.Base
 {
     public static class IncrementalSignatureTests
     {
-        public static readonly TheoryData<SignatureAlgorithm> IncrementalSignatureAlgorithms = Registry.IncrementalSignatureAlgorithms;
+        public static readonly TheoryData<SignatureAlgorithm2> IncrementalSignatureAlgorithms = Registry.IncrementalSignatureAlgorithms;
 
         #region Initialize
 
@@ -16,31 +16,45 @@ namespace NSec.Tests.Base
             Assert.Throws<ArgumentNullException>("algorithm", () => IncrementalSignature.Initialize(null!, out _));
         }
 
-        [Fact]
-        public static void InitializeWithUnsupportedAlgorithm()
-        {
-            Assert.Throws<NotSupportedException>(() => IncrementalSignature.Initialize(SignatureAlgorithm.Ed25519, out _));
-        }
-
         #endregion
 
-        #region FinalSignature #1
+        #region Finalize #1
 
         [Theory]
         [MemberData(nameof(IncrementalSignatureAlgorithms))]
-        public static void FinalSignatureInvalid(SignatureAlgorithm a)
+        public static void FinalizeInvalid(SignatureAlgorithm2 a)
         {
+            using var k = new Key(a);
             var state = default(IncrementalSignature);
 
-            var key = new Key(a);
-
-            Assert.Throws<InvalidOperationException>(() => IncrementalSignature.FinalSignature(ref state, key));
+            Assert.Throws<InvalidOperationException>(() => IncrementalSignature.Finalize(ref state, k));
         }
 
         [Theory]
         [MemberData(nameof(IncrementalSignatureAlgorithms))]
-        public static void FinalSignatureSuccess(SignatureAlgorithm a)
+        public static void FinalizeWithNullKey(SignatureAlgorithm2 a)
         {
+            IncrementalSignature.Initialize(a, out var state);
+
+            Assert.Throws<ArgumentNullException>("key", () => IncrementalSignature.Finalize(ref state, null!));
+        }
+
+        [Theory]
+        [MemberData(nameof(IncrementalSignatureAlgorithms))]
+        public static void FinalizeWithWrongKey(SignatureAlgorithm2 a)
+        {
+            using var k = new Key(SignatureAlgorithm.Ed25519);
+
+            IncrementalSignature.Initialize(a, out var state);
+
+            Assert.Throws<ArgumentException>("key", () => IncrementalSignature.Finalize(ref state, k));
+        }
+
+        [Theory]
+        [MemberData(nameof(IncrementalSignatureAlgorithms))]
+        public static void FinalizeSuccess(SignatureAlgorithm2 a)
+        {
+            using var k = new Key(a);
             var state = default(IncrementalSignature);
 
             Assert.Null(state.Algorithm);
@@ -53,57 +67,76 @@ namespace NSec.Tests.Base
             IncrementalSignature.Update(ref state, Utilities.RandomBytes.Slice(100, 100));
             IncrementalSignature.Update(ref state, Utilities.RandomBytes.Slice(200, 100));
 
-            var key = new Key(a);
-            var actual = IncrementalSignature.FinalSignature(ref state, key);
+            var actual = IncrementalSignature.Finalize(ref state, k);
 
             Assert.Null(state.Algorithm);
 
-            var expected = a.Sign(key, Utilities.RandomBytes.Slice(0, 300));
+            var expected = a.Sign(k, Utilities.RandomBytes.Slice(0, 300));
 
             Assert.Equal(expected, actual);
         }
 
         #endregion
 
-        #region FinalSignature #2
+        #region Finalize #2
 
         [Theory]
         [MemberData(nameof(IncrementalSignatureAlgorithms))]
-        public static void FinalSignatureWithSpanInvalid(SignatureAlgorithm a)
+        public static void FinalizeWithSpanInvalid(SignatureAlgorithm2 a)
         {
+            using var k = new Key(a);
             var state = default(IncrementalSignature);
 
-            var key = new Key(a);
-
-            Assert.Throws<InvalidOperationException>(() => IncrementalSignature.FinalSignature(ref state, key, Span<byte>.Empty));
+            Assert.Throws<InvalidOperationException>(() => IncrementalSignature.Finalize(ref state, k, new byte[a.SignatureSize]));
         }
 
         [Theory]
         [MemberData(nameof(IncrementalSignatureAlgorithms))]
-        public static void FinalSignatureWithSpanTooSmall(SignatureAlgorithm a)
+        public static void FinalizeWithSpanAndNullKey(SignatureAlgorithm2 a)
         {
-            var key = new Key(a);
+            IncrementalSignature.Initialize(a, out var state);
+
+            Assert.Throws<ArgumentNullException>("key", () => IncrementalSignature.Finalize(ref state, null!, new byte[a.SignatureSize]));
+        }
+
+        [Theory]
+        [MemberData(nameof(IncrementalSignatureAlgorithms))]
+        public static void FinalizeWithSpanAndWrongKey(SignatureAlgorithm2 a)
+        {
+            using var k = new Key(SignatureAlgorithm.Ed25519);
 
             IncrementalSignature.Initialize(a, out var state);
 
-            Assert.Throws<ArgumentException>("signature", () => IncrementalSignature.FinalSignature(ref state, key, new byte[a.SignatureSize - 1]));
+            Assert.Throws<ArgumentException>("key", () => IncrementalSignature.Finalize(ref state, k, new byte[a.SignatureSize]));
         }
 
         [Theory]
         [MemberData(nameof(IncrementalSignatureAlgorithms))]
-        public static void FinalizeWithSpanTooLarge(SignatureAlgorithm a)
+        public static void FinalizeWithSpanTooSmall(SignatureAlgorithm2 a)
         {
-            var key = new Key(a);
+            using var k = new Key(a);
 
             IncrementalSignature.Initialize(a, out var state);
 
-            Assert.Throws<ArgumentException>("signature", () => IncrementalSignature.FinalSignature(ref state, key, new byte[a.SignatureSize + 1]));
+            Assert.Throws<ArgumentException>("signature", () => IncrementalSignature.Finalize(ref state, k, new byte[a.SignatureSize - 1]));
         }
 
         [Theory]
         [MemberData(nameof(IncrementalSignatureAlgorithms))]
-        public static void FinalSignatureWithSpanSuccess(SignatureAlgorithm a)
+        public static void FinalizeWithSpanTooLarge(SignatureAlgorithm2 a)
         {
+            using var k = new Key(a);
+
+            IncrementalSignature.Initialize(a, out var state);
+
+            Assert.Throws<ArgumentException>("signature", () => IncrementalSignature.Finalize(ref state, k, new byte[a.SignatureSize + 1]));
+        }
+
+        [Theory]
+        [MemberData(nameof(IncrementalSignatureAlgorithms))]
+        public static void FinalizeWithSpanSuccess(SignatureAlgorithm2 a)
+        {
+            using var k = new Key(a);
             var state = default(IncrementalSignature);
 
             Assert.Null(state.Algorithm);
@@ -116,22 +149,22 @@ namespace NSec.Tests.Base
             IncrementalSignature.Update(ref state, Utilities.RandomBytes.Slice(100, 100));
             IncrementalSignature.Update(ref state, Utilities.RandomBytes.Slice(200, 100));
 
-            var key = new Key(a);
-
             var actual = new byte[a.SignatureSize];
-            IncrementalSignature.FinalSignature(ref state, key, actual);
+
+            IncrementalSignature.Finalize(ref state, k, actual);
 
             Assert.Null(state.Algorithm);
 
-            var expected = a.Sign(key, Utilities.RandomBytes.Slice(0, 300));
+            var expected = a.Sign(k, Utilities.RandomBytes.Slice(0, 300));
 
             Assert.Equal(expected, actual);
         }
 
         [Theory]
         [MemberData(nameof(IncrementalSignatureAlgorithms))]
-        public static void FinalSignatureWithSpanSuccessNoUpdate(SignatureAlgorithm a)
+        public static void FinalizeWithSpanSuccessNoUpdate(SignatureAlgorithm2 a)
         {
+            using var k = new Key(a);
             var state = default(IncrementalSignature);
 
             Assert.Null(state.Algorithm);
@@ -140,63 +173,73 @@ namespace NSec.Tests.Base
 
             Assert.Same(a, state.Algorithm);
 
-            var key = new Key(a);
-
             var actual = new byte[a.SignatureSize];
-            IncrementalSignature.FinalSignature(ref state, key, actual);
+
+            IncrementalSignature.Finalize(ref state, k, actual);
 
             Assert.Null(state.Algorithm);
 
-            var expected = a.Sign(key, ReadOnlySpan<byte>.Empty);
+            var expected = a.Sign(k, ReadOnlySpan<byte>.Empty);
 
             Assert.Equal(expected, actual);
         }
 
         #endregion
 
-        #region FinalVerify
+        #region FinalizeAndVerify
 
         [Theory]
         [MemberData(nameof(IncrementalSignatureAlgorithms))]
-        public static void FinalVerifyInvalid(SignatureAlgorithm a)
+        public static void FinalizeAndVerifyInvalid(SignatureAlgorithm2 a)
         {
+            using var k = new Key(a);
             var state = default(IncrementalSignature);
 
-            var key = new Key(a);
-
-            Assert.Throws<InvalidOperationException>(() => IncrementalSignature.FinalVerify(ref state, key.PublicKey, Span<byte>.Empty));
+            Assert.Throws<InvalidOperationException>(() => IncrementalSignature.FinalizeAndVerify(ref state, k.PublicKey, new byte[a.SignatureSize]));
         }
 
         [Theory]
         [MemberData(nameof(IncrementalSignatureAlgorithms))]
-        public static void FinalVerifyNullKey(SignatureAlgorithm a)
-        {
-            var state = default(IncrementalSignature);
-
-            Assert.Throws<InvalidOperationException>(() => IncrementalSignature.FinalVerify(ref state, null!, Span<byte>.Empty));
-        }
-
-        [Theory]
-        [MemberData(nameof(IncrementalSignatureAlgorithms))]
-        public static void FinalVerifyKeyFromdifferentAlgorithm(SignatureAlgorithm a)
-        {
-            var state = default(IncrementalSignature);
-
-            var key = new Key(SignatureAlgorithm.Ed25519);
-
-            Assert.Throws<InvalidOperationException>(() => IncrementalSignature.FinalVerify(ref state, key.PublicKey, Span<byte>.Empty));
-        }
-
-        [Theory]
-        [MemberData(nameof(IncrementalSignatureAlgorithms))]
-        public static void FinalVerifySuccess(SignatureAlgorithm a)
+        public static void FinalizeAndVerifyWithNullKey(SignatureAlgorithm2 a)
         {
             IncrementalSignature.Initialize(a, out var state);
 
-            var key = new Key(a);
-            var signature = a.Sign(key, ReadOnlySpan<byte>.Empty);
+            Assert.Throws<ArgumentNullException>("publicKey", () => IncrementalSignature.FinalizeAndVerify(ref state, null!, new byte[a.SignatureSize]));
+        }
 
-            Assert.True(IncrementalSignature.FinalVerify(ref state, key.PublicKey, signature));
+        [Theory]
+        [MemberData(nameof(IncrementalSignatureAlgorithms))]
+        public static void FinalizeAndVerifyWithWrongKey(SignatureAlgorithm2 a)
+        {
+            using var k = new Key(SignatureAlgorithm.Ed25519);
+
+            IncrementalSignature.Initialize(a, out var state);
+
+            Assert.Throws<ArgumentException>("publicKey", () => IncrementalSignature.FinalizeAndVerify(ref state, k.PublicKey, new byte[a.SignatureSize]));
+        }
+
+        [Theory]
+        [MemberData(nameof(IncrementalSignatureAlgorithms))]
+        public static void FinalizeAndVerifyFail(SignatureAlgorithm2 a)
+        {
+            using var k = new Key(a);
+
+            IncrementalSignature.Initialize(a, out var state);
+
+            Assert.False(IncrementalSignature.FinalizeAndVerify(ref state, k.PublicKey, new byte[a.SignatureSize]));
+
+            Assert.Null(state.Algorithm);
+        }
+
+        [Theory]
+        [MemberData(nameof(IncrementalSignatureAlgorithms))]
+        public static void FinalizeAndVerifySuccess(SignatureAlgorithm2 a)
+        {
+            using var k = new Key(a);
+
+            IncrementalSignature.Initialize(a, out var state);
+
+            Assert.True(IncrementalSignature.FinalizeAndVerify(ref state, k.PublicKey, a.Sign(k, ReadOnlySpan<byte>.Empty)));
 
             Assert.Null(state.Algorithm);
         }
