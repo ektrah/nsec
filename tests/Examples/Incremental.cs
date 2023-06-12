@@ -90,7 +90,7 @@ namespace NSec.Tests.Examples
             using var key = Key.Create(algorithm);
 
             // initialize the state
-            IncrementalSignature.Initialize(algorithm, out var state);
+            IncrementalSignature.Initialize(algorithm, key, out var state);
 
             // incrementally update the state with some data
             var lines = new[]
@@ -109,7 +109,7 @@ namespace NSec.Tests.Examples
             }
 
             // finalize the computation using the private key and get the result
-            var signature = IncrementalSignature.Finalize(ref state, key);
+            var signature = IncrementalSignature.Finalize(ref state);
 
             #endregion
 
@@ -143,7 +143,7 @@ namespace NSec.Tests.Examples
             // sign
             {
                 // initialize the state
-                IncrementalSignature.Initialize(algorithm, out var state);
+                IncrementalSignature.Initialize(algorithm, key, out var state);
 
                 // incrementally update the state with the data
                 foreach (var line in lines)
@@ -152,22 +152,22 @@ namespace NSec.Tests.Examples
                 }
 
                 // finalize the computation using the private key and get the result
-                signature = IncrementalSignature.Finalize(ref state, key);
+                signature = IncrementalSignature.Finalize(ref state);
             }
 
             // verify
             {
                 // initialize the state
-                IncrementalSignature.Initialize(algorithm, out var state);
+                IncrementalSignatureVerification.Initialize(algorithm, key.PublicKey, out var state);
 
                 // incrementally update the state with the data
                 foreach (var line in lines)
                 {
-                    IncrementalSignature.Update(ref state, Encoding.UTF8.GetBytes(line));
+                    IncrementalSignatureVerification.Update(ref state, Encoding.UTF8.GetBytes(line));
                 }
 
                 // verify the data using the signature and the public key
-                if (IncrementalSignature.FinalizeAndVerify(ref state, key.PublicKey, signature))
+                if (IncrementalSignatureVerification.FinalizeAndVerify(ref state, signature))
                 {
                     // verified!
                     /*{*//*}*/
