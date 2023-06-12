@@ -62,6 +62,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{F058E702-CA9
 		docs\api\nsec.cryptography.hashalgorithm.md = docs\api\nsec.cryptography.hashalgorithm.md
 		docs\api\nsec.cryptography.incrementalhash.md = docs\api\nsec.cryptography.incrementalhash.md
 		docs\api\nsec.cryptography.incrementalmac.md = docs\api\nsec.cryptography.incrementalmac.md
+		docs\api\nsec.cryptography.incrementalsignature.md = docs\api\nsec.cryptography.incrementalsignature.md
+		docs\api\nsec.cryptography.incrementalsignatureverification.md = docs\api\nsec.cryptography.incrementalsignatureverification.md
 		docs\api\nsec.cryptography.key.md = docs\api\nsec.cryptography.key.md
 		docs\api\nsec.cryptography.keyagreementalgorithm.md = docs\api\nsec.cryptography.keyagreementalgorithm.md
 		docs\api\nsec.cryptography.keyblobformat.md = docs\api\nsec.cryptography.keyblobformat.md
@@ -78,6 +80,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{F058E702-CA9
 		docs\api\nsec.cryptography.sharedsecretblobformat.md = docs\api\nsec.cryptography.sharedsecretblobformat.md
 		docs\api\nsec.cryptography.sharedsecretcreationparameters.md = docs\api\nsec.cryptography.sharedsecretcreationparameters.md
 		docs\api\nsec.cryptography.signaturealgorithm.md = docs\api\nsec.cryptography.signaturealgorithm.md
+		docs\api\nsec.cryptography.signaturealgorithm2.md = docs\api\nsec.cryptography.signaturealgorithm2.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{030978CE-A451-4F42-887C-1B200DF7211C}"
