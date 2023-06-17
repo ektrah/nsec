@@ -73,6 +73,7 @@ jobs:
         - os: centos:7
         - os: debian:10
         - os: debian:11
+        - os: debian:12
         - os: fedora:37
         - os: fedora:38
         - os: ubuntu:16.04
@@ -121,6 +122,7 @@ jobs:
       matrix:
         include:
         - os: alpine3.17
+        - os: alpine3.18
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/dotnet/sdk:7.0-${{ matrix.os }}
