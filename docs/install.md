@@ -1,22 +1,22 @@
 # Installation
 
 NSec is available as
-[a NuGet package from nuget.org](https://www.nuget.org/packages/NSec.Cryptography/23.5.0-preview.1).
+[a NuGet package from nuget.org](https://www.nuget.org/packages/NSec.Cryptography/23.6.0-preview.2).
 It can be added to a project in a number of ways, depending on the project type
 and tools used:
 
 
 #### dotnet CLI
 
-    $ dotnet add package NSec.Cryptography --version 23.5.0-preview.1
+    $ dotnet add package NSec.Cryptography --version 23.6.0-preview.2
 
 #### Visual Studio
 
-    PM> Install-Package NSec.Cryptography -Version 23.5.0-preview.1
+    PM> Install-Package NSec.Cryptography -Version 23.6.0-preview.2
 
 #### .csproj
 
-    <PackageReference Include="NSec.Cryptography" Version="23.5.0-preview.1"/>
+    <PackageReference Include="NSec.Cryptography" Version="23.6.0-preview.2"/>
 
 
 ## Supported Platforms
@@ -35,7 +35,7 @@ on the following platforms:
 | **`android-`**        |          |          |          |          |
 
 Specifically,
-[NSec 23.5.0-preview.1](https://www.nuget.org/packages/NSec.Cryptography/23.5.0-preview.1)
+[NSec 23.6.0-preview.2](https://www.nuget.org/packages/NSec.Cryptography/23.6.0-preview.2)
 has been tested to run on the following platforms and .NET versions:
 
 | OS                   | Version  | Architectures | .NET            |
