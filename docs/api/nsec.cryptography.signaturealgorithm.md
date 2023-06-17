@@ -10,6 +10,8 @@ Represents a digital signature algorithm.
 * [[Algorithm|Algorithm Class]]
     * **SignatureAlgorithm**
         * Ed25519
+        * [[SignatureAlgorithm2|SignatureAlgorithm2 Class]]
+            * Ed25519ph
 
 
 ## [TOC] Summary
@@ -23,6 +25,19 @@ Represents a digital signature algorithm.
 Gets the Ed25519 signature algorithm.
 
     public static Ed25519 Ed25519 { get; }
+
+
+### Ed25519ph
+
+Gets the Ed25519ph signature algorithm.
+
+    public static Ed25519ph Ed25519ph { get; }
+
+!!! Note
+    Ed25519ph incorporates a pre-hashing step to support [[incremental
+    signing|IncrementalSignature Struct]]. As a result, the outputs of Ed25519
+    and Ed25519ph are not the same. For most cryptographic applications, it is
+    recommended to use Ed25519 due to its broader adoption.
 
 
 ## Properties
@@ -189,3 +204,4 @@ All methods yield the same result for the same arguments.
     * [[Algorithm Class]]
     * [[Key Class]]
     * [[PublicKey Class]]
+    * [[SignatureAlgorithm2 Class]]

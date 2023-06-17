@@ -286,7 +286,8 @@ namespace NSec.Cryptography
             if ((crypto_sign_ed25519_bytes() != crypto_sign_ed25519_BYTES) ||
                 (crypto_sign_ed25519_publickeybytes() != crypto_sign_ed25519_PUBLICKEYBYTES) ||
                 (crypto_sign_ed25519_secretkeybytes() != crypto_sign_ed25519_SECRETKEYBYTES) ||
-                (crypto_sign_ed25519_seedbytes() != crypto_sign_ed25519_SEEDBYTES))
+                (crypto_sign_ed25519_seedbytes() != crypto_sign_ed25519_SEEDBYTES) ||
+                (crypto_sign_ed25519ph_statebytes() != (nuint)Unsafe.SizeOf<crypto_sign_ed25519ph_state>()))                
             {
                 throw Error.InvalidOperation_InitializationFailed();
             }

@@ -68,6 +68,7 @@ See [[Installation]] for more details.
 | [[PasswordBasedKeyDerivationAlgorithm Class]]   | Argon2id                  |
 |                                                 | scrypt                    |
 | [[SignatureAlgorithm Class]]                    | Ed25519                   |
+| [[SignatureAlgorithm2 Class]]                   | Ed25519ph                 |
 
 See [[API Reference|NSec.Cryptography Namespace]] for detailed information.
 

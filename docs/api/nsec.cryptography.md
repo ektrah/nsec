@@ -26,8 +26,12 @@
             * [[ScryptParameters Struct]]
     * [[SignatureAlgorithm Class]]
         * Ed25519 Class
+        * [[SignatureAlgorithm2 Class]]
+            * Ed25519ph Class
 * [[IncrementalHash Struct]]
 * [[IncrementalMac Struct]]
+* [[IncrementalSignature Struct]]
+* [[IncrementalSignatureVerification Struct]]
 * [[Key Class]]
     * [[KeyCreationParameters Struct]]
     * [[KeyExportPolicies Enum]]

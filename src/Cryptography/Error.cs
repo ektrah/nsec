@@ -221,6 +221,12 @@ namespace NSec.Cryptography
             return new ArgumentException(string.Format(ResourceManager.GetString(nameof(Argument_SharedSecretLength))!, arg0), paramName);
         }
 
+        internal static ArgumentException Argument_SignatureKeyRequired(
+            string paramName)
+        {
+            return new ArgumentException(ResourceManager.GetString(nameof(Argument_SignatureKeyRequired)), paramName);
+        }
+
         internal static ArgumentException Argument_SignatureLength(
             string paramName,
             object? arg0)

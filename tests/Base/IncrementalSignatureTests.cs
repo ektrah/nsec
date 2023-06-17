@@ -11,18 +11,9 @@ namespace NSec.Tests.Base
         #region Initialize
 
         [Fact]
-        public static void InitializeWithNullAlgorithm()
+        public static void InitializeWithNullKey()
         {
-            using var k = new Key(SignatureAlgorithm.Ed25519ph);
-
-            Assert.Throws<ArgumentNullException>("algorithm", () => IncrementalSignature.Initialize(null!, k, out _));
-        }
-
-        [Theory]
-        [MemberData(nameof(IncrementalSignatureAlgorithms))]
-        public static void InitializeWithNullKey(SignatureAlgorithm2 a)
-        {
-            Assert.Throws<ArgumentNullException>("privateKey", () => IncrementalSignature.Initialize(a, null!, out _));
+            Assert.Throws<ArgumentNullException>("privateKey", () => IncrementalSignature.Initialize(null!, out _));
         }
 
         [Theory]
@@ -31,7 +22,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(SignatureAlgorithm.Ed25519);
 
-            Assert.Throws<ArgumentException>("privateKey", () => IncrementalSignature.Initialize(a, k, out var state));
+            Assert.Throws<ArgumentException>("privateKey", () => IncrementalSignature.Initialize(k, out var state));
         }
 
         #endregion
@@ -42,7 +33,6 @@ namespace NSec.Tests.Base
         [MemberData(nameof(IncrementalSignatureAlgorithms))]
         public static void FinalizeInvalid(SignatureAlgorithm2 a)
         {
-            using var k = new Key(a);
             var state = default(IncrementalSignature);
 
             Assert.Throws<InvalidOperationException>(() => IncrementalSignature.Finalize(ref state));
@@ -57,7 +47,7 @@ namespace NSec.Tests.Base
 
             Assert.Null(state.Algorithm);
 
-            IncrementalSignature.Initialize(a, k, out state);
+            IncrementalSignature.Initialize(k, out state);
 
             Assert.Same(a, state.Algorithm);
 
@@ -82,7 +72,6 @@ namespace NSec.Tests.Base
         [MemberData(nameof(IncrementalSignatureAlgorithms))]
         public static void FinalizeWithSpanInvalid(SignatureAlgorithm2 a)
         {
-            using var k = new Key(a);
             var state = default(IncrementalSignature);
 
             Assert.Throws<InvalidOperationException>(() => IncrementalSignature.Finalize(ref state, new byte[a.SignatureSize]));
@@ -94,7 +83,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            IncrementalSignature.Initialize(a, k, out var state);
+            IncrementalSignature.Initialize(k, out var state);
 
             Assert.Throws<ArgumentException>("signature", () => IncrementalSignature.Finalize(ref state, new byte[a.SignatureSize - 1]));
         }
@@ -105,7 +94,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            IncrementalSignature.Initialize(a, k, out var state);
+            IncrementalSignature.Initialize(k, out var state);
 
             Assert.Throws<ArgumentException>("signature", () => IncrementalSignature.Finalize(ref state, new byte[a.SignatureSize + 1]));
         }
@@ -119,7 +108,7 @@ namespace NSec.Tests.Base
 
             Assert.Null(state.Algorithm);
 
-            IncrementalSignature.Initialize(a, k, out state);
+            IncrementalSignature.Initialize(k, out state);
 
             Assert.Same(a, state.Algorithm);
 
@@ -147,7 +136,7 @@ namespace NSec.Tests.Base
 
             Assert.Null(state.Algorithm);
 
-            IncrementalSignature.Initialize(a, k, out state);
+            IncrementalSignature.Initialize(k, out state);
 
             Assert.Same(a, state.Algorithm);
 

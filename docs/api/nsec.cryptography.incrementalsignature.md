@@ -5,14 +5,16 @@ segments of data.
 
     public readonly struct IncrementalSignature
 
-The type provides an "init, update, final" interface for generating the signature: First, a
-state needs to be initialized with the signature algorithm to be used and the key. The state can
+The type provides an "init, update, final" interface for computing a signature:
+First, a state needs to be initialized with the signing key to be used. The state can
 then be updated zero or more times with segments of data. Finalizing the state
 yields a result that is identical to the signature of the concatenated segments.
 
-[[IncrementalSignature|IncrementalSignature Struct]] instances have value-type semantics:
-Passing an instance to a method or assigning it to a variable creates a copy of
-the state.
+!!! Note
+    [[IncrementalSignature|IncrementalSignature Struct]] instances have
+    value-type semantics: Passing an instance to a method or assigning it to a
+    variable creates a copy of the state. It is therefore recommended to always
+    pass instances using `ref`, `in`, or `out`.
 
 
 ## Example
@@ -20,7 +22,7 @@ the state.
 The following C# example shows how to compute a signature from multiple segments of
 data:
 
-    {{Incremental Signature}}
+    {{Incremental Signing}}
 
 
 ## [TOC] Summary
@@ -44,23 +46,19 @@ current instance has not been initialized yet or if it has been finalized.
 ## Static Methods
 
 
-### Initialize(SignatureAlgorithm2, out IncrementalSignature)
+### Initialize(Key, out IncrementalSignature)
 
 Initializes the [[IncrementalSignature|IncrementalSignature Struct]] state with the
-specified signature algorithm.
+specified private key.
 
     public static void Initialize(
-        SignatureAlgorithm2 algorithm,
         Key privateKey,
         out IncrementalSignature state)
 
 #### Parameters
 
-algorithm
-: The signature algorithm to use for computing the signature.
-
 privateKey
-: The key used to sign the data.
+: The private key to use for computing the signature.
 
 state
 : When this method returns, contains the initialized state.
@@ -68,10 +66,12 @@ state
 #### Exceptions
 
 ArgumentNullException
-: `algorithm` is `null` or `privateKey` is `null`.
+: `privateKey` is `null`.
 
 ArgumentException
-: `privateKey` algorithm does not match `algorithm`.
+: `privateKey.Algorithm` is not an instance of the
+    [[SignatureAlgorithm2|SignatureAlgorithm2 Class]] class.
+
 
 ### Update(ref IncrementalSignature, ReadOnlySpan<byte>)
 
@@ -141,7 +141,10 @@ InvalidOperationException
 : `state` has not been initialized yet or has already been finalized.
 
 ArgumentException
-: `signature.Length` is not equal to [[SignatureSize|SignatureAlgorithm Class#SignatureSize]].
+: `signature.Length` is not equal to [[SignatureSize|SignatureAlgorithm2 Class#SignatureSize]].
+
+ObjectDisposedException
+: The private key used to initialize the state has been disposed.
 
 
 ## Thread Safety
@@ -155,6 +158,6 @@ lock to guarantee thread safety.
 ## See Also
 
 * API Reference
-    * [[SignatureAlgorithm Class]]
-    * [[SignatureAlgorithm2 Class]]
     * [[IncrementalSignatureVerification Struct]]
+    * [[Key Class]]
+    * [[SignatureAlgorithm2 Class]]

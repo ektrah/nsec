@@ -10,7 +10,6 @@ namespace NSec.Cryptography
     {
         private readonly IncrementalSignatureState _state;
         private readonly SignatureAlgorithm2? _algorithm;
-
         private readonly PublicKey? _publicKey;
 
         public SignatureAlgorithm2? Algorithm => _algorithm;
@@ -24,22 +23,16 @@ namespace NSec.Cryptography
         }
 
         public static void Initialize(
-            SignatureAlgorithm2 algorithm,
             PublicKey publicKey,
             out IncrementalSignatureVerification state)
         {
-            if (algorithm == null)
-            {
-                throw Error.ArgumentNull_Algorithm(nameof(algorithm));
-            }
-
             if (publicKey == null)
             {
                 throw Error.ArgumentNull_Key(nameof(publicKey));
             }
-            if (publicKey.Algorithm != algorithm)
+            if (publicKey.Algorithm is not SignatureAlgorithm2 algorithm)
             {
-                throw Error.Argument_PublicKeyAlgorithmMismatch(nameof(publicKey), nameof(publicKey));
+                throw Error.Argument_SignatureKeyRequired(nameof(publicKey));
             }
 
             state = default;
@@ -64,12 +57,7 @@ namespace NSec.Cryptography
             ref IncrementalSignatureVerification state,
             ReadOnlySpan<byte> signature)
         {
-            if (state._algorithm == null)
-            {
-                throw Error.InvalidOperation_UninitializedState();
-            }
-
-            if (state._publicKey == null)
+            if (state._algorithm == null || state._publicKey == null)
             {
                 throw Error.InvalidOperation_UninitializedState();
             }
@@ -84,6 +72,33 @@ namespace NSec.Cryptography
                 Unsafe.AsRef<SignatureAlgorithm2?>(in state._algorithm) = null;
                 Unsafe.AsRef<PublicKey?>(in state._publicKey) = null;
             }
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static new bool ReferenceEquals(
+            object? objA,
+            object? objB)
+        {
+            return object.ReferenceEquals(objA, objB);
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override bool Equals(
+            object? obj)
+        {
+            throw Error.NotSupported_Operation();
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override int GetHashCode()
+        {
+            throw Error.NotSupported_Operation();
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override string? ToString()
+        {
+            return typeof(IncrementalSignatureVerification).ToString();
         }
     }
 }

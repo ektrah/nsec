@@ -76,6 +76,9 @@ internal static partial class Interop
             crypto_sign_ed25519ph_state* state);
 
         [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern nuint crypto_sign_ed25519ph_statebytes();
+
+        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static unsafe extern int crypto_sign_ed25519ph_update(
             crypto_sign_ed25519ph_state* state,
             byte* m,

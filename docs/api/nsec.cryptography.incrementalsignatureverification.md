@@ -5,22 +5,25 @@ segments of data.
 
     public readonly struct IncrementalSignatureVerification
 
-The type provides an "init, update, final" interface for verifying a signature: First, a
-state needs to be initialized with the signature algorithm to be used and the key. The state can
-then be updated zero or more times with segments of data. Finalizing the state
-yields a result that is identical to the signature verification of the concatenated segments.
+The type provides an "init, update, final" interface for verifying data given a
+public key and a signature. First, a state needs to be initialized with the
+public key. The state can then be updated zero or more times with segments of
+data. Finalizing the state gives a result as to whether verification of the
+concatenated segments was successful.
 
-[[IncrementalSignatureVerification|IncrementalSignatureVerification Struct]] instances have value-type semantics:
-Passing an instance to a method or assigning it to a variable creates a copy of
-the state.
+!!! Note
+    [[IncrementalSignatureVerification|IncrementalSignatureVerification Struct]]
+    instances have value-type semantics: Passing an instance to a method or
+    assigning it to a variable creates a copy of the state. It is therefore
+    recommended to always pass instances using `ref`, `in`, or `out`.
 
 
 ## Example
 
-The following C# example shows how to verify a computed signature from multiple segments of
-data:
+The following C# example shows how to verify multiple segments of data given a
+public key and a signature:
 
-    {{Incremental Verify}}
+    {{Incremental Signature Verification}}
 
 
 ## [TOC] Summary
@@ -44,23 +47,20 @@ current instance has not been initialized yet or if it has been finalized.
 ## Static Methods
 
 
-### Initialize(SignatureAlgorithm2, out IncrementalSignatureVerification)
+### Initialize(PublicKey, out IncrementalSignatureVerification)
 
-Initializes the [[IncrementalSignatureVerification|IncrementalSignatureVerification Struct]] state with the
-specified signature algorithm.
+Initializes the
+[[IncrementalSignatureVerification|IncrementalSignatureVerification Struct]]
+state with the specified public key.
 
     public static void Initialize(
-        SignatureAlgorithm2 algorithm,
         PublicKey publicKey,
         out IncrementalSignatureVerification state)
 
 #### Parameters
 
-algorithm
-: The signature algorithm to use for computing the signature.
-
 publicKey
-: The key used to verify the signature of the data.
+: The public key to use for verifying the data.
 
 state
 : When this method returns, contains the initialized state.
@@ -68,10 +68,12 @@ state
 #### Exceptions
 
 ArgumentNullException
-: `algorithm` is `null` or `publicKey` is `null`.
+: `publicKey` is `null`.
 
 ArgumentException
-: `publicKey` algorithm does not match `algorithm`.
+: `publicKey.Algorithm` is not an instance of the
+    [[SignatureAlgorithm2|SignatureAlgorithm2 Class]] class.
+
 
 ### Update(ref IncrementalSignatureVerification, ReadOnlySpan<byte>)
 
@@ -88,7 +90,7 @@ state
 : The state to be updated with `data`.
 
 data
-: A segment of the data used to verify the signature.
+: A segment of the data to verify.
 
 #### Exceptions
 
@@ -96,9 +98,9 @@ InvalidOperationException
 : `state` has not been initialized yet or has already been finalized.
 
 
-### Finalize(ref IncrementalSignatureVerification, ReadOnlySpan<byte>)
+### FinalizeAndVerify(ref IncrementalSignatureVerification, ReadOnlySpan<byte>)
 
-Completes the signature computation and returns the result as an array of bytes.
+Completes the verification.
 
     public static bool FinalizeAndVerify(
         ref IncrementalSignatureVerification state,
@@ -110,16 +112,17 @@ state
 : The state to be finalized.
 
 signature
-: The signature to be validated
+: The signature of the data to verify.
 
 #### Return Value
 
-A boolean result if the signature is valid.
+`true` if verification succeeds; otherwise, `false`.
 
 #### Exceptions
 
 InvalidOperationException
 : `state` has not been initialized yet or has already been finalized.
+
 
 ## Thread Safety
 
@@ -132,6 +135,6 @@ lock to guarantee thread safety.
 ## See Also
 
 * API Reference
-    * [[SignatureAlgorithm Class]]
-    * [[SignatureAlgorithm2 Class]]
     * [[IncrementalSignature Struct]]
+    * [[PublicKey Class]]
+    * [[SignatureAlgorithm2 Class]]

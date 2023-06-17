@@ -10,7 +10,6 @@ namespace NSec.Cryptography
     {
         private readonly IncrementalSignatureState _state;
         private readonly SignatureAlgorithm2? _algorithm;
-
         private readonly Key? _privateKey;
 
         public SignatureAlgorithm2? Algorithm => _algorithm;
@@ -24,22 +23,16 @@ namespace NSec.Cryptography
         }
 
         public static void Initialize(
-            SignatureAlgorithm2 algorithm,
             Key privateKey,
             out IncrementalSignature state)
         {
-            if (algorithm == null)
-            {
-                throw Error.ArgumentNull_Algorithm(nameof(algorithm));
-            }
-
             if (privateKey == null)
             {
                 throw Error.ArgumentNull_Key(nameof(privateKey));
             }
-            if (privateKey.Algorithm != algorithm)
+            if (privateKey.Algorithm is not SignatureAlgorithm2 algorithm)
             {
-                throw Error.Argument_KeyAlgorithmMismatch(nameof(privateKey), nameof(algorithm));
+                throw Error.Argument_SignatureKeyRequired(nameof(privateKey));
             }
 
             state = default;
@@ -63,11 +56,7 @@ namespace NSec.Cryptography
         public static byte[] Finalize(
             ref IncrementalSignature state)
         {
-            if (state._algorithm == null)
-            {
-                throw Error.InvalidOperation_UninitializedState();
-            }
-            if (state._privateKey == null)
+            if (state._algorithm == null || state._privateKey == null)
             {
                 throw Error.InvalidOperation_UninitializedState();
             }
@@ -89,16 +78,10 @@ namespace NSec.Cryptography
             ref IncrementalSignature state,
             Span<byte> signature)
         {
-            if (state._algorithm == null)
+            if (state._algorithm == null || state._privateKey == null)
             {
                 throw Error.InvalidOperation_UninitializedState();
             }
-
-            if (state._privateKey == null)
-            {
-                throw Error.InvalidOperation_UninitializedState();
-            }
-
             if (signature.Length != state._algorithm.SignatureSize)
             {
                 throw Error.Argument_SignatureLength(nameof(signature), state._algorithm.SignatureSize);
@@ -112,6 +95,33 @@ namespace NSec.Cryptography
             {
                 Unsafe.AsRef<SignatureAlgorithm2?>(in state._algorithm) = null;
             }
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static new bool ReferenceEquals(
+            object? objA,
+            object? objB)
+        {
+            return object.ReferenceEquals(objA, objB);
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override bool Equals(
+            object? obj)
+        {
+            throw Error.NotSupported_Operation();
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override int GetHashCode()
+        {
+            throw Error.NotSupported_Operation();
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override string? ToString()
+        {
+            return typeof(IncrementalSignature).ToString();
         }
     }
 }
