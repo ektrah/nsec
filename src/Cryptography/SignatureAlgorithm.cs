@@ -20,6 +20,7 @@ namespace NSec.Cryptography
     public abstract class SignatureAlgorithm : Algorithm
     {
         private static Ed25519? s_Ed25519;
+        private static Ed25519ph? s_Ed25519ph;
 
         private readonly int _privateKeySize;
         private readonly int _publicKeySize;
@@ -48,6 +49,20 @@ namespace NSec.Cryptography
                 {
                     Interlocked.CompareExchange(ref s_Ed25519, new Ed25519(), null);
                     instance = s_Ed25519;
+                }
+                return instance;
+            }
+        }
+
+        public static Ed25519ph Ed25519ph
+        {
+            get
+            {
+                Ed25519ph? instance = s_Ed25519ph;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_Ed25519ph, new Ed25519ph(), null);
+                    instance = s_Ed25519ph;
                 }
                 return instance;
             }

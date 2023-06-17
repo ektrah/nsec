@@ -1,16 +1,18 @@
-# SignatureAlgorithm Class
+# SignatureAlgorithm2 Class
 
-Represents a digital signature algorithm.
+Represents a digital signature algorithm that supports [[incremental
+signing|IncrementalSignature Struct]] and [[incremental signature
+verification|IncrementalSignatureVerification Struct]].
 
-    public abstract class SignatureAlgorithm : Algorithm
+    public abstract class SignatureAlgorithm2 : SignatureAlgorithm
 
 
 ## Inheritance Hierarchy
 
 * [[Algorithm|Algorithm Class]]
-    * **SignatureAlgorithm**
+    * [[SignatureAlgorithm|SignatureAlgorithm Class]]
         * Ed25519
-        * [[SignatureAlgorithm2|SignatureAlgorithm2 Class]]
+        * **SignatureAlgorithm2**
             * Ed25519ph
 
 
@@ -18,13 +20,6 @@ Represents a digital signature algorithm.
 
 
 ## Static Properties
-
-
-### Ed25519
-
-Gets the Ed25519 signature algorithm.
-
-    public static Ed25519 Ed25519 { get; }
 
 
 ### Ed25519ph
@@ -204,4 +199,4 @@ All methods yield the same result for the same arguments.
     * [[Algorithm Class]]
     * [[Key Class]]
     * [[PublicKey Class]]
-    * [[SignatureAlgorithm2 Class]]
+    * [[SignatureAlgorithm Class]]

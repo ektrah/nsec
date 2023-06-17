@@ -288,11 +288,18 @@ Interop.Sign.Ed25519.cs:
   - crypto_sign_ed25519_pk_to_curve25519 (PublicKeyBytes* curve25519_pk, PublicKeyBytes* ed25519_pk)
   - crypto_sign_ed25519_publickeybytes
   - crypto_sign_ed25519_secretkeybytes
-  - crypto_sign_ed25519_sk_to_curve25519 (SecureMemoryHandle ed25519_sk)
-  - crypto_sign_ed25519_sk_to_seed (SecureMemoryHandle sk)
   - crypto_sign_ed25519_seed_keypair (PublicKeyBytes* pk, SecureMemoryHandle sk)
   - crypto_sign_ed25519_seedbytes
+  - crypto_sign_ed25519_sk_to_curve25519 (SecureMemoryHandle ed25519_sk)
+  - crypto_sign_ed25519_sk_to_seed (SecureMemoryHandle sk)
   - crypto_sign_ed25519_verify_detached (PublicKeyBytes* pk)
+  - crypto_sign_ed25519ph_final_create (out ulong siglen_p, SecureMemoryHandle sk)
+  - crypto_sign_ed25519ph_final_verify (PublicKeyBytes* pk)
+  - crypto_sign_ed25519ph_init
+  - crypto_sign_ed25519ph_statebytes
+  - crypto_sign_ed25519ph_update
+  structs:
+  - crypto_sign_ed25519ph_state
 
 #Interop.Sign.Edwards25519Sha512Batch.cs:
 #  include: include/sodium/crypto_sign_edwards25519sha512batch.h

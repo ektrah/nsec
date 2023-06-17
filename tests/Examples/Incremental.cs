@@ -77,5 +77,90 @@ namespace NSec.Tests.Examples
 
             Assert.Equal(algorithm.Mac(key, Encoding.UTF8.GetBytes(string.Concat(lines))), mac);
         }
+
+        [Fact]
+        public static void Signature()
+        {
+            #region Incremental Signing
+
+            // define some data to be signed
+            var lines = new[]
+            {
+                "Luke Skywalker has returned to\n",
+                "his home planet of Tatooine in\n",
+                "an attempt to rescue his\n",
+                "friend Han Solo from the\n",
+                "clutches of the vile gangster\n",
+                "Jabba the Hutt.\n",
+            };
+
+            // select the Ed25519ph algorithm
+            var algorithm = SignatureAlgorithm.Ed25519ph;
+
+            // create a new key pair
+            using var key = Key.Create(algorithm);
+
+            // initialize the state with the private key
+            IncrementalSignature.Initialize(key, out var state);
+
+            // incrementally update the state with the data
+            foreach (var line in lines)
+            {
+                IncrementalSignature.Update(ref state, Encoding.UTF8.GetBytes(line));
+            }
+
+            // finalize the computation and get the result
+            var signature = IncrementalSignature.Finalize(ref state);
+
+            #endregion
+
+            Assert.Equal(algorithm.Sign(key, Encoding.UTF8.GetBytes(string.Concat(lines))), signature);
+        }
+
+        [Fact]
+        public static void SignatureVerification()
+        {
+            using var key = Key.Create(SignatureAlgorithm.Ed25519ph);
+
+            #region Incremental Signature Verification
+
+            // define some data to be verified
+            var lines = new[]
+            {
+                "Luke Skywalker has returned to\n",
+                "his home planet of Tatooine in\n",
+                "an attempt to rescue his\n",
+                "friend Han Solo from the\n",
+                "clutches of the vile gangster\n",
+                "Jabba the Hutt.\n",
+            };
+
+            // select the Ed25519ph algorithm
+            var algorithm = SignatureAlgorithm.Ed25519ph;
+
+            // obtain the public key
+            var publicKey = /*{*/key.PublicKey;/*}*/
+
+            // obtain the signature
+            var signature = /*{*/algorithm.Sign(key, Encoding.UTF8.GetBytes(string.Concat(lines)));/*}*/
+
+            // initialize the state with the public key
+            IncrementalSignatureVerification.Initialize(publicKey, out var state);
+
+            // incrementally update the state with the data
+            foreach (var line in lines)
+            {
+                IncrementalSignatureVerification.Update(ref state, Encoding.UTF8.GetBytes(line));
+            }
+
+            // verify the data using the signature
+            if (IncrementalSignatureVerification.FinalizeAndVerify(ref state, signature))
+            {
+                // verified!
+                /*{*//*}*/
+            }
+
+            #endregion
+        }
     }
 }

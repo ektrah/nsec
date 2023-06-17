@@ -80,6 +80,12 @@ namespace NSec.Tests
         public static readonly TheoryData<SignatureAlgorithm> SignatureAlgorithms = new()
         {
             SignatureAlgorithm.Ed25519,
+            SignatureAlgorithm.Ed25519ph,
+        };
+
+        public static readonly TheoryData<SignatureAlgorithm2> IncrementalSignatureAlgorithms = new()
+        {
+            SignatureAlgorithm.Ed25519ph,
         };
 
         #endregion
@@ -90,6 +96,7 @@ namespace NSec.Tests
         {
             KeyAgreementAlgorithm.X25519,
             SignatureAlgorithm.Ed25519,
+            SignatureAlgorithm.Ed25519ph,
         };
 
         public static readonly TheoryData<Algorithm> SymmetricAlgorithms = new()
@@ -140,6 +147,8 @@ namespace NSec.Tests
             { SignatureAlgorithm.Ed25519, KeyBlobFormat.NSecPublicKey },
             { SignatureAlgorithm.Ed25519, KeyBlobFormat.PkixPublicKey },
             { SignatureAlgorithm.Ed25519, KeyBlobFormat.PkixPublicKeyText },
+            { SignatureAlgorithm.Ed25519ph, KeyBlobFormat.RawPublicKey },
+            { SignatureAlgorithm.Ed25519ph, KeyBlobFormat.NSecPublicKey },
         };
 
         public static readonly TheoryData<Algorithm, KeyBlobFormat> PrivateKeyBlobFormats = new()
@@ -152,6 +161,8 @@ namespace NSec.Tests
             { SignatureAlgorithm.Ed25519, KeyBlobFormat.NSecPrivateKey },
             { SignatureAlgorithm.Ed25519, KeyBlobFormat.PkixPrivateKey },
             { SignatureAlgorithm.Ed25519, KeyBlobFormat.PkixPrivateKeyText },
+            { SignatureAlgorithm.Ed25519ph, KeyBlobFormat.RawPrivateKey },
+            { SignatureAlgorithm.Ed25519ph, KeyBlobFormat.NSecPrivateKey },
         };
 
         public static readonly TheoryData<Algorithm, KeyBlobFormat> SymmetricKeyBlobFormats = new()

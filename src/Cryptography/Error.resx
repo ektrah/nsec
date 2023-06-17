@@ -258,6 +258,9 @@
   <data name="Argument_SharedSecretLength" xml:space="preserve">
     <value>The length of the shared secret must be less than or equal to {0}.</value>
   </data>
+  <data name="Argument_SignatureKeyRequired" xml:space="preserve">
+    <value>Cannot use a key for an incremental signature that is not a signature key.</value>
+  </data>
   <data name="Argument_SignatureLength" xml:space="preserve">
     <value>The signature must have a length of {0} bytes.</value>
   </data>
