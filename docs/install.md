@@ -1,27 +1,15 @@
 # Installation
 
-NSec is available as
-[a NuGet package from nuget.org](https://www.nuget.org/packages/NSec.Cryptography/23.6.0-preview.2).
-It can be added to a project in a number of ways, depending on the project type
-and tools used:
-
-
-#### dotnet CLI
+Use the following command to install the
+[NSec.Cryptography NuGet package](https://www.nuget.org/packages/NSec.Cryptography/23.6.0-preview.2):
 
     $ dotnet add package NSec.Cryptography --version 23.6.0-preview.2
-
-#### Visual Studio
-
-    PM> Install-Package NSec.Cryptography -Version 23.6.0-preview.2
-
-#### .csproj
-
-    <PackageReference Include="NSec.Cryptography" Version="23.6.0-preview.2"/>
 
 
 ## Supported Platforms
 
-NSec is intended to run on
+[NSec 23.6.0-preview.2](https://www.nuget.org/packages/NSec.Cryptography/23.6.0-preview.2)
+is intended to run on all
 [supported versions of .NET](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core)
 on the following platforms:
 
@@ -34,7 +22,21 @@ on the following platforms:
 | **`ios-`**            |          |          |          |          |
 | **`android-`**        |          |          |          |          |
 
-Specifically,
+
+Please note:
+
+1. For Windows, the
+   [Microsoft Visual C++ Redistributable for Visual Studio 2015, 2017, 2019, and 2022](https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads)
+   is required. This is part of the .NET SDK but might not be present on a
+   clean Windows installation.
+
+2. The AES-GCM implementation in NSec is hardware accelerated and may not be
+   available on all architectures. Support can be determined at runtime using
+   the static `IsSupported` property of the `NSec.Cryptography.Aes256Gcm` class.
+
+
+## Tested Platforms
+
 [NSec 23.6.0-preview.2](https://www.nuget.org/packages/NSec.Cryptography/23.6.0-preview.2)
 has been tested to run on the following platforms and .NET versions:
 
@@ -60,14 +62,17 @@ has been tested to run on the following platforms and .NET versions:
 |                      | 20.04    | x64           | 7.0.7 / 6.0.18  |
 |                      | 22.04    | x64           | 7.0.7 / 6.0.18  |
 
-Other, similar platforms supported by .NET should work as well but have not been tested.
+The other supported platforms should work as well, but haven't been tested.
 
-Using NSec on Windows requires the
-[Microsoft Visual C++ Redistributable for Visual Studio 2015, 2017, 2019, and 2022](https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads).
-This dependency is included in the .NET SDK but might
-not be present, for example, when deploying a self-contained application.
 
-The implementation of AES-GCM in NSec is hardware-accelerated and requires an
-x64 processor with the AES-NI extension. The availability of this extension can
-be determined at runtime using the static `IsSupported` property of the
-`NSec.Cryptography.Aes256Gcm` class.
+## Frequently Asked Questions
+
+Below are some frequently asked questions:
+
+**Q**: What could cause a *System.DllNotFoundException: Unable to load shared
+library 'libsodium' or one of its dependencies.* when using the
+NSec.Cryptography NuGet package?  
+**A**: This exception can occur if the operating system or architecture is not
+supported, or if the Visual C++ Redistributable has not been installed on a
+Windows system. Please refer to the [Supported Platforms](#supported-platforms)
+section above.
