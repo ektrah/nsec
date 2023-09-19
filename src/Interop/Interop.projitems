@@ -5,6 +5,8 @@
     <HasSharedItems>true</HasSharedItems>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Interop.Aead.Aegis128L.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interop.Aead.Aegis256.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop.Aead.Aes256Gcm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop.Aead.ChaCha20Poly1305.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop.Aead.XChaCha20Poly1305.cs" />

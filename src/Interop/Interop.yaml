@@ -6,6 +6,36 @@ Interop.Core.cs:
   - sodium_init
   - sodium_set_misuse_handler
 
+Interop.Aead.Aegis128L.cs:
+  include: include/sodium/crypto_aead_aegis128l.h
+  constants:
+  - crypto_aead_aegis128l_ABYTES
+  - crypto_aead_aegis128l_KEYBYTES
+  - crypto_aead_aegis128l_NPUBBYTES
+  - crypto_aead_aegis128l_NSECBYTES
+  functions:
+  - crypto_aead_aegis128l_abytes
+  - crypto_aead_aegis128l_decrypt (out ulong mlen_p, SecureMemoryHandle k)
+  - crypto_aead_aegis128l_encrypt (out ulong clen_p, SecureMemoryHandle k)
+  - crypto_aead_aegis128l_keybytes
+  - crypto_aead_aegis128l_npubbytes
+  - crypto_aead_aegis128l_nsecbytes
+
+Interop.Aead.Aegis256.cs:
+  include: include/sodium/crypto_aead_aegis256.h
+  constants:
+  - crypto_aead_aegis256_ABYTES
+  - crypto_aead_aegis256_KEYBYTES
+  - crypto_aead_aegis256_NPUBBYTES
+  - crypto_aead_aegis256_NSECBYTES
+  functions:
+  - crypto_aead_aegis256_abytes
+  - crypto_aead_aegis256_decrypt (out ulong mlen_p, SecureMemoryHandle k)
+  - crypto_aead_aegis256_encrypt (out ulong clen_p, SecureMemoryHandle k)
+  - crypto_aead_aegis256_keybytes
+  - crypto_aead_aegis256_npubbytes
+  - crypto_aead_aegis256_nsecbytes
+
 Interop.Aead.Aes256Gcm.cs:
   include: include/sodium/crypto_aead_aes256gcm.h
   constants:

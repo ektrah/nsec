@@ -23,6 +23,8 @@ namespace NSec.Cryptography
     //
     public abstract class AeadAlgorithm : Algorithm
     {
+        private static Aegis128L? s_Aegis128L;
+        private static Aegis256? s_Aegis256;
         private static Aes256Gcm? s_Aes256Gcm;
         private static ChaCha20Poly1305? s_ChaCha20Poly1305;
         private static XChaCha20Poly1305? s_XChaCha20Poly1305;
@@ -37,12 +39,40 @@ namespace NSec.Cryptography
             int tagSize)
         {
             Debug.Assert(keySize > 0);
-            Debug.Assert(nonceSize >= 0 && nonceSize <= 24);
+            Debug.Assert(nonceSize >= 0 && nonceSize <= 32);
             Debug.Assert(tagSize >= 0 && tagSize <= 255);
 
             _keySize = keySize;
             _nonceSize = nonceSize;
             _tagSize = tagSize;
+        }
+
+        public static Aegis128L Aegis128L
+        {
+            get
+            {
+                Aegis128L? instance = s_Aegis128L;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_Aegis128L, new Aegis128L(), null);
+                    instance = s_Aegis128L;
+                }
+                return instance;
+            }
+        }
+
+        public static Aegis256 Aegis256
+        {
+            get
+            {
+                Aegis256? instance = s_Aegis256;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_Aegis256, new Aegis256(), null);
+                    instance = s_Aegis256;
+                }
+                return instance;
+            }
         }
 
         public static Aes256Gcm Aes256Gcm

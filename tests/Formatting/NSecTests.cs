@@ -7,6 +7,8 @@ namespace NSec.Tests.Formatting
     public static class NSecTests
     {
         [Theory]
+        [InlineData(typeof(Aegis128L), new byte[] { 0xDE, 0x61, 0x4A, 0xDE })]
+        [InlineData(typeof(Aegis256), new byte[] { 0xDE, 0x61, 0x4B, 0xDE })]
         [InlineData(typeof(Aes256Gcm), new byte[] { 0xDE, 0x61, 0x44, 0xDE })]
         [InlineData(typeof(ChaCha20Poly1305), new byte[] { 0xDE, 0x61, 0x43, 0xDE })]
         public static void Aead(Type algorithmType, byte[] blobHeader)

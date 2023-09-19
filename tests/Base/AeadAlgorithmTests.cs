@@ -17,7 +17,7 @@ namespace NSec.Tests.Base
         public static void Properties(AeadAlgorithm a)
         {
             Assert.True(a.KeySize > 0);
-            Assert.InRange(a.NonceSize, 0, 24);
+            Assert.InRange(a.NonceSize, 0, 32);
             Assert.InRange(a.TagSize, 0, 255);
         }
 

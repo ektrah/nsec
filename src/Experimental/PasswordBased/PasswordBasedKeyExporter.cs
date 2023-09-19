@@ -189,6 +189,16 @@ namespace NSec.Experimental.PasswordBased
                 Read(ref reader, out nonce);
                 break;
 
+            case Aegis128L _:
+                Read(ref reader, 0x2004);
+                Read(ref reader, out nonce);
+                break;
+
+            case Aegis256 _:
+                Read(ref reader, 0x2005);
+                Read(ref reader, out nonce);
+                break;
+
             default:
                 throw new NotSupportedException();
             }
@@ -272,6 +282,16 @@ namespace NSec.Experimental.PasswordBased
 
             case XChaCha20Poly1305 _:
                 Write(ref writer, 0x2003);
+                Write(ref writer, nonce);
+                break;
+
+            case Aegis128L _:
+                Write(ref writer, 0x2004);
+                Write(ref writer, nonce);
+                break;
+
+            case Aegis256 _:
+                Write(ref writer, 0x2005);
                 Write(ref writer, nonce);
                 break;
 

@@ -12,6 +12,8 @@ namespace NSec.Tests
 
         public static readonly TheoryData<AeadAlgorithm> AeadAlgorithms = new()
         {
+            AeadAlgorithm.Aegis128L,
+            AeadAlgorithm.Aegis256,
             AeadAlgorithm.Aes256Gcm,
             AeadAlgorithm.ChaCha20Poly1305,
             AeadAlgorithm.XChaCha20Poly1305,
@@ -101,6 +103,8 @@ namespace NSec.Tests
 
         public static readonly TheoryData<Algorithm> SymmetricAlgorithms = new()
         {
+            AeadAlgorithm.Aegis128L,
+            AeadAlgorithm.Aegis256,
             AeadAlgorithm.Aes256Gcm,
             AeadAlgorithm.ChaCha20Poly1305,
             AeadAlgorithm.XChaCha20Poly1305,
@@ -167,6 +171,10 @@ namespace NSec.Tests
 
         public static readonly TheoryData<Algorithm, KeyBlobFormat> SymmetricKeyBlobFormats = new()
         {
+            { AeadAlgorithm.Aegis128L, KeyBlobFormat.RawSymmetricKey },
+            { AeadAlgorithm.Aegis128L, KeyBlobFormat.NSecSymmetricKey },
+            { AeadAlgorithm.Aegis256, KeyBlobFormat.RawSymmetricKey },
+            { AeadAlgorithm.Aegis256, KeyBlobFormat.NSecSymmetricKey },
             { AeadAlgorithm.Aes256Gcm, KeyBlobFormat.RawSymmetricKey },
             { AeadAlgorithm.Aes256Gcm, KeyBlobFormat.NSecSymmetricKey },
             { MacAlgorithm.Blake2b_128, KeyBlobFormat.RawSymmetricKey },
