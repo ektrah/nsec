@@ -2,8 +2,8 @@
 
 * [[Algorithm Class]]
     * [[AeadAlgorithm Class]]
-        * Aegis128L
-        * Aegis256
+        * Aegis128L Class
+        * Aegis256 Class
         * Aes256Gcm Class
         * ChaCha20Poly1305 Class
         * XChaCha20Poly1305 Class

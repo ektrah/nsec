@@ -136,8 +136,9 @@ nonce
     catastrophic loss of security.
 
 : To prevent nonce reuse when encrypting multiple plaintexts with the same key,
-    it is recommended to increment the previous nonce; a randomly generated
-    nonce is not suitable.
+    it is recommended to increment the previous nonce. A randomly generated
+    nonce is unsafe unless the [[nonce size|AeadAlgorithm Class#NonceSize]]
+    is at least 24 bytes.
 
 associatedData
 : Optional additional data to be authenticated during decryption.
@@ -199,8 +200,9 @@ nonce
     catastrophic loss of security.
 
 : To prevent nonce reuse when encrypting multiple plaintexts with the same key,
-    it is recommended to increment the previous nonce; a randomly generated
-    nonce is not suitable.
+    it is recommended to increment the previous nonce. A randomly generated
+    nonce is unsafe unless the [[nonce size|AeadAlgorithm Class#NonceSize]]
+    is at least 24 bytes.
 
 associatedData
 : Optional additional data to be authenticated during decryption.
