@@ -53,16 +53,18 @@ See [[Installation]] for more details.
 
 | Class                                           | Algorithms                |
 |:----------------------------------------------- |:------------------------- |
-| [[AeadAlgorithm Class]]                         | AES256-GCM                |
+| [[AeadAlgorithm Class]]                         | AEGIS-128L                |
+|                                                 | AEGIS-256                 |
+|                                                 | AES256-GCM                |
 |                                                 | ChaCha20-Poly1305         |
 |                                                 | XChaCha20-Poly1305        |
-| [[HashAlgorithm Class]]                         | BLAKE2b *-- unkeyed*      |
+| [[HashAlgorithm Class]]                         | BLAKE2b *(unkeyed)*       |
 |                                                 | SHA-256                   |
 |                                                 | SHA-512                   |
 | [[KeyAgreementAlgorithm Class]]                 | X25519                    |
 | [[KeyDerivationAlgorithm2 Class]]               | HKDF-SHA-256              |
 |                                                 | HKDF-SHA-512              |
-| [[MacAlgorithm Class]]                          | BLAKE2b *-- keyed*        |
+| [[MacAlgorithm Class]]                          | BLAKE2b *(keyed)*         |
 |                                                 | HMAC-SHA-256              |
 |                                                 | HMAC-SHA-512              |
 | [[PasswordBasedKeyDerivationAlgorithm Class]]   | Argon2id                  |

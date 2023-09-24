@@ -11,8 +11,11 @@ This class has no public members.
 
 * **Algorithm**
     * [[AeadAlgorithm|AeadAlgorithm Class]]
+        * Aegis128L
+        * Aegis256
         * Aes256Gcm
         * ChaCha20Poly1305
+        * XChaCha20Poly1305
     * [[HashAlgorithm|HashAlgorithm Class]]
         * Blake2b
         * Sha256

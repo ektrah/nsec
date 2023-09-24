@@ -30,7 +30,7 @@ Please note:
    is required. This is part of the .NET SDK but might not be present on a
    clean Windows installation.
 
-2. The AES-GCM implementation in NSec is hardware accelerated and may not be
+2. The AES-GCM implementation in NSec is hardware-accelerated and may not be
    available on all architectures. Support can be determined at runtime using
    the static `IsSupported` property of the `NSec.Cryptography.Aes256Gcm` class.
 
@@ -42,25 +42,25 @@ has been tested to run on the following platforms and .NET versions:
 
 | OS                   | Version  | Architectures | .NET            |
 |:-------------------- |:-------- |:------------- |:--------------- |
-| Windows 11           | 22H2     | x64           | 7.0.7 / 6.0.18  |
-| Windows Server       | 2022     | x64           | 7.0.7 / 6.0.18  |
+| Windows 11           | 22H2     | x64           | 7.0.11 / 6.0.22 |
+| Windows Server       | 2022     | x64           | 7.0.11 / 6.0.22 |
 |                      |          |               |                 |
-| macOS                | 11.7     | x64           | 7.0.7 / 6.0.18  |
-|                      | 12.6     | x64           | 7.0.7 / 6.0.18  |
-|                      | 13.4     | x64           | 7.0.7 / 6.0.18  |
+| macOS                | 11.7     | x64           | 7.0.11 / 6.0.22 |
+|                      | 12.6     | x64           | 7.0.11 / 6.0.22 |
+|                      | 13.4     | x64           | 7.0.11 / 6.0.22 |
 |                      |          |               |                 |
-| Alpine               | 3.17     | x64           | 7.0.7           |
-|                      | 3.18     | x64           | 7.0.7           |
-| CentOS               | 7        | x64           | 7.0.7 / 6.0.18  |
-| Debian               | 10       | x64           | 7.0.7 / 6.0.18  |
-|                      | 11       | x64           | 7.0.7 / 6.0.18  |
-|                      | 12       | x64           | 7.0.7 / 6.0.18  |
-| Fedora               | 37       | x64           | 7.0.7 / 6.0.18  |
-|                      | 38       | x64           | 7.0.7 / 6.0.18  |
-| Ubuntu               | 16.04    | x64           | 7.0.7 / 6.0.18  |
-|                      | 18.04    | x64           | 7.0.7 / 6.0.18  |
-|                      | 20.04    | x64           | 7.0.7 / 6.0.18  |
-|                      | 22.04    | x64           | 7.0.7 / 6.0.18  |
+| Alpine Linux         | 3.17     | x64           | 7.0.10          |
+|                      | 3.18     | x64           | 7.0.11          |
+| CentOS Linux         | 7        | x64           | 7.0.11 / 6.0.22 |
+| Debian               | 10       | x64           | 7.0.11 / 6.0.22 |
+|                      | 11       | x64           | 7.0.11 / 6.0.22 |
+|                      | 12       | x64           | 7.0.11 / 6.0.22 |
+| Fedora               | 37       | x64           | 7.0.11 / 6.0.22 |
+|                      | 38       | x64           | 7.0.11 / 6.0.22 |
+| Ubuntu               | 16.04    | x64           | 7.0.11 / 6.0.22 |
+|                      | 18.04    | x64           | 7.0.11 / 6.0.22 |
+|                      | 20.04    | x64           | 7.0.11 / 6.0.22 |
+|                      | 22.04    | x64           | 7.0.11 / 6.0.22 |
 
 The other supported platforms should work as well, but haven't been tested.
 
