@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
@@ -73,7 +74,7 @@ internal static partial class Interop
 
             public unsafe Span<byte> DangerousGetSpan()
             {
-                return new Span<byte>((void*)handle, _size);
+                return new Span<byte>(handle.ToPointer(), _size);
             }
 
             protected override bool ReleaseHandle()
