@@ -16,8 +16,13 @@ jobs:
         dotnet-version: |
           6.0.x
           7.0.x
+          8.0.x
     - run: dotnet --info
     - uses: actions/checkout@v3
+    - name: Test (.NET 8.0/Debug)
+      run: dotnet test tests -f net8.0 -c Debug
+    - name: Test (.NET 8.0/Release)
+      run: dotnet test tests -f net8.0 -c Release
     - name: Test (.NET 7.0/Debug)
       run: dotnet test tests -f net7.0 -c Debug
     - name: Test (.NET 7.0/Release)
@@ -53,8 +58,13 @@ jobs:
         dotnet-version: |
           6.0.x
           7.0.x
+          8.0.x
     - run: dotnet --info
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v3    
+    - name: Test (.NET 8.0/Debug)
+      run: dotnet test tests -f net8.0 -c Debug
+    - name: Test (.NET 8.0/Release)
+      run: dotnet test tests -f net8.0 -c Release
     - name: Test (.NET 7.0/Debug)
       run: dotnet test tests -f net7.0 -c Debug
     - name: Test (.NET 7.0/Release)
@@ -105,8 +115,13 @@ jobs:
         dotnet-version: |
           6.0.x
           7.0.x
+          8.0.x
     - run: dotnet --info
     - uses: actions/checkout@v3
+    - name: Test (.NET 8.0/Debug)
+      run: dotnet test tests -f net8.0 -c Debug
+    - name: Test (.NET 8.0/Release)
+      run: dotnet test tests -f net8.0 -c Release
     - name: Test (.NET 7.0/Debug)
       run: dotnet test tests -f net7.0 -c Debug
     - name: Test (.NET 7.0/Release)
@@ -116,7 +131,7 @@ jobs:
     - name: Test (.NET 6.0/Release)
       run: dotnet test tests -f net6.0 -c Release
 
-  test-linux-musl:
+  test-linux-musl7:
     strategy:
       fail-fast: false
       matrix:
@@ -136,3 +151,24 @@ jobs:
       run: dotnet test tests -f net7.0 -c Debug
     - name: Test (.NET 7.0/Release)
       run: dotnet test tests -f net7.0 -c Release
+
+  test-linux-musl8:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - os: alpine3.18
+        - os: alpine3.19
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/dotnet/sdk:8.0-${{ matrix.os }}
+      env:
+        DOTNET_CLI_TELEMETRY_OPTOUT: 1
+        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+    steps:
+    - run: dotnet --info
+    - uses: actions/checkout@v3
+    - name: Test (.NET 8.0/Debug)
+      run: dotnet test tests -f net8.0 -c Debug
+    - name: Test (.NET 8.0/Release)
+      run: dotnet test tests -f net8.0 -c Release
