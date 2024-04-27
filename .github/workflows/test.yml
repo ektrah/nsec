@@ -11,13 +11,13 @@ jobs:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
     steps:
     - name: Set up .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: |
           6.0.x
           8.0.x
     - run: dotnet --info
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Test (.NET 8.0/Debug)
       run: dotnet test tests -f net8.0 -c Debug
     - name: Test (.NET 8.0/Release)
@@ -48,13 +48,13 @@ jobs:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
     steps:
     - name: Set up .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: |
           6.0.x
           8.0.x
     - run: dotnet --info
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Test (.NET 8.0/Debug)
       run: dotnet test tests -f net8.0 -c Debug
     - name: Test (.NET 8.0/Release)
@@ -76,8 +76,6 @@ jobs:
         - os: fedora:38
         - os: fedora:39
         - os: fedora:40
-        - os: ubuntu:16.04
-        - os: ubuntu:18.04
         - os: ubuntu:20.04
         - os: ubuntu:22.04
         - os: ubuntu:24.04
@@ -101,13 +99,13 @@ jobs:
       run: apt-get -qq update && apt-get -qq install --yes --no-install-recommends curl ca-certificates gettext
       if: ${{ startsWith(matrix.os, 'ubuntu') }}
     - name: Set up .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: |
           6.0.x
           8.0.x
     - run: dotnet --info
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Test (.NET 8.0/Debug)
       run: dotnet test tests -f net8.0 -c Debug
     - name: Test (.NET 8.0/Release)
@@ -132,7 +130,7 @@ jobs:
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
     steps:
     - run: dotnet --info
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Test (.NET 8.0/Debug)
       run: dotnet test tests -f net8.0 -c Debug
     - name: Test (.NET 8.0/Release)
