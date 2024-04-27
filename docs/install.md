@@ -1,14 +1,14 @@
 # Installation
 
 Use the following command to install the
-[NSec.Cryptography NuGet package](https://www.nuget.org/packages/NSec.Cryptography/23.9.0-preview.3):
+[NSec.Cryptography NuGet package](https://www.nuget.org/packages/NSec.Cryptography/24.4.0):
 
-    $ dotnet add package NSec.Cryptography --version 23.9.0-preview.3
+    $ dotnet add package NSec.Cryptography --version 24.4.0
 
 
 ## Supported Platforms
 
-[NSec 23.9.0-preview.3](https://www.nuget.org/packages/NSec.Cryptography/23.9.0-preview.3)
+[NSec 24.4.0](https://www.nuget.org/packages/NSec.Cryptography/24.4.0)
 is intended to run on all
 [supported versions of .NET](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core)
 on the following platforms:
@@ -37,7 +37,7 @@ Please note:
 
 ## Tested Platforms
 
-[NSec 23.9.0-preview.3](https://www.nuget.org/packages/NSec.Cryptography/23.9.0-preview.3)
+[NSec 24.4.0](https://www.nuget.org/packages/NSec.Cryptography/24.4.0)
 has been tested to run on the following platforms and .NET versions:
 
 | OS                   | Version  | Architecture  | .NET           |
