@@ -26,7 +26,7 @@ on the following platforms:
 Please note:
 
 1. For Windows, the
-   [Microsoft Visual C++ Redistributable for Visual Studio 2015, 2017, 2019, and 2022](https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads)
+   [Microsoft Visual C++ Redistributable for Visual Studio 2015, 2017, 2019, and 2022](https://learn.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist)
    is required. This is part of the .NET SDK but might not be present on a
    clean Windows installation.
 
@@ -40,27 +40,28 @@ Please note:
 [NSec 23.9.0-preview.3](https://www.nuget.org/packages/NSec.Cryptography/23.9.0-preview.3)
 has been tested to run on the following platforms and .NET versions:
 
-| OS                   | Version  | Architectures | .NET            |
-|:-------------------- |:-------- |:------------- |:--------------- |
-| Windows 11           | 22H2     | x64           | 7.0.11 / 6.0.22 |
-| Windows Server       | 2022     | x64           | 7.0.11 / 6.0.22 |
-|                      |          |               |                 |
-| macOS                | 11.7     | x64           | 7.0.11 / 6.0.22 |
-|                      | 12.6     | x64           | 7.0.11 / 6.0.22 |
-|                      | 13.4     | x64           | 7.0.11 / 6.0.22 |
-|                      |          |               |                 |
-| Alpine Linux         | 3.17     | x64           | 7.0.10          |
-|                      | 3.18     | x64           | 7.0.11          |
-| CentOS Linux         | 7        | x64           | 7.0.11 / 6.0.22 |
-| Debian               | 10       | x64           | 7.0.11 / 6.0.22 |
-|                      | 11       | x64           | 7.0.11 / 6.0.22 |
-|                      | 12       | x64           | 7.0.11 / 6.0.22 |
-| Fedora               | 37       | x64           | 7.0.11 / 6.0.22 |
-|                      | 38       | x64           | 7.0.11 / 6.0.22 |
-| Ubuntu               | 16.04    | x64           | 7.0.11 / 6.0.22 |
-|                      | 18.04    | x64           | 7.0.11 / 6.0.22 |
-|                      | 20.04    | x64           | 7.0.11 / 6.0.22 |
-|                      | 22.04    | x64           | 7.0.11 / 6.0.22 |
+| OS                   | Version  | Architecture  | .NET           |
+|:-------------------- |:-------- |:------------- |:-------------- |
+| Windows 11           | 23H2     | x64           | 8.0.4 / 6.0.29 |
+| Windows Server       | 2022     | x64           | 8.0.4 / 6.0.29 |
+|                      |          |               |                |
+| macOS                | 12.7     | x64           | 8.0.4 / 6.0.29 |
+|                      | 13.6     | x64           | 8.0.4 / 6.0.29 |
+|                      | 14.4     | arm64         | 8.0.4 / 6.0.29 |
+|                      |          |               |                |
+| Alpine Linux         | 3.18     | x64           | 8.0.4          |
+|                      | 3.19     | x64           | 8.0.4          |
+| Debian               | 10       | x64           | 8.0.4 / 6.0.29 |
+|                      | 11       | x64           | 8.0.4 / 6.0.29 |
+|                      | 12       | x64           | 8.0.4 / 6.0.29 |
+| Fedora               | 38       | x64           | 8.0.4 / 6.0.29 |
+|                      | 39       | x64           | 8.0.4 / 6.0.29 |
+|                      | 40       | x64           | 8.0.4 / 6.0.29 |
+| Ubuntu               | 16.04    | x64           | 8.0.4 / 6.0.29 |
+|                      | 18.04    | x64           | 8.0.4 / 6.0.29 |
+|                      | 20.04    | x64           | 8.0.4 / 6.0.29 |
+|                      | 22.04    | x64           | 8.0.4 / 6.0.29 |
+|                      | 24.04    | x64           | 8.0.4 / 6.0.29 |
 
 The other supported platforms should work as well, but haven't been tested.
 
@@ -69,7 +70,7 @@ The other supported platforms should work as well, but haven't been tested.
 
 Below are some frequently asked questions:
 
-**Q**: What could cause a *System.DllNotFoundException: Unable to load shared
+**Q**: What causes a *System.DllNotFoundException: Unable to load shared
 library 'libsodium' or one of its dependencies.* when using the
 NSec.Cryptography NuGet package?  
 **A**: This exception can occur if the operating system or architecture is not
