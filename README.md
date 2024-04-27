@@ -1,6 +1,6 @@
 # NSec
 
-[![Maintenance](https://img.shields.io/maintenance/yes/2023)](https://github.com/ektrah/nsec)
+[![Maintenance](https://img.shields.io/maintenance/yes/2024)](https://github.com/ektrah/nsec)
 [![License](https://img.shields.io/github/license/ektrah/nsec)](https://nsec.rocks/license)
 [![NuGet](https://img.shields.io/nuget/vpre/NSec.Cryptography)](https://www.nuget.org/packages/NSec.Cryptography/23.9.0-preview.3)
 
