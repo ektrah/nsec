@@ -11,17 +11,17 @@ jobs:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
     steps:
     - name: Set up .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: |
           6.0.x
-          7.0.x
+          8.0.x
     - run: dotnet --info
-    - uses: actions/checkout@v3
-    - name: Test (.NET 7.0/Debug)
-      run: dotnet test tests -f net7.0 -c Debug
-    - name: Test (.NET 7.0/Release)
-      run: dotnet test tests -f net7.0 -c Release
+    - uses: actions/checkout@v4
+    - name: Test (.NET 8.0/Debug)
+      run: dotnet test tests -f net8.0 -c Debug
+    - name: Test (.NET 8.0/Release)
+      run: dotnet test tests -f net8.0 -c Release
     - name: Test (.NET 6.0/Debug)
       run: dotnet test tests -f net6.0 -c Debug
     - name: Test (.NET 6.0/Release)
@@ -39,26 +39,26 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - os: macos-11
         - os: macos-12
         - os: macos-13
+        - os: macos-14
     runs-on: ${{ matrix.os }}
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
     steps:
     - name: Set up .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: |
           6.0.x
-          7.0.x
+          8.0.x
     - run: dotnet --info
-    - uses: actions/checkout@v3
-    - name: Test (.NET 7.0/Debug)
-      run: dotnet test tests -f net7.0 -c Debug
-    - name: Test (.NET 7.0/Release)
-      run: dotnet test tests -f net7.0 -c Release
+    - uses: actions/checkout@v4
+    - name: Test (.NET 8.0/Debug)
+      run: dotnet test tests -f net8.0 -c Debug
+    - name: Test (.NET 8.0/Release)
+      run: dotnet test tests -f net8.0 -c Release
     - name: Test (.NET 6.0/Debug)
       run: dotnet test tests -f net6.0 -c Debug
     - name: Test (.NET 6.0/Release)
@@ -70,16 +70,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - os: centos:7
         - os: debian:10
         - os: debian:11
         - os: debian:12
-        - os: fedora:37
         - os: fedora:38
-        - os: ubuntu:16.04
-        - os: ubuntu:18.04
+        - os: fedora:39
+        - os: fedora:40
         - os: ubuntu:20.04
         - os: ubuntu:22.04
+        - os: ubuntu:24.04
     runs-on: ubuntu-latest
     container:
       image: ${{ matrix.os }}
@@ -100,17 +99,17 @@ jobs:
       run: apt-get -qq update && apt-get -qq install --yes --no-install-recommends curl ca-certificates gettext
       if: ${{ startsWith(matrix.os, 'ubuntu') }}
     - name: Set up .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: |
           6.0.x
-          7.0.x
+          8.0.x
     - run: dotnet --info
-    - uses: actions/checkout@v3
-    - name: Test (.NET 7.0/Debug)
-      run: dotnet test tests -f net7.0 -c Debug
-    - name: Test (.NET 7.0/Release)
-      run: dotnet test tests -f net7.0 -c Release
+    - uses: actions/checkout@v4
+    - name: Test (.NET 8.0/Debug)
+      run: dotnet test tests -f net8.0 -c Debug
+    - name: Test (.NET 8.0/Release)
+      run: dotnet test tests -f net8.0 -c Release
     - name: Test (.NET 6.0/Debug)
       run: dotnet test tests -f net6.0 -c Debug
     - name: Test (.NET 6.0/Release)
@@ -121,18 +120,18 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - os: alpine3.17
         - os: alpine3.18
+        - os: alpine3.19
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/dotnet/sdk:7.0-${{ matrix.os }}
+      image: mcr.microsoft.com/dotnet/sdk:8.0-${{ matrix.os }}
       env:
         DOTNET_CLI_TELEMETRY_OPTOUT: 1
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
     steps:
     - run: dotnet --info
-    - uses: actions/checkout@v3
-    - name: Test (.NET 7.0/Debug)
-      run: dotnet test tests -f net7.0 -c Debug
-    - name: Test (.NET 7.0/Release)
-      run: dotnet test tests -f net7.0 -c Release
+    - uses: actions/checkout@v4
+    - name: Test (.NET 8.0/Debug)
+      run: dotnet test tests -f net8.0 -c Debug
+    - name: Test (.NET 8.0/Release)
+      run: dotnet test tests -f net8.0 -c Release
