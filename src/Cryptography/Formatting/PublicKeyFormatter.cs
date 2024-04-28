@@ -7,21 +7,21 @@ namespace NSec.Cryptography.Formatting
     internal abstract class PublicKeyFormatter
     {
         private static readonly byte[] s_beginLabel =
-        {
+        [
             // "-----BEGIN PUBLIC KEY-----"
             0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x42, 0x45, 0x47,
             0x49, 0x4E, 0x20, 0x50, 0x55, 0x42, 0x4C, 0x49,
             0x43, 0x20, 0x4B, 0x45, 0x59, 0x2D, 0x2D, 0x2D,
             0x2D, 0x2D,
-        };
+        ];
 
         private static readonly byte[] s_endLabel =
-        {
+        [
             // "-----END PUBLIC KEY-----"
             0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x45, 0x4E, 0x44,
             0x20, 0x50, 0x55, 0x42, 0x4C, 0x49, 0x43, 0x20,
             0x4B, 0x45, 0x59, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D,
-        };
+        ];
 
         private readonly byte[] _blobHeader;
         private readonly int _blobSize;
@@ -41,7 +41,7 @@ namespace NSec.Cryptography.Formatting
         }
 
         public bool TryExport(
-            in PublicKeyBytes publicKeyBytes,
+            ref readonly PublicKeyBytes publicKeyBytes,
             Span<byte> blob,
             out int blobSize)
         {
@@ -58,7 +58,7 @@ namespace NSec.Cryptography.Formatting
         }
 
         public bool TryExportText(
-            in PublicKeyBytes publicKeyBytes,
+            ref readonly PublicKeyBytes publicKeyBytes,
             Span<byte> blob,
             out int blobSize)
         {
@@ -72,9 +72,9 @@ namespace NSec.Cryptography.Formatting
             Span<byte> temp = stackalloc byte[_blobSize];
 
             _blobHeader.CopyTo(temp);
-            Serialize(in publicKeyBytes, temp.Slice(_blobHeader.Length));
+            Serialize(in publicKeyBytes, temp[_blobHeader.Length..]);
 
-            Armor.EncodeToUtf8(temp, s_beginLabel, s_endLabel, blob.Slice(0, _blobTextSize));
+            Armor.EncodeToUtf8(temp, s_beginLabel, s_endLabel, blob[.._blobTextSize]);
             return true;
         }
 
@@ -88,7 +88,7 @@ namespace NSec.Cryptography.Formatting
                 return false;
             }
 
-            Deserialize(blob.Slice(_blobHeader.Length), out result);
+            Deserialize(blob[_blobHeader.Length..], out result);
             return true;
         }
 
@@ -112,7 +112,7 @@ namespace NSec.Cryptography.Formatting
             out PublicKeyBytes publicKeyBytes);
 
         protected abstract void Serialize(
-            in PublicKeyBytes publicKeyBytes,
+            ref readonly PublicKeyBytes publicKeyBytes,
             Span<byte> span);
     }
 }

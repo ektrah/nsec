@@ -8,22 +8,22 @@ namespace NSec.Cryptography.Formatting
     internal abstract class PrivateKeyFormatter
     {
         private static readonly byte[] s_beginLabel =
-        {
+        [
             // "-----BEGIN PRIVATE KEY-----"
             0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x42, 0x45, 0x47,
             0x49, 0x4E, 0x20, 0x50, 0x52, 0x49, 0x56, 0x41,
             0x54, 0x45, 0x20, 0x4B, 0x45, 0x59, 0x2D, 0x2D,
             0x2D, 0x2D, 0x2D,
-        };
+        ];
 
         private static readonly byte[] s_endLabel =
-        {
+        [
             // "-----END PRIVATE KEY-----"
             0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x45, 0x4E, 0x44,
             0x20, 0x50, 0x52, 0x49, 0x56, 0x41, 0x54, 0x45,
             0x20, 0x4B, 0x45, 0x59, 0x2D, 0x2D, 0x2D, 0x2D,
             0x2D,
-        };
+        ];
 
         private readonly byte[] _blobHeader;
         private readonly int _blobSize;
@@ -75,9 +75,9 @@ namespace NSec.Cryptography.Formatting
             try
             {
                 _blobHeader.CopyTo(temp);
-                Serialize(keyHandle, temp.Slice(_blobHeader.Length));
+                Serialize(keyHandle, temp[_blobHeader.Length..]);
 
-                Armor.EncodeToUtf8(temp, s_beginLabel, s_endLabel, blob.Slice(0, _blobTextSize));
+                Armor.EncodeToUtf8(temp, s_beginLabel, s_endLabel, blob[.._blobTextSize]);
                 return true;
             }
             finally
@@ -98,7 +98,7 @@ namespace NSec.Cryptography.Formatting
                 return false;
             }
 
-            Deserialize(blob.Slice(_blobHeader.Length), out keyHandle, out publicKeyBytes);
+            Deserialize(blob[_blobHeader.Length..], out keyHandle, out publicKeyBytes);
             return true;
         }
 

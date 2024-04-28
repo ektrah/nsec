@@ -5,14 +5,10 @@ using static Interop.Libsodium;
 
 namespace NSec.Cryptography.Formatting
 {
-    internal sealed class X25519PublicKeyFormatter : PublicKeyFormatter
+    internal sealed class X25519PublicKeyFormatter(byte[] blobHeader) : PublicKeyFormatter(
+        crypto_scalarmult_curve25519_SCALARBYTES,
+        blobHeader)
     {
-        public X25519PublicKeyFormatter(byte[] blobHeader) : base(
-            crypto_scalarmult_curve25519_SCALARBYTES,
-            blobHeader)
-        {
-        }
-
         protected override void Deserialize(
             ReadOnlySpan<byte> span,
             out PublicKeyBytes publicKeyBytes)
@@ -29,7 +25,7 @@ namespace NSec.Cryptography.Formatting
         }
 
         protected override void Serialize(
-            in PublicKeyBytes publicKeyBytes,
+            ref readonly PublicKeyBytes publicKeyBytes,
             Span<byte> span)
         {
             if (Unsafe.SizeOf<PublicKeyBytes>() != crypto_scalarmult_curve25519_SCALARBYTES)

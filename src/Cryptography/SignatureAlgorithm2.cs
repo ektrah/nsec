@@ -1,6 +1,4 @@
 using System;
-using System.Diagnostics;
-using System.Threading;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
@@ -39,7 +37,7 @@ namespace NSec.Cryptography
 
         internal abstract bool FinalVerifyCore(
             ref IncrementalSignatureState state,
-            in PublicKeyBytes publicKeyBytes,
+            ref readonly PublicKeyBytes publicKeyBytes,
             ReadOnlySpan<byte> signature);
     }
 }

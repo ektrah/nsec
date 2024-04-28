@@ -10,30 +10,16 @@ namespace NSec.Experimental.Asn1
     {
         internal const int MaxDepth = 7;
 
-#pragma warning disable 0414
-        private Span _stack0;
-        private Span _stack1;
-        private Span _stack2;
-        private Span _stack3;
-        private Span _stack4;
-        private Span _stack5;
-        private Span _stack6;
-#pragma warning restore 0414
-
-        private ReadOnlySpan<byte> _buffer;
+        private InlineSpanArray _stack;
+        private readonly ReadOnlySpan<byte> _buffer;
         private int _depth;
         private bool _failed;
 
         public Asn1Reader(
             ReadOnlySpan<byte> buffer)
         {
-            _stack0 = new Span(buffer);
-            _stack1 = default;
-            _stack2 = default;
-            _stack3 = default;
-            _stack4 = default;
-            _stack5 = default;
-            _stack6 = default;
+            _stack = new InlineSpanArray();
+            _stack[0] = new Span(buffer);
 
             _buffer = buffer;
             _depth = 0;
@@ -42,7 +28,7 @@ namespace NSec.Experimental.Asn1
 
         public readonly bool Success => !_failed;
 
-        public readonly bool SuccessComplete => !_failed && _depth == 0 && _stack0.IsEmpty;
+        public readonly bool SuccessComplete => !_failed && _depth == 0 && _stack[0].IsEmpty;
 
         public void BeginSequence()
         {
@@ -59,7 +45,7 @@ namespace NSec.Experimental.Asn1
                 {
                     throw Error.InvalidOperation_InternalError(); // overflow
                 }
-                Unsafe.Add(ref _stack0, _depth) = span;
+                _stack[_depth] = span;
             }
         }
 
@@ -74,7 +60,7 @@ namespace NSec.Experimental.Asn1
             }
             else
             {
-                value = bytes.Slice(1);
+                value = bytes[1..];
             }
 
             return value;
@@ -99,7 +85,7 @@ namespace NSec.Experimental.Asn1
 
         public void End()
         {
-            if (_failed || !Unsafe.Add(ref _stack0, _depth).IsEmpty)
+            if (_failed || !_stack[_depth].IsEmpty)
             {
                 Fail();
             }
@@ -179,7 +165,7 @@ namespace NSec.Experimental.Asn1
         {
             _failed = true;
             _depth = 0;
-            _stack0 = default;
+            _stack = default;
         }
 
         private readonly bool IsInvalidInteger(
@@ -195,7 +181,7 @@ namespace NSec.Experimental.Asn1
         private Span Read(
             int tag)
         {
-            Span span = Unsafe.Add(ref _stack0, _depth);
+            Span span = _stack[_depth];
             ReadOnlySpan<byte> bytes = span.ApplyTo(_buffer);
 
             if (_failed || bytes.Length < 2 || bytes[0] != tag)
@@ -232,11 +218,17 @@ namespace NSec.Experimental.Asn1
                 goto failed;
             }
 
-            Unsafe.Add(ref _stack0, _depth) = span.Slice(start + length);
+            _stack[_depth] = span[(start + length)..];
             return span.Slice(start, length);
         failed:
             Fail();
             return default;
+        }
+
+        [InlineArray(MaxDepth)]
+        private struct InlineSpanArray
+        {
+            private Span _element0;
         }
 
         private readonly struct Span

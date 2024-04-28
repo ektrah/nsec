@@ -30,13 +30,13 @@ namespace NSec.Cryptography
     //
     public sealed class Ed25519ph : SignatureAlgorithm2
     {
-        private static readonly PrivateKeyFormatter s_nsecPrivateKeyFormatter = new Ed25519PrivateKeyFormatter(new byte[] { 0xDE, 0x64, 0x48, 0xDE, crypto_sign_ed25519_SEEDBYTES, 0, crypto_sign_ed25519_BYTES, 0 });
+        private static readonly PrivateKeyFormatter s_nsecPrivateKeyFormatter = new Ed25519PrivateKeyFormatter([0xDE, 0x64, 0x48, 0xDE, crypto_sign_ed25519_SEEDBYTES, 0, crypto_sign_ed25519_BYTES, 0]);
 
-        private static readonly PublicKeyFormatter s_nsecPublicKeyFormatter = new Ed25519PublicKeyFormatter(new byte[] { 0xDE, 0x65, 0x48, 0xDE, crypto_sign_ed25519_PUBLICKEYBYTES, 0, crypto_sign_ed25519_BYTES, 0 });
+        private static readonly PublicKeyFormatter s_nsecPublicKeyFormatter = new Ed25519PublicKeyFormatter([0xDE, 0x65, 0x48, 0xDE, crypto_sign_ed25519_PUBLICKEYBYTES, 0, crypto_sign_ed25519_BYTES, 0]);
 
-        private static readonly PrivateKeyFormatter s_rawPrivateKeyFormatter = new Ed25519PrivateKeyFormatter(Array.Empty<byte>());
+        private static readonly PrivateKeyFormatter s_rawPrivateKeyFormatter = new Ed25519PrivateKeyFormatter([]);
 
-        private static readonly PublicKeyFormatter s_rawPublicKeyFormatter = new Ed25519PublicKeyFormatter(Array.Empty<byte>());
+        private static readonly PublicKeyFormatter s_rawPublicKeyFormatter = new Ed25519PublicKeyFormatter([]);
 
         private static int s_selfTest;
 
@@ -114,7 +114,7 @@ namespace NSec.Cryptography
         }
 
         private protected unsafe override bool VerifyCore(
-            in PublicKeyBytes publicKeyBytes,
+            ref readonly PublicKeyBytes publicKeyBytes,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> signature)
         {
@@ -199,7 +199,7 @@ namespace NSec.Cryptography
 
         internal unsafe override bool FinalVerifyCore(
             ref IncrementalSignatureState state,
-            in PublicKeyBytes publicKeyBytes,
+            ref readonly PublicKeyBytes publicKeyBytes,
             ReadOnlySpan<byte> signature)
         {
             if (Unsafe.SizeOf<PublicKeyBytes>() != crypto_sign_ed25519_PUBLICKEYBYTES)

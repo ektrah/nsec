@@ -101,7 +101,7 @@ namespace NSec.Cryptography
         public byte[] Export(
             KeyBlobFormat format)
         {
-            _algorithm.TryExportPublicKey(this, format, Span<byte>.Empty, out int blobSize);
+            _algorithm.TryExportPublicKey(this, format, [], out int blobSize);
             byte[] blob = new byte[blobSize];
 
             if (!_algorithm.TryExportPublicKey(this, format, blob, out blobSize))
@@ -116,7 +116,7 @@ namespace NSec.Cryptography
         public int GetExportBlobSize(
             KeyBlobFormat format)
         {
-            _algorithm.TryExportPublicKey(this, format, Span<byte>.Empty, out int blobSize);
+            _algorithm.TryExportPublicKey(this, format, [], out int blobSize);
             return blobSize;
         }
 

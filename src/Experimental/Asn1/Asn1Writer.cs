@@ -9,35 +9,21 @@ namespace NSec.Experimental.Asn1
     {
         internal const int MaxDepth = 6;
 
-#pragma warning disable 0414
-        private int _stack0;
-        private int _stack1;
-        private int _stack2;
-        private int _stack3;
-        private int _stack4;
-        private int _stack5;
-#pragma warning restore 0414
-
-        private Span<byte> _buffer;
+        private InlineInt32Array _stack;
+        private readonly Span<byte> _buffer;
         private int _depth;
         private int _pos;
 
         public Asn1Writer(
             Span<byte> buffer)
         {
-            _stack0 = default;
-            _stack1 = default;
-            _stack2 = default;
-            _stack3 = default;
-            _stack4 = default;
-            _stack5 = default;
-
+            _stack = new InlineInt32Array();
             _buffer = buffer;
             _depth = 0;
             _pos = buffer.Length;
         }
 
-        public readonly ReadOnlySpan<byte> Bytes => _buffer.Slice(_pos);
+        public readonly ReadOnlySpan<byte> Bytes => _buffer[_pos..];
 
         public void BeginSequence()
         {
@@ -47,7 +33,7 @@ namespace NSec.Experimental.Asn1
             }
 
             _depth--;
-            WriteLength(Unsafe.Add(ref _stack0, _depth) - _pos);
+            WriteLength(_stack[_depth] - _pos);
             WriteByte(0x30);
         }
 
@@ -75,7 +61,7 @@ namespace NSec.Experimental.Asn1
                 throw Error.InvalidOperation_InternalError(); // overflow
             }
 
-            Unsafe.Add(ref _stack0, _depth) = _pos;
+            _stack[_depth] = _pos;
             _depth++;
         }
 
@@ -150,7 +136,7 @@ namespace NSec.Experimental.Asn1
             }
 
             _pos -= bytes.Length;
-            bytes.CopyTo(_buffer.Slice(_pos));
+            bytes.CopyTo(_buffer[_pos..]);
         }
 
         private void WriteLength(
@@ -171,6 +157,12 @@ namespace NSec.Experimental.Asn1
                 }
                 WriteByte((byte)(0x80 + (end - _pos)));
             }
+        }
+
+        [InlineArray(MaxDepth)]
+        private struct InlineInt32Array
+        {
+            private int _element0;
         }
     }
 }

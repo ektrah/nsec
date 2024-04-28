@@ -31,12 +31,11 @@ namespace NSec.Cryptography
     //
     public sealed class X25519 : KeyAgreementAlgorithm
     {
-        private static readonly PrivateKeyFormatter s_nsecPrivateKeyFormatter = new X25519PrivateKeyFormatter(new byte[] { 0xDE, 0x66, 0x41, 0xDE, crypto_scalarmult_curve25519_SCALARBYTES, 0, crypto_scalarmult_curve25519_BYTES, 0 });
+        private static readonly PrivateKeyFormatter s_nsecPrivateKeyFormatter = new X25519PrivateKeyFormatter([0xDE, 0x66, 0x41, 0xDE, crypto_scalarmult_curve25519_SCALARBYTES, 0, crypto_scalarmult_curve25519_BYTES, 0]);
 
-        private static readonly PublicKeyFormatter s_nsecPublicKeyFormatter = new X25519PublicKeyFormatter(new byte[] { 0xDE, 0x67, 0x41, 0xDE, crypto_scalarmult_curve25519_SCALARBYTES, 0, crypto_scalarmult_curve25519_BYTES, 0 });
+        private static readonly PublicKeyFormatter s_nsecPublicKeyFormatter = new X25519PublicKeyFormatter([0xDE, 0x67, 0x41, 0xDE, crypto_scalarmult_curve25519_SCALARBYTES, 0, crypto_scalarmult_curve25519_BYTES, 0]);
 
-        private static readonly PrivateKeyFormatter s_pkixPrivateKeyFormatter = new X25519PrivateKeyFormatter(new byte[]
-        {
+        private static readonly PrivateKeyFormatter s_pkixPrivateKeyFormatter = new X25519PrivateKeyFormatter([
             // +-- SEQUENCE (3 elements)
             //     +-- INTEGER 0
             //     +-- SEQUENCE (1 element)
@@ -45,21 +44,20 @@ namespace NSec.Cryptography
             //         +-- OCTET STRING (32 bytes)
             0x30, 0x2E, 0x02, 0x01, 0x00, 0x30, 0x05, 0x06,
             0x03, 0x2B, 0x65, 0x6E, 0x04, 0x22, 0x04, 0x20,
-        });
+        ]);
 
-        private static readonly PublicKeyFormatter s_pkixPublicKeyFormatter = new X25519PublicKeyFormatter(new byte[]
-        {
+        private static readonly PublicKeyFormatter s_pkixPublicKeyFormatter = new X25519PublicKeyFormatter([
             // +-- SEQUENCE (2 elements)
             //     +-- SEQUENCE (1 element)
             //     |   +-- OBJECT IDENTIFIER 1.3.101.110
             //     +-- BIT STRING (256 bits)
             0x30, 0x2A, 0x30, 0x05, 0x06, 0x03, 0x2B, 0x65,
             0x6E, 0x03, 0x21, 0x00,
-        });
+        ]);
 
-        private static readonly PrivateKeyFormatter s_rawPrivateKeyFormatter = new X25519PrivateKeyFormatter(Array.Empty<byte>());
+        private static readonly PrivateKeyFormatter s_rawPrivateKeyFormatter = new X25519PrivateKeyFormatter([]);
 
-        private static readonly PublicKeyFormatter s_rawPublicKeyFormatter = new X25519PublicKeyFormatter(Array.Empty<byte>());
+        private static readonly PublicKeyFormatter s_rawPublicKeyFormatter = new X25519PublicKeyFormatter([]);
 
         private static int s_selfTest;
 
@@ -106,7 +104,7 @@ namespace NSec.Cryptography
 
         private protected unsafe override bool AgreeCore(
             SecureMemoryHandle keyHandle,
-            in PublicKeyBytes otherPartyPublicKey,
+            ref readonly PublicKeyBytes otherPartyPublicKey,
             out SecureMemoryHandle? sharedSecretHandle)
         {
             if (Unsafe.SizeOf<PublicKeyBytes>() != crypto_scalarmult_curve25519_SCALARBYTES)

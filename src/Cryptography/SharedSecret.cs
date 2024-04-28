@@ -96,10 +96,7 @@ namespace NSec.Cryptography
         public byte[] Export(
             SharedSecretBlobFormat format)
         {
-            if (_handle.IsClosed)
-            {
-                throw new ObjectDisposedException(typeof(SharedSecret).FullName);
-            }
+            ObjectDisposedException.ThrowIf(_handle.IsClosed, this);
 
             if ((_exportPolicy & KeyExportPolicies.AllowPlaintextExport) == 0)
             {
@@ -113,7 +110,7 @@ namespace NSec.Cryptography
                 }
             }
 
-            TryExportCore(_handle, format, Span<byte>.Empty, out int blobSize);
+            TryExportCore(_handle, format, [], out int blobSize);
             byte[] blob = new byte[blobSize];
 
             if (!TryExportCore(_handle, format, blob, out blobSize))
@@ -129,12 +126,9 @@ namespace NSec.Cryptography
         public int GetExportBlobSize(
             SharedSecretBlobFormat format)
         {
-            if (_handle.IsClosed)
-            {
-                throw new ObjectDisposedException(typeof(SharedSecret).FullName);
-            }
+            ObjectDisposedException.ThrowIf(_handle.IsClosed, this);
 
-            TryExportCore(_handle, format, Span<byte>.Empty, out int blobSize);
+            TryExportCore(_handle, format, [], out int blobSize);
             return blobSize;
         }
 
@@ -149,10 +143,7 @@ namespace NSec.Cryptography
             Span<byte> blob,
             out int blobSize)
         {
-            if (_handle.IsClosed)
-            {
-                throw new ObjectDisposedException(typeof(SharedSecret).FullName);
-            }
+            ObjectDisposedException.ThrowIf(_handle.IsClosed, this);
 
             if ((_exportPolicy & KeyExportPolicies.AllowPlaintextExport) == 0)
             {

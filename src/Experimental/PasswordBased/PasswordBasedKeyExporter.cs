@@ -396,17 +396,11 @@ namespace NSec.Experimental.PasswordBased
             value.CopyTo(writer[value.Length]);
         }
 
-        private ref struct Reader
+        private ref struct Reader(
+            ReadOnlySpan<byte> bytes)
         {
-            private readonly ReadOnlySpan<byte> _bytes;
-            private int _pos;
-
-            public Reader(
-                ReadOnlySpan<byte> bytes)
-            {
-                _bytes = bytes;
-                _pos = 0;
-            }
+            private readonly ReadOnlySpan<byte> _bytes = bytes;
+            private int _pos = 0;
 
             public ReadOnlySpan<byte> this[
                 int length]
@@ -420,17 +414,11 @@ namespace NSec.Experimental.PasswordBased
             }
         }
 
-        private ref struct Writer
+        private ref struct Writer(
+            Span<byte> bytes)
         {
-            private readonly Span<byte> _bytes;
-            private int _pos;
-
-            public Writer(
-                Span<byte> bytes)
-            {
-                _bytes = bytes;
-                _pos = 0;
-            }
+            private readonly Span<byte> _bytes = bytes;
+            private int _pos = 0;
 
             public Span<byte> this[
                 int length]
@@ -443,9 +431,9 @@ namespace NSec.Experimental.PasswordBased
                 }
             }
 
-            public byte[] ToArray()
+            public readonly byte[] ToArray()
             {
-                return _bytes.Slice(0, _pos).ToArray();
+                return _bytes[.._pos].ToArray();
             }
         }
     }

@@ -19,7 +19,7 @@ namespace NSec.Cryptography.Formatting
             int i = 0;
             int j = 0;
 
-            utf8BeginLabel.CopyTo(utf8.Slice(j));
+            utf8BeginLabel.CopyTo(utf8[j..]);
             j += utf8BeginLabel.Length;
             utf8[j++] = (byte)'\r';
             utf8[j++] = (byte)'\n';
@@ -28,7 +28,7 @@ namespace NSec.Cryptography.Formatting
             {
                 System.Buffers.Text.Base64.EncodeToUtf8(
                     bytes.Slice(i, remaining <= 48 ? remaining : 48),
-                    utf8.Slice(j),
+                    utf8[j..],
                     out int consumed,
                     out int written,
                     isFinalBlock: true);
@@ -38,7 +38,7 @@ namespace NSec.Cryptography.Formatting
                 utf8[j++] = (byte)'\n';
             }
 
-            utf8EndLabel.CopyTo(utf8.Slice(j));
+            utf8EndLabel.CopyTo(utf8[j..]);
             j += utf8EndLabel.Length;
             utf8[j++] = (byte)'\r';
             utf8[j++] = (byte)'\n';
@@ -88,7 +88,7 @@ namespace NSec.Cryptography.Formatting
                 break;
             }
 
-            if (!utf8.Slice(i).StartsWith(utf8BeginLabel))
+            if (!utf8[i..].StartsWith(utf8BeginLabel))
             {
                 written = 0;
                 return false;
@@ -141,7 +141,7 @@ namespace NSec.Cryptography.Formatting
                 break;
             }
 
-            if (!utf8.Slice(i).StartsWith(utf8EndLabel))
+            if (!utf8[i..].StartsWith(utf8EndLabel))
             {
                 written = 0;
                 return false;
@@ -170,7 +170,7 @@ namespace NSec.Cryptography.Formatting
         }
 
         private static readonly sbyte[] s_decodingMap =
-        {
+        [
             -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
             -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
             -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, -1, -1, -1, 63,
@@ -187,6 +187,6 @@ namespace NSec.Cryptography.Formatting
             -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
             -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
             -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        };
+        ];
     }
 }

@@ -61,7 +61,7 @@ namespace NSec.Cryptography
 
         internal Key(
             Algorithm algorithm,
-            in KeyCreationParameters creationParameters,
+            ref readonly KeyCreationParameters creationParameters,
             SecureMemoryHandle keyHandle,
             PublicKey? publicKey)
         {
@@ -170,10 +170,7 @@ namespace NSec.Cryptography
 
             if (format < 0)
             {
-                if (_handle.IsClosed)
-                {
-                    throw new ObjectDisposedException(typeof(Key).FullName);
-                }
+                ObjectDisposedException.ThrowIf(_handle.IsClosed, this);
 
                 if ((_exportPolicy & KeyExportPolicies.AllowPlaintextExport) == 0)
                 {
@@ -187,7 +184,7 @@ namespace NSec.Cryptography
                     }
                 }
 
-                _algorithm.TryExportKey(_handle, format, Span<byte>.Empty, out blobSize);
+                _algorithm.TryExportKey(_handle, format, [], out blobSize);
                 blob = new byte[blobSize];
 
                 if (!_algorithm.TryExportKey(_handle, format, blob, out blobSize))
@@ -206,7 +203,7 @@ namespace NSec.Cryptography
                     throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
                 }
 
-                _algorithm.TryExportPublicKey(_publicKey, format, Span<byte>.Empty, out blobSize);
+                _algorithm.TryExportPublicKey(_publicKey, format, [], out blobSize);
                 blob = new byte[blobSize];
 
                 if (!_algorithm.TryExportPublicKey(_publicKey, format, blob, out blobSize))
@@ -226,12 +223,9 @@ namespace NSec.Cryptography
 
             if (format < 0)
             {
-                if (_handle.IsClosed)
-                {
-                    throw new ObjectDisposedException(typeof(Key).FullName);
-                }
+                ObjectDisposedException.ThrowIf(_handle.IsClosed, this);
 
-                _algorithm.TryExportKey(_handle, format, Span<byte>.Empty, out blobSize);
+                _algorithm.TryExportKey(_handle, format, [], out blobSize);
             }
             else
             {
@@ -240,7 +234,7 @@ namespace NSec.Cryptography
                     throw Error.Argument_FormatNotSupported(nameof(format), format.ToString());
                 }
 
-                _algorithm.TryExportPublicKey(_publicKey, format, Span<byte>.Empty, out blobSize);
+                _algorithm.TryExportPublicKey(_publicKey, format, [], out blobSize);
             }
 
             return blobSize;
@@ -259,10 +253,7 @@ namespace NSec.Cryptography
         {
             if (format < 0)
             {
-                if (_handle.IsClosed)
-                {
-                    throw new ObjectDisposedException(typeof(Key).FullName);
-                }
+                ObjectDisposedException.ThrowIf(_handle.IsClosed, this);
 
                 if ((_exportPolicy & KeyExportPolicies.AllowPlaintextExport) == 0)
                 {

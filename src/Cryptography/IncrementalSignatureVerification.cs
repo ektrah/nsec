@@ -65,7 +65,7 @@ namespace NSec.Cryptography
             try
             {
                 return signature.Length == state._algorithm.SignatureSize &&
-                       state._algorithm.FinalVerifyCore(ref Unsafe.AsRef(in state._state), state._publicKey.GetPinnableReference(), signature);
+                       state._algorithm.FinalVerifyCore(ref Unsafe.AsRef(in state._state), in state._publicKey.GetPinnableReference(), signature);
             }
             finally
             {

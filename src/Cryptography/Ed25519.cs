@@ -35,12 +35,11 @@ namespace NSec.Cryptography
     //
     public sealed class Ed25519 : SignatureAlgorithm
     {
-        private static readonly PrivateKeyFormatter s_nsecPrivateKeyFormatter = new Ed25519PrivateKeyFormatter(new byte[] { 0xDE, 0x64, 0x42, 0xDE, crypto_sign_ed25519_SEEDBYTES, 0, crypto_sign_ed25519_BYTES, 0 });
+        private static readonly PrivateKeyFormatter s_nsecPrivateKeyFormatter = new Ed25519PrivateKeyFormatter([0xDE, 0x64, 0x42, 0xDE, crypto_sign_ed25519_SEEDBYTES, 0, crypto_sign_ed25519_BYTES, 0]);
 
-        private static readonly PublicKeyFormatter s_nsecPublicKeyFormatter = new Ed25519PublicKeyFormatter(new byte[] { 0xDE, 0x65, 0x42, 0xDE, crypto_sign_ed25519_PUBLICKEYBYTES, 0, crypto_sign_ed25519_BYTES, 0 });
+        private static readonly PublicKeyFormatter s_nsecPublicKeyFormatter = new Ed25519PublicKeyFormatter([0xDE, 0x65, 0x42, 0xDE, crypto_sign_ed25519_PUBLICKEYBYTES, 0, crypto_sign_ed25519_BYTES, 0]);
 
-        private static readonly PrivateKeyFormatter s_pkixPrivateKeyFormatter = new Ed25519PrivateKeyFormatter(new byte[]
-        {
+        private static readonly PrivateKeyFormatter s_pkixPrivateKeyFormatter = new Ed25519PrivateKeyFormatter([
             // +-- SEQUENCE (3 elements)
             //     +-- INTEGER 0
             //     +-- SEQUENCE (1 element)
@@ -49,21 +48,20 @@ namespace NSec.Cryptography
             //         +-- OCTET STRING (32 bytes)
             0x30, 0x2E, 0x02, 0x01, 0x00, 0x30, 0x05, 0x06,
             0x03, 0x2B, 0x65, 0x70, 0x04, 0x22, 0x04, 0x20,
-        });
+        ]);
 
-        private static readonly PublicKeyFormatter s_pkixPublicKeyFormatter = new Ed25519PublicKeyFormatter(new byte[]
-        {
+        private static readonly PublicKeyFormatter s_pkixPublicKeyFormatter = new Ed25519PublicKeyFormatter([
             // +-- SEQUENCE (2 elements)
             //     +-- SEQUENCE (1 element)
             //     |   +-- OBJECT IDENTIFIER 1.3.101.112
             //     +-- BIT STRING (256 bits)
             0x30, 0x2A, 0x30, 0x05, 0x06, 0x03, 0x2B, 0x65,
             0x70, 0x03, 0x21, 0x00,
-        });
+        ]);
 
-        private static readonly PrivateKeyFormatter s_rawPrivateKeyFormatter = new Ed25519PrivateKeyFormatter(Array.Empty<byte>());
+        private static readonly PrivateKeyFormatter s_rawPrivateKeyFormatter = new Ed25519PrivateKeyFormatter([]);
 
-        private static readonly PublicKeyFormatter s_rawPublicKeyFormatter = new Ed25519PublicKeyFormatter(Array.Empty<byte>());
+        private static readonly PublicKeyFormatter s_rawPublicKeyFormatter = new Ed25519PublicKeyFormatter([]);
 
         private static int s_selfTest;
 
@@ -199,7 +197,7 @@ namespace NSec.Cryptography
         }
 
         private protected unsafe override bool VerifyCore(
-            in PublicKeyBytes publicKeyBytes,
+            ref readonly PublicKeyBytes publicKeyBytes,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> signature)
         {

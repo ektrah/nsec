@@ -25,8 +25,8 @@ namespace NSec.Cryptography.Formatting
             }
 
             BinaryPrimitives.WriteUInt32BigEndian(blob, blobHeader);
-            BinaryPrimitives.WriteInt16LittleEndian(blob.Slice(sizeof(uint)), (short)keySize);
-            BinaryPrimitives.WriteInt16LittleEndian(blob.Slice(sizeof(uint) + sizeof(short)), (short)outputSize);
+            BinaryPrimitives.WriteInt16LittleEndian(blob[sizeof(uint)..], (short)keySize);
+            BinaryPrimitives.WriteInt16LittleEndian(blob[(sizeof(uint) + sizeof(short))..], (short)outputSize);
             keyHandle.CopyTo(blob.Slice(sizeof(uint) + sizeof(short) + sizeof(short), keySize));
             return true;
         }
@@ -40,8 +40,8 @@ namespace NSec.Cryptography.Formatting
         {
             if (blob.Length != sizeof(uint) + sizeof(short) + sizeof(short) + keySize ||
                 BinaryPrimitives.ReadUInt32BigEndian(blob) != blobHeader ||
-                BinaryPrimitives.ReadInt16LittleEndian(blob.Slice(sizeof(uint))) != keySize ||
-                BinaryPrimitives.ReadInt16LittleEndian(blob.Slice(sizeof(uint) + sizeof(short))) != outputSize)
+                BinaryPrimitives.ReadInt16LittleEndian(blob[sizeof(uint)..]) != keySize ||
+                BinaryPrimitives.ReadInt16LittleEndian(blob[(sizeof(uint) + sizeof(short))..]) != outputSize)
             {
                 keyHandle = default;
                 return false;

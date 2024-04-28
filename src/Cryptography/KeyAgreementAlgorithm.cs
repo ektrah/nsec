@@ -112,7 +112,7 @@ namespace NSec.Cryptography
 
         private protected abstract bool AgreeCore(
             SecureMemoryHandle keyHandle,
-            in PublicKeyBytes otherPartyPublicKey,
+            ref readonly PublicKeyBytes otherPartyPublicKey,
             out SecureMemoryHandle? sharedSecretHandle);
     }
 }
