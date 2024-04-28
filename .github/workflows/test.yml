@@ -14,7 +14,6 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: |
-          6.0.x
           8.0.x
     - run: dotnet --info
     - uses: actions/checkout@v4
@@ -22,10 +21,6 @@ jobs:
       run: dotnet test tests -f net8.0 -c Debug
     - name: Test (.NET 8.0/Release)
       run: dotnet test tests -f net8.0 -c Release
-    - name: Test (.NET 6.0/Debug)
-      run: dotnet test tests -f net6.0 -c Debug
-    - name: Test (.NET 6.0/Release)
-      run: dotnet test tests -f net6.0 -c Release
     - name: Pack
       run: dotnet pack -c Release
     - name: Upload artifacts
@@ -51,7 +46,6 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: |
-          6.0.x
           8.0.x
     - run: dotnet --info
     - uses: actions/checkout@v4
@@ -59,10 +53,6 @@ jobs:
       run: dotnet test tests -f net8.0 -c Debug
     - name: Test (.NET 8.0/Release)
       run: dotnet test tests -f net8.0 -c Release
-    - name: Test (.NET 6.0/Debug)
-      run: dotnet test tests -f net6.0 -c Debug
-    - name: Test (.NET 6.0/Release)
-      run: dotnet test tests -f net6.0 -c Release
 
   test-linux:
     needs: [test-win, test-linux-musl]
@@ -87,9 +77,6 @@ jobs:
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
     steps:
     - name: Install prerequisites
-      run: yum install -q -y curl ca-certificates libicu
-      if: ${{ startsWith(matrix.os, 'centos') }}
-    - name: Install prerequisites
       run: apt-get -qq update && apt-get -qq install --yes --no-install-recommends curl ca-certificates gettext
       if: ${{ startsWith(matrix.os, 'debian') }}
     - name: Install prerequisites
@@ -102,7 +89,6 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: |
-          6.0.x
           8.0.x
     - run: dotnet --info
     - uses: actions/checkout@v4
@@ -110,10 +96,6 @@ jobs:
       run: dotnet test tests -f net8.0 -c Debug
     - name: Test (.NET 8.0/Release)
       run: dotnet test tests -f net8.0 -c Release
-    - name: Test (.NET 6.0/Debug)
-      run: dotnet test tests -f net6.0 -c Debug
-    - name: Test (.NET 6.0/Release)
-      run: dotnet test tests -f net6.0 -c Release
 
   test-linux-musl:
     strategy:

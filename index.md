@@ -1,7 +1,7 @@
 # NSec
 
 NSec is a modern and easy-to-use cryptographic library for
-[.NET 6+](https://dotnet.microsoft.com/) based on
+[.NET 8+](https://dotnet.microsoft.com/) based on
 [libsodium](https://libsodium.org/).
 
 * **Modern** -- libsodium provides a small set of high-quality, modern
@@ -44,7 +44,7 @@ and verify the signature:
 
     $ dotnet add package NSec.Cryptography --version 24.4.0
 
-NSec works with .NET 6 and later on Windows, Linux and macOS.
+NSec works with .NET 8 and later on Windows, Linux and macOS.
 
 See [[Installation]] for more details.
 
