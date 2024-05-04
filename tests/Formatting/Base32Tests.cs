@@ -200,7 +200,7 @@ namespace NSec.Tests.Formatting
         [Fact]
         public static void TryDecodeNull()
         {
-            Assert.Throws<ArgumentNullException>("base32", () => Base32.TryDecode((string)null!, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("base32", () => Base32.TryDecode((string)null!, []));
         }
 
         [Fact]

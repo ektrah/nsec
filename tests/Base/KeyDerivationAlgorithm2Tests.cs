@@ -14,15 +14,15 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms2))]
         public static void ExtractWithNullSecret(KeyDerivationAlgorithm2 a)
         {
-            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.Extract((SharedSecret)null!, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.Extract((SharedSecret)null!, []));
         }
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms2))]
         public static void ExtractWithEmptySalt(KeyDerivationAlgorithm2 a)
         {
-            var expected = a.Extract(ReadOnlySpan<byte>.Empty, new byte[a.PseudorandomKeySize]);
-            var actual = a.Extract(ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty);
+            var expected = a.Extract([], new byte[a.PseudorandomKeySize]);
+            var actual = a.Extract([], []);
 
             Assert.Equal(expected, actual);
         }
@@ -31,7 +31,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms2))]
         public static void ExtractSuccess(KeyDerivationAlgorithm2 a)
         {
-            var actual = a.Extract(ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty);
+            var actual = a.Extract([], []);
 
             Assert.NotNull(actual);
             Assert.Equal(a.PseudorandomKeySize, actual.Length);
@@ -45,21 +45,21 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms2))]
         public static void ExtractWithSpanWithNullSecret(KeyDerivationAlgorithm2 a)
         {
-            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.Extract((SharedSecret)null!, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.Extract((SharedSecret)null!, [], []));
         }
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms2))]
         public static void ExtractWithSpanTooShort(KeyDerivationAlgorithm2 a)
         {
-            Assert.Throws<ArgumentException>("pseudorandomKey", () => a.Extract(ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[a.PseudorandomKeySize - 1]));
+            Assert.Throws<ArgumentException>("pseudorandomKey", () => a.Extract([], [], new byte[a.PseudorandomKeySize - 1]));
         }
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms2))]
         public static void ExtractWithSpanTooLong(KeyDerivationAlgorithm2 a)
         {
-            Assert.Throws<ArgumentException>("pseudorandomKey", () => a.Extract(ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[a.PseudorandomKeySize + 1]));
+            Assert.Throws<ArgumentException>("pseudorandomKey", () => a.Extract([], [], new byte[a.PseudorandomKeySize + 1]));
         }
 
         [Theory]
@@ -69,8 +69,8 @@ namespace NSec.Tests.Base
             var expected = new byte[a.PseudorandomKeySize];
             var actual = new byte[expected.Length];
 
-            a.Extract(ReadOnlySpan<byte>.Empty, new byte[a.PseudorandomKeySize], expected);
-            a.Extract(ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, actual);
+            a.Extract([], new byte[a.PseudorandomKeySize], expected);
+            a.Extract([], [], actual);
 
             Assert.Equal(expected, actual);
         }
@@ -82,8 +82,8 @@ namespace NSec.Tests.Base
             var expected = new byte[a.PseudorandomKeySize];
             var actual = Utilities.RandomBytes[..a.PseudorandomKeySize].ToArray();
 
-            a.Extract(ReadOnlySpan<byte>.Empty, actual, expected);
-            a.Extract(ReadOnlySpan<byte>.Empty, actual, actual);
+            a.Extract([], actual, expected);
+            a.Extract([], actual, actual);
 
             Assert.Equal(expected, actual);
         }
@@ -94,7 +94,7 @@ namespace NSec.Tests.Base
         {
             var actual = new byte[a.PseudorandomKeySize];
 
-            a.Extract(ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, actual);
+            a.Extract([], [], actual);
         }
 
         #endregion
@@ -105,21 +105,21 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms2))]
         public static void ExpandWithCountWithPrkTooShort(KeyDerivationAlgorithm2 a)
         {
-            Assert.Throws<ArgumentException>("pseudorandomKey", () => a.Expand(Utilities.RandomBytes[..(a.PseudorandomKeySize - 1)], ReadOnlySpan<byte>.Empty, 0));
+            Assert.Throws<ArgumentException>("pseudorandomKey", () => a.Expand(Utilities.RandomBytes[..(a.PseudorandomKeySize - 1)], [], 0));
         }
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms2))]
         public static void ExpandWithNegativeCount(KeyDerivationAlgorithm2 a)
         {
-            Assert.Throws<ArgumentOutOfRangeException>("count", () => a.Expand(Utilities.RandomBytes[..a.PseudorandomKeySize], ReadOnlySpan<byte>.Empty, -1));
+            Assert.Throws<ArgumentOutOfRangeException>("count", () => a.Expand(Utilities.RandomBytes[..a.PseudorandomKeySize], [], -1));
         }
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms2))]
         public static void ExpandWithCountTooLarge(KeyDerivationAlgorithm2 a)
         {
-            Assert.Throws<ArgumentOutOfRangeException>("count", () => a.Expand(Utilities.RandomBytes[..a.PseudorandomKeySize], ReadOnlySpan<byte>.Empty, a.MaxCount + 1));
+            Assert.Throws<ArgumentOutOfRangeException>("count", () => a.Expand(Utilities.RandomBytes[..a.PseudorandomKeySize], [], a.MaxCount + 1));
         }
 
         [Fact]
@@ -145,14 +145,14 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms2))]
         public static void ExpandWithSpanWithPrkTooShort(KeyDerivationAlgorithm2 a)
         {
-            Assert.Throws<ArgumentException>("pseudorandomKey", () => a.Expand(Utilities.RandomBytes[..(a.PseudorandomKeySize - 1)], ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("pseudorandomKey", () => a.Expand(Utilities.RandomBytes[..(a.PseudorandomKeySize - 1)], [], []));
         }
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms2))]
         public static void ExpandWithSpanTooLarge(KeyDerivationAlgorithm2 a)
         {
-            Assert.Throws<ArgumentException>("bytes", () => a.Expand(Utilities.RandomBytes[..a.PseudorandomKeySize], ReadOnlySpan<byte>.Empty, new byte[a.MaxCount + 1]));
+            Assert.Throws<ArgumentException>("bytes", () => a.Expand(Utilities.RandomBytes[..a.PseudorandomKeySize], [], new byte[a.MaxCount + 1]));
         }
 
         [Theory]
@@ -161,8 +161,8 @@ namespace NSec.Tests.Base
         {
             var b = new byte[200];
 
-            Assert.Throws<ArgumentException>("bytes", () => a.Expand(b.AsSpan(10, a.PseudorandomKeySize), ReadOnlySpan<byte>.Empty, b.AsSpan(30, 100)));
-            Assert.Throws<ArgumentException>("bytes", () => a.Expand(b.AsSpan(30, a.PseudorandomKeySize), ReadOnlySpan<byte>.Empty, b.AsSpan(10, 100)));
+            Assert.Throws<ArgumentException>("bytes", () => a.Expand(b.AsSpan(10, a.PseudorandomKeySize), [], b.AsSpan(30, 100)));
+            Assert.Throws<ArgumentException>("bytes", () => a.Expand(b.AsSpan(30, a.PseudorandomKeySize), [], b.AsSpan(10, 100)));
         }
 
         [Theory]
@@ -176,7 +176,7 @@ namespace NSec.Tests.Base
 
             var b = new byte[200];
 
-            var prk = a.Extract(s, ReadOnlySpan<byte>.Empty);
+            var prk = a.Extract(s, []);
 
             Assert.Throws<ArgumentException>("bytes", () => a.Expand(prk, b.AsSpan(10, 100), b.AsSpan(60, 100)));
             Assert.Throws<ArgumentException>("bytes", () => a.Expand(prk, b.AsSpan(60, 100), b.AsSpan(10, 100)));
@@ -209,14 +209,14 @@ namespace NSec.Tests.Base
         {
             var y = AeadAlgorithm.ChaCha20Poly1305;
 
-            Assert.Throws<ArgumentException>("pseudorandomKey", () => a.ExpandKey(Utilities.RandomBytes[..(a.PseudorandomKeySize - 1)], ReadOnlySpan<byte>.Empty, y));
+            Assert.Throws<ArgumentException>("pseudorandomKey", () => a.ExpandKey(Utilities.RandomBytes[..(a.PseudorandomKeySize - 1)], [], y));
         }
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms2))]
         public static void ExpandKeyWithNullAlgorithm(KeyDerivationAlgorithm2 a)
         {
-            Assert.Throws<ArgumentNullException>("algorithm", () => a.ExpandKey(Utilities.RandomBytes[..a.PseudorandomKeySize], ReadOnlySpan<byte>.Empty, null!));
+            Assert.Throws<ArgumentNullException>("algorithm", () => a.ExpandKey(Utilities.RandomBytes[..a.PseudorandomKeySize], [], null!));
         }
 
         [Theory]
@@ -225,7 +225,7 @@ namespace NSec.Tests.Base
         {
             var y = AeadAlgorithm.ChaCha20Poly1305;
 
-            using var i = a.ExpandKey(Utilities.RandomBytes[..a.PseudorandomKeySize], ReadOnlySpan<byte>.Empty, y);
+            using var i = a.ExpandKey(Utilities.RandomBytes[..a.PseudorandomKeySize], [], y);
             Assert.NotNull(i);
             Assert.Same(y, i.Algorithm);
         }

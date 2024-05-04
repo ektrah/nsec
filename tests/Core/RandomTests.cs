@@ -48,7 +48,7 @@ namespace NSec.Tests.Core
         [Fact]
         public static void GenerateBytesWithEmptySpan()
         {
-            RandomGenerator.Default.GenerateBytes(Span<byte>.Empty);
+            RandomGenerator.Default.GenerateBytes([]);
         }
 
         [Theory]
@@ -67,23 +67,23 @@ namespace NSec.Tests.Core
         [Fact]
         public static void GenerateBytesWithSpanOffset()
         {
-            var bytes = Utilities.RandomBytes.Slice(0, 400).ToArray();
+            var bytes = Utilities.RandomBytes[..400].ToArray();
 
             RandomGenerator.Default.GenerateBytes(bytes.AsSpan(100, 200));
 
-            Assert.Equal(Utilities.RandomBytes.Slice(0, 100).ToArray(), bytes.AsSpan(0, 100).ToArray());
-            Assert.NotEqual(Utilities.RandomBytes.Slice(100, 200).ToArray(), bytes.AsSpan(100, 200).ToArray());
-            Assert.Equal(Utilities.RandomBytes.Slice(300, 100).ToArray(), bytes.AsSpan(300, 100).ToArray());
+            Assert.Equal(Utilities.RandomBytes[..100].ToArray(), bytes[0..100]);
+            Assert.NotEqual(Utilities.RandomBytes[100..300].ToArray(), bytes[100..300]);
+            Assert.Equal(Utilities.RandomBytes[300..400].ToArray(), bytes[300..400]);
         }
 
         [Fact]
         public static void GenerateBytesWithSpanEmpty()
         {
-            var bytes = Utilities.RandomBytes.Slice(0, 400).ToArray();
+            var bytes = Utilities.RandomBytes[..400].ToArray();
 
             RandomGenerator.Default.GenerateBytes(bytes.AsSpan(100, 0));
 
-            Assert.Equal(Utilities.RandomBytes.Slice(0, 400).ToArray(), bytes.AsSpan(0, 400).ToArray());
+            Assert.Equal(Utilities.RandomBytes[..400].ToArray(), bytes[..400]);
         }
 
         #endregion

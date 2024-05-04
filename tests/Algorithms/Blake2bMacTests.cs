@@ -86,7 +86,7 @@ namespace NSec.Tests.Algorithms
         public static void ExportImportRaw(int keySize, int macSize)
         {
             var a = new Blake2bMac(keySize, macSize);
-            var b = Utilities.RandomBytes.Slice(0, keySize);
+            var b = Utilities.RandomBytes[..keySize];
 
             Assert.Equal(keySize, a.KeySize);
             Assert.Equal(macSize, a.MacSize);
@@ -107,7 +107,7 @@ namespace NSec.Tests.Algorithms
         public static void ExportImportNSec(int keySize, int macSize)
         {
             var a = new Blake2bMac(keySize, macSize);
-            var b = Utilities.RandomBytes.Slice(0, keySize);
+            var b = Utilities.RandomBytes[..keySize];
 
             Assert.Equal(keySize, a.KeySize);
             Assert.Equal(macSize, a.MacSize);
@@ -135,7 +135,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = MacAlgorithm.Blake2b_512;
 
-            Assert.Throws<ArgumentNullException>("key", () => a.Mac(null!, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Mac(null!, []));
         }
 
         [Fact]
@@ -145,7 +145,7 @@ namespace NSec.Tests.Algorithms
 
             using var k = new Key(SignatureAlgorithm.Ed25519);
 
-            Assert.Throws<ArgumentException>("key", () => a.Mac(k, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentException>("key", () => a.Mac(k, []));
         }
 
         [Fact]
@@ -155,7 +155,7 @@ namespace NSec.Tests.Algorithms
 
             using var k = new Key(a);
 
-            var b = a.Mac(k, ReadOnlySpan<byte>.Empty);
+            var b = a.Mac(k, []);
 
             Assert.NotNull(b);
             Assert.Equal(a.MacSize, b.Length);
@@ -170,7 +170,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = MacAlgorithm.Blake2b_512;
 
-            Assert.Throws<ArgumentNullException>("key", () => a.Mac(null!, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Mac(null!, [], []));
         }
 
         [Fact]
@@ -180,7 +180,7 @@ namespace NSec.Tests.Algorithms
 
             using var k = new Key(SignatureAlgorithm.Ed25519);
 
-            Assert.Throws<ArgumentException>("key", () => a.Mac(k, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("key", () => a.Mac(k, [], []));
         }
 
         [Fact]
@@ -190,7 +190,7 @@ namespace NSec.Tests.Algorithms
 
             using var k = new Key(a);
 
-            Assert.Throws<ArgumentException>("mac", () => a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize - 1]));
+            Assert.Throws<ArgumentException>("mac", () => a.Mac(k, [], new byte[a.MacSize - 1]));
         }
 
         [Fact]
@@ -200,7 +200,7 @@ namespace NSec.Tests.Algorithms
 
             using var k = new Key(a);
 
-            Assert.Throws<ArgumentException>("mac", () => a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize + 1]));
+            Assert.Throws<ArgumentException>("mac", () => a.Mac(k, [], new byte[a.MacSize + 1]));
         }
 
         [Fact]
@@ -210,7 +210,7 @@ namespace NSec.Tests.Algorithms
 
             using var k = new Key(a);
 
-            a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize]);
+            a.Mac(k, [], new byte[a.MacSize]);
         }
 
         #endregion

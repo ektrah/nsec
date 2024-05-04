@@ -38,9 +38,9 @@ namespace NSec.Tests.Core
             Assert.Equal(0, actual.Size);
             Assert.Equal(0, actual.FixedFieldSize);
             Assert.Equal(0, actual.CounterFieldSize);
-            Assert.Equal(Array.Empty<byte>(), actual.ToArray());
+            Assert.Equal([], actual.ToArray());
             Assert.Equal("[][]", actual.GetDebuggerDisplay());
-            actual.CopyTo(Span<byte>.Empty);
+            actual.CopyTo([]);
         }
 
         #endregion
@@ -97,7 +97,7 @@ namespace NSec.Tests.Core
         [MemberData(nameof(Sizes))]
         public static void CtorWithFixedAndCounterSize(int size)
         {
-            var fixedField = Utilities.RandomBytes.Slice(0, size / 2).ToArray();
+            var fixedField = Utilities.RandomBytes[..(size / 2)].ToArray();
             var counterField = new byte[size - fixedField.Length];
 
             var expected = new byte[size];
@@ -119,19 +119,19 @@ namespace NSec.Tests.Core
         [Fact]
         public static void CtorWithFixedLargerThan32AndCounterSize()
         {
-            Assert.Throws<ArgumentException>("fixedField", () => new Nonce(Utilities.RandomBytes.Slice(0, 32 + 1), -1));
+            Assert.Throws<ArgumentException>("fixedField", () => new Nonce(Utilities.RandomBytes[..(32 + 1)], -1));
         }
 
         [Fact]
         public static void CtorWithFixedAndNegativeCounterSize()
         {
-            Assert.Throws<ArgumentOutOfRangeException>("counterFieldSize", () => new Nonce(Utilities.RandomBytes.Slice(0, 4), -1));
+            Assert.Throws<ArgumentOutOfRangeException>("counterFieldSize", () => new Nonce(Utilities.RandomBytes[..4], -1));
         }
 
         [Fact]
         public static void CtorWithFixedAndCounterSizeGreater32()
         {
-            Assert.Throws<ArgumentOutOfRangeException>("counterFieldSize", () => new Nonce(Utilities.RandomBytes.Slice(0, 4), 32 - 4 + 1));
+            Assert.Throws<ArgumentOutOfRangeException>("counterFieldSize", () => new Nonce(Utilities.RandomBytes[..4], 32 - 4 + 1));
         }
 
         #endregion
@@ -142,7 +142,7 @@ namespace NSec.Tests.Core
         [MemberData(nameof(Sizes))]
         public static void CtorWithFixedAndCounter(int size)
         {
-            var fixedField = Utilities.RandomBytes.Slice(0, size / 2).ToArray();
+            var fixedField = Utilities.RandomBytes[..(size / 2)].ToArray();
             var counterField = Utilities.RandomBytes.Slice(size / 2, size - fixedField.Length).ToArray();
 
             var expected = new byte[size];
@@ -165,13 +165,13 @@ namespace NSec.Tests.Core
         [Fact]
         public static void CtorWithFixedLargerThan32AndCounter()
         {
-            Assert.Throws<ArgumentException>("fixedField", () => new Nonce(Utilities.RandomBytes.Slice(0, 32 + 1), Utilities.RandomBytes.Slice(0, 0)));
+            Assert.Throws<ArgumentException>("fixedField", () => new Nonce(Utilities.RandomBytes[..(32 + 1)], Utilities.RandomBytes[..0]));
         }
 
         [Fact]
         public static void CtorWithFixedAndCounterLargerThan32()
         {
-            Assert.Throws<ArgumentException>("counterField", () => new Nonce(Utilities.RandomBytes.Slice(0, 4), Utilities.RandomBytes.Slice(0, 32 - 4 + 1)));
+            Assert.Throws<ArgumentException>("counterField", () => new Nonce(Utilities.RandomBytes[..4], Utilities.RandomBytes[..(32 - 4 + 1)]));
         }
 
         #endregion
@@ -182,8 +182,8 @@ namespace NSec.Tests.Core
         [MemberData(nameof(Sizes))]
         public static void Equal(int size)
         {
-            var expected = new Nonce(Utilities.RandomBytes.Slice(0, size), 0);
-            var actual = new Nonce(Utilities.RandomBytes.Slice(0, size), 0);
+            var expected = new Nonce(Utilities.RandomBytes[..size], 0);
+            var actual = new Nonce(Utilities.RandomBytes[..size], 0);
 
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
@@ -342,7 +342,7 @@ namespace NSec.Tests.Core
             var bytes2 = Utilities.RandomBytes.Slice(start * 32 + 100, 12 + start);
 
             var expected = new byte[bytes1.Length];
-            var actual = new Nonce(ReadOnlySpan<byte>.Empty, bytes1) ^ new Nonce(bytes2, 0);
+            var actual = new Nonce([], bytes1) ^ new Nonce(bytes2, 0);
 
             for (var i = 0; i < expected.Length; i++)
             {

@@ -79,7 +79,7 @@ namespace NSec.Tests.Formatting
 
         private static void Test(Algorithm a, int seedSize, KeyBlobFormat importFormat, int keySize, int outputSize, KeyBlobFormat format, byte[] blobHeader)
         {
-            var b = Utilities.RandomBytes.Slice(0, seedSize);
+            var b = Utilities.RandomBytes[..seedSize];
 
             using var k = Key.Import(a, b, importFormat, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving });
 

@@ -27,7 +27,7 @@ namespace NSec.Tests.Formatting
         {
             var k = new Key(SignatureAlgorithm.Ed25519, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving });
 
-            Assert.Throws<ArgumentNullException>("scheme", () => PasswordBasedKeyExporter.Export(k, null!, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("scheme", () => PasswordBasedKeyExporter.Export(k, null!, ReadOnlySpan<byte>.Empty, [], []));
         }
 
         [Theory]
@@ -107,7 +107,7 @@ namespace NSec.Tests.Formatting
         {
             var k = new Key(SignatureAlgorithm.Ed25519, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving });
 
-            Assert.Throws<ArgumentNullException>("scheme", () => PasswordBasedKeyExporter.Export(k, null!, s_password, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("scheme", () => PasswordBasedKeyExporter.Export(k, null!, s_password, [], []));
         }
 
         [Theory]
@@ -118,7 +118,7 @@ namespace NSec.Tests.Formatting
 
             var scheme = new PasswordBasedEncryptionScheme(a, AeadAlgorithm.ChaCha20Poly1305);
 
-            Assert.Throws<ArgumentNullException>("password", () => PasswordBasedKeyExporter.Export(k, scheme, (string)null!, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("password", () => PasswordBasedKeyExporter.Export(k, scheme, (string)null!, [], []));
         }
 
         [Theory]

@@ -44,7 +44,7 @@ namespace NSec.Tests.Base
         {
             var state = default(IncrementalMac);
 
-            Assert.Throws<InvalidOperationException>(() => IncrementalMac.Update(ref state, Utilities.RandomBytes.Slice(0, 100)));
+            Assert.Throws<InvalidOperationException>(() => IncrementalMac.Update(ref state, Utilities.RandomBytes[..100]));
         }
 
         #endregion
@@ -72,15 +72,15 @@ namespace NSec.Tests.Base
 
             Assert.Same(a, state.Algorithm);
 
-            IncrementalMac.Update(ref state, Utilities.RandomBytes.Slice(0, 100));
-            IncrementalMac.Update(ref state, Utilities.RandomBytes.Slice(100, 100));
-            IncrementalMac.Update(ref state, Utilities.RandomBytes.Slice(200, 100));
+            IncrementalMac.Update(ref state, Utilities.RandomBytes[..100]);
+            IncrementalMac.Update(ref state, Utilities.RandomBytes[100..200]);
+            IncrementalMac.Update(ref state, Utilities.RandomBytes[200..300]);
 
             var actual = IncrementalMac.Finalize(ref state);
 
             Assert.Null(state.Algorithm);
 
-            var expected = a.Mac(k, Utilities.RandomBytes.Slice(0, 300));
+            var expected = a.Mac(k, Utilities.RandomBytes[..300]);
 
             Assert.Equal(expected, actual);
         }
@@ -94,7 +94,7 @@ namespace NSec.Tests.Base
         {
             var state = default(IncrementalMac);
 
-            Assert.Throws<InvalidOperationException>(() => IncrementalMac.Finalize(ref state, Span<byte>.Empty));
+            Assert.Throws<InvalidOperationException>(() => IncrementalMac.Finalize(ref state, []));
         }
 
         [Theory]
@@ -132,9 +132,9 @@ namespace NSec.Tests.Base
 
             Assert.Same(a, state.Algorithm);
 
-            IncrementalMac.Update(ref state, Utilities.RandomBytes.Slice(0, 100));
-            IncrementalMac.Update(ref state, Utilities.RandomBytes.Slice(100, 100));
-            IncrementalMac.Update(ref state, Utilities.RandomBytes.Slice(200, 100));
+            IncrementalMac.Update(ref state, Utilities.RandomBytes[..100]);
+            IncrementalMac.Update(ref state, Utilities.RandomBytes[100..200]);
+            IncrementalMac.Update(ref state, Utilities.RandomBytes[200..300]);
 
             var actual = new byte[a.MacSize];
 
@@ -142,7 +142,7 @@ namespace NSec.Tests.Base
 
             Assert.Null(state.Algorithm);
 
-            var expected = a.Mac(k, Utilities.RandomBytes.Slice(0, 300));
+            var expected = a.Mac(k, Utilities.RandomBytes[..300]);
 
             Assert.Equal(expected, actual);
         }
@@ -156,7 +156,7 @@ namespace NSec.Tests.Base
         {
             var state = default(IncrementalMac);
 
-            Assert.Throws<InvalidOperationException>(() => IncrementalMac.FinalizeAndVerify(ref state, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<InvalidOperationException>(() => IncrementalMac.FinalizeAndVerify(ref state, []));
         }
 
         [Theory]
@@ -180,7 +180,7 @@ namespace NSec.Tests.Base
 
             IncrementalMac.Initialize(k, out var state);
 
-            Assert.True(IncrementalMac.FinalizeAndVerify(ref state, a.Mac(k, ReadOnlySpan<byte>.Empty)));
+            Assert.True(IncrementalMac.FinalizeAndVerify(ref state, a.Mac(k, [])));
 
             Assert.Null(state.Algorithm);
         }
@@ -204,7 +204,7 @@ namespace NSec.Tests.Base
 
             Assert.Null(state.Algorithm);
 
-            var expected = a.Mac(k, ReadOnlySpan<byte>.Empty);
+            var expected = a.Mac(k, []);
 
             Assert.Equal(expected, actual);
         }

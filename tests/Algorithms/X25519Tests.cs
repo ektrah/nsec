@@ -62,9 +62,9 @@ namespace NSec.Tests.Algorithms
             using var sharedSecretActual1 = Utilities.AssertNotNull(a.Agree(k, PublicKey.Import(a, pk1, KeyBlobFormat.RawPublicKey)));
             using var sharedSecretActual2 = Utilities.AssertNotNull(a.Agree(k, PublicKey.Import(a, pk2, KeyBlobFormat.RawPublicKey)));
 
-            var expected = kdf.Extract(sharedSecretExpected, ReadOnlySpan<byte>.Empty);
-            var actual1 = kdf.Extract(sharedSecretActual1, ReadOnlySpan<byte>.Empty);
-            var actual2 = kdf.Extract(sharedSecretActual2, ReadOnlySpan<byte>.Empty);
+            var expected = kdf.Extract(sharedSecretExpected, []);
+            var actual1 = kdf.Extract(sharedSecretActual1, []);
+            var actual2 = kdf.Extract(sharedSecretActual2, []);
 
             Assert.Equal(expected, actual1);
             Assert.Equal(expected, actual2);
@@ -120,8 +120,8 @@ namespace NSec.Tests.Algorithms
             using var sharedSecretExpected = SharedSecret.Import(sharedSecret.DecodeHex(), SharedSecretBlobFormat.RawSharedSecret);
             using var sharedSecretActual = Utilities.AssertNotNull(a.Agree(k, PublicKey.Import(a, publicKey.DecodeHex(), KeyBlobFormat.RawPublicKey)));
 
-            var expected = kdf.Extract(sharedSecretExpected, ReadOnlySpan<byte>.Empty);
-            var actual = kdf.Extract(sharedSecretActual, ReadOnlySpan<byte>.Empty);
+            var expected = kdf.Extract(sharedSecretExpected, []);
+            var actual = kdf.Extract(sharedSecretActual, []);
 
             Assert.Equal(expected, actual);
         }

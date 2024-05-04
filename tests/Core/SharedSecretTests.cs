@@ -13,7 +13,7 @@ namespace NSec.Tests.Core
         [Fact]
         public static void ImportEmpty()
         {
-            using var s = SharedSecret.Import(ReadOnlySpan<byte>.Empty, SharedSecretBlobFormat.RawSharedSecret);
+            using var s = SharedSecret.Import([], SharedSecretBlobFormat.RawSharedSecret);
             Assert.NotNull(s);
             Assert.Equal(0, s.Size);
         }
@@ -78,13 +78,13 @@ namespace NSec.Tests.Core
         [Fact]
         public static void ImportWithFormatMin()
         {
-            Assert.Throws<ArgumentException>("format", () => SharedSecret.Import(ReadOnlySpan<byte>.Empty, (SharedSecretBlobFormat)int.MinValue));
+            Assert.Throws<ArgumentException>("format", () => SharedSecret.Import([], (SharedSecretBlobFormat)int.MinValue));
         }
 
         [Fact]
         public static void ImportWithFormatMax()
         {
-            Assert.Throws<ArgumentException>("format", () => SharedSecret.Import(ReadOnlySpan<byte>.Empty, (SharedSecretBlobFormat)int.MaxValue));
+            Assert.Throws<ArgumentException>("format", () => SharedSecret.Import([], (SharedSecretBlobFormat)int.MaxValue));
         }
 
         #endregion
@@ -94,13 +94,13 @@ namespace NSec.Tests.Core
         [Fact]
         public static void TryImportWithFormatMin()
         {
-            Assert.Throws<ArgumentException>("format", () => SharedSecret.TryImport(ReadOnlySpan<byte>.Empty, (SharedSecretBlobFormat)int.MinValue, out _));
+            Assert.Throws<ArgumentException>("format", () => SharedSecret.TryImport([], (SharedSecretBlobFormat)int.MinValue, out _));
         }
 
         [Fact]
         public static void TryImportWithFormatMax()
         {
-            Assert.Throws<ArgumentException>("format", () => SharedSecret.TryImport(ReadOnlySpan<byte>.Empty, (SharedSecretBlobFormat)int.MaxValue, out _));
+            Assert.Throws<ArgumentException>("format", () => SharedSecret.TryImport([], (SharedSecretBlobFormat)int.MaxValue, out _));
         }
 
         #endregion
@@ -187,7 +187,7 @@ namespace NSec.Tests.Core
             using var s = SharedSecret.Import(Utilities.RandomBytes[..64], SharedSecretBlobFormat.RawSharedSecret, new() { ExportPolicy = KeyExportPolicies.AllowPlaintextExport });
             Assert.Equal(KeyExportPolicies.AllowPlaintextExport, s.ExportPolicy);
 
-            Assert.Throws<ArgumentException>("format", () => s.TryExport((SharedSecretBlobFormat)int.MinValue, Span<byte>.Empty, out _));
+            Assert.Throws<ArgumentException>("format", () => s.TryExport((SharedSecretBlobFormat)int.MinValue, [], out _));
         }
 
         [Fact]
@@ -196,7 +196,7 @@ namespace NSec.Tests.Core
             using var s = SharedSecret.Import(Utilities.RandomBytes[..64], SharedSecretBlobFormat.RawSharedSecret, new() { ExportPolicy = KeyExportPolicies.AllowPlaintextExport });
             Assert.Equal(KeyExportPolicies.AllowPlaintextExport, s.ExportPolicy);
 
-            Assert.Throws<ArgumentException>("format", () => s.TryExport((SharedSecretBlobFormat)int.MaxValue, Span<byte>.Empty, out _));
+            Assert.Throws<ArgumentException>("format", () => s.TryExport((SharedSecretBlobFormat)int.MaxValue, [], out _));
         }
 
         [Theory]
@@ -240,9 +240,9 @@ namespace NSec.Tests.Core
             var s = SharedSecret.Import(Utilities.RandomBytes[..64], SharedSecretBlobFormat.RawSharedSecret, new() { ExportPolicy = KeyExportPolicies.AllowPlaintextExport });
             s.Dispose();
 
-            Assert.Throws<ObjectDisposedException>(() => s.TryExport(SharedSecretBlobFormat.RawSharedSecret, Span<byte>.Empty, out _));
-            Assert.Throws<ObjectDisposedException>(() => s.TryExport(SharedSecretBlobFormat.RawSharedSecret, Span<byte>.Empty, out _));
-            Assert.Throws<ObjectDisposedException>(() => s.TryExport(SharedSecretBlobFormat.RawSharedSecret, Span<byte>.Empty, out _));
+            Assert.Throws<ObjectDisposedException>(() => s.TryExport(SharedSecretBlobFormat.RawSharedSecret, [], out _));
+            Assert.Throws<ObjectDisposedException>(() => s.TryExport(SharedSecretBlobFormat.RawSharedSecret, [], out _));
+            Assert.Throws<ObjectDisposedException>(() => s.TryExport(SharedSecretBlobFormat.RawSharedSecret, [], out _));
         }
 
         #endregion

@@ -94,8 +94,8 @@ namespace NSec.Tests.Other
         [Fact]
         public static void UnpadEmpty()
         {
-            Assert.Null(Iso78164Padding.Unpad(ReadOnlySpan<byte>.Empty, 8));
-            Assert.False(Iso78164Padding.Unpad(ReadOnlySpan<byte>.Empty, 8, out var actual));
+            Assert.Null(Iso78164Padding.Unpad([], 8));
+            Assert.False(Iso78164Padding.Unpad([], 8, out var actual));
             Assert.True(actual.IsEmpty);
         }
     }

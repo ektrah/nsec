@@ -51,7 +51,7 @@ namespace NSec.Tests.Formatting
         public static void BitStringInvalid(byte[] value)
         {
             var reader = new Asn1Reader(value);
-            Assert.Equal(Array.Empty<byte>(), reader.BitString().ToArray());
+            Assert.Equal([], reader.BitString().ToArray());
             Assert.False(reader.Success);
             Assert.False(reader.SuccessComplete);
         }
@@ -134,7 +134,7 @@ namespace NSec.Tests.Formatting
         public static void LengthInvalid(byte[] value)
         {
             var reader = new Asn1Reader(value);
-            Assert.Equal(Array.Empty<byte>(), reader.OctetString().ToArray());
+            Assert.Equal([], reader.OctetString().ToArray());
             Assert.False(reader.Success);
             Assert.False(reader.SuccessComplete);
         }
@@ -189,7 +189,7 @@ namespace NSec.Tests.Formatting
         public static void OctetStringInvalid(byte[] value)
         {
             var reader = new Asn1Reader(value);
-            Assert.Equal(Array.Empty<byte>(), reader.OctetString().ToArray());
+            Assert.Equal([], reader.OctetString().ToArray());
             Assert.False(reader.Success);
             Assert.False(reader.SuccessComplete);
         }
@@ -303,7 +303,7 @@ namespace NSec.Tests.Formatting
             var reader = new Asn1Reader(value);
             reader.BeginSequence();
             Assert.True(reader.Success);
-            Assert.Equal(Array.Empty<byte>(), reader.OctetString().ToArray());
+            Assert.Equal([], reader.OctetString().ToArray());
             Assert.False(reader.Success);
             reader.End();
             Assert.False(reader.Success);

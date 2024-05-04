@@ -35,7 +35,7 @@ namespace NSec.Tests.Algorithms
             var a = HashAlgorithm.Sha512;
 
             var expected = s_hashOfEmpty.DecodeHex();
-            var actual = a.Hash(ReadOnlySpan<byte>.Empty);
+            var actual = a.Hash([]);
 
             Assert.Equal(a.HashSize, actual.Length);
             Assert.Equal(expected, actual);
@@ -53,7 +53,7 @@ namespace NSec.Tests.Algorithms
             var expected = s_hashOfEmpty.DecodeHex();
             var actual = new byte[expected.Length];
 
-            a.Hash(ReadOnlySpan<byte>.Empty, actual);
+            a.Hash([], actual);
             Assert.Equal(expected, actual);
         }
 

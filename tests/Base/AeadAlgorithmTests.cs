@@ -29,7 +29,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AeadAlgorithms))]
         public static void EncryptWithNullKey(AeadAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Encrypt(null!, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Encrypt(null!, Utilities.RandomBytes[..a.NonceSize], [], []));
         }
 
         [Theory]
@@ -38,7 +38,7 @@ namespace NSec.Tests.Base
         {
             var k = new Key(a);
             k.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => a.Encrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ObjectDisposedException>(() => a.Encrypt(k, Utilities.RandomBytes[..a.NonceSize], [], []));
         }
 
         [Theory]
@@ -47,7 +47,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(SignatureAlgorithm.Ed25519);
 
-            Assert.Throws<ArgumentException>("key", () => a.Encrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentException>("key", () => a.Encrypt(k, Utilities.RandomBytes[..a.NonceSize], [], []));
         }
 
         [Theory]
@@ -56,7 +56,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.Throws<ArgumentException>("nonce", () => a.Encrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentException>("nonce", () => a.Encrypt(k, Utilities.RandomBytes[..(a.NonceSize - 1)], [], []));
         }
 
         [Theory]
@@ -65,7 +65,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.Throws<ArgumentException>("nonce", () => a.Encrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentException>("nonce", () => a.Encrypt(k, Utilities.RandomBytes[..(a.NonceSize + 1)], [], []));
         }
 
         [Theory]
@@ -74,7 +74,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            var b = a.Encrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty);
+            var b = a.Encrypt(k, Utilities.RandomBytes[..a.NonceSize], [], []);
             Assert.NotNull(b);
             Assert.Equal(a.TagSize, b.Length);
         }
@@ -87,7 +87,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AeadAlgorithms))]
         public static void EncryptWithSpanWithNullKey(AeadAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Encrypt(null!, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Encrypt(null!, Utilities.RandomBytes[..a.NonceSize], [], [], []));
         }
 
         [Theory]
@@ -96,7 +96,7 @@ namespace NSec.Tests.Base
         {
             var k = new Key(a);
             k.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => a.Encrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[a.TagSize]));
+            Assert.Throws<ObjectDisposedException>(() => a.Encrypt(k, Utilities.RandomBytes[..a.NonceSize], [], [], new byte[a.TagSize]));
         }
 
         [Theory]
@@ -105,7 +105,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(SignatureAlgorithm.Ed25519);
 
-            Assert.Throws<ArgumentException>("key", () => a.Encrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("key", () => a.Encrypt(k, Utilities.RandomBytes[..a.NonceSize], [], [], []));
         }
 
         [Theory]
@@ -114,7 +114,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.Throws<ArgumentException>("nonce", () => a.Encrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("nonce", () => a.Encrypt(k, Utilities.RandomBytes[..(a.NonceSize - 1)], [], [], []));
         }
 
         [Theory]
@@ -123,7 +123,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.Throws<ArgumentException>("nonce", () => a.Encrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("nonce", () => a.Encrypt(k, Utilities.RandomBytes[..(a.NonceSize + 1)], [], [], []));
         }
 
         [Theory]
@@ -132,7 +132,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.Throws<ArgumentException>("ciphertext", () => a.Encrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[a.TagSize - 1]));
+            Assert.Throws<ArgumentException>("ciphertext", () => a.Encrypt(k, Utilities.RandomBytes[..a.NonceSize], [], [], new byte[a.TagSize - 1]));
         }
 
         [Theory]
@@ -141,7 +141,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.Throws<ArgumentException>("ciphertext", () => a.Encrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[a.TagSize + 1]));
+            Assert.Throws<ArgumentException>("ciphertext", () => a.Encrypt(k, Utilities.RandomBytes[..a.NonceSize], [], [], new byte[a.TagSize + 1]));
         }
 
         [Theory]
@@ -149,8 +149,8 @@ namespace NSec.Tests.Base
         public static void EncryptWithNonceOverlapping(AeadAlgorithm a)
         {
             using var k = new Key(a);
-            var ad = Utilities.RandomBytes.Slice(0, 100);
-            var b = Utilities.RandomBytes.Slice(0, L);
+            var ad = Utilities.RandomBytes[..100];
+            var b = Utilities.RandomBytes[..L];
 
             var expected = new byte[b.Length + a.TagSize];
             var actual = new byte[b.Length + a.TagSize];
@@ -167,8 +167,8 @@ namespace NSec.Tests.Base
         public static void EncryptWithAdOverlapping(AeadAlgorithm a)
         {
             using var k = new Key(a);
-            var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
-            var b = Utilities.RandomBytes.Slice(0, L);
+            var n = Utilities.RandomBytes[..a.NonceSize];
+            var b = Utilities.RandomBytes[..L];
 
             var expected = new byte[b.Length + a.TagSize];
             var actual = new byte[b.Length + a.TagSize];
@@ -185,9 +185,9 @@ namespace NSec.Tests.Base
         public static void EncryptWithPlaintextOverlapping(AeadAlgorithm a)
         {
             using var k = new Key(a);
-            var n = Utilities.RandomBytes.Slice(0, a.NonceSize).ToArray();
-            var ad = Utilities.RandomBytes.Slice(0, 100).ToArray();
-            var b = Utilities.RandomBytes.Slice(200, 200).ToArray();
+            var n = Utilities.RandomBytes[..a.NonceSize].ToArray();
+            var ad = Utilities.RandomBytes[..100].ToArray();
+            var b = Utilities.RandomBytes[200..400].ToArray();
 
             Assert.Throws<ArgumentException>("ciphertext", () => a.Encrypt(k, n, ad, b.AsSpan(10, 100), b.AsSpan(60, 100 + a.TagSize)));
             Assert.Throws<ArgumentException>("ciphertext", () => a.Encrypt(k, n, ad, b.AsSpan(60, 100), b.AsSpan(10, 100 + a.TagSize)));
@@ -198,13 +198,13 @@ namespace NSec.Tests.Base
         public static void EncryptWithSpanOutOfPlace(AeadAlgorithm a)
         {
             using var k = new Key(a);
-            var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
-            var ad = Utilities.RandomBytes.Slice(0, 100);
+            var n = Utilities.RandomBytes[..a.NonceSize];
+            var ad = Utilities.RandomBytes[..100];
 
             var expected = new byte[L + a.TagSize];
             var actual = new byte[L + a.TagSize];
 
-            var plaintext = Utilities.RandomBytes.Slice(0, L);
+            var plaintext = Utilities.RandomBytes[..L];
 
             a.Encrypt(k, n, ad, plaintext, expected);
             a.Encrypt(k, n, ad, plaintext, actual);
@@ -216,12 +216,12 @@ namespace NSec.Tests.Base
         public static void EncryptWithSpanInPlace(AeadAlgorithm a)
         {
             using var k = new Key(a);
-            var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
-            var ad = Utilities.RandomBytes.Slice(0, 100);
+            var n = Utilities.RandomBytes[..a.NonceSize];
+            var ad = Utilities.RandomBytes[..100];
 
             var expected = new byte[L + a.TagSize];
             var actual = new byte[L + a.TagSize];
-            Utilities.RandomBytes.Slice(0, L).CopyTo(actual);
+            Utilities.RandomBytes[..L].CopyTo(actual);
 
             a.Encrypt(k, n, ad, actual.AsSpan(0, L), expected);
             a.Encrypt(k, n, ad, actual.AsSpan(0, L), actual);
@@ -237,7 +237,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AeadAlgorithms))]
         public static void DecryptWithNullKey(AeadAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Decrypt(null!, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Decrypt(null!, Utilities.RandomBytes[..a.NonceSize], [], []));
         }
 
         [Theory]
@@ -246,7 +246,7 @@ namespace NSec.Tests.Base
         {
             var k = new Key(a);
             k.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize]));
+            Assert.Throws<ObjectDisposedException>(() => a.Decrypt(k, Utilities.RandomBytes[..a.NonceSize], [], new byte[a.TagSize]));
         }
 
         [Theory]
@@ -255,7 +255,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(SignatureAlgorithm.Ed25519);
 
-            Assert.Throws<ArgumentException>("key", () => a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentException>("key", () => a.Decrypt(k, Utilities.RandomBytes[..a.NonceSize], [], []));
         }
 
         [Theory]
@@ -264,7 +264,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.Null(a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Null(a.Decrypt(k, Utilities.RandomBytes[..(a.NonceSize - 1)], [], []));
         }
 
         [Theory]
@@ -273,7 +273,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.Null(a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Null(a.Decrypt(k, Utilities.RandomBytes[..(a.NonceSize + 1)], [], []));
         }
 
         [Theory]
@@ -282,7 +282,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.Null(a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize - 1]));
+            Assert.Null(a.Decrypt(k, Utilities.RandomBytes[..a.NonceSize], [], new byte[a.TagSize - 1]));
         }
 
         [Theory]
@@ -290,10 +290,10 @@ namespace NSec.Tests.Base
         public static void DecryptEmptySuccess(AeadAlgorithm a)
         {
             using var k = new Key(a);
-            var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
+            var n = Utilities.RandomBytes[..a.NonceSize];
             var ad = ReadOnlySpan<byte>.Empty;
 
-            var ct = a.Encrypt(k, n, ad, ReadOnlySpan<byte>.Empty);
+            var ct = a.Encrypt(k, n, ad, []);
             Assert.NotNull(ct);
             Assert.Equal(a.TagSize, ct.Length);
 
@@ -307,10 +307,10 @@ namespace NSec.Tests.Base
         public static void DecryptSuccess(AeadAlgorithm a)
         {
             using var k = new Key(a);
-            var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
-            var ad = Utilities.RandomBytes.Slice(0, 100);
+            var n = Utilities.RandomBytes[..a.NonceSize];
+            var ad = Utilities.RandomBytes[..100];
 
-            var expected = Utilities.RandomBytes.Slice(0, L).ToArray();
+            var expected = Utilities.RandomBytes[..L].ToArray();
 
             var ct = a.Encrypt(k, n, ad, expected);
             Assert.NotNull(ct);
@@ -328,7 +328,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(AeadAlgorithms))]
         public static void DecryptWithSpanWithNullKey(AeadAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Decrypt(null!, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Decrypt(null!, Utilities.RandomBytes[..a.NonceSize], [], [], []));
         }
 
         [Theory]
@@ -337,7 +337,7 @@ namespace NSec.Tests.Base
         {
             var k = new Key(a);
             k.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize], Span<byte>.Empty));
+            Assert.Throws<ObjectDisposedException>(() => a.Decrypt(k, Utilities.RandomBytes[..a.NonceSize], [], new byte[a.TagSize], []));
         }
 
         [Theory]
@@ -346,7 +346,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(SignatureAlgorithm.Ed25519);
 
-            Assert.Throws<ArgumentException>("key", () => a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("key", () => a.Decrypt(k, Utilities.RandomBytes[..a.NonceSize], [], [], []));
         }
 
         [Theory]
@@ -355,7 +355,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.False(a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize - 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.False(a.Decrypt(k, Utilities.RandomBytes[..(a.NonceSize - 1)], [], [], []));
         }
 
         [Theory]
@@ -364,7 +364,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.False(a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize + 1), ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.False(a.Decrypt(k, Utilities.RandomBytes[..(a.NonceSize + 1)], [], [], []));
         }
 
         [Theory]
@@ -373,7 +373,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.False(a.Decrypt(k, Utilities.RandomBytes.Slice(0, a.NonceSize), ReadOnlySpan<byte>.Empty, new byte[a.TagSize - 1], Span<byte>.Empty));
+            Assert.False(a.Decrypt(k, Utilities.RandomBytes[..a.NonceSize], [], new byte[a.TagSize - 1], []));
         }
 
         [Theory]
@@ -381,13 +381,13 @@ namespace NSec.Tests.Base
         public static void DecryptWithSpanTooLarge(AeadAlgorithm a)
         {
             using var k = new Key(a);
-            var n = Utilities.RandomBytes.Slice(0, a.NonceSize).ToArray();
+            var n = Utilities.RandomBytes[..a.NonceSize].ToArray();
 
-            var ct = a.Encrypt(k, n, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty);
+            var ct = a.Encrypt(k, n, [], []);
             Assert.NotNull(ct);
             Assert.Equal(a.TagSize, ct.Length);
 
-            Assert.Throws<ArgumentException>("plaintext", () => a.Decrypt(k, n, ReadOnlySpan<byte>.Empty, ct, new byte[1]));
+            Assert.Throws<ArgumentException>("plaintext", () => a.Decrypt(k, n, [], ct, new byte[1]));
         }
 
         [Theory]
@@ -395,8 +395,8 @@ namespace NSec.Tests.Base
         public static void DecryptWithAdOverlappingSuccess(AeadAlgorithm a)
         {
             using var k = new Key(a);
-            var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
-            var b = Utilities.RandomBytes.Slice(0, L);
+            var n = Utilities.RandomBytes[..a.NonceSize];
+            var b = Utilities.RandomBytes[..L];
 
             var expected = b.ToArray();
             var actual = Utilities.RandomBytes.Slice(200, L).ToArray();
@@ -412,9 +412,9 @@ namespace NSec.Tests.Base
         public static void DecryptWithCiphertextOverlapping(AeadAlgorithm a)
         {
             using var k = new Key(a);
-            var n = Utilities.RandomBytes.Slice(0, a.NonceSize).ToArray();
-            var ad = Utilities.RandomBytes.Slice(0, 100).ToArray();
-            var b = Utilities.RandomBytes.Slice(200, 200).ToArray();
+            var n = Utilities.RandomBytes[..a.NonceSize].ToArray();
+            var ad = Utilities.RandomBytes[..100].ToArray();
+            var b = Utilities.RandomBytes[200..400].ToArray();
 
             Assert.Throws<ArgumentException>("plaintext", () => a.Decrypt(k, n, ad, b.AsSpan(10, 100 + a.TagSize), b.AsSpan(60, 100)));
             Assert.Throws<ArgumentException>("plaintext", () => a.Decrypt(k, n, ad, b.AsSpan(60, 100 + a.TagSize), b.AsSpan(10, 100)));
@@ -425,10 +425,10 @@ namespace NSec.Tests.Base
         public static void DecryptWithSpanSuccess(AeadAlgorithm a)
         {
             using var k = new Key(a);
-            var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
-            var ad = Utilities.RandomBytes.Slice(0, 100);
+            var n = Utilities.RandomBytes[..a.NonceSize];
+            var ad = Utilities.RandomBytes[..100];
 
-            var expected = Utilities.RandomBytes.Slice(0, L).ToArray();
+            var expected = Utilities.RandomBytes[..L].ToArray();
             var actual = new byte[L];
 
             var ciphertext = a.Encrypt(k, n, ad, expected);
@@ -442,14 +442,14 @@ namespace NSec.Tests.Base
         public static void DecryptWithSpanInPlaceSuccess(AeadAlgorithm a)
         {
             using var k = new Key(a);
-            var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
-            var ad = Utilities.RandomBytes.Slice(0, 100);
+            var n = Utilities.RandomBytes[..a.NonceSize];
+            var ad = Utilities.RandomBytes[..100];
 
             var actual = new byte[L + a.TagSize];
             var expected = new byte[L + a.TagSize];
 
-            a.Encrypt(k, n, ad, Utilities.RandomBytes.Slice(0, L), actual);
-            a.Encrypt(k, n, ad, Utilities.RandomBytes.Slice(0, L), expected);
+            a.Encrypt(k, n, ad, Utilities.RandomBytes[..L], actual);
+            a.Encrypt(k, n, ad, Utilities.RandomBytes[..L], expected);
 
             Assert.True(a.Decrypt(k, n, ad, actual, expected.AsSpan(0, L)));
             Assert.True(a.Decrypt(k, n, ad, actual, actual.AsSpan(0, L)));
@@ -461,10 +461,10 @@ namespace NSec.Tests.Base
         public static void DecryptFailClearsPlaintext(AeadAlgorithm a)
         {
             using var k = new Key(a);
-            var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
-            var ad = Utilities.RandomBytes.Slice(0, 100);
+            var n = Utilities.RandomBytes[..a.NonceSize];
+            var ad = Utilities.RandomBytes[..100];
 
-            var actual = Utilities.RandomBytes.Slice(0, L).ToArray();
+            var actual = Utilities.RandomBytes[..L].ToArray();
 
             var ciphertext = new byte[actual.Length + a.TagSize];
 

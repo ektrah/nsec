@@ -14,7 +14,7 @@ namespace NSec.Tests.Formatting
         public static void PkixPrivateKey()
         {
             var a = SignatureAlgorithm.Ed25519;
-            var b = Utilities.RandomBytes.Slice(0, a.PrivateKeySize);
+            var b = Utilities.RandomBytes[..a.PrivateKeySize];
 
             using var k = Key.Import(a, b, KeyBlobFormat.RawPrivateKey, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport });
             var blob = k.Export(KeyBlobFormat.PkixPrivateKey);
@@ -36,7 +36,7 @@ namespace NSec.Tests.Formatting
         public static void PkixPrivateKeyText()
         {
             var a = SignatureAlgorithm.Ed25519;
-            var b = Utilities.RandomBytes.Slice(0, a.PrivateKeySize);
+            var b = Utilities.RandomBytes[..a.PrivateKeySize];
 
             using var k = Key.Import(a, b, KeyBlobFormat.RawPrivateKey, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport });
             var expected = Encoding.UTF8.GetBytes(
@@ -53,7 +53,7 @@ namespace NSec.Tests.Formatting
         public static void PkixPublicKey()
         {
             var a = SignatureAlgorithm.Ed25519;
-            var b = Utilities.RandomBytes.Slice(0, a.PrivateKeySize);
+            var b = Utilities.RandomBytes[..a.PrivateKeySize];
 
             using var k = Key.Import(a, b, KeyBlobFormat.RawPrivateKey);
             var publicKeyBytes = k.Export(KeyBlobFormat.RawPublicKey);
@@ -73,7 +73,7 @@ namespace NSec.Tests.Formatting
         public static void PkixPublicKeyText()
         {
             var a = SignatureAlgorithm.Ed25519;
-            var b = Utilities.RandomBytes.Slice(0, a.PrivateKeySize);
+            var b = Utilities.RandomBytes[..a.PrivateKeySize];
 
             using var k = Key.Import(a, b, KeyBlobFormat.RawPrivateKey);
             var expected = Encoding.UTF8.GetBytes(

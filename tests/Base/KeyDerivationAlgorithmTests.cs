@@ -29,7 +29,7 @@ namespace NSec.Tests.Base
         {
             var count = 1000;
 
-            var b = a.DeriveBytes(ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, count);
+            var b = a.DeriveBytes([], [], [], count);
 
             Assert.NotNull(b);
             Assert.Equal(count, b.Length);
@@ -44,7 +44,7 @@ namespace NSec.Tests.Base
                 return;
             }
 
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(Utilities.RandomBytes[..100], Utilities.RandomBytes[..(a.MinSaltSize - 1)], ReadOnlySpan<byte>.Empty, 0));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(Utilities.RandomBytes[..100], Utilities.RandomBytes[..(a.MinSaltSize - 1)], [], 0));
         }
 
         [Theory]
@@ -56,14 +56,14 @@ namespace NSec.Tests.Base
                 return;
             }
 
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(Utilities.RandomBytes[..100], Utilities.RandomBytes[..(a.MaxSaltSize + 1)], ReadOnlySpan<byte>.Empty, 0));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(Utilities.RandomBytes[..100], Utilities.RandomBytes[..(a.MaxSaltSize + 1)], [], 0));
         }
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveBytesSpanWithNegativeCount(KeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentOutOfRangeException>("count", () => a.DeriveBytes(Utilities.RandomBytes[..100], ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, -1));
+            Assert.Throws<ArgumentOutOfRangeException>("count", () => a.DeriveBytes(Utilities.RandomBytes[..100], [], [], -1));
         }
 
         [Theory]
@@ -75,14 +75,14 @@ namespace NSec.Tests.Base
                 return;
             }
 
-            Assert.Throws<ArgumentOutOfRangeException>("count", () => a.DeriveBytes(Utilities.RandomBytes[..100], ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, a.MaxCount + 1));
+            Assert.Throws<ArgumentOutOfRangeException>("count", () => a.DeriveBytes(Utilities.RandomBytes[..100], [], [], a.MaxCount + 1));
         }
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveBytesSpanWithZeroCount(KeyDerivationAlgorithm a)
         {
-            var b = a.DeriveBytes(Utilities.RandomBytes[..100], ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, 0);
+            var b = a.DeriveBytes(Utilities.RandomBytes[..100], [], [], 0);
 
             Assert.NotNull(b);
             Assert.Empty(b);
@@ -94,7 +94,7 @@ namespace NSec.Tests.Base
         {
             var count = Math.Min(a.MaxCount, 500173);
 
-            var b = a.DeriveBytes(Utilities.RandomBytes[..100], ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, count);
+            var b = a.DeriveBytes(Utilities.RandomBytes[..100], [], [], count);
 
             Assert.NotNull(b);
             Assert.Equal(count, b.Length);
@@ -110,7 +110,7 @@ namespace NSec.Tests.Base
         {
             var count = 1000;
 
-            a.DeriveBytes(ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[count]);
+            a.DeriveBytes([], [], [], new byte[count]);
         }
 
         [Theory]
@@ -122,7 +122,7 @@ namespace NSec.Tests.Base
                 return;
             }
 
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(Utilities.RandomBytes[..100], Utilities.RandomBytes[..(a.MinSaltSize - 1)], ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(Utilities.RandomBytes[..100], Utilities.RandomBytes[..(a.MinSaltSize - 1)], [], []));
         }
 
         [Theory]
@@ -134,7 +134,7 @@ namespace NSec.Tests.Base
                 return;
             }
 
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(Utilities.RandomBytes[..100], Utilities.RandomBytes[..(a.MaxSaltSize + 1)], ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(Utilities.RandomBytes[..100], Utilities.RandomBytes[..(a.MaxSaltSize + 1)], [], []));
         }
 
         [Theory]
@@ -148,8 +148,8 @@ namespace NSec.Tests.Base
 
             var b = new byte[200];
 
-            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(Utilities.RandomBytes[..100], b.AsSpan(10, 100), ReadOnlySpan<byte>.Empty, b.AsSpan(60, 100)));
-            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(Utilities.RandomBytes[..100], b.AsSpan(60, 100), ReadOnlySpan<byte>.Empty, b.AsSpan(10, 100)));
+            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(Utilities.RandomBytes[..100], b.AsSpan(10, 100), [], b.AsSpan(60, 100)));
+            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(Utilities.RandomBytes[..100], b.AsSpan(60, 100), [], b.AsSpan(10, 100)));
         }
 
         [Theory]
@@ -158,8 +158,8 @@ namespace NSec.Tests.Base
         {
             var b = new byte[200];
 
-            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(Utilities.RandomBytes[..100], ReadOnlySpan<byte>.Empty, b.AsSpan(10, 100), b.AsSpan(60, 100)));
-            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(Utilities.RandomBytes[..100], ReadOnlySpan<byte>.Empty, b.AsSpan(60, 100), b.AsSpan(10, 100)));
+            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(Utilities.RandomBytes[..100], [], b.AsSpan(10, 100), b.AsSpan(60, 100)));
+            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(Utilities.RandomBytes[..100], [], b.AsSpan(60, 100), b.AsSpan(10, 100)));
         }
 
         [Theory]
@@ -171,14 +171,14 @@ namespace NSec.Tests.Base
                 return;
             }
 
-            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(Utilities.RandomBytes[..100], ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[a.MaxCount + 1]));
+            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(Utilities.RandomBytes[..100], [], [], new byte[a.MaxCount + 1]));
         }
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveBytesSpanWithEmptySpan(KeyDerivationAlgorithm a)
         {
-            a.DeriveBytes(Utilities.RandomBytes[..100], ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty);
+            a.DeriveBytes(Utilities.RandomBytes[..100], [], [], []);
         }
 
         [Theory]
@@ -187,7 +187,7 @@ namespace NSec.Tests.Base
         {
             var count = Math.Min(a.MaxCount, 500173);
 
-            a.DeriveBytes(Utilities.RandomBytes[..100], ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[count]);
+            a.DeriveBytes(Utilities.RandomBytes[..100], [], [], new byte[count]);
         }
 
         #endregion
@@ -200,7 +200,7 @@ namespace NSec.Tests.Base
         {
             var y = AeadAlgorithm.ChaCha20Poly1305;
 
-            using var i = a.DeriveKey(ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, y);
+            using var i = a.DeriveKey([], [], [], y);
             Assert.NotNull(i);
             Assert.Same(y, i.Algorithm);
         }
@@ -214,7 +214,7 @@ namespace NSec.Tests.Base
                 return;
             }
 
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(Utilities.RandomBytes[..100], Utilities.RandomBytes[0..(a.MinSaltSize - 1)], ReadOnlySpan<byte>.Empty, null!));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(Utilities.RandomBytes[..100], Utilities.RandomBytes[0..(a.MinSaltSize - 1)], [], null!));
         }
 
         [Theory]
@@ -226,14 +226,14 @@ namespace NSec.Tests.Base
                 return;
             }
 
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(Utilities.RandomBytes[..100], Utilities.RandomBytes[0..(a.MaxSaltSize + 1)], ReadOnlySpan<byte>.Empty, null!));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(Utilities.RandomBytes[..100], Utilities.RandomBytes[0..(a.MaxSaltSize + 1)], [], null!));
         }
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveKeySpanWithNullAlgorithm(KeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("algorithm", () => a.DeriveKey(Utilities.RandomBytes[..100], ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, null!));
+            Assert.Throws<ArgumentNullException>("algorithm", () => a.DeriveKey(Utilities.RandomBytes[..100], [], [], null!));
         }
 
         [Theory]
@@ -242,7 +242,7 @@ namespace NSec.Tests.Base
         {
             var y = AeadAlgorithm.ChaCha20Poly1305;
 
-            using var i = a.DeriveKey(Utilities.RandomBytes[..100], ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, y);
+            using var i = a.DeriveKey(Utilities.RandomBytes[..100], [], [], y);
             Assert.NotNull(i);
             Assert.Same(y, i.Algorithm);
         }
@@ -255,7 +255,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveBytesWithNullSecret(KeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.DeriveBytes((SharedSecret)null!, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, 0));
+            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.DeriveBytes((SharedSecret)null!, [], [], 0));
         }
 
         [Theory]
@@ -264,7 +264,7 @@ namespace NSec.Tests.Base
         {
             var s = SharedSecret.Import(Utilities.RandomBytes[..32], SharedSecretBlobFormat.RawSharedSecret);
             s.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, 200));
+            Assert.Throws<ObjectDisposedException>(() => a.DeriveBytes(s, [], [], 200));
         }
 
         [Theory]
@@ -281,7 +281,7 @@ namespace NSec.Tests.Base
             using var k = new Key(x);
             using var s = x.Agree(k, k.PublicKey)!;
 
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s, Utilities.RandomBytes[..(a.MinSaltSize - 1)], ReadOnlySpan<byte>.Empty, 0));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s, Utilities.RandomBytes[..(a.MinSaltSize - 1)], [], 0));
         }
 
         [Theory]
@@ -298,7 +298,7 @@ namespace NSec.Tests.Base
             using var k = new Key(x);
             using var s = x.Agree(k, k.PublicKey)!;
 
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s, Utilities.RandomBytes[..(a.MaxSaltSize + 1)], ReadOnlySpan<byte>.Empty, 0));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s, Utilities.RandomBytes[..(a.MaxSaltSize + 1)], [], 0));
         }
 
         [Theory]
@@ -310,7 +310,7 @@ namespace NSec.Tests.Base
             using var k = new Key(x);
             using var s = x.Agree(k, k.PublicKey)!;
 
-            Assert.Throws<ArgumentOutOfRangeException>("count", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, -1));
+            Assert.Throws<ArgumentOutOfRangeException>("count", () => a.DeriveBytes(s, [], [], -1));
         }
 
         [Theory]
@@ -327,7 +327,7 @@ namespace NSec.Tests.Base
             using var k = new Key(x);
             using var s = x.Agree(k, k.PublicKey)!;
 
-            Assert.Throws<ArgumentOutOfRangeException>("count", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, a.MaxCount + 1));
+            Assert.Throws<ArgumentOutOfRangeException>("count", () => a.DeriveBytes(s, [], [], a.MaxCount + 1));
         }
 
         [Theory]
@@ -339,7 +339,7 @@ namespace NSec.Tests.Base
             using var k = new Key(x);
             using var s = x.Agree(k, k.PublicKey)!;
 
-            var b = a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, 0);
+            var b = a.DeriveBytes(s, [], [], 0);
 
             Assert.NotNull(b);
             Assert.Empty(b);
@@ -355,7 +355,7 @@ namespace NSec.Tests.Base
             using var s = x.Agree(k, k.PublicKey)!;
             var count = Math.Min(a.MaxCount, 500173);
 
-            var b = a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, count);
+            var b = a.DeriveBytes(s, [], [], count);
 
             Assert.NotNull(b);
             Assert.Equal(count, b.Length);
@@ -369,7 +369,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveBytesWithNullSecretAndSpan(KeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.DeriveBytes((SharedSecret)null!, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.DeriveBytes((SharedSecret)null!, [], [], []));
         }
 
         [Theory]
@@ -378,7 +378,7 @@ namespace NSec.Tests.Base
         {
             var s = SharedSecret.Import(Utilities.RandomBytes[..32], SharedSecretBlobFormat.RawSharedSecret);
             s.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[200]));
+            Assert.Throws<ObjectDisposedException>(() => a.DeriveBytes(s, [], [], new byte[200]));
         }
 
         [Theory]
@@ -395,7 +395,7 @@ namespace NSec.Tests.Base
             using var k = new Key(x);
             using var s = x.Agree(k, k.PublicKey)!;
 
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s, Utilities.RandomBytes[..(a.MinSaltSize - 1)], ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s, Utilities.RandomBytes[..(a.MinSaltSize - 1)], [], []));
         }
 
         [Theory]
@@ -412,7 +412,7 @@ namespace NSec.Tests.Base
             using var k = new Key(x);
             using var s = x.Agree(k, k.PublicKey)!;
 
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s, Utilities.RandomBytes[..(a.MaxSaltSize + 1)], ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveBytes(s, Utilities.RandomBytes[..(a.MaxSaltSize + 1)], [], []));
         }
 
         [Theory]
@@ -430,8 +430,8 @@ namespace NSec.Tests.Base
             using var s = x.Agree(k, k.PublicKey)!;
             var b = new byte[200];
 
-            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, b.AsSpan(10, 100), ReadOnlySpan<byte>.Empty, b.AsSpan(60, 100)));
-            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, b.AsSpan(60, 100), ReadOnlySpan<byte>.Empty, b.AsSpan(10, 100)));
+            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, b.AsSpan(10, 100), [], b.AsSpan(60, 100)));
+            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, b.AsSpan(60, 100), [], b.AsSpan(10, 100)));
         }
 
         [Theory]
@@ -444,8 +444,8 @@ namespace NSec.Tests.Base
             using var s = x.Agree(k, k.PublicKey)!;
             var b = new byte[200];
 
-            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, b.AsSpan(10, 100), b.AsSpan(60, 100)));
-            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, b.AsSpan(60, 100), b.AsSpan(10, 100)));
+            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, [], b.AsSpan(10, 100), b.AsSpan(60, 100)));
+            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, [], b.AsSpan(60, 100), b.AsSpan(10, 100)));
         }
 
         [Theory]
@@ -462,7 +462,7 @@ namespace NSec.Tests.Base
             using var k = new Key(x);
             using var s = x.Agree(k, k.PublicKey)!;
 
-            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[a.MaxCount + 1]));
+            Assert.Throws<ArgumentException>("bytes", () => a.DeriveBytes(s, [], [], new byte[a.MaxCount + 1]));
         }
 
         [Theory]
@@ -474,7 +474,7 @@ namespace NSec.Tests.Base
             using var k = new Key(x);
             using var s = x.Agree(k, k.PublicKey)!;
 
-            a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, Span<byte>.Empty);
+            a.DeriveBytes(s, [], [], []);
         }
 
         [Theory]
@@ -487,7 +487,7 @@ namespace NSec.Tests.Base
             using var s = x.Agree(k, k.PublicKey)!;
             var count = Math.Min(a.MaxCount, 500173);
 
-            a.DeriveBytes(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, new byte[count]);
+            a.DeriveBytes(s, [], [], new byte[count]);
         }
 
         #endregion
@@ -498,7 +498,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveKeyWithNullSecret(KeyDerivationAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.DeriveKey((SharedSecret)null!, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, null!));
+            Assert.Throws<ArgumentNullException>("sharedSecret", () => a.DeriveKey((SharedSecret)null!, [], [], null!));
         }
 
         [Theory]
@@ -507,7 +507,7 @@ namespace NSec.Tests.Base
         {
             var s = SharedSecret.Import(Utilities.RandomBytes[..32], SharedSecretBlobFormat.RawSharedSecret);
             s.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => a.DeriveKey(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, AeadAlgorithm.ChaCha20Poly1305));
+            Assert.Throws<ObjectDisposedException>(() => a.DeriveKey(s, [], [], AeadAlgorithm.ChaCha20Poly1305));
         }
 
         [Theory]
@@ -524,7 +524,7 @@ namespace NSec.Tests.Base
             using var k = new Key(x);
             using var s = x.Agree(k, k.PublicKey)!;
 
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(s, Utilities.RandomBytes[..(a.MinSaltSize - 1)], ReadOnlySpan<byte>.Empty, null!));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(s, Utilities.RandomBytes[..(a.MinSaltSize - 1)], [], null!));
         }
 
         [Theory]
@@ -541,7 +541,7 @@ namespace NSec.Tests.Base
             using var k = new Key(x);
             using var s = x.Agree(k, k.PublicKey)!;
 
-            Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(s, Utilities.RandomBytes[..(a.MaxSaltSize + 1)], ReadOnlySpan<byte>.Empty, null!));
+            Assert.Throws<ArgumentException>("salt", () => a.DeriveKey(s, Utilities.RandomBytes[..(a.MaxSaltSize + 1)], [], null!));
         }
 
         [Theory]
@@ -553,7 +553,7 @@ namespace NSec.Tests.Base
             using var k = new Key(x);
             using var s = x.Agree(k, k.PublicKey)!;
 
-            Assert.Throws<ArgumentNullException>("algorithm", () => a.DeriveKey(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, null!));
+            Assert.Throws<ArgumentNullException>("algorithm", () => a.DeriveKey(s, [], [], null!));
         }
 
         [Theory]
@@ -565,7 +565,7 @@ namespace NSec.Tests.Base
 
             using var k = new Key(x);
             using var s = x.Agree(k, k.PublicKey)!;
-            using var i = a.DeriveKey(s, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, y);
+            using var i = a.DeriveKey(s, [], [], y);
             Assert.NotNull(i);
             Assert.Same(y, i.Algorithm);
         }

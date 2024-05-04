@@ -27,7 +27,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(SignatureAlgorithms))]
         public static void SignWithNullKey(SignatureAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Sign(null!, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Sign(null!, []));
         }
 
         [Theory]
@@ -36,7 +36,7 @@ namespace NSec.Tests.Base
         {
             var k = new Key(a);
             k.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => a.Sign(k, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ObjectDisposedException>(() => a.Sign(k, []));
         }
 
         [Theory]
@@ -45,7 +45,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(KeyAgreementAlgorithm.X25519);
 
-            Assert.Throws<ArgumentException>("key", () => a.Sign(k, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentException>("key", () => a.Sign(k, []));
         }
 
         [Theory]
@@ -54,7 +54,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            var b = a.Sign(k, ReadOnlySpan<byte>.Empty);
+            var b = a.Sign(k, []);
 
             Assert.NotNull(b);
             Assert.Equal(a.SignatureSize, b.Length);
@@ -68,7 +68,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(SignatureAlgorithms))]
         public static void SignWithSpanWithNullKey(SignatureAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Sign(null!, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Sign(null!, [], []));
         }
 
         [Theory]
@@ -77,7 +77,7 @@ namespace NSec.Tests.Base
         {
             var k = new Key(a);
             k.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => a.Sign(k, ReadOnlySpan<byte>.Empty, new byte[a.SignatureSize]));
+            Assert.Throws<ObjectDisposedException>(() => a.Sign(k, [], new byte[a.SignatureSize]));
         }
 
         [Theory]
@@ -86,7 +86,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(KeyAgreementAlgorithm.X25519);
 
-            Assert.Throws<ArgumentException>("key", () => a.Sign(k, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("key", () => a.Sign(k, [], []));
         }
 
         [Theory]
@@ -95,7 +95,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.Throws<ArgumentException>("signature", () => a.Sign(k, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("signature", () => a.Sign(k, [], []));
         }
 
         [Theory]
@@ -104,7 +104,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            a.Sign(k, ReadOnlySpan<byte>.Empty, new byte[a.SignatureSize]);
+            a.Sign(k, [], new byte[a.SignatureSize]);
         }
 
         #endregion
@@ -115,7 +115,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(SignatureAlgorithms))]
         public static void VerifyWithNullKey(SignatureAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("publicKey", () => a.Verify(null!, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("publicKey", () => a.Verify(null!, [], []));
         }
 
         [Theory]
@@ -124,7 +124,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(KeyAgreementAlgorithm.X25519);
 
-            Assert.Throws<ArgumentException>("publicKey", () => a.Verify(k.PublicKey, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentException>("publicKey", () => a.Verify(k.PublicKey, [], []));
         }
 
         [Theory]
@@ -133,7 +133,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.False(a.Verify(k.PublicKey, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.False(a.Verify(k.PublicKey, [], []));
         }
 
         [Theory]
@@ -142,12 +142,12 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            var s = a.Sign(k, ReadOnlySpan<byte>.Empty);
+            var s = a.Sign(k, []);
 
             Assert.NotNull(s);
             Assert.Equal(a.SignatureSize, s.Length);
 
-            Assert.True(a.Verify(k.PublicKey, ReadOnlySpan<byte>.Empty, s));
+            Assert.True(a.Verify(k.PublicKey, [], s));
         }
 
         #endregion

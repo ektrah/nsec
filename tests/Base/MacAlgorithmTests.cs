@@ -26,7 +26,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(MacAlgorithms))]
         public static void ExportImportRaw(MacAlgorithm a)
         {
-            var b = Utilities.RandomBytes.Slice(0, a.KeySize);
+            var b = Utilities.RandomBytes[..a.KeySize];
 
             using var k = Key.Import(a, b, KeyBlobFormat.RawSymmetricKey, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving });
             Assert.Equal(KeyExportPolicies.AllowPlaintextArchiving, k.ExportPolicy);
@@ -41,7 +41,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(MacAlgorithms))]
         public static void ExportImportNSec(MacAlgorithm a)
         {
-            var b = Utilities.RandomBytes.Slice(0, a.KeySize);
+            var b = Utilities.RandomBytes[..a.KeySize];
 
             using var k1 = Key.Import(a, b, KeyBlobFormat.RawSymmetricKey, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving });
             Assert.Equal(KeyExportPolicies.AllowPlaintextArchiving, k1.ExportPolicy);
@@ -65,7 +65,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(MacAlgorithms))]
         public static void MacWithNullKey(MacAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Mac(null!, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Mac(null!, []));
         }
 
         [Theory]
@@ -74,7 +74,7 @@ namespace NSec.Tests.Base
         {
             var k = new Key(a);
             k.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => a.Mac(k, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ObjectDisposedException>(() => a.Mac(k, []));
         }
 
         [Theory]
@@ -83,7 +83,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(SignatureAlgorithm.Ed25519);
 
-            Assert.Throws<ArgumentException>("key", () => a.Mac(k, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentException>("key", () => a.Mac(k, []));
         }
 
         [Theory]
@@ -91,7 +91,7 @@ namespace NSec.Tests.Base
         public static void MacSuccess(MacAlgorithm a)
         {
             using var k = new Key(a);
-            var data = Utilities.RandomBytes.Slice(0, 100);
+            var data = Utilities.RandomBytes[..100];
 
             var expected = a.Mac(k, data);
             var actual = a.Mac(k, data);
@@ -109,7 +109,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(MacAlgorithms))]
         public static void MacWithSpanWithNullKey(MacAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Mac(null!, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Mac(null!, [], []));
         }
 
         [Theory]
@@ -118,7 +118,7 @@ namespace NSec.Tests.Base
         {
             var k = new Key(a);
             k.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize]));
+            Assert.Throws<ObjectDisposedException>(() => a.Mac(k, [], new byte[a.MacSize]));
         }
 
         [Theory]
@@ -127,7 +127,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(SignatureAlgorithm.Ed25519);
 
-            Assert.Throws<ArgumentException>("key", () => a.Mac(k, ReadOnlySpan<byte>.Empty, Span<byte>.Empty));
+            Assert.Throws<ArgumentException>("key", () => a.Mac(k, [], []));
         }
 
         [Theory]
@@ -136,7 +136,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.Throws<ArgumentException>("mac", () => a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize - 1]));
+            Assert.Throws<ArgumentException>("mac", () => a.Mac(k, [], new byte[a.MacSize - 1]));
         }
 
         [Theory]
@@ -145,7 +145,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.Throws<ArgumentException>("mac", () => a.Mac(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize + 1]));
+            Assert.Throws<ArgumentException>("mac", () => a.Mac(k, [], new byte[a.MacSize + 1]));
         }
 
         [Theory]
@@ -153,7 +153,7 @@ namespace NSec.Tests.Base
         public static void MacWithSpanSuccess(MacAlgorithm a)
         {
             using var k = new Key(a);
-            var data = Utilities.RandomBytes.Slice(0, 100);
+            var data = Utilities.RandomBytes[..100];
 
             var expected = new byte[a.MacSize];
             var actual = new byte[a.MacSize];
@@ -168,7 +168,7 @@ namespace NSec.Tests.Base
         public static void MacWithSpanOverlapping(MacAlgorithm a)
         {
             using var k = new Key(a);
-            var data = Utilities.RandomBytes.Slice(0, 100).ToArray();
+            var data = Utilities.RandomBytes[..100].ToArray();
 
             var expected = new byte[a.MacSize];
             var actual = data.AsSpan(0, a.MacSize);
@@ -187,7 +187,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(MacAlgorithms))]
         public static void VerifyWithNullKey(MacAlgorithm a)
         {
-            Assert.Throws<ArgumentNullException>("key", () => a.Verify(null!, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("key", () => a.Verify(null!, [], []));
         }
 
         [Theory]
@@ -196,7 +196,7 @@ namespace NSec.Tests.Base
         {
             var k = new Key(a);
             k.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => a.Verify(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize]));
+            Assert.Throws<ObjectDisposedException>(() => a.Verify(k, [], new byte[a.MacSize]));
         }
 
         [Theory]
@@ -205,7 +205,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(SignatureAlgorithm.Ed25519);
 
-            Assert.Throws<ArgumentException>("key", () => a.Verify(k, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<ArgumentException>("key", () => a.Verify(k, [], []));
         }
 
         [Theory]
@@ -214,7 +214,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.False(a.Verify(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize - 1]));
+            Assert.False(a.Verify(k, [], new byte[a.MacSize - 1]));
         }
 
         [Theory]
@@ -223,7 +223,7 @@ namespace NSec.Tests.Base
         {
             using var k = new Key(a);
 
-            Assert.False(a.Verify(k, ReadOnlySpan<byte>.Empty, new byte[a.MacSize + 1]));
+            Assert.False(a.Verify(k, [], new byte[a.MacSize + 1]));
         }
 
         [Theory]

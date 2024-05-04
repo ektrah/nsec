@@ -154,7 +154,7 @@ namespace NSec.Tests.Formatting
         [Fact]
         public static void TryDecodeNull()
         {
-            Assert.Throws<ArgumentNullException>("base16", () => Base16.TryDecode((string)null!, Span<byte>.Empty));
+            Assert.Throws<ArgumentNullException>("base16", () => Base16.TryDecode((string)null!, []));
         }
 
         [Fact]

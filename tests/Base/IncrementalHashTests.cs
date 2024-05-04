@@ -25,7 +25,7 @@ namespace NSec.Tests.Base
         {
             var state = default(IncrementalHash);
 
-            Assert.Throws<InvalidOperationException>(() => IncrementalHash.Update(ref state, Utilities.RandomBytes.Slice(0, 100)));
+            Assert.Throws<InvalidOperationException>(() => IncrementalHash.Update(ref state, Utilities.RandomBytes[..100]));
         }
 
         #endregion
@@ -52,15 +52,15 @@ namespace NSec.Tests.Base
 
             Assert.Same(a, state.Algorithm);
 
-            IncrementalHash.Update(ref state, Utilities.RandomBytes.Slice(0, 100));
-            IncrementalHash.Update(ref state, Utilities.RandomBytes.Slice(100, 100));
-            IncrementalHash.Update(ref state, Utilities.RandomBytes.Slice(200, 100));
+            IncrementalHash.Update(ref state, Utilities.RandomBytes[..100]);
+            IncrementalHash.Update(ref state, Utilities.RandomBytes[100..200]);
+            IncrementalHash.Update(ref state, Utilities.RandomBytes[200..300]);
 
             var actual = IncrementalHash.Finalize(ref state);
 
             Assert.Null(state.Algorithm);
 
-            var expected = a.Hash(Utilities.RandomBytes.Slice(0, 300));
+            var expected = a.Hash(Utilities.RandomBytes[..300]);
 
             Assert.Equal(expected, actual);
         }
@@ -74,7 +74,7 @@ namespace NSec.Tests.Base
         {
             var state = default(IncrementalHash);
 
-            Assert.Throws<InvalidOperationException>(() => IncrementalHash.Finalize(ref state, Span<byte>.Empty));
+            Assert.Throws<InvalidOperationException>(() => IncrementalHash.Finalize(ref state, []));
         }
 
         [Theory]
@@ -107,9 +107,9 @@ namespace NSec.Tests.Base
 
             Assert.Same(a, state.Algorithm);
 
-            IncrementalHash.Update(ref state, Utilities.RandomBytes.Slice(0, 100));
-            IncrementalHash.Update(ref state, Utilities.RandomBytes.Slice(100, 100));
-            IncrementalHash.Update(ref state, Utilities.RandomBytes.Slice(200, 100));
+            IncrementalHash.Update(ref state, Utilities.RandomBytes[..100]);
+            IncrementalHash.Update(ref state, Utilities.RandomBytes[100..200]);
+            IncrementalHash.Update(ref state, Utilities.RandomBytes[200..300]);
 
             var actual = new byte[a.HashSize];
 
@@ -117,7 +117,7 @@ namespace NSec.Tests.Base
 
             Assert.Null(state.Algorithm);
 
-            var expected = a.Hash(Utilities.RandomBytes.Slice(0, 300));
+            var expected = a.Hash(Utilities.RandomBytes[..300]);
 
             Assert.Equal(expected, actual);
         }
@@ -140,7 +140,7 @@ namespace NSec.Tests.Base
 
             Assert.Null(state.Algorithm);
 
-            var expected = a.Hash(ReadOnlySpan<byte>.Empty);
+            var expected = a.Hash([]);
 
             Assert.Equal(expected, actual);
         }
@@ -154,7 +154,7 @@ namespace NSec.Tests.Base
         {
             var state = default(IncrementalHash);
 
-            Assert.Throws<InvalidOperationException>(() => IncrementalHash.FinalizeAndVerify(ref state, ReadOnlySpan<byte>.Empty));
+            Assert.Throws<InvalidOperationException>(() => IncrementalHash.FinalizeAndVerify(ref state, []));
         }
 
         [Theory]
@@ -174,7 +174,7 @@ namespace NSec.Tests.Base
         {
             IncrementalHash.Initialize(a, out var state);
 
-            Assert.True(IncrementalHash.FinalizeAndVerify(ref state, a.Hash(ReadOnlySpan<byte>.Empty)));
+            Assert.True(IncrementalHash.FinalizeAndVerify(ref state, a.Hash([])));
 
             Assert.Null(state.Algorithm);
         }

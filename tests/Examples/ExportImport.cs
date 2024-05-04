@@ -44,7 +44,7 @@ namespace NSec.Tests.Examples
                 // re-import it
                 using var key = Key.Import(algorithm, blob, KeyBlobFormat.NSecPrivateKey);
 
-                var signature = algorithm.Sign(key, /*{*/Array.Empty<byte>()/*}*/);
+                var signature = algorithm.Sign(key, /*{*/[]/*}*/);
 
                 #endregion
             }

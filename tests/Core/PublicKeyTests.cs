@@ -14,28 +14,28 @@ namespace NSec.Tests.Core
         [Fact]
         public static void ImportWithNullAlgorithm()
         {
-            Assert.Throws<ArgumentNullException>("algorithm", () => PublicKey.Import(null!, ReadOnlySpan<byte>.Empty, 0));
+            Assert.Throws<ArgumentNullException>("algorithm", () => PublicKey.Import(null!, [], 0));
         }
 
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
         public static void ImportWithFormatMin(Algorithm a)
         {
-            Assert.Throws<ArgumentException>("format", () => PublicKey.Import(a, ReadOnlySpan<byte>.Empty, (KeyBlobFormat)int.MinValue));
+            Assert.Throws<ArgumentException>("format", () => PublicKey.Import(a, [], (KeyBlobFormat)int.MinValue));
         }
 
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
         public static void ImportWithFormatMax(Algorithm a)
         {
-            Assert.Throws<ArgumentException>("format", () => PublicKey.Import(a, ReadOnlySpan<byte>.Empty, (KeyBlobFormat)int.MaxValue));
+            Assert.Throws<ArgumentException>("format", () => PublicKey.Import(a, [], (KeyBlobFormat)int.MaxValue));
         }
 
         [Theory]
         [MemberData(nameof(PublicKeyBlobFormats))]
         public static void ImportEmpty(Algorithm a, KeyBlobFormat format)
         {
-            Assert.Throws<FormatException>(() => PublicKey.Import(a, ReadOnlySpan<byte>.Empty, format));
+            Assert.Throws<FormatException>(() => PublicKey.Import(a, [], format));
         }
 
         #endregion
@@ -45,28 +45,28 @@ namespace NSec.Tests.Core
         [Fact]
         public static void TryImportWithNullAlgorithm()
         {
-            Assert.Throws<ArgumentNullException>("algorithm", () => PublicKey.TryImport(null!, ReadOnlySpan<byte>.Empty, 0, out var pk));
+            Assert.Throws<ArgumentNullException>("algorithm", () => PublicKey.TryImport(null!, [], 0, out var pk));
         }
 
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
         public static void TryImportWithFormatMin(Algorithm a)
         {
-            Assert.Throws<ArgumentException>("format", () => PublicKey.TryImport(a, ReadOnlySpan<byte>.Empty, (KeyBlobFormat)int.MinValue, out var pk));
+            Assert.Throws<ArgumentException>("format", () => PublicKey.TryImport(a, [], (KeyBlobFormat)int.MinValue, out var pk));
         }
 
         [Theory]
         [MemberData(nameof(AsymmetricKeyAlgorithms))]
         public static void TryImportWithFormatMax(Algorithm a)
         {
-            Assert.Throws<ArgumentException>("format", () => PublicKey.TryImport(a, ReadOnlySpan<byte>.Empty, (KeyBlobFormat)int.MaxValue, out var pk));
+            Assert.Throws<ArgumentException>("format", () => PublicKey.TryImport(a, [], (KeyBlobFormat)int.MaxValue, out var pk));
         }
 
         [Theory]
         [MemberData(nameof(PublicKeyBlobFormats))]
         public static void TryImportEmpty(Algorithm a, KeyBlobFormat format)
         {
-            Assert.False(PublicKey.TryImport(a, ReadOnlySpan<byte>.Empty, format, out var pk));
+            Assert.False(PublicKey.TryImport(a, [], format, out var pk));
             Assert.Null(pk);
         }
 
@@ -181,7 +181,7 @@ namespace NSec.Tests.Core
         {
             using var k = new Key(a);
 
-            Assert.Throws<ArgumentException>("format", () => k.PublicKey.TryExport((KeyBlobFormat)int.MinValue, Span<byte>.Empty, out _));
+            Assert.Throws<ArgumentException>("format", () => k.PublicKey.TryExport((KeyBlobFormat)int.MinValue, [], out _));
         }
 
         [Theory]
@@ -190,7 +190,7 @@ namespace NSec.Tests.Core
         {
             using var k = new Key(a);
 
-            Assert.Throws<ArgumentException>("format", () => k.PublicKey.TryExport((KeyBlobFormat)int.MaxValue, Span<byte>.Empty, out _));
+            Assert.Throws<ArgumentException>("format", () => k.PublicKey.TryExport((KeyBlobFormat)int.MaxValue, [], out _));
         }
 
         [Theory]
@@ -199,7 +199,7 @@ namespace NSec.Tests.Core
         {
             using var k = new Key(a);
 
-            Assert.False(k.PublicKey.TryExport(format, Span<byte>.Empty, out _));
+            Assert.False(k.PublicKey.TryExport(format, [], out _));
         }
 
         [Theory]

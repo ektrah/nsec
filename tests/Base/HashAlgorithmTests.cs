@@ -25,7 +25,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(HashAlgorithms))]
         public static void HashSuccess(HashAlgorithm a)
         {
-            var data = Utilities.RandomBytes.Slice(0, 100);
+            var data = Utilities.RandomBytes[..100];
 
             var expected = a.Hash(data);
             var actual = a.Hash(data);
@@ -43,21 +43,21 @@ namespace NSec.Tests.Base
         [MemberData(nameof(HashAlgorithms))]
         public static void HashWithSpanTooSmall(HashAlgorithm a)
         {
-            Assert.Throws<ArgumentException>("hash", () => a.Hash(ReadOnlySpan<byte>.Empty, new byte[a.HashSize - 1]));
+            Assert.Throws<ArgumentException>("hash", () => a.Hash([], new byte[a.HashSize - 1]));
         }
 
         [Theory]
         [MemberData(nameof(HashAlgorithms))]
         public static void HashWithSpanTooLarge(HashAlgorithm a)
         {
-            Assert.Throws<ArgumentException>("hash", () => a.Hash(ReadOnlySpan<byte>.Empty, new byte[a.HashSize + 1]));
+            Assert.Throws<ArgumentException>("hash", () => a.Hash([], new byte[a.HashSize + 1]));
         }
 
         [Theory]
         [MemberData(nameof(HashAlgorithms))]
         public static void HashWithSpanSuccess(HashAlgorithm a)
         {
-            var data = Utilities.RandomBytes.Slice(0, 100);
+            var data = Utilities.RandomBytes[..100];
 
             var expected = new byte[a.HashSize];
             var actual = new byte[a.HashSize];
@@ -71,7 +71,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(HashAlgorithms))]
         public static void HashWithSpanOverlapping(HashAlgorithm a)
         {
-            var data = Utilities.RandomBytes.Slice(0, 100).ToArray();
+            var data = Utilities.RandomBytes[..100].ToArray();
 
             var expected = new byte[a.HashSize];
             var actual = data.AsSpan(0, a.HashSize);
@@ -89,14 +89,14 @@ namespace NSec.Tests.Base
         [MemberData(nameof(HashAlgorithms))]
         public static void VerifyWithSpanTooSmall(HashAlgorithm a)
         {
-            Assert.False(a.Verify(ReadOnlySpan<byte>.Empty, new byte[a.HashSize - 1]));
+            Assert.False(a.Verify([], new byte[a.HashSize - 1]));
         }
 
         [Theory]
         [MemberData(nameof(HashAlgorithms))]
         public static void VerifyWithSpanTooLarge(HashAlgorithm a)
         {
-            Assert.False(a.Verify(ReadOnlySpan<byte>.Empty, new byte[a.HashSize + 1]));
+            Assert.False(a.Verify([], new byte[a.HashSize + 1]));
         }
 
         [Theory]

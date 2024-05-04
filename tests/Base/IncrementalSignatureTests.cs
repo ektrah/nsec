@@ -51,15 +51,15 @@ namespace NSec.Tests.Base
 
             Assert.Same(a, state.Algorithm);
 
-            IncrementalSignature.Update(ref state, Utilities.RandomBytes.Slice(0, 100));
-            IncrementalSignature.Update(ref state, Utilities.RandomBytes.Slice(100, 100));
-            IncrementalSignature.Update(ref state, Utilities.RandomBytes.Slice(200, 100));
+            IncrementalSignature.Update(ref state, Utilities.RandomBytes[..100]);
+            IncrementalSignature.Update(ref state, Utilities.RandomBytes[100..200]);
+            IncrementalSignature.Update(ref state, Utilities.RandomBytes[200..300]);
 
             var actual = IncrementalSignature.Finalize(ref state);
 
             Assert.Null(state.Algorithm);
 
-            var expected = a.Sign(k, Utilities.RandomBytes.Slice(0, 300));
+            var expected = a.Sign(k, Utilities.RandomBytes[..300]);
 
             Assert.Equal(expected, actual);
         }
@@ -112,9 +112,9 @@ namespace NSec.Tests.Base
 
             Assert.Same(a, state.Algorithm);
 
-            IncrementalSignature.Update(ref state, Utilities.RandomBytes.Slice(0, 100));
-            IncrementalSignature.Update(ref state, Utilities.RandomBytes.Slice(100, 100));
-            IncrementalSignature.Update(ref state, Utilities.RandomBytes.Slice(200, 100));
+            IncrementalSignature.Update(ref state, Utilities.RandomBytes[..100]);
+            IncrementalSignature.Update(ref state, Utilities.RandomBytes[100..200]);
+            IncrementalSignature.Update(ref state, Utilities.RandomBytes[200..300]);
 
             var actual = new byte[a.SignatureSize];
 
@@ -122,7 +122,7 @@ namespace NSec.Tests.Base
 
             Assert.Null(state.Algorithm);
 
-            var expected = a.Sign(k, Utilities.RandomBytes.Slice(0, 300));
+            var expected = a.Sign(k, Utilities.RandomBytes[..300]);
 
             Assert.Equal(expected, actual);
         }
@@ -146,7 +146,7 @@ namespace NSec.Tests.Base
 
             Assert.Null(state.Algorithm);
 
-            var expected = a.Sign(k, ReadOnlySpan<byte>.Empty);
+            var expected = a.Sign(k, []);
 
             Assert.Equal(expected, actual);
         }

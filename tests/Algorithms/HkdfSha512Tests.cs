@@ -555,7 +555,7 @@ namespace NSec.Tests.Algorithms
             var a = KeyDerivationAlgorithm.HkdfSha512;
 
             var expected = s_prkForEmpty.DecodeHex();
-            var actual = a.Extract(ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty);
+            var actual = a.Extract([], []);
 
             Assert.Equal(expected, actual);
             Assert.Equal(a.PseudorandomKeySize, actual.Length);
@@ -573,7 +573,7 @@ namespace NSec.Tests.Algorithms
             var expected = s_prkForEmpty.DecodeHex();
             var actual = new byte[expected.Length];
 
-            a.Extract(ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, actual);
+            a.Extract([], [], actual);
 
             Assert.Equal(expected, actual);
         }
@@ -597,7 +597,7 @@ namespace NSec.Tests.Algorithms
             var a = KeyDerivationAlgorithm.HkdfSha512;
 
             var expected = s_outputForEmpty.DecodeHex().Substring(..count);
-            var actual = a.Expand(s_prkForEmpty.DecodeHex(), ReadOnlySpan<byte>.Empty, count);
+            var actual = a.Expand(s_prkForEmpty.DecodeHex(), [], count);
 
             Assert.NotNull(actual);
             Assert.Equal(expected, actual);
@@ -610,7 +610,7 @@ namespace NSec.Tests.Algorithms
             var a = KeyDerivationAlgorithm.HkdfSha512;
 
             var expected = s_outputForEmpty.DecodeHex();
-            var actual = a.Expand(s_prkForEmpty.DecodeHex(), ReadOnlySpan<byte>.Empty, a.MaxCount);
+            var actual = a.Expand(s_prkForEmpty.DecodeHex(), [], a.MaxCount);
 
             Assert.NotNull(actual);
             Assert.Equal(expected, actual);
@@ -622,7 +622,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = KeyDerivationAlgorithm.HkdfSha512;
 
-            var b = a.Expand((s_prkForEmpty + s_prkForEmpty).DecodeHex(), ReadOnlySpan<byte>.Empty, 256);
+            var b = a.Expand((s_prkForEmpty + s_prkForEmpty).DecodeHex(), [], 256);
 
             Assert.NotNull(b);
             Assert.Equal(256, b.Length);
@@ -649,7 +649,7 @@ namespace NSec.Tests.Algorithms
             var expected = s_outputForEmpty.DecodeHex().Substring(..count);
             var actual = new byte[count];
 
-            a.Expand(s_prkForEmpty.DecodeHex(), ReadOnlySpan<byte>.Empty, actual);
+            a.Expand(s_prkForEmpty.DecodeHex(), [], actual);
 
             Assert.Equal(expected, actual);
         }
@@ -662,7 +662,7 @@ namespace NSec.Tests.Algorithms
             var expected = s_outputForEmpty.DecodeHex();
             var actual = new byte[a.MaxCount];
 
-            a.Expand(s_prkForEmpty.DecodeHex(), ReadOnlySpan<byte>.Empty, actual);
+            a.Expand(s_prkForEmpty.DecodeHex(), [], actual);
 
             Assert.Equal(expected, actual);
         }
@@ -674,7 +674,7 @@ namespace NSec.Tests.Algorithms
 
             var b = new byte[256];
 
-            a.Expand((s_prkForEmpty + s_prkForEmpty).DecodeHex(), ReadOnlySpan<byte>.Empty, b);
+            a.Expand((s_prkForEmpty + s_prkForEmpty).DecodeHex(), [], b);
 
             Assert.NotNull(b);
             Assert.Equal(256, b.Length);
@@ -690,7 +690,7 @@ namespace NSec.Tests.Algorithms
             var a = KeyDerivationAlgorithm.HkdfSha512;
 
             var expected = s_outputForEmpty.DecodeHex();
-            var actual = a.DeriveBytes(ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, a.MaxCount);
+            var actual = a.DeriveBytes([], [], [], a.MaxCount);
 
             Assert.NotNull(actual);
             Assert.Equal(expected, actual);
@@ -709,7 +709,7 @@ namespace NSec.Tests.Algorithms
             var expected = s_outputForEmpty.DecodeHex();
             var actual = new byte[a.MaxCount];
 
-            a.DeriveBytes(ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, ReadOnlySpan<byte>.Empty, actual);
+            a.DeriveBytes([], [], [], actual);
 
             Assert.Equal(expected, actual);
         }

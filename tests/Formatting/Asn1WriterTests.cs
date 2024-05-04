@@ -113,7 +113,7 @@ namespace NSec.Tests.Formatting
         [Fact]
         public static void SequenceStackUnderflow()
         {
-            var writer = new Asn1Writer(Span<byte>.Empty);
+            var writer = new Asn1Writer([]);
             try { writer.BeginSequence(); Assert.True(false); } catch (InvalidOperationException) { } // cannot use Assert.Throws
         }
 
@@ -226,7 +226,7 @@ namespace NSec.Tests.Formatting
         public static void BufferOverflow(int capacity)
         {
             var value = new byte[5];
-            Utilities.RandomBytes.Slice(0, value.Length).CopyTo(value);
+            Utilities.RandomBytes[..value.Length].CopyTo(value);
 
             var writer = new Asn1Writer(new byte[capacity]);
             try { writer.OctetString(value); Assert.True(false); } catch (InvalidOperationException) { } // cannot use Assert.Throws

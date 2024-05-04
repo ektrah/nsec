@@ -59,7 +59,7 @@ namespace NSec.Tests.Base
 
             IncrementalSignatureVerification.Initialize(k.PublicKey, out var state);
 
-            Assert.True(IncrementalSignatureVerification.FinalizeAndVerify(ref state, a.Sign(k, ReadOnlySpan<byte>.Empty)));
+            Assert.True(IncrementalSignatureVerification.FinalizeAndVerify(ref state, a.Sign(k, [])));
 
             Assert.Null(state.Algorithm);
         }

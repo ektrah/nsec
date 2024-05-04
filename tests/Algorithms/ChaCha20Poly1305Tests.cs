@@ -31,10 +31,10 @@ namespace NSec.Tests.Algorithms
             var a = AeadAlgorithm.ChaCha20Poly1305;
 
             using var k = new Key(a);
-            var n = Utilities.RandomBytes.Slice(0, a.NonceSize);
-            var ad = Utilities.RandomBytes.Slice(0, 100);
+            var n = Utilities.RandomBytes[..a.NonceSize];
+            var ad = Utilities.RandomBytes[..100];
 
-            var expected = Utilities.RandomBytes.Slice(0, length).ToArray();
+            var expected = Utilities.RandomBytes[..length].ToArray();
 
             var ciphertext = a.Encrypt(k, n, ad, expected);
             Assert.NotNull(ciphertext);
