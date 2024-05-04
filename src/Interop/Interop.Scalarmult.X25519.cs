@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
@@ -8,21 +9,25 @@ internal static partial class Interop
         internal const int crypto_scalarmult_curve25519_BYTES = 32;
         internal const int crypto_scalarmult_curve25519_SCALARBYTES = 32;
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_scalarmult_curve25519(
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_scalarmult_curve25519(
             SecureMemoryHandle q,
             SecureMemoryHandle n,
-            PublicKeyBytes* p);
+            in PublicKeyBytes p);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_scalarmult_curve25519_base(
-            PublicKeyBytes* q,
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_scalarmult_curve25519_base(
+            ref PublicKeyBytes q,
             SecureMemoryHandle n);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_scalarmult_curve25519_bytes();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_scalarmult_curve25519_bytes();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_scalarmult_curve25519_scalarbytes();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_scalarmult_curve25519_scalarbytes();
     }
 }

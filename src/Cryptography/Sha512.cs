@@ -52,79 +52,60 @@ namespace NSec.Cryptography
             }
         }
 
-        internal unsafe override void FinalizeCore(
+        internal override void FinalizeCore(
             ref IncrementalHashState state,
             Span<byte> hash)
         {
             Debug.Assert(hash.Length <= crypto_hash_sha512_BYTES);
 
-            byte* temp = stackalloc byte[crypto_hash_sha512_BYTES];
+            Span<byte> temp = stackalloc byte[crypto_hash_sha512_BYTES];
 
-            fixed (crypto_hash_sha512_state* state_ = &state.sha512)
-            {
-                int error = crypto_hash_sha512_final(
-                    state_,
-                    temp);
+            int error = crypto_hash_sha512_final(
+                ref state.sha512,
+                temp);
 
-                Debug.Assert(error == 0);
-            }
+            Debug.Assert(error == 0);
 
-            fixed (byte* @out = hash)
-            {
-                Unsafe.CopyBlockUnaligned(@out, temp, (uint)hash.Length);
-            }
+            temp[..hash.Length].CopyTo(hash);
         }
 
-        internal unsafe override void InitializeCore(
+        internal override void InitializeCore(
             out IncrementalHashState state)
         {
-            fixed (crypto_hash_sha512_state* state_ = &state.sha512)
-            {
-                int error = crypto_hash_sha512_init(
-                    state_);
+            int error = crypto_hash_sha512_init(
+                ref state.sha512);
 
-                Debug.Assert(error == 0);
-            }
+            Debug.Assert(error == 0);
         }
 
-        internal unsafe override void UpdateCore(
+        internal override void UpdateCore(
             ref IncrementalHashState state,
             ReadOnlySpan<byte> data)
         {
-            fixed (crypto_hash_sha512_state* state_ = &state.sha512)
-            fixed (byte* @in = data)
-            {
-                int error = crypto_hash_sha512_update(
-                    state_,
-                    @in,
-                    (ulong)data.Length);
+            int error = crypto_hash_sha512_update(
+                ref state.sha512,
+                data,
+                (ulong)data.Length);
 
-                Debug.Assert(error == 0);
-            }
+            Debug.Assert(error == 0);
         }
 
-        private protected unsafe override void HashCore(
+        private protected override void HashCore(
             ReadOnlySpan<byte> data,
             Span<byte> hash)
         {
             Debug.Assert(hash.Length <= crypto_hash_sha512_BYTES);
 
-            byte* temp = stackalloc byte[crypto_hash_sha512_BYTES];
+            Span<byte> temp = stackalloc byte[crypto_hash_sha512_BYTES];
 
-            fixed (byte* @in = data)
-            {
-                int error = crypto_hash_sha512(
-                    temp,
-                    @in,
-                    (ulong)data.Length);
+            int error = crypto_hash_sha512(
+                temp,
+                data,
+                (ulong)data.Length);
 
-                Debug.Assert(error == 0);
-            }
+            Debug.Assert(error == 0);
 
-            fixed (byte* @out = hash)
-            {
-                Unsafe.CopyBlockUnaligned(@out, temp, (uint)hash.Length);
-            }
+            temp[..hash.Length].CopyTo(hash);
         }
 
         private static void SelfTest()

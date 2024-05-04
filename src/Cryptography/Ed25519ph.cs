@@ -52,7 +52,7 @@ namespace NSec.Cryptography
             }
         }
 
-        internal override unsafe void CreateKey(
+        internal override void CreateKey(
             ReadOnlySpan<byte> seed,
             out SecureMemoryHandle keyHandle,
             out PublicKey? publicKey)
@@ -67,13 +67,12 @@ namespace NSec.Cryptography
             publicKey = new PublicKey(this);
             keyHandle = SecureMemoryHandle.Create(crypto_sign_ed25519_SECRETKEYBYTES);
 
-            fixed (PublicKeyBytes* pk = publicKey)
-            fixed (byte* seed_ = seed)
-            {
-                int error = crypto_sign_ed25519_seed_keypair(pk, keyHandle, seed_);
+            int error = crypto_sign_ed25519_seed_keypair(
+                ref publicKey.GetPinnableReference(),
+                keyHandle,
+                seed);
 
-                Debug.Assert(error == 0);
-            }
+            Debug.Assert(error == 0);
         }
 
         internal override int GetSeedSize()
@@ -81,7 +80,7 @@ namespace NSec.Cryptography
             return crypto_sign_ed25519_SEEDBYTES;
         }
 
-        private protected unsafe override void SignCore(
+        private protected override void SignCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             Span<byte> signature)
@@ -89,31 +88,27 @@ namespace NSec.Cryptography
             Debug.Assert(keyHandle.Size == crypto_sign_ed25519_SECRETKEYBYTES);
             Debug.Assert(signature.Length == crypto_sign_ed25519_BYTES);
 
-            fixed (byte* sig = signature)
-            fixed (byte* m = data)
-            {
-                crypto_sign_ed25519ph_state state;
+            crypto_sign_ed25519ph_state state;
 
-                crypto_sign_ed25519ph_init(
-                    &state);
+            crypto_sign_ed25519ph_init(
+                ref state);
 
-                crypto_sign_ed25519ph_update(
-                    &state,
-                    m,
-                    (ulong)data.Length);
+            crypto_sign_ed25519ph_update(
+                ref state,
+                data,
+                (ulong)data.Length);
 
-                int error = crypto_sign_ed25519ph_final_create(
-                     &state,
-                     sig,
-                     out ulong signatureLength,
-                     keyHandle);
+            int error = crypto_sign_ed25519ph_final_create(
+                 ref state,
+                 signature,
+                 out ulong siglen,
+                 keyHandle);
 
-                Debug.Assert(error == 0);
-                Debug.Assert((ulong)signature.Length == signatureLength);
-            }
+            Debug.Assert(error == 0);
+            Debug.Assert((ulong)signature.Length == siglen);
         }
 
-        private protected unsafe override bool VerifyCore(
+        private protected override bool VerifyCore(
             ref readonly PublicKeyBytes publicKeyBytes,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> signature)
@@ -125,57 +120,46 @@ namespace NSec.Cryptography
 
             Debug.Assert(signature.Length == crypto_sign_ed25519_BYTES);
 
-            fixed (byte* sig = signature)
-            fixed (byte* m = data)
-            fixed (PublicKeyBytes* pk = &publicKeyBytes)
-            {
-                crypto_sign_ed25519ph_state state;
+            crypto_sign_ed25519ph_state state;
 
-                crypto_sign_ed25519ph_init(
-                    &state);
+            crypto_sign_ed25519ph_init(
+                ref state);
 
-                crypto_sign_ed25519ph_update(
-                    &state,
-                    m,
-                    (ulong)data.Length);
+            crypto_sign_ed25519ph_update(
+                ref state,
+                data,
+                (ulong)data.Length);
 
-                int error = crypto_sign_ed25519ph_final_verify(
-                    &state,
-                    sig,
-                    pk);
+            int error = crypto_sign_ed25519ph_final_verify(
+                ref state,
+                signature,
+                in publicKeyBytes);
 
-                return error == 0;
-            }
+            return error == 0;
         }
 
-        internal unsafe override void InitializeCore(
+        internal override void InitializeCore(
             out IncrementalSignatureState state)
         {
-            fixed (crypto_sign_ed25519ph_state* state_ = &state.ed25519ph)
-            {
-                int error = crypto_sign_ed25519ph_init(state_);
+            int error = crypto_sign_ed25519ph_init(
+                ref state.ed25519ph);
 
-                Debug.Assert(error == 0);
-            }
+            Debug.Assert(error == 0);
         }
 
-        internal unsafe override void UpdateCore(
+        internal override void UpdateCore(
             ref IncrementalSignatureState state,
             ReadOnlySpan<byte> data)
         {
-            fixed (crypto_sign_ed25519ph_state* state_ = &state.ed25519ph)
-            fixed (byte* @in = data)
-            {
-                int error = crypto_sign_ed25519ph_update(
-                    state_,
-                    @in,
-                    (ulong)data.Length);
+            int error = crypto_sign_ed25519ph_update(
+                ref state.ed25519ph,
+                data,
+                (ulong)data.Length);
 
-                Debug.Assert(error == 0);
-            }
+            Debug.Assert(error == 0);
         }
 
-        internal unsafe override void FinalSignCore(
+        internal override void FinalSignCore(
             ref IncrementalSignatureState state,
             SecureMemoryHandle keyHandle,
             Span<byte> signature)
@@ -183,21 +167,17 @@ namespace NSec.Cryptography
             Debug.Assert(keyHandle.Size == crypto_sign_ed25519_SECRETKEYBYTES);
             Debug.Assert(signature.Length == crypto_sign_ed25519_BYTES);
 
-            fixed (crypto_sign_ed25519ph_state* state_ = &state.ed25519ph)
-            fixed (byte* sig = signature)
-            {
-                int error = crypto_sign_ed25519ph_final_create(
-                    state_,
-                    sig,
-                    out ulong signatureLength,
-                    keyHandle);
+            int error = crypto_sign_ed25519ph_final_create(
+                ref state.ed25519ph,
+                signature,
+                out ulong siglen,
+                keyHandle);
 
-                Debug.Assert(error == 0);
-                Debug.Assert((ulong)signature.Length == signatureLength);
-            }
+            Debug.Assert(error == 0);
+            Debug.Assert((ulong)signature.Length == siglen);
         }
 
-        internal unsafe override bool FinalVerifyCore(
+        internal override bool FinalVerifyCore(
             ref IncrementalSignatureState state,
             ref readonly PublicKeyBytes publicKeyBytes,
             ReadOnlySpan<byte> signature)
@@ -209,17 +189,12 @@ namespace NSec.Cryptography
 
             Debug.Assert(signature.Length == crypto_sign_ed25519_BYTES);
 
-            fixed (crypto_sign_ed25519ph_state* state_ = &state.ed25519ph)
-            fixed (byte* sig = signature)
-            fixed (PublicKeyBytes* pk = &publicKeyBytes)
-            {
-                int error = crypto_sign_ed25519ph_final_verify(
-                    state_,
-                    sig,
-                    pk);
+            int error = crypto_sign_ed25519ph_final_verify(
+                ref state.ed25519ph,
+                signature,
+                in publicKeyBytes);
 
-                return error == 0;
-            }
+            return error == 0;
         }
 
         internal override bool TryExportKey(
@@ -287,7 +262,7 @@ namespace NSec.Cryptography
                 (crypto_sign_ed25519_publickeybytes() != crypto_sign_ed25519_PUBLICKEYBYTES) ||
                 (crypto_sign_ed25519_secretkeybytes() != crypto_sign_ed25519_SECRETKEYBYTES) ||
                 (crypto_sign_ed25519_seedbytes() != crypto_sign_ed25519_SEEDBYTES) ||
-                (crypto_sign_ed25519ph_statebytes() != (nuint)Unsafe.SizeOf<crypto_sign_ed25519ph_state>()))                
+                (crypto_sign_ed25519ph_statebytes() != (nuint)Unsafe.SizeOf<crypto_sign_ed25519ph_state>()))
             {
                 throw Error.InvalidOperation_InitializationFailed();
             }

@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
@@ -65,10 +65,6 @@ namespace NSec.Cryptography
         public bool Equals(
             PublicKey? other)
         {
-            if (Unsafe.SizeOf<PublicKeyBytes>() != 8 * sizeof(uint))
-            {
-                throw Error.InvalidOperation_InternalError();
-            }
             if (other == this)
             {
                 return true;
@@ -78,17 +74,8 @@ namespace NSec.Cryptography
                 return false;
             }
 
-            ref byte x = ref Unsafe.As<PublicKeyBytes, byte>(ref _bytes);
-            ref byte y = ref Unsafe.As<PublicKeyBytes, byte>(ref other._bytes);
-
-            return Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 0 * sizeof(uint))) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 0 * sizeof(uint)))
-                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 1 * sizeof(uint))) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 1 * sizeof(uint)))
-                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 2 * sizeof(uint))) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 2 * sizeof(uint)))
-                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 3 * sizeof(uint))) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 3 * sizeof(uint)))
-                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 4 * sizeof(uint))) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 4 * sizeof(uint)))
-                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 5 * sizeof(uint))) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 5 * sizeof(uint)))
-                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 6 * sizeof(uint))) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 6 * sizeof(uint)))
-                && Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 7 * sizeof(uint))) == Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref y, 7 * sizeof(uint)));
+            ReadOnlySpan<byte> bytes = _bytes;
+            return bytes.SequenceEqual(other._bytes);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -122,24 +109,8 @@ namespace NSec.Cryptography
 
         public override int GetHashCode()
         {
-            if (Unsafe.SizeOf<PublicKeyBytes>() != 8 * sizeof(uint))
-            {
-                throw Error.InvalidOperation_InternalError();
-            }
-
-            ref byte x = ref Unsafe.As<PublicKeyBytes, byte>(ref _bytes);
-            uint hashCode = unchecked((uint)_algorithm.GetHashCode());
-
-            hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 0 * sizeof(uint))));
-            hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 1 * sizeof(uint))));
-            hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 2 * sizeof(uint))));
-            hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 3 * sizeof(uint))));
-            hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 4 * sizeof(uint))));
-            hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 5 * sizeof(uint))));
-            hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 6 * sizeof(uint))));
-            hashCode = unchecked(hashCode * 0xA5555529 + Unsafe.ReadUnaligned<uint>(ref Unsafe.Add(ref x, 7 * sizeof(uint))));
-
-            return unchecked((int)hashCode);
+            ReadOnlySpan<uint> values = MemoryMarshal.Cast<byte, uint>(_bytes);
+            return HashCode.Combine(values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7]);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]

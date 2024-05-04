@@ -49,67 +49,52 @@ namespace NSec.Cryptography
             }
         }
 
-        internal unsafe override void FinalizeCore(
+        internal override void FinalizeCore(
             ref IncrementalHashState state,
             Span<byte> hash)
         {
             Debug.Assert(hash.Length == crypto_hash_sha256_BYTES);
 
-            fixed (crypto_hash_sha256_state* state_ = &state.sha256)
-            fixed (byte* @out = hash)
-            {
-                int error = crypto_hash_sha256_final(
-                    state_,
-                    @out);
+            int error = crypto_hash_sha256_final(
+                ref state.sha256,
+                hash);
 
-                Debug.Assert(error == 0);
-            }
+            Debug.Assert(error == 0);
         }
 
-        internal unsafe override void InitializeCore(
+        internal override void InitializeCore(
             out IncrementalHashState state)
         {
-            fixed (crypto_hash_sha256_state* state_ = &state.sha256)
-            {
-                int error = crypto_hash_sha256_init(
-                    state_);
+            int error = crypto_hash_sha256_init(
+                ref state.sha256);
 
-                Debug.Assert(error == 0);
-            }
+            Debug.Assert(error == 0);
         }
 
-        internal unsafe override void UpdateCore(
+        internal override void UpdateCore(
             ref IncrementalHashState state,
             ReadOnlySpan<byte> data)
         {
-            fixed (crypto_hash_sha256_state* state_ = &state.sha256)
-            fixed (byte* @in = data)
-            {
-                int error = crypto_hash_sha256_update(
-                    state_,
-                    @in,
-                    (ulong)data.Length);
+            int error = crypto_hash_sha256_update(
+                ref state.sha256,
+                data,
+                (ulong)data.Length);
 
-                Debug.Assert(error == 0);
-            }
+            Debug.Assert(error == 0);
         }
 
-        private protected unsafe override void HashCore(
+        private protected override void HashCore(
             ReadOnlySpan<byte> data,
             Span<byte> hash)
         {
             Debug.Assert(hash.Length == crypto_hash_sha256_BYTES);
 
-            fixed (byte* @out = hash)
-            fixed (byte* @in = data)
-            {
-                int error = crypto_hash_sha256(
-                    @out,
-                    @in,
-                    (ulong)data.Length);
+            int error = crypto_hash_sha256(
+                hash,
+                data,
+                (ulong)data.Length);
 
-                Debug.Assert(error == 0);
-            }
+            Debug.Assert(error == 0);
         }
 
         private static void SelfTest()

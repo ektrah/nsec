@@ -77,27 +77,21 @@ namespace NSec.Cryptography
             keyHandle = SecureMemoryHandle.CreateFrom(seed);
         }
 
-        internal unsafe override void FinalizeCore(
+        internal override void FinalizeCore(
             ref IncrementalMacState state,
             Span<byte> mac)
         {
             Debug.Assert(mac.Length <= crypto_auth_hmacsha512_BYTES);
 
-            byte* temp = stackalloc byte[crypto_auth_hmacsha512_BYTES];
+            Span<byte> temp = stackalloc byte[crypto_auth_hmacsha512_BYTES];
 
-            fixed (crypto_auth_hmacsha512_state* state_ = &state.hmacsha512)
-            {
-                int error = crypto_auth_hmacsha512_final(
-                    state_,
-                    temp);
+            int error = crypto_auth_hmacsha512_final(
+                ref state.hmacsha512,
+                temp);
 
-                Debug.Assert(error == 0);
-            }
+            Debug.Assert(error == 0);
 
-            fixed (byte* @out = mac)
-            {
-                Unsafe.CopyBlockUnaligned(@out, temp, (uint)mac.Length);
-            }
+            temp[..mac.Length].CopyTo(mac);
         }
 
         internal override int GetSeedSize()
@@ -105,21 +99,18 @@ namespace NSec.Cryptography
             return KeySize;
         }
 
-        internal unsafe override void InitializeCore(
+        internal override void InitializeCore(
             SecureMemoryHandle keyHandle,
             out IncrementalMacState state)
         {
             Debug.Assert(keyHandle.Size == crypto_hash_sha512_BYTES);
 
-            fixed (crypto_auth_hmacsha512_state* state_ = &state.hmacsha512)
-            {
-                int error = crypto_auth_hmacsha512_init(
-                    state_,
-                    keyHandle,
-                    (nuint)keyHandle.Size);
+            int error = crypto_auth_hmacsha512_init(
+                ref state.hmacsha512,
+                keyHandle,
+                (nuint)keyHandle.Size);
 
-                Debug.Assert(error == 0);
-            }
+            Debug.Assert(error == 0);
         }
 
         internal override bool TryExportKey(
@@ -152,23 +143,19 @@ namespace NSec.Cryptography
             };
         }
 
-        internal unsafe override void UpdateCore(
+        internal override void UpdateCore(
             ref IncrementalMacState state,
             ReadOnlySpan<byte> data)
         {
-            fixed (crypto_auth_hmacsha512_state* state_ = &state.hmacsha512)
-            fixed (byte* @in = data)
-            {
-                int error = crypto_auth_hmacsha512_update(
-                    state_,
-                    @in,
-                    (ulong)data.Length);
+            int error = crypto_auth_hmacsha512_update(
+                ref state.hmacsha512,
+                data,
+                (ulong)data.Length);
 
-                Debug.Assert(error == 0);
-            }
+            Debug.Assert(error == 0);
         }
 
-        private protected unsafe override void MacCore(
+        private protected override void MacCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             Span<byte> mac)
@@ -176,31 +163,24 @@ namespace NSec.Cryptography
             Debug.Assert(keyHandle.Size == crypto_hash_sha512_BYTES);
             Debug.Assert(mac.Length <= crypto_auth_hmacsha512_BYTES);
 
-            byte* temp = stackalloc byte[crypto_auth_hmacsha512_BYTES];
+            Span<byte> temp = stackalloc byte[crypto_auth_hmacsha512_BYTES];
+            crypto_auth_hmacsha512_state state;
 
-            fixed (byte* @in = data)
-            {
-                crypto_auth_hmacsha512_state state;
+            crypto_auth_hmacsha512_init(
+                ref state,
+                keyHandle,
+                (nuint)keyHandle.Size);
 
-                crypto_auth_hmacsha512_init(
-                    &state,
-                    keyHandle,
-                    (nuint)keyHandle.Size);
+            crypto_auth_hmacsha512_update(
+                ref state,
+                data,
+                (ulong)data.Length);
 
-                crypto_auth_hmacsha512_update(
-                    &state,
-                    @in,
-                    (ulong)data.Length);
+            crypto_auth_hmacsha512_final(
+                ref state,
+                temp);
 
-                crypto_auth_hmacsha512_final(
-                    &state,
-                    temp);
-            }
-
-            fixed (byte* @out = mac)
-            {
-                Unsafe.CopyBlockUnaligned(@out, temp, (uint)mac.Length);
-            }
+            temp[..mac.Length].CopyTo(mac);
         }
 
         private static void SelfTest()

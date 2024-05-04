@@ -15,8 +15,8 @@ Interop.Aead.Aegis128L.cs:
   - crypto_aead_aegis128l_NSECBYTES
   functions:
   - crypto_aead_aegis128l_abytes
-  - crypto_aead_aegis128l_decrypt (out ulong mlen_p, SecureMemoryHandle k)
-  - crypto_aead_aegis128l_encrypt (out ulong clen_p, SecureMemoryHandle k)
+  - crypto_aead_aegis128l_decrypt (out ulong mlen_p, IntPtr nsec, SecureMemoryHandle k)
+  - crypto_aead_aegis128l_encrypt (out ulong clen_p, IntPtr nsec, SecureMemoryHandle k)
   - crypto_aead_aegis128l_keybytes
   - crypto_aead_aegis128l_npubbytes
   - crypto_aead_aegis128l_nsecbytes
@@ -30,8 +30,8 @@ Interop.Aead.Aegis256.cs:
   - crypto_aead_aegis256_NSECBYTES
   functions:
   - crypto_aead_aegis256_abytes
-  - crypto_aead_aegis256_decrypt (out ulong mlen_p, SecureMemoryHandle k)
-  - crypto_aead_aegis256_encrypt (out ulong clen_p, SecureMemoryHandle k)
+  - crypto_aead_aegis256_decrypt (out ulong mlen_p, IntPtr nsec, SecureMemoryHandle k)
+  - crypto_aead_aegis256_encrypt (out ulong clen_p, IntPtr nsec, SecureMemoryHandle k)
   - crypto_aead_aegis256_keybytes
   - crypto_aead_aegis256_npubbytes
   - crypto_aead_aegis256_nsecbytes
@@ -45,8 +45,8 @@ Interop.Aead.Aes256Gcm.cs:
   - crypto_aead_aes256gcm_NSECBYTES
   functions:
   - crypto_aead_aes256gcm_abytes
-  - crypto_aead_aes256gcm_decrypt (out ulong mlen_p, SecureMemoryHandle k)
-  - crypto_aead_aes256gcm_encrypt (out ulong clen_p, SecureMemoryHandle k)
+  - crypto_aead_aes256gcm_decrypt (out ulong mlen_p, IntPtr nsec, SecureMemoryHandle k)
+  - crypto_aead_aes256gcm_encrypt (out ulong clen_p, IntPtr nsec, SecureMemoryHandle k)
   - crypto_aead_aes256gcm_is_available
   - crypto_aead_aes256gcm_keybytes
   - crypto_aead_aes256gcm_npubbytes
@@ -61,8 +61,8 @@ Interop.Aead.ChaCha20Poly1305.cs:
   - crypto_aead_chacha20poly1305_ietf_NSECBYTES
   functions:
   - crypto_aead_chacha20poly1305_ietf_abytes
-  - crypto_aead_chacha20poly1305_ietf_decrypt (out ulong mlen_p, SecureMemoryHandle k)
-  - crypto_aead_chacha20poly1305_ietf_encrypt (out ulong clen_p, SecureMemoryHandle k)
+  - crypto_aead_chacha20poly1305_ietf_decrypt (out ulong mlen_p, IntPtr nsec, SecureMemoryHandle k)
+  - crypto_aead_chacha20poly1305_ietf_encrypt (out ulong clen_p, IntPtr nsec, SecureMemoryHandle k)
   - crypto_aead_chacha20poly1305_ietf_keybytes
   - crypto_aead_chacha20poly1305_ietf_npubbytes
   - crypto_aead_chacha20poly1305_ietf_nsecbytes
@@ -76,8 +76,8 @@ Interop.Aead.XChaCha20Poly1305.cs:
   - crypto_aead_xchacha20poly1305_ietf_NSECBYTES
   functions:
   - crypto_aead_xchacha20poly1305_ietf_abytes
-  - crypto_aead_xchacha20poly1305_ietf_decrypt (out ulong mlen_p, SecureMemoryHandle k)
-  - crypto_aead_xchacha20poly1305_ietf_encrypt (out ulong clen_p, SecureMemoryHandle k)
+  - crypto_aead_xchacha20poly1305_ietf_decrypt (out ulong mlen_p, IntPtr nsec, SecureMemoryHandle k)
+  - crypto_aead_xchacha20poly1305_ietf_encrypt (out ulong clen_p, IntPtr nsec, SecureMemoryHandle k)
   - crypto_aead_xchacha20poly1305_ietf_keybytes
   - crypto_aead_xchacha20poly1305_ietf_npubbytes
   - crypto_aead_xchacha20poly1305_ietf_nsecbytes
@@ -95,6 +95,7 @@ Interop.Auth.HmacSha256.cs:
   - crypto_auth_hmacsha256_keybytes
   - crypto_auth_hmacsha256_statebytes
   - crypto_auth_hmacsha256_update
+  - crypto_auth_hmacsha256_update (in uint in)
   structs:
   - crypto_auth_hmacsha256_state
 
@@ -181,6 +182,7 @@ Interop.Hash.Sha256.cs:
   - crypto_hash_sha256_init
   - crypto_hash_sha256_statebytes
   - crypto_hash_sha256_update
+  - crypto_hash_sha256_update (in uint in)
   structs:
   - crypto_hash_sha256_state
 
@@ -209,9 +211,9 @@ Interop.Pwhash.Argon2i.cs:
   constants:
   - crypto_pwhash_argon2i_ALG_ARGON2I13
   - crypto_pwhash_argon2i_BYTES_MIN
-  - crypto_pwhash_argon2i_MEMLIMIT_MIN (long)
-  - crypto_pwhash_argon2i_OPSLIMIT_MAX (long)
-  - crypto_pwhash_argon2i_OPSLIMIT_MIN (long)
+  - crypto_pwhash_argon2i_MEMLIMIT_MIN
+  - crypto_pwhash_argon2i_OPSLIMIT_MAX
+  - crypto_pwhash_argon2i_OPSLIMIT_MIN
   - crypto_pwhash_argon2i_SALTBYTES
   functions:
   - crypto_pwhash_argon2i
@@ -229,9 +231,9 @@ Interop.Pwhash.Argon2id.cs:
   constants:
   - crypto_pwhash_argon2id_ALG_ARGON2ID13
   - crypto_pwhash_argon2id_BYTES_MIN
-  - crypto_pwhash_argon2id_MEMLIMIT_MIN (long)
-  - crypto_pwhash_argon2id_OPSLIMIT_MAX (long)
-  - crypto_pwhash_argon2id_OPSLIMIT_MIN (long)
+  - crypto_pwhash_argon2id_MEMLIMIT_MIN
+  - crypto_pwhash_argon2id_OPSLIMIT_MAX
+  - crypto_pwhash_argon2id_OPSLIMIT_MIN
   - crypto_pwhash_argon2id_SALTBYTES
   functions:
   - crypto_pwhash_argon2id
@@ -248,9 +250,9 @@ Interop.Pwhash.Scrypt.cs:
   include: include/sodium/crypto_pwhash_scryptsalsa208sha256.h
   constants:
   - crypto_pwhash_scryptsalsa208sha256_BYTES_MIN
-  - crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_MIN (long)
-  - crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MAX (long)
-  - crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MIN (long)
+  - crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_MIN
+  - crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MAX
+  - crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MIN
   - crypto_pwhash_scryptsalsa208sha256_SALTBYTES
   functions:
   - crypto_pwhash_scryptsalsa208sha256_ll
@@ -268,8 +270,8 @@ Interop.Scalarmult.X25519.cs:
   - crypto_scalarmult_curve25519_BYTES
   - crypto_scalarmult_curve25519_SCALARBYTES
   functions:
-  - crypto_scalarmult_curve25519 (SecureMemoryHandle q, SecureMemoryHandle n, PublicKeyBytes* p)
-  - crypto_scalarmult_curve25519_base (PublicKeyBytes* q, SecureMemoryHandle n)
+  - crypto_scalarmult_curve25519 (SecureMemoryHandle q, SecureMemoryHandle n, in PublicKeyBytes p)
+  - crypto_scalarmult_curve25519_base (ref PublicKeyBytes q, SecureMemoryHandle n)
   - crypto_scalarmult_curve25519_bytes
   - crypto_scalarmult_curve25519_scalarbytes
 
@@ -315,16 +317,16 @@ Interop.Sign.Ed25519.cs:
   functions:
   - crypto_sign_ed25519_bytes
   - crypto_sign_ed25519_detached (out ulong siglen_p, SecureMemoryHandle sk)
-  - crypto_sign_ed25519_pk_to_curve25519 (PublicKeyBytes* curve25519_pk, PublicKeyBytes* ed25519_pk)
+  - crypto_sign_ed25519_pk_to_curve25519 (ref PublicKeyBytes curve25519_pk, in PublicKeyBytes ed25519_pk)
   - crypto_sign_ed25519_publickeybytes
   - crypto_sign_ed25519_secretkeybytes
-  - crypto_sign_ed25519_seed_keypair (PublicKeyBytes* pk, SecureMemoryHandle sk)
+  - crypto_sign_ed25519_seed_keypair (ref PublicKeyBytes pk, SecureMemoryHandle sk)
   - crypto_sign_ed25519_seedbytes
   - crypto_sign_ed25519_sk_to_curve25519 (SecureMemoryHandle ed25519_sk)
   - crypto_sign_ed25519_sk_to_seed (SecureMemoryHandle sk)
-  - crypto_sign_ed25519_verify_detached (PublicKeyBytes* pk)
+  - crypto_sign_ed25519_verify_detached (in PublicKeyBytes pk)
   - crypto_sign_ed25519ph_final_create (out ulong siglen_p, SecureMemoryHandle sk)
-  - crypto_sign_ed25519ph_final_verify (PublicKeyBytes* pk)
+  - crypto_sign_ed25519ph_final_verify (in PublicKeyBytes pk)
   - crypto_sign_ed25519ph_init
   - crypto_sign_ed25519ph_statebytes
   - crypto_sign_ed25519ph_update
@@ -379,7 +381,7 @@ Interop.Runtime.cs:
 Interop.Utils.cs:
   include: include/sodium/utils.h
   functions:
-  - sodium_free (IntPtr ptr)
+  - sodium_free
   - sodium_malloc (SecureMemoryHandle)
 
 Interop.Version.cs:

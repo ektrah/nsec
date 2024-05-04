@@ -73,7 +73,7 @@ namespace NSec.Cryptography
             }
         }
 
-        internal override unsafe void CreateKey(
+        internal override void CreateKey(
             ReadOnlySpan<byte> seed,
             out SecureMemoryHandle keyHandle,
             out PublicKey? publicKey)
@@ -88,13 +88,12 @@ namespace NSec.Cryptography
             publicKey = new PublicKey(this);
             keyHandle = SecureMemoryHandle.CreateFrom(seed);
 
-            fixed (PublicKeyBytes* q = publicKey)
-            {
-                int error = crypto_scalarmult_curve25519_base(q, keyHandle);
+            int error = crypto_scalarmult_curve25519_base(
+                ref publicKey.GetPinnableReference(),
+                keyHandle);
 
-                Debug.Assert(error == 0);
-                Debug.Assert((((byte*)q)[crypto_scalarmult_curve25519_SCALARBYTES - 1] & 0x80) == 0);
-            }
+            Debug.Assert(error == 0);
+            Debug.Assert((publicKey.GetPinnableReference()[crypto_scalarmult_curve25519_SCALARBYTES - 1] & 0x80) == 0);
         }
 
         internal override int GetSeedSize()
@@ -102,7 +101,7 @@ namespace NSec.Cryptography
             return crypto_scalarmult_curve25519_SCALARBYTES;
         }
 
-        private protected unsafe override bool AgreeCore(
+        private protected override bool AgreeCore(
             SecureMemoryHandle keyHandle,
             ref readonly PublicKeyBytes otherPartyPublicKey,
             out SecureMemoryHandle? sharedSecretHandle)
@@ -116,12 +115,12 @@ namespace NSec.Cryptography
 
             sharedSecretHandle = SecureMemoryHandle.Create(crypto_scalarmult_curve25519_BYTES);
 
-            fixed (PublicKeyBytes* p = &otherPartyPublicKey)
-            {
-                int error = crypto_scalarmult_curve25519(sharedSecretHandle, keyHandle, p);
+            int error = crypto_scalarmult_curve25519(
+                sharedSecretHandle,
+                keyHandle,
+                in otherPartyPublicKey);
 
-                return error == 0;
-            }
+            return error == 0;
         }
 
         internal override bool TryExportKey(

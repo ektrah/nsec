@@ -9,7 +9,7 @@ namespace NSec.Cryptography.Formatting
         crypto_scalarmult_curve25519_SCALARBYTES,
         blobHeader)
     {
-        protected override unsafe void Deserialize(
+        protected override void Deserialize(
             ReadOnlySpan<byte> span,
             out SecureMemoryHandle? keyHandle,
             out PublicKeyBytes publicKeyBytes)
@@ -22,14 +22,14 @@ namespace NSec.Cryptography.Formatting
             Debug.Assert(span.Length == crypto_scalarmult_curve25519_SCALARBYTES);
 
             keyHandle = SecureMemoryHandle.CreateFrom(span);
+            publicKeyBytes = new PublicKeyBytes();
 
-            fixed (PublicKeyBytes* q = &publicKeyBytes)
-            {
-                int error = crypto_scalarmult_curve25519_base(q, keyHandle);
+            int error = crypto_scalarmult_curve25519_base(
+                ref publicKeyBytes,
+                keyHandle);
 
-                Debug.Assert(error == 0);
-                Debug.Assert((((byte*)q)[crypto_scalarmult_curve25519_SCALARBYTES - 1] & 0x80) == 0);
-            }
+            Debug.Assert(error == 0);
+            Debug.Assert((publicKeyBytes[crypto_scalarmult_curve25519_SCALARBYTES - 1] & 0x80) == 0);
         }
 
         protected override void Serialize(

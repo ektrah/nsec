@@ -64,7 +64,7 @@ namespace NSec.Cryptography
             keyHandle = SecureMemoryHandle.CreateFrom(seed);
         }
 
-        private protected unsafe override void EncryptCore(
+        private protected override void EncryptCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> associatedData,
@@ -75,25 +75,19 @@ namespace NSec.Cryptography
             Debug.Assert(nonce.Length == crypto_aead_xchacha20poly1305_ietf_NPUBBYTES);
             Debug.Assert(ciphertext.Length == plaintext.Length + crypto_aead_xchacha20poly1305_ietf_ABYTES);
 
-            fixed (byte* c = ciphertext)
-            fixed (byte* m = plaintext)
-            fixed (byte* ad = associatedData)
-            fixed (byte* n = nonce)
-            {
-                int error = crypto_aead_xchacha20poly1305_ietf_encrypt(
-                    c,
-                    out ulong clen_p,
-                    m,
-                    (ulong)plaintext.Length,
-                    ad,
-                    (ulong)associatedData.Length,
-                    null,
-                    n,
-                    keyHandle);
+            int error = crypto_aead_xchacha20poly1305_ietf_encrypt(
+                ciphertext,
+                out ulong clen,
+                plaintext,
+                (ulong)plaintext.Length,
+                associatedData,
+                (ulong)associatedData.Length,
+                IntPtr.Zero,
+                nonce,
+                keyHandle);
 
-                Debug.Assert(error == 0);
-                Debug.Assert((ulong)ciphertext.Length == clen_p);
-            }
+            Debug.Assert(error == 0);
+            Debug.Assert((ulong)ciphertext.Length == clen);
         }
 
         internal override int GetSeedSize()
@@ -101,7 +95,7 @@ namespace NSec.Cryptography
             return crypto_aead_xchacha20poly1305_ietf_KEYBYTES;
         }
 
-        private protected unsafe override bool DecryptCore(
+        private protected override bool DecryptCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> associatedData,
@@ -112,27 +106,21 @@ namespace NSec.Cryptography
             Debug.Assert(nonce.Length == crypto_aead_xchacha20poly1305_ietf_NPUBBYTES);
             Debug.Assert(plaintext.Length == ciphertext.Length - crypto_aead_xchacha20poly1305_ietf_ABYTES);
 
-            fixed (byte* m = plaintext)
-            fixed (byte* c = ciphertext)
-            fixed (byte* ad = associatedData)
-            fixed (byte* n = nonce)
-            {
-                int error = crypto_aead_xchacha20poly1305_ietf_decrypt(
-                    m,
-                    out ulong mlen_p,
-                    null,
-                    c,
-                    (ulong)ciphertext.Length,
-                    ad,
-                    (ulong)associatedData.Length,
-                    n,
-                    keyHandle);
+            int error = crypto_aead_xchacha20poly1305_ietf_decrypt(
+                plaintext,
+                out ulong mlen,
+                IntPtr.Zero,
+                ciphertext,
+                (ulong)ciphertext.Length,
+                associatedData,
+                (ulong)associatedData.Length,
+                nonce,
+                keyHandle);
 
-                // libsodium clears plaintext if decryption fails
+            // libsodium clears plaintext if decryption fails
 
-                Debug.Assert(error != 0 || (ulong)plaintext.Length == mlen_p);
-                return error == 0;
-            }
+            Debug.Assert(error != 0 || (ulong)plaintext.Length == mlen);
+            return error == 0;
         }
 
         internal override bool TryExportKey(

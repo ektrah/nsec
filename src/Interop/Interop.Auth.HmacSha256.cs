@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
@@ -8,36 +9,50 @@ internal static partial class Interop
         internal const int crypto_auth_hmacsha256_BYTES = 32;
         internal const int crypto_auth_hmacsha256_KEYBYTES = 32;
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_auth_hmacsha256_bytes();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_auth_hmacsha256_bytes();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_auth_hmacsha256_final(
-            crypto_auth_hmacsha256_state* state,
-            byte* @out);
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_auth_hmacsha256_final(
+            ref crypto_auth_hmacsha256_state state,
+            Span<byte> @out);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_auth_hmacsha256_init(
-            crypto_auth_hmacsha256_state* state,
-            byte* key,
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_auth_hmacsha256_init(
+            ref crypto_auth_hmacsha256_state state,
+            ReadOnlySpan<byte> key,
             nuint keylen);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_auth_hmacsha256_init(
-            crypto_auth_hmacsha256_state* state,
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_auth_hmacsha256_init(
+            ref crypto_auth_hmacsha256_state state,
             SecureMemoryHandle key,
             nuint keylen);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_auth_hmacsha256_keybytes();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_auth_hmacsha256_keybytes();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_auth_hmacsha256_statebytes();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_auth_hmacsha256_statebytes();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_auth_hmacsha256_update(
-            crypto_auth_hmacsha256_state* state,
-            byte* @in,
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_auth_hmacsha256_update(
+            ref crypto_auth_hmacsha256_state state,
+            ReadOnlySpan<byte> @in,
+            ulong inlen);
+
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_auth_hmacsha256_update(
+            ref crypto_auth_hmacsha256_state state,
+            in uint @in,
             ulong inlen);
 
         [StructLayout(LayoutKind.Explicit, Size = 208)]

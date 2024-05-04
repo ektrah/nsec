@@ -1,6 +1,6 @@
 using System;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Threading;
 using NSec.Cryptography;
 using static Interop.Libsodium;
@@ -104,7 +104,7 @@ namespace NSec.Experimental.PasswordBased
             parameters.NumberOfPasses = (long)_opsLimit;
         }
 
-        internal override unsafe bool TryDeriveBytesCore(
+        internal override bool TryDeriveBytesCore(
             ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,
             Span<byte> bytes)
@@ -113,35 +113,30 @@ namespace NSec.Experimental.PasswordBased
 
             const int MinCount = crypto_pwhash_argon2i_BYTES_MIN;
             bool min = bytes.Length < MinCount;
-            byte* temp = stackalloc byte[MinCount];
+            Span<byte> temp = stackalloc byte[MinCount];
 
             try
             {
-                fixed (byte* @in = password)
-                fixed (byte* salt_ = salt)
-                fixed (byte* @out = bytes)
+                int error = crypto_pwhash_argon2i(
+                    min ? temp : bytes,
+                    (ulong)(min ? temp : bytes).Length,
+                    MemoryMarshal.Cast<byte, sbyte>(password),
+                    (ulong)password.Length,
+                    salt,
+                    _opsLimit,
+                    _memLimit,
+                    crypto_pwhash_argon2i_ALG_ARGON2I13);
+
+                if (min)
                 {
-                    int error = crypto_pwhash_argon2i(
-                        min ? temp : @out,
-                        (ulong)(min ? MinCount : bytes.Length),
-                        (sbyte*)@in,
-                        (ulong)password.Length,
-                        salt_,
-                        _opsLimit,
-                        _memLimit,
-                        crypto_pwhash_argon2i_ALG_ARGON2I13);
-
-                    if (min)
-                    {
-                        Unsafe.CopyBlockUnaligned(@out, temp, (uint)bytes.Length);
-                    }
-
-                    return error == 0;
+                    temp[..bytes.Length].CopyTo(bytes);
                 }
+
+                return error == 0;
             }
             finally
             {
-                Unsafe.InitBlockUnaligned(temp, 0, MinCount);
+                System.Security.Cryptography.CryptographicOperations.ZeroMemory(temp);
             }
         }
 

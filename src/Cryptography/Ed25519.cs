@@ -77,7 +77,7 @@ namespace NSec.Cryptography
             }
         }
 
-        internal override unsafe void CreateKey(
+        internal override void CreateKey(
             ReadOnlySpan<byte> seed,
             out SecureMemoryHandle keyHandle,
             out PublicKey? publicKey)
@@ -92,13 +92,12 @@ namespace NSec.Cryptography
             publicKey = new PublicKey(this);
             keyHandle = SecureMemoryHandle.Create(crypto_sign_ed25519_SECRETKEYBYTES);
 
-            fixed (PublicKeyBytes* pk = publicKey)
-            fixed (byte* seed_ = seed)
-            {
-                int error = crypto_sign_ed25519_seed_keypair(pk, keyHandle, seed_);
+            int error = crypto_sign_ed25519_seed_keypair(
+                ref publicKey.GetPinnableReference(),
+                keyHandle,
+                seed);
 
-                Debug.Assert(error == 0);
-            }
+            Debug.Assert(error == 0);
         }
 
         internal override int GetSeedSize()
@@ -106,7 +105,7 @@ namespace NSec.Cryptography
             return crypto_sign_ed25519_SEEDBYTES;
         }
 
-        private protected unsafe override void SignCore(
+        private protected override void SignCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> data,
             Span<byte> signature)
@@ -114,19 +113,15 @@ namespace NSec.Cryptography
             Debug.Assert(keyHandle.Size == crypto_sign_ed25519_SECRETKEYBYTES);
             Debug.Assert(signature.Length == crypto_sign_ed25519_BYTES);
 
-            fixed (byte* sig = signature)
-            fixed (byte* m = data)
-            {
-                int error = crypto_sign_ed25519_detached(
-                    sig,
-                    out ulong signatureLength,
-                    m,
-                    (ulong)data.Length,
-                    keyHandle);
+            int error = crypto_sign_ed25519_detached(
+                signature,
+                out ulong siglen,
+                data,
+                (ulong)data.Length,
+                keyHandle);
 
-                Debug.Assert(error == 0);
-                Debug.Assert((ulong)signature.Length == signatureLength);
-            }
+            Debug.Assert(error == 0);
+            Debug.Assert((ulong)signature.Length == siglen);
         }
 
         internal override bool TryExportKey(
@@ -196,7 +191,7 @@ namespace NSec.Cryptography
             };
         }
 
-        private protected unsafe override bool VerifyCore(
+        private protected override bool VerifyCore(
             ref readonly PublicKeyBytes publicKeyBytes,
             ReadOnlySpan<byte> data,
             ReadOnlySpan<byte> signature)
@@ -208,18 +203,13 @@ namespace NSec.Cryptography
 
             Debug.Assert(signature.Length == crypto_sign_ed25519_BYTES);
 
-            fixed (byte* sig = signature)
-            fixed (byte* m = data)
-            fixed (PublicKeyBytes* pk = &publicKeyBytes)
-            {
-                int error = crypto_sign_ed25519_verify_detached(
-                    sig,
-                    m,
-                    (ulong)data.Length,
-                    pk);
+            int error = crypto_sign_ed25519_verify_detached(
+                signature,
+                data,
+                (ulong)data.Length,
+                in publicKeyBytes);
 
-                return error == 0;
-            }
+            return error == 0;
         }
 
         private static void SelfTest()

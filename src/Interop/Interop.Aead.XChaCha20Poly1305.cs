@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
@@ -10,40 +11,46 @@ internal static partial class Interop
         internal const int crypto_aead_xchacha20poly1305_ietf_NPUBBYTES = 24;
         internal const int crypto_aead_xchacha20poly1305_ietf_NSECBYTES = 0;
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_aead_xchacha20poly1305_ietf_abytes();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_aead_xchacha20poly1305_ietf_abytes();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_aead_xchacha20poly1305_ietf_decrypt(
-            byte* m,
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_aead_xchacha20poly1305_ietf_decrypt(
+            Span<byte> m,
             out ulong mlen_p,
-            byte* nsec,
-            byte* c,
+            IntPtr nsec,
+            ReadOnlySpan<byte> c,
             ulong clen,
-            byte* ad,
+            ReadOnlySpan<byte> ad,
             ulong adlen,
-            byte* npub,
+            ReadOnlySpan<byte> npub,
             SecureMemoryHandle k);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_aead_xchacha20poly1305_ietf_encrypt(
-            byte* c,
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_aead_xchacha20poly1305_ietf_encrypt(
+            Span<byte> c,
             out ulong clen_p,
-            byte* m,
+            ReadOnlySpan<byte> m,
             ulong mlen,
-            byte* ad,
+            ReadOnlySpan<byte> ad,
             ulong adlen,
-            byte* nsec,
-            byte* npub,
+            IntPtr nsec,
+            ReadOnlySpan<byte> npub,
             SecureMemoryHandle k);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_aead_xchacha20poly1305_ietf_keybytes();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_aead_xchacha20poly1305_ietf_keybytes();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_aead_xchacha20poly1305_ietf_npubbytes();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_aead_xchacha20poly1305_ietf_npubbytes();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_aead_xchacha20poly1305_ietf_nsecbytes();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_aead_xchacha20poly1305_ietf_nsecbytes();
     }
 }

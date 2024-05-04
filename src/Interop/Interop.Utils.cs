@@ -1,16 +1,19 @@
 using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
 {
     internal static partial class Libsodium
     {
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void sodium_free(
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial void sodium_free(
             IntPtr ptr);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern SecureMemoryHandle sodium_malloc(
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial SecureMemoryHandle sodium_malloc(
             nuint size);
     }
 }

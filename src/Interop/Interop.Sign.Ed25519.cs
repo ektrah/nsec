@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
@@ -10,78 +11,93 @@ internal static partial class Interop
         internal const int crypto_sign_ed25519_SECRETKEYBYTES = (32 + 32);
         internal const int crypto_sign_ed25519_SEEDBYTES = 32;
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_sign_ed25519_bytes();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_sign_ed25519_bytes();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_sign_ed25519_detached(
-            byte* sig,
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_sign_ed25519_detached(
+            Span<byte> sig,
             out ulong siglen_p,
-            byte* m,
+            ReadOnlySpan<byte> m,
             ulong mlen,
             SecureMemoryHandle sk);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_sign_ed25519_pk_to_curve25519(
-            PublicKeyBytes* curve25519_pk,
-            PublicKeyBytes* ed25519_pk);
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_sign_ed25519_pk_to_curve25519(
+            ref PublicKeyBytes curve25519_pk,
+            in PublicKeyBytes ed25519_pk);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_sign_ed25519_publickeybytes();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_sign_ed25519_publickeybytes();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_sign_ed25519_secretkeybytes();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_sign_ed25519_secretkeybytes();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_sign_ed25519_seed_keypair(
-            PublicKeyBytes* pk,
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_sign_ed25519_seed_keypair(
+            ref PublicKeyBytes pk,
             SecureMemoryHandle sk,
-            byte* seed);
+            ReadOnlySpan<byte> seed);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_sign_ed25519_seedbytes();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_sign_ed25519_seedbytes();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_sign_ed25519_sk_to_curve25519(
-            byte* curve25519_sk,
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_sign_ed25519_sk_to_curve25519(
+            Span<byte> curve25519_sk,
             SecureMemoryHandle ed25519_sk);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_sign_ed25519_sk_to_seed(
-            byte* seed,
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_sign_ed25519_sk_to_seed(
+            Span<byte> seed,
             SecureMemoryHandle sk);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_sign_ed25519_verify_detached(
-            byte* sig,
-            byte* m,
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_sign_ed25519_verify_detached(
+            ReadOnlySpan<byte> sig,
+            ReadOnlySpan<byte> m,
             ulong mlen,
-            PublicKeyBytes* pk);
+            in PublicKeyBytes pk);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_sign_ed25519ph_final_create(
-            crypto_sign_ed25519ph_state* state,
-            byte* sig,
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_sign_ed25519ph_final_create(
+            ref crypto_sign_ed25519ph_state state,
+            Span<byte> sig,
             out ulong siglen_p,
             SecureMemoryHandle sk);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_sign_ed25519ph_final_verify(
-            crypto_sign_ed25519ph_state* state,
-            byte* sig,
-            PublicKeyBytes* pk);
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_sign_ed25519ph_final_verify(
+            ref crypto_sign_ed25519ph_state state,
+            ReadOnlySpan<byte> sig,
+            in PublicKeyBytes pk);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_sign_ed25519ph_init(
-            crypto_sign_ed25519ph_state* state);
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_sign_ed25519ph_init(
+            ref crypto_sign_ed25519ph_state state);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_sign_ed25519ph_statebytes();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_sign_ed25519ph_statebytes();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_sign_ed25519ph_update(
-            crypto_sign_ed25519ph_state* state,
-            byte* m,
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_sign_ed25519ph_update(
+            ref crypto_sign_ed25519ph_state state,
+            ReadOnlySpan<byte> m,
             ulong mlen);
 
         [StructLayout(LayoutKind.Explicit, Size = 208)]

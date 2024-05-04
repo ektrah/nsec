@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
@@ -6,42 +7,50 @@ internal static partial class Interop
     internal static partial class Libsodium
     {
         internal const int crypto_pwhash_scryptsalsa208sha256_BYTES_MIN = 16;
-        internal const long crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_MIN = 16777216;
+        internal const int crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_MIN = 16777216;
         internal const long crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MAX = 4294967295;
-        internal const long crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MIN = 32768;
+        internal const int crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MIN = 32768;
         internal const int crypto_pwhash_scryptsalsa208sha256_SALTBYTES = 32;
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_pwhash_scryptsalsa208sha256_bytes_max();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_pwhash_scryptsalsa208sha256_bytes_max();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_pwhash_scryptsalsa208sha256_bytes_min();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_pwhash_scryptsalsa208sha256_bytes_min();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_pwhash_scryptsalsa208sha256_ll(
-            byte* passwd,
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_pwhash_scryptsalsa208sha256_ll(
+            ReadOnlySpan<byte> passwd,
             nuint passwdlen,
-            byte* salt,
+            ReadOnlySpan<byte> salt,
             nuint saltlen,
             ulong N,
             uint r,
             uint p,
-            byte* buf,
+            Span<byte> buf,
             nuint buflen);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_pwhash_scryptsalsa208sha256_memlimit_max();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_pwhash_scryptsalsa208sha256_memlimit_max();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_pwhash_scryptsalsa208sha256_memlimit_min();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_pwhash_scryptsalsa208sha256_memlimit_min();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_pwhash_scryptsalsa208sha256_opslimit_max();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_pwhash_scryptsalsa208sha256_opslimit_max();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_pwhash_scryptsalsa208sha256_opslimit_min();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_pwhash_scryptsalsa208sha256_opslimit_min();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_pwhash_scryptsalsa208sha256_saltbytes();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_pwhash_scryptsalsa208sha256_saltbytes();
     }
 }

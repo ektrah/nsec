@@ -38,7 +38,7 @@ namespace NSec.Experimental
             return crypto_stream_chacha20_ietf_KEYBYTES;
         }
 
-        private protected unsafe override void GeneratePseudoRandomStreamCore(
+        private protected override void GeneratePseudoRandomStreamCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> nonce,
             Span<byte> bytes)
@@ -46,20 +46,16 @@ namespace NSec.Experimental
             Debug.Assert(keyHandle.Size == crypto_stream_chacha20_ietf_KEYBYTES);
             Debug.Assert(nonce.Length == crypto_stream_chacha20_ietf_NONCEBYTES);
 
-            fixed (byte* c = bytes)
-            fixed (byte* n = nonce)
-            {
-                int error = crypto_stream_chacha20_ietf(
-                    c,
-                    (ulong)bytes.Length,
-                    n,
-                    keyHandle);
+            int error = crypto_stream_chacha20_ietf(
+                bytes,
+                (ulong)bytes.Length,
+                nonce,
+                keyHandle);
 
-                Debug.Assert(error == 0);
-            }
+            Debug.Assert(error == 0);
         }
 
-        private protected unsafe override void XOrCore(
+        private protected override void XOrCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> input,
@@ -69,22 +65,17 @@ namespace NSec.Experimental
             Debug.Assert(nonce.Length == crypto_stream_chacha20_ietf_NONCEBYTES);
             Debug.Assert(output.Length == input.Length);
 
-            fixed (byte* c = output)
-            fixed (byte* m = input)
-            fixed (byte* n = nonce)
-            {
-                int error = crypto_stream_chacha20_ietf_xor(
-                    c,
-                    m,
-                    (ulong)input.Length,
-                    n,
-                    keyHandle);
+            int error = crypto_stream_chacha20_ietf_xor(
+                output,
+                input,
+                (ulong)input.Length,
+                nonce,
+                keyHandle);
 
-                Debug.Assert(error == 0);
-            }
+            Debug.Assert(error == 0);
         }
 
-        private protected unsafe override void XOrICCore(
+        private protected override void XOrICCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> input,
@@ -95,20 +86,15 @@ namespace NSec.Experimental
             Debug.Assert(nonce.Length == crypto_stream_chacha20_ietf_NONCEBYTES);
             Debug.Assert(output.Length == input.Length);
 
-            fixed (byte* c = output)
-            fixed (byte* m = input)
-            fixed (byte* n = nonce)
-            {
-                int error = crypto_stream_chacha20_ietf_xor_ic(
-                    c,
-                    m,
-                    (ulong)input.Length,
-                    n,
-                    ic,
-                    keyHandle);
+            int error = crypto_stream_chacha20_ietf_xor_ic(
+                output,
+                input,
+                (ulong)input.Length,
+                nonce,
+                ic,
+                keyHandle);
 
-                Debug.Assert(error == 0);
-            }
+            Debug.Assert(error == 0);
         }
 
         internal override bool TryExportKey(

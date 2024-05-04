@@ -9,7 +9,7 @@ namespace NSec.Cryptography.Formatting
         crypto_sign_ed25519_SEEDBYTES,
         blobHeader)
     {
-        protected unsafe override void Deserialize(
+        protected override void Deserialize(
             ReadOnlySpan<byte> span,
             out SecureMemoryHandle? keyHandle,
             out PublicKeyBytes publicKeyBytes)
@@ -22,29 +22,28 @@ namespace NSec.Cryptography.Formatting
             Debug.Assert(span.Length == crypto_sign_ed25519_SEEDBYTES);
 
             keyHandle = SecureMemoryHandle.Create(crypto_sign_ed25519_SECRETKEYBYTES);
+            publicKeyBytes = new PublicKeyBytes();
 
-            fixed (PublicKeyBytes* pk = &publicKeyBytes)
-            fixed (byte* seed_ = span)
-            {
-                int error = crypto_sign_ed25519_seed_keypair(pk, keyHandle, seed_);
+            int error = crypto_sign_ed25519_seed_keypair(
+                ref publicKeyBytes,
+                keyHandle,
+                span);
 
-                Debug.Assert(error == 0);
-            }
+            Debug.Assert(error == 0);
         }
 
-        protected unsafe override void Serialize(
+        protected override void Serialize(
             SecureMemoryHandle keyHandle,
             Span<byte> span)
         {
             Debug.Assert(keyHandle.Size == crypto_sign_ed25519_SECRETKEYBYTES);
             Debug.Assert(span.Length == crypto_sign_ed25519_SEEDBYTES);
 
-            fixed (byte* seed_ = span)
-            {
-                int error = crypto_sign_ed25519_sk_to_seed(seed_, keyHandle);
+            int error = crypto_sign_ed25519_sk_to_seed(
+                span,
+                keyHandle);
 
-                Debug.Assert(error == 0);
-            }
+            Debug.Assert(error == 0);
         }
     }
 }

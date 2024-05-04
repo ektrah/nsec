@@ -46,7 +46,7 @@ namespace NSec.Experimental.PasswordBased
             parameters.IterationCount = _c;
         }
 
-        internal override unsafe bool TryDeriveBytesCore(
+        internal override bool TryDeriveBytesCore(
             ReadOnlySpan<byte> password,
             ReadOnlySpan<byte> salt,
             Span<byte> bytes)

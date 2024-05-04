@@ -48,79 +48,64 @@ namespace NSec.Cryptography
             }
         }
 
-        internal unsafe override void FinalizeCore(
+        internal override void FinalizeCore(
             ref IncrementalHashState state,
             Span<byte> hash)
         {
             Debug.Assert(hash.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(hash.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
-            fixed (crypto_generichash_blake2b_state* state_ = &state.blake2b)
-            fixed (byte* @out = hash)
-            {
-                int error = crypto_generichash_blake2b_final(
-                    state_,
-                    @out,
-                    (nuint)hash.Length);
+            int error = crypto_generichash_blake2b_final(
+                ref state.blake2b,
+                hash,
+                (nuint)hash.Length);
 
-                Debug.Assert(error == 0);
-            }
+            Debug.Assert(error == 0);
         }
 
-        internal unsafe override void InitializeCore(
+        internal override void InitializeCore(
             out IncrementalHashState state)
         {
             Debug.Assert(HashSize >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(HashSize <= crypto_generichash_blake2b_BYTES_MAX);
 
-            fixed (crypto_generichash_blake2b_state* state_ = &state.blake2b)
-            {
-                int error = crypto_generichash_blake2b_init(
-                    state_,
-                    IntPtr.Zero,
-                    0,
-                    (nuint)HashSize);
+            int error = crypto_generichash_blake2b_init(
+                ref state.blake2b,
+                IntPtr.Zero,
+                0,
+                (nuint)HashSize);
 
-                Debug.Assert(error == 0);
-            }
+            Debug.Assert(error == 0);
         }
 
-        internal unsafe override void UpdateCore(
+        internal override void UpdateCore(
             ref IncrementalHashState state,
             ReadOnlySpan<byte> data)
         {
-            fixed (crypto_generichash_blake2b_state* state_ = &state.blake2b)
-            fixed (byte* @in = data)
-            {
-                int error = crypto_generichash_blake2b_update(
-                    state_,
-                    @in,
-                    (ulong)data.Length);
+            int error = crypto_generichash_blake2b_update(
+                ref state.blake2b,
+                data,
+                (ulong)data.Length);
 
-                Debug.Assert(error == 0);
-            }
+            Debug.Assert(error == 0);
         }
 
-        private protected unsafe override void HashCore(
+        private protected override void HashCore(
             ReadOnlySpan<byte> data,
             Span<byte> hash)
         {
             Debug.Assert(hash.Length >= crypto_generichash_blake2b_BYTES_MIN);
             Debug.Assert(hash.Length <= crypto_generichash_blake2b_BYTES_MAX);
 
-            fixed (byte* @out = hash)
-            fixed (byte* @in = data)
-            {
-                int error = crypto_generichash_blake2b(
-                    @out,
-                    (nuint)hash.Length,
-                    @in,
-                    (ulong)data.Length,
-                    IntPtr.Zero,
-                    0);
+            int error = crypto_generichash_blake2b(
+                hash,
+                (nuint)hash.Length,
+                data,
+                (ulong)data.Length,
+                IntPtr.Zero,
+                0);
 
-                Debug.Assert(error == 0);
-            }
+            Debug.Assert(error == 0);
         }
 
         private static void SelfTest()

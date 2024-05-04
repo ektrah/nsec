@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography.Formatting
@@ -13,28 +12,19 @@ namespace NSec.Cryptography.Formatting
             ReadOnlySpan<byte> span,
             out PublicKeyBytes publicKeyBytes)
         {
-            if (Unsafe.SizeOf<PublicKeyBytes>() != crypto_sign_ed25519_PUBLICKEYBYTES)
-            {
-                throw Error.InvalidOperation_InternalError();
-            }
-
             Debug.Assert(span.Length == crypto_sign_ed25519_PUBLICKEYBYTES);
 
-            Unsafe.CopyBlockUnaligned(ref Unsafe.As<PublicKeyBytes, byte>(ref publicKeyBytes), ref Unsafe.AsRef(in span.GetPinnableReference()), crypto_sign_ed25519_PUBLICKEYBYTES);
+            publicKeyBytes = new PublicKeyBytes();
+            span.CopyTo(publicKeyBytes);
         }
 
         protected override void Serialize(
             ref readonly PublicKeyBytes publicKeyBytes,
             Span<byte> span)
         {
-            if (Unsafe.SizeOf<PublicKeyBytes>() != crypto_sign_ed25519_PUBLICKEYBYTES)
-            {
-                throw Error.InvalidOperation_InternalError();
-            }
-
             Debug.Assert(span.Length == crypto_sign_ed25519_PUBLICKEYBYTES);
 
-            Unsafe.CopyBlockUnaligned(ref span.GetPinnableReference(), ref Unsafe.As<PublicKeyBytes, byte>(ref Unsafe.AsRef(in publicKeyBytes)), crypto_sign_ed25519_PUBLICKEYBYTES);
+            publicKeyBytes[..crypto_sign_ed25519_PUBLICKEYBYTES].CopyTo(span);
         }
     }
 }

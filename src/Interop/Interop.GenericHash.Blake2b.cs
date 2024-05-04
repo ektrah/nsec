@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
@@ -12,69 +13,82 @@ internal static partial class Interop
         internal const int crypto_generichash_blake2b_KEYBYTES_MAX = 64;
         internal const int crypto_generichash_blake2b_KEYBYTES_MIN = 16;
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_generichash_blake2b(
-            byte* @out,
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_generichash_blake2b(
+            Span<byte> @out,
             nuint outlen,
-            byte* @in,
+            ReadOnlySpan<byte> @in,
             ulong inlen,
             IntPtr key,
             nuint keylen);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_generichash_blake2b(
-            byte* @out,
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_generichash_blake2b(
+            Span<byte> @out,
             nuint outlen,
-            byte* @in,
+            ReadOnlySpan<byte> @in,
             ulong inlen,
             SecureMemoryHandle key,
             nuint keylen);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_generichash_blake2b_bytes();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_generichash_blake2b_bytes();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_generichash_blake2b_bytes_max();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_generichash_blake2b_bytes_max();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_generichash_blake2b_bytes_min();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_generichash_blake2b_bytes_min();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_generichash_blake2b_final(
-            crypto_generichash_blake2b_state* state,
-            byte* @out,
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_generichash_blake2b_final(
+            ref crypto_generichash_blake2b_state state,
+            Span<byte> @out,
             nuint outlen);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_generichash_blake2b_init(
-            crypto_generichash_blake2b_state* state,
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_generichash_blake2b_init(
+            ref crypto_generichash_blake2b_state state,
             IntPtr key,
             nuint keylen,
             nuint outlen);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_generichash_blake2b_init(
-            crypto_generichash_blake2b_state* state,
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_generichash_blake2b_init(
+            ref crypto_generichash_blake2b_state state,
             SecureMemoryHandle key,
             nuint keylen,
             nuint outlen);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_generichash_blake2b_keybytes();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_generichash_blake2b_keybytes();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_generichash_blake2b_keybytes_max();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_generichash_blake2b_keybytes_max();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_generichash_blake2b_keybytes_min();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_generichash_blake2b_keybytes_min();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_generichash_blake2b_statebytes();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_generichash_blake2b_statebytes();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_generichash_blake2b_update(
-            crypto_generichash_blake2b_state* state,
-            byte* @in,
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_generichash_blake2b_update(
+            ref crypto_generichash_blake2b_state state,
+            ReadOnlySpan<byte> @in,
             ulong inlen);
 
         [StructLayout(LayoutKind.Explicit, Size = 384)]

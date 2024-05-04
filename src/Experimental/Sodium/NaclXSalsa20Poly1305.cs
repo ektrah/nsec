@@ -37,7 +37,7 @@ namespace NSec.Experimental.Sodium
             keyHandle = SecureMemoryHandle.CreateFrom(seed);
         }
 
-        internal unsafe override void EncryptCore(
+        internal override void EncryptCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> plaintext,
@@ -47,19 +47,14 @@ namespace NSec.Experimental.Sodium
             Debug.Assert(nonce.Length == crypto_secretbox_xsalsa20poly1305_NONCEBYTES);
             Debug.Assert(ciphertext.Length == crypto_secretbox_xsalsa20poly1305_MACBYTES + plaintext.Length);
 
-            fixed (byte* c = ciphertext)
-            fixed (byte* m = plaintext)
-            fixed (byte* n = nonce)
-            {
-                int error = crypto_secretbox_easy(
-                    c,
-                    m,
-                    (ulong)plaintext.Length,
-                    n,
-                    keyHandle);
+            int error = crypto_secretbox_easy(
+                ciphertext,
+                plaintext,
+                (ulong)plaintext.Length,
+                nonce,
+                keyHandle);
 
-                Debug.Assert(error == 0);
-            }
+            Debug.Assert(error == 0);
         }
 
         internal override int GetSeedSize()
@@ -67,7 +62,7 @@ namespace NSec.Experimental.Sodium
             return crypto_secretbox_xsalsa20poly1305_KEYBYTES;
         }
 
-        internal unsafe override bool DecryptCore(
+        internal override bool DecryptCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> nonce,
             ReadOnlySpan<byte> ciphertext,
@@ -77,21 +72,16 @@ namespace NSec.Experimental.Sodium
             Debug.Assert(nonce.Length == crypto_secretbox_xsalsa20poly1305_NONCEBYTES);
             Debug.Assert(plaintext.Length == ciphertext.Length - crypto_secretbox_xsalsa20poly1305_MACBYTES);
 
-            fixed (byte* m = plaintext)
-            fixed (byte* c = ciphertext)
-            fixed (byte* n = nonce)
-            {
-                int error = crypto_secretbox_open_easy(
-                    m,
-                    c,
-                    (ulong)ciphertext.Length,
-                    n,
-                    keyHandle);
+            int error = crypto_secretbox_open_easy(
+                plaintext,
+                ciphertext,
+                (ulong)ciphertext.Length,
+                nonce,
+                keyHandle);
 
-                // TODO: clear plaintext if decryption fails
+            // TODO: clear plaintext if decryption fails
 
-                return error == 0;
-            }
+            return error == 0;
         }
 
         internal override bool TryExportKey(

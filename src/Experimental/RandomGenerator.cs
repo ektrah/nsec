@@ -198,7 +198,7 @@ namespace NSec.Experimental
 
         internal sealed class System : RandomGenerator
         {
-            private protected unsafe override void GenerateBytesCore(
+            private protected override void GenerateBytesCore(
                 Span<byte> bytes)
             {
                 global::System.Security.Cryptography.RandomNumberGenerator.Fill(bytes);

@@ -1,12 +1,13 @@
-using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 internal static partial class Interop
 {
     internal static partial class Libsodium
     {
-        [StructLayout(LayoutKind.Explicit, Size = 32)]
-        internal readonly struct PublicKeyBytes
+        [InlineArray(32)]
+        internal struct PublicKeyBytes
         {
+            private byte _element0;
         }
     }
 }

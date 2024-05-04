@@ -37,17 +37,11 @@ namespace NSec.Experimental
                 Span<byte> seed = stackalloc byte[crypto_scalarmult_curve25519_BYTES];
                 try
                 {
-                    unsafe
-                    {
-                        fixed (byte* buf = seed)
-                        {
-                            int error = crypto_sign_ed25519_sk_to_curve25519(buf, key.Handle);
+                    int error = crypto_sign_ed25519_sk_to_curve25519(seed, key.Handle);
 
-                            if (error != 0)
-                            {
-                                throw Error.InvalidOperation_InternalError();
-                            }
-                        }
+                    if (error != 0)
+                    {
+                        throw Error.InvalidOperation_InternalError();
                     }
 
                     algorithm.CreateKey(seed, out keyHandle, out publicKey);
@@ -92,18 +86,13 @@ namespace NSec.Experimental
 
             PublicKey newPublicKey = new(algorithm);
 
-            unsafe
-            {
-                fixed (PublicKeyBytes* curve25519_pk = newPublicKey)
-                fixed (PublicKeyBytes* ed25519_pk = publicKey)
-                {
-                    int error = crypto_sign_ed25519_pk_to_curve25519(curve25519_pk, ed25519_pk);
+            int error = crypto_sign_ed25519_pk_to_curve25519(
+                ref newPublicKey.GetPinnableReference(),
+                in publicKey.GetPinnableReference());
 
-                    if (error != 0)
-                    {
-                        throw Error.InvalidOperation_InternalError();
-                    }
-                }
+            if (error != 0)
+            {
+                throw Error.InvalidOperation_InternalError();
             }
 
             return newPublicKey;

@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
@@ -8,36 +9,43 @@ internal static partial class Interop
         internal const int crypto_auth_hmacsha512_BYTES = 64;
         internal const int crypto_auth_hmacsha512_KEYBYTES = 32;
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_auth_hmacsha512_bytes();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_auth_hmacsha512_bytes();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_auth_hmacsha512_final(
-            crypto_auth_hmacsha512_state* state,
-            byte* @out);
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_auth_hmacsha512_final(
+            ref crypto_auth_hmacsha512_state state,
+            Span<byte> @out);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_auth_hmacsha512_init(
-            crypto_auth_hmacsha512_state* state,
-            byte* key,
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_auth_hmacsha512_init(
+            ref crypto_auth_hmacsha512_state state,
+            ReadOnlySpan<byte> key,
             nuint keylen);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_auth_hmacsha512_init(
-            crypto_auth_hmacsha512_state* state,
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_auth_hmacsha512_init(
+            ref crypto_auth_hmacsha512_state state,
             SecureMemoryHandle key,
             nuint keylen);
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_auth_hmacsha512_keybytes();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_auth_hmacsha512_keybytes();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern nuint crypto_auth_hmacsha512_statebytes();
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial nuint crypto_auth_hmacsha512_statebytes();
 
-        [DllImport(Libraries.Libsodium, CallingConvention = CallingConvention.Cdecl)]
-        internal static unsafe extern int crypto_auth_hmacsha512_update(
-            crypto_auth_hmacsha512_state* state,
-            byte* @in,
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_auth_hmacsha512_update(
+            ref crypto_auth_hmacsha512_state state,
+            ReadOnlySpan<byte> @in,
             ulong inlen);
 
         [StructLayout(LayoutKind.Explicit, Size = 416)]
