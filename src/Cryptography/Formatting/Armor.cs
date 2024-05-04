@@ -24,10 +24,10 @@ namespace NSec.Cryptography.Formatting
             utf8[j++] = (byte)'\r';
             utf8[j++] = (byte)'\n';
 
-            while ((remaining = bytes.Length - i) > 0)
+            while ((remaining = Math.Min(bytes.Length - i, 48)) > 0)
             {
                 System.Buffers.Text.Base64.EncodeToUtf8(
-                    bytes.Slice(i, remaining <= 48 ? remaining : 48),
+                    bytes.Slice(i, remaining),
                     utf8[j..],
                     out int consumed,
                     out int written,
