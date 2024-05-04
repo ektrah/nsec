@@ -126,6 +126,9 @@
   <data name="ArgumentNull_Password" xml:space="preserve">
     <value>Password cannot be null.</value>
   </data>
+  <data name="ArgumentNull_Scheme" xml:space="preserve">
+    <value>Encryption scheme cannot be null.</value>
+  </data>
   <data name="ArgumentNull_SharedSecret" xml:space="preserve">
     <value>Shared secret cannot be null.</value>
   </data>

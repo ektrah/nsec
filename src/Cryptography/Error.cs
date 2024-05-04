@@ -252,6 +252,12 @@ namespace NSec.Cryptography
             return new ArgumentNullException(paramName, ResourceManager.GetString(nameof(ArgumentNull_Password)));
         }
 
+        internal static ArgumentNullException ArgumentNull_Scheme(
+            string paramName)
+        {
+            return new ArgumentNullException(paramName, ResourceManager.GetString(nameof(ArgumentNull_Scheme)));
+        }
+
         internal static ArgumentNullException ArgumentNull_SharedSecret(
             string paramName)
         {

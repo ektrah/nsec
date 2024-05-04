@@ -14,7 +14,7 @@ namespace NSec.Experimental.PasswordBased
         {
             if (key == null)
             {
-                throw new ArgumentNullException(nameof(key));
+                throw Error.ArgumentNull_Key(nameof(key));
             }
 
             KeyBlobFormat format = SelectKeyBlobFormat(key.Algorithm);
@@ -31,7 +31,7 @@ namespace NSec.Experimental.PasswordBased
         {
             if (key == null)
             {
-                throw new ArgumentNullException(nameof(key));
+                throw Error.ArgumentNull_Key(nameof(key));
             }
 
             KeyBlobFormat format = SelectKeyBlobFormat(key.Algorithm);
@@ -48,7 +48,7 @@ namespace NSec.Experimental.PasswordBased
         {
             if (algorithm == null)
             {
-                throw new ArgumentNullException(nameof(algorithm));
+                throw Error.ArgumentNull_Algorithm(nameof(algorithm));
             }
 
             KeyBlobFormat format = SelectKeyBlobFormat(algorithm);
@@ -65,7 +65,7 @@ namespace NSec.Experimental.PasswordBased
         {
             if (algorithm == null)
             {
-                throw new ArgumentNullException(nameof(algorithm));
+                throw Error.ArgumentNull_Algorithm(nameof(algorithm));
             }
 
             KeyBlobFormat format = SelectKeyBlobFormat(algorithm);
@@ -80,7 +80,7 @@ namespace NSec.Experimental.PasswordBased
         {
             if (scheme == null)
             {
-                throw new ArgumentNullException(nameof(scheme));
+                throw Error.ArgumentNull_Scheme(nameof(scheme));
             }
 
             Reader reader = new(blob);
@@ -96,7 +96,7 @@ namespace NSec.Experimental.PasswordBased
         {
             if (scheme == null)
             {
-                throw new ArgumentNullException(nameof(scheme));
+                throw Error.ArgumentNull_Scheme(nameof(scheme));
             }
 
             Reader reader = new(blob);
@@ -114,7 +114,7 @@ namespace NSec.Experimental.PasswordBased
         {
             if (scheme == null)
             {
-                throw new ArgumentNullException(nameof(scheme));
+                throw Error.ArgumentNull_Scheme(nameof(scheme));
             }
 
             byte[] ciphertext = scheme.Encrypt(password, salt, nonce, plaintext);
@@ -133,7 +133,7 @@ namespace NSec.Experimental.PasswordBased
         {
             if (scheme == null)
             {
-                throw new ArgumentNullException(nameof(scheme));
+                throw Error.ArgumentNull_Scheme(nameof(scheme));
             }
 
             byte[] ciphertext = scheme.Encrypt(password, salt, nonce, plaintext);
