@@ -17,8 +17,8 @@ namespace NSec.Tests.Rfc
         {
             var a = HashAlgorithm.Blake2b_512;
 
-            var expected = hash.DecodeHex();
-            var actual = a.Hash(msg.DecodeHex());
+            var expected = Convert.FromHexString(hash);
+            var actual = a.Hash(Convert.FromHexString(msg));
 
             Assert.Equal(expected, actual);
         }

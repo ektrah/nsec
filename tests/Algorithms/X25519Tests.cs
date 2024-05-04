@@ -51,14 +51,14 @@ namespace NSec.Tests.Algorithms
             var a = KeyAgreementAlgorithm.X25519;
             var kdf = KeyDerivationAlgorithm.HkdfSha256;
 
-            var pk1 = publicKey.DecodeHex();
-            var pk2 = publicKey.DecodeHex();
+            var pk1 = Convert.FromHexString(publicKey);
+            var pk2 = Convert.FromHexString(publicKey);
 
             pk1[^1] &= 0x7F;
             pk2[^1] |= 0x80;
 
-            using var k = Key.Import(a, privateKey.DecodeHex(), KeyBlobFormat.RawPrivateKey);
-            using var sharedSecretExpected = SharedSecret.Import(sharedSecret.DecodeHex(), SharedSecretBlobFormat.RawSharedSecret);
+            using var k = Key.Import(a, Convert.FromHexString(privateKey), KeyBlobFormat.RawPrivateKey);
+            using var sharedSecretExpected = SharedSecret.Import(Convert.FromHexString(sharedSecret), SharedSecretBlobFormat.RawSharedSecret);
             using var sharedSecretActual1 = Utilities.AssertNotNull(a.Agree(k, PublicKey.Import(a, pk1, KeyBlobFormat.RawPublicKey)));
             using var sharedSecretActual2 = Utilities.AssertNotNull(a.Agree(k, PublicKey.Import(a, pk2, KeyBlobFormat.RawPublicKey)));
 
@@ -80,8 +80,8 @@ namespace NSec.Tests.Algorithms
         {
             var a = KeyAgreementAlgorithm.X25519;
 
-            var pk1 = publicKey.DecodeHex();
-            var pk2 = publicKey.DecodeHex();
+            var pk1 = Convert.FromHexString(publicKey);
+            var pk2 = Convert.FromHexString(publicKey);
 
             pk1[^1] &= 0x7F;
             pk2[^1] |= 0x80;
@@ -102,9 +102,9 @@ namespace NSec.Tests.Algorithms
         {
             var a = KeyAgreementAlgorithm.X25519;
 
-            var pk = PublicKey.Import(a, publicKey.DecodeHex(), KeyBlobFormat.RawPublicKey);
+            var pk = PublicKey.Import(a, Convert.FromHexString(publicKey), KeyBlobFormat.RawPublicKey);
 
-            using var k = Key.Import(a, privateKey.DecodeHex(), KeyBlobFormat.RawPrivateKey);
+            using var k = Key.Import(a, Convert.FromHexString(privateKey), KeyBlobFormat.RawPrivateKey);
 
             Assert.Null(a.Agree(k, pk));
         }
@@ -116,9 +116,9 @@ namespace NSec.Tests.Algorithms
             var a = KeyAgreementAlgorithm.X25519;
             var kdf = KeyDerivationAlgorithm.HkdfSha256;
 
-            using var k = Key.Import(a, privateKey.DecodeHex(), KeyBlobFormat.RawPrivateKey);
-            using var sharedSecretExpected = SharedSecret.Import(sharedSecret.DecodeHex(), SharedSecretBlobFormat.RawSharedSecret);
-            using var sharedSecretActual = Utilities.AssertNotNull(a.Agree(k, PublicKey.Import(a, publicKey.DecodeHex(), KeyBlobFormat.RawPublicKey)));
+            using var k = Key.Import(a, Convert.FromHexString(privateKey), KeyBlobFormat.RawPrivateKey);
+            using var sharedSecretExpected = SharedSecret.Import(Convert.FromHexString(sharedSecret), SharedSecretBlobFormat.RawSharedSecret);
+            using var sharedSecretActual = Utilities.AssertNotNull(a.Agree(k, PublicKey.Import(a, Convert.FromHexString(publicKey), KeyBlobFormat.RawPublicKey)));
 
             var expected = kdf.Extract(sharedSecretExpected, []);
             var actual = kdf.Extract(sharedSecretActual, []);

@@ -9,14 +9,14 @@ namespace NSec.Experimental
         public static byte[] Base64Decode(
             string base64)
         {
-            return NSec.Experimental.Text.Base64.Decode(base64);
+            return Convert.FromBase64String(base64);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string Base64Encode(
             ReadOnlySpan<byte> bytes)
         {
-            return NSec.Experimental.Text.Base64.Encode(bytes);
+            return Convert.ToBase64String(bytes);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -58,14 +58,14 @@ namespace NSec.Experimental
         public static byte[] HexDecode(
             string base16)
         {
-            return NSec.Experimental.Text.Base16.Decode(base16);
+            return Convert.FromHexString(base16);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string HexEncode(
             ReadOnlySpan<byte> bytes)
         {
-            return NSec.Experimental.Text.Base16.Encode(bytes);
+            return Convert.ToHexString(bytes);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

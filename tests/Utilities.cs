@@ -13,18 +13,12 @@ namespace NSec.Tests
             return obj!;
         }
 
-        public static byte[] DecodeHex(this string hex) => NSec.Experimental.Text.Base16.Decode(hex);
-
-        public static string EncodeHex(this byte[] bytes) => NSec.Experimental.Text.Base16.Encode(bytes);
-
         public static byte[] FillArray(int length, byte value)
         {
             var array = new byte[length];
-            array.AsSpan().Fill(value);
+            Array.Fill(array, value);
             return array;
         }
-
-        public static byte[] Substring(this byte[] array, Range range) => array.AsSpan(range).ToArray();
 
         #region Random Bytes
 

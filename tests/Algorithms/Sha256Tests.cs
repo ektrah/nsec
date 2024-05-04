@@ -32,7 +32,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = HashAlgorithm.Sha256;
 
-            var expected = s_hashOfEmpty.DecodeHex();
+            var expected = Convert.FromHexString(s_hashOfEmpty);
             var actual = a.Hash([]);
 
             Assert.Equal(a.HashSize, actual.Length);
@@ -48,7 +48,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = HashAlgorithm.Sha256;
 
-            var expected = s_hashOfEmpty.DecodeHex();
+            var expected = Convert.FromHexString(s_hashOfEmpty);
             var actual = new byte[expected.Length];
 
             a.Hash([], actual);

@@ -21,12 +21,12 @@ namespace NSec.Tests.Rfc
         {
             var a = SignatureAlgorithm.Ed25519;
 
-            var p = PublicKey.Import(a, pk.DecodeHex(), KeyBlobFormat.RawPublicKey);
+            var p = PublicKey.Import(a, Convert.FromHexString(pk), KeyBlobFormat.RawPublicKey);
 
-            using var k = Key.Import(a, sk.DecodeHex(), KeyBlobFormat.RawPrivateKey);
-            var m = msg.DecodeHex();
+            using var k = Key.Import(a, Convert.FromHexString(sk), KeyBlobFormat.RawPrivateKey);
+            var m = Convert.FromHexString(msg);
 
-            var expected = sig.DecodeHex();
+            var expected = Convert.FromHexString(sig);
             var actual = a.Sign(k, m);
             Assert.Equal(expected, actual);
 

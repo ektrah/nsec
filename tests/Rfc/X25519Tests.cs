@@ -23,9 +23,9 @@ namespace NSec.Tests.Rfc
             var a = KeyAgreementAlgorithm.X25519;
             var kdf = KeyDerivationAlgorithm.HkdfSha256;
 
-            using var k = Key.Import(a, privateKey.DecodeHex(), KeyBlobFormat.RawPrivateKey);
-            using var sharedSecretExpected = SharedSecret.Import(sharedSecret.DecodeHex(), SharedSecretBlobFormat.RawSharedSecret);
-            using var sharedSecretActual = Utilities.AssertNotNull(a.Agree(k, PublicKey.Import(a, publicKey.DecodeHex(), KeyBlobFormat.RawPublicKey)));
+            using var k = Key.Import(a, Convert.FromHexString(privateKey), KeyBlobFormat.RawPrivateKey);
+            using var sharedSecretExpected = SharedSecret.Import(Convert.FromHexString(sharedSecret), SharedSecretBlobFormat.RawSharedSecret);
+            using var sharedSecretActual = Utilities.AssertNotNull(a.Agree(k, PublicKey.Import(a, Convert.FromHexString(publicKey), KeyBlobFormat.RawPublicKey)));
 
             var expected = kdf.Extract(sharedSecretExpected, []);
             var actual = kdf.Extract(sharedSecretActual, []);

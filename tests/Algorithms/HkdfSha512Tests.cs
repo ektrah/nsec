@@ -554,7 +554,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = KeyDerivationAlgorithm.HkdfSha512;
 
-            var expected = s_prkForEmpty.DecodeHex();
+            var expected = Convert.FromHexString(s_prkForEmpty);
             var actual = a.Extract([], []);
 
             Assert.Equal(expected, actual);
@@ -570,7 +570,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = KeyDerivationAlgorithm.HkdfSha512;
 
-            var expected = s_prkForEmpty.DecodeHex();
+            var expected = Convert.FromHexString(s_prkForEmpty);
             var actual = new byte[expected.Length];
 
             a.Extract([], [], actual);
@@ -596,8 +596,8 @@ namespace NSec.Tests.Algorithms
         {
             var a = KeyDerivationAlgorithm.HkdfSha512;
 
-            var expected = s_outputForEmpty.DecodeHex().Substring(..count);
-            var actual = a.Expand(s_prkForEmpty.DecodeHex(), [], count);
+            var expected = Convert.FromHexString(s_outputForEmpty)[..count];
+            var actual = a.Expand(Convert.FromHexString(s_prkForEmpty), [], count);
 
             Assert.NotNull(actual);
             Assert.Equal(expected, actual);
@@ -609,8 +609,8 @@ namespace NSec.Tests.Algorithms
         {
             var a = KeyDerivationAlgorithm.HkdfSha512;
 
-            var expected = s_outputForEmpty.DecodeHex();
-            var actual = a.Expand(s_prkForEmpty.DecodeHex(), [], a.MaxCount);
+            var expected = Convert.FromHexString(s_outputForEmpty);
+            var actual = a.Expand(Convert.FromHexString(s_prkForEmpty), [], a.MaxCount);
 
             Assert.NotNull(actual);
             Assert.Equal(expected, actual);
@@ -622,7 +622,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = KeyDerivationAlgorithm.HkdfSha512;
 
-            var b = a.Expand((s_prkForEmpty + s_prkForEmpty).DecodeHex(), [], 256);
+            var b = a.Expand(Convert.FromHexString(s_prkForEmpty + s_prkForEmpty), [], 256);
 
             Assert.NotNull(b);
             Assert.Equal(256, b.Length);
@@ -646,10 +646,10 @@ namespace NSec.Tests.Algorithms
         {
             var a = KeyDerivationAlgorithm.HkdfSha512;
 
-            var expected = s_outputForEmpty.DecodeHex().Substring(..count);
+            var expected = Convert.FromHexString(s_outputForEmpty)[..count];
             var actual = new byte[count];
 
-            a.Expand(s_prkForEmpty.DecodeHex(), [], actual);
+            a.Expand(Convert.FromHexString(s_prkForEmpty), [], actual);
 
             Assert.Equal(expected, actual);
         }
@@ -659,10 +659,10 @@ namespace NSec.Tests.Algorithms
         {
             var a = KeyDerivationAlgorithm.HkdfSha512;
 
-            var expected = s_outputForEmpty.DecodeHex();
+            var expected = Convert.FromHexString(s_outputForEmpty);
             var actual = new byte[a.MaxCount];
 
-            a.Expand(s_prkForEmpty.DecodeHex(), [], actual);
+            a.Expand(Convert.FromHexString(s_prkForEmpty), [], actual);
 
             Assert.Equal(expected, actual);
         }
@@ -674,7 +674,7 @@ namespace NSec.Tests.Algorithms
 
             var b = new byte[256];
 
-            a.Expand((s_prkForEmpty + s_prkForEmpty).DecodeHex(), [], b);
+            a.Expand(Convert.FromHexString(s_prkForEmpty + s_prkForEmpty), [], b);
 
             Assert.NotNull(b);
             Assert.Equal(256, b.Length);
@@ -689,7 +689,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = KeyDerivationAlgorithm.HkdfSha512;
 
-            var expected = s_outputForEmpty.DecodeHex();
+            var expected = Convert.FromHexString(s_outputForEmpty);
             var actual = a.DeriveBytes([], [], [], a.MaxCount);
 
             Assert.NotNull(actual);
@@ -706,7 +706,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = KeyDerivationAlgorithm.HkdfSha512;
 
-            var expected = s_outputForEmpty.DecodeHex();
+            var expected = Convert.FromHexString(s_outputForEmpty);
             var actual = new byte[a.MaxCount];
 
             a.DeriveBytes([], [], [], actual);

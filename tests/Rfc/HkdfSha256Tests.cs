@@ -40,9 +40,9 @@ namespace NSec.Tests.Rfc
         {
             var a = KeyDerivationAlgorithm.HkdfSha256;
 
-            var actualOkm = a.DeriveBytes(ikm.DecodeHex(), salt.DecodeHex(), info.DecodeHex(), expectedOkm.DecodeHex().Length);
+            var actualOkm = a.DeriveBytes(Convert.FromHexString(ikm), Convert.FromHexString(salt), Convert.FromHexString(info), Convert.FromHexString(expectedOkm).Length);
 
-            Assert.Equal(expectedOkm.DecodeHex(), actualOkm);
+            Assert.Equal(Convert.FromHexString(expectedOkm), actualOkm);
         }
 
         [Theory]
@@ -51,11 +51,11 @@ namespace NSec.Tests.Rfc
         {
             var a = KeyDerivationAlgorithm.HkdfSha256;
 
-            using var s = SharedSecret.Import(ikm.DecodeHex(), SharedSecretBlobFormat.RawSharedSecret);
+            using var s = SharedSecret.Import(Convert.FromHexString(ikm), SharedSecretBlobFormat.RawSharedSecret);
 
-            var actualOkm = a.DeriveBytes(s, salt.DecodeHex(), info.DecodeHex(), expectedOkm.DecodeHex().Length);
+            var actualOkm = a.DeriveBytes(s, Convert.FromHexString(salt), Convert.FromHexString(info), Convert.FromHexString(expectedOkm).Length);
 
-            Assert.Equal(expectedOkm.DecodeHex(), actualOkm);
+            Assert.Equal(Convert.FromHexString(expectedOkm), actualOkm);
         }
 
         [Theory]
@@ -64,13 +64,13 @@ namespace NSec.Tests.Rfc
         {
             var a = KeyDerivationAlgorithm.HkdfSha256;
 
-            using var s = SharedSecret.Import(ikm.DecodeHex(), SharedSecretBlobFormat.RawSharedSecret);
+            using var s = SharedSecret.Import(Convert.FromHexString(ikm), SharedSecretBlobFormat.RawSharedSecret);
 
-            var actualPrk = a.Extract(s, salt.DecodeHex());
-            Assert.Equal(expectedPrk.DecodeHex(), actualPrk);
+            var actualPrk = a.Extract(s, Convert.FromHexString(salt));
+            Assert.Equal(Convert.FromHexString(expectedPrk), actualPrk);
 
-            var actualOkm = a.Expand(actualPrk, info.DecodeHex(), expectedOkm.DecodeHex().Length);
-            Assert.Equal(expectedOkm.DecodeHex(), actualOkm);
+            var actualOkm = a.Expand(actualPrk, Convert.FromHexString(info), Convert.FromHexString(expectedOkm).Length);
+            Assert.Equal(Convert.FromHexString(expectedOkm), actualOkm);
         }
     }
 }

@@ -64,13 +64,13 @@ namespace NSec.Tests.Rfc
 
             var a = AeadAlgorithm.ChaCha20Poly1305;
 
-            using var k = Key.Import(a, key.DecodeHex(), KeyBlobFormat.RawSymmetricKey);
+            using var k = Key.Import(a, Convert.FromHexString(key), KeyBlobFormat.RawSymmetricKey);
 
-            var ct = a.Encrypt(k, nonce.DecodeHex(), aad.DecodeHex(), plaintext.DecodeHex());
-            Assert.Equal((ciphertext + tag).DecodeHex(), ct);
+            var ct = a.Encrypt(k, Convert.FromHexString(nonce), Convert.FromHexString(aad), Convert.FromHexString(plaintext));
+            Assert.Equal(Convert.FromHexString(ciphertext + tag), ct);
 
-            var pt = a.Decrypt(k, nonce.DecodeHex(), aad.DecodeHex(), ct);
-            Assert.Equal(plaintext.DecodeHex(), pt);
+            var pt = a.Decrypt(k, Convert.FromHexString(nonce), Convert.FromHexString(aad), ct);
+            Assert.Equal(Convert.FromHexString(plaintext), pt);
         }
     }
 }

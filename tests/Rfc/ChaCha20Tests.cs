@@ -63,11 +63,11 @@ namespace NSec.Tests.Rfc
 
             var a = StreamCipherAlgorithm.ChaCha20;
 
-            using var k = Key.Import(a, key.DecodeHex(), KeyBlobFormat.RawSymmetricKey);
+            using var k = Key.Import(a, Convert.FromHexString(key), KeyBlobFormat.RawSymmetricKey);
 
-            var b = a.XOrIC(k, nonce.DecodeHex(), plaintext.DecodeHex(), initialBlockCounter);
+            var b = a.XOrIC(k, Convert.FromHexString(nonce), Convert.FromHexString(plaintext), initialBlockCounter);
 
-            Assert.Equal(ciphertext.DecodeHex(), b);
+            Assert.Equal(Convert.FromHexString(ciphertext), b);
         }
     }
 }

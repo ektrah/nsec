@@ -33,10 +33,10 @@ namespace NSec.Tests.Rfc
         {
             var a = MacAlgorithm.HmacSha256;
 
-            using var k = Key.Import(a, key.DecodeHex(), KeyBlobFormat.RawSymmetricKey);
-            var m = msg.DecodeHex();
+            using var k = Key.Import(a, Convert.FromHexString(key), KeyBlobFormat.RawSymmetricKey);
+            var m = Convert.FromHexString(msg);
 
-            var expected = mac.DecodeHex();
+            var expected = Convert.FromHexString(mac);
             var actual = a.Mac(k, m);
             Assert.Equal(expected, actual);
 
