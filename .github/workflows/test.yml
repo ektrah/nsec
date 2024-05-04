@@ -5,6 +5,7 @@ on: [push, pull_request]
 jobs:
 
   test-win:
+    needs: test-linux-musl
     runs-on: windows-latest
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
@@ -15,6 +16,8 @@ jobs:
       with:
         dotnet-version: |
           8.0.x
+    - name: Install workloads
+      run: dotnet workload install ios tvos maccatalyst
     - run: dotnet --info
     - uses: actions/checkout@v4
     - name: Test (.NET 8.0/Debug)
@@ -29,7 +32,7 @@ jobs:
         path: '**/*.nupkg'
 
   test-macos:
-    needs: [test-win, test-linux-musl]
+    needs: test-win
     strategy:
       fail-fast: false
       matrix:
@@ -55,7 +58,7 @@ jobs:
       run: dotnet test tests -f net8.0 -c Release
 
   test-linux:
-    needs: [test-win, test-linux-musl]
+    needs: test-macos
     strategy:
       fail-fast: false
       matrix:
