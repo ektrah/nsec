@@ -1,11 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0</TargetFrameworks>
-    <TargetFrameworks Condition="'$(RUNNER_OS)'=='Windows'">net8.0;net8.0-ios;net8.0-tvos;net8.0-maccatalyst</TargetFrameworks>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <Description>Provides modern cryptographic algorithm implementations for .NET based on libsodium.
 
 Commonly Used Types:
