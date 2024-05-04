@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSec.Cryptography", "src\Cr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSec.Experimental", "src\Experimental\NSec.Experimental.csproj", "{5D5C8827-A74C-4B29-961F-CB8613C33F5C}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Interop", "src\Interop\Interop.shproj", "{F9492D32-4406-41EE-B90E-F9AE33F0F4DC}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "tests\Tests.csproj", "{97BF2648-69D2-4A17-888F-2A13E5C5CB28}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{DF40D4F3-D18D-45F3-87DD-2A8378354B57}"
@@ -113,7 +111,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{F9492D32-4406-41EE-B90E-F9AE33F0F4DC} = {D24568A9-54F1-48E0-88FF-2E067F9BDA95}
 		{99A04338-7321-4B8B-AA29-496C18328F90} = {DF40D4F3-D18D-45F3-87DD-2A8378354B57}
 		{F9D92917-A968-4F64-8F28-98B2CADE6417} = {DF40D4F3-D18D-45F3-87DD-2A8378354B57}
 		{D24568A9-54F1-48E0-88FF-2E067F9BDA95} = {DF40D4F3-D18D-45F3-87DD-2A8378354B57}
@@ -123,9 +120,5 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ED81BE7D-A09F-4466-8138-E0F420A24568}
-	EndGlobalSection
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		src\Interop\Interop.projitems*{839872cc-6af4-456b-a55b-f82ee7b4822e}*SharedItemsImports = 5
-		src\Interop\Interop.projitems*{f9492d32-4406-41ee-b90e-f9ae33f0f4dc}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal
