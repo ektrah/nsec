@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using NSec.Cryptography;
 
@@ -10,7 +9,7 @@ namespace NSec.Experimental.Asn1
     {
         internal const int MaxDepth = 7;
 
-        private InlineSpanArray _stack;
+        private InlineRangeArray _stack;
         private readonly ReadOnlySpan<byte> _buffer;
         private int _depth;
         private bool _failed;
@@ -18,8 +17,8 @@ namespace NSec.Experimental.Asn1
         public Asn1Reader(
             ReadOnlySpan<byte> buffer)
         {
-            _stack = new InlineSpanArray();
-            _stack[0] = new Span(buffer);
+            _stack = new InlineRangeArray();
+            _stack[0] = Range.All;
 
             _buffer = buffer;
             _depth = 0;
@@ -28,11 +27,11 @@ namespace NSec.Experimental.Asn1
 
         public readonly bool Success => !_failed;
 
-        public readonly bool SuccessComplete => !_failed && _depth == 0 && _stack[0].IsEmpty;
+        public readonly bool SuccessComplete => !_failed && _depth == 0 && _buffer[_stack[0]].IsEmpty;
 
         public void BeginSequence()
         {
-            Span span = Read(0x30);
+            Range range = Read(0x30);
 
             if (_failed)
             {
@@ -45,13 +44,13 @@ namespace NSec.Experimental.Asn1
                 {
                     throw Error.InvalidOperation_InternalError(); // overflow
                 }
-                _stack[_depth] = span;
+                _stack[_depth] = range;
             }
         }
 
         public ReadOnlySpan<byte> BitString()
         {
-            ReadOnlySpan<byte> bytes = Read(0x03).ApplyTo(_buffer);
+            ReadOnlySpan<byte> bytes = _buffer[Read(0x03)];
             ReadOnlySpan<byte> value = default;
 
             if (_failed || bytes.IsEmpty || bytes[0] != 0)
@@ -68,7 +67,7 @@ namespace NSec.Experimental.Asn1
 
         public bool Bool()
         {
-            ReadOnlySpan<byte> bytes = Read(0x01).ApplyTo(_buffer);
+            ReadOnlySpan<byte> bytes = _buffer[Read(0x01)];
             bool value = default;
 
             if (_failed || bytes.Length != 1 || (bytes[0] != 0x00 && bytes[0] != 0xFF))
@@ -85,7 +84,7 @@ namespace NSec.Experimental.Asn1
 
         public void End()
         {
-            if (_failed || !_stack[_depth].IsEmpty)
+            if (_failed || !_buffer[_stack[_depth]].IsEmpty)
             {
                 Fail();
             }
@@ -101,7 +100,7 @@ namespace NSec.Experimental.Asn1
 
         public int Integer32()
         {
-            ReadOnlySpan<byte> bytes = Read(0x02).ApplyTo(_buffer);
+            ReadOnlySpan<byte> bytes = _buffer[Read(0x02)];
             int value = default;
 
             if (_failed || IsInvalidInteger(bytes, sizeof(int)))
@@ -122,7 +121,7 @@ namespace NSec.Experimental.Asn1
 
         public long Integer64()
         {
-            ReadOnlySpan<byte> bytes = Read(0x02).ApplyTo(_buffer);
+            ReadOnlySpan<byte> bytes = _buffer[Read(0x02)];
             long value = default;
 
             if (_failed || IsInvalidInteger(bytes, sizeof(long)))
@@ -143,9 +142,9 @@ namespace NSec.Experimental.Asn1
 
         public void Null()
         {
-            Span span = Read(0x05);
+            ReadOnlySpan<byte> bytes = _buffer[Read(0x05)];
 
-            if (_failed || !span.IsEmpty)
+            if (_failed || !bytes.IsEmpty)
             {
                 Fail();
             }
@@ -153,12 +152,12 @@ namespace NSec.Experimental.Asn1
 
         public ReadOnlySpan<byte> ObjectIdentifier()
         {
-            return Read(0x06).ApplyTo(_buffer);
+            return _buffer[Read(0x06)];
         }
 
         public ReadOnlySpan<byte> OctetString()
         {
-            return Read(0x04).ApplyTo(_buffer);
+            return _buffer[Read(0x04)];
         }
 
         private void Fail()
@@ -178,18 +177,18 @@ namespace NSec.Experimental.Asn1
                 || bytes.Length > 1 && bytes[0] == 0xFF && (bytes[1] & 0x80) == 0x80;
         }
 
-        private Span Read(
+        private Range Read(
             int tag)
         {
-            Span span = _stack[_depth];
-            ReadOnlySpan<byte> bytes = span.ApplyTo(_buffer);
+            Range range = _stack[_depth];
+            ReadOnlySpan<byte> bytes = _buffer[range];
 
             if (_failed || bytes.Length < 2 || bytes[0] != tag)
             {
                 goto failed;
             }
 
-            int start = 2;
+            int offset = 2;
             int length = 0;
 
             if ((bytes[1] & ~0x7F) == 0)
@@ -205,7 +204,7 @@ namespace NSec.Experimental.Asn1
                 }
                 while (count-- > 0)
                 {
-                    length = (length << 8) | bytes[start++];
+                    length = (length << 8) | bytes[offset++];
                 }
                 if (length < 0x80)
                 {
@@ -213,65 +212,23 @@ namespace NSec.Experimental.Asn1
                 }
             }
 
-            if (length > bytes.Length - start)
+            if (length > bytes.Length - offset)
             {
                 goto failed;
             }
 
-            _stack[_depth] = span[(start + length)..];
-            return span.Slice(start, length);
+            (int Offset, int Length) = range.GetOffsetAndLength(_buffer.Length);
+            _stack[_depth] = new Range(Offset + offset + length, Offset + Length);
+            return new Range(Offset + offset, Offset + offset + length);
         failed:
             Fail();
             return default;
         }
 
         [InlineArray(MaxDepth)]
-        private struct InlineSpanArray
+        private struct InlineRangeArray
         {
-            private Span _element0;
-        }
-
-        private readonly struct Span
-        {
-            private readonly int _start;
-            private readonly int _length;
-
-            public Span(ReadOnlySpan<byte> buffer)
-                : this(0, buffer.Length)
-            {
-            }
-
-            private Span(int start, int length)
-            {
-                _start = start;
-                _length = length;
-            }
-
-            public bool IsEmpty => _length == 0;
-
-            public int Length => _length;
-
-            public int Start => _start;
-
-            public ReadOnlySpan<byte> ApplyTo(ReadOnlySpan<byte> buffer)
-            {
-                return buffer.Slice(_start, _length);
-            }
-
-            public Span Slice(int start)
-            {
-                Debug.Assert(start >= 0 && start <= _length);
-
-                return new Span(_start + start, _length - start);
-            }
-
-            public Span Slice(int start, int length)
-            {
-                Debug.Assert(start >= 0 && start <= _length);
-                Debug.Assert(length >= 0 && length <= _length - start);
-
-                return new Span(_start + start, length);
-            }
+            private Range _element0;
         }
     }
 }
