@@ -9,13 +9,14 @@
     <Description>Provides modern cryptographic algorithm implementations for .NET based on libsodium.
 
 Commonly Used Types:
-NSec.Cryptography.Aes256Gcm
+NSec.Cryptography.Aegis256
+NSec.Cryptography.Argon2id
 NSec.Cryptography.Blake2b
 NSec.Cryptography.Chacha20Poly1305
 NSec.Cryptography.Ed25519
-NSec.Cryptography.HkdfSha256
 NSec.Cryptography.X25519</Description>
-    <PackageTags>aead aes-gcm blake2b chacha20-poly1305 crypto cryptography curve25519 dotnet-core ed25519 encryption hash hkdf hmac libsodium security sha256 sha512 x25519</PackageTags>
+    <PackageTags>aead aegis128l aegis256 aes-gcm argon2id blake2b chacha20-poly1305 crypto cryptography curve25519 ed25519 encryption hash hkdf hmac libsodium scrypt security sha2 x25519</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,6 +31,10 @@ NSec.Cryptography.X25519</Description>
   <ItemGroup>
     <Compile Include="..\Interop\*.cs" Link="Interop\%(RecursiveDir)%(Filename)%(Extension)" />
     <None Include="..\Interop\*.yaml" Link="Interop\%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>

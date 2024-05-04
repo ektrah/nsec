@@ -7,6 +7,7 @@
 
   <PropertyGroup>
     <Description>Experimental code</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <IsPackable Condition="!$(Version.Contains('-'))">false</IsPackable>
   </PropertyGroup>
 
@@ -16,6 +17,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Cryptography\NSec.Cryptography.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>
