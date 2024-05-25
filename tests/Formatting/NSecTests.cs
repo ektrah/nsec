@@ -87,7 +87,7 @@ namespace NSec.Tests.Formatting
 
             Assert.NotNull(blob);
             Assert.Equal(blobHeader.Length + sizeof(short) + sizeof(short) + keySize, blob.Length);
-            Assert.Equal(blobHeader, blob.AsSpan(0, blobHeader.Length).ToArray());
+            Assert.Equal(blobHeader, blob[..blobHeader.Length]);
             Assert.Equal(keySize, BitConverter.ToInt16(blob, blobHeader.Length));
             Assert.Equal(outputSize, BitConverter.ToInt16(blob, blobHeader.Length + sizeof(short)));
 
@@ -118,7 +118,7 @@ namespace NSec.Tests.Formatting
 
             Assert.NotNull(blob);
             Assert.Equal(blobHeader.Length + sizeof(short) + sizeof(short) + b.Length, blob.Length);
-            Assert.Equal(blobHeader, blob.AsSpan(0, blobHeader.Length).ToArray());
+            Assert.Equal(blobHeader, blob[..blobHeader.Length]);
             Assert.Equal(b.Length, BitConverter.ToInt16(blob, blobHeader.Length));
             Assert.Equal(0, BitConverter.ToInt16(blob, blobHeader.Length + sizeof(short)));
 

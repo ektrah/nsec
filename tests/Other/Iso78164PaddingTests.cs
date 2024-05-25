@@ -70,7 +70,7 @@ namespace NSec.Tests.Other
         {
             for (var i = unpadded.Length; i < padded.Length; i++)
             {
-                var corrupted = padded.AsSpan().ToArray();
+                var corrupted = padded[..];
                 corrupted[i] = 0xFF;
                 Assert.Null(Iso78164Padding.Unpad(corrupted, blockSize));
                 Assert.False(Iso78164Padding.Unpad(corrupted, blockSize, out var actual));
@@ -84,7 +84,7 @@ namespace NSec.Tests.Other
         {
             for (var i = 1; i < blockSize; i++)
             {
-                var corrupted = padded.AsSpan(0, padded.Length - i).ToArray();
+                var corrupted = padded[..^i];
                 Assert.Null(Iso78164Padding.Unpad(corrupted, blockSize));
                 Assert.False(Iso78164Padding.Unpad(corrupted, blockSize, out var actual));
                 Assert.True(actual.IsEmpty);
