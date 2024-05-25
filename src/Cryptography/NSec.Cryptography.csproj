@@ -15,7 +15,7 @@ NSec.Cryptography.X25519</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="libsodium" Version="[1.0.19.2,1.0.20)" />
+    <PackageReference Include="libsodium" Version="[1.0.20,1.0.21)" />
   </ItemGroup>
 
   <ItemGroup>
