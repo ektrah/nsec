@@ -234,6 +234,13 @@ namespace NSec.Cryptography
             return new ArgumentException(string.Format(ResourceManager.GetString(nameof(Argument_SignatureLength))!, arg0), paramName);
         }
 
+        internal static ArgumentException Argument_TagLength(
+            string paramName,
+            object? arg0)
+        {
+            return new ArgumentException(string.Format(ResourceManager.GetString(nameof(Argument_TagLength))!, arg0), paramName);
+        }
+
         internal static ArgumentNullException ArgumentNull_Algorithm(
             string paramName)
         {

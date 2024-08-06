@@ -43,6 +43,33 @@ internal static partial class Interop
 
         [LibraryImport(Libraries.Libsodium)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_aead_aes256gcm_decrypt_detached(
+            Span<byte> m,
+            IntPtr nsec,
+            ReadOnlySpan<byte> c,
+            ulong clen,
+            ReadOnlySpan<byte> mac,
+            ReadOnlySpan<byte> ad,
+            ulong adlen,
+            ReadOnlySpan<byte> npub,
+            SecureMemoryHandle k);
+
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        internal static partial int crypto_aead_aes256gcm_encrypt_detached(
+            Span<byte> c,
+            Span<byte> mac,
+            out ulong maclen_p,
+            ReadOnlySpan<byte> m,
+            ulong mlen,
+            ReadOnlySpan<byte> ad,
+            ulong adlen,
+            IntPtr nsec,
+            ReadOnlySpan<byte> npub,
+            SecureMemoryHandle k);
+
+        [LibraryImport(Libraries.Libsodium)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int crypto_aead_aes256gcm_is_available();
 
         [LibraryImport(Libraries.Libsodium)]
