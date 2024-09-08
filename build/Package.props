@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <!--<Version Condition="'$(Version)' == ''">24.5.0-preview.1</Version>-->
+    <Version Condition="'$(Version)' == ''">24.9.0-preview.2</Version>
     <Version Condition="'$(Version)' == ''">$([System.DateTime]::UtcNow.ToString(y.M.0))-preview.2-$(BuildNumberMajor)-$(BuildNumberMinor)</Version>
   </PropertyGroup>
 
