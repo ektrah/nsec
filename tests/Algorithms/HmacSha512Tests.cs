@@ -13,7 +13,7 @@ namespace NSec.Tests.Algorithms
         {
             var a = new HmacSha512();
 
-            Assert.Equal(64, HmacSha512.MinKeySize);
+            Assert.Equal(32, HmacSha512.MinKeySize);
             Assert.Equal(64, HmacSha512.MaxKeySize);
             Assert.Equal(16, HmacSha512.MinMacSize);
             Assert.Equal(64, HmacSha512.MaxMacSize);

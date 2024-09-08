@@ -34,6 +34,7 @@ namespace NSec.Tests
             MacAlgorithm.HmacSha256_128,
             MacAlgorithm.HmacSha512,
             MacAlgorithm.HmacSha512_256,
+            new HmacSha512(32, 32),
         };
 
         public static readonly TheoryData<StreamCipherAlgorithm> StreamCipherAlgorithms = new()

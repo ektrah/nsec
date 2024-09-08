@@ -34,7 +34,7 @@ namespace NSec.Cryptography
     //
     public sealed class HmacSha512 : MacAlgorithm
     {
-        public static readonly int MinKeySize = crypto_hash_sha512_BYTES;
+        public static readonly int MinKeySize = crypto_auth_hmacsha512_KEYBYTES;
         public static readonly int MaxKeySize = crypto_hash_sha512_BYTES;
         public static readonly int MinMacSize = 16;
         public static readonly int MaxMacSize = crypto_auth_hmacsha512_BYTES;
@@ -103,7 +103,7 @@ namespace NSec.Cryptography
             SecureMemoryHandle keyHandle,
             out IncrementalMacState state)
         {
-            Debug.Assert(keyHandle.Size == crypto_hash_sha512_BYTES);
+            Debug.Assert(keyHandle.Size <= crypto_hash_sha512_BYTES);
 
             int error = crypto_auth_hmacsha512_init(
                 ref state.hmacsha512,
@@ -160,7 +160,7 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> data,
             Span<byte> mac)
         {
-            Debug.Assert(keyHandle.Size == crypto_hash_sha512_BYTES);
+            Debug.Assert(keyHandle.Size <= crypto_hash_sha512_BYTES);
             Debug.Assert(mac.Length <= crypto_auth_hmacsha512_BYTES);
 
             Span<byte> temp = stackalloc byte[crypto_auth_hmacsha512_BYTES];
