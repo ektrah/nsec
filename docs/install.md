@@ -42,26 +42,23 @@ Please note:
 [NSec 24.9.0-preview.2](https://www.nuget.org/packages/NSec.Cryptography/24.9.0-preview.2)
 has been tested to run on the following platforms and .NET versions:
 
-| OS                   | Version  | Architecture  | .NET  |
-|:-------------------- |:-------- |:------------- |:------|
-| Windows 11           | 23H2     | x64           | 8.0.4 |
-| Windows Server       | 2022     | x64           | 8.0.4 |
-|                      |          |               |       |
-| macOS                | 12.7     | x64           | 8.0.4 |
-|                      | 13.6     | x64           | 8.0.4 |
-|                      | 14.4     | arm64         | 8.0.4 |
-|                      |          |               |       |
-| Alpine Linux         | 3.18     | x64           | 8.0.4 |
-|                      | 3.19     | x64           | 8.0.4 |
-| Debian               | 10       | x64           | 8.0.4 |
-|                      | 11       | x64           | 8.0.4 |
-|                      | 12       | x64           | 8.0.4 |
-| Fedora               | 38       | x64           | 8.0.4 |
-|                      | 39       | x64           | 8.0.4 |
-|                      | 40       | x64           | 8.0.4 |
-| Ubuntu               | 20.04    | x64           | 8.0.4 |
-|                      | 22.04    | x64           | 8.0.4 |
-|                      | 24.04    | x64           | 8.0.4 |
+| OS                   | Version  | Architecture  | .NET   |
+|:-------------------- |:-------- |:------------- |:-------|
+| Windows 11           | 23H2     | x64           | 8.0.11 |
+| Windows Server 2022  | LTSC     | x64           | 8.0.11 |
+|                      |          |               |        |
+| macOS                | 13.7     | x64           | 8.0.11 |
+|                      | 14.7     | arm64         | 8.0.11 |
+|                      | 15.1     | arm64         | 8.0.11 |
+|                      |          |               |        |
+| Alpine Linux         | 3.18     | x64           | 8.0.6  |
+|                      | 3.19     | x64           | 8.0.8  |
+|                      | 3.20     | x64           | 8.0.11 |
+| Debian               | 12       | x64           | 8.0.11 |
+| Fedora               | 40       | x64           | 8.0.11 |
+| Ubuntu               | 20.04    | x64           | 8.0.11 |
+|                      | 22.04    | x64           | 8.0.11 |
+|                      | 24.04    | x64           | 8.0.11 |
 
 The other supported platforms should work as well, but have not been tested.
 
