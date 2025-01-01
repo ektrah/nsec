@@ -46,7 +46,9 @@ Interop.Aead.Aes256Gcm.cs:
   functions:
   - crypto_aead_aes256gcm_abytes
   - crypto_aead_aes256gcm_decrypt (out ulong mlen_p, IntPtr nsec, SecureMemoryHandle k)
+  - crypto_aead_aes256gcm_decrypt_detached (IntPtr nsec, SecureMemoryHandle k)
   - crypto_aead_aes256gcm_encrypt (out ulong clen_p, IntPtr nsec, SecureMemoryHandle k)
+  - crypto_aead_aes256gcm_encrypt_detached (out ulong maclen_p, IntPtr nsec, SecureMemoryHandle k)
   - crypto_aead_aes256gcm_is_available
   - crypto_aead_aes256gcm_keybytes
   - crypto_aead_aes256gcm_npubbytes

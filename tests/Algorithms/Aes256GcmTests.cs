@@ -52,5 +52,31 @@ namespace NSec.Tests.Algorithms
         }
 
         #endregion
+
+        #region Encrypt/Decrypt Detached
+
+        [Theory]
+        [MemberData(nameof(PlaintextLengths))]
+        public static void EncryptDecryptDetached(int length)
+        {
+            var a = AeadAlgorithm.Aes256Gcm;
+
+            using var k = new Key(a);
+            var n = Utilities.RandomBytes[..a.NonceSize];
+            var ad = Utilities.RandomBytes[..100];
+            var c = new byte[length];
+            var t = new byte[a.TagSize];
+
+            var expected = Utilities.RandomBytes[..length].ToArray();
+
+            a.EncryptDetached(k, n, ad, expected, c, t);
+
+            var actual = new byte[length];
+
+            Assert.True(a.DecryptDetached(k, n, ad, c, t, actual));
+            Assert.Equal(expected, actual);
+        }
+
+        #endregion
     }
 }

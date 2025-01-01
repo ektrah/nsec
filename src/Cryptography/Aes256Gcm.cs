@@ -89,6 +89,62 @@ namespace NSec.Cryptography
             keyHandle = SecureMemoryHandle.CreateFrom(seed);
         }
 
+        public void EncryptDetached(
+            Key key,
+            ReadOnlySpan<byte> nonce,
+            ReadOnlySpan<byte> associatedData,
+            ReadOnlySpan<byte> plaintext,
+            Span<byte> ciphertext,
+            Span<byte> authenticationTag)
+        {
+            if (key == null)
+            {
+                throw Error.ArgumentNull_Key(nameof(key));
+            }
+            if (key.Algorithm != this)
+            {
+                throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
+            if (nonce.Length != NonceSize)
+            {
+                throw Error.Argument_NonceLength(nameof(nonce), NonceSize);
+            }
+            if (ciphertext.Length != plaintext.Length)
+            {
+                throw new ArgumentException();
+            }
+            if (ciphertext.Overlaps(plaintext, out int offset) && offset != 0)
+            {
+                throw Error.Argument_OverlapCiphertext(nameof(ciphertext));
+            }
+            if (authenticationTag.Length != TagSize)
+            {
+                throw new ArgumentException();
+            }
+
+            SecureMemoryHandle keyHandle = key.Handle;
+
+            Debug.Assert(keyHandle.Size == crypto_aead_aes256gcm_KEYBYTES);
+            Debug.Assert(nonce.Length == crypto_aead_aes256gcm_NPUBBYTES);
+            Debug.Assert(ciphertext.Length == plaintext.Length);
+            Debug.Assert(authenticationTag.Length == crypto_aead_aes256gcm_ABYTES);
+
+            int error = crypto_aead_aes256gcm_encrypt_detached(
+                ciphertext,
+                authenticationTag,
+                out ulong maclen,
+                plaintext,
+                (ulong)plaintext.Length,
+                associatedData,
+                (ulong)associatedData.Length,
+                IntPtr.Zero,
+                nonce,
+                keyHandle);
+
+            Debug.Assert(error == 0);
+            Debug.Assert((ulong)authenticationTag.Length == maclen);
+        }
+
         private protected override void EncryptCore(
             SecureMemoryHandle keyHandle,
             ReadOnlySpan<byte> nonce,
@@ -118,6 +174,58 @@ namespace NSec.Cryptography
         internal override int GetSeedSize()
         {
             return crypto_aead_aes256gcm_KEYBYTES;
+        }
+
+        public bool DecryptDetached(
+            Key key,
+            ReadOnlySpan<byte> nonce,
+            ReadOnlySpan<byte> associatedData,
+            ReadOnlySpan<byte> ciphertext,
+            ReadOnlySpan<byte> authenticationTag,
+            Span<byte> plaintext)
+        {
+            if (key == null)
+            {
+                throw Error.ArgumentNull_Key(nameof(key));
+            }
+            if (key.Algorithm != this)
+            {
+                throw Error.Argument_KeyAlgorithmMismatch(nameof(key), nameof(key));
+            }
+            if (nonce.Length != NonceSize || authenticationTag.Length != TagSize)
+            {
+                return false;
+            }
+            if (plaintext.Length != ciphertext.Length)
+            {
+                throw new ArgumentException();
+            }
+            if (plaintext.Overlaps(ciphertext, out int offset) && offset != 0)
+            {
+                throw Error.Argument_OverlapPlaintext(nameof(plaintext));
+            }
+
+            SecureMemoryHandle keyHandle = key.Handle;
+
+            Debug.Assert(keyHandle.Size == crypto_aead_aes256gcm_KEYBYTES);
+            Debug.Assert(nonce.Length == crypto_aead_aes256gcm_NPUBBYTES);
+            Debug.Assert(ciphertext.Length == plaintext.Length);
+            Debug.Assert(authenticationTag.Length == crypto_aead_aes256gcm_ABYTES);
+
+            int error = crypto_aead_aes256gcm_decrypt_detached(
+                plaintext,
+                IntPtr.Zero,
+                ciphertext,
+                (ulong)ciphertext.Length,
+                authenticationTag,
+                associatedData,
+                (ulong)associatedData.Length,
+                nonce,
+                keyHandle);
+
+            // libsodium clears plaintext if decryption fails
+
+            return error == 0;
         }
 
         private protected override bool DecryptCore(
