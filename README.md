@@ -2,7 +2,7 @@
 
 [![Maintenance](https://img.shields.io/maintenance/yes/2025)](https://github.com/ektrah/nsec)
 [![License](https://img.shields.io/github/license/ektrah/nsec)](https://nsec.rocks/license)
-[![NuGet](https://img.shields.io/nuget/vpre/NSec.Cryptography)](https://www.nuget.org/packages/NSec.Cryptography/24.9.0-preview.2)
+[![NuGet](https://img.shields.io/nuget/vpre/NSec.Cryptography)](https://www.nuget.org/packages/NSec.Cryptography/25.2.0-preview.3)
 
 [NSec](https://nsec.rocks/) is a cryptographic library for
 [.NET 8+](https://dotnet.microsoft.com/) based on
