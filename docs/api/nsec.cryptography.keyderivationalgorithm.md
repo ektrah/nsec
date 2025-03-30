@@ -133,6 +133,9 @@ ArgumentNullException
 : `sharedSecret` is `null`.
 
 ArgumentException
+: `inputKeyingMaterial` is empty.
+
+ArgumentException
 : `salt.Length` is less than
     [[MinSaltSize|KeyDerivationAlgorithm Class#MinSaltSize]]
     or greater than
@@ -194,6 +197,9 @@ bytes
 
 ArgumentNullException
 : `sharedSecret` is `null`.
+
+ArgumentException
+: `inputKeyingMaterial` is empty.
 
 ArgumentException
 : `salt.Length` is less than
@@ -269,6 +275,9 @@ A new instance of the [[Key|Key Class]] class that represents the derived key.
 
 ArgumentNullException
 : `sharedSecret` or `algorithm` is `null`.
+
+ArgumentException
+: `inputKeyingMaterial` is empty.
 
 ArgumentException
 : `salt.Length` is less than

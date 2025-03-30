@@ -160,6 +160,9 @@ ArgumentNullException
 : `sharedSecret` is `null`.
 
 ArgumentException
+: `inputKeyingMaterial` is empty.
+
+ArgumentException
 : `salt.Length` is less than
     [[MinSaltSize|KeyDerivationAlgorithm Class#MinSaltSize]]
     or greater than
@@ -223,6 +226,9 @@ bytes
 
 ArgumentNullException
 : `sharedSecret` is `null`.
+
+ArgumentException
+: `inputKeyingMaterial` is empty.
 
 ArgumentException
 : `salt.Length` is less than
@@ -302,6 +308,9 @@ ArgumentNullException
 : `sharedSecret` or `algorithm` is `null`.
 
 ArgumentException
+: `inputKeyingMaterial` is empty.
+
+ArgumentException
 : `salt.Length` is less than
     [[MinSaltSize|KeyDerivationAlgorithm Class#MinSaltSize]]
     or greater than
@@ -348,6 +357,9 @@ ArgumentNullException
 : `sharedSecret` is `null`.
 
 ArgumentException
+: `inputKeyingMaterial` is empty.
+
+ArgumentException
 : `salt.Length` is less than
     [[MinSaltSize|KeyDerivationAlgorithm2 Class#MinSaltSize]]
     or greater than
@@ -391,6 +403,9 @@ pseudorandomKey
 
 ArgumentNullException
 : `sharedSecret` is `null`.
+
+ArgumentException
+: `inputKeyingMaterial` is empty.
 
 ArgumentException
 : `salt.Length` is less than
