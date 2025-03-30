@@ -3,6 +3,7 @@
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)StrongNameKey.snk</AssemblyOriginatorKeyFile>
+    <PublicSign>True</PublicSign>
   </PropertyGroup>
 
 </Project>
