@@ -87,6 +87,10 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> info,
             int count)
         {
+            if (inputKeyingMaterial.IsEmpty)
+            {
+                throw Error.Argument_InvalidIkmLength(nameof(inputKeyingMaterial));
+            }
             if (salt.Length < _minSaltSize || salt.Length > _maxSaltSize)
             {
                 throw (_minSaltSize == _maxSaltSize) ? Error.Argument_SaltLength(nameof(salt), _minSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), _minSaltSize, _maxSaltSize);
@@ -115,6 +119,10 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> info,
             Span<byte> bytes)
         {
+            if (inputKeyingMaterial.IsEmpty)
+            {
+                throw Error.Argument_InvalidIkmLength(nameof(inputKeyingMaterial));
+            }
             if (salt.Length < _minSaltSize || salt.Length > _maxSaltSize)
             {
                 throw (_minSaltSize == _maxSaltSize) ? Error.Argument_SaltLength(nameof(salt), _minSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), _minSaltSize, _maxSaltSize);
@@ -146,6 +154,10 @@ namespace NSec.Cryptography
             Algorithm algorithm,
             in KeyCreationParameters creationParameters = default)
         {
+            if (inputKeyingMaterial.IsEmpty)
+            {
+                throw Error.Argument_InvalidIkmLength(nameof(inputKeyingMaterial));
+            }
             if (salt.Length < _minSaltSize || salt.Length > _maxSaltSize)
             {
                 throw (_minSaltSize == _maxSaltSize) ? Error.Argument_SaltLength(nameof(salt), _minSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), _minSaltSize, _maxSaltSize);

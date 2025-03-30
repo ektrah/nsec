@@ -192,6 +192,9 @@
   <data name="Argument_InvalidArgon2Parameters" xml:space="preserve">
     <value>The specified Argon2 parameters are out of the range of valid values.</value>
   </data>
+  <data name="Argument_InvalidIkmLength" xml:space="preserve">
+    <value>The input keying material must be non-empty.</value>
+  </data>
   <data name="Argument_InvalidPbkdf2Parameters" xml:space="preserve">
     <value>The specified PBKDF2 parameters are out of the range of valid values.</value>
   </data>

@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using static Interop.Libsodium;
 
 namespace NSec.Cryptography
@@ -47,6 +48,8 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> info,
             Span<byte> bytes)
         {
+            Debug.Assert(!inputKeyingMaterial.IsEmpty);
+
             System.Security.Cryptography.HKDF.DeriveKey(
                 System.Security.Cryptography.HashAlgorithmName.SHA256,
                 inputKeyingMaterial,
@@ -72,6 +75,8 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> salt,
             Span<byte> pseudorandomKey)
         {
+            Debug.Assert(!inputKeyingMaterial.IsEmpty);
+
             System.Security.Cryptography.HKDF.Extract(
                 System.Security.Cryptography.HashAlgorithmName.SHA256,
                 inputKeyingMaterial,

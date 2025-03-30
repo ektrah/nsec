@@ -294,14 +294,21 @@ namespace NSec.Tests.Algorithms
         #region Extract #1
 
         [Fact]
-        public static void ExtractSuccess()
+        public static void ExtractWithEmptySecret()
         {
             var a = KeyDerivationAlgorithm.HkdfSha256;
 
-            var expected = Convert.FromHexString(s_prkForEmpty);
-            var actual = a.Extract([], []);
+            Assert.Throws<ArgumentException>("inputKeyingMaterial", () => a.Extract([], []));
+        }
 
-            Assert.Equal(expected, actual);
+        [Fact]
+        public static void ExtractSuccess()
+        {
+            var a = KeyDerivationAlgorithm.HkdfSha256;
+            var ikm = Utilities.RandomBytes[..64];
+
+            var actual = a.Extract(ikm, []);
+
             Assert.Equal(a.PseudorandomKeySize, actual.Length);
         }
 
@@ -310,16 +317,22 @@ namespace NSec.Tests.Algorithms
         #region Extract #2
 
         [Fact]
-        public static void ExtractWithSpanSuccess()
+        public static void ExtractWithSpanAndEmptySecret()
         {
             var a = KeyDerivationAlgorithm.HkdfSha256;
 
-            var expected = Convert.FromHexString(s_prkForEmpty);
-            var actual = new byte[expected.Length];
+            Assert.Throws<ArgumentException>("inputKeyingMaterial", () => a.Extract([], [], []));
+        }
 
-            a.Extract([], [], actual);
+        [Fact]
+        public static void ExtractWithSpanSuccess()
+        {
+            var a = KeyDerivationAlgorithm.HkdfSha256;
+            var ikm = Utilities.RandomBytes[..64];
 
-            Assert.Equal(expected, actual);
+            var actual = new byte[a.PseudorandomKeySize];
+
+            a.Extract(ikm, [], actual);
         }
 
         #endregion
@@ -429,15 +442,22 @@ namespace NSec.Tests.Algorithms
         #region DeriveBytes #1
 
         [Fact]
-        public static void DeriveBytesEmpty()
+        public static void DeriveBytesWithEmptySecret()
         {
             var a = KeyDerivationAlgorithm.HkdfSha256;
 
-            var expected = Convert.FromHexString(s_outputForEmpty);
-            var actual = a.DeriveBytes([], [], [], a.MaxCount);
+            Assert.Throws<ArgumentException>("inputKeyingMaterial", () => a.DeriveBytes([], [], [], a.MaxCount));
+        }
+
+        [Fact]
+        public static void DeriveBytesSuccess()
+        {
+            var a = KeyDerivationAlgorithm.HkdfSha256;
+            var ikm = Utilities.RandomBytes[..64];
+
+            var actual = a.DeriveBytes(ikm, [], [], a.MaxCount);
 
             Assert.NotNull(actual);
-            Assert.Equal(expected, actual);
             Assert.Equal(a.MaxCount, actual.Length);
         }
 
@@ -446,16 +466,22 @@ namespace NSec.Tests.Algorithms
         #region DeriveBytes #2
 
         [Fact]
-        public static void DeriveBytesWithSpanEmpty()
+        public static void DeriveBytesWithSpanAndEmptySecret()
         {
             var a = KeyDerivationAlgorithm.HkdfSha256;
 
-            var expected = Convert.FromHexString(s_outputForEmpty);
+            Assert.Throws<ArgumentException>("inputKeyingMaterial", () => a.DeriveBytes([], [], [], []));
+        }
+
+        [Fact]
+        public static void DeriveBytesWithSpanSuccess()
+        {
+            var a = KeyDerivationAlgorithm.HkdfSha256;
+            var ikm = Utilities.RandomBytes[..64];
+
             var actual = new byte[a.MaxCount];
 
-            a.DeriveBytes([], [], [], actual);
-
-            Assert.Equal(expected, actual);
+            a.DeriveBytes(ikm, [], [], actual);
         }
 
         #endregion

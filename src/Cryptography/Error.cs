@@ -68,6 +68,12 @@ namespace NSec.Cryptography
             return new ArgumentException(ResourceManager.GetString(nameof(Argument_InvalidArgon2Parameters)), paramName);
         }
 
+        internal static ArgumentException Argument_InvalidIkmLength(
+            string paramName)
+        {
+            return new ArgumentException(ResourceManager.GetString(nameof(Argument_InvalidIkmLength)), paramName);
+        }
+
         internal static ArgumentException Argument_InvalidPbkdf2Parameters(
             string paramName)
         {

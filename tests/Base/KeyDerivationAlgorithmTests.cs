@@ -27,12 +27,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveBytesSpanWithEmptySecret(KeyDerivationAlgorithm a)
         {
-            var count = 1000;
-
-            var b = a.DeriveBytes([], [], [], count);
-
-            Assert.NotNull(b);
-            Assert.Equal(count, b.Length);
+            Assert.Throws<ArgumentException>("inputKeyingMaterial", () => a.DeriveBytes([], [], [], 0));
         }
 
         [Theory]
@@ -108,9 +103,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveBytesSpanWithEmptySecretAndSpan(KeyDerivationAlgorithm a)
         {
-            var count = 1000;
-
-            a.DeriveBytes([], [], [], new byte[count]);
+            Assert.Throws<ArgumentException>("inputKeyingMaterial", () => a.DeriveBytes([], [], [], []));
         }
 
         [Theory]
@@ -198,11 +191,7 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms))]
         public static void DeriveKeySpanWithEmptySecret(KeyDerivationAlgorithm a)
         {
-            var y = AeadAlgorithm.ChaCha20Poly1305;
-
-            using var i = a.DeriveKey([], [], [], y);
-            Assert.NotNull(i);
-            Assert.Same(y, i.Algorithm);
+            Assert.Throws<ArgumentException>("inputKeyingMaterial", () => a.DeriveKey([], [], [], null!));
         }
 
         [Theory]

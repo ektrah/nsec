@@ -21,8 +21,10 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms2))]
         public static void ExtractWithEmptySalt(KeyDerivationAlgorithm2 a)
         {
-            var expected = a.Extract([], new byte[a.PseudorandomKeySize]);
-            var actual = a.Extract([], []);
+            var ikm = Utilities.RandomBytes[..64];
+
+            var expected = a.Extract(ikm, new byte[a.PseudorandomKeySize]);
+            var actual = a.Extract(ikm, []);
 
             Assert.Equal(expected, actual);
         }
@@ -31,7 +33,9 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms2))]
         public static void ExtractSuccess(KeyDerivationAlgorithm2 a)
         {
-            var actual = a.Extract([], []);
+            var ikm = Utilities.RandomBytes[..64];
+
+            var actual = a.Extract(ikm, []);
 
             Assert.NotNull(actual);
             Assert.Equal(a.PseudorandomKeySize, actual.Length);
@@ -52,25 +56,27 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms2))]
         public static void ExtractWithSpanTooShort(KeyDerivationAlgorithm2 a)
         {
-            Assert.Throws<ArgumentException>("pseudorandomKey", () => a.Extract([], [], new byte[a.PseudorandomKeySize - 1]));
+            Assert.Throws<ArgumentException>("pseudorandomKey", () => a.Extract(Utilities.RandomBytes[..100], [], new byte[a.PseudorandomKeySize - 1]));
         }
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms2))]
         public static void ExtractWithSpanTooLong(KeyDerivationAlgorithm2 a)
         {
-            Assert.Throws<ArgumentException>("pseudorandomKey", () => a.Extract([], [], new byte[a.PseudorandomKeySize + 1]));
+            Assert.Throws<ArgumentException>("pseudorandomKey", () => a.Extract(Utilities.RandomBytes[..100], [], new byte[a.PseudorandomKeySize + 1]));
         }
 
         [Theory]
         [MemberData(nameof(KeyDerivationAlgorithms2))]
         public static void ExtractWithSpanWithEmptySalt(KeyDerivationAlgorithm2 a)
         {
+            var ikm = Utilities.RandomBytes[..64];
+
             var expected = new byte[a.PseudorandomKeySize];
             var actual = new byte[expected.Length];
 
-            a.Extract([], new byte[a.PseudorandomKeySize], expected);
-            a.Extract([], [], actual);
+            a.Extract(ikm, new byte[a.PseudorandomKeySize], expected);
+            a.Extract(ikm, [], actual);
 
             Assert.Equal(expected, actual);
         }
@@ -79,11 +85,13 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms2))]
         public static void ExtractWithSpanWithSaltOverlapping(KeyDerivationAlgorithm2 a)
         {
+            var ikm = Utilities.RandomBytes[..64];
+
             var expected = new byte[a.PseudorandomKeySize];
             var actual = Utilities.RandomBytes[..a.PseudorandomKeySize].ToArray();
 
-            a.Extract([], actual, expected);
-            a.Extract([], actual, actual);
+            a.Extract(ikm, actual, expected);
+            a.Extract(ikm, actual, actual);
 
             Assert.Equal(expected, actual);
         }
@@ -92,9 +100,11 @@ namespace NSec.Tests.Base
         [MemberData(nameof(KeyDerivationAlgorithms2))]
         public static void ExtractWithSpanSuccess(KeyDerivationAlgorithm2 a)
         {
+            var ikm = Utilities.RandomBytes[..64];
+
             var actual = new byte[a.PseudorandomKeySize];
 
-            a.Extract([], [], actual);
+            a.Extract(ikm, [], actual);
         }
 
         #endregion

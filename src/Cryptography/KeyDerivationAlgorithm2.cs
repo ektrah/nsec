@@ -36,6 +36,10 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> inputKeyingMaterial,
             ReadOnlySpan<byte> salt)
         {
+            if (inputKeyingMaterial.IsEmpty)
+            {
+                throw Error.Argument_InvalidIkmLength(nameof(inputKeyingMaterial));
+            }
             if (salt.Length < MinSaltSize || salt.Length > MaxSaltSize)
             {
                 throw (MinSaltSize == MaxSaltSize) ? Error.Argument_SaltLength(nameof(salt), MinSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), MinSaltSize, MaxSaltSize);
@@ -51,6 +55,10 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> salt,
             Span<byte> pseudorandomKey)
         {
+            if (inputKeyingMaterial.IsEmpty)
+            {
+                throw Error.Argument_InvalidIkmLength(nameof(inputKeyingMaterial));
+            }
             if (salt.Length < MinSaltSize || salt.Length > MaxSaltSize)
             {
                 throw (MinSaltSize == MaxSaltSize) ? Error.Argument_SaltLength(nameof(salt), MinSaltSize) : Error.Argument_SaltLengthRange(nameof(salt), MinSaltSize, MaxSaltSize);
@@ -215,6 +223,7 @@ namespace NSec.Cryptography
             ReadOnlySpan<byte> info,
             Span<byte> bytes)
         {
+            Debug.Assert(!inputKeyingMaterial.IsEmpty);
             Debug.Assert(bytes.Length <= byte.MaxValue * _pseudorandomKeySize);
 
             Span<byte> pseudorandomKey = stackalloc byte[_pseudorandomKeySize];
