@@ -27,10 +27,10 @@ on the following platforms:
 
 Please note:
 
-1. For Windows, the
+1. On Windows, the
    [Microsoft Visual C++ Redistributable for Visual Studio 2015, 2017, 2019, and 2022](https://learn.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist)
-   is required. This is part of the .NET SDK but might not be present on a
-   clean Windows installation.
+   is required. This is part of Visual Studio and the .NET SDK but might
+   not be present on a clean Windows installation.
 
 2. The AES-GCM implementation in NSec is hardware-accelerated and may not be
    available on all architectures. Support can be determined at runtime using
@@ -42,23 +42,22 @@ Please note:
 [NSec 25.2.0-preview.3](https://www.nuget.org/packages/NSec.Cryptography/25.2.0-preview.3)
 has been tested to run on the following platforms and .NET versions:
 
-| OS                   | Version  | Architecture  | .NET   |
-|:-------------------- |:-------- |:------------- |:-------|
-| Windows 11           | 23H2     | x64           | 8.0.11 |
-| Windows Server 2022  | LTSC     | x64           | 8.0.11 |
-|                      |          |               |        |
-| macOS                | 13.7     | x64           | 8.0.11 |
-|                      | 14.7     | arm64         | 8.0.11 |
-|                      | 15.1     | arm64         | 8.0.11 |
-|                      |          |               |        |
-| Alpine Linux         | 3.18     | x64           | 8.0.6  |
-|                      | 3.19     | x64           | 8.0.8  |
-|                      | 3.20     | x64           | 8.0.11 |
-| Debian               | 12       | x64           | 8.0.11 |
-| Fedora               | 40       | x64           | 8.0.11 |
-| Ubuntu               | 20.04    | x64           | 8.0.11 |
-|                      | 22.04    | x64           | 8.0.11 |
-|                      | 24.04    | x64           | 8.0.11 |
+| OS                   | Version  | Architecture  | .NET           |
+|:-------------------- |:-------- |:------------- |:---------------|
+| Windows 11           | 23H2     | x64           | 9.0.3 / 8.0.14 |
+| Windows Server 2022  | LTSC     | x64           | 9.0.3 / 8.0.14 |
+|                      |          |               |                
+| macOS                | 13.7     | x64           | 9.0.3 / 8.0.14 |
+|                      | 14.7     | arm64         | 9.0.3 / 8.0.14 |
+|                      | 15.2     | arm64         | 9.0.3 / 8.0.14 |
+|                      |          |               |                |
+| Alpine Linux         | 3.20     | x64           | 9.0.3          |
+|                      | 3.21     | x64           | 9.0.3          |
+| Debian               | 12       | x64           | 9.0.3 / 8.0.14 |
+| Fedora               | 40       | x64           | 9.0.3 / 8.0.14 |
+|                      | 41       | x64           | 9.0.3 / 8.0.14 |
+| Ubuntu               | 22.04    | x64           | 9.0.3 / 8.0.14 |
+|                      | 24.04    | x64           | 9.0.3 / 8.0.14 |
 
 The other supported platforms should work as well, but have not been tested.
 
