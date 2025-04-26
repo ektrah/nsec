@@ -18,7 +18,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{DF40D4F3
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
 		favicon.ico = favicon.ico
-		firebase.json = firebase.json
 		index.md = index.md
 		LICENSE = LICENSE
 		NOTICE = NOTICE
@@ -26,6 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{DF40D4F3
 		nsec.png = nsec.png
 		nsec.svg = nsec.svg
 		README.md = README.md
+		releases.md = releases.md
 		style.css = style.css
 	EndProjectSection
 EndProject
