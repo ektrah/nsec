@@ -201,7 +201,7 @@ namespace NSec.Tests.Core
         [InlineData(new byte[] { 0xFF, 0xFF, 0x01 })]
         public static void NotEqual(byte[] bytes)
         {
-            var expected = new Nonce(new byte[] { 0xFF, 0xFF }, 0);
+            var expected = new Nonce([0xFF, 0xFF], 0);
             var actual = new Nonce(bytes, 0);
 
             Assert.NotEqual(expected, actual);
@@ -262,7 +262,7 @@ namespace NSec.Tests.Core
         [InlineData(new byte[] { 0xFE, 0xED, 0xDC, 0xCB, 0x12, 0x34, 0x56, 0x78 }, new byte[] { 0x10, 0x30, 0x50, 0x70 }, 0x02040608)]
         public static void AddNoCarry(byte[] expected, byte[] left, int right)
         {
-            var actual = new Nonce(new byte[] { 0xFE, 0xED, 0xDC, 0xCB }, left) + right;
+            var actual = new Nonce([0xFE, 0xED, 0xDC, 0xCB], left) + right;
 
             Assert.Equal(expected, actual.ToArray());
         }
@@ -274,7 +274,7 @@ namespace NSec.Tests.Core
         [InlineData(new byte[] { 0xFE, 0xED, 0xDC, 0xCB, 0xFF, 0xFF, 0xFF, 0xFE }, new byte[] { 0x7F, 0xFF, 0xFF, 0xFF }, int.MaxValue)]
         public static void AddCarry(byte[] expected, byte[] left, int right)
         {
-            var actual = new Nonce(new byte[] { 0xFE, 0xED, 0xDC, 0xCB }, left) + right;
+            var actual = new Nonce([0xFE, 0xED, 0xDC, 0xCB], left) + right;
 
             Assert.Equal(expected, actual.ToArray());
         }
@@ -284,7 +284,7 @@ namespace NSec.Tests.Core
         [InlineData(new byte[] { 0xFF, 0xF0, 0xBD, 0xBF }, 1000001)]
         public static void AddOverflow(byte[] left, int right)
         {
-            Assert.Throws<OverflowException>(() => new Nonce(new byte[] { 0xFE, 0xED, 0xDC, 0xCB }, left) + right);
+            Assert.Throws<OverflowException>(() => new Nonce([0xFE, 0xED, 0xDC, 0xCB], left) + right);
         }
 
         [Fact]
@@ -301,7 +301,7 @@ namespace NSec.Tests.Core
         public static void IncrementNoCarry()
         {
             var expected = new byte[] { 0xFE, 0xED, 0xDC, 0xCB, 0xFF, 0xFF, 0xFF, 0xFF };
-            var actual = new Nonce(new byte[] { 0xFE, 0xED, 0xDC, 0xCB }, new byte[] { 0xFF, 0xFF, 0xFF, 0xFE });
+            var actual = new Nonce([0xFE, 0xED, 0xDC, 0xCB], [0xFF, 0xFF, 0xFF, 0xFE]);
 
             actual++;
 
@@ -312,7 +312,7 @@ namespace NSec.Tests.Core
         public static void IncrementCarry()
         {
             var expected = new byte[] { 0xFE, 0xED, 0xDC, 0xCB, 0x01, 0x00, 0x00, 0x00 };
-            var actual = new Nonce(new byte[] { 0xFE, 0xED, 0xDC, 0xCB }, new byte[] { 0x00, 0xFF, 0xFF, 0xFF });
+            var actual = new Nonce([0xFE, 0xED, 0xDC, 0xCB], [0x00, 0xFF, 0xFF, 0xFF]);
 
             actual++;
 
@@ -322,7 +322,7 @@ namespace NSec.Tests.Core
         [Fact]
         public static void IncrementOverflow()
         {
-            var actual = new Nonce(new byte[] { 0xFE, 0xED, 0xDC, 0xCB }, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF });
+            var actual = new Nonce([0xFE, 0xED, 0xDC, 0xCB], [0xFF, 0xFF, 0xFF, 0xFF]);
 
             Assert.Throws<OverflowException>(() => ++actual);
         }

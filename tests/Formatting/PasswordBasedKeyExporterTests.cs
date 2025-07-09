@@ -27,7 +27,7 @@ namespace NSec.Tests.Formatting
         {
             var k = new Key(SignatureAlgorithm.Ed25519, new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextArchiving });
 
-            Assert.Throws<ArgumentNullException>("scheme", () => PasswordBasedKeyExporter.Export(k, null!, ReadOnlySpan<byte>.Empty, [], []));
+            Assert.Throws<ArgumentNullException>("scheme", () => PasswordBasedKeyExporter.Export(k, null!, [], [], []));
         }
 
         [Theory]

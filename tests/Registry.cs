@@ -10,17 +10,17 @@ namespace NSec.Tests
     {
         #region Algorithms By Base Class
 
-        public static readonly TheoryData<AeadAlgorithm> AeadAlgorithms = new()
-        {
+        public static readonly TheoryData<AeadAlgorithm> AeadAlgorithms =
+        [
             AeadAlgorithm.Aegis128L,
             AeadAlgorithm.Aegis256,
             AeadAlgorithm.Aes256Gcm,
             AeadAlgorithm.ChaCha20Poly1305,
             AeadAlgorithm.XChaCha20Poly1305,
-        };
+        ];
 
-        public static readonly TheoryData<MacAlgorithm> MacAlgorithms = new()
-        {
+        public static readonly TheoryData<MacAlgorithm> MacAlgorithms =
+        [
             new Blake2bMac(16, 16),
             new Blake2bMac(16, 32),
             new Blake2bMac(16, 64),
@@ -35,75 +35,75 @@ namespace NSec.Tests
             MacAlgorithm.HmacSha512,
             MacAlgorithm.HmacSha512_256,
             new HmacSha512(32, 32),
-        };
+        ];
 
-        public static readonly TheoryData<StreamCipherAlgorithm> StreamCipherAlgorithms = new()
-        {
+        public static readonly TheoryData<StreamCipherAlgorithm> StreamCipherAlgorithms =
+        [
             StreamCipherAlgorithm.ChaCha20
-        };
+        ];
 
-        public static readonly TheoryData<HashAlgorithm> HashAlgorithms = new()
-        {
+        public static readonly TheoryData<HashAlgorithm> HashAlgorithms =
+        [
             HashAlgorithm.Blake2b_256,
             HashAlgorithm.Blake2b_512,
             HashAlgorithm.Sha256,
             HashAlgorithm.Sha512,
             HashAlgorithm.Sha512_256,
-        };
+        ];
 
-        public static readonly TheoryData<KeyAgreementAlgorithm> KeyAgreementAlgorithms = new()
-        {
+        public static readonly TheoryData<KeyAgreementAlgorithm> KeyAgreementAlgorithms =
+        [
             KeyAgreementAlgorithm.X25519,
-        };
+        ];
 
-        public static readonly TheoryData<KeyDerivationAlgorithm> KeyDerivationAlgorithms = new()
-        {
+        public static readonly TheoryData<KeyDerivationAlgorithm> KeyDerivationAlgorithms =
+        [
             new AnsiX963KdfSha256(),
             new ConcatKdfHmacSha256(),
             new ConcatKdfSha256(),
             KeyDerivationAlgorithm.HkdfSha256,
             KeyDerivationAlgorithm.HkdfSha512,
-        };
+        ];
 
-        public static readonly TheoryData<KeyDerivationAlgorithm2> KeyDerivationAlgorithms2 = new()
-        {
+        public static readonly TheoryData<KeyDerivationAlgorithm2> KeyDerivationAlgorithms2 =
+        [
             KeyDerivationAlgorithm2.HkdfSha256,
             KeyDerivationAlgorithm2.HkdfSha512,
-        };
+        ];
 
-        public static readonly TheoryData<PasswordBasedKeyDerivationAlgorithm> PasswordHashAlgorithms = new()
-        {
+        public static readonly TheoryData<PasswordBasedKeyDerivationAlgorithm> PasswordHashAlgorithms =
+        [
             // intentionally weak parameters for unit testing
             new Argon2i(new Argon2Parameters { DegreeOfParallelism = 1, MemorySize = 1 << 12, NumberOfPasses = 3 }),
             PasswordBasedKeyDerivationAlgorithm.Argon2id(new Argon2Parameters { DegreeOfParallelism = 1, MemorySize = 1 << 12, NumberOfPasses = 3 }),
             PasswordBasedKeyDerivationAlgorithm.Scrypt(new ScryptParameters { Cost = 1 << 11, BlockSize = 5, Parallelization = 1 }),
             new Pbkdf2HmacSha256(new Pbkdf2Parameters { IterationCount = 10 }),
-        };
+        ];
 
-        public static readonly TheoryData<SignatureAlgorithm> SignatureAlgorithms = new()
-        {
+        public static readonly TheoryData<SignatureAlgorithm> SignatureAlgorithms =
+        [
             SignatureAlgorithm.Ed25519,
             SignatureAlgorithm.Ed25519ph,
-        };
+        ];
 
-        public static readonly TheoryData<SignatureAlgorithm2> IncrementalSignatureAlgorithms = new()
-        {
+        public static readonly TheoryData<SignatureAlgorithm2> IncrementalSignatureAlgorithms =
+        [
             SignatureAlgorithm.Ed25519ph,
-        };
+        ];
 
         #endregion
 
         #region Algorithms By Key Type
 
-        public static readonly TheoryData<Algorithm> AsymmetricAlgorithms = new()
-        {
+        public static readonly TheoryData<Algorithm> AsymmetricAlgorithms =
+        [
             KeyAgreementAlgorithm.X25519,
             SignatureAlgorithm.Ed25519,
             SignatureAlgorithm.Ed25519ph,
-        };
+        ];
 
-        public static readonly TheoryData<Algorithm> SymmetricAlgorithms = new()
-        {
+        public static readonly TheoryData<Algorithm> SymmetricAlgorithms =
+        [
             AeadAlgorithm.Aegis128L,
             AeadAlgorithm.Aegis256,
             AeadAlgorithm.Aes256Gcm,
@@ -117,10 +117,10 @@ namespace NSec.Tests
             MacAlgorithm.HmacSha512,
             MacAlgorithm.HmacSha512_256,
             StreamCipherAlgorithm.ChaCha20,
-        };
+        ];
 
-        public static readonly TheoryData<Algorithm> KeylessAlgorithms = new()
-        {
+        public static readonly TheoryData<Algorithm> KeylessAlgorithms =
+        [
             HashAlgorithm.Blake2b_256,
             HashAlgorithm.Blake2b_512,
             HashAlgorithm.Sha256,
@@ -136,7 +136,7 @@ namespace NSec.Tests
             PasswordBasedKeyDerivationAlgorithm.Argon2id(new Argon2Parameters { DegreeOfParallelism = 1, MemorySize = 1 << 12, NumberOfPasses = 3 }),
             PasswordBasedKeyDerivationAlgorithm.Scrypt(new ScryptParameters { Cost = 1 << 11, BlockSize = 5, Parallelization = 1 }),
             new Pbkdf2HmacSha256(new Pbkdf2Parameters { IterationCount = 10 }),
-        };
+        ];
 
         #endregion
 
@@ -199,11 +199,11 @@ namespace NSec.Tests
 
         #region SharedSecret Blob Formats
 
-        public static readonly TheoryData<SharedSecretBlobFormat> SharedSecretBlobFormats = new()
-        {
+        public static readonly TheoryData<SharedSecretBlobFormat> SharedSecretBlobFormats =
+        [
             SharedSecretBlobFormat.RawSharedSecret,
             SharedSecretBlobFormat.NSecSharedSecret,
-        };
+        ];
 
         #endregion
     }
