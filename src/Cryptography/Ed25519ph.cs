@@ -170,11 +170,11 @@ namespace NSec.Cryptography
             int error = crypto_sign_ed25519ph_final_create(
                 ref state.ed25519ph,
                 signature,
-                out ulong siglen,
+                out ulong signatureLength,
                 keyHandle);
 
             Debug.Assert(error == 0);
-            Debug.Assert((ulong)signature.Length == siglen);
+            Debug.Assert((ulong)signature.Length == signatureLength);
         }
 
         internal override bool FinalVerifyCore(

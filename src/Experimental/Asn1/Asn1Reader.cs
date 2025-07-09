@@ -167,7 +167,7 @@ namespace NSec.Experimental.Asn1
             _stack = default;
         }
 
-        private readonly bool IsInvalidInteger(
+        private static bool IsInvalidInteger(
             ReadOnlySpan<byte> bytes,
             int maxSize)
         {

@@ -133,7 +133,7 @@ namespace NSec.Cryptography
 
             int error = crypto_aead_aes256gcm_decrypt(
                 plaintext,
-                out ulong mlen,
+                out ulong plaintextLength,
                 IntPtr.Zero,
                 ciphertext,
                 (ulong)ciphertext.Length,
@@ -144,7 +144,7 @@ namespace NSec.Cryptography
 
             // libsodium clears plaintext if decryption fails
 
-            Debug.Assert(error != 0 || (ulong)plaintext.Length == mlen);
+            Debug.Assert(error != 0 || (ulong)plaintext.Length == plaintextLength);
             return error == 0;
         }
 

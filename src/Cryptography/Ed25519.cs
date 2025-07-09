@@ -115,13 +115,13 @@ namespace NSec.Cryptography
 
             int error = crypto_sign_ed25519_detached(
                 signature,
-                out ulong siglen,
+                out ulong signatureLength,
                 data,
                 (ulong)data.Length,
                 keyHandle);
 
             Debug.Assert(error == 0);
-            Debug.Assert((ulong)signature.Length == siglen);
+            Debug.Assert((ulong)signature.Length == signatureLength);
         }
 
         internal override bool TryExportKey(

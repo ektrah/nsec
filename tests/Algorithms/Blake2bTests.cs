@@ -27,7 +27,7 @@ namespace NSec.Tests.Algorithms
         [InlineData(256 / 8)]
         [InlineData(384 / 8)]
         [InlineData(512 / 8)]
-        public static void PropertiesContructed(int hashSize)
+        public static void PropertiesConstructed(int hashSize)
         {
             var a = new Blake2b(hashSize);
 
