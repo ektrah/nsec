@@ -40,24 +40,25 @@ Please note:
 ## Tested Platforms
 
 [NSec 25.4.0](https://www.nuget.org/packages/NSec.Cryptography/25.4.0)
-has been tested to run on the following platforms and .NET versions:
+has been tested to run on the following platforms and .NET versions at
+the time of release:
 
-| OS                   | Version  | Architecture  | .NET           |
-|:-------------------- |:-------- |:------------- |:---------------|
-| Windows 11           | 23H2     | x64           | 9.0.3 / 8.0.14 |
-| Windows Server 2022  | LTSC     | x64           | 9.0.3 / 8.0.14 |
-|                      |          |               |                
-| macOS                | 13.7     | x64           | 9.0.3 / 8.0.14 |
-|                      | 14.7     | arm64         | 9.0.3 / 8.0.14 |
-|                      | 15.2     | arm64         | 9.0.3 / 8.0.14 |
-|                      |          |               |                |
-| Alpine Linux         | 3.20     | x64           | 9.0.3          |
-|                      | 3.21     | x64           | 9.0.3          |
-| Debian               | 12       | x64           | 9.0.3 / 8.0.14 |
-| Fedora               | 40       | x64           | 9.0.3 / 8.0.14 |
-|                      | 41       | x64           | 9.0.3 / 8.0.14 |
-| Ubuntu               | 22.04    | x64           | 9.0.3 / 8.0.14 |
-|                      | 24.04    | x64           | 9.0.3 / 8.0.14 |
+| OS                   | Version  | Architecture  | .NET   |
+|:-------------------- |:-------- |:------------- |:-------|
+| Windows 11           | 24H2     | x64           | 9.0.11 |
+| Windows Server 2025  | LTSC     | x64           | 9.0.11 |
+|                      |          |               |        |
+| macOS                | 14.8     | arm64         | 9.0.11 |
+|                      | 15.7     | arm64         | 9.0.11 |
+|                      | 26.0     | arm64         | 9.0.11 |
+|                      |          |               |        |
+| Alpine Linux         | 3.21     | x64           | 9.0.11 |
+|                      | 3.22     | x64           | 9.0.11 |
+| Debian               | 12       | x64           | 9.0.11 |
+| Fedora               | 42       | x64           | 9.0.11 |
+|                      | 43       | x64           | 9.0.11 |
+| Ubuntu               | 22.04    | x64           | 9.0.11 |
+|                      | 24.04    | x64           | 9.0.11 |
 
 The other supported platforms should work as well, but have not been tested.
 

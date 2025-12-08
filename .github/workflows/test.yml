@@ -6,29 +6,24 @@ jobs:
 
   test-win:
     needs: test-linux-musl
-    runs-on: windows-2022
+    runs-on: windows-2025
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
     steps:
     - name: Set up .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: |
-          8.0.x
           9.0.x
     - name: Install workloads
       run: dotnet workload install ios tvos maccatalyst
     - run: dotnet --info
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Test (.NET 9.0/Debug)
       run: dotnet test tests -f net9.0 -c Debug
     - name: Test (.NET 9.0/Release)
       run: dotnet test tests -f net9.0 -c Release
-    - name: Test (.NET 8.0/Debug)
-      run: dotnet test tests -f net8.0 -c Debug
-    - name: Test (.NET 8.0/Release)
-      run: dotnet test tests -f net8.0 -c Release
     - name: Pack
       run: dotnet pack -c Release
     - name: Upload artifacts
@@ -42,30 +37,25 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - os: macos-13
         - os: macos-14
         - os: macos-15
+        - os: macos-26
     runs-on: ${{ matrix.os }}
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
     steps:
     - name: Set up .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: |
-          8.0.x
           9.0.x
     - run: dotnet --info
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Test (.NET 9.0/Debug)
       run: dotnet test tests -f net9.0 -c Debug
     - name: Test (.NET 9.0/Release)
       run: dotnet test tests -f net9.0 -c Release
-    - name: Test (.NET 8.0/Debug)
-      run: dotnet test tests -f net8.0 -c Debug
-    - name: Test (.NET 8.0/Release)
-      run: dotnet test tests -f net8.0 -c Release
 
   test-linux:
     needs: test-macos
@@ -74,8 +64,8 @@ jobs:
       matrix:
         include:
         - os: debian:12
-        - os: fedora:40
-        - os: fedora:41
+        - os: fedora:42
+        - os: fedora:43
         - os: ubuntu:22.04
         - os: ubuntu:24.04
     runs-on: ubuntu-latest
@@ -95,29 +85,24 @@ jobs:
       run: apt-get -qq update && apt-get -qq install --yes --no-install-recommends curl ca-certificates gettext
       if: ${{ startsWith(matrix.os, 'ubuntu') }}
     - name: Set up .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: |
-          8.0.x
           9.0.x
     - run: dotnet --info
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Test (.NET 9.0/Debug)
       run: dotnet test tests -f net9.0 -c Debug
     - name: Test (.NET 9.0/Release)
       run: dotnet test tests -f net9.0 -c Release
-    - name: Test (.NET 8.0/Debug)
-      run: dotnet test tests -f net8.0 -c Debug
-    - name: Test (.NET 8.0/Release)
-      run: dotnet test tests -f net8.0 -c Release
 
   test-linux-musl:
     strategy:
       fail-fast: false
       matrix:
         include:
-        - os: alpine3.20
         - os: alpine3.21
+        - os: alpine3.22
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/dotnet/sdk:9.0-${{ matrix.os }}
@@ -126,7 +111,7 @@ jobs:
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
     steps:
     - run: dotnet --info
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Test (.NET 9.0/Debug)
       run: dotnet test tests -f net9.0 -c Debug
     - name: Test (.NET 9.0/Release)

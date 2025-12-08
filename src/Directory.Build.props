@@ -3,8 +3,8 @@
   <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.props" />
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0</TargetFrameworks>
-    <TargetFrameworks Condition="'$(RUNNER_OS)'=='Windows'">net8.0;net8.0-ios;net8.0-tvos;net8.0-maccatalyst</TargetFrameworks>
+    <TargetFrameworks>net9.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(RUNNER_OS)'=='Windows'">net9.0;net9.0-ios;net9.0-tvos;net9.0-maccatalyst</TargetFrameworks>
   </PropertyGroup>
 
   <Import Project="$(MSBuildThisFileDirectory)..\build\Package.props" />
