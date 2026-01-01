@@ -12,7 +12,7 @@ permission except when reproducing the unmodified NSec documentation.
 
 [NSec](https://github.com/ektrah/nsec) is licensed under the MIT license.
 
-Copyright &copy; 2025 Klaus Hartke
+Copyright &copy; 2026 Klaus Hartke
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,7 +39,7 @@ NSec is based on and contains code derived from
 [libsodium](https://github.com/jedisct1/libsodium),
 which is available under the ISC license.
 
-Copyright &copy; 2013-2025 Frank Denis
+Copyright &copy; 2013-2026 Frank Denis
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
