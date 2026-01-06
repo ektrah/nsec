@@ -52,7 +52,7 @@ internal static partial class Interop
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int crypto_auth_hmacsha256_update(
             ref crypto_auth_hmacsha256_state state,
-            in uint @in,
+            ref readonly uint @in,
             ulong inlen);
 
         [StructLayout(LayoutKind.Explicit, Size = 208)]

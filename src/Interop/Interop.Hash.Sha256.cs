@@ -45,7 +45,7 @@ internal static partial class Interop
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int crypto_hash_sha256_update(
             ref crypto_hash_sha256_state state,
-            in uint @in,
+            ref readonly uint @in,
             ulong inlen);
 
         [StructLayout(LayoutKind.Explicit, Size = 104)]

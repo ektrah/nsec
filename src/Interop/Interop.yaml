@@ -95,7 +95,7 @@ Interop.Auth.HmacSha256.cs:
   - crypto_auth_hmacsha256_keybytes
   - crypto_auth_hmacsha256_statebytes
   - crypto_auth_hmacsha256_update
-  - crypto_auth_hmacsha256_update (in uint in)
+  - crypto_auth_hmacsha256_update (ref readonly uint in)
   structs:
   - crypto_auth_hmacsha256_state
 
@@ -182,7 +182,7 @@ Interop.Hash.Sha256.cs:
   - crypto_hash_sha256_init
   - crypto_hash_sha256_statebytes
   - crypto_hash_sha256_update
-  - crypto_hash_sha256_update (in uint in)
+  - crypto_hash_sha256_update (ref readonly uint in)
   structs:
   - crypto_hash_sha256_state
 
@@ -270,7 +270,7 @@ Interop.Scalarmult.X25519.cs:
   - crypto_scalarmult_curve25519_BYTES
   - crypto_scalarmult_curve25519_SCALARBYTES
   functions:
-  - crypto_scalarmult_curve25519 (SecureMemoryHandle q, SecureMemoryHandle n, in PublicKeyBytes p)
+  - crypto_scalarmult_curve25519 (SecureMemoryHandle q, SecureMemoryHandle n, ref readonly PublicKeyBytes p)
   - crypto_scalarmult_curve25519_base (ref PublicKeyBytes q, SecureMemoryHandle n)
   - crypto_scalarmult_curve25519_bytes
   - crypto_scalarmult_curve25519_scalarbytes
@@ -317,16 +317,16 @@ Interop.Sign.Ed25519.cs:
   functions:
   - crypto_sign_ed25519_bytes
   - crypto_sign_ed25519_detached (out ulong siglen_p, SecureMemoryHandle sk)
-  - crypto_sign_ed25519_pk_to_curve25519 (ref PublicKeyBytes curve25519_pk, in PublicKeyBytes ed25519_pk)
+  - crypto_sign_ed25519_pk_to_curve25519 (ref PublicKeyBytes curve25519_pk, ref readonly PublicKeyBytes ed25519_pk)
   - crypto_sign_ed25519_publickeybytes
   - crypto_sign_ed25519_secretkeybytes
   - crypto_sign_ed25519_seed_keypair (ref PublicKeyBytes pk, SecureMemoryHandle sk)
   - crypto_sign_ed25519_seedbytes
   - crypto_sign_ed25519_sk_to_curve25519 (SecureMemoryHandle ed25519_sk)
   - crypto_sign_ed25519_sk_to_seed (SecureMemoryHandle sk)
-  - crypto_sign_ed25519_verify_detached (in PublicKeyBytes pk)
+  - crypto_sign_ed25519_verify_detached (ref readonly PublicKeyBytes pk)
   - crypto_sign_ed25519ph_final_create (out ulong siglen_p, SecureMemoryHandle sk)
-  - crypto_sign_ed25519ph_final_verify (in PublicKeyBytes pk)
+  - crypto_sign_ed25519ph_final_verify (ref readonly PublicKeyBytes pk)
   - crypto_sign_ed25519ph_init
   - crypto_sign_ed25519ph_statebytes
   - crypto_sign_ed25519ph_update

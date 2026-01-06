@@ -14,7 +14,7 @@ internal static partial class Interop
         internal static partial int crypto_scalarmult_curve25519(
             SecureMemoryHandle q,
             SecureMemoryHandle n,
-            in PublicKeyBytes p);
+            ref readonly PublicKeyBytes p);
 
         [LibraryImport(Libraries.Libsodium)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

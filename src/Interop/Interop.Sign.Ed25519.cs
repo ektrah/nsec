@@ -28,7 +28,7 @@ internal static partial class Interop
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         internal static partial int crypto_sign_ed25519_pk_to_curve25519(
             ref PublicKeyBytes curve25519_pk,
-            in PublicKeyBytes ed25519_pk);
+            ref readonly PublicKeyBytes ed25519_pk);
 
         [LibraryImport(Libraries.Libsodium)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -67,7 +67,7 @@ internal static partial class Interop
             ReadOnlySpan<byte> sig,
             ReadOnlySpan<byte> m,
             ulong mlen,
-            in PublicKeyBytes pk);
+            ref readonly PublicKeyBytes pk);
 
         [LibraryImport(Libraries.Libsodium)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -82,7 +82,7 @@ internal static partial class Interop
         internal static partial int crypto_sign_ed25519ph_final_verify(
             ref crypto_sign_ed25519ph_state state,
             ReadOnlySpan<byte> sig,
-            in PublicKeyBytes pk);
+            ref readonly PublicKeyBytes pk);
 
         [LibraryImport(Libraries.Libsodium)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
