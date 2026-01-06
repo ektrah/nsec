@@ -15,7 +15,7 @@ on the following platforms:
 
 |                       | `-x64`   | `-x86`   | `-arm64` | `-arm`   |
 |:----------------------|:--------:|:--------:|:--------:|:--------:|
-| **`android-`**        |          |          |          |          |
+| **`android-`**        | &check;  | &check;  | &check;  | &check;  |
 | **`ios-`**            |          |          | &check;  |          |
 | **`linux-`**          | &check;  |          | &check;  | &check;  |
 | **`linux-musl-`**     | &check;  |          | &check;  | &check;  |
