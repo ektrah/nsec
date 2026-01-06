@@ -43,7 +43,7 @@ and verify the signature:
 
 ## Installation
 
-    $ dotnet add package NSec.Cryptography --version 25.4.0
+    $ dotnet add package NSec.Cryptography --version 26.1.0-preview.1
 
 See [[Installation]] for prerequisites and supported platforms.
 
