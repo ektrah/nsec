@@ -43,22 +43,22 @@ Please note:
 has been tested to run on the following platforms and .NET versions at
 the time of release:
 
-| OS                   | Version  | Architecture  | .NET   |
-|:-------------------- |:-------- |:------------- |:-------|
-| Windows 11           | 24H2     | x64           | 9.0.11 |
-| Windows Server 2025  | LTSC     | x64           | 9.0.11 |
-|                      |          |               |        |
-| macOS                | 14.8     | arm64         | 9.0.11 |
-|                      | 15.7     | arm64         | 9.0.11 |
-|                      | 26.0     | arm64         | 9.0.11 |
-|                      |          |               |        |
-| Alpine Linux         | 3.21     | x64           | 9.0.11 |
-|                      | 3.22     | x64           | 9.0.11 |
-| Debian               | 12       | x64           | 9.0.11 |
-| Fedora               | 42       | x64           | 9.0.11 |
-|                      | 43       | x64           | 9.0.11 |
-| Ubuntu               | 22.04    | x64           | 9.0.11 |
-|                      | 24.04    | x64           | 9.0.11 |
+| OS                   | Version    | Architecture  | .NET            |
+|:---------------------|:-----------|:--------------|:----------------|
+| Windows Server       | 10.0.26100 | x64           | 10.0.5 / 9.0.14 |
+|                      |            |               |                 |
+| macOS                | 14.8       | arm64         | 10.0.5 / 9.0.14 |
+|                      | 15.7       | arm64         | 10.0.5 / 9.0.14 |
+|                      | 26.3       | arm64         | 10.0.5 / 9.0.14 |
+|                      |            |               |                 |
+| Alpine Linux         | 3.22       | x64           | 10.0.3          |
+|                      | 3.23       | x64           | 10.0.5          |
+| Debian               | 12         | x64           | 10.0.5 / 9.0.14 |
+|                      | 13         | x64           | 10.0.5 / 9.0.14 |
+| Fedora               | 42         | x64           | 10.0.5 / 9.0.14 |
+|                      | 43         | x64           | 10.0.5 / 9.0.14 |
+| Ubuntu               | 22.04      | x64           | 10.0.5 / 9.0.14 |
+|                      | 24.04      | x64           | 10.0.5 / 9.0.14 |
 
 The other supported platforms should work as well, but have not been tested.
 

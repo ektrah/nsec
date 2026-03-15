@@ -16,10 +16,15 @@ jobs:
       with:
         dotnet-version: |
           9.0.x
+          10.0.x
     - name: Install workloads
       run: dotnet workload install ios tvos maccatalyst
     - run: dotnet --info
     - uses: actions/checkout@v6
+    - name: Test (.NET 10.0/Debug)
+      run: dotnet test tests -f net10.0 -c Debug
+    - name: Test (.NET 10.0/Release)
+      run: dotnet test tests -f net10.0 -c Release
     - name: Test (.NET 9.0/Debug)
       run: dotnet test tests -f net9.0 -c Debug
     - name: Test (.NET 9.0/Release)
@@ -27,7 +32,7 @@ jobs:
     - name: Pack
       run: dotnet pack -c Release
     - name: Upload artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         path: '**/*.nupkg'
 
@@ -50,8 +55,13 @@ jobs:
       with:
         dotnet-version: |
           9.0.x
+          10.0.x
     - run: dotnet --info
     - uses: actions/checkout@v6
+    - name: Test (.NET 10.0/Debug)
+      run: dotnet test tests -f net10.0 -c Debug
+    - name: Test (.NET 10.0/Release)
+      run: dotnet test tests -f net10.0 -c Release
     - name: Test (.NET 9.0/Debug)
       run: dotnet test tests -f net9.0 -c Debug
     - name: Test (.NET 9.0/Release)
@@ -64,6 +74,7 @@ jobs:
       matrix:
         include:
         - os: debian:12
+        - os: debian:13
         - os: fedora:42
         - os: fedora:43
         - os: ubuntu:22.04
@@ -76,7 +87,7 @@ jobs:
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
     steps:
     - name: Install prerequisites
-      run: apt-get -qq update && apt-get -qq install --yes --no-install-recommends curl ca-certificates gettext
+      run: apt-get -qq update && apt-get -qq install --yes --no-install-recommends curl ca-certificates gettext libicu-dev
       if: ${{ startsWith(matrix.os, 'debian') }}
     - name: Install prerequisites
       run: dnf install -q -y curl ca-certificates libicu findutils
@@ -89,8 +100,13 @@ jobs:
       with:
         dotnet-version: |
           9.0.x
+          10.0.x
     - run: dotnet --info
     - uses: actions/checkout@v6
+    - name: Test (.NET 10.0/Debug)
+      run: dotnet test tests -f net10.0 -c Debug
+    - name: Test (.NET 10.0/Release)
+      run: dotnet test tests -f net10.0 -c Release
     - name: Test (.NET 9.0/Debug)
       run: dotnet test tests -f net9.0 -c Debug
     - name: Test (.NET 9.0/Release)
@@ -101,18 +117,18 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - os: alpine3.21
         - os: alpine3.22
+        - os: alpine3.23
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/dotnet/sdk:9.0-${{ matrix.os }}
+      image: mcr.microsoft.com/dotnet/sdk:10.0-${{ matrix.os }}
       env:
         DOTNET_CLI_TELEMETRY_OPTOUT: 1
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
     steps:
     - run: dotnet --info
     - uses: actions/checkout@v6
-    - name: Test (.NET 9.0/Debug)
-      run: dotnet test tests -f net9.0 -c Debug
-    - name: Test (.NET 9.0/Release)
-      run: dotnet test tests -f net9.0 -c Release
+    - name: Test (.NET 10.0/Debug)
+      run: dotnet test tests -f net10.0 -c Debug
+    - name: Test (.NET 10.0/Release)
+      run: dotnet test tests -f net10.0 -c Release
