@@ -43,7 +43,7 @@ NSec is intended to run on the following platforms. Please note, not all of thes
 
 |                       | `-x64`   | `-x86`   | `-arm64` | `-arm`   |
 |:----------------------|:--------:|:--------:|:--------:|:--------:|
-| **`android-`**        |          |          |          |          |
+| **`android-`**        | &check;  | &check;  | &check;  | &check;  |
 | **`ios-`**            |          |          | &check;  |          |
 | **`linux-`**          | &check;  |          | &check;  | &check;  |
 | **`linux-musl-`**     | &check;  |          | &check;  | &check;  |
