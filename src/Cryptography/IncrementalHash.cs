@@ -151,5 +151,11 @@ namespace NSec.Cryptography
 
         [FieldOffset(0)]
         internal crypto_hash_sha512_state sha512;
+
+        [FieldOffset(0)]
+        internal crypto_hash_sha3256_state sha3_256;
+
+        [FieldOffset(0)]
+        internal crypto_hash_sha3512_state sha3_512;
     }
 }

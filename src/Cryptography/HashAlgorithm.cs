@@ -28,6 +28,8 @@ namespace NSec.Cryptography
         private static Sha256? s_Sha256;
         private static Sha512? s_Sha512;
         private static Sha512? s_Sha512_256;
+        private static Sha3_256? s_Sha3_256;
+        private static Sha3_512? s_Sha3_512;
 
         private readonly int _hashSize;
 
@@ -104,6 +106,34 @@ namespace NSec.Cryptography
                 {
                     Interlocked.CompareExchange(ref s_Sha512_256, new Sha512(256 / 8), null);
                     instance = s_Sha512_256;
+                }
+                return instance;
+            }
+        }
+
+        public static Sha3_256 Sha3_256
+        {
+            get
+            {
+                Sha3_256? instance = s_Sha3_256;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_Sha3_256, new Sha3_256(256 / 8), null);
+                    instance = s_Sha3_256;
+                }
+                return instance;
+            }
+        }
+
+        public static Sha3_512 Sha3_512
+        {
+            get
+            {
+                Sha3_512? instance = s_Sha3_512;
+                if (instance == null)
+                {
+                    Interlocked.CompareExchange(ref s_Sha3_512, new Sha3_512(512 / 8), null);
+                    instance = s_Sha3_512;
                 }
                 return instance;
             }

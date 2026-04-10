@@ -24,6 +24,8 @@ For more detailed documentation, usage examples, and API references, please visi
 | [HashAlgorithm Class](https://nsec.rocks/docs/api/nsec.cryptography.hashalgorithm)                                                | BLAKE2b *(unkeyed)*       |
 |                                                                                                                                   | SHA-256                   |
 |                                                                                                                                   | SHA-512                   |
+|                                                                                                                                   | SHA3-256                  |
+|                                                                                                                                   | SHA3-512                  |
 | [KeyAgreementAlgorithm Class](https://nsec.rocks/docs/api/nsec.cryptography.keyagreementalgorithm)                                | X25519                    |
 | [KeyDerivationAlgorithm2 Class](https://nsec.rocks/docs/api/nsec.cryptography.keyderivationalgorithm2)                            | HKDF-SHA-256              |
 |                                                                                                                                   | HKDF-SHA-512              |

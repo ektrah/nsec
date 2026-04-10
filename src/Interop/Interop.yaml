@@ -171,6 +171,28 @@ Interop.GenericHash.Blake2b.cs:
   structs:
   - crypto_generichash_blake2b_state
 
+Interop.Hash.Sha3.cs:
+  include: include/sodium/crypto_hash_sha3.h
+  constants:
+  - crypto_hash_sha3256_BYTES
+  - crypto_hash_sha3512_BYTES
+  functions:
+  - crypto_hash_sha3256
+  - crypto_hash_sha3256_bytes
+  - crypto_hash_sha3256_final
+  - crypto_hash_sha3256_init
+  - crypto_hash_sha3256_statebytes
+  - crypto_hash_sha3256_update
+  - crypto_hash_sha3512
+  - crypto_hash_sha3512_bytes
+  - crypto_hash_sha3512_final
+  - crypto_hash_sha3512_init
+  - crypto_hash_sha3512_statebytes
+  - crypto_hash_sha3512_update
+  structs:
+  - crypto_hash_sha3256_state
+  - crypto_hash_sha3512_state
+
 Interop.Hash.Sha256.cs:
   include: include/sodium/crypto_hash_sha256.h
   constants:

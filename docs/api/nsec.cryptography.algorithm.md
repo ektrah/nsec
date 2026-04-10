@@ -20,6 +20,8 @@ This class has no public members.
         * Blake2b
         * Sha256
         * Sha512
+        * Sha3_256
+        * Sha3_512
     * [[KeyAgreementAlgorithm|KeyAgreementAlgorithm Class]]
         * X25519
     * [[KeyDerivationAlgorithm|KeyDerivationAlgorithm Class]]

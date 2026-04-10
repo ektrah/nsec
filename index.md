@@ -60,6 +60,8 @@ See [[Installation]] for prerequisites and supported platforms.
 | [[HashAlgorithm Class]]                         | BLAKE2b *(unkeyed)*       |
 |                                                 | SHA-256                   |
 |                                                 | SHA-512                   |
+|                                                 | SHA3-256                  |
+|                                                 | SHA3-512                  |
 | [[KeyAgreementAlgorithm Class]]                 | X25519                    |
 | [[KeyDerivationAlgorithm2 Class]]               | HKDF-SHA-256              |
 |                                                 | HKDF-SHA-512              |

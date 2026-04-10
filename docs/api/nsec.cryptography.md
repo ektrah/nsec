@@ -11,6 +11,8 @@
         * Blake2b Class
         * Sha256 Class
         * Sha512 Class
+        * Sha3_256 Class
+        * Sha3_512 Class
     * [[KeyAgreementAlgorithm Class]]
         * X25519 Class
     * [[KeyDerivationAlgorithm Class]]

@@ -12,6 +12,8 @@ Represents a cryptographic hash algorithm.
         * Blake2b
         * Sha256
         * Sha512
+        * Sha3_256
+        * Sha3_512
 
 
 ## [TOC] Summary
@@ -53,6 +55,20 @@ Gets the SHA-512 hash algorithm with a 512-bit output.
 Gets the SHA-512 hash algorithm with a truncated, 256-bit output.
 
     public static Sha512 Sha512_256 { get; }
+
+
+### Sha3_256
+
+Gets the SHA3-256 hash algorithm with a 256-bit output.
+
+    public static Sha3_256 Sha3_256 { get; }
+
+
+### Sha3_512
+
+Gets the SHA3-512 hash algorithm with a 512-bit output.
+
+    public static Sha3_512 Sha3_512 { get; }
 
 
 ## Properties

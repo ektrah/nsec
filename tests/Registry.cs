@@ -49,6 +49,8 @@ namespace NSec.Tests
             HashAlgorithm.Sha256,
             HashAlgorithm.Sha512,
             HashAlgorithm.Sha512_256,
+            HashAlgorithm.Sha3_256,
+            HashAlgorithm.Sha3_512,
         ];
 
         public static readonly TheoryData<KeyAgreementAlgorithm> KeyAgreementAlgorithms =
@@ -126,6 +128,8 @@ namespace NSec.Tests
             HashAlgorithm.Sha256,
             HashAlgorithm.Sha512,
             HashAlgorithm.Sha512_256,
+            HashAlgorithm.Sha3_256,
+            HashAlgorithm.Sha3_512,
             new AnsiX963KdfSha256(),
             new ConcatKdfHmacSha256(),
             new ConcatKdfSha256(),
