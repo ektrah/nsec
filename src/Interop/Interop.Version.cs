@@ -7,8 +7,8 @@ internal static partial class Interop
     internal static partial class Libsodium
     {
         internal const int SODIUM_LIBRARY_VERSION_MAJOR = 26;
-        internal const int SODIUM_LIBRARY_VERSION_MINOR = 3;
-        internal const string SODIUM_VERSION_STRING = "1.0.21";
+        internal const int SODIUM_LIBRARY_VERSION_MINOR = 4;
+        internal const string SODIUM_VERSION_STRING = "1.0.22";
 
         [LibraryImport(Libraries.Libsodium)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
