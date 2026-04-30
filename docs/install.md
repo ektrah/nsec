@@ -1,14 +1,14 @@
 # Installation
 
 Use the following command to install the
-[NSec.Cryptography NuGet package](https://www.nuget.org/packages/NSec.Cryptography/26.1.0-preview.1):
+[NSec.Cryptography NuGet package](https://www.nuget.org/packages/NSec.Cryptography/26.4.0):
 
-    $ dotnet add package NSec.Cryptography --version 26.1.0-preview.1
+    $ dotnet add package NSec.Cryptography --version 26.4.0
 
 
 ## Supported Platforms
 
-[NSec 26.1.0-preview.1](https://www.nuget.org/packages/NSec.Cryptography/26.1.0-preview.1)
+[NSec 26.4.0](https://www.nuget.org/packages/NSec.Cryptography/26.4.0)
 is intended to run on all
 [supported versions of .NET](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core)
 on the following platforms:
@@ -39,26 +39,26 @@ Please note:
 
 ## Tested Platforms
 
-[NSec 26.1.0-preview.1](https://www.nuget.org/packages/NSec.Cryptography/26.1.0-preview.1)
+[NSec 26.4.0](https://www.nuget.org/packages/NSec.Cryptography/26.4.0)
 has been tested to run on the following platforms and .NET versions at
 the time of release:
 
 | OS                   | Version    | Architecture  | .NET            |
 |:---------------------|:-----------|:--------------|:----------------|
-| Windows Server       | 10.0.26100 | x64           | 10.0.5 / 9.0.14 |
+| Windows Server       | 10.0.26100 | x64           | 10.0.7 / 9.0.15 |
 |                      |            |               |                 |
-| macOS                | 14.8       | arm64         | 10.0.5 / 9.0.14 |
-|                      | 15.7       | arm64         | 10.0.5 / 9.0.14 |
-|                      | 26.3       | arm64         | 10.0.5 / 9.0.14 |
+| macOS                | 14.8       | arm64         | 10.0.7 / 9.0.15 |
+|                      | 15.7       | arm64         | 10.0.7 / 9.0.15 |
+|                      | 26.3       | arm64         | 10.0.7 / 9.0.15 |
 |                      |            |               |                 |
 | Alpine Linux         | 3.22       | x64           | 10.0.3          |
-|                      | 3.23       | x64           | 10.0.5          |
-| Debian               | 12         | x64           | 10.0.5 / 9.0.14 |
-|                      | 13         | x64           | 10.0.5 / 9.0.14 |
-| Fedora               | 42         | x64           | 10.0.5 / 9.0.14 |
-|                      | 43         | x64           | 10.0.5 / 9.0.14 |
-| Ubuntu               | 22.04      | x64           | 10.0.5 / 9.0.14 |
-|                      | 24.04      | x64           | 10.0.5 / 9.0.14 |
+|                      | 3.23       | x64           | 10.0.7          |
+| Debian               | 12         | x64           | 10.0.7 / 9.0.15 |
+|                      | 13         | x64           | 10.0.7 / 9.0.15 |
+| Fedora               | 42         | x64           | 10.0.7 / 9.0.15 |
+|                      | 43         | x64           | 10.0.7 / 9.0.15 |
+| Ubuntu               | 22.04      | x64           | 10.0.7 / 9.0.15 |
+|                      | 24.04      | x64           | 10.0.7 / 9.0.15 |
 
 The other supported platforms should work as well, but have not been tested.
 
